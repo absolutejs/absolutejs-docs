@@ -1,5 +1,4 @@
-// import { providers } from '../../src/providers';
-// import { isValidProviderOption } from '../../src/typeGuards';
+import { providerOptions } from '@absolutejs/auth';
 import { Head } from '../components/page/Head';
 import { Navbar } from '../components/page/Navbar';
 import { Legend } from '../components/testing/Legend';
@@ -8,10 +7,6 @@ import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 export const Testing = () => {
 	const { user, handleSignOut } = useAuthStatus();
-
-	// const providerOptions = Object.keys(providers).filter(
-	// 	isValidProviderOption
-	// );
 
 	return (
 		<html lang="en" style={htmlDefault}>
@@ -28,8 +23,8 @@ export const Testing = () => {
 							textAlign: 'center'
 						}}
 					>
-						Citra currently supports {/*providerOptions.length*/}{' '}
-						OAuth 2.0 providers
+						Citra currently supports {providerOptions.length} OAuth
+						2.0 providers
 					</h1>
 
 					<p
@@ -67,7 +62,7 @@ export const Testing = () => {
 							width: '100%'
 						}}
 					>
-						{/* {providerOptions.map((provider) => (
+						{providerOptions.map((provider) => (
 							<button
 								key={provider}
 								style={{
@@ -86,7 +81,7 @@ export const Testing = () => {
 							>
 								{provider}
 							</button>
-						))} */}
+						))}
 					</div>
 				</main>
 			</body>

@@ -11,19 +11,14 @@ export const Legend = () => (
 	<div style={legendWrapperStyle}>
 		<h2 style={legendTitleStyle}>Status Key</h2>
 		<div style={legendGridStyle}>
-			<span style={badgeStyle('#888')}>Untested</span>
-			<p style={legendTextStyle}>
-				Pending external or restricted access.
-			</p>
-
 			<span style={badgeStyle('#4caf50')}>Tested</span>
 			<p style={legendTextStyle}>
 				Verified routes actively working and community-tested.
 			</p>
 
-			<span style={badgeStyle('#e53935')}>Failed</span>
+			<span style={badgeStyle('#888')}>Untested</span>
 			<p style={legendTextStyle}>
-				Library or endpoint issues (not user error).
+				Pending external or restricted access.
 			</p>
 
 			<span style={badgeStyle('#ff9800')}>Testing</span>
@@ -34,6 +29,11 @@ export const Legend = () => (
 			<span style={badgeStyle('#fafafa', '#333')}>Missing</span>
 			<p style={legendTextStyle}>
 				Functionality not supported by the provider.
+			</p>
+
+			<span style={badgeStyle('#e53935')}>Failed</span>
+			<p style={legendTextStyle}>
+				Library or endpoint issues (not user error).
 			</p>
 		</div>
 

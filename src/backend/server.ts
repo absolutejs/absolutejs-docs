@@ -9,10 +9,9 @@ import { Home } from '../frontend/pages/Home';
 import { Testing } from '../frontend/pages/Testing';
 
 const manifest = await build({
-	assetsDir: 'example/assets',
-	buildDir: 'example/build',
-	reactIndexDir: 'example/indexes',
-	reactPagesDir: 'example/pages'
+	assetsDir: 'src/backend/assets',
+	reactIndexDir: 'src/frontend/indexes',
+	reactPagesDir: 'src/frontend/pages'
 });
 
 if (manifest === null) {
@@ -28,7 +27,7 @@ if (homeIndex === undefined || testingIndex === undefined) {
 new Elysia()
 	.use(
 		staticPlugin({
-			assets: './example/build',
+			assets: './build',
 			prefix: ''
 		})
 	)
