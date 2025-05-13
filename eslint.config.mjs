@@ -210,16 +210,16 @@ export default [
 	},
 	{
 		files: [
-			'example/server.ts',
-			'example/indexes/*.tsx',
-			'example/db/migrate.ts'
+			'src/frontend/server.ts',
+			'src/frontend/indexes/*.tsx',
+			'db/migrate.ts'
 		],
 		rules: {
 			'import/no-unused-modules': 'off'
 		}
 	},
 	{
-		files: ['example/providers/**/*.ts', 'example/db/migrate.ts'],
+		files: ['db/migrate.ts'],
 		rules: {
 			'no-console': 'off'
 		}
@@ -237,20 +237,7 @@ export default [
 		}
 	},
 	{
-		files: ['src/providers.ts'],
-		rules: {
-			'absolute/sort-keys-fixable': [
-				'error',
-				{
-					caseSensitive: true,
-					natural: true,
-					order: 'asc'
-				}
-			]
-		}
-	},
-	{
-		files: ['example/db/schema.ts'],
+		files: ['db/schema.ts'],
 		rules: {
 			'absolute/explicit-object-types': 'off'
 		}

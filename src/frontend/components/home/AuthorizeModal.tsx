@@ -1,3 +1,4 @@
+import { ProviderOption, providerOptions } from '@absolutejs/auth';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { formStyle, formButtonStyle } from '../../styles/styles';
 import { Modal } from '../utils/Modal';

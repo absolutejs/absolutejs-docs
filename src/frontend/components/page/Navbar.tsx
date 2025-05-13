@@ -1,4 +1,4 @@
-import { User } from '../../db/schema';
+import { User } from '../../../../db/schema';
 import { linkStyle } from '../../styles/styles';
 import { NavbarUserButtons } from './NavbarUserButtons';
 

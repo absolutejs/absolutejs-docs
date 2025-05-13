@@ -1,15 +1,12 @@
+import {
+	RefreshableProvider,
+	refreshableProviderOptions
+} from '@absolutejs/auth';
 import { Dispatch, SetStateAction, useState, FormEvent } from 'react';
-import { providers } from '../../../src/providers';
-import { isRefreshableProvider } from '../../../src/typeGuards';
-import { RefreshableProvider } from '../../../src/types';
 import { formStyle, formButtonStyle } from '../../styles/styles';
 import { Modal } from '../utils/Modal';
 import { ProviderDropdown } from '../utils/ProviderDropdown';
 import { useToast } from '../utils/ToastProvider';
-
-const refreshableProviders = Object.keys(providers).filter(
-	isRefreshableProvider
-);
 
 type RefreshModalProps = {
 	refreshModalOpen: boolean;
@@ -74,7 +71,7 @@ export const RefreshModal = ({
 			<form style={formStyle} onSubmit={handleSubmit}>
 				<ProviderDropdown
 					setCurrentProvider={setCurrentProvider}
-					providerOptions={refreshableProviders}
+					providerOptions={refreshableProviderOptions}
 				/>
 
 				<input

@@ -1,6 +1,6 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useRef, useState } from 'react';
-import { User } from '../../db/schema';
+import { User } from '../../../../db/schema';
 import { buttonStyle } from '../../styles/styles';
 import { AuthContainer } from '../auth/AuthContainer';
 import { ProfilePicture } from '../utils/ProfilePicture';

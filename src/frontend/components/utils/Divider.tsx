@@ -3,7 +3,7 @@ import {
 	separatorLineStyle,
 	separatorTextStyle
 } from '../../styles/authStyles';
-import { isNonEmptyString } from '../../utils/typeguards';
+import { isNonEmptyString } from '../../types/typeGuards';
 
 type DividerProps = {
 	color?: string;

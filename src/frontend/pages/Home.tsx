@@ -6,6 +6,7 @@ import { RevokeModal } from '../components/home/RevokeModal';
 import { Head } from '../components/page/Head';
 import { Navbar } from '../components/page/Navbar';
 import { ToastProvider } from '../components/utils/ToastProvider';
+import { useAuthStatus } from '../hooks/useAuthStatus';
 import {
 	htmlDefault,
 	bodyDefault,
@@ -14,7 +15,6 @@ import {
 	paragraphStyle,
 	buttonStyle
 } from '../styles/styles';
-import { useAuthStatus } from '../hooks/useAuthStatus';
 
 export const Home = () => {
 	const { user, handleSignOut } = useAuthStatus();

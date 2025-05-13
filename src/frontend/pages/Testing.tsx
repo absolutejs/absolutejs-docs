@@ -28,8 +28,8 @@ export const Testing = () => {
 							textAlign: 'center'
 						}}
 					>
-						Citra currently supports {/*providerOptions.length*/} OAuth
-						2.0 providers
+						Citra currently supports {/*providerOptions.length*/}{' '}
+						OAuth 2.0 providers
 					</h1>
 
 					<p
@@ -49,8 +49,9 @@ export const Testing = () => {
 						<br />
 						<br />
 						Test providers from this screen by opening a provider's
-						tab—you'll find a link to create an OAuth app on that provider and controls to exercise each step of the
-						OAuth 2.0 flow.
+						tab—you'll find a link to create an OAuth app on that
+						provider and controls to exercise each step of the OAuth
+						2.0 flow.
 					</p>
 
 					<Legend />
