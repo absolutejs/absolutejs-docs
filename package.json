@@ -4,7 +4,7 @@
 	"description": "Documentation for AbsoluteJS and its associated packages.",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/absolutejs/citra.git"
+		"url": "https://github.com/absolutejs/absolutejs.git"
 	},
 	"main": "./dist/index.js",
 	"types": "./dist/src/index.d.ts",
@@ -20,7 +20,7 @@
 		"release": "bun run format && bun run build && bun publish"
 	},
 	"devDependencies": {
-		"@absolutejs/absolute": "0.4.0",
+		"@absolutejs/auth": "0.6.0",
 		"@elysiajs/static": "1.2.0",
 		"@stylistic/eslint-plugin-ts": "4.2.0",
 		"@neondatabase/serverless": "1.0.0",
