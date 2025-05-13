@@ -1,6 +1,6 @@
 import { providerOptions } from '@absolutejs/auth';
+import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
-import { Navbar } from '../components/page/Navbar';
 import { Legend } from '../components/testing/Legend';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';

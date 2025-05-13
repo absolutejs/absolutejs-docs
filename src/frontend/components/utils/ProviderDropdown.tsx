@@ -1,14 +1,16 @@
+import { ProviderOption, providerOptions } from 'citra';
 import { Dispatch, SetStateAction } from 'react';
+import { providerData } from '../../data/providerData';
 
-type ProviderDropdownProps<T extends string> = {
-	providerOptions: T[];
-	setCurrentProvider: Dispatch<SetStateAction<T | undefined>>;
+type ProviderDropdownProps = {
+	setCurrentProvider: Dispatch<
+		SetStateAction<Lowercase<ProviderOption> | undefined>
+	>;
 };
 
-export const ProviderDropdown = <T extends string>({
-	providerOptions,
+export const ProviderDropdown = ({
 	setCurrentProvider
-}: ProviderDropdownProps<T>) => (
+}: ProviderDropdownProps) => (
 	<select
 		defaultValue={-1}
 		onChange={(event) => {
@@ -21,16 +23,32 @@ export const ProviderDropdown = <T extends string>({
 			}
 		}}
 		style={{
-			border: '1px solid #ccc',
+			border: '1px solid #747775',
 			borderRadius: '4px',
 			fontSize: '14px',
-			padding: '8px'
+			marginBottom: '10px',
+			padding: '10px',
+			textAlign: 'center',
+			width: '100%'
 		}}
 	>
-		<option value={-1}>Select provider</option>
+		<option
+			value={-1}
+			style={{
+				fontWeight: 'bold'
+			}}
+		>
+			Select provider
+		</option>
 		{providerOptions.map((provider, index) => (
-			<option key={provider} value={index}>
-				{provider}
+			<option
+				key={provider}
+				value={index}
+				style={{
+					textAlign: 'left'
+				}}
+			>
+				{providerData[provider].name}
 			</option>
 		))}
 	</select>

@@ -210,7 +210,7 @@ export default [
 	},
 	{
 		files: [
-			'src/frontend/server.ts',
+			'src/backend/server.ts',
 			'src/frontend/indexes/*.tsx',
 			'db/migrate.ts'
 		],

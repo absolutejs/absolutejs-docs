@@ -1,4 +1,5 @@
 import { CSSProperties } from 'react';
+import { primaryColor } from './styles';
 
 export const confirmInputStyle: CSSProperties = {
 	border: '1px solid #ccc',
@@ -17,11 +18,8 @@ export const containerStyle: CSSProperties = {
 	minWidth: '400px',
 	padding: '20px'
 };
-export const egLogoStyle: CSSProperties = {
-	height: '100px',
-	margin: '0 auto'
-};
-export const googleButtonContentStyle: CSSProperties = {
+
+export const oauthButtonContentStyle: CSSProperties = {
 	alignItems: 'center',
 	display: 'flex',
 	justifyContent: 'center',
@@ -29,13 +27,23 @@ export const googleButtonContentStyle: CSSProperties = {
 	paddingRight: '12px',
 	width: '100%'
 };
-export const googleButtonStyle: CSSProperties = {
+
+type OAuthButtonStyleProps = {
+	providerPrimaryColor?: string;
+	isProviderSelected: boolean;
+};
+
+export const oauthButtonStyle = ({
+	providerPrimaryColor = '#747775',
+	isProviderSelected
+}: OAuthButtonStyleProps): CSSProperties => ({
 	alignItems: 'center',
 	backgroundColor: '#FFFFFF',
-	border: '1px solid #747775',
+	border: `1px solid ${providerPrimaryColor}`,
 	borderRadius: '4px',
+	boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
 	color: '#1f1f1f',
-	cursor: 'pointer',
+	cursor: isProviderSelected ? 'pointer' : 'not-allowed',
 	display: 'flex',
 	fontSize: '14px',
 	justifyContent: 'center',
@@ -43,61 +51,46 @@ export const googleButtonStyle: CSSProperties = {
 	padding: '10px',
 	textDecoration: 'none',
 	width: '100%'
-};
-export const googleButtonTextStyle: CSSProperties = {
+});
+
+export const oauthButtonTextStyle: CSSProperties = {
 	overflow: 'hidden',
 	textAlign: 'center',
 	textOverflow: 'ellipsis'
 };
-export const googleIconStyle: CSSProperties = {
-	height: '20px',
+export const oauthIconStyle: CSSProperties = {
+	height: '24px',
 	marginRight: '10px',
-	width: '20px'
+	objectFit: 'contain',
+	width: '24px'
 };
 export const headingStyle: CSSProperties = {
 	fontSize: '1.5rem',
 	marginBottom: '20px',
 	textAlign: 'center'
 };
-export const inputStyle: CSSProperties = {
-	border: '1px solid #ccc',
-	borderRadius: '4px',
-	marginBottom: '10px',
-	padding: '10px 0 10px 0',
-	width: '100%'
-};
+
 export const labelStyle: CSSProperties = {
 	color: '#333',
 	fontSize: '14px',
 	marginBottom: '-2px',
 	textAlign: 'left'
 };
-export const loginContainerStyle: CSSProperties = {
-	alignItems: 'center',
-	display: 'flex',
-	gap: '5px',
-	justifyContent: 'center',
-	marginTop: '20px'
-};
+
 export const loginLinkTextStyle: CSSProperties = {
-	color: '#C7158C',
+	backgroundColor: 'transparent',
+	border: 'none',
+	color: primaryColor,
 	cursor: 'pointer',
+	fontSize: '14px',
+	fontWeight: 'bold',
 	textAlign: 'center'
 };
 export const loginTextStyle: CSSProperties = {
 	color: '#151414',
 	textAlign: 'center'
 };
-export const nameInputContainerStyle: CSSProperties = {
-	display: 'flex',
-	flexDirection: 'column',
-	width: '100%'
-};
-export const nameRowStyle: CSSProperties = {
-	display: 'flex',
-	gap: '10px',
-	justifyContent: 'space-between'
-};
+
 export const separatorStyle: CSSProperties = {
 	alignItems: 'center',
 	display: 'flex',
@@ -110,20 +103,7 @@ export const separatorTextStyle: CSSProperties = {
 	fontSize: '14px',
 	padding: '0 10px'
 };
-export const signupButtonStyle: CSSProperties = {
-	alignItems: 'center',
-	backgroundColor: '#C7158C',
-	border: 'none',
-	borderRadius: '4px',
-	color: '#fff',
-	cursor: 'pointer',
-	display: 'flex',
-	fontSize: '14px',
-	fontWeight: 'bold',
-	justifyContent: 'center',
-	padding: '10px',
-	width: '100%'
-};
+
 export const separatorLineStyle = ({
 	color = '#DDDDDD',
 	height = '1px'

@@ -10,6 +10,9 @@ export const styleReset = `
     }
 `;
 
+export const primaryColor = '#A0E7E5';
+export const secondaryColor = '#B4F8C8';
+
 export const bodyDefault: CSSProperties = {
 	backgroundColor: '#f5f5f5',
 	color: '#333',
@@ -35,10 +38,12 @@ export const htmlDefault: CSSProperties = {
 type ButtonStyleProps = {
 	backgroundColor?: string;
 	color?: string;
+	width?: string;
 };
 export const buttonStyle = ({
 	backgroundColor = 'none',
-	color = 'white'
+	color = 'white',
+	width
 }: ButtonStyleProps): CSSProperties => ({
 	alignItems: 'center',
 	backgroundColor,
@@ -54,7 +59,7 @@ export const buttonStyle = ({
 	padding: '0.625rem 1rem',
 	textDecoration: 'none',
 	textWrap: 'nowrap',
-	width: '100%'
+	width
 });
 
 export const formStyle: CSSProperties = {

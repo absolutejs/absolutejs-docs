@@ -1,6 +1,7 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useRef, useState } from 'react';
 import { User } from '../../../../db/schema';
+import { profileButtonStyle } from '../../styles/navbarStyles';
 import { buttonStyle } from '../../styles/styles';
 import { AuthContainer } from '../auth/AuthContainer';
 import { ProfilePicture } from '../utils/ProfilePicture';
@@ -54,14 +55,14 @@ export const NavbarUserButtons = ({
 				ref={userButtonRef}
 				onClick={user ? () => handleSignOut() : handleLoginClick}
 				style={buttonStyle({
-					backgroundColor: 'blue',
-					color: 'white'
+					backgroundColor: '#000',
+					color: '#fff'
 				})}
 			>
-				{user ? 'Logout' : 'Login'}
+				{user ? 'Sign Out' : 'Login'}
 			</button>
 			{user !== undefined && (
-				<animated.a href="/portal">
+				<animated.a style={profileButtonStyle} href="/protected">
 					<ProfilePicture
 						userImage={user.picture}
 						backupImage={'/assets/svg/default-account-icon.svg'}

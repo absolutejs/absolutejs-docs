@@ -1,27 +1,18 @@
-import {
-	googleButtonStyle,
-	googleButtonContentStyle,
-	googleIconStyle,
-	googleButtonTextStyle
-} from '../../styles/authStyles';
+import { OAuthButton } from './OAuthButton';
 
 type OAuthButtonsProps = {
 	mode: 'login' | 'signup';
 };
 
 export const OAuthButtons = ({ mode }: OAuthButtonsProps) => (
-	<a href="/oauth2/google/authorization" style={googleButtonStyle}>
-		<div style={googleButtonContentStyle}>
-			<img
-				src="/assets/svg/GoogleIcon.svg"
-				alt="Google Icon"
-				style={googleIconStyle}
-			/>
-			<span style={googleButtonTextStyle}>
-				{mode === 'login'
-					? 'Sign in with Google'
-					: 'Sign up with Google'}
-			</span>
-		</div>
-	</a>
+	<nav
+		style={{
+			display: 'flex',
+			flexDirection: 'column',
+			width: '100%'
+		}}
+	>
+		<OAuthButton mode={mode} provider="google" />
+		<OAuthButton mode={mode} provider="github" />
+	</nav>
 );

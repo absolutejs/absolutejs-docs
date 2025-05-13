@@ -2,8 +2,8 @@ import { ReactNode, useEffect, useRef, MouseEvent } from 'react';
 
 type ModalProps = {
 	isOpen: boolean;
-	onClose: () => void;
-	onOpen: (dialogRef: HTMLDialogElement | null) => void;
+	onClose?: () => void;
+	onOpen?: (dialogRef: HTMLDialogElement | null) => void;
 	children: ReactNode;
 };
 
@@ -16,11 +16,11 @@ export const Modal = ({ isOpen, onClose, onOpen, children }: ModalProps) => {
 
 		if (isOpen) {
 			dialog.showModal();
-			onOpen(dialog);
+			onOpen?.(dialog);
 			document.body.style.overflow = 'hidden';
 		} else if (dialog.open) {
 			dialog.close();
-			onClose();
+			onClose?.();
 			document.body.style.overflow = '';
 		}
 	}, [isOpen, onClose, onOpen]);
@@ -30,10 +30,10 @@ export const Modal = ({ isOpen, onClose, onOpen, children }: ModalProps) => {
 			ref={dialogRef}
 			onCancel={(event) => {
 				event.preventDefault();
-				onClose();
+				onClose?.();
 			}}
 			onClick={(event: MouseEvent<HTMLDialogElement>) => {
-				if (event.target === dialogRef.current) onClose();
+				if (event.target === dialogRef.current) onClose?.();
 			}}
 			style={{
 				alignItems: 'center',

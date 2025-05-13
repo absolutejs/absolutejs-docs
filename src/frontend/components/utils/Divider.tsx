@@ -1,9 +1,9 @@
+import { isNonEmptyString } from '../../../types/typeGuards';
 import {
 	separatorStyle,
 	separatorLineStyle,
 	separatorTextStyle
-} from '../../styles/authStyles';
-import { isNonEmptyString } from '../../types/typeGuards';
+} from '../../styles/authModalStyles';
 
 type DividerProps = {
 	color?: string;
