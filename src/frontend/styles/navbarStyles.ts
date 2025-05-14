@@ -1,7 +1,7 @@
 import { SpringValue } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { AnimatedCSSProperties } from '../../types/types';
-import { primaryColor } from './styles';
+import { primaryColor, tertiaryColor } from './styles';
 
 export const dropdownStyle: CSSProperties = {
 	alignItems: 'center',
@@ -48,9 +48,11 @@ export const navbarDrowdownLinkStyle: CSSProperties = {
 	alignItems: 'center',
 	background: 'none',
 	border: 'none',
-	color: '#000',
+	color: tertiaryColor,
+	fontSize: '1.5rem',
+			
+					textDecoration: 'none',
 	display: 'flex',
-	fontSize: '1.5rem'
 };
 
 export const optionStyle: CSSProperties = {

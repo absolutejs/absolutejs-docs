@@ -6,7 +6,6 @@ import {
 	loginTextStyle,
 	loginLinkTextStyle
 } from '../../styles/authModalStyles';
-import { Divider } from '../utils/Divider';
 import { ProviderDropdown } from '../utils/ProviderDropdown';
 import { OAuthButton } from './OAuthButton';
 import { OAuthButtons } from './OAuthButtons';
@@ -39,12 +38,6 @@ export const AuthContainer = () => {
 			</h1>
 
 			<OAuthButtons mode={mode} />
-
-			<Divider text="or" />
-
-			<ProviderDropdown setCurrentProvider={setCurrentProvider} />
-
-			<OAuthButton mode={'login'} provider={currentProvider} />
 
 			<p style={loginTextStyle}>
 				{mode === 'login' ? 'Need an account? ' : 'Have an account? '}

@@ -8,6 +8,7 @@ import {
 	getNavbarDropdownListStyle
 } from '../../styles/navbarStyles';
 import { NavbarLink } from './NavbarLink';
+import { primaryColor, quaternaryColor, secondaryColor } from '../../styles/styles';
 
 type NavbarDropdownProps = {
 	label: string;
@@ -71,7 +72,7 @@ export const NavbarDropdown = ({ label, href, links }: NavbarDropdownProps) => {
 
 				<AnimatedFaChevronDown
 					style={{
-						color: '#000',
+						color: quaternaryColor,
 						fontSize: '1.5rem',
 						marginLeft: '10px',
 						transform: dropdownSpring.transform,

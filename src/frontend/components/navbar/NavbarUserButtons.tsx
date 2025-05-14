@@ -48,7 +48,8 @@ export const NavbarUserButtons = ({
 		<div
 			style={{
 				display: 'flex',
-				position: 'relative'
+				position: 'relative',
+				marginLeft: '1.5rem',
 			}}
 		>
 			<button

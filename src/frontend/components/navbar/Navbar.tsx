@@ -11,6 +11,7 @@ import {
 import { HamburgerMenu } from '../hamburger/HamburgerMenu';
 import { NavbarLinks } from './NavbarLinks';
 import { NavbarUserButtons } from './NavbarUserButtons';
+import { primaryColor, tertiaryColor } from '../../styles/styles';
 
 type NavbarProps = {
 	user: User | undefined;
@@ -49,13 +50,13 @@ export const Navbar = ({ user, handleSignOut }: NavbarProps) => {
 			<a
 				href="/"
 				style={{
-					color: '#000',
+					color: tertiaryColor,
 					fontSize: '1.5rem',
 					fontWeight: 'bold',
 					textDecoration: 'none'
 				}}
 			>
-				Absolute Auth
+				AbsoluteJS
 			</a>
 
 			<div
