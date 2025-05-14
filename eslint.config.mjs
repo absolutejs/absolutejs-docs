@@ -219,7 +219,7 @@ export default [
 		}
 	},
 	{
-		files: ['db/migrate.ts'],
+		files: ['db/migrate.ts', 'src/backend/utils/absoluteAuthConfig.ts'],
 		rules: {
 			'no-console': 'off'
 		}

@@ -3,10 +3,17 @@ import {
 	handleReactPageRequest,
 	networkingPlugin
 } from '@absolutejs/absolute';
+import { absoluteAuth } from '@absolutejs/auth';
 import { staticPlugin } from '@elysiajs/static';
-import { Elysia } from 'elysia';
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { Elysia, env } from 'elysia';
+import { schema, User } from '../../db/schema';
 import { Home } from '../frontend/pages/Home';
+import { NotAuthorized } from '../frontend/pages/NotAuthorized';
+import { Protected } from '../frontend/pages/Protected';
 import { Testing } from '../frontend/pages/Testing';
+import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 
 const manifest = await build({
 	assetsDir: 'src/backend/assets',
@@ -20,9 +27,26 @@ if (manifest === null) {
 
 const homeIndex = manifest['HomeIndex'];
 const testingIndex = manifest['TestingIndex'];
-if (homeIndex === undefined || testingIndex === undefined) {
+const notAuthorizedIndex = manifest['NotAuthorizedIndex'];
+const protectedIndex = manifest['ProtectedIndex'];
+
+if (
+	homeIndex === undefined ||
+	testingIndex === undefined ||
+	notAuthorizedIndex === undefined ||
+	protectedIndex === undefined
+) {
 	throw new Error('Missing index file in manifest');
 }
+
+if (!env.DATABASE_URL) {
+	throw new Error('DATABASE_URL is not set in .env file');
+}
+
+const sql = neon(env.DATABASE_URL);
+const db = drizzle(sql, {
+	schema
+});
 
 new Elysia()
 	.use(
@@ -31,8 +55,15 @@ new Elysia()
 			prefix: ''
 		})
 	)
+	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
 	.get('/', () => handleReactPageRequest(Home, homeIndex))
 	.get('/testing', () => handleReactPageRequest(Testing, testingIndex))
+	.get('/protected', ({ protectRoute }) =>
+		protectRoute(
+			() => handleReactPageRequest(Protected, protectedIndex),
+			() => handleReactPageRequest(NotAuthorized, notAuthorizedIndex)
+		)
+	)
 	.use(networkingPlugin)
 	.on('error', (error) => {
 		const { request } = error;

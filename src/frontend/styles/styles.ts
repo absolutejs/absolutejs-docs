@@ -103,3 +103,11 @@ export const linkStyle: CSSProperties = {
 	fontWeight: 'bold',
 	textDecoration: 'none'
 };
+
+export const contentStyle: CSSProperties = {
+	alignItems: 'center',
+	display: 'flex',
+	flexDirection: 'column',
+	height: '100%',
+	justifyContent: 'center'
+};
