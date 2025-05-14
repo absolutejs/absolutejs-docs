@@ -29,7 +29,7 @@ export const AuthContainer = () => {
 					textDecoration: 'none'
 				}}
 			>
-				Absolute Auth
+				AbsoluteJS
 			</a>
 			<h1 style={headingStyle}>
 				{mode === 'login'
