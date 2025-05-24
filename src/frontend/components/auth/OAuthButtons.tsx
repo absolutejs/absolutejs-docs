@@ -15,8 +15,8 @@ export const OAuthButtons = ({ mode }: OAuthButtonsProps) => (
 	>
 		<OAuthButton mode={mode} provider="google" />
 
-			<Divider text="or" />
-			
+		<Divider text="or" />
+
 		<OAuthButton mode={mode} provider="github" />
 	</nav>
 );

@@ -7,8 +7,8 @@ import {
 	dropdownStyle,
 	getNavbarDropdownListStyle
 } from '../../styles/navbarStyles';
+import { quaternaryColor } from '../../styles/styles';
 import { NavbarLink } from './NavbarLink';
-import { primaryColor, quaternaryColor, secondaryColor } from '../../styles/styles';
 
 type NavbarDropdownProps = {
 	label: string;

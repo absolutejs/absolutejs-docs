@@ -17,7 +17,7 @@ import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 
 const manifest = await build({
 	assetsDirectory: 'src/backend/assets',
-	reactDirectory: 'src/frontend',
+	reactDirectory: 'src/frontend'
 });
 
 if (manifest === null) {

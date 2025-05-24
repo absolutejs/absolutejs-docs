@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import {  tertiaryColor} from './styles';
+import { tertiaryColor } from './styles';
 
 export const confirmInputStyle: CSSProperties = {
 	border: '1px solid #ccc',
@@ -73,9 +73,9 @@ export const headingStyle: CSSProperties = {
 export const labelStyle: CSSProperties = {
 	color: tertiaryColor,
 	fontSize: '1.5rem',
-	textDecoration: 'none',
 	marginBottom: '-2px',
-	textAlign: 'left'
+	textAlign: 'left',
+	textDecoration: 'none'
 };
 
 export const loginLinkTextStyle: CSSProperties = {

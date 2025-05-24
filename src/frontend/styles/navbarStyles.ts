@@ -49,10 +49,9 @@ export const navbarDrowdownLinkStyle: CSSProperties = {
 	background: 'none',
 	border: 'none',
 	color: tertiaryColor,
-	fontSize: '1.5rem',
-			
-					textDecoration: 'none',
 	display: 'flex',
+	fontSize: '1.5rem',
+	textDecoration: 'none'
 };
 
 export const optionStyle: CSSProperties = {

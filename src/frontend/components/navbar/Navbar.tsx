@@ -8,10 +8,10 @@ import {
 	hamburgerButtonStyle,
 	hamburgerBarStyle
 } from '../../styles/navbarStyles';
+import { tertiaryColor } from '../../styles/styles';
 import { HamburgerMenu } from '../hamburger/HamburgerMenu';
 import { NavbarLinks } from './NavbarLinks';
 import { NavbarUserButtons } from './NavbarUserButtons';
-import { primaryColor, tertiaryColor } from '../../styles/styles';
 
 type NavbarProps = {
 	user: User | undefined;

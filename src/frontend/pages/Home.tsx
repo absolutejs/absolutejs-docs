@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { CreateButton } from '../components/home/CreateButton';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { useAuthStatus } from '../hooks/useAuthStatus';
@@ -13,31 +13,21 @@ import {
 export const Home = () => {
 	const { user, handleSignOut } = useAuthStatus();
 
-	// Remove harmless OAuth fragments inserted by Facebook and Reddit
-	useEffect(() => {
-		const { hash } = window.location;
-		if (hash === '#_=_' || hash === '#_') {
-			// Strip the fragment without reloading the page
-			window.history.replaceState(
-				null,
-				document.title,
-				window.location.pathname + window.location.search
-			);
-		}
-	}, []);
-
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head />
 			<body style={bodyDefault}>
 				<Navbar user={user} handleSignOut={handleSignOut} />
 				<main style={mainDefault}>
-					<h1 style={headingStyle}>Welcome to Citra Example</h1>
+					<h1 style={headingStyle}>Welcome to AbsoluteJS</h1>
 					<p style={paragraphStyle}>
-						Citra is a lightweight TypeScript OAuth2 client library
-						that makes it easy to authorize users, refresh, and
-						revoke tokens with just a few lines of code.
+						AbsoluteJS is a powerful and flexible JavaScript
+						framework that provides a wide range of features and
+						tools for building modern web applications. Whether
+						you're a beginner or an experienced developer,
+						AbsoluteJS has something to offer you.
 					</p>
+					<CreateButton />
 				</main>
 			</body>
 		</html>

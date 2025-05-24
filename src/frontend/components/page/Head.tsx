@@ -6,13 +6,13 @@ type HeadProps = {
 };
 
 export const Head = ({
-	title = 'Citra',
+	title = 'AbsoluteJS',
 	icon = '/assets/favicon.ico'
 }: HeadProps) => (
 	<head>
 		<meta charSet="utf-8" />
 		<title>{title}</title>
-		<meta name="description" content="Bun, Elysia & React" />
+		<meta name="description" content="AbsoluteJS Documentation" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" href={icon} />
 		<link

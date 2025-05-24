@@ -1,4 +1,3 @@
-import { ProviderOption } from 'citra';
 import { useState } from 'react';
 import {
 	containerStyle,
@@ -6,13 +5,9 @@ import {
 	loginTextStyle,
 	loginLinkTextStyle
 } from '../../styles/authModalStyles';
-import { ProviderDropdown } from '../utils/ProviderDropdown';
-import { OAuthButton } from './OAuthButton';
 import { OAuthButtons } from './OAuthButtons';
 
 export const AuthContainer = () => {
-	const [currentProvider, setCurrentProvider] =
-		useState<Lowercase<ProviderOption>>();
 	const [mode, setMode] = useState<'login' | 'signup'>('login');
 	const switchMode = () => {
 		setMode((prev) => (prev === 'login' ? 'signup' : 'login'));
