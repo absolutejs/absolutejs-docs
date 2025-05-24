@@ -1,3 +1,5 @@
+import { FaCheckCircle, FaRegQuestionCircle } from 'react-icons/fa';
+import { AiOutlineExperiment, AiOutlineMinusCircle } from 'react-icons/ai';
 import {
 	legendWrapperStyle,
 	legendTitleStyle,
@@ -6,34 +8,45 @@ import {
 	legendTextStyle,
 	legendFooterStyle
 } from '../../styles/testingStyles';
+import { ImWarning } from 'react-icons/im';
 
 export const Legend = () => (
 	<div style={legendWrapperStyle}>
 		<h2 style={legendTitleStyle}>Status Key</h2>
 		<div style={legendGridStyle}>
-			<span style={badgeStyle('#4caf50')}>Tested</span>
+			<span style={badgeStyle('#4caf50')}>
+				<FaCheckCircle />
+			</span>
 			<p style={legendTextStyle}>
-				Verified routes actively working and community-tested.
+				Tested: Verified routes actively working and community-tested.
 			</p>
 
-			<span style={badgeStyle('#888')}>Untested</span>
+			<span style={badgeStyle('#888')}>
+				<FaRegQuestionCircle />
+			</span>
 			<p style={legendTextStyle}>
-				Pending external or restricted access.
+				Untested: Pending external or restricted access.
 			</p>
 
-			<span style={badgeStyle('#ff9800')}>Testing</span>
+			<span style={badgeStyle('#ff9800')}>
+				<AiOutlineExperiment />
+			</span>
 			<p style={legendTextStyle}>
-				Feature currently under development on our end.
+				Testing: Feature currently under development on our end.
 			</p>
 
-			<span style={badgeStyle('#fafafa', '#333')}>Missing</span>
+			<span style={badgeStyle('#e0e0e0', '#333')}>
+				<AiOutlineMinusCircle />
+			</span>
 			<p style={legendTextStyle}>
-				Functionality not supported by the provider.
+				Missing: Functionality not supported by the provider.
 			</p>
 
-			<span style={badgeStyle('#e53935')}>Failed</span>
+			<span style={badgeStyle('#e53935')}>
+				<ImWarning />
+			</span>
 			<p style={legendTextStyle}>
-				Library or endpoint issues (not user error).
+				Failed: Library or endpoint issues (not user error).
 			</p>
 		</div>
 

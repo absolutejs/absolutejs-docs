@@ -24,7 +24,7 @@ export const AuthTesting = () => {
 							textAlign: 'center'
 						}}
 					>
-						Absolute-Auth and Citra currently support{' '}
+						Citra and Absolute-Auth currently support{' '}
 						{providerOptions.length} OAuth 2.0 providers
 					</h1>
 

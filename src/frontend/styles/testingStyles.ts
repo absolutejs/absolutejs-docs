@@ -19,12 +19,12 @@ export const legendTitleStyle: CSSProperties = {
 };
 
 export const legendGridStyle: CSSProperties = {
-	alignItems: 'center',
-	columnGap: '12px',
 	display: 'grid',
-	gridTemplateColumns: '8ch auto',
-	margin: '0 auto',
+	gridTemplateColumns: 'auto 1fr',
+	columnGap: '12px',
 	rowGap: '12px',
+	alignItems: 'center',
+	margin: '0 auto',
 	width: 'max-content'
 };
 
@@ -37,18 +37,15 @@ export const badgeStyle = (
 	backgroundColor: string,
 	textColor = '#fff'
 ): CSSProperties => ({
+	display: 'flex',
 	alignItems: 'center',
-	backgroundColor,
-	border: '1px solid black',
-	borderRadius: '4px',
-	boxSizing: 'border-box',
-	color: textColor,
-	display: 'inline-flex',
-	fontSize: '0.9rem',
-	fontWeight: 500,
 	justifyContent: 'center',
-	padding: '4px 12px',
-	width: '8ch'
+	backgroundColor,
+	color: textColor,
+	width: '2rem',
+	height: '2rem',
+	borderRadius: '50%',
+	fontSize: '1.2rem'
 });
 
 export const legendTextStyle: CSSProperties = {
