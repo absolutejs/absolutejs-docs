@@ -1,11 +1,10 @@
 import { providerOptions } from '@absolutejs/auth';
+import { OAuthButton } from '../components/auth/OAuthButton';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { Legend } from '../components/testing/Legend';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
-import { OAuthLink } from '../components/auth/OAuthLink';
-import { OAuthButton } from '../components/auth/OAuthButton';
 
 export const AuthTesting = () => {
 	const { user, handleSignOut } = useAuthStatus();

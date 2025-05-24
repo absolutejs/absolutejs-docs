@@ -1,4 +1,4 @@
-import { User } from '../../db/schema';
+import { User } from '../../../../db/schema';
 import { contentStyle } from '../../styles/styles';
 
 type UserInfoProps = {

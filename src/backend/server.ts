@@ -9,10 +9,10 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { Elysia, env } from 'elysia';
 import { schema, User } from '../../db/schema';
+import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { Home } from '../frontend/pages/Home';
 import { NotAuthorized } from '../frontend/pages/NotAuthorized';
 import { Protected } from '../frontend/pages/Protected';
-import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 
 const manifest = await build({

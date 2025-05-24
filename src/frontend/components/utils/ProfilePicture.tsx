@@ -20,9 +20,5 @@ export const ProfilePicture = ({
 			objectFit: 'cover',
 			width: width
 		}}
-		onError={(error) => {
-			error.currentTarget.onerror = null;
-			error.currentTarget.src = backupImage;
-		}}
 	/>
 );

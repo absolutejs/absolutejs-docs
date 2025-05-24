@@ -1,5 +1,5 @@
 import { isRefreshableProviderOption, isRevocableProviderOption } from 'citra';
-import { User } from '../../db/schema';
+import { User } from '../../../../db/schema';
 import { buttonStyle } from '../../styles/styles';
 import { useToast } from '../utils/ToastProvider';
 

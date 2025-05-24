@@ -1,3 +1,4 @@
+import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 const users = pgTable('users', {
@@ -13,8 +14,12 @@ export const schema = {
 	users
 };
 
-// Type Definitions
 export type SchemaType = typeof schema;
 
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
+
+export type DatabaseFunctionProps = {
+	db: NeonHttpDatabase<SchemaType>;
+	schema: SchemaType;
+};

@@ -1,6 +1,6 @@
+import { UserFunctionProps } from '@absolutejs/auth';
 import { eq } from 'drizzle-orm';
-import { UserFunctionProps } from '../../src/types';
-import type { DatabaseFunctionProps, NewUser } from '../db/schema';
+import { DatabaseFunctionProps, NewUser } from '../../../db/schema';
 
 export const getDBUser = async ({
 	authSub,
