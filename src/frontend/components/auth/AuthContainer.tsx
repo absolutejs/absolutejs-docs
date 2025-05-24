@@ -5,7 +5,7 @@ import {
 	loginTextStyle,
 	loginLinkTextStyle
 } from '../../styles/authModalStyles';
-import { OAuthButtons } from './OAuthButtons';
+import { OAuthLinks } from './OAuthLinks';
 
 export const AuthContainer = () => {
 	const [mode, setMode] = useState<'login' | 'signup'>('login');
@@ -32,7 +32,7 @@ export const AuthContainer = () => {
 					: 'Create an account'}
 			</h1>
 
-			<OAuthButtons mode={mode} />
+			<OAuthLinks mode={mode} />
 
 			<p style={loginTextStyle}>
 				{mode === 'login' ? 'Need an account? ' : 'Have an account? '}

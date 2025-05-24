@@ -4,8 +4,10 @@ import { Head } from '../components/page/Head';
 import { Legend } from '../components/testing/Legend';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
+import { OAuthLink } from '../components/auth/OAuthLink';
+import { OAuthButton } from '../components/auth/OAuthButton';
 
-export const Testing = () => {
+export const AuthTesting = () => {
 	const { user, handleSignOut } = useAuthStatus();
 
 	return (
@@ -23,8 +25,8 @@ export const Testing = () => {
 							textAlign: 'center'
 						}}
 					>
-						Citra currently supports {providerOptions.length} OAuth
-						2.0 providers
+						Absolute-Auth and Citra currently support{' '}
+						{providerOptions.length} OAuth 2.0 providers
 					</h1>
 
 					<p
@@ -63,24 +65,7 @@ export const Testing = () => {
 						}}
 					>
 						{providerOptions.map((provider) => (
-							<button
-								key={provider}
-								style={{
-									alignItems: 'center',
-									backgroundColor: '#fff',
-									border: '1px solid #ddd',
-									borderRadius: '4px',
-									cursor: 'pointer',
-									display: 'flex',
-									fontSize: '0.9rem',
-									height: '40px',
-									justifyContent: 'center',
-									padding: '10px',
-									textAlign: 'center'
-								}}
-							>
-								{provider}
-							</button>
+							<OAuthButton key={provider} provider={provider} />
 						))}
 					</div>
 				</main>

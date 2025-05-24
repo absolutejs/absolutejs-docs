@@ -12,7 +12,7 @@ import { schema, User } from '../../db/schema';
 import { Home } from '../frontend/pages/Home';
 import { NotAuthorized } from '../frontend/pages/NotAuthorized';
 import { Protected } from '../frontend/pages/Protected';
-import { Testing } from '../frontend/pages/Testing';
+import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 
 const manifest = await build({
@@ -25,13 +25,13 @@ if (manifest === null) {
 }
 
 const homeIndex = manifest['HomeIndex'];
-const testingIndex = manifest['TestingIndex'];
+const authTestingIndex = manifest['AuthTestingIndex'];
 const notAuthorizedIndex = manifest['NotAuthorizedIndex'];
 const protectedIndex = manifest['ProtectedIndex'];
 
 if (
 	homeIndex === undefined ||
-	testingIndex === undefined ||
+	authTestingIndex === undefined ||
 	notAuthorizedIndex === undefined ||
 	protectedIndex === undefined
 ) {
@@ -56,7 +56,9 @@ new Elysia()
 	)
 	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
 	.get('/', () => handleReactPageRequest(Home, homeIndex))
-	.get('/testing', () => handleReactPageRequest(Testing, testingIndex))
+	.get('/auth/testing', () =>
+		handleReactPageRequest(AuthTesting, authTestingIndex)
+	)
 	.get('/protected', ({ protectRoute }) =>
 		protectRoute(
 			() => handleReactPageRequest(Protected, protectedIndex),

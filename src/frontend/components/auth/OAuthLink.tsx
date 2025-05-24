@@ -8,11 +8,12 @@ import {
 	oauthButtonTextStyle
 } from '../../styles/authModalStyles';
 
-type OAuthButtonProps = {
+type OAuthLinkProps = {
+	mode: 'login' | 'signup';
 	provider: Lowercase<ProviderOption> | undefined;
 };
 
-export const OAuthButton = ({ provider }: OAuthButtonProps) => {
+export const OAuthLink = ({ mode, provider }: OAuthLinkProps) => {
 	const defaultData: ProviderInfo = {
 		logoUrl: '/assets/svg/todo-put-file.svg',
 		name: 'other provider',
@@ -26,8 +27,12 @@ export const OAuthButton = ({ provider }: OAuthButtonProps) => {
 
 	const isProviderSelected = provider !== undefined;
 
+	const buttonText =
+		mode === 'login' ? `Sign in with ${name}` : `Sign up with ${name}`;
+
 	return (
-		<button
+		<a
+			href={provider ? `/oauth2/${provider}/authorization` : undefined}
 			style={oauthButtonStyle({
 				isProviderSelected,
 				providerPrimaryColor: isProviderSelected
@@ -45,8 +50,8 @@ export const OAuthButton = ({ provider }: OAuthButtonProps) => {
 				) : (
 					<FiUser style={oauthIconStyle} />
 				)}
-				<span style={oauthButtonTextStyle}>{name}</span>
+				<span style={oauthButtonTextStyle}>{buttonText}</span>
 			</div>
-		</button>
+		</a>
 	);
 };

@@ -8,17 +8,14 @@ export const navbarData: NavbarElement[] = [
 	{
 		href: '/citra',
 		label: 'Citra',
-		links: [
-			{ href: '/citra/testing', label: 'Testing' },
-			{ href: '/citra/documentation', label: 'Documentation' }
-		]
+		links: [{ href: '/citra/documentation', label: 'Documentation' }]
 	},
 	{
-		href: '/absolute-auth',
+		href: '/auth',
 		label: 'Auth',
 		links: [
-			{ href: '/absolute-auth/testing', label: 'Testing' },
-			{ href: '/absolute-auth/documentation', label: 'Documentation' }
+			{ href: '/auth/documentation', label: 'Documentation' },
+			{ href: '/auth/testing', label: 'Testing' }
 		]
 	},
 	{
