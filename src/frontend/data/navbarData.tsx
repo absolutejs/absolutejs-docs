@@ -19,6 +19,14 @@ export const navbarData: NavbarElement[] = [
 		]
 	},
 	{
+		href: '/CLI',
+		label: 'CLI',
+		links: [
+			{ href: '/CLI/documentation', label: 'Documentation' },
+			{ href: '/CLI/commands', label: 'Commands' }
+		]
+	},
+	{
 		href: '/blog',
 		label: 'Blog'
 	}

@@ -26,11 +26,9 @@ export const bodyDefault: CSSProperties = {
 };
 
 export const mainDefault: CSSProperties = {
-	alignItems: 'center',
 	display: 'flex',
 	flex: 1,
-	flexDirection: 'column',
-	justifyContent: 'center'
+	flexDirection: 'column'
 };
 
 export const htmlDefault: CSSProperties = {
