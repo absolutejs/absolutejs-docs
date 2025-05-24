@@ -18,18 +18,24 @@
 		"lint": "eslint ./src ./eslint.config.mjs",
 		"typecheck": "bun run tsc --noEmit"
 	},
-	"devDependencies": {
+	"dependencies": {
 		"@absolutejs/auth": "0.7.5",
 		"@elysiajs/static": "1.2.0",
+		"@absolutejs/absolute": "0.6.0",
+		"elysia": "1.2.25",
+		"react": "19.1.0",
+		"react-dom": "19.1.0",
+		"react-icons": "5.5.0"
+	},
+	"devDependencies": {
 		"@neondatabase/serverless": "1.0.0",
-		"@react-spring/web": "10.0.0-beta.0",
+		"@react-spring/web": "10.0.1",
 		"@stylistic/eslint-plugin-ts": "4.2.0",
 		"@types/bun": "1.2.12",
 		"@types/react": "19.1.4",
 		"@types/react-dom": "19.1.5",
 		"drizzle-kit": "0.30.6",
 		"drizzle-orm": "0.41.0",
-		"elysia": "1.2.25",
 		"eslint": "9.26.0",
 		"eslint-plugin-absolute": "0.0.3",
 		"eslint-plugin-import": "2.31.0",
@@ -40,9 +46,6 @@
 		"eslint-plugin-react-hooks": "5.2.0",
 		"eslint-plugin-security": "3.0.1",
 		"prettier": "3.5.3",
-		"react": "19.1.0",
-		"react-dom": "19.1.0",
-		"react-icons": "5.5.0",
 		"typescript": "5.8.3",
 		"typescript-eslint": "8.32.0"
 	}

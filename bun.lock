@@ -3,18 +3,24 @@
   "workspaces": {
     "": {
       "name": "@absolutejs/docs",
-      "devDependencies": {
+      "dependencies": {
+        "@absolutejs/absolute": "0.6.0",
         "@absolutejs/auth": "0.7.5",
         "@elysiajs/static": "1.2.0",
+        "elysia": "1.2.25",
+        "react": "19.1.0",
+        "react-dom": "19.1.0",
+        "react-icons": "5.5.0",
+      },
+      "devDependencies": {
         "@neondatabase/serverless": "1.0.0",
-        "@react-spring/web": "10.0.0-beta.0",
+        "@react-spring/web": "10.0.1",
         "@stylistic/eslint-plugin-ts": "4.2.0",
         "@types/bun": "1.2.12",
         "@types/react": "19.1.4",
         "@types/react-dom": "19.1.5",
         "drizzle-kit": "0.30.6",
         "drizzle-orm": "0.41.0",
-        "elysia": "1.2.25",
         "eslint": "9.26.0",
         "eslint-plugin-absolute": "0.0.3",
         "eslint-plugin-import": "2.31.0",
@@ -25,15 +31,14 @@
         "eslint-plugin-react-hooks": "5.2.0",
         "eslint-plugin-security": "3.0.1",
         "prettier": "3.5.3",
-        "react": "19.1.0",
-        "react-dom": "19.1.0",
-        "react-icons": "5.5.0",
         "typescript": "5.8.3",
         "typescript-eslint": "8.32.0",
       },
     },
   },
   "packages": {
+    "@absolutejs/absolute": ["@absolutejs/absolute@0.6.0", "", { "peerDependencies": { "elysia": ">= 1.2.0", "react": ">= 19.1.0", "react-dom": ">= 19.1.0" } }, "sha512-NJH3QcIoEyRDR13x70wZErAijGWETztDtMKB9elFYRDnrNGRh4NCQWnD4kwiTtyPdvUh/M26mEEKZ2315mBa7g=="],
+
     "@absolutejs/auth": ["@absolutejs/auth@0.7.5", "", { "dependencies": { "citra": "0.20.1" }, "peerDependencies": { "elysia": ">= 1.2.0" } }, "sha512-GwsCXxDAQzFBxJN8+RTNS5Y1MgDh+KASpH2xCs1l718HmtBda37/gvaljHA16XR/8trlorFfN/WzzrVdf1oX+w=="],
 
     "@ampproject/remapping": ["@ampproject/remapping@2.3.0", "", { "dependencies": { "@jridgewell/gen-mapping": "^0.3.5", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw=="],
@@ -186,17 +191,17 @@
 
     "@petamoriken/float16": ["@petamoriken/float16@3.9.2", "", {}, "sha512-VgffxawQde93xKxT3qap3OH+meZf7VaSB5Sqd4Rqc+FP5alWbpOyan/7tRbOAvynjpG3GpdtAuGU/NdhQpmrog=="],
 
-    "@react-spring/animated": ["@react-spring/animated@10.0.0-beta.0", "", { "dependencies": { "@react-spring/shared": "~10.0.0-beta.0", "@react-spring/types": "~10.0.0-beta.0" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-6bcSwKVqgdDpfIYAuYQ2dXvgo8ixS9csiLlqTDo0J6qArkili4tLDsJ55+mq9gsbRh5G50Mr32yeZa+PRDAMOw=="],
+    "@react-spring/animated": ["@react-spring/animated@10.0.1", "", { "dependencies": { "@react-spring/shared": "~10.0.1", "@react-spring/types": "~10.0.1" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-BGL3hA66Y8Qm3KmRZUlfG/mFbDPYajgil2/jOP0VXf2+o2WPVmcDps/eEgdDqgf5Pv9eBbyj7LschLMuSjlW3Q=="],
 
-    "@react-spring/core": ["@react-spring/core@10.0.0-beta.0", "", { "dependencies": { "@react-spring/animated": "~10.0.0-beta.0", "@react-spring/shared": "~10.0.0-beta.0", "@react-spring/types": "~10.0.0-beta.0" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-kkPvjdBjvwa/3cOM6zG6lO/iftVA5v0HmvF31/8jmajbpgOgDjSvTwh+dJ8tXlNwA3Yt/8ixrLIwtrAWQdJZMw=="],
+    "@react-spring/core": ["@react-spring/core@10.0.1", "", { "dependencies": { "@react-spring/animated": "~10.0.1", "@react-spring/shared": "~10.0.1", "@react-spring/types": "~10.0.1" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-KaMMsN1qHuVTsFpg/5ajAVye7OEqhYbCq0g4aKM9bnSZlDBBYpO7Uf+9eixyXN8YEbF+YXaYj9eoWDs+npZ+sA=="],
 
-    "@react-spring/rafz": ["@react-spring/rafz@10.0.0-beta.0", "", {}, "sha512-glLfiILpBU13HEH0l3GiWiKLRRsy9NAfRY+MkpCUFgBVdGDlj2kfVPwOX+N0AnTdBHhOQDwANjK5RZYuQpGefw=="],
+    "@react-spring/rafz": ["@react-spring/rafz@10.0.1", "", {}, "sha512-UrzG/d6Is+9i0aCAjsjWRqIlFFiC4lFqFHrH63zK935z2YDU95TOFio4VKGISJ5SG0xq4ULy7c1V3KU+XvL+Yg=="],
 
-    "@react-spring/shared": ["@react-spring/shared@10.0.0-beta.0", "", { "dependencies": { "@react-spring/rafz": "~10.0.0-beta.0", "@react-spring/types": "~10.0.0-beta.0" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-3yqhM7jnpP2Tstp7OMXB0burXB5nEGqwW1v+suIYzEgWoJuGFrzjv2vlws9Q+YorjiXzIf6qdlp4ljOVlWCYBw=="],
+    "@react-spring/shared": ["@react-spring/shared@10.0.1", "", { "dependencies": { "@react-spring/rafz": "~10.0.1", "@react-spring/types": "~10.0.1" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-KR2tmjDShPruI/GGPfAZOOLvDgkhFseabjvxzZFFggJMPkyICLjO0J6mCIoGtdJSuHywZyc4Mmlgi+C88lS00g=="],
 
-    "@react-spring/types": ["@react-spring/types@10.0.0-beta.0", "", {}, "sha512-iLNkbth4fwO57EG+iXlgh4483SFzwrftF33xGdrwVqUbCTckIeqtjIpjerW3KmP+3q9rvTI8ugqrAofMWEPkBw=="],
+    "@react-spring/types": ["@react-spring/types@10.0.1", "", {}, "sha512-Fk1wYVAKL+ZTYK+4YFDpHf3Slsy59pfFFvnnTfRjQQFGlyIo4VejPtDs3CbDiuBjM135YztRyZjIH2VbycB+ZQ=="],
 
-    "@react-spring/web": ["@react-spring/web@10.0.0-beta.0", "", { "dependencies": { "@react-spring/animated": "~10.0.0-beta.0", "@react-spring/core": "~10.0.0-beta.0", "@react-spring/shared": "~10.0.0-beta.0", "@react-spring/types": "~10.0.0-beta.0" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-0KWfUyOmfuIG33Sxr/FkkBNRkUxTFugJ5th0GRe2TuCrvyX4IVdB0v/XSHMOqj8fzyVIkxnueNaNsjhQ7qiVtg=="],
+    "@react-spring/web": ["@react-spring/web@10.0.1", "", { "dependencies": { "@react-spring/animated": "~10.0.1", "@react-spring/core": "~10.0.1", "@react-spring/shared": "~10.0.1", "@react-spring/types": "~10.0.1" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-FgQk02OqFrYyJBTTnBTWAU0WPzkHkKXauc6aeexcvATvLapUxwnfGuLlsLYF8BYjEVfkivPT04ziAue6zyRBtQ=="],
 
     "@rtsao/scc": ["@rtsao/scc@1.1.0", "", {}, "sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g=="],
 
