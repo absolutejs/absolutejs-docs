@@ -6,7 +6,6 @@ export const CreateButton = () => {
 	const [copied, setCopied] = useState(false);
 
 	const TIMEOUT_DURATION = 2000;
-	// eslint-disable-next-line absolute/localize-react-props
 	const handleCopy = () => {
 		navigator.clipboard.writeText('bun create absolutejs');
 		setCopied(true);
@@ -17,6 +16,7 @@ export const CreateButton = () => {
 
 	return (
 		<div
+			onClick={handleCopy}
 			style={{
 				alignItems: 'center',
 				backgroundColor: '#f0f0f0',
@@ -24,7 +24,8 @@ export const CreateButton = () => {
 				borderRadius: '16px',
 				display: 'flex',
 				justifyContent: 'center',
-				padding: '10px 20px'
+				padding: '10px 20px',
+				cursor: 'pointer'
 			}}
 		>
 			<code
@@ -36,16 +37,7 @@ export const CreateButton = () => {
 			>
 				bun create absolutejs
 			</code>
-			{copied ? (
-				<LuCopyCheck />
-			) : (
-				<FiCopy
-					style={{
-						cursor: 'pointer'
-					}}
-					onClick={handleCopy}
-				/>
-			)}
+			{copied ? <LuCopyCheck /> : <FiCopy />}
 		</div>
 	);
 };
