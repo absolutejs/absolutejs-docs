@@ -1,4 +1,5 @@
 import { ProviderOption } from 'citra';
+import { Dispatch, SetStateAction } from 'react';
 import { FiUser } from 'react-icons/fi';
 import { providerData, ProviderInfo } from '../../data/providerData';
 import {
@@ -10,9 +11,13 @@ import {
 
 type OAuthButtonProps = {
 	provider: Lowercase<ProviderOption> | undefined;
+	setModalContent: Dispatch<SetStateAction<ProviderInfo | null>>;
 };
 
-export const OAuthButton = ({ provider }: OAuthButtonProps) => {
+export const OAuthButton = ({
+	provider,
+	setModalContent
+}: OAuthButtonProps) => {
 	const defaultData: ProviderInfo = {
 		logoUrl: '/assets/svg/todo-put-file.svg',
 		name: 'other provider',
@@ -34,6 +39,13 @@ export const OAuthButton = ({ provider }: OAuthButtonProps) => {
 					? primaryColor
 					: '#999999'
 			})}
+			onClick={() => {
+				setModalContent({
+					logoUrl,
+					name,
+					primaryColor
+				});
+			}}
 		>
 			<div style={oauthButtonContentStyle}>
 				{provider ? (

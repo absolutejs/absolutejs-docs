@@ -2,6 +2,7 @@ import { providerOptions } from '@absolutejs/auth';
 import { OAuthButton } from '../components/auth/OAuthButton';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
+import { AuthGrid } from '../components/testing/AuthGrid';
 import { Legend } from '../components/testing/Legend';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
@@ -51,22 +52,7 @@ export const AuthTesting = () => {
 					</p>
 
 					<Legend />
-
-					<div
-						style={{
-							display: 'grid',
-							gap: '12px',
-							gridTemplateColumns:
-								'repeat(auto-fill, minmax(180px, 1fr))',
-							margin: '0 auto 2rem',
-							maxWidth: '800px',
-							width: '100%'
-						}}
-					>
-						{providerOptions.map((provider) => (
-							<OAuthButton key={provider} provider={provider} />
-						))}
-					</div>
+					<AuthGrid />
 				</main>
 			</body>
 		</html>

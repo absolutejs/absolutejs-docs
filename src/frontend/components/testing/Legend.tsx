@@ -1,5 +1,6 @@
-import { FaCheckCircle, FaRegQuestionCircle } from 'react-icons/fa';
 import { AiOutlineExperiment, AiOutlineMinusCircle } from 'react-icons/ai';
+import { FaCheckCircle, FaRegQuestionCircle } from 'react-icons/fa';
+import { ImWarning } from 'react-icons/im';
 import {
 	legendWrapperStyle,
 	legendTitleStyle,
@@ -8,7 +9,6 @@ import {
 	legendTextStyle,
 	legendFooterStyle
 } from '../../styles/testingStyles';
-import { ImWarning } from 'react-icons/im';
 
 export const Legend = () => (
 	<div style={legendWrapperStyle}>

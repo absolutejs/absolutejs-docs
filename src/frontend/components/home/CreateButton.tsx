@@ -22,10 +22,10 @@ export const CreateButton = () => {
 				backgroundColor: '#f0f0f0',
 				border: '1px solid #ccc',
 				borderRadius: '16px',
+				cursor: 'pointer',
 				display: 'flex',
 				justifyContent: 'center',
-				padding: '10px 20px',
-				cursor: 'pointer'
+				padding: '10px 20px'
 			}}
 		>
 			<code

@@ -1,13 +1,20 @@
-import { ReactNode, useEffect, useRef, MouseEvent } from 'react';
+import { ReactNode, useEffect, useRef, MouseEvent, CSSProperties } from 'react';
 
 type ModalProps = {
 	isOpen: boolean;
 	onClose?: () => void;
 	onOpen?: (dialogRef: HTMLDialogElement | null) => void;
 	children: ReactNode;
+	style?: CSSProperties;
 };
 
-export const Modal = ({ isOpen, onClose, onOpen, children }: ModalProps) => {
+export const Modal = ({
+	style,
+	isOpen,
+	onClose,
+	onOpen,
+	children
+}: ModalProps) => {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 
 	useEffect(() => {
@@ -38,7 +45,7 @@ export const Modal = ({ isOpen, onClose, onOpen, children }: ModalProps) => {
 			style={{
 				alignItems: 'center',
 				border: 'none',
-				borderRadius: '8px',
+				borderRadius: style?.borderRadius,
 				display: 'flex',
 				inset: 0,
 				justifyContent: 'center',
@@ -54,32 +61,34 @@ export const Modal = ({ isOpen, onClose, onOpen, children }: ModalProps) => {
 				}
 			`}</style>
 
-			<div
-				onClick={(event) => event.stopPropagation()}
-				style={{
-					backgroundColor: '#fff',
-					minWidth: '300px',
-					padding: '20px',
-					position: 'relative'
-				}}
-			>
-				<button
-					onClick={() => dialogRef.current?.close()}
-					aria-label="Close modal"
+			{isOpen && (
+				<div
+					onClick={(event) => event.stopPropagation()}
 					style={{
-						background: 'transparent',
-						border: 'none',
-						cursor: 'pointer',
-						fontSize: '16px',
-						position: 'absolute',
-						right: '10px',
-						top: '10px'
+						...style,
+						minWidth: '300px',
+						padding: '20px',
+						position: 'relative'
 					}}
 				>
-					&times;
-				</button>
-				{children}
-			</div>
+					<button
+						onClick={() => dialogRef.current?.close()}
+						aria-label="Close modal"
+						style={{
+							background: 'transparent',
+							border: 'none',
+							cursor: 'pointer',
+							fontSize: '16px',
+							position: 'absolute',
+							right: '10px',
+							top: '10px'
+						}}
+					>
+						&times;
+					</button>
+					{children}
+				</div>
+			)}
 		</dialog>
 	);
 };

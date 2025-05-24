@@ -21,10 +21,10 @@ export const Home = () => {
 				<main style={mainDefault}>
 					<article
 						style={{
+							alignItems: 'center',
 							display: 'flex',
 							flex: '1',
 							flexDirection: 'column',
-							alignItems: 'center',
 							justifyContent: 'center'
 						}}
 					>
