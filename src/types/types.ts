@@ -16,6 +16,12 @@ type NavbarDropdown = {
 	icon?: ReactNode;
 };
 
+export type AuthorizationResults = {
+	accessToken?: string;
+	refreshToken?: string;
+	profile?: Record<string, unknown>;
+};
+
 export const isNavbarDropdown = (
 	element: NavbarElement
 ): element is NavbarDropdown => 'links' in element;

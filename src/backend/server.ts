@@ -56,7 +56,7 @@ new Elysia()
 	)
 	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
 	.get('/', () => handleReactPageRequest(Home, homeIndex))
-	.get('/auth/testing', () =>
+	.get('/testing/auth', () =>
 		handleReactPageRequest(AuthTesting, authTestingIndex)
 	)
 	.get('/protected', ({ protectRoute }) =>

@@ -11,7 +11,7 @@ export const NavbarLinks = ({ navbarData }: NavbarLinksProps) => (
 		style={{
 			alignItems: 'center',
 			display: 'flex',
-			gap: '15px',
+			gap: '10px',
 			justifyContent: 'center'
 		}}
 	>

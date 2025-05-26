@@ -6,28 +6,35 @@ export const navbarData: NavbarElement[] = [
 		label: 'Documentation'
 	},
 	{
-		href: '/citra',
-		label: 'Citra',
-		links: [{ href: '/citra/documentation', label: 'Documentation' }]
-	},
-	{
-		href: '/auth',
-		label: 'Auth',
+		href: '/packages',
+		label: 'Packages',
 		links: [
-			{ href: '/auth/documentation', label: 'Documentation' },
-			{ href: '/auth/testing', label: 'Testing' }
+			{
+				href: '/citra',
+				label: 'Citra'
+			},
+			{
+				href: '/auth',
+				label: 'Abs Auth'
+			},
+			{
+				href: '/create',
+				label: 'Create Abs'
+			},
+			{
+				href: '/eslint',
+				label: 'Eslint Rules'
+			}
 		]
 	},
 	{
-		href: '/CLI',
-		label: 'CLI',
+		href: '/testing',
+		label: 'Testing',
 		links: [
-			{ href: '/CLI/documentation', label: 'Documentation' },
-			{ href: '/CLI/commands', label: 'Commands' }
+			{
+				href: '/testing/auth',
+				label: 'Authentication'
+			}
 		]
-	},
-	{
-		href: '/blog',
-		label: 'Blog'
 	}
 ];
