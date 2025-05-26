@@ -3,11 +3,15 @@ import {
 	isRevocableProviderOption,
 	ProviderOption
 } from '@absolutejs/auth';
-import { Dispatch, SetStateAction, CSSProperties, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { User } from '../../../../db/schema';
 import { ProviderInfo } from '../../data/providerData';
-import { getContrastColor, opButtonStyle } from '../../styles/authModalStyles';
-import { linkStyle } from '../../styles/styles';
+import {
+	credentialLinkStyle,
+	getContrastColor,
+	opButtonStyle
+} from '../../styles/authModalStyles';
+import { HighlightedJson } from '../utils/HighlightedJson';
 import { Modal } from '../utils/Modal';
 import { useToast } from '../utils/ToastProvider';
 
@@ -38,73 +42,78 @@ export const AuthModal = ({
 		provider !== undefined && modalContent?.providerOption === provider;
 	const isRefreshable = isAuthorized && isRefreshableProviderOption(provider);
 	const isRevokeable = isAuthorized && isRevocableProviderOption(provider);
-	const helpMessage = isAuthorized
-		? 'Fetch your profile to see your data.'
-		: 'Authorize with this provider for this session to test.';
 
-	const handleRefresh = async () => {
-		const response = await fetch('/oauth2/tokens', {
-			method: 'POST'
-		});
-
-		if (!response.ok) {
-			const errorText = await response.text();
-			addToast({
-				duration: 0,
-				message: `${errorText}`,
-				style: { background: '#f8d7da', color: '#721c24' }
-			});
-
-			return;
+	const showToast = (message: string, type: 'info' | 'success' | 'error') => {
+		let style;
+		switch (type) {
+			case 'error':
+				style = { background: '#f8d7da', color: '#721c24' };
+				break;
+			case 'success':
+				style = { background: '#d4edda', color: '#155724' };
+				break;
+			case 'info':
+				style = {
+					background: primaryColor,
+					color: getContrastColor(primaryColor)
+				};
+				break;
 		}
 		addToast({
-			message: 'Token refreshed successfully!',
-			style: { background: '#d4edda', color: '#155724' }
+			duration: type === 'error' ? 0 : undefined,
+			message,
+			style
 		});
+	};
+
+	const handleRefresh = async () => {
+		showToast('Refreshing token...', 'info');
+		try {
+			const response = await fetch('/oauth2/tokens', { method: 'POST' });
+			if (!response.ok) throw new Error(await response.text());
+			showToast('Token refreshed successfully!', 'success');
+		} catch (error: any) {
+			showToast(error.message, 'error');
+		}
 	};
 
 	const handleRevocation = async () => {
-		const response = await fetch('/oauth2/revocation', {
-			method: 'POST'
-		});
-
-		if (!response.ok) {
-			const errorText = await response.text();
-			addToast({
-				duration: 0,
-				message: `${errorText}`,
-				style: { background: '#f8d7da', color: '#721c24' }
+		showToast('Revoking token...', 'info');
+		try {
+			const response = await fetch('/oauth2/revocation', {
+				method: 'POST'
 			});
-
-			return;
+			if (!response.ok) throw new Error(await response.text());
+			showToast('Token revoked successfully!', 'success');
+			handleSignOut();
+			setProfile(undefined);
+		} catch (error: any) {
+			showToast(error.message, 'error');
 		}
-		addToast({
-			message: 'Token revoked successfully!',
-			style: { background: '#d4edda', color: '#155724' }
-		});
-		handleSignOut();
-		setProfile(undefined);
 	};
 
 	const fetchProfile = async () => {
-		const response = await fetch('/oauth2/profile');
-
-		if (!response.ok) {
-			const errorText = await response.text();
-			addToast({
-				duration: 0,
-				message: `${errorText}`,
-				style: { background: '#f8d7da', color: '#721c24' }
-			});
-
-			return;
+		showToast('Fetching profile...', 'info');
+		try {
+			const response = await fetch('/oauth2/profile');
+			if (!response.ok) throw new Error(await response.text());
+			const data = await response.json();
+			setProfile(data);
+			showToast('Profile fetched successfully!', 'success');
+		} catch (error: any) {
+			showToast(error.message, 'error');
 		}
-		const data = await response.json();
-		setProfile(data);
-		addToast({
-			message: 'Profile fetched successfully!',
-			style: { background: '#d4edda', color: '#155724' }
-		});
+	};
+
+	const boxStyle: React.CSSProperties = {
+		border: `2px solid ${primaryColor}`,
+		borderRadius: '4px',
+		fontFamily: 'monospace',
+		height: '250px',
+		margin: '0 0 8px',
+		overflow: 'auto',
+		padding: '16px',
+		whiteSpace: 'pre-wrap'
 	};
 
 	return (
@@ -121,9 +130,7 @@ export const AuthModal = ({
 				padding: '32px',
 				width: '500px'
 			}}
-			onOpen={(dialogRef) => {
-				registerHost(dialogRef);
-			}}
+			onOpen={(dialogRef) => registerHost(dialogRef)}
 			isOpen={modalContent !== null}
 			onClose={() => {
 				setModalContent(null);
@@ -144,17 +151,13 @@ export const AuthModal = ({
 			<img
 				src={modalContent?.logoUrl}
 				alt={`${modalContent?.name} logo`}
-				style={{
-					alignSelf: 'center',
-					height: '120px',
-					width: '120px'
-				}}
+				style={{ alignSelf: 'center', height: '120px', width: '120px' }}
 			/>
 
 			<nav style={{ display: 'flex', gap: '16px' }}>
 				<a
 					href={modalContent?.manageCredentialsUrl}
-					style={linkStyle}
+					style={credentialLinkStyle(primaryColor)}
 					target="_blank"
 					rel="noopener noreferrer"
 				>
@@ -162,7 +165,7 @@ export const AuthModal = ({
 				</a>
 				<a
 					href={modalContent?.createNewCredentialsUrl}
-					style={linkStyle}
+					style={credentialLinkStyle(primaryColor)}
 					target="_blank"
 					rel="noopener noreferrer"
 				>
@@ -170,26 +173,19 @@ export const AuthModal = ({
 				</a>
 			</nav>
 
-			<p
-				style={{
-					border: `2px solid ${primaryColor}`,
-					borderRadius: '4px',
-					height: '250px',
-					margin: '0 0 8px',
-					overflow: 'auto',
-					padding: '16px'
-				}}
-			>
-				Profile:
-				<p
-					style={{
-						fontFamily: 'monospace',
-						whiteSpace: 'pre-wrap'
-					}}
-				>
-					{profile ? JSON.stringify(profile, null, 2) : helpMessage}
-				</p>
-			</p>
+			{!isAuthorized ? (
+				<pre style={boxStyle}>
+					<code>
+						Authorize with this provider for this session to test.
+					</code>
+				</pre>
+			) : !profile ? (
+				<pre style={boxStyle}>
+					<code>Fetch your profile to see your data.</code>
+				</pre>
+			) : (
+				<HighlightedJson data={profile} primaryColor={primaryColor} />
+			)}
 
 			<nav
 				style={{
@@ -200,70 +196,28 @@ export const AuthModal = ({
 			>
 				<a
 					href={`/oauth2/${modalContent?.providerOption}/authorization`}
-					style={opButtonStyle(false, modalContent?.primaryColor)}
+					style={opButtonStyle(false, primaryColor)}
 				>
 					Authorize User
 				</a>
 				<button
 					disabled={!isAuthorized}
-					onClick={() => {
-						addToast({
-							message: 'Fetching profile...',
-							style: {
-								background: modalContent?.primaryColor,
-								color: getContrastColor(
-									modalContent?.primaryColor ?? '#333'
-								)
-							}
-						});
-						fetchProfile();
-					}}
-					style={opButtonStyle(
-						!isAuthorized,
-						modalContent?.primaryColor
-					)}
+					onClick={fetchProfile}
+					style={opButtonStyle(!isAuthorized, primaryColor)}
 				>
 					Fetch Profile
 				</button>
 				<button
 					disabled={!isRefreshable}
-					onClick={() => {
-						addToast({
-							message: 'Refreshing token...',
-							style: {
-								background: modalContent?.primaryColor,
-								color: getContrastColor(
-									modalContent?.primaryColor ?? '#333'
-								)
-							}
-						});
-						handleRefresh();
-					}}
-					style={opButtonStyle(
-						!isRefreshable,
-						modalContent?.primaryColor
-					)}
+					onClick={handleRefresh}
+					style={opButtonStyle(!isRefreshable, primaryColor)}
 				>
 					Refresh Token
 				</button>
 				<button
 					disabled={!isRevokeable}
-					onClick={() => {
-						addToast({
-							message: 'Revoking token...',
-							style: {
-								background: modalContent?.primaryColor,
-								color: getContrastColor(
-									modalContent?.primaryColor ?? '#333'
-								)
-							}
-						});
-						handleRevocation();
-					}}
-					style={opButtonStyle(
-						!isRevokeable,
-						modalContent?.primaryColor
-					)}
+					onClick={handleRevocation}
+					style={opButtonStyle(!isRevokeable, primaryColor)}
 				>
 					Revoke Token
 				</button>

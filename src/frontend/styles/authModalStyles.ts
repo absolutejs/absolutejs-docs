@@ -124,15 +124,17 @@ export const getContrastColor = (hex: string): string => {
 };
 /* eslint-enable no-magic-numbers */
 
-export const linkStyle: CSSProperties = {
-	border: `2px solid ${primaryColor}`,
+export const credentialLinkStyle = (
+	companyColor = '#747775'
+): CSSProperties => ({
+	border: `2px solid ${companyColor}`,
 	borderRadius: '4px',
 	color: 'black',
 	flex: '1',
 	padding: '12px 0',
 	textAlign: 'center',
 	textDecoration: 'none'
-};
+});
 
 export const opButtonStyle = (
 	disabled: boolean,
