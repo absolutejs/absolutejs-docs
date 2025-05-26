@@ -2,7 +2,6 @@ import { providerOptions } from '@absolutejs/auth';
 import { useState } from 'react';
 import { ProviderInfo } from '../../data/providerData';
 import { OAuthButton } from '../auth/OAuthButton';
-import { Modal } from '../utils/Modal';
 import { AuthModal } from './AuthModal';
 
 export const AuthGrid = () => {
