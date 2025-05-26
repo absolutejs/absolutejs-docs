@@ -1,12 +1,12 @@
 import { providerOptions } from '@absolutejs/auth';
-import { OAuthButton } from '../components/auth/OAuthButton';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { AuthGrid } from '../components/testing/AuthGrid';
 import { Legend } from '../components/testing/Legend';
+import { ToastProvider } from '../components/utils/ToastProvider';
 import { useAuthStatus } from '../hooks/useAuthStatus';
-import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 import { useCleanPath } from '../hooks/useCleanPath';
+import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 export const AuthTesting = () => {
 	const { user, handleSignOut } = useAuthStatus();
@@ -54,7 +54,9 @@ export const AuthTesting = () => {
 					</p>
 
 					<Legend />
-					<AuthGrid />
+					<ToastProvider>
+						<AuthGrid handleSignOut={handleSignOut} user={user} />
+					</ToastProvider>
 				</main>
 			</body>
 		</html>

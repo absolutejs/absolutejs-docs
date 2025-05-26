@@ -37,11 +37,11 @@ export const OAuthButton = ({
 			})}
 			onClick={() => {
 				setModalContent({
+					createNewCredentialsUrl,
 					logoUrl,
+					manageCredentialsUrl,
 					name,
 					primaryColor,
-					createNewCredentialsUrl,
-					manageCredentialsUrl,
 					providerOption: provider
 				});
 			}}

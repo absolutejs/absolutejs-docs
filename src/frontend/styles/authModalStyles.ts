@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { tertiaryColor } from './styles';
+import { primaryColor, tertiaryColor } from './styles';
 
 export const confirmInputStyle: CSSProperties = {
 	border: '1px solid #ccc',
@@ -111,4 +111,43 @@ export const separatorLineStyle = ({
 	backgroundColor: color,
 	flexGrow: 1,
 	height: height
+});
+
+/* eslint-disable no-magic-numbers */
+export const getContrastColor = (hex: string): string => {
+	const red = parseInt(hex.slice(1, 3), 16);
+	const green = parseInt(hex.slice(3, 5), 16);
+	const blue = parseInt(hex.slice(5, 7), 16);
+	const yiq = (red * 299 + green * 587 + blue * 114) / 1000;
+
+	return yiq >= 128 ? '#000' : '#fff';
+};
+/* eslint-enable no-magic-numbers */
+
+export const linkStyle: CSSProperties = {
+	border: `2px solid ${primaryColor}`,
+	borderRadius: '4px',
+	color: 'black',
+	flex: '1',
+	padding: '12px 0',
+	textAlign: 'center',
+	textDecoration: 'none'
+};
+
+export const opButtonStyle = (
+	disabled: boolean,
+	providerPrimaryColor = '#747775'
+): CSSProperties => ({
+	backgroundColor: providerPrimaryColor,
+	border: `2px solid ${providerPrimaryColor}`,
+	borderRadius: '4px',
+	color: getContrastColor(providerPrimaryColor),
+	cursor: disabled ? 'not-allowed' : 'pointer',
+	fontSize: '1rem',
+	lineHeight: '1.2rem',
+	opacity: disabled ? 0.5 : 1,
+	padding: '12px 0',
+	textAlign: 'center',
+	textDecoration: 'none',
+	width: '100%'
 });

@@ -1,31 +1,19 @@
 import { ProviderOption, providerOptions } from '@absolutejs/auth';
 import { useState } from 'react';
+import { User } from '../../../../db/schema';
 import { ProviderInfo } from '../../data/providerData';
 import { OAuthButton } from '../auth/OAuthButton';
 import { AuthModal } from './AuthModal';
-import { AuthorizationResults } from '../../../types/types';
 
-export const AuthGrid = () => {
+type AuthGridProps = {
+	user: User | undefined;
+	handleSignOut: () => Promise<void>;
+};
+
+export const AuthGrid = ({ user, handleSignOut }: AuthGridProps) => {
 	const [modalContent, setModalContent] = useState<
 		(ProviderInfo & { providerOption: ProviderOption }) | null
 	>(null);
-
-	const [authorizationResults, setAuthorizationResults] = useState<
-		Record<string, AuthorizationResults>
-	>({});
-
-	const updateAuthorizationResults = (
-		providerName: string,
-		data: Partial<AuthorizationResults>
-	) => {
-		setAuthorizationResults((prev) => ({
-			...prev,
-			[providerName]: {
-				...prev[providerName],
-				...data
-			}
-		}));
-	};
 
 	return (
 		<section>
@@ -50,14 +38,10 @@ export const AuthGrid = () => {
 			</div>
 
 			<AuthModal
+				handleSignOut={handleSignOut}
+				user={user}
 				modalContent={modalContent}
 				setModalContent={setModalContent}
-				authorizationResults={
-					modalContent
-						? authorizationResults[modalContent.name]
-						: undefined
-				}
-				updateAuthorizationResults={updateAuthorizationResults}
 			/>
 		</section>
 	);

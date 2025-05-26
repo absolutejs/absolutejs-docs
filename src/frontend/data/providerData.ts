@@ -12,500 +12,501 @@ type ProviderData = Record<Lowercase<ProviderOption>, ProviderInfo>;
 
 export const providerData: ProviderData = {
 	'42': {
-		logoUrl: '/assets/svg/42-logo.svg',
-		name: '42',
-		primaryColor: '#000000',
-		manageCredentialsUrl: 'https://profile.intra.42.fr/oauth/applications',
 		createNewCredentialsUrl:
-			'https://profile.intra.42.fr/oauth/applications/new'
+			'https://profile.intra.42.fr/oauth/applications/new',
+		logoUrl: '/assets/svg/42-logo.svg',
+		manageCredentialsUrl: 'https://profile.intra.42.fr/oauth/applications',
+		name: '42',
+		primaryColor: '#000000'
 	},
 	amazoncognito: {
+		createNewCredentialsUrl:
+			'https://console.aws.amazon.com/cognito/home#/user-pools',
 		logoUrl: '/assets/svg/amazoncognito-logo.svg',
-		name: 'Amazon Cognito',
-		primaryColor: '#DD344C',
 		manageCredentialsUrl:
 			'https://console.aws.amazon.com/cognito/home#/user-pools',
-		createNewCredentialsUrl:
-			'https://console.aws.amazon.com/cognito/home#/user-pools'
+		name: 'Amazon Cognito',
+		primaryColor: '#DD344C'
 	},
 
 	anilist: {
+		createNewCredentialsUrl: 'https://anilist.co/settings/developer',
 		logoUrl: '/assets/svg/anilist-logo.svg',
-		name: 'AniList',
-		primaryColor: '#02A9FF',
 		manageCredentialsUrl: 'https://anilist.co/settings/developer',
-		createNewCredentialsUrl: 'https://anilist.co/settings/developer'
+		name: 'AniList',
+		primaryColor: '#02A9FF'
 	},
 	apple: {
+		createNewCredentialsUrl:
+			'https://developer.apple.com/account/resources/identifiers/add',
 		logoUrl: '/assets/svg/apple-logo.svg',
-		name: 'Apple',
-		primaryColor: '#000000',
 		manageCredentialsUrl:
 			'https://developer.apple.com/account/resources/identifiers/list',
-		createNewCredentialsUrl:
-			'https://developer.apple.com/account/resources/identifiers/add'
+		name: 'Apple',
+		primaryColor: '#000000'
 	},
 	atlassian: {
-		logoUrl: '/assets/svg/atlassian-logo.svg',
-		name: 'Atlassian',
-		primaryColor: '#0052CC',
-		manageCredentialsUrl: 'https://developer.atlassian.com/console/myapps/',
 		createNewCredentialsUrl:
-			'https://developer.atlassian.com/console/myapps/'
+			'https://developer.atlassian.com/console/myapps/',
+		logoUrl: '/assets/svg/atlassian-logo.svg',
+		manageCredentialsUrl: 'https://developer.atlassian.com/console/myapps/',
+		name: 'Atlassian',
+		primaryColor: '#0052CC'
 	},
 	auth0: {
+		createNewCredentialsUrl: 'https://manage.auth0.com/#/applications',
 		logoUrl: '/assets/svg/auth0-logo.svg',
-		name: 'Auth0',
-		primaryColor: '#EB5424',
 		manageCredentialsUrl: 'https://manage.auth0.com/#/applications',
-		createNewCredentialsUrl: 'https://manage.auth0.com/#/applications'
+		name: 'Auth0',
+		primaryColor: '#EB5424'
 	},
 	authentik: {
+		createNewCredentialsUrl:
+			'https://goauthentik.io/docs/add-secure-apps/providers/oauth2/create-oauth2-provider',
 		logoUrl: '/assets/svg/authentik-logo.svg',
-		name: 'Authentik',
-		primaryColor: '#FD4B2D',
 		manageCredentialsUrl:
 			'https://goauthentik.io/docs/add-secure-apps/providers/oauth2/',
-		createNewCredentialsUrl:
-			'https://goauthentik.io/docs/add-secure-apps/providers/oauth2/create-oauth2-provider'
+		name: 'Authentik',
+		primaryColor: '#FD4B2D'
 	},
 	autodesk: {
+		createNewCredentialsUrl:
+			'https://aps.autodesk.com/hubs/@personal/applications/',
 		logoUrl: '/assets/svg/autodesk-logo.svg',
-		name: 'Autodesk',
-		primaryColor: '#000000',
 		manageCredentialsUrl:
 			'https://aps.autodesk.com/hubs/@personal/applications/',
-		createNewCredentialsUrl:
-			'https://aps.autodesk.com/hubs/@personal/applications/'
+		name: 'Autodesk',
+		primaryColor: '#000000'
 	},
 	battlenet: {
+		createNewCredentialsUrl: 'https://develop.battle.net/access/clients',
 		logoUrl: '/assets/svg/battlenet-logo.svg',
-		name: 'Battle.net',
-		primaryColor: '#4381C3',
 		manageCredentialsUrl: 'https://develop.battle.net/access/clients',
-		createNewCredentialsUrl: 'https://develop.battle.net/access/clients'
+		name: 'Battle.net',
+		primaryColor: '#4381C3'
 	},
 	bitbucket: {
-		logoUrl: '/assets/svg/bitbucket-logo.svg',
-		name: 'Bitbucket',
-		primaryColor: '#0052CC',
-		manageCredentialsUrl: 'https://bitbucket.org',
 		createNewCredentialsUrl:
-			'https://support.atlassian.com/bitbucket-cloud/docs/integrate-another-application-through-oauth'
+			'https://support.atlassian.com/bitbucket-cloud/docs/integrate-another-application-through-oauth',
+		logoUrl: '/assets/svg/bitbucket-logo.svg',
+		manageCredentialsUrl: 'https://bitbucket.org',
+		name: 'Bitbucket',
+		primaryColor: '#0052CC'
 	},
 	box: {
+		createNewCredentialsUrl: 'https://app.box.com/developers/console',
 		logoUrl: '/assets/svg/box-logo.svg',
-		name: 'Box',
-		primaryColor: '#0061D5',
 		manageCredentialsUrl: 'https://app.box.com/developers/console',
-		createNewCredentialsUrl: 'https://app.box.com/developers/console'
+		name: 'Box',
+		primaryColor: '#0061D5'
 	},
 	bungie: {
+		createNewCredentialsUrl: 'https://www.bungie.net/en/Application',
 		logoUrl: '/assets/svg/bungie-logo.svg',
-		name: 'Bungie',
-		primaryColor: '#0075BB',
 		manageCredentialsUrl: 'https://www.bungie.net/en/Application',
-		createNewCredentialsUrl: 'https://www.bungie.net/en/Application'
+		name: 'Bungie',
+		primaryColor: '#0075BB'
 	},
 	coinbase: {
+		createNewCredentialsUrl: 'https://www.coinbase.com/settings/api',
 		logoUrl: '/assets/svg/coinbase-logo.svg',
-		name: 'Coinbase',
-		primaryColor: '#0052FF',
 		manageCredentialsUrl: 'https://www.coinbase.com/settings/api',
-		createNewCredentialsUrl: 'https://www.coinbase.com/settings/api'
+		name: 'Coinbase',
+		primaryColor: '#0052FF'
 	},
 	discord: {
+		createNewCredentialsUrl: 'https://discord.com/developers/applications',
 		logoUrl: '/assets/svg/discord-logo.svg',
-		name: 'Discord',
-		primaryColor: '#5865F2',
 		manageCredentialsUrl: 'https://discord.com/developers/applications',
-		createNewCredentialsUrl: 'https://discord.com/developers/applications'
+		name: 'Discord',
+		primaryColor: '#5865F2'
 	},
 	donationalerts: {
+		createNewCredentialsUrl:
+			'https://www.donationalerts.com/application/clients',
 		logoUrl: '/assets/svg/DA_Alert_Color-Logo.svg',
-		name: 'Donation Alerts',
-		primaryColor: '#F57D07',
 		manageCredentialsUrl:
 			'https://www.donationalerts.com/application/clients',
-		createNewCredentialsUrl:
-			'https://www.donationalerts.com/application/clients'
+		name: 'Donation Alerts',
+		primaryColor: '#F57D07'
 	},
 	dribbble: {
+		createNewCredentialsUrl: 'https://dribbble.com/account/applications',
 		logoUrl: '/assets/svg/dribbble-logo.svg',
-		name: 'Dribbble',
-		primaryColor: '#EA4C89',
 		manageCredentialsUrl: 'https://dribbble.com/account/applications',
-		createNewCredentialsUrl: 'https://dribbble.com/account/applications'
+		name: 'Dribbble',
+		primaryColor: '#EA4C89'
 	},
 	dropbox: {
+		createNewCredentialsUrl: 'https://www.dropbox.com/developers/apps',
 		logoUrl: '/assets/svg/dropbox-logo.svg',
-		name: 'Dropbox',
-		primaryColor: '#0061FF',
 		manageCredentialsUrl: 'https://www.dropbox.com/developers/apps',
-		createNewCredentialsUrl: 'https://www.dropbox.com/developers/apps'
+		name: 'Dropbox',
+		primaryColor: '#0061FF'
 	},
 	epicgames: {
+		createNewCredentialsUrl: 'https://dev.epicgames.com/portal',
 		logoUrl: '/assets/svg/epicgames-logo.svg',
-		name: 'Epic Games',
-		primaryColor: '#313131',
 		manageCredentialsUrl: 'https://dev.epicgames.com/portal',
-		createNewCredentialsUrl: 'https://dev.epicgames.com/portal'
+		name: 'Epic Games',
+		primaryColor: '#313131'
 	},
 	etsy: {
+		createNewCredentialsUrl: 'https://www.etsy.com/developers/register',
 		logoUrl: '/assets/svg/etsy-logo.svg',
-		name: 'Etsy',
-		primaryColor: '#F16521',
 		manageCredentialsUrl: 'https://www.etsy.com/developers/your-apps',
-		createNewCredentialsUrl: 'https://www.etsy.com/developers/register'
+		name: 'Etsy',
+		primaryColor: '#F16521'
 	},
 	facebook: {
+		createNewCredentialsUrl: 'https://developers.facebook.com/apps/',
 		logoUrl: '/assets/png/Facebook_Logo_Primary.png',
-		name: 'Facebook',
-		primaryColor: '#0866FF',
 		manageCredentialsUrl: 'https://developers.facebook.com/apps/',
-		createNewCredentialsUrl: 'https://developers.facebook.com/apps/'
+		name: 'Facebook',
+		primaryColor: '#0866FF'
 	},
 	figma: {
+		createNewCredentialsUrl: 'https://www.figma.com/developers/apps',
 		logoUrl: '/assets/svg/Figma-Icon-(Full-color).svg',
-		name: 'Figma',
-		primaryColor: '#F24E1E',
 		manageCredentialsUrl: 'https://www.figma.com/developers/apps',
-		createNewCredentialsUrl: 'https://www.figma.com/developers/apps'
+		name: 'Figma',
+		primaryColor: '#F24E1E'
 	},
 	gitea: {
+		createNewCredentialsUrl: 'https://gitea.com/user/settings/applications',
 		logoUrl: '/assets/svg/gitea-logo.svg',
-		name: 'Gitea',
-		primaryColor: '#609926',
 		manageCredentialsUrl: 'https://gitea.com/user/settings/applications',
-		createNewCredentialsUrl: 'https://gitea.com/user/settings/applications'
+		name: 'Gitea',
+		primaryColor: '#609926'
 	},
 	github: {
+		createNewCredentialsUrl: 'https://github.com/settings/developers',
 		logoUrl: '/assets/svg/GitHub_Invertocat_Dark.svg',
-		name: 'GitHub',
-		primaryColor: '#181717',
 		manageCredentialsUrl: 'https://github.com/settings/developers',
-		createNewCredentialsUrl: 'https://github.com/settings/developers'
+		name: 'GitHub',
+		primaryColor: '#181717'
 	},
 	gitlab: {
+		createNewCredentialsUrl: 'https://gitlab.com/oauth/applications',
 		logoUrl: '/assets/svg/gitlab-logo.svg',
-		name: 'GitLab',
-		primaryColor: '#FC6D26',
 		manageCredentialsUrl: 'https://gitlab.com/oauth/applications',
-		createNewCredentialsUrl: 'https://gitlab.com/oauth/applications'
+		name: 'GitLab',
+		primaryColor: '#FC6D26'
 	},
 	google: {
+		createNewCredentialsUrl:
+			'https://console.cloud.google.com/apis/credentials',
 		logoUrl: '/assets/svg/google-logo.svg',
-		name: 'Google',
-		primaryColor: '#4285F4',
 		manageCredentialsUrl:
 			'https://console.cloud.google.com/apis/credentials',
-		createNewCredentialsUrl:
-			'https://console.cloud.google.com/apis/credentials'
+		name: 'Google',
+		primaryColor: '#4285F4'
 	},
 	intuit: {
+		createNewCredentialsUrl: 'https://developer.intuit.com/workspaces',
 		logoUrl: '/assets/svg/intuit-logo.svg',
-		name: 'Intuit',
-		primaryColor: '#236CFF',
 		manageCredentialsUrl: 'https://developer.intuit.com/workspaces',
-		createNewCredentialsUrl: 'https://developer.intuit.com/workspaces'
+		name: 'Intuit',
+		primaryColor: '#236CFF'
 	},
 	kakao: {
+		createNewCredentialsUrl: 'https://developers.kakao.com/apps',
 		logoUrl: '/assets/svg/kakao-logo.svg',
-		name: 'Kakao',
-		primaryColor: '#FFCD00',
 		manageCredentialsUrl: 'https://developers.kakao.com/apps',
-		createNewCredentialsUrl: 'https://developers.kakao.com/apps'
+		name: 'Kakao',
+		primaryColor: '#FFCD00'
 	},
 	keycloak: {
-		logoUrl: '/assets/svg/keycloak-logo.svg',
-		name: 'Keycloak',
-		primaryColor: '#4D4D4D',
-		manageCredentialsUrl: 'https://lichess.org/api#section/Authentication',
 		createNewCredentialsUrl:
-			'https://lichess.org/account/oauth/token/create'
+			'https://lichess.org/account/oauth/token/create',
+		logoUrl: '/assets/svg/keycloak-logo.svg',
+		manageCredentialsUrl: 'https://lichess.org/api#section/Authentication',
+		name: 'Keycloak',
+		primaryColor: '#4D4D4D'
 	},
 	kick: {
+		createNewCredentialsUrl: 'https://kick.com/settings/developer',
 		logoUrl: '/assets/svg/kick-logo.svg',
-		name: 'Kick',
-		primaryColor: '#53FC19',
 		manageCredentialsUrl: 'https://kick.com/settings/developer',
-		createNewCredentialsUrl: 'https://kick.com/settings/developer'
+		name: 'Kick',
+		primaryColor: '#53FC19'
 	},
 	lichess: {
-		logoUrl: '/assets/svg/lichess-logo.svg',
-		name: 'Lichess',
-		primaryColor: '#000000',
-		manageCredentialsUrl: 'https://lichess.org/api#section/Authentication',
 		createNewCredentialsUrl:
-			'https://lichess.org/api#section/Authentication'
+			'https://lichess.org/api#section/Authentication',
+		logoUrl: '/assets/svg/lichess-logo.svg',
+		manageCredentialsUrl: 'https://lichess.org/api#section/Authentication',
+		name: 'Lichess',
+		primaryColor: '#000000'
 	},
 	line: {
+		createNewCredentialsUrl: 'https://developers.line.biz/console',
 		logoUrl: '/assets/png/LINE_Brand_icon.png',
-		name: 'LINE',
-		primaryColor: '#00B900',
 		manageCredentialsUrl: 'https://developers.line.biz/console',
-		createNewCredentialsUrl: 'https://developers.line.biz/console'
+		name: 'LINE',
+		primaryColor: '#00B900'
 	},
 	linear: {
+		createNewCredentialsUrl: 'https://linear.app/absolutejs/settings/api',
 		logoUrl: '/assets/svg/linear-logo.svg',
-		name: 'Linear',
-		primaryColor: '#5E6AD2',
 		manageCredentialsUrl: 'https://linear.app/absolutejs/settings/api',
-		createNewCredentialsUrl: 'https://linear.app/absolutejs/settings/api'
+		name: 'Linear',
+		primaryColor: '#5E6AD2'
 	},
 	linkedin: {
+		createNewCredentialsUrl: 'https://www.linkedin.com/developers/apps',
 		logoUrl: '/assets/png/LI-In-Bug.png',
-		name: 'LinkedIn',
-		primaryColor: '#0077B5',
 		manageCredentialsUrl: 'https://www.linkedin.com/developers/apps',
-		createNewCredentialsUrl: 'https://www.linkedin.com/developers/apps'
+		name: 'LinkedIn',
+		primaryColor: '#0077B5'
 	},
 	mastodon: {
+		createNewCredentialsUrl:
+			'https://mastodon.social/settings/applications',
 		logoUrl: '/assets/svg/mastadon-logo-purple.svg',
-		name: 'Mastodon',
-		primaryColor: '#6364FF',
 		manageCredentialsUrl: 'https://mastodon.social/settings/applications',
-		createNewCredentialsUrl: 'https://mastodon.social/settings/applications'
+		name: 'Mastodon',
+		primaryColor: '#6364FF'
 	},
 	mercadolibre: {
+		createNewCredentialsUrl:
+			'https://developers.mercadolibre.com.ar/en_us/register-your-application',
 		logoUrl: '/assets/jpeg/mercadolibre-logo.jpeg',
-		name: 'Mercado Libre',
-		primaryColor: '#FFD100',
 		manageCredentialsUrl:
 			'https://developers.mercadolibre.com.ar/en_us/manage-your-applications',
-		createNewCredentialsUrl:
-			'https://developers.mercadolibre.com.ar/en_us/register-your-application'
+		name: 'Mercado Libre',
+		primaryColor: '#FFD100'
 	},
 	mercadopago: {
-		logoUrl: '/assets/svg/mercadopago-logo.svg',
-		name: 'Mercado Pago',
-		primaryColor: '#00B1EA',
-		manageCredentialsUrl: 'https://www.mercadopago.com.ar/developers/panel',
 		createNewCredentialsUrl:
-			'https://www.mercadopago.com.ar/developers/panel'
+			'https://www.mercadopago.com.ar/developers/panel',
+		logoUrl: '/assets/svg/mercadopago-logo.svg',
+		manageCredentialsUrl: 'https://www.mercadopago.com.ar/developers/panel',
+		name: 'Mercado Pago',
+		primaryColor: '#00B1EA'
 	},
 	microsoftentraid: {
+		createNewCredentialsUrl:
+			'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/CreateApplicationBlade/quickStartType~/null/isMSAApp',
 		logoUrl: '/assets/svg/Microsoft-Entra-ID-color-icon.svg',
-		name: 'Microsoft Entra ID',
-		primaryColor: '#000000',
 		manageCredentialsUrl:
 			'https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps',
-		createNewCredentialsUrl:
-			'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/CreateApplicationBlade/quickStartType~/null/isMSAApp'
+		name: 'Microsoft Entra ID',
+		primaryColor: '#000000'
 	},
 	myanimelist: {
+		createNewCredentialsUrl: 'https://myanimelist.net/apiconfig/create',
 		logoUrl: '/assets/svg/myanimelist-logo.svg',
-		name: 'MyAnimeList',
-		primaryColor: '#2E51A2',
 		manageCredentialsUrl: 'https://myanimelist.net/apiconfig',
-		createNewCredentialsUrl: 'https://myanimelist.net/apiconfig/create'
+		name: 'MyAnimeList',
+		primaryColor: '#2E51A2'
 	},
 	naver: {
+		createNewCredentialsUrl: 'https://developers.naver.com/apps/#/list',
 		logoUrl: '/assets/png/naver-btnG_icon_circle.png',
-		name: 'Naver',
-		primaryColor: '#03C75A',
 		manageCredentialsUrl: 'https://developers.naver.com/apps/#/list',
-		createNewCredentialsUrl: 'https://developers.naver.com/apps/#/list'
+		name: 'Naver',
+		primaryColor: '#03C75A'
 	},
 	notion: {
+		createNewCredentialsUrl: 'https://www.notion.so/my-integrations',
 		logoUrl: '/assets/svg/notion-logo.svg',
-		name: 'Notion',
-		primaryColor: '#000000',
 		manageCredentialsUrl: 'https://www.notion.so/my-integrations',
-		createNewCredentialsUrl: 'https://www.notion.so/my-integrations'
+		name: 'Notion',
+		primaryColor: '#000000'
 	},
 	okta: {
+		createNewCredentialsUrl: 'https://developer.okta.com/login/',
 		logoUrl: '/assets/png/Okta_Wordmark_Black_S.png',
-		name: 'Okta',
-		primaryColor: '#007DC1',
 		manageCredentialsUrl: 'https://developer.okta.com/login/',
-		createNewCredentialsUrl: 'https://developer.okta.com/login/'
+		name: 'Okta',
+		primaryColor: '#007DC1'
 	},
 	osu: {
-		logoUrl: '/assets/svg/osu-logo.svg',
-		name: 'osu!',
-		primaryColor: '#FF66AA',
-		manageCredentialsUrl: 'https://osu.ppy.sh/home/account/edit#oauth',
 		createNewCredentialsUrl:
-			'https://osu.ppy.sh/home/account/edit#new-oauth-application'
+			'https://osu.ppy.sh/home/account/edit#new-oauth-application',
+		logoUrl: '/assets/svg/osu-logo.svg',
+		manageCredentialsUrl: 'https://osu.ppy.sh/home/account/edit#oauth',
+		name: 'osu!',
+		primaryColor: '#FF66AA'
 	},
 	patreon: {
+		createNewCredentialsUrl:
+			'https://www.patreon.com/portal/registration/register-clients',
 		logoUrl: '/assets/svg/PATREON_SYMBOL_1_BLACK_RGB.svg',
-		name: 'Patreon',
-		primaryColor: '#000000',
 		manageCredentialsUrl:
 			'https://www.patreon.com/portal/registration/register-clients',
-		createNewCredentialsUrl:
-			'https://www.patreon.com/portal/registration/register-clients'
+		name: 'Patreon',
+		primaryColor: '#000000'
 	},
 	polar: {
+		createNewCredentialsUrl: 'https://polar.sh/dashboard',
 		logoUrl: '/assets/svg/polar-logo.svg',
-		name: 'Polar',
-		primaryColor: '#000000',
 		manageCredentialsUrl: 'https://polar.sh/dashboard',
-		createNewCredentialsUrl: 'https://polar.sh/dashboard'
+		name: 'Polar',
+		primaryColor: '#000000'
 	},
 	polaraccesslink: {
+		createNewCredentialsUrl: 'https://admin.polaraccesslink.com',
 		logoUrl: '/assets/png/Polar_logo_black_web.png',
-		name: 'Polar Access Link',
-		primaryColor: '#DF0827',
 		manageCredentialsUrl: 'https://admin.polaraccesslink.com',
-		createNewCredentialsUrl: 'https://admin.polaraccesslink.com'
+		name: 'Polar Access Link',
+		primaryColor: '#DF0827'
 	},
 	polarteampro: {
+		createNewCredentialsUrl: 'https://admin.polaraccesslink.com',
 		logoUrl: '/assets/png/Polar_logo_black_web.png',
-		name: 'Polar Team Pro',
-		primaryColor: '#DF0827',
 		manageCredentialsUrl: 'https://admin.polaraccesslink.com',
-		createNewCredentialsUrl: 'https://admin.polaraccesslink.com'
+		name: 'Polar Team Pro',
+		primaryColor: '#DF0827'
 	},
 	reddit: {
+		createNewCredentialsUrl: 'https://www.reddit.com/prefs/apps',
 		logoUrl: '/assets/svg/Reddit_Icon_FullColor.svg',
-		name: 'Reddit',
-		primaryColor: '#FF4500',
 		manageCredentialsUrl: 'https://www.reddit.com/prefs/apps',
-		createNewCredentialsUrl: 'https://www.reddit.com/prefs/apps'
+		name: 'Reddit',
+		primaryColor: '#FF4500'
 	},
 	roblox: {
+		createNewCredentialsUrl:
+			'https://create.roblox.com/dashboard/credentials?activeTab=OAuthTab',
 		logoUrl: '/assets/svg/roblox-logo.svg',
-		name: 'Roblox',
-		primaryColor: '#000000',
 		manageCredentialsUrl:
 			'https://create.roblox.com/dashboard/credentials?activeTab=OAuthTab',
-		createNewCredentialsUrl:
-			'https://create.roblox.com/dashboard/credentials?activeTab=OAuthTab'
+		name: 'Roblox',
+		primaryColor: '#000000'
 	},
 	salesforce: {
+		createNewCredentialsUrl: 'https://welcome.salesforce.com/',
 		logoUrl: '/assets/svg/salesforce-logo.svg',
-		name: 'Salesforce',
-		primaryColor: '#00A1E0',
 		manageCredentialsUrl: 'https://welcome.salesforce.com/',
-		createNewCredentialsUrl: 'https://welcome.salesforce.com/'
+		name: 'Salesforce',
+		primaryColor: '#00A1E0'
 	},
 	shikimori: {
+		createNewCredentialsUrl: 'https://shikimori.one/oauth/applications',
 		logoUrl: '/assets/svg/shikimori-logo.svg',
-		name: 'Shikimori',
-		primaryColor: '#343434',
 		manageCredentialsUrl: 'https://shikimori.one/oauth/applications',
-		createNewCredentialsUrl: 'https://shikimori.one/oauth/applications'
+		name: 'Shikimori',
+		primaryColor: '#343434'
 	},
 	slack: {
+		createNewCredentialsUrl: 'https://api.slack.com/apps',
 		logoUrl: '/assets/png/SLA-Slack-from-Salesforce-logo.png',
-		name: 'Slack',
-		primaryColor: '#4A154B',
 		manageCredentialsUrl: 'https://api.slack.com/apps',
-		createNewCredentialsUrl: 'https://api.slack.com/apps'
+		name: 'Slack',
+		primaryColor: '#4A154B'
 	},
 	spotify: {
-		logoUrl: '/assets/svg/spotify-Primary_Logo_Green_RGB.svg',
-		name: 'Spotify',
-		primaryColor: '#1ED760',
-		manageCredentialsUrl: 'https://developer.spotify.com/dashboard',
 		createNewCredentialsUrl:
-			'https://developer.spotify.com/dashboard/create'
+			'https://developer.spotify.com/dashboard/create',
+		logoUrl: '/assets/svg/spotify-Primary_Logo_Green_RGB.svg',
+		manageCredentialsUrl: 'https://developer.spotify.com/dashboard',
+		name: 'Spotify',
+		primaryColor: '#1ED760'
 	},
 	startgg: {
-		logoUrl: '/assets/svg/start.gg_Icon_RGB.svg',
-		name: 'Start.gg',
-		primaryColor: '#2E75BA',
-		manageCredentialsUrl: 'https://developer.start.gg/docs/authentication',
 		createNewCredentialsUrl:
-			'https://developer.start.gg/docs/authentication'
+			'https://developer.start.gg/docs/authentication',
+		logoUrl: '/assets/svg/start.gg_Icon_RGB.svg',
+		manageCredentialsUrl: 'https://developer.start.gg/docs/authentication',
+		name: 'Start.gg',
+		primaryColor: '#2E75BA'
 	},
 	strava: {
+		createNewCredentialsUrl: 'https://www.strava.com/settings/api',
 		logoUrl: '/assets/svg/strava-logo.svg',
-		name: 'Strava',
-		primaryColor: '#FC4C02',
 		manageCredentialsUrl: 'https://www.strava.com/settings/api',
-		createNewCredentialsUrl: 'https://www.strava.com/settings/api'
+		name: 'Strava',
+		primaryColor: '#FC4C02'
 	},
 	synology: {
+		createNewCredentialsUrl:
+			'https://kb.synology.com/en-us/DSM/help/OAuthService/oauth_service_desc',
 		logoUrl: '/assets/png/Synology_logo_Standard.png',
-		name: 'Synology',
-		primaryColor: '#B5B5B6',
 		manageCredentialsUrl:
 			'https://kb.synology.com/en-us/DSM/help/OAuthService/oauth_service_desc',
-		createNewCredentialsUrl:
-			'https://kb.synology.com/en-us/DSM/help/OAuthService/oauth_service_desc'
+		name: 'Synology',
+		primaryColor: '#B5B5B6'
 	},
 	tiktok: {
+		createNewCredentialsUrl: 'https://developers.tiktok.com/apps',
 		logoUrl: '/assets/svg/tiktok-logo.svg',
-		name: 'TikTok',
-		primaryColor: '#000000',
 		manageCredentialsUrl: 'https://developers.tiktok.com/apps',
-		createNewCredentialsUrl: 'https://developers.tiktok.com/apps'
+		name: 'TikTok',
+		primaryColor: '#000000'
 	},
 	tiltify: {
+		createNewCredentialsUrl: 'https://app.tiltify.com/developers',
 		logoUrl: '/assets/svg/rgb-tiltify22_mark_blue.svg',
-		name: 'Tiltify',
-		primaryColor: '#143DF4',
 		manageCredentialsUrl: 'https://app.tiltify.com/developers',
-		createNewCredentialsUrl: 'https://app.tiltify.com/developers'
+		name: 'Tiltify',
+		primaryColor: '#143DF4'
 	},
 	tumblr: {
+		createNewCredentialsUrl: 'https://www.tumblr.com/oauth/register',
 		logoUrl: '/assets/svg/tumblr.svg',
-		name: 'Tumblr',
-		primaryColor: '#36465D',
 		manageCredentialsUrl: 'https://www.tumblr.com/oauth/apps',
-		createNewCredentialsUrl: 'https://www.tumblr.com/oauth/register'
+		name: 'Tumblr',
+		primaryColor: '#36465D'
 	},
 	twitch: {
+		createNewCredentialsUrl: 'https://dev.twitch.tv/console/apps/create',
 		logoUrl: '/assets/svg/twitch-glitch_flat_purple.svg',
-		name: 'Twitch',
-		primaryColor: '#9146FF',
 		manageCredentialsUrl: 'https://dev.twitch.tv/console/apps',
-		createNewCredentialsUrl: 'https://dev.twitch.tv/console/apps/create'
+		name: 'Twitch',
+		primaryColor: '#9146FF'
 	},
 	twitter: {
+		createNewCredentialsUrl:
+			'https://developer.twitter.com/en/portal/projects-and-apps',
 		logoUrl: '/assets/png/twitter-logo-black.png',
-		name: 'Twitter / X',
-		primaryColor: '#000000',
 		manageCredentialsUrl:
 			'https://developer.twitter.com/en/portal/dashboard',
-		createNewCredentialsUrl:
-			'https://developer.twitter.com/en/portal/projects-and-apps'
+		name: 'Twitter / X',
+		primaryColor: '#000000'
 	},
 	vk: {
+		createNewCredentialsUrl: 'https://dev.vk.com/ru/admin/create-app',
 		logoUrl: '/assets/svg/vk-logo.svg',
-		name: 'VK',
-		primaryColor: '#0077FF',
 		manageCredentialsUrl: 'https://dev.vk.com/ru/admin/apps-list',
-		createNewCredentialsUrl: 'https://dev.vk.com/ru/admin/create-app'
+		name: 'VK',
+		primaryColor: '#0077FF'
 	},
 	withings: {
-		logoUrl: '/assets/svg/withings-logo.svg',
-		name: 'Withings',
-		primaryColor: '#00A0DC',
-		manageCredentialsUrl: 'https://developer.withings.com/dashboard/',
 		createNewCredentialsUrl:
-			'https://developer.withings.com/dashboard/create'
+			'https://developer.withings.com/dashboard/create',
+		logoUrl: '/assets/svg/withings-logo.svg',
+		manageCredentialsUrl: 'https://developer.withings.com/dashboard/',
+		name: 'Withings',
+		primaryColor: '#00A0DC'
 	},
 	workos: {
+		createNewCredentialsUrl: 'https://dashboard.workos.com',
 		logoUrl: '/assets/svg/workos-logo-color.svg',
-		name: 'WorkOS',
-		primaryColor: '#6363F1',
 		manageCredentialsUrl: 'https://dashboard.workos.com',
-		createNewCredentialsUrl: 'https://dashboard.workos.com'
+		name: 'WorkOS',
+		primaryColor: '#6363F1'
 	},
 	yahoo: {
+		createNewCredentialsUrl: 'https://developer.yahoo.com/apps/create/',
 		logoUrl: '/assets/jpeg/yahoo-Icon.jpeg',
-		name: 'Yahoo',
-		primaryColor: '#5F01D1',
 		manageCredentialsUrl: 'https://developer.yahoo.com/apps',
-		createNewCredentialsUrl: 'https://developer.yahoo.com/apps/create/'
+		name: 'Yahoo',
+		primaryColor: '#5F01D1'
 	},
 	yandex: {
+		createNewCredentialsUrl: 'https://oauth.yandex.com/client/new',
 		logoUrl: '/assets/svg/yandex-icon_grad_circ.svg',
-		name: 'Yandex',
-		primaryColor: '#5282FF',
 		manageCredentialsUrl: 'https://oauth.yandex.com/client/my',
-		createNewCredentialsUrl: 'https://oauth.yandex.com/client/new'
+		name: 'Yandex',
+		primaryColor: '#5282FF'
 	},
 	zoom: {
+		createNewCredentialsUrl: 'https://marketplace.zoom.us/develop/create',
 		logoUrl: '/assets/png/Zoom_Logo_Bloom_RGB.png',
-		name: 'Zoom',
-		primaryColor: '#0B5CFF',
 		manageCredentialsUrl: 'https://marketplace.zoom.us/user/build',
-		createNewCredentialsUrl: 'https://marketplace.zoom.us/develop/create'
+		name: 'Zoom',
+		primaryColor: '#0B5CFF'
 	}
 };
