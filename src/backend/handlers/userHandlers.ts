@@ -34,22 +34,16 @@ export const getDBUser = async ({
 
 export const createDBUser = async ({
 	auth_sub,
-	given_name,
-	family_name,
-	email,
-	picture,
 	db,
-	schema
+	schema,
+	metadata
 }: DatabaseFunctionProps & NewUser) => {
 	try {
 		const newUser = await db
 			.insert(schema.users)
 			.values({
-				auth_sub: auth_sub,
-				email,
-				family_name: family_name,
-				given_name: given_name,
-				picture
+				auth_sub,
+				metadata
 			})
 			.returning();
 
@@ -74,28 +68,17 @@ export const createUser = ({
 	schema
 }: UserFunctionProps & DatabaseFunctionProps) => {
 	const provider = authProvider.toUpperCase();
-	const { sub, id, email, family_name, given_name, picture, avatar_url } =
-		userProfile;
+	const { sub, id, userid } = userProfile;
 
-	if (!sub && !id) {
+	if (!sub && !id && !userid) {
 		throw new Error('No sub or ID claim found in ID token');
 	}
-	const authSub = `${provider}|${sub || id}`;
-
-	let pictureUrl = '';
-	if (typeof picture === 'string') {
-		pictureUrl = picture;
-	} else if (typeof avatar_url === 'string') {
-		pictureUrl = avatar_url;
-	}
+	const authSub = `${provider}|${sub ?? id ?? userid}`;
 
 	return createDBUser({
 		auth_sub: authSub,
 		db,
-		email: typeof email === 'string' ? email : '',
-		family_name: typeof family_name === 'string' ? family_name : '',
-		given_name: typeof given_name === 'string' ? given_name : '',
-		picture: pictureUrl,
+		metadata: userProfile,
 		schema
 	});
 };
@@ -107,13 +90,13 @@ export const getUser = ({
 	schema
 }: UserFunctionProps & DatabaseFunctionProps) => {
 	const provider = authProvider.toUpperCase();
-	const { sub, id } = userProfile;
+	const { sub, id, userid } = userProfile;
 
-	if (!sub && !id) {
+	if (!sub && !id && !userid) {
 		throw new Error('No sub or ID claim found in ID token');
 	}
 
-	const authSub = `${provider}|${sub ?? id}`;
+	const authSub = `${provider}|${sub ?? id ?? userid}`;
 
 	return getDBUser({ authSub, db, schema });
 };

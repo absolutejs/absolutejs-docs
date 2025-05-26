@@ -6,9 +6,11 @@ import { AuthGrid } from '../components/testing/AuthGrid';
 import { Legend } from '../components/testing/Legend';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
+import { useCleanPath } from '../hooks/useCleanPath';
 
 export const AuthTesting = () => {
 	const { user, handleSignOut } = useAuthStatus();
+	useCleanPath();
 
 	return (
 		<html lang="en" style={htmlDefault}>

@@ -5,7 +5,7 @@
       "name": "@absolutejs/docs",
       "dependencies": {
         "@absolutejs/absolute": "0.6.0",
-        "@absolutejs/auth": "0.9.1",
+        "@absolutejs/auth": "0.9.4",
         "@elysiajs/static": "1.2.0",
         "elysia": "1.2.25",
         "react": "19.1.0",
@@ -39,7 +39,7 @@
   "packages": {
     "@absolutejs/absolute": ["@absolutejs/absolute@0.6.0", "", { "peerDependencies": { "elysia": ">= 1.2.0", "react": ">= 19.1.0", "react-dom": ">= 19.1.0" } }, "sha512-NJH3QcIoEyRDR13x70wZErAijGWETztDtMKB9elFYRDnrNGRh4NCQWnD4kwiTtyPdvUh/M26mEEKZ2315mBa7g=="],
 
-    "@absolutejs/auth": ["@absolutejs/auth@0.9.1", "", { "dependencies": { "citra": "0.21.0" }, "peerDependencies": { "elysia": ">= 1.2.0" } }, "sha512-ivOoP8G/6gGvyvSDBUelplzN2ah1UD8Ir1PRSAHXJQYWX2H3qmYKmxjZYXkB9Fxgg69acGpZjuQ0EY82XkGSfQ=="],
+    "@absolutejs/auth": ["@absolutejs/auth@0.9.4", "", { "dependencies": { "citra": "0.21.0" }, "peerDependencies": { "elysia": ">= 1.2.0" } }, "sha512-5BHr9MoAg2y3sAsCkLMAzwx80w/t7Zr3UahuNHac3xq97RTrEfKCzWYGPhWBSmYV+EUseb6VGlT9R14vKJH/Cw=="],
 
     "@ampproject/remapping": ["@ampproject/remapping@2.3.0", "", { "dependencies": { "@jridgewell/gen-mapping": "^0.3.5", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw=="],
 

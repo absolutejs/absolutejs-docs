@@ -2,15 +2,20 @@ import { Dispatch, SetStateAction, CSSProperties, useState } from 'react';
 import { ProviderInfo } from '../../data/providerData';
 import { Modal } from '../utils/Modal';
 import { AuthorizationResults } from '../../../types/types';
+import { ProviderOption } from '@absolutejs/auth';
 
 type AuthModalProps = {
-	modalContent: ProviderInfo | null;
+	modalContent: (ProviderInfo & { providerOption: ProviderOption }) | null;
 	updateAuthorizationResults: (
 		providerName: string,
 		data: Partial<AuthorizationResults>
 	) => void;
 	authorizationResults: AuthorizationResults | undefined;
-	setModalContent: Dispatch<SetStateAction<ProviderInfo | null>>;
+	setModalContent: Dispatch<
+		SetStateAction<
+			(ProviderInfo & { providerOption: ProviderOption }) | null
+		>
+	>;
 };
 
 const getContrastColor = (hex: string): string => {
@@ -46,7 +51,9 @@ export const AuthModal = ({
 		borderRadius: '4px',
 		backgroundColor: primaryColor,
 		color: getContrastColor(primaryColor),
-		cursor: 'pointer',
+		textDecoration: 'none',
+		textAlign: 'center',
+		fontSize: '1rem',
 		fontWeight: 500
 	};
 
@@ -107,53 +114,28 @@ export const AuthModal = ({
 				</a>
 			</nav>
 
-			<div
+			<p
 				style={{
+					margin: '0 0 8px',
 					border: `2px solid ${primaryColor}`,
 					borderRadius: '4px',
 					padding: '16px',
-					maxHeight: '200px',
+					height: '250px',
 					overflow: 'auto'
 				}}
 			>
-				<p style={{ margin: '0 0 8px' }}>
-					<strong>Access Token:</strong>
-					<p
-						style={{
-							fontFamily: 'monospace'
-						}}
-					>
-						{authorizationResults?.accessToken ?? 'Unauthorized'}
-					</p>
+				Profile:
+				<p
+					style={{
+						whiteSpace: 'pre-wrap',
+						fontFamily: 'monospace'
+					}}
+				>
+					{authorizationResults?.profile
+						? JSON.stringify(authorizationResults?.profile, null, 2)
+						: 'No profile data'}
 				</p>
-				<p style={{ margin: '0 0 8px' }}>
-					<strong>Refresh Token:</strong>
-					<p
-						style={{
-							fontFamily: 'monospace'
-						}}
-					>
-						{authorizationResults?.refreshToken ?? 'Unauthorized'}
-					</p>
-				</p>
-				<p style={{ margin: '0 0 8px' }}>
-					Profile:
-					<p
-						style={{
-							whiteSpace: 'pre-wrap',
-							fontFamily: 'monospace'
-						}}
-					>
-						{authorizationResults?.profile
-							? JSON.stringify(
-									authorizationResults?.profile,
-									null,
-									2
-								)
-							: 'No profile data'}
-					</p>
-				</p>
-			</div>
+			</p>
 
 			<nav
 				style={{
@@ -162,10 +144,15 @@ export const AuthModal = ({
 					gap: '12px'
 				}}
 			>
-				<button style={opButtonStyle}>Authorize User</button>
-				<button style={opButtonStyle}>Refresh Token</button>
-				<button style={opButtonStyle}>Revoke Token</button>
-				<button style={opButtonStyle}>Fetch Profile</button>
+				<a
+					href={`/oauth2/${modalContent?.providerOption}/authorization`}
+					style={opButtonStyle}
+				>
+					Authorize User
+				</a>
+				<a style={opButtonStyle}>Refresh Token</a>
+				<a style={opButtonStyle}>Revoke Token</a>
+				<a style={opButtonStyle}>Fetch Profile</a>
 			</nav>
 		</Modal>
 	);

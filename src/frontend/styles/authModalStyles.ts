@@ -30,12 +30,10 @@ export const oauthButtonContentStyle: CSSProperties = {
 
 type OAuthLinkStyleProps = {
 	providerPrimaryColor?: string;
-	isProviderSelected: boolean;
 };
 
 export const oauthButtonStyle = ({
-	providerPrimaryColor = '#747775',
-	isProviderSelected
+	providerPrimaryColor = '#747775'
 }: OAuthLinkStyleProps): CSSProperties => ({
 	alignItems: 'center',
 	backgroundColor: '#FFFFFF',
@@ -43,7 +41,7 @@ export const oauthButtonStyle = ({
 	borderRadius: '4px',
 	boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
 	color: '#1f1f1f',
-	cursor: isProviderSelected ? 'pointer' : 'not-allowed',
+	cursor: 'pointer',
 	display: 'flex',
 	fontSize: '14px',
 	justifyContent: 'center',

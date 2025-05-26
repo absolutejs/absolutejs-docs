@@ -11,15 +11,15 @@
 	"license": "CC BY-NC 4.0",
 	"author": "Alex Kahn",
 	"scripts": {
-		"build": "rm -rf dist && bun build src/index.ts --outdir dist --target=bun --external react --external react-dom --external elysia && tsc --emitDeclarationOnly --project tsconfig.json",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"format": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,json,mjs,md}\"",
 		"dev": "bun run --watch src/backend/server.ts",
 		"lint": "eslint ./src ./eslint.config.mjs",
-		"typecheck": "bun run tsc --noEmit"
+		"typecheck": "bun run tsc --noEmit",
+		"db:studio": "drizzle-kit studio"
 	},
 	"dependencies": {
-		"@absolutejs/auth": "0.9.1",
+		"@absolutejs/auth": "0.9.4",
 		"@elysiajs/static": "1.2.0",
 		"@absolutejs/absolute": "0.6.0",
 		"elysia": "1.2.25",

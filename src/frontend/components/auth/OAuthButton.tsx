@@ -10,42 +10,30 @@ import {
 } from '../../styles/authModalStyles';
 
 type OAuthButtonProps = {
-	provider: Lowercase<ProviderOption> | undefined;
-	setModalContent: Dispatch<SetStateAction<ProviderInfo | null>>;
+	provider: Lowercase<ProviderOption>;
+	setModalContent: Dispatch<
+		SetStateAction<
+			(ProviderInfo & { providerOption: ProviderOption }) | null
+		>
+	>;
 };
 
 export const OAuthButton = ({
 	provider,
 	setModalContent
 }: OAuthButtonProps) => {
-	const defaultData: ProviderInfo = {
-		logoUrl: '/assets/svg/todo-put-file.svg',
-		name: 'other provider',
-		primaryColor: 'lightgray',
-		createNewCredentialsUrl: '',
-		manageCredentialsUrl: ''
-	};
-
 	const {
 		logoUrl,
 		name,
 		primaryColor,
 		manageCredentialsUrl,
 		createNewCredentialsUrl
-	} =
-		provider && providerData[provider]
-			? providerData[provider]
-			: defaultData;
-
-	const isProviderSelected = provider !== undefined;
+	} = providerData[provider];
 
 	return (
 		<button
 			style={oauthButtonStyle({
-				isProviderSelected,
-				providerPrimaryColor: isProviderSelected
-					? primaryColor
-					: '#999999'
+				providerPrimaryColor: primaryColor
 			})}
 			onClick={() => {
 				setModalContent({
@@ -53,7 +41,8 @@ export const OAuthButton = ({
 					name,
 					primaryColor,
 					createNewCredentialsUrl,
-					manageCredentialsUrl
+					manageCredentialsUrl,
+					providerOption: provider
 				});
 			}}
 		>

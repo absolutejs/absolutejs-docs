@@ -1,4 +1,4 @@
-import { providerOptions } from '@absolutejs/auth';
+import { ProviderOption, providerOptions } from '@absolutejs/auth';
 import { useState } from 'react';
 import { ProviderInfo } from '../../data/providerData';
 import { OAuthButton } from '../auth/OAuthButton';
@@ -6,7 +6,9 @@ import { AuthModal } from './AuthModal';
 import { AuthorizationResults } from '../../../types/types';
 
 export const AuthGrid = () => {
-	const [modalContent, setModalContent] = useState<ProviderInfo | null>(null);
+	const [modalContent, setModalContent] = useState<
+		(ProviderInfo & { providerOption: ProviderOption }) | null
+	>(null);
 
 	const [authorizationResults, setAuthorizationResults] = useState<
 		Record<string, AuthorizationResults>
