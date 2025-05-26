@@ -73,7 +73,7 @@ export const Modal = ({
 				>
 					<button
 						onClick={() => {
-							dialogRef.current?.close()
+							dialogRef.current?.close();
 							onClose?.();
 						}}
 						aria-label="Close modal"

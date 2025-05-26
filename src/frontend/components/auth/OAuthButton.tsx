@@ -21,10 +21,18 @@ export const OAuthButton = ({
 	const defaultData: ProviderInfo = {
 		logoUrl: '/assets/svg/todo-put-file.svg',
 		name: 'other provider',
-		primaryColor: 'lightgray'
+		primaryColor: 'lightgray',
+		createNewCredentialsUrl: '',
+		manageCredentialsUrl: ''
 	};
 
-	const { logoUrl, name, primaryColor } =
+	const {
+		logoUrl,
+		name,
+		primaryColor,
+		manageCredentialsUrl,
+		createNewCredentialsUrl
+	} =
 		provider && providerData[provider]
 			? providerData[provider]
 			: defaultData;
@@ -43,7 +51,9 @@ export const OAuthButton = ({
 				setModalContent({
 					logoUrl,
 					name,
-					primaryColor
+					primaryColor,
+					createNewCredentialsUrl,
+					manageCredentialsUrl
 				});
 			}}
 		>
