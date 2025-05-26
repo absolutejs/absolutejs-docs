@@ -19,7 +19,7 @@
 		"typecheck": "bun run tsc --noEmit"
 	},
 	"dependencies": {
-		"@absolutejs/auth": "0.7.5",
+		"@absolutejs/auth": "0.9.1",
 		"@elysiajs/static": "1.2.0",
 		"@absolutejs/absolute": "0.6.0",
 		"elysia": "1.2.25",

@@ -5,7 +5,7 @@
       "name": "@absolutejs/docs",
       "dependencies": {
         "@absolutejs/absolute": "0.6.0",
-        "@absolutejs/auth": "0.7.5",
+        "@absolutejs/auth": "0.9.1",
         "@elysiajs/static": "1.2.0",
         "elysia": "1.2.25",
         "react": "19.1.0",
@@ -39,7 +39,7 @@
   "packages": {
     "@absolutejs/absolute": ["@absolutejs/absolute@0.6.0", "", { "peerDependencies": { "elysia": ">= 1.2.0", "react": ">= 19.1.0", "react-dom": ">= 19.1.0" } }, "sha512-NJH3QcIoEyRDR13x70wZErAijGWETztDtMKB9elFYRDnrNGRh4NCQWnD4kwiTtyPdvUh/M26mEEKZ2315mBa7g=="],
 
-    "@absolutejs/auth": ["@absolutejs/auth@0.7.5", "", { "dependencies": { "citra": "0.20.1" }, "peerDependencies": { "elysia": ">= 1.2.0" } }, "sha512-GwsCXxDAQzFBxJN8+RTNS5Y1MgDh+KASpH2xCs1l718HmtBda37/gvaljHA16XR/8trlorFfN/WzzrVdf1oX+w=="],
+    "@absolutejs/auth": ["@absolutejs/auth@0.9.1", "", { "dependencies": { "citra": "0.21.0" }, "peerDependencies": { "elysia": ">= 1.2.0" } }, "sha512-ivOoP8G/6gGvyvSDBUelplzN2ah1UD8Ir1PRSAHXJQYWX2H3qmYKmxjZYXkB9Fxgg69acGpZjuQ0EY82XkGSfQ=="],
 
     "@ampproject/remapping": ["@ampproject/remapping@2.3.0", "", { "dependencies": { "@jridgewell/gen-mapping": "^0.3.5", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw=="],
 
@@ -309,7 +309,7 @@
 
     "chalk": ["chalk@4.1.2", "", { "dependencies": { "ansi-styles": "^4.1.0", "supports-color": "^7.1.0" } }, "sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA=="],
 
-    "citra": ["citra@0.20.1", "", {}, "sha512-s2nVsWkoKZPaki65G0hyb9QAADihT2lC3PCw4doK8Qyfucsp7pvowbLiCUVTBDwMLAv4LDDNSzqTHUU+KCmIbg=="],
+    "citra": ["citra@0.21.0", "", {}, "sha512-DrjjFumjoblQ1+TUWHINtniUphafurvDkRVhbI7L4qYfvP7sb9Tb6Cz3ubz6bR5R4CsXXcUrtnB84WQOWEjgLw=="],
 
     "clone": ["clone@2.1.2", "", {}, "sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w=="],
 

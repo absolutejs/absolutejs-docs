@@ -14,7 +14,10 @@ export const AuthModal = ({
 	<Modal
 		style={{
 			border: `4px solid ${modalContent?.primaryColor}`,
-			borderRadius: '8px'
+			borderRadius: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
 		}}
 		isOpen={modalContent !== null}
 		onClose={() => setModalContent(null)}
@@ -30,5 +33,6 @@ export const AuthModal = ({
 				width: '100px'
 			}}
 		/>
+        <a>Manage Credentials</a>
 	</Modal>
 );
