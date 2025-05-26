@@ -1,6 +1,6 @@
 import {
 	createAuthConfiguration,
-	instantiateUserSession,
+	instantiateUserSession
 } from '@absolutejs/auth';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { SchemaType, User, schema } from '../../../db/schema';
@@ -16,7 +16,8 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			tokenResponse,
 			user_session_id,
 			session
-		}) =>instantiateUserSession<User>({
+		}) =>
+			instantiateUserSession<User>({
 				authProvider,
 				providerInstance,
 				session,

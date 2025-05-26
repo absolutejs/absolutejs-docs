@@ -32,9 +32,8 @@ export const Home = () => {
 						<p style={paragraphStyle}>
 							AbsoluteJS is a powerful and flexible JavaScript
 							framework that provides a wide range of features and
-							tools for building modern web applications. Whether
-							you're a beginner or an experienced developer,
-							AbsoluteJS has something to offer you.
+							tools for building modern web applications with any
+							of the popular modern tools.
 						</p>
 						<CreateButton />
 					</article>
