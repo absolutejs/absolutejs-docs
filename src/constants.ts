@@ -5,5 +5,5 @@ export const PROVIDER_STATUSES = [
 	'untested',
 	'testing',
 	'missing',
-	'failed',
+	'failed'
 ] as const;

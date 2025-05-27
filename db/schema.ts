@@ -1,5 +1,11 @@
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
-import { jsonb, pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
+import {
+	jsonb,
+	pgEnum,
+	pgTable,
+	timestamp,
+	varchar
+} from 'drizzle-orm/pg-core';
 import { PROVIDER_STATUSES } from '../src/constants';
 import { ProviderOption } from '@absolutejs/auth';
 
@@ -13,29 +19,23 @@ export const users = pgTable('users', {
 
 export const providers = pgTable('providers', {
 	name: varchar('name', { length: 255 }).primaryKey().$type<ProviderOption>(),
-	authorizeStatus: providerStatusEnum
-		('authorize_status')
+	authorizeStatus: providerStatusEnum('authorize_status')
 		.notNull()
 		.default('untested'),
-	profileStatus: providerStatusEnum
-		('profile_status')
+	profileStatus: providerStatusEnum('profile_status')
 		.notNull()
 		.default('untested'),
-	refreshStatus: providerStatusEnum
-		('refresh_status')
+	refreshStatus: providerStatusEnum('refresh_status')
 		.notNull()
 		.default('untested'),
-	revokeStatus: providerStatusEnum
-		('revoke_status')
+	revokeStatus: providerStatusEnum('revoke_status')
 		.notNull()
-		.default('untested'),
-})
-
-
+		.default('untested')
+});
 
 export const schema = {
 	users,
-	providers,
+	providers
 };
 
 export type SchemaType = typeof schema;
