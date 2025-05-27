@@ -9,42 +9,37 @@ import {
 	legendTextStyle,
 	legendFooterStyle
 } from '../../styles/testingStyles';
+import { FailedBadge } from './badges/FailedBadge';
+import { MissingBadge } from './badges/MissingBadge';
+import { TestedBadge } from './badges/TestedBadge';
+import { TestingBadge } from './badges/TestingBadge';
+import { UntestedBadge } from './badges/UntestedBadge';
 
 export const Legend = () => (
 	<div style={legendWrapperStyle}>
 		<h2 style={legendTitleStyle}>Status Key</h2>
 		<div style={legendGridStyle}>
-			<span style={badgeStyle('#4caf50')}>
-				<FaCheckCircle />
-			</span>
+			<TestedBadge />
 			<p style={legendTextStyle}>
 				Tested: Verified routes actively working and community-tested.
 			</p>
 
-			<span style={badgeStyle('#888')}>
-				<FaRegQuestionCircle />
-			</span>
+			<UntestedBadge />
 			<p style={legendTextStyle}>
 				Untested: Pending external or restricted access.
 			</p>
 
-			<span style={badgeStyle('#ff9800')}>
-				<AiOutlineExperiment />
-			</span>
+			<TestingBadge />
 			<p style={legendTextStyle}>
 				Testing: Feature currently under development on our end.
 			</p>
 
-			<span style={badgeStyle('#e0e0e0', '#333')}>
-				<AiOutlineMinusCircle />
-			</span>
+			<MissingBadge />
 			<p style={legendTextStyle}>
 				Missing: Functionality not supported by the provider.
 			</p>
 
-			<span style={badgeStyle('#e53935')}>
-				<ImWarning />
-			</span>
+			<FailedBadge />
 			<p style={legendTextStyle}>
 				Failed: Library or endpoint issues (not user error).
 			</p>

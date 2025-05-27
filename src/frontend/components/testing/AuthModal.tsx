@@ -3,7 +3,7 @@ import {
 	isRevocableProviderOption,
 	ProviderOption
 } from '@absolutejs/auth';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { CSSProperties, Dispatch, SetStateAction, useState } from 'react';
 import { User } from '../../../../db/schema';
 import { ProviderInfo } from '../../data/providerData';
 import {
@@ -14,6 +14,7 @@ import {
 import { HighlightedJson } from '../utils/HighlightedJson';
 import { Modal } from '../utils/Modal';
 import { useToast } from '../utils/ToastProvider';
+import { TestedBadge } from './badges/TestedBadge';
 
 type AuthModalProps = {
 	user: User | undefined;
@@ -105,7 +106,7 @@ export const AuthModal = ({
 		}
 	};
 
-	const boxStyle: React.CSSProperties = {
+	const boxStyle: CSSProperties = {
 		border: `2px solid ${primaryColor}`,
 		borderRadius: '4px',
 		fontFamily: 'monospace',
@@ -114,6 +115,12 @@ export const AuthModal = ({
 		overflow: 'auto',
 		padding: '16px',
 		whiteSpace: 'pre-wrap'
+	};
+
+	const containerStyle: CSSProperties = {
+		alignItems: 'center',
+		display: 'flex',
+		gap: '0.5rem'
 	};
 
 	return (
@@ -194,33 +201,45 @@ export const AuthModal = ({
 					gridTemplateColumns: '1fr 1fr'
 				}}
 			>
-				<a
-					href={`/oauth2/${modalContent?.providerOption}/authorization`}
-					style={opButtonStyle(false, primaryColor)}
-				>
-					Authorize User
-				</a>
-				<button
-					disabled={!isAuthorized}
-					onClick={fetchProfile}
-					style={opButtonStyle(!isAuthorized, primaryColor)}
-				>
-					Fetch Profile
-				</button>
-				<button
-					disabled={!isRefreshable}
-					onClick={handleRefresh}
-					style={opButtonStyle(!isRefreshable, primaryColor)}
-				>
-					Refresh Token
-				</button>
-				<button
-					disabled={!isRevokeable}
-					onClick={handleRevocation}
-					style={opButtonStyle(!isRevokeable, primaryColor)}
-				>
-					Revoke Token
-				</button>
+				<div style={containerStyle}>
+					<TestedBadge />
+					<a
+						href={`/oauth2/${modalContent?.providerOption}/authorization`}
+						style={opButtonStyle(false, primaryColor)}
+					>
+						Authorize User
+					</a>
+				</div>
+				<div style={containerStyle}>
+					<TestedBadge />
+					<button
+						disabled={!isAuthorized}
+						onClick={fetchProfile}
+						style={opButtonStyle(!isAuthorized, primaryColor)}
+					>
+						Fetch Profile
+					</button>
+				</div>
+				<div style={containerStyle}>
+					<TestedBadge />
+					<button
+						disabled={!isRefreshable}
+						onClick={handleRefresh}
+						style={opButtonStyle(!isRefreshable, primaryColor)}
+					>
+						Refresh Token
+					</button>
+				</div>
+				<div style={containerStyle}>
+					<TestedBadge />
+					<button
+						disabled={!isRevokeable}
+						onClick={handleRevocation}
+						style={opButtonStyle(!isRevokeable, primaryColor)}
+					>
+						Revoke Token
+					</button>
+				</div>
 			</nav>
 		</Modal>
 	);

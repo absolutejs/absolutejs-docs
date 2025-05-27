@@ -42,6 +42,7 @@ export const badgeStyle = (
 	borderRadius: '50%',
 	color: textColor,
 	display: 'flex',
+	flexShrink: 0,
 	fontSize: '1.2rem',
 	height: '2rem',
 	justifyContent: 'center',
