@@ -6,32 +6,31 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 
 if (!env.DATABASE_URL) {
-  throw new Error('DATABASE_URL is not set in .env file');
+  throw new Error('Please set DATABASE_URL in your .env file');
 }
 
 const sql = neon(env.DATABASE_URL);
 const db = drizzle(sql, { schema });
 
-const existing = await db.select().from(schema.providers).execute();
-const existingNames = new Set(existing.map(r => r.name));
-const toCreate = providerOptions.filter(name => !existingNames.has(name));
+const existingProviders = await db.select().from(schema.providers).execute();
+const existingProviderNames = new Set(existingProviders.map(record => record.name));
+const providersToCreate = providerOptions.filter(name => !existingProviderNames.has(name));
 
-if (toCreate.length === 0) {
-  console.log('No new providers to create');
+if (providersToCreate.length === 0) {
+  console.log('All providers are already created. Nothing to do.');
   process.exit(0);
 }
 
-const creationPromises = toCreate.map(name =>
+const creationPromises = providersToCreate.map(name =>
   createProvider({ db, schema, name })
 );
+const creationResults = await Promise.allSettled(creationPromises);
 
-const results = await Promise.allSettled(creationPromises);
-
-results.forEach((res, i) => {
-  const name = toCreate[i];
-  if (res.status === 'fulfilled') {
-    console.log(`✔ Created provider "${name}"`);
+for (const [index, result] of creationResults.entries()) {
+  const providerName = providersToCreate[index];
+  if (result.status === 'fulfilled') {
+    console.log(`✅ Provider added: ${providerName}`);
   } else {
-    console.warn(`✖ Failed to create provider "${name}":`, res.reason);
+    console.error(`🚫 Could not add provider ${providerName}:`, result.reason);
   }
-});
+}
