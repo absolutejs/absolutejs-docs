@@ -30,37 +30,3 @@ export const getProvider = async ({
 
 	return provider;
 };
-
-export const seedProviders = async ({
-	db: database,
-	schema: databaseSchema
-}: DatabaseFunctionProps) => {
-	const existingProviderRecords = await database
-		.select()
-		.from(databaseSchema.providers)
-		.execute();
-	const existingProviderNames = new Set<string>();
-	for (const record of existingProviderRecords) {
-		existingProviderNames.add(record.name);
-	}
-	const creationPromises = providerOptions.flatMap((providerName) =>
-		existingProviderNames.has(providerName)
-			? []
-			: [
-					createProvider({
-						db: database,
-						schema: databaseSchema,
-						name: providerName
-					})
-				]
-	);
-	const settlementResults = await Promise.allSettled(creationPromises);
-	settlementResults
-		.filter((settlement) => settlement.status === 'rejected')
-		.forEach((settlement) =>
-			console.warn('Failed to create provider:', settlement.reason)
-		);
-	return settlementResults
-		.filter((settlement) => settlement.status === 'fulfilled')
-		.map((settlement) => settlement.value);
-};

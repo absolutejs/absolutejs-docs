@@ -16,7 +16,9 @@
 		"dev": "bun run --watch src/backend/server.ts",
 		"lint": "eslint ./src ./eslint.config.mjs",
 		"typecheck": "bun run tsc --noEmit",
-		"db:studio": "drizzle-kit studio"
+		"db:studio": "drizzle-kit studio",
+		"db:push": "drizzle-kit push",
+		"seed:providers": "bun run db/scripts/seedProviders.ts"
 	},
 	"dependencies": {
 		"@absolutejs/auth": "0.9.4",
