@@ -15,6 +15,7 @@ import { HighlightedJson } from '../utils/HighlightedJson';
 import { Modal } from '../utils/Modal';
 import { useToast } from '../utils/ToastProvider';
 import { TestedBadge } from './badges/TestedBadge';
+import { useAuthModalData } from '../../hooks/useAuthModalData';
 
 type AuthModalProps = {
 	user: User | undefined;
@@ -33,8 +34,8 @@ export const AuthModal = ({
 	handleSignOut,
 	setModalContent
 }: AuthModalProps) => {
-	const { addToast, registerHost } = useToast();
-	const [profile, setProfile] = useState<Record<string, unknown>>();
+	// const { addToast, registerHost } = useToast();
+	// const [profile, setProfile] = useState<Record<string, unknown>>();
 
 	const primaryColor = modalContent?.primaryColor ?? '#000';
 	const provider = user?.auth_sub?.split('|')[0]?.toLocaleLowerCase();
@@ -44,67 +45,78 @@ export const AuthModal = ({
 	const isRefreshable = isAuthorized && isRefreshableProviderOption(provider);
 	const isRevokeable = isAuthorized && isRevocableProviderOption(provider);
 
-	const showToast = (message: string, type: 'info' | 'success' | 'error') => {
-		let style;
-		switch (type) {
-			case 'error':
-				style = { background: '#f8d7da', color: '#721c24' };
-				break;
-			case 'success':
-				style = { background: '#d4edda', color: '#155724' };
-				break;
-			case 'info':
-				style = {
-					background: primaryColor,
-					color: getContrastColor(primaryColor)
-				};
-				break;
-		}
-		addToast({
-			duration: type === 'error' ? 0 : undefined,
-			message,
-			style
-		});
-	};
+	// const showToast = (message: string, type: 'info' | 'success' | 'error') => {
+	// 	let style;
+	// 	switch (type) {
+	// 		case 'error':
+	// 			style = { background: '#f8d7da', color: '#721c24' };
+	// 			break;
+	// 		case 'success':
+	// 			style = { background: '#d4edda', color: '#155724' };
+	// 			break;
+	// 		case 'info':
+	// 			style = {
+	// 				background: primaryColor,
+	// 				color: getContrastColor(primaryColor)
+	// 			};
+	// 			break;
+	// 	}
+	// 	addToast({
+	// 		duration: type === 'error' ? 0 : undefined,
+	// 		message,
+	// 		style
+	// 	});
+	// };
 
-	const handleRefresh = async () => {
-		showToast('Refreshing token...', 'info');
-		try {
-			const response = await fetch('/oauth2/tokens', { method: 'POST' });
-			if (!response.ok) throw new Error(await response.text());
-			showToast('Token refreshed successfully!', 'success');
-		} catch (error: any) {
-			showToast(error.message, 'error');
-		}
-	};
+	// const handleRefresh = async () => {
+	// 	showToast('Refreshing token...', 'info');
+	// 	try {
+	// 		const response = await fetch('/oauth2/tokens', { method: 'POST' });
+	// 		if (!response.ok) throw new Error(await response.text());
+	// 		showToast('Token refreshed successfully!', 'success');
+	// 	} catch (error: any) {
+	// 		showToast(error.message, 'error');
+	// 	}
+	// };
 
-	const handleRevocation = async () => {
-		showToast('Revoking token...', 'info');
-		try {
-			const response = await fetch('/oauth2/revocation', {
-				method: 'POST'
-			});
-			if (!response.ok) throw new Error(await response.text());
-			showToast('Token revoked successfully!', 'success');
-			handleSignOut();
-			setProfile(undefined);
-		} catch (error: any) {
-			showToast(error.message, 'error');
-		}
-	};
+	// const handleRevocation = async () => {
+	// 	showToast('Revoking token...', 'info');
+	// 	try {
+	// 		const response = await fetch('/oauth2/revocation', {
+	// 			method: 'POST'
+	// 		});
+	// 		if (!response.ok) throw new Error(await response.text());
+	// 		showToast('Token revoked successfully!', 'success');
+	// 		handleSignOut();
+	// 		setProfile(undefined);
+	// 	} catch (error: any) {
+	// 		showToast(error.message, 'error');
+	// 	}
+	// };
 
-	const fetchProfile = async () => {
-		showToast('Fetching profile...', 'info');
-		try {
-			const response = await fetch('/oauth2/profile');
-			if (!response.ok) throw new Error(await response.text());
-			const data = await response.json();
-			setProfile(data);
-			showToast('Profile fetched successfully!', 'success');
-		} catch (error: any) {
-			showToast(error.message, 'error');
-		}
-	};
+	// const fetchProfile = async () => {
+	// 	showToast('Fetching profile...', 'info');
+	// 	try {
+	// 		const response = await fetch('/oauth2/profile');
+	// 		if (!response.ok) throw new Error(await response.text());
+	// 		const data = await response.json();
+	// 		setProfile(data);
+	// 		showToast('Profile fetched successfully!', 'success');
+	// 	} catch (error: any) {
+	// 		showToast(error.message, 'error');
+	// 	}
+	// };
+
+	const {
+		fetchProfile,
+		handleRefresh,
+		handleRevocation,
+		profile,
+		registerHost
+	} = useAuthModalData({
+		modalContent,
+		handleSignOut
+	});
 
 	const boxStyle: CSSProperties = {
 		border: `2px solid ${primaryColor}`,
