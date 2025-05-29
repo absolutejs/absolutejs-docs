@@ -34,7 +34,8 @@ export const useAuthModalData = ({
 				);
 			}
 
-			return data;
+			const { name, ...statuses } = data;
+			return statuses;
 		}
 	});
 
@@ -62,17 +63,14 @@ export const useAuthModalData = ({
 	};
 
 	const handleRefresh = async () => {
-		// showToast('Refreshing token...', 'info');
-		// try {
-		// 	const response = await fetch('/oauth2/tokens', { method: 'POST' });
-		// 	if (!response.ok) throw new Error(await response.text());
-		// 	showToast('Token refreshed successfully!', 'success');
-		// } catch (error: any) {
-		// 	showToast(error.message, 'error');
-		// }
-
 		showToast('Refreshing token...', 'info');
-		const { data, error } = await server;
+		try {
+			const response = await fetch('/oauth2/tokens', { method: 'POST' });
+			if (!response.ok) throw new Error(await response.text());
+			showToast('Token refreshed successfully!', 'success');
+		} catch (error: any) {
+			showToast(error.message, 'error');
+		}
 	};
 
 	const handleRevocation = async () => {
