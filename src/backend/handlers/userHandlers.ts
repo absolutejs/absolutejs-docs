@@ -1,7 +1,7 @@
 import { UserFunctionProps } from '@absolutejs/auth';
 import { eq } from 'drizzle-orm';
-import { NewUser, schema, SchemaType } from '../../../db/schema';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
+import { NewUser, schema, SchemaType } from '../../../db/schema';
 
 export const getDBUser = async ({
 	authSub,

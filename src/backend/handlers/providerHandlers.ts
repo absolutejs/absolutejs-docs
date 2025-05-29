@@ -1,7 +1,7 @@
+import { ProviderOption } from '@absolutejs/auth';
+import { eq } from 'drizzle-orm';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { schema, SchemaType } from '../../../db/schema';
-import { eq } from 'drizzle-orm';
-import { ProviderOption } from '@absolutejs/auth';
 
 type ProviderFunctionProps = {
 	db: NeonHttpDatabase<SchemaType>;

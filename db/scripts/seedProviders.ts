@@ -26,7 +26,7 @@ if (providersToCreate.length === 0) {
 }
 
 const creationPromises = providersToCreate.map((name) =>
-	createProvider({ db, schema, name })
+	createProvider({ db, name })
 );
 const creationResults = await Promise.allSettled(creationPromises);
 

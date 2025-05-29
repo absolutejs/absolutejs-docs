@@ -1,8 +1,8 @@
+import { isValidProviderOption } from '@absolutejs/auth';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import Elysia from 'elysia';
 import { SchemaType } from '../../../db/schema';
 import { getProvider } from '../handlers/providerHandlers';
-import { isValidProviderOption } from '@absolutejs/auth';
 
 export const providerPlugin = (db: NeonHttpDatabase<SchemaType>) =>
 	new Elysia().get(
