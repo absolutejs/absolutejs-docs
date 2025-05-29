@@ -27,7 +27,6 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 					const user = await createUser({
 						authProvider,
 						db,
-						schema,
 						userProfile
 					});
 					if (user === undefined)
@@ -39,7 +38,6 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 					const user = await getUser({
 						authProvider,
 						db,
-						schema,
 						userProfile
 					});
 

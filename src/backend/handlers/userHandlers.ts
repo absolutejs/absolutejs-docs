@@ -1,72 +1,47 @@
 import { UserFunctionProps } from '@absolutejs/auth';
 import { eq } from 'drizzle-orm';
-import { DatabaseFunctionProps, NewUser } from '../../../db/schema';
+import { NewUser, schema, SchemaType } from '../../../db/schema';
+import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
 export const getDBUser = async ({
 	authSub,
-	db,
-	schema
-}: DatabaseFunctionProps & { authSub: string }) => {
-	try {
-		const user = await db
-			.select()
-			.from(schema.users)
-			.where(eq(schema.users.auth_sub, authSub))
-			.execute();
+	db
+}: {
+	authSub: string;
+	db: NeonHttpDatabase<SchemaType>;
+}) => {
+	const [user] = await db
+		.select()
+		.from(schema.users)
+		.where(eq(schema.users.auth_sub, authSub))
+		.execute();
 
-		if (user.length === 0) {
-			return null;
-		}
-
-		return user[0];
-	} catch (error) {
-		console.error('Error fetching user:', error);
-
-		if (error instanceof Error) {
-			throw new Error(`Database query failed: ${error.message}`);
-		} else {
-			throw new Error(
-				'An unknown error occurred while fetching the user'
-			);
-		}
-	}
+	return user;
 };
 
 export const createDBUser = async ({
 	auth_sub,
 	db,
-	schema,
 	metadata
-}: DatabaseFunctionProps & NewUser) => {
-	try {
-		const newUser = await db
-			.insert(schema.users)
-			.values({
-				auth_sub,
-				metadata
-			})
-			.returning();
+}: NewUser & { db: NeonHttpDatabase<SchemaType> }) => {
+	const [newUser] = await db
+		.insert(schema.users)
+		.values({
+			auth_sub,
+			metadata
+		})
+		.returning();
 
-		return newUser[0];
-	} catch (error) {
-		console.error('Error creating user:', error);
-
-		if (error instanceof Error) {
-			throw new Error(`Failed to create user: ${error.message}`);
-		} else {
-			throw new Error(
-				'An unknown error occurred while creating the user'
-			);
-		}
-	}
+	return newUser;
 };
 
 export const createUser = ({
 	userProfile,
 	authProvider,
-	db,
-	schema
-}: UserFunctionProps & DatabaseFunctionProps) => {
+	db
+}: UserFunctionProps & {
+	db: NeonHttpDatabase<SchemaType>;
+}) => {
 	const provider = authProvider.toUpperCase();
 	const { sub, id, userid } = userProfile;
 
@@ -78,17 +53,17 @@ export const createUser = ({
 	return createDBUser({
 		auth_sub: authSub,
 		db,
-		metadata: userProfile,
-		schema
+		metadata: userProfile
 	});
 };
 
 export const getUser = ({
 	userProfile,
 	authProvider,
-	db,
-	schema
-}: UserFunctionProps & DatabaseFunctionProps) => {
+	db
+}: UserFunctionProps & {
+	db: NeonHttpDatabase<SchemaType>;
+}) => {
 	const provider = authProvider.toUpperCase();
 	const { sub, id, userid } = userProfile;
 
@@ -98,5 +73,5 @@ export const getUser = ({
 
 	const authSub = `${provider}|${sub ?? id ?? userid}`;
 
-	return getDBUser({ authSub, db, schema });
+	return getDBUser({ authSub, db });
 };

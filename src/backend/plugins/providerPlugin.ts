@@ -1,0 +1,16 @@
+import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
+import Elysia from 'elysia';
+import { SchemaType } from '../../../db/schema';
+import { getProvider } from '../handlers/providerHandlers';
+import { isValidProviderOption } from '@absolutejs/auth';
+
+export const providerPlugin = (db: NeonHttpDatabase<SchemaType>) =>
+	new Elysia().get(
+		'/api/vi/providers/:provider',
+		async ({ error, params: { provider } }) => {
+			if (!isValidProviderOption(provider)) {
+				return error('Bad Request', `Invalid provider: ${provider}`);
+			}
+			const providerData = await getProvider({ db, name: provider });
+		}
+	);

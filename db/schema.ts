@@ -1,4 +1,3 @@
-import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import {
 	jsonb,
 	pgEnum,
@@ -45,8 +44,3 @@ export type NewUser = typeof users.$inferInsert;
 
 export type Provider = typeof providers.$inferSelect;
 export type NewProvider = typeof providers.$inferInsert;
-
-export type DatabaseFunctionProps = {
-	db: NeonHttpDatabase<SchemaType>;
-	schema: SchemaType;
-};
