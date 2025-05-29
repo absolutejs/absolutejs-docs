@@ -10,16 +10,16 @@ export const navbarData: NavbarElement[] = [
 		label: 'Packages',
 		links: [
 			{
+				href: '/create',
+				label: 'Create Abs'
+			},
+			{
 				href: '/citra',
 				label: 'Citra'
 			},
 			{
 				href: '/auth',
 				label: 'Abs Auth'
-			},
-			{
-				href: '/create',
-				label: 'Create Abs'
 			},
 			{
 				href: '/eslint',
