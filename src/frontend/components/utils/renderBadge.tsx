@@ -1,7 +1,7 @@
 import { PROVIDER_STATUSES } from '../../../constants';
-import { TestedBadge } from '../testing/badges/TestedBadge';
-import { MissingBadge } from '../testing/badges/MissingBadge';
 import { FailedBadge } from '../testing/badges/FailedBadge';
+import { MissingBadge } from '../testing/badges/MissingBadge';
+import { TestedBadge } from '../testing/badges/TestedBadge';
 import { TestingBadge } from '../testing/badges/TestingBadge';
 import { UntestedBadge } from '../testing/badges/UntestedBadge';
 

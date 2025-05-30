@@ -1,14 +1,14 @@
+import { UseQueryResult } from '@tanstack/react-query';
 import {
 	isRefreshableProviderOption,
 	isRevocableProviderOption,
 	ProviderOption
 } from 'citra';
-import { opButtonStyle } from '../../styles/authModalStyles';
-import { primaryColor } from '../../styles/styles';
-import { ProviderInfo } from '../../data/providerData';
 import { CSSProperties } from 'react';
 import { Provider } from '../../../../db/schema';
-import { UseQueryResult } from '@tanstack/react-query';
+import { ProviderInfo } from '../../data/providerData';
+import { opButtonStyle } from '../../styles/authModalStyles';
+import { primaryColor } from '../../styles/styles';
 import { renderBadge } from '../utils/renderBadge';
 
 const containerStyle: CSSProperties = {
@@ -44,28 +44,28 @@ export const AuthTestButtons = ({
 
 	const actions = [
 		{
-			label: 'Authorize User',
-			keyName: 'authorizeStatus',
+			disabled: false,
 			href: `/oauth2/${providerOption}/authorization`,
-			disabled: false
+			keyName: 'authorizeStatus',
+			label: 'Authorize User'
 		},
 		{
-			label: 'Fetch Profile',
+			disabled: !isAuthorized,
 			keyName: 'profileStatus',
-			onClick: fetchProfile,
-			disabled: !isAuthorized
+			label: 'Fetch Profile',
+			onClick: fetchProfile
 		},
 		{
-			label: 'Refresh Token',
+			disabled: !isRefreshable,
 			keyName: 'refreshStatus',
-			onClick: handleRefresh,
-			disabled: !isRefreshable
+			label: 'Refresh Token',
+			onClick: handleRefresh
 		},
 		{
-			label: 'Revoke Token',
+			disabled: !isRevocable,
 			keyName: 'revokeStatus',
-			onClick: handleRevocation,
-			disabled: !isRevocable
+			label: 'Revoke Token',
+			onClick: handleRevocation
 		}
 	] as const;
 

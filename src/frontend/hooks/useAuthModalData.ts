@@ -1,11 +1,11 @@
 import { ProviderOption } from '@absolutejs/auth';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useToast } from '../components/utils/ToastProvider';
 import { ProviderInfo } from '../data/providerData';
 import { server } from '../eden/treaty';
-import { useToast } from '../components/utils/ToastProvider';
 import { getContrastColor } from '../styles/authModalStyles';
 import { primaryColor } from '../styles/styles';
-import { useState } from 'react';
 
 type UseAuthModalDataProps = {
 	modalContent: (ProviderInfo & { providerOption: ProviderOption }) | null;
@@ -35,6 +35,7 @@ export const useAuthModalData = ({
 			}
 
 			const { name, ...statuses } = data;
+
 			return statuses;
 		}
 	});
@@ -102,11 +103,11 @@ export const useAuthModalData = ({
 	};
 
 	return {
-		providerStatuses,
-		profile,
+		fetchProfile,
 		handleRefresh,
 		handleRevocation,
-		fetchProfile,
+		profile,
+		providerStatuses,
 		registerHost
 	};
 };

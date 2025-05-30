@@ -6,6 +6,7 @@ import {
 import { CSSProperties, Dispatch, SetStateAction, useState } from 'react';
 import { User } from '../../../../db/schema';
 import { ProviderInfo } from '../../data/providerData';
+import { useAuthModalData } from '../../hooks/useAuthModalData';
 import {
 	credentialLinkStyle,
 	getContrastColor,
@@ -14,9 +15,8 @@ import {
 import { HighlightedJson } from '../utils/HighlightedJson';
 import { Modal } from '../utils/Modal';
 import { useToast } from '../utils/ToastProvider';
-import { TestedBadge } from './badges/TestedBadge';
-import { useAuthModalData } from '../../hooks/useAuthModalData';
 import { AuthTestButtons } from './AuthTestButtons';
+import { TestedBadge } from './badges/TestedBadge';
 
 type AuthModalProps = {
 	user: User | undefined;
@@ -49,8 +49,8 @@ export const AuthModal = ({
 		profile,
 		registerHost
 	} = useAuthModalData({
-		modalContent,
-		handleSignOut
+		handleSignOut,
+		modalContent
 	});
 
 	const boxStyle: CSSProperties = {
