@@ -1,0 +1,26 @@
+import { headingStyle, paragraphStyle } from '../../styles/styles';
+
+export const HomeHeader = () => (
+	<section
+		style={{
+			display: 'flex',
+			flexDirection: 'column',
+			alignItems: 'center',
+			textAlign: 'center'
+		}}
+	>
+		<h1 style={headingStyle}>
+			The Last Fullstack JavaScript Meta-Framework You'll Ever Need
+		</h1>
+		<p style={paragraphStyle}>
+			AbsoluteJS brings together every aspect of modern web development.
+			It covers user interfaces, data handling, code quality, and
+			authentication.
+		</p>
+		<p style={paragraphStyle}>
+			Powered by Bun & Elysia, it delivers blazing SSR performance and
+			full TypeScript support end to end, so you can focus on building
+			great apps instead of configuring tools.
+		</p>
+	</section>
+);

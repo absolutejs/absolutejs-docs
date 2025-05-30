@@ -39,7 +39,7 @@ if (
 	throw new Error('Missing index file in manifest');
 }
 
-if (!env.DATABASE_URL) {
+if (env.DATABASE_URL === undefined) {
 	throw new Error('DATABASE_URL is not set in .env file');
 }
 
