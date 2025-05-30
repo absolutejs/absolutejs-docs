@@ -34,6 +34,7 @@ export const useAuthModalData = ({
 				);
 			}
 
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { name, ...statuses } = data;
 
 			return statuses;

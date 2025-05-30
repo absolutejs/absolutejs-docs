@@ -1,5 +1,6 @@
 import { PROVIDER_STATUSES } from '../../../constants';
 import { FailedBadge } from '../testing/badges/FailedBadge';
+import { LoadingBadge } from '../testing/badges/LoadingBadge';
 import { MissingBadge } from '../testing/badges/MissingBadge';
 import { TestedBadge } from '../testing/badges/TestedBadge';
 import { TestingBadge } from '../testing/badges/TestingBadge';
@@ -15,7 +16,9 @@ export const renderBadge = (status: (typeof PROVIDER_STATUSES)[number]) => {
 			return <TestingBadge />;
 		case 'missing':
 			return <MissingBadge />;
-		default:
+		case 'failed':
 			return <FailedBadge />;
+		default:
+			return <LoadingBadge />;
 	}
 };

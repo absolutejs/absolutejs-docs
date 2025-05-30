@@ -3,20 +3,14 @@ import {
 	isRevocableProviderOption,
 	ProviderOption
 } from '@absolutejs/auth';
-import { CSSProperties, Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { User } from '../../../../db/schema';
 import { ProviderInfo } from '../../data/providerData';
 import { useAuthModalData } from '../../hooks/useAuthModalData';
-import {
-	credentialLinkStyle,
-	getContrastColor,
-	opButtonStyle
-} from '../../styles/authModalStyles';
+import { boxStyle, credentialLinkStyle } from '../../styles/authModalStyles';
 import { HighlightedJson } from '../utils/HighlightedJson';
 import { Modal } from '../utils/Modal';
-import { useToast } from '../utils/ToastProvider';
-import { AuthTestButtons } from './AuthTestButtons';
-import { TestedBadge } from './badges/TestedBadge';
+import { ProviderAction } from './ProviderAction';
 
 type AuthModalProps = {
 	user: User | undefined;
@@ -35,11 +29,15 @@ export const AuthModal = ({
 	handleSignOut,
 	setModalContent
 }: AuthModalProps) => {
+	if (!modalContent) return null;
+
 	const primaryColor = modalContent?.primaryColor ?? '#000';
 	const provider = user?.auth_sub?.split('|')[0]?.toLocaleLowerCase();
 
 	const isAuthorized =
 		provider !== undefined && modalContent?.providerOption === provider;
+	const isRefreshable = isAuthorized && isRefreshableProviderOption(provider);
+	const isRevocable = isAuthorized && isRevocableProviderOption(provider);
 
 	const {
 		fetchProfile,
@@ -53,16 +51,42 @@ export const AuthModal = ({
 		modalContent
 	});
 
-	const boxStyle: CSSProperties = {
-		border: `2px solid ${primaryColor}`,
-		borderRadius: '4px',
-		fontFamily: 'monospace',
-		height: '250px',
-		margin: '0 0 8px',
-		overflow: 'auto',
-		padding: '16px',
-		whiteSpace: 'pre-wrap'
-	};
+	const actions: Array<{
+		disabled: boolean;
+		href?: string;
+		keyName:
+			| 'authorizeStatus'
+			| 'profileStatus'
+			| 'refreshStatus'
+			| 'revokeStatus';
+		label: string;
+		onClick?: () => Promise<void>;
+	}> = [
+		{
+			disabled: false,
+			href: `/oauth2/${modalContent.providerOption}/authorization`,
+			keyName: 'authorizeStatus',
+			label: 'Authorize User'
+		},
+		{
+			disabled: !isAuthorized,
+			keyName: 'profileStatus',
+			label: 'Fetch Profile',
+			onClick: fetchProfile
+		},
+		{
+			disabled: !isRefreshable,
+			keyName: 'refreshStatus',
+			label: 'Refresh Token',
+			onClick: handleRefresh
+		},
+		{
+			disabled: !isRevocable,
+			keyName: 'revokeStatus',
+			label: 'Revoke Token',
+			onClick: handleRevocation
+		}
+	];
 
 	return (
 		<Modal
@@ -121,28 +145,44 @@ export const AuthModal = ({
 				</a>
 			</nav>
 
-			{!isAuthorized ? (
-				<pre style={boxStyle}>
+			{!isAuthorized && (
+				<pre style={boxStyle(primaryColor)}>
 					<code>
 						Authorize with this provider for this session to test.
 					</code>
 				</pre>
-			) : !profile ? (
-				<pre style={boxStyle}>
+			)}
+
+			{isAuthorized && !profile && (
+				<pre style={boxStyle(primaryColor)}>
 					<code>Fetch your profile to see your data.</code>
 				</pre>
-			) : (
+			)}
+
+			{isAuthorized && profile && (
 				<HighlightedJson data={profile} primaryColor={primaryColor} />
 			)}
 
-			<AuthTestButtons
-				providerStatuses={providerStatuses}
-				modalContent={modalContent}
-				provider={provider}
-				fetchProfile={fetchProfile}
-				handleRefresh={handleRefresh}
-				handleRevocation={handleRevocation}
-			/>
+			<nav
+				style={{
+					display: 'grid',
+					gap: '12px',
+					gridTemplateColumns: '1fr 1fr'
+				}}
+			>
+				{actions.map((action) => (
+					<ProviderAction
+						key={action.keyName}
+						providerStatuses={providerStatuses}
+						keyName={action.keyName}
+						type={action.href ? 'link' : 'button'}
+						href={action.href}
+						disabled={action.disabled}
+						label={action.label}
+						onClick={action.onClick}
+					/>
+				))}
+			</nav>
 		</Modal>
 	);
 };

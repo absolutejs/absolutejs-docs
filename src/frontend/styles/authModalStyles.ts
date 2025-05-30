@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react';
-import { primaryColor, tertiaryColor } from './styles';
+import { HALF } from '../../constants';
+import { tertiaryColor } from './styles';
 
 export const confirmInputStyle: CSSProperties = {
 	border: '1px solid #ccc',
@@ -17,6 +18,23 @@ export const containerStyle: CSSProperties = {
 	margin: '0 auto',
 	minWidth: '400px',
 	padding: '20px'
+};
+
+export const boxStyle = (primaryColor: string): CSSProperties => ({
+	border: `2px solid ${primaryColor}`,
+	borderRadius: '4px',
+	fontFamily: 'monospace',
+	height: '250px',
+	margin: '0 0 8px',
+	overflow: 'auto',
+	padding: '16px',
+	whiteSpace: 'pre-wrap'
+});
+
+export const buttonContainerStyle: CSSProperties = {
+	alignItems: 'center',
+	display: 'flex',
+	gap: '0.5rem'
 };
 
 export const oauthButtonContentStyle: CSSProperties = {
@@ -114,7 +132,7 @@ export const separatorLineStyle = ({
 });
 
 /* eslint-disable no-magic-numbers */
-export const getContrastColor = (hex: string): string => {
+export const getContrastColor = (hex: string) => {
 	const red = parseInt(hex.slice(1, 3), 16);
 	const green = parseInt(hex.slice(3, 5), 16);
 	const blue = parseInt(hex.slice(5, 7), 16);
@@ -147,7 +165,7 @@ export const opButtonStyle = (
 	cursor: disabled ? 'not-allowed' : 'pointer',
 	fontSize: '1rem',
 	lineHeight: '1.2rem',
-	opacity: disabled ? 0.5 : 1,
+	opacity: disabled ? HALF : 1,
 	padding: '12px 0',
 	textAlign: 'center',
 	textDecoration: 'none',

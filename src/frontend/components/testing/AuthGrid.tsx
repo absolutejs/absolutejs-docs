@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { User } from '../../../../db/schema';
 import { ProviderInfo } from '../../data/providerData';
 import { OAuthButton } from '../auth/OAuthButton';
+import { ToastProvider } from '../utils/ToastProvider';
 import { AuthModal } from './AuthModal';
 
 type AuthGridProps = {
@@ -16,7 +17,7 @@ export const AuthGrid = ({ user, handleSignOut }: AuthGridProps) => {
 	>(null);
 
 	return (
-		<section>
+		<ToastProvider>
 			<div
 				style={{
 					display: 'grid',
@@ -43,6 +44,6 @@ export const AuthGrid = ({ user, handleSignOut }: AuthGridProps) => {
 				modalContent={modalContent}
 				setModalContent={setModalContent}
 			/>
-		</section>
+		</ToastProvider>
 	);
 };

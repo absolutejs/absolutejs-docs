@@ -3,7 +3,7 @@ import {
 	instantiateUserSession
 } from '@absolutejs/auth';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
-import { SchemaType, User, schema } from '../../../db/schema';
+import { SchemaType, User } from '../../../db/schema';
 import { createUser, getUser } from '../handlers/userHandlers';
 import { providersConfiguration } from './providersConfiguration';
 

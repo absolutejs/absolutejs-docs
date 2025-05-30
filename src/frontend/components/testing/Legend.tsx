@@ -1,11 +1,7 @@
-import { AiOutlineExperiment, AiOutlineMinusCircle } from 'react-icons/ai';
-import { FaCheckCircle, FaRegQuestionCircle } from 'react-icons/fa';
-import { ImWarning } from 'react-icons/im';
 import {
 	legendWrapperStyle,
 	legendTitleStyle,
 	legendGridStyle,
-	badgeStyle,
 	legendTextStyle,
 	legendFooterStyle
 } from '../../styles/testingStyles';

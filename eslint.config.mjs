@@ -21,12 +21,7 @@ export default [
 	{
 		ignores: ['example/build/**']
 	},
-	pluginJs.configs.recommended,
-
-	...tseslint.configs.recommended,
-
 	{
-		files: ['**/*.{ts,tsx}'],
 		languageOptions: {
 			globals: globals.browser,
 			parser: tsParser,
@@ -36,6 +31,13 @@ export default [
 				tsconfigRootDir: __dirname
 			}
 		}
+	},
+	pluginJs.configs.recommended,
+
+	...tseslint.configs.recommended,
+
+	{
+		files: ['**/*.{ts,tsx}']
 	},
 
 	{
@@ -59,6 +61,7 @@ export default [
 			security: securityPlugin
 		},
 		rules: {
+			'@typescript-eslint/no-unnecessary-type-assertion': 'error',
 			'absolute/explicit-object-types': 'error',
 			'absolute/localize-react-props': 'error',
 			'absolute/max-depth-extended': ['error', 1],
@@ -74,7 +77,6 @@ export default [
 			'absolute/no-nested-jsx-return': 'error',
 			'absolute/no-or-none-component': 'error',
 			'absolute/no-transition-cssproperties': 'error',
-			'absolute/no-type-cast': 'error',
 			'absolute/no-unnecessary-div': 'error',
 			'absolute/no-unnecessary-key': 'error',
 			'absolute/no-useless-function': 'error',
@@ -127,7 +129,11 @@ export default [
 			'no-loop-func': 'error',
 			'no-magic-numbers': [
 				'warn',
-				{ detectObjects: false, enforceConst: true, ignore: [0, 1] }
+				{
+					detectObjects: false,
+					enforceConst: true,
+					ignore: [0, -1, 1, 2]
+				}
 			],
 			'no-misleading-character-class': 'error',
 			'no-nested-ternary': 'error',
@@ -216,6 +222,12 @@ export default [
 		],
 		rules: {
 			'import/no-unused-modules': 'off'
+		}
+	},
+	{
+		files: ['src/backend/server.ts'],
+		rules: {
+			'no-unused-vars': 'off'
 		}
 	},
 	{
