@@ -4,7 +4,7 @@ FROM oven/bun:latest
 # Set the working directory in the container to /
 WORKDIR /
 
-# Copy package.json and bun.lockb to the working directory
+# Copy package.json and bun.lock to the working directory
 COPY package.json bun.lock ./
 
 # Install any needed packages specified in package.json
