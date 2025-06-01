@@ -1,55 +1,55 @@
 import { CSSProperties } from 'react';
 
 export const highlighterContainerStyle: CSSProperties = {
-	position: 'relative',
+	border: '1px solid #e1e1e8',
 	borderRadius: '5px',
 	overflow: 'hidden',
-	border: '1px solid #e1e1e8'
+	position: 'relative'
 };
 
 export const highlighterHeaderStyle: CSSProperties = {
-	display: 'flex',
-	justifyContent: 'space-between',
 	alignItems: 'center',
 	backgroundColor: '#f5f5f5',
-	padding: '5px 10px',
-	borderBottom: '1px solid #e1e1e8'
+	borderBottom: '1px solid #e1e1e8',
+	display: 'flex',
+	justifyContent: 'space-between',
+	padding: '5px 10px'
 };
 
 export const highlighterCopyButtonStyle: CSSProperties = {
-	display: 'flex',
 	alignItems: 'center',
 	backgroundColor: 'transparent',
-	color: '#333',
 	border: 'none',
+	color: '#333',
 	cursor: 'pointer',
+	display: 'flex',
 	fontSize: '0.9em'
 };
 
 export const highlighterSelectContainerStyle: CSSProperties = {
-	position: 'relative',
 	display: 'inline-block',
-	marginLeft: '10px'
+	marginLeft: '10px',
+	position: 'relative'
 };
 
 export const highlighterSelectStyle: CSSProperties = {
-	fontSize: '0.9em',
+	appearance: 'none',
 	background: 'transparent',
 	border: 'none',
 	color: '#333',
-	appearance: 'none',
-	WebkitAppearance: 'none',
+	cursor: 'pointer',
+	fontSize: '0.9em',
 	MozAppearance: 'none',
-	paddingRight: '20px',
-	paddingLeft: '0',
 	outline: 'none',
-	cursor: 'pointer'
+	paddingLeft: '0',
+	paddingRight: '20px',
+	WebkitAppearance: 'none'
 };
 
 export const selectArrowStyle: CSSProperties = {
-	position: 'absolute',
-	top: '50%',
-	right: '5px',
 	pointerEvents: 'none',
+	position: 'absolute',
+	right: '5px',
+	top: '50%',
 	transform: 'translateY(-50%)'
 };

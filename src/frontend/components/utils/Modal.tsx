@@ -33,6 +33,7 @@ export const Modal = ({
 		if (!isOpen) return;
 
 		document.body.style.overflow = 'hidden';
+
 		return () => {
 			document.body.style.overflow = '';
 		};

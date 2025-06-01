@@ -105,6 +105,16 @@ export const AuthModal = ({
 			onOpen={(dialogRef) => registerHost(dialogRef)}
 			isOpen={modalContent !== null}
 			onClose={() => {
+				const params = new URLSearchParams(window.location.search);
+				params.delete('provider');
+
+				const newQuery = params.toString();
+				const newUrl = newQuery
+					? `${window.location.pathname}?${newQuery}`
+					: window.location.pathname;
+
+				window.history.replaceState(null, '', newUrl);
+
 				setModalContent(null);
 				registerHost(null);
 			}}

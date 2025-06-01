@@ -36,6 +36,12 @@ export const OAuthButton = ({
 				providerPrimaryColor: primaryColor
 			})}
 			onClick={() => {
+				const params = new URLSearchParams(window.location.search);
+				params.set('provider', provider);
+
+				const newUrl = `${window.location.pathname}?${params.toString()}`;
+				window.history.replaceState(null, '', newUrl);
+
 				setModalContent({
 					createNewCredentialsUrl,
 					logoUrl,

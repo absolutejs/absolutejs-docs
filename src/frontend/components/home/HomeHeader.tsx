@@ -3,9 +3,9 @@ import { headingStyle, paragraphStyle } from '../../styles/styles';
 export const HomeHeader = () => (
 	<section
 		style={{
+			alignItems: 'center',
 			display: 'flex',
 			flexDirection: 'column',
-			alignItems: 'center',
 			textAlign: 'center'
 		}}
 	>

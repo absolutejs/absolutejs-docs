@@ -1,7 +1,11 @@
-import { ProviderOption, providerOptions } from '@absolutejs/auth';
+import {
+	isValidProviderOption,
+	ProviderOption,
+	providerOptions
+} from '@absolutejs/auth';
 import { useState } from 'react';
 import { User } from '../../../../db/schema';
-import { ProviderInfo } from '../../data/providerData';
+import { providerData, ProviderInfo } from '../../data/providerData';
 import { OAuthButton } from '../auth/OAuthButton';
 import { ToastProvider } from '../utils/ToastProvider';
 import { AuthModal } from './AuthModal';
@@ -14,7 +18,25 @@ type AuthGridProps = {
 export const AuthGrid = ({ user, handleSignOut }: AuthGridProps) => {
 	const [modalContent, setModalContent] = useState<
 		(ProviderInfo & { providerOption: ProviderOption }) | null
-	>(null);
+	>(() => {
+		if (typeof window === 'undefined') return null;
+		const params = new URLSearchParams(window.location.search);
+		const raw = params.get('provider');
+		if (raw && isValidProviderOption(raw)) {
+			const data = providerData[raw];
+
+			return {
+				createNewCredentialsUrl: data.createNewCredentialsUrl,
+				logoUrl: data.logoUrl,
+				manageCredentialsUrl: data.manageCredentialsUrl,
+				name: data.name,
+				primaryColor: data.primaryColor,
+				providerOption: raw
+			};
+		}
+
+		return null;
+	});
 
 	return (
 		<ToastProvider>

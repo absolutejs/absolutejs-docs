@@ -1,8 +1,10 @@
+import { CSSProperties } from 'react';
 import { CreateButton } from '../components/home/CreateButton';
+import { HomeHeader } from '../components/home/HomeHeader';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
+import { frontendCode, serverCode, treatyCode } from '../data/edenCode';
 import { useAuthStatus } from '../hooks/useAuthStatus';
-import { CSSProperties } from 'react';
 import {
 	htmlDefault,
 	bodyDefault,
@@ -10,15 +12,13 @@ import {
 	headingStyle,
 	paragraphStyle
 } from '../styles/styles';
-import { frontendCode, serverCode, treatyCode } from '../data/edenCode';
-import { HomeHeader } from '../components/home/HomeHeader';
 
 const heroStyle: CSSProperties = {
+	alignItems: 'center',
 	display: 'flex',
 	flexDirection: 'column',
-	alignItems: 'center',
-	textAlign: 'center',
-	padding: '4rem 2rem'
+	padding: '4rem 2rem',
+	textAlign: 'center'
 };
 
 const navStyle: CSSProperties = {
@@ -30,28 +30,28 @@ const navStyle: CSSProperties = {
 const featureWrapper: CSSProperties = {
 	display: 'flex',
 	flexWrap: 'wrap',
-	justifyContent: 'center',
 	gap: '2rem',
+	justifyContent: 'center',
 	padding: '3rem 1rem'
 };
 
 const featureCard: CSSProperties = {
 	background: '#faf9f5',
-	padding: '1rem',
-	borderRadius: '8px',
 	border: '1px solid rgba(0,0,0,0.05)',
+	borderRadius: '8px',
 	boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
 	display: 'flex',
-	flexDirection: 'column'
+	flexDirection: 'column',
+	padding: '1rem'
 };
 
 const codeBlock: CSSProperties = {
-	fontFamily: 'monospace',
 	background: '#f5f5f5',
-	padding: '1rem',
 	borderRadius: '4px',
+	fontFamily: 'monospace',
+	marginTop: '1rem',
 	overflowX: 'auto',
-	marginTop: '1rem'
+	padding: '1rem'
 };
 
 export const Home = () => {
@@ -70,15 +70,15 @@ export const Home = () => {
 							<a
 								href="/playground"
 								style={{
-									padding: '0.75rem 1.5rem',
-									borderRadius: '4px',
-									background: '#0070f3',
-									color: '#fff',
-									border: '1px solid #0070f3',
-									textDecoration: 'none',
-									display: 'inline-flex',
 									alignItems: 'center',
-									justifyContent: 'center'
+									background: '#0070f3',
+									border: '1px solid #0070f3',
+									borderRadius: '4px',
+									color: '#fff',
+									display: 'inline-flex',
+									justifyContent: 'center',
+									padding: '0.75rem 1.5rem',
+									textDecoration: 'none'
 								}}
 							>
 								Try in Browser
@@ -86,15 +86,15 @@ export const Home = () => {
 							<a
 								href="/docs"
 								style={{
-									padding: '0.75rem 1.5rem',
-									borderRadius: '4px',
-									background: 'transparent',
-									color: '#0070f3',
-									border: '1px solid #0070f3',
-									textDecoration: 'none',
-									display: 'inline-flex',
 									alignItems: 'center',
-									justifyContent: 'center'
+									background: 'transparent',
+									border: '1px solid #0070f3',
+									borderRadius: '4px',
+									color: '#0070f3',
+									display: 'inline-flex',
+									justifyContent: 'center',
+									padding: '0.75rem 1.5rem',
+									textDecoration: 'none'
 								}}
 							>
 								Read Docs
@@ -127,9 +127,9 @@ export const Home = () => {
 								target="_blank"
 								rel="noopener noreferrer"
 								style={{
+									color: '#0070f3',
 									marginTop: 'auto',
-									textDecoration: 'none',
-									color: '#0070f3'
+									textDecoration: 'none'
 								}}
 							>
 								Learn more

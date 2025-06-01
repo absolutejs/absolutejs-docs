@@ -1,7 +1,8 @@
 import { ChangeEvent, CSSProperties, useState } from 'react';
+import { AiOutlineCheck, AiOutlineCopy } from 'react-icons/ai';
+import { FiChevronDown } from 'react-icons/fi';
 import { Prism, SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { AiOutlineCheck, AiOutlineCopy } from 'react-icons/ai';
 import {
 	highlighterContainerStyle,
 	highlighterHeaderStyle,
@@ -10,7 +11,6 @@ import {
 	highlighterSelectStyle,
 	selectArrowStyle
 } from '../../styles/syntaxHighlighterStyles';
-import { FiChevronDown } from 'react-icons/fi';
 
 type PrismPlusProps = {
 	codeString: string | string[];
@@ -41,6 +41,7 @@ export const PrismPlus = ({
 	const handleCopy = () => {
 		if (!displayedCodeString) {
 			console.warn('Nothing to copy');
+
 			return;
 		}
 
@@ -61,16 +62,17 @@ export const PrismPlus = ({
 
 	const getDisplayLanguage = (lang: string) => {
 		const langMap: { [key: string]: string } = {
-			typescript: 'TS',
-			javascript: 'JS'
+			javascript: 'JS',
+			typescript: 'TS'
 		};
+
 		return langMap[lang.toLowerCase()] || lang.toUpperCase();
 	};
 
 	return (
 		<div style={highlighterContainerStyle}>
 			<div style={highlighterHeaderStyle}>
-				<span style={{ fontSize: '0.9em', color: '#333' }}>
+				<span style={{ color: '#333', fontSize: '0.9em' }}>
 					{getDisplayLanguage(language)}
 				</span>
 				{options && options.length > 0 && (
