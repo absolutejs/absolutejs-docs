@@ -24,13 +24,19 @@ export const Modal = ({
 		if (isOpen) {
 			dialog.showModal();
 			onOpen?.(dialog);
-			document.body.style.overflow = 'hidden';
-		} else if (dialog.open) {
+		} else {
 			dialog.close();
-			onClose?.();
-			document.body.style.overflow = '';
 		}
-	}, [isOpen, onClose, onOpen]);
+	}, [isOpen, onOpen]);
+
+	useEffect(() => {
+		if (!isOpen) return;
+
+		document.body.style.overflow = 'hidden';
+		return () => {
+			document.body.style.overflow = '';
+		};
+	}, [isOpen]);
 
 	return (
 		<dialog
