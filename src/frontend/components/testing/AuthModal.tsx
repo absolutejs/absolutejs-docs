@@ -55,34 +55,34 @@ export const AuthModal = ({
 		disabled: boolean;
 		href?: string;
 		keyName:
-			| 'authorizeStatus'
-			| 'profileStatus'
-			| 'refreshStatus'
-			| 'revokeStatus';
+			| 'authorize_status'
+			| 'profile_status'
+			| 'refresh_status'
+			| 'revoke_status';
 		label: string;
 		onClick?: () => Promise<void>;
 	}> = [
 		{
 			disabled: false,
 			href: `/oauth2/${modalContent.providerOption}/authorization`,
-			keyName: 'authorizeStatus',
+			keyName: 'authorize_status',
 			label: 'Authorize User'
 		},
 		{
 			disabled: !isAuthorized,
-			keyName: 'profileStatus',
+			keyName: 'profile_status',
 			label: 'Fetch Profile',
 			onClick: fetchProfile
 		},
 		{
 			disabled: !isRefreshable,
-			keyName: 'refreshStatus',
+			keyName: 'refresh_status',
 			label: 'Refresh Token',
 			onClick: handleRefresh
 		},
 		{
 			disabled: !isRevocable,
-			keyName: 'revokeStatus',
+			keyName: 'revoke_status',
 			label: 'Revoke Token',
 			onClick: handleRevocation
 		}

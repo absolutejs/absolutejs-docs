@@ -9,10 +9,10 @@ import { renderBadge } from '../utils/renderBadge';
 
 type ProviderActionProps = {
 	keyName:
-		| 'authorizeStatus'
-		| 'profileStatus'
-		| 'refreshStatus'
-		| 'revokeStatus';
+		| 'authorize_status'
+		| 'profile_status'
+		| 'refresh_status'
+		| 'revoke_status';
 	providerStatuses: UseQueryResult<Omit<Provider, 'name'> | null>;
 	type: 'button' | 'link';
 	href?: string;

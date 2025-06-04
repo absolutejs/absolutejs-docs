@@ -38,7 +38,10 @@ export const updateProviderStatus = async ({
 }: ProviderFunctionProps & {
 	column: keyof Pick<
 		Provider,
-		'authorizeStatus' | 'profileStatus' | 'refreshStatus' | 'revokeStatus'
+		| 'authorize_status'
+		| 'profile_status'
+		| 'refresh_status'
+		| 'revoke_status'
 	>;
 	status: (typeof PROVIDER_STATUSES)[number];
 }) => {
@@ -56,9 +59,9 @@ export const resetAllProviderStatuses = async (
 	db: NeonHttpDatabase<SchemaType>
 ) => {
 	await db.update(schema.providers).set({
-		authorizeStatus: 'untested',
-		profileStatus: 'untested',
-		refreshStatus: 'untested',
-		revokeStatus: 'untested'
+		authorize_status: 'untested',
+		profile_status: 'untested',
+		refresh_status: 'untested',
+		revoke_status: 'untested'
 	});
 };

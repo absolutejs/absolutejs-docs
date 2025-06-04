@@ -84,24 +84,24 @@ while (true) {
 
 let column: keyof Pick<
 	Provider,
-	'authorizeStatus' | 'profileStatus' | 'refreshStatus' | 'revokeStatus'
+	'authorize_status' | 'profile_status' | 'refresh_status' | 'revoke_status'
 >;
 switch (action) {
 	case 'authorization':
-		column = 'authorizeStatus';
+		column = 'authorize_status';
 		break;
 	case 'refresh':
-		column = 'refreshStatus';
+		column = 'refresh_status';
 		break;
 	case 'revoke':
-		column = 'revokeStatus';
+		column = 'revoke_status';
 		break;
 	case 'profile':
-		column = 'profileStatus';
+		column = 'profile_status';
 		break;
 }
 
-let newStatus: Provider['authorizeStatus'];
+let newStatus: Provider['authorize_status'];
 while (true) {
 	validNewStatuses.forEach((s, i) => console.log(`${i + 1}) ${s}`));
 	const num = Number(
