@@ -64,9 +64,9 @@ export const handleStatusUpdate = async ({
 
 	if (error !== undefined) {
 		handleErrorLogging({
-			error,
+			authProvider,
 			db,
-			authProvider
+			error
 		});
 	}
 };
