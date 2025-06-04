@@ -33,6 +33,7 @@ export const OAuthButton = ({
 	return (
 		<button
 			style={oauthButtonStyle({
+				isProviderSelected: true,
 				providerPrimaryColor: primaryColor
 			})}
 			onClick={() => {
