@@ -94,28 +94,61 @@ export const useAuthModalData = ({
 
 	const handleRevocation = async () => {
 		showToast('Revoking token...', 'info');
+		const revokeStatus = providerStatuses.data?.revoke_status;
+
 		try {
 			const response = await fetch('/oauth2/revocation', {
 				method: 'POST'
 			});
+
 			if (!response.ok) throw new Error(await response.text());
+
+			if (revokeStatus !== 'tested') {
+				queryClient.invalidateQueries({
+					queryKey: ['providerStatuses', modalContent?.providerOption]
+				});
+			}
+
 			showToast('Token revoked successfully!', 'success');
 			handleSignOut();
 			setProfile(undefined);
 		} catch (error: any) {
+			if (revokeStatus !== 'failed') {
+				queryClient.invalidateQueries({
+					queryKey: ['providerStatuses', modalContent?.providerOption]
+				});
+			}
+
 			showToast(error.message, 'error');
 		}
 	};
 
 	const fetchProfile = async () => {
 		showToast('Fetching profile...', 'info');
+		const profileStatus = providerStatuses.data?.profile_status;
+
 		try {
 			const response = await fetch('/oauth2/profile');
+
 			if (!response.ok) throw new Error(await response.text());
+
+			if (profileStatus !== 'tested') {
+				queryClient.invalidateQueries({
+					queryKey: ['providerStatuses', modalContent?.providerOption]
+				});
+			}
+
 			const data = await response.json();
+
 			setProfile(data);
 			showToast('Profile fetched successfully!', 'success');
 		} catch (error: any) {
+			if (profileStatus !== 'failed') {
+				queryClient.invalidateQueries({
+					queryKey: ['providerStatuses', modalContent?.providerOption]
+				});
+			}
+
 			showToast(error.message, 'error');
 		}
 	};
