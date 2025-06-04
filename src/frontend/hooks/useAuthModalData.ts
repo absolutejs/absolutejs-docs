@@ -131,6 +131,7 @@ export const useAuthModalData = ({
 			const response = await fetch('/oauth2/profile');
 
 			if (!response.ok) throw new Error(await response.text());
+			const data = await response.json();
 
 			if (profileStatus !== 'tested') {
 				queryClient.invalidateQueries({
@@ -138,7 +139,6 @@ export const useAuthModalData = ({
 				});
 			}
 
-			const data = await response.json();
 
 			setProfile(data);
 			showToast('Profile fetched successfully!', 'success');

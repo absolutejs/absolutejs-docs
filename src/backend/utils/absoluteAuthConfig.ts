@@ -12,7 +12,7 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 	createAuthConfiguration<User>({
 		providersConfiguration: providersConfiguration,
 		onCallbackError: async ({ error, authProvider }) => {
-			handleStatusUpdate({
+			await handleStatusUpdate({
 				authProvider,
 				column: 'authorize_status',
 				db,
@@ -28,7 +28,7 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			userSessionId,
 			session
 		}) => {
-			handleStatusUpdate({
+			await handleStatusUpdate({
 				authProvider,
 				column: 'authorize_status',
 				db,
@@ -65,7 +65,7 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			});
 		},
 		onProfileError: async ({ error, authProvider }) => {
-			handleStatusUpdate({
+			await handleStatusUpdate({
 				authProvider,
 				column: 'profile_status',
 				db,
@@ -75,7 +75,7 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			});
 		},
 		onProfileSuccess: async ({ authProvider }) => {
-			handleStatusUpdate({
+			await handleStatusUpdate({
 				authProvider,
 				column: 'profile_status',
 				db,
@@ -84,7 +84,7 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			});
 		},
 		onRefreshError: async ({ error, authProvider }) => {
-			handleStatusUpdate({
+			await handleStatusUpdate({
 				authProvider,
 				column: 'refresh_status',
 				db,
@@ -94,7 +94,7 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			});
 		},
 		onRefreshSuccess: async ({ authProvider }) => {
-			handleStatusUpdate({
+			await handleStatusUpdate({
 				authProvider,
 				column: 'refresh_status',
 				db,
@@ -103,7 +103,7 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			});
 		},
 		onRevocationError: async ({ error, authProvider }) => {
-			handleStatusUpdate({
+			await handleStatusUpdate({
 				authProvider,
 				column: 'revoke_status',
 				db,
@@ -113,7 +113,7 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			});
 		},
 		onRevocationSuccess: async ({ authProvider }) => {
-			handleStatusUpdate({
+			await handleStatusUpdate({
 				authProvider,
 				column: 'revoke_status',
 				db,
