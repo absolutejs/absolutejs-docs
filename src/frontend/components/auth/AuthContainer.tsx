@@ -1,3 +1,4 @@
+import { ProviderOption } from '@absolutejs/auth';
 import { useState } from 'react';
 import {
 	containerStyle,
@@ -5,9 +6,13 @@ import {
 	loginTextStyle,
 	loginLinkTextStyle
 } from '../../styles/authModalStyles';
-import { OAuthLinks } from './OAuthLinks';
+import { Divider } from '../utils/Divider';
+import { ProviderDropdown } from '../utils/ProviderDropdown';
+import { OAuthLink } from './OAuthLink';
 
 export const AuthContainer = () => {
+	const [currentProvider, setCurrentProvider] =
+		useState<Lowercase<ProviderOption>>();
 	const [mode, setMode] = useState<'login' | 'signup'>('login');
 	const switchMode = () => {
 		setMode((prev) => (prev === 'login' ? 'signup' : 'login'));
@@ -32,7 +37,14 @@ export const AuthContainer = () => {
 					: 'Create an account'}
 			</h1>
 
-			<OAuthLinks mode={mode} />
+			<OAuthLink mode={mode} provider="google" />
+			<OAuthLink mode={mode} provider="github" />
+
+			<Divider text="or" />
+
+			<ProviderDropdown setCurrentProvider={setCurrentProvider} />
+
+			<OAuthLink mode={mode} provider={currentProvider} />
 
 			<p style={loginTextStyle}>
 				{mode === 'login' ? 'Need an account? ' : 'Have an account? '}

@@ -17,7 +17,9 @@ export const OAuthLink = ({ mode, provider }: OAuthLinkProps) => {
 	const defaultData: ProviderInfo = {
 		logoUrl: '/assets/svg/todo-put-file.svg',
 		name: 'other provider',
-		primaryColor: 'lightgray'
+		primaryColor: 'lightgray',
+		manageCredentialsUrl: '/oauth2/credentials',
+		createNewCredentialsUrl: '/oauth2/credentials/create'
 	};
 
 	const { logoUrl, name, primaryColor } =

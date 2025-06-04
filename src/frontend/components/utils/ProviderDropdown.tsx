@@ -27,7 +27,7 @@ export const ProviderDropdown = ({
 			borderRadius: '4px',
 			fontSize: '14px',
 			marginBottom: '10px',
-			padding: '10px',
+			padding: '14px',
 			textAlign: 'center',
 			width: '100%'
 		}}
