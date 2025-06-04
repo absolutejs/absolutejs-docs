@@ -83,6 +83,44 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 				newStatus: 'tested'
 			});
 		},
+		onRefreshError: async ({ error, authProvider }) => {
+			handleStatusUpdate({
+				authProvider,
+				column: 'refresh_status',
+				db,
+				error,
+				guardStatuses: ['tested', 'untested'],
+				newStatus: 'failed'
+			});
+		},
+		onRefreshSuccess: async ({ authProvider }) => {
+			handleStatusUpdate({
+				authProvider,
+				column: 'refresh_status',
+				db,
+				guardStatuses: ['failed', 'untested', 'missing', 'testing'],
+				newStatus: 'tested'
+			});
+		},
+		onRevocationError: async ({ error, authProvider }) => {
+			handleStatusUpdate({
+				authProvider,
+				column: 'revoke_status',
+				db,
+				error,
+				guardStatuses: ['tested', 'untested'],
+				newStatus: 'failed'
+			});
+		},
+		onRevocationSuccess: async ({ authProvider }) => {
+			handleStatusUpdate({
+				authProvider,
+				column: 'revoke_status',
+				db,
+				guardStatuses: ['failed', 'untested', 'missing', 'testing'],
+				newStatus: 'tested'
+			});
+		},
 		onSignOut: ({ userSessionId, session }) => {
 			const userSession = session[userSessionId];
 
