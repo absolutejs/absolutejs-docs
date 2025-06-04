@@ -325,7 +325,7 @@ export const providerData: ProviderData = {
 	osu: {
 		createNewCredentialsUrl:
 			'https://osu.ppy.sh/home/account/edit#new-oauth-application',
-		logoUrl: '/assets/svg/osu-logo.svg',
+		logoUrl: '/assets/png/osu!logo.png',
 		manageCredentialsUrl: 'https://osu.ppy.sh/home/account/edit#oauth',
 		name: 'osu!',
 		primaryColor: '#FF66AA'
@@ -341,7 +341,7 @@ export const providerData: ProviderData = {
 	},
 	polar: {
 		createNewCredentialsUrl: 'https://polar.sh/dashboard',
-		logoUrl: '/assets/svg/polar-logo.svg',
+		logoUrl: '/assets/png/logomark_black.png',
 		manageCredentialsUrl: 'https://polar.sh/dashboard',
 		name: 'Polar',
 		primaryColor: '#000000'
@@ -445,7 +445,7 @@ export const providerData: ProviderData = {
 	},
 	tumblr: {
 		createNewCredentialsUrl: 'https://www.tumblr.com/oauth/register',
-		logoUrl: '/assets/svg/tumblr.svg',
+		logoUrl: '/assets/png/Tumblr_Logos_2018.03.06_t_Icon_Blue.png',
 		manageCredentialsUrl: 'https://www.tumblr.com/oauth/apps',
 		name: 'Tumblr',
 		primaryColor: '#36465D'
@@ -476,7 +476,7 @@ export const providerData: ProviderData = {
 	withings: {
 		createNewCredentialsUrl:
 			'https://developer.withings.com/dashboard/create',
-		logoUrl: '/assets/svg/withings-logo.svg',
+		logoUrl: '/assets/png/logo_withings_black.png',
 		manageCredentialsUrl: 'https://developer.withings.com/dashboard/',
 		name: 'Withings',
 		primaryColor: '#00A0DC'
