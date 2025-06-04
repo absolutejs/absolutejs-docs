@@ -32,14 +32,23 @@ export const HamburgerUserButtons = ({
 			>
 				<animated.a href="/portal">
 					<ProfilePicture
-						userImage={user.picture}
-						backupImage={'/assets/svg/default-account-icon.svg'}
+						userImage={
+							typeof user.metadata?.profile_picture === 'string'
+								? user.metadata.profile_picture
+								: undefined
+						}
+						backupImage={'/assets/svg/default-profile-icon.svg'}
 						width="100%"
 						height="100%"
 					/>
 				</animated.a>
 				<span style={{ color: primaryColor, fontSize: '1.3rem' }}>
-					{user.given_name} {user.family_name}
+					{typeof user.metadata?.given_name === 'string'
+						? user.metadata.given_name
+						: ''}{' '}
+					{typeof user.metadata?.family_name === 'string'
+						? user.metadata.family_name
+						: ''}
 				</span>
 			</div>
 		)}

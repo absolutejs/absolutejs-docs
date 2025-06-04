@@ -1,87 +1,25 @@
 import {
 	createAuthConfiguration,
-	instantiateUserSession,
-	isValidProviderOption
+	instantiateUserSession
 } from '@absolutejs/auth';
-import { eq } from 'drizzle-orm';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
-import { schema, SchemaType, User } from '../../../db/schema';
-import { logError, logUnknownError } from '../handlers/errorLogHandlers';
-import { updateProviderStatus } from '../handlers/providerHandlers';
+import { SchemaType, User } from '../../../db/schema';
 import { createUser, getUser } from '../handlers/userHandlers';
 import { providersConfiguration } from './providersConfiguration';
+import { handleStatusUpdate } from './handleStatusUpdate';
 
 export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 	createAuthConfiguration<User>({
 		providersConfiguration: providersConfiguration,
 		onCallbackError: async ({ error, authProvider }) => {
-			if (!isValidProviderOption(authProvider)) {
-				throw new Error(`Invalid auth provider: ${authProvider}`);
-			}
-
-			const [{ authorize_status } = {}] = await db
-				.select({ authorize_status: schema.providers.authorize_status })
-				.from(schema.providers)
-				.where(eq(schema.providers.name, authProvider))
-				.execute();
-
-			if (
-				authorize_status === 'tested' ||
-				authorize_status === 'untested'
-			) {
-				updateProviderStatus({
-					column: 'authorize_status',
-					db,
-					name: authProvider,
-					status: 'failed'
-				})
-					.then(() => {
-						console.log(
-							`Provider ${authProvider} authorize status updated to 'failed'`
-						);
-					})
-					.catch((e) => {
-						console.error(
-							`Failed to update provider ${authProvider} authorize status:`,
-							e
-						);
-					});
-
-				if (error instanceof Error) {
-					logError({
-						db,
-						message: error.message,
-						stack: error.stack ?? 'No stack trace available'
-					})
-						.then(() => {
-							console.log(
-								`Error logged for provider ${authProvider}`
-							);
-						})
-						.catch((e) => {
-							console.error(
-								`Failed to log error for provider ${authProvider}:`,
-								e
-							);
-						});
-				} else {
-					logUnknownError({
-						db,
-						raw: error
-					})
-						.then(() => {
-							console.log(
-								`Unknown error logged for provider ${authProvider}`
-							);
-						})
-						.catch((e) => {
-							console.error(
-								`Failed to log unknown error for provider ${authProvider}:`,
-								e
-							);
-						});
-				}
-			}
+			handleStatusUpdate({
+				db,
+				column: 'authorize_status',
+				guardStatuses: ['tested', 'untested'],
+				newStatus: 'failed',
+				authProvider,
+				error
+			});
 		},
 		onCallbackSuccess: async ({
 			authProvider,
@@ -90,42 +28,15 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			userSessionId,
 			session
 		}) => {
-			if (!isValidProviderOption(authProvider)) {
-				throw new Error(`Invalid auth provider: ${authProvider}`);
-			}
+			handleStatusUpdate({
+				db,
+				column: 'authorize_status',
+				guardStatuses: ['failed', 'untested', 'missing', 'testing'],
+				newStatus: 'tested',
+				authProvider
+			});
 
-			const [{ authorize_status } = {}] = await db
-				.select({ authorize_status: schema.providers.authorize_status })
-				.from(schema.providers)
-				.where(eq(schema.providers.name, authProvider))
-				.execute();
-
-			if (
-				authorize_status === 'failed' ||
-				authorize_status === 'untested' ||
-				authorize_status === 'missing' ||
-				authorize_status === 'testing'
-			) {
-				updateProviderStatus({
-					column: 'authorize_status',
-					db,
-					name: authProvider,
-					status: 'tested'
-				})
-					.then(() => {
-						console.log(
-							`Provider ${authProvider} authorize status updated to 'tested'`
-						);
-					})
-					.catch((error) => {
-						console.error(
-							`Failed to update provider ${authProvider} authorize status:`,
-							error
-						);
-					});
-			}
-
-			return instantiateUserSession<User>({
+			instantiateUserSession<User>({
 				authProvider,
 				providerInstance,
 				session,
@@ -163,5 +74,24 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			}
 
 			session[userSessionId] = undefined;
+		},
+		onProfileSuccess: async ({ authProvider }) => {
+			handleStatusUpdate({
+				db,
+				column: 'profile_status',
+				guardStatuses: ['failed', 'untested', 'missing', 'testing'],
+				newStatus: 'tested',
+				authProvider
+			});
+		},
+		onProfileError: async ({ error, authProvider }) => {
+			handleStatusUpdate({
+				db,
+				column: 'profile_status',
+				guardStatuses: ['tested', 'untested'],
+				newStatus: 'failed',
+				authProvider,
+				error
+			});
 		}
 	});

@@ -36,8 +36,8 @@ export const updateProviderStatus = async ({
 	column,
 	status
 }: ProviderFunctionProps & {
-	column: keyof Pick<
-		Provider,
+	column: Extract<
+		keyof Provider,
 		| 'authorize_status'
 		| 'profile_status'
 		| 'refresh_status'
