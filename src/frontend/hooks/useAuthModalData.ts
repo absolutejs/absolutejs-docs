@@ -1,5 +1,5 @@
 import { ProviderOption } from '@absolutejs/auth';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useToast } from '../components/utils/ToastProvider';
 import { ProviderInfo } from '../data/providerData';
@@ -18,6 +18,7 @@ export const useAuthModalData = ({
 }: UseAuthModalDataProps) => {
 	const { addToast, registerHost } = useToast();
 	const [profile, setProfile] = useState<Record<string, unknown>>();
+	const queryClient = useQueryClient();
 
 	const providerStatuses = useQuery({
 		queryKey: ['providerStatuses', modalContent?.providerOption],
@@ -66,11 +67,27 @@ export const useAuthModalData = ({
 
 	const handleRefresh = async () => {
 		showToast('Refreshing token...', 'info');
+		const refreshStatus = providerStatuses.data?.refresh_status;
+
 		try {
 			const response = await fetch('/oauth2/tokens', { method: 'POST' });
+
 			if (!response.ok) throw new Error(await response.text());
+
+			if (refreshStatus !== 'tested') {
+				queryClient.invalidateQueries({
+					queryKey: ['providerStatuses', modalContent?.providerOption]
+				});
+			}
+
 			showToast('Token refreshed successfully!', 'success');
 		} catch (error: any) {
+			if (refreshStatus !== 'failed') {
+				queryClient.invalidateQueries({
+					queryKey: ['providerStatuses', modalContent?.providerOption]
+				});
+			}
+
 			showToast(error.message, 'error');
 		}
 	};

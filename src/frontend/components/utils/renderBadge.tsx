@@ -6,7 +6,9 @@ import { TestedBadge } from '../testing/badges/TestedBadge';
 import { TestingBadge } from '../testing/badges/TestingBadge';
 import { UntestedBadge } from '../testing/badges/UntestedBadge';
 
-export const renderBadge = (status: (typeof PROVIDER_STATUSES)[number]) => {
+export const renderBadge = (
+	status: (typeof PROVIDER_STATUSES)[number] | undefined
+) => {
 	switch (status) {
 		case 'tested':
 			return <TestedBadge />;

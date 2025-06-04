@@ -32,7 +32,7 @@ export const ProviderAction = ({
 	onClick
 }: ProviderActionProps) => (
 	<div style={buttonContainerStyle}>
-		{renderBadge(providerStatuses.data?.[keyName] ?? 'failed')}
+		{renderBadge(providerStatuses.data?.[keyName])}
 		{type === 'link' ? (
 			<a href={href} style={opButtonStyle(disabled, color)}>
 				{label}
