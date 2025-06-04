@@ -4,7 +4,6 @@ import {
 	buttonContainerStyle,
 	opButtonStyle
 } from '../../styles/authModalStyles';
-import { primaryColor } from '../../styles/styles';
 import { renderBadge } from '../utils/renderBadge';
 
 type ProviderActionProps = {
@@ -19,6 +18,7 @@ type ProviderActionProps = {
 	disabled: boolean;
 	label: string;
 	onClick?: () => void;
+	color: string;
 };
 
 export const ProviderAction = ({
@@ -28,19 +28,20 @@ export const ProviderAction = ({
 	href,
 	disabled,
 	label,
+	color,
 	onClick
 }: ProviderActionProps) => (
 	<div style={buttonContainerStyle}>
 		{renderBadge(providerStatuses.data?.[keyName] ?? 'failed')}
 		{type === 'link' ? (
-			<a href={href} style={opButtonStyle(disabled, primaryColor)}>
+			<a href={href} style={opButtonStyle(disabled, color)}>
 				{label}
 			</a>
 		) : (
 			<button
 				disabled={disabled}
 				onClick={onClick}
-				style={opButtonStyle(disabled, primaryColor)}
+				style={opButtonStyle(disabled, color)}
 			>
 				{label}
 			</button>

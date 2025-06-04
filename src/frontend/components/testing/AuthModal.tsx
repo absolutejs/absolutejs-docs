@@ -190,6 +190,7 @@ export const AuthModal = ({
 						disabled={action.disabled}
 						label={action.label}
 						onClick={action.onClick}
+						color={primaryColor}
 					/>
 				))}
 			</nav>
