@@ -139,7 +139,6 @@ export const useAuthModalData = ({
 				});
 			}
 
-
 			setProfile(data);
 			showToast('Profile fetched successfully!', 'success');
 		} catch (error: any) {
