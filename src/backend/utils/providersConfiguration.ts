@@ -142,7 +142,8 @@ export const providersConfiguration = createProvidersConfiguration({
 			clientId: getEnvVar('DROPBOX_APP_KEY'),
 			clientSecret: getEnvVar('DROPBOX_APP_SECRET'),
 			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI')
-		}
+		},
+		searchParams: [['token_access_type', 'offline']]
 	},
 	epicgames: {
 		credentials: {
