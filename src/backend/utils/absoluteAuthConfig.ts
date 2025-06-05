@@ -36,7 +36,7 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 				newStatus: 'tested'
 			});
 
-			instantiateUserSession<User>({
+			await instantiateUserSession<User>({
 				authProvider,
 				providerInstance,
 				session,
