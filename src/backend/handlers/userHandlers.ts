@@ -1,8 +1,8 @@
+import { isValidProviderOption, providers } from 'citra';
 import { eq } from 'drizzle-orm';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { NewUser, schema, SchemaType } from '../../../db/schema';
 import { UserFunctionProps } from '../../types/types';
-import { isValidProviderOption, providers } from 'citra';
 
 export const getDBUser = async ({
 	authSub,

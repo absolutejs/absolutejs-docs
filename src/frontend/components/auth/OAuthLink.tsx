@@ -15,11 +15,11 @@ type OAuthLinkProps = {
 
 export const OAuthLink = ({ mode, provider }: OAuthLinkProps) => {
 	const defaultData: ProviderInfo = {
+		createNewCredentialsUrl: '/oauth2/credentials/create',
 		logoUrl: '/assets/svg/todo-put-file.svg',
-		name: 'other provider',
-		primaryColor: 'lightgray',
 		manageCredentialsUrl: '/oauth2/credentials',
-		createNewCredentialsUrl: '/oauth2/credentials/create'
+		name: 'other provider',
+		primaryColor: 'lightgray'
 	};
 
 	const { logoUrl, name, primaryColor } =

@@ -1,5 +1,5 @@
 import { ProviderOption } from '@absolutejs/auth';
-import { eq } from 'drizzle-orm';
+import { eq, or } from 'drizzle-orm';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { Provider, schema, SchemaType } from '../../../db/schema';
 import { PROVIDER_STATUSES } from '../../constants';
@@ -64,4 +64,29 @@ export const resetAllProviderStatuses = async (
 		refresh_status: 'untested',
 		revoke_status: 'untested'
 	});
+};
+
+export const getProvidersByStatus = async (
+	db: NeonHttpDatabase<SchemaType>,
+	status: (typeof PROVIDER_STATUSES)[number]
+) => {
+	const providers = await db
+		.select({
+			authorize: schema.providers.authorize_status,
+			name: schema.providers.name,
+			profile: schema.providers.profile_status,
+			refresh: schema.providers.refresh_status,
+			revoke: schema.providers.revoke_status
+		})
+		.from(schema.providers)
+		.where(
+			or(
+				eq(schema.providers.authorize_status, status),
+				eq(schema.providers.profile_status, status),
+				eq(schema.providers.refresh_status, status),
+				eq(schema.providers.revoke_status, status)
+			)
+		);
+
+	return providers;
 };

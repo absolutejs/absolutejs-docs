@@ -1,6 +1,6 @@
-import { createProvidersConfiguration } from '@absolutejs/auth';
 import { Buffer } from 'buffer';
 import { env } from 'process';
+import { createProvidersConfiguration } from '@absolutejs/auth';
 
 const getEnvVar = (key: string) => {
 	const environmentVariable = env[key];
@@ -61,8 +61,8 @@ export const providersConfiguration = createProvidersConfiguration({
 			domain: getEnvVar('AUTH0_DOMAIN'),
 			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI')
 		},
-		searchParams: [['prompt', 'login']],
-		scope: ['offline_access', 'openid']
+		scope: ['offline_access', 'openid'],
+		searchParams: [['prompt', 'login']]
 	},
 	authentik: {
 		credentials: {

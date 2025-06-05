@@ -20,7 +20,8 @@
 		"db:push": "drizzle-kit push",
 		"seed:providers": "bun run db/scripts/seedProviders.ts",
 		"update:provider-status": "bun run db/scripts/updateProviderStatus.ts",
-		"reset:provider-statuses": "bun run db/scripts/resetAllProviderStatuses.ts"
+		"reset:provider-statuses": "bun run db/scripts/resetAllProviderStatuses.ts",
+		"get:providers:by-status": "bun run db/scripts/getProvidersByStatus.ts"
 	},
 	"dependencies": {
 		"@absolutejs/absolute": "0.6.0",
