@@ -127,7 +127,8 @@ export const providersConfiguration = createProvidersConfiguration({
 			clientId: getEnvVar('DONATION_ALERTS_CLIENT_ID'),
 			clientSecret: getEnvVar('DONATION_ALERTS_CLIENT_SECRET'),
 			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI')
-		}
+		},
+		scope: ['oauth-user-show']
 	},
 	dribbble: {
 		credentials: {
