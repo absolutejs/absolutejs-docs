@@ -104,10 +104,11 @@ export const Home = () => {
 
 					<section style={featureWrapper}>
 						<article style={featureCard}>
-							<h2 style={headingStyle}>Type Safe End-to-End</h2>
+							<h2 style={headingStyle}>Type Safe All Around</h2>
 							<p style={paragraphStyle}>
-								Enjoy full TypeScript inference from server
-								routes to client calls via Eden.
+								Maximize the power of TypeScript with
+								AbsoluteJS. From the database, to the backend,
+								to the frontend, everything is type safe.
 							</p>
 							<pre style={codeBlock}>{serverCode}</pre>
 							<pre style={codeBlock}>{treatyCode}</pre>
