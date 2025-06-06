@@ -32,12 +32,21 @@ export const CreateButton = () => {
 				style={{
 					color: '#333',
 					fontSize: '1.2rem',
-					marginRight: '10px'
+					marginRight: '2rem'
 				}}
 			>
 				bun create absolutejs
 			</code>
 			{copied ? <LuCopyCheck /> : <FiCopy />}
+			<p
+				style={{
+					fontSize: '0.8rem',
+					minWidth: '6ch',
+					marginLeft: '0.5rem',
+				}}
+			>
+				{copied ? 'Copied' : 'Copy'}
+			</p>
 		</div>
 	);
 };
