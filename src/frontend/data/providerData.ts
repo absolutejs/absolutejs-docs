@@ -218,9 +218,10 @@ export const providerData: ProviderData = {
 	},
 	keycloak: {
 		createNewCredentialsUrl:
-			'https://lichess.org/account/oauth/token/create',
+			'https://www.keycloak.org/docs/latest/server_admin/#_clients',
+		manageCredentialsUrl:
+			'https://www.keycloak.org/docs/latest/server_admin/#_clients',
 		logoUrl: '/assets/svg/keycloak-logo.svg',
-		manageCredentialsUrl: 'https://lichess.org/api#section/Authentication',
 		name: 'Keycloak',
 		primaryColor: '#4D4D4D'
 	},

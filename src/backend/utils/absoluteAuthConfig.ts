@@ -75,6 +75,8 @@ export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
 			});
 		},
 		onProfileSuccess: async ({ authProvider }) => {
+			if (authProvider === 'withings') return; // Skip Withings since it does not support a profile route for OAuth
+
 			await handleStatusUpdate({
 				authProvider,
 				column: 'profile_status',

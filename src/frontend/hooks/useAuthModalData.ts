@@ -133,6 +133,8 @@ export const useAuthModalData = ({
 			if (!response.ok) throw new Error(await response.text());
 			const data = await response.json();
 
+			if (data.error !== undefined) throw new Error(data.error);
+
 			if (profileStatus !== 'tested') {
 				queryClient.invalidateQueries({
 					queryKey: ['providerStatuses', modalContent?.providerOption]

@@ -411,7 +411,7 @@ export const providersConfiguration = createProvidersConfiguration({
 		credentials: {
 			clientId: getEnvVar('SPOTIFY_CLIENT_ID'),
 			clientSecret: getEnvVar('SPOTIFY_CLIENT_SECRET'),
-			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI')
+			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI_RFC')
 		}
 	},
 	startgg: {
@@ -419,7 +419,8 @@ export const providersConfiguration = createProvidersConfiguration({
 			clientId: getEnvVar('STARTGG_CLIENT_ID'),
 			clientSecret: getEnvVar('STARTGG_CLIENT_SECRET'),
 			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI')
-		}
+		},
+		scope: ['user.identity', 'user.email']
 	},
 	strava: {
 		credentials: {
@@ -454,14 +455,17 @@ export const providersConfiguration = createProvidersConfiguration({
 			clientId: getEnvVar('TUMBLR_CONSUMER_KEY'),
 			clientSecret: getEnvVar('TUMBLR_CONSUMER_SECRET'),
 			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI')
-		}
+		},
+		scope: ['offline_access']
 	},
 	twitch: {
 		credentials: {
 			clientId: getEnvVar('TWITCH_CLIENT_ID'),
 			clientSecret: getEnvVar('TWITCH_CLIENT_SECRET'),
 			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI')
-		}
+		},
+		searchParams: [['force_verify', 'true']],
+		scope: ['openid']
 	},
 	twitter: {
 		credentials: {
@@ -489,8 +493,10 @@ export const providersConfiguration = createProvidersConfiguration({
 		credentials: {
 			clientId: getEnvVar('WORK_OS_CLIENT_ID'),
 			clientSecret: getEnvVar('WORK_OS_CLIENT_SECRET'),
-			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI')
-		}
+			redirectUri: getEnvVar('OAUTH2_CALLBACK_URI'),
+			domain: getEnvVar('WORK_OS_DOMAIN')
+		},
+		scope: ['offline_access', 'openid', 'profile', 'email']
 	},
 	yahoo: {
 		credentials: {
