@@ -42,7 +42,7 @@ export const CreateButton = () => {
 				style={{
 					fontSize: '0.8rem',
 					minWidth: '6ch',
-					marginLeft: '0.5rem',
+					marginLeft: '0.5rem'
 				}}
 			>
 				{copied ? 'Copied' : 'Copy'}

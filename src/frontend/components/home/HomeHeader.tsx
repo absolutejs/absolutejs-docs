@@ -18,9 +18,9 @@ export const HomeHeader = () => (
 			authentication.
 		</p>
 		<p style={paragraphStyle}>
-			Powered by Bun & Elysia, it delivers blazing server side rendered performance and
-			full TypeScript support all the way through, so you can focus on building
-			great apps instead of configuring tools.
+			Powered by Bun & Elysia, it delivers blazing server side rendered
+			performance and full TypeScript support all the way through, so you
+			can focus on building great apps instead of configuring tools.
 		</p>
 	</section>
 );
