@@ -1,12 +1,28 @@
-import { ProviderOption } from '@absolutejs/auth';
+import { isValidProviderOption, ProviderOption } from '@absolutejs/auth';
 import { eq, or } from 'drizzle-orm';
-import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
-import { Provider, schema, SchemaType } from '../../../db/schema';
+import { DatabaseType, Provider, schema } from '../../../db/schema';
 import { PROVIDER_STATUSES } from '../../constants';
+import { handleErrorLogging } from './errorLogHandlers';
 
 type ProviderFunctionProps = {
-	db: NeonHttpDatabase<SchemaType>;
+	db: DatabaseType;
 	name: ProviderOption;
+};
+
+type HandleStatusUpdateProps = {
+	column: Extract<
+		keyof Provider,
+		| 'authorize_status'
+		| 'profile_status'
+		| 'refresh_status'
+		| 'revoke_status'
+	>;
+
+	db: DatabaseType;
+	guardStatuses: (typeof PROVIDER_STATUSES)[number][];
+	newStatus: Extract<(typeof PROVIDER_STATUSES)[number], 'tested' | 'failed'>;
+	authProvider: string;
+	error?: Error | unknown;
 };
 
 export const createProvider = async ({ db, name }: ProviderFunctionProps) => {
@@ -55,9 +71,7 @@ export const updateProviderStatus = async ({
 	return updatedProvider;
 };
 
-export const resetAllProviderStatuses = async (
-	db: NeonHttpDatabase<SchemaType>
-) => {
+export const resetAllProviderStatuses = async (db: DatabaseType) => {
 	await db.update(schema.providers).set({
 		authorize_status: 'untested',
 		profile_status: 'untested',
@@ -67,7 +81,7 @@ export const resetAllProviderStatuses = async (
 };
 
 export const getProvidersByStatus = async (
-	db: NeonHttpDatabase<SchemaType>,
+	db: DatabaseType,
 	status: (typeof PROVIDER_STATUSES)[number]
 ) => {
 	const providers = await db
@@ -89,4 +103,55 @@ export const getProvidersByStatus = async (
 		);
 
 	return providers;
+};
+
+export const handleStatusUpdate = async ({
+	db,
+	column,
+	guardStatuses,
+	newStatus,
+	authProvider,
+	error
+}: HandleStatusUpdateProps) => {
+	if (!isValidProviderOption(authProvider)) {
+		throw new Error(`Invalid auth provider: ${authProvider}`);
+	}
+
+	const [{ [column]: currentStatus } = {}] = await db
+		.select({ [column]: schema.providers[column] })
+		.from(schema.providers)
+		.where(eq(schema.providers.name, authProvider))
+		.execute();
+
+	if (currentStatus === undefined || !guardStatuses.includes(currentStatus)) {
+		return;
+	}
+
+	await updateProviderStatus({
+		column,
+		db,
+		name: authProvider,
+		status: newStatus
+	})
+		.then(() => {
+			console.log(
+				`Provider ${authProvider} ${column} status updated to '${newStatus}'`
+			);
+
+			return null;
+		})
+		.catch((err) => {
+			console.error(
+				`Failed to update provider ${authProvider} ${column} status:`,
+				err
+			);
+		});
+
+	if (error !== undefined) {
+		handleErrorLogging({
+			authProvider,
+			db,
+			error
+		});
+	}
 };

@@ -1,3 +1,5 @@
+/* eslint-disable absolute/max-depth-extended, @typescript-eslint/no-explicit-any */
+
 import { ProviderOption } from '@absolutejs/auth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';

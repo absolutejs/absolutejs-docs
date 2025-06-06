@@ -1,6 +1,6 @@
 import { AnimatedProps } from '@react-spring/web';
-import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { CSSProperties, ReactNode } from 'react';
+import { DatabaseType } from '../../db/schema';
 
 export type AnimatedCSSProperties = AnimatedProps<CSSProperties>;
 
@@ -23,8 +23,8 @@ export const isNavbarDropdown = (
 
 export type NavbarElement = NavbarLink | NavbarDropdown;
 
-export type UserFunctionProps<SchemaType extends Record<string, unknown>> = {
+export type UserFunctionProps = {
 	authProvider: string;
 	userIdentity: Record<string, unknown>;
-	db: NeonHttpDatabase<SchemaType>;
+	db: DatabaseType;
 };

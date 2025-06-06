@@ -67,6 +67,7 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
 
 	return (
 		<ToastContext.Provider value={{ addToast, registerHost }}>
+			{/* @ts-expect-error React 19 is running so this is okay but were on 18 types for react-spring */}
 			{children}
 			{host !== null &&
 				createPortal(

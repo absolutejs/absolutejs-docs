@@ -1,8 +1,9 @@
-import { ChangeEvent, CSSProperties, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { AiOutlineCheck, AiOutlineCopy } from 'react-icons/ai';
 import { FiChevronDown } from 'react-icons/fi';
 import { Prism, SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { COPY_TIMEOUT_DURATION } from '../../../constants';
 import {
 	highlighterContainerStyle,
 	highlighterHeaderStyle,
@@ -39,17 +40,13 @@ export const PrismPlus = ({
 		codeStringsArray[selectedOptionIndex] ?? codeStringsArray[0] ?? '';
 
 	const handleCopy = () => {
-		if (!displayedCodeString) {
-			console.warn('Nothing to copy');
-
-			return;
-		}
-
 		navigator.clipboard
 			.writeText(displayedCodeString)
 			.then(() => {
 				setCopied(true);
-				setTimeout(() => setCopied(false), 2500);
+				setTimeout(() => setCopied(false), COPY_TIMEOUT_DURATION);
+
+				return null;
 			})
 			.catch((err) => {
 				console.error('Copy failed', err);
@@ -105,6 +102,7 @@ export const PrismPlus = ({
 					)}
 				</button>
 			</div>
+			{/* @ts-expect-error react 19 thing where we have 18 types */}
 			<Prism
 				language={language}
 				style={codeStyle}

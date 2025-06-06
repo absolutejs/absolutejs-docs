@@ -11,8 +11,6 @@ import { Elysia, env } from 'elysia';
 import { schema, User } from '../../db/schema';
 import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { Home } from '../frontend/pages/Home';
-import { NotAuthorized } from '../frontend/pages/NotAuthorized';
-import { Protected } from '../frontend/pages/Protected';
 import { providerPlugin } from './plugins/providerPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 
@@ -60,12 +58,6 @@ const server = new Elysia()
 	.get('/', () => handleReactPageRequest(Home, homeIndex))
 	.get('/testing/auth', () =>
 		handleReactPageRequest(AuthTesting, authTestingIndex)
-	)
-	.get('/protected', ({ protectRoute }) =>
-		protectRoute(
-			() => handleReactPageRequest(Protected, protectedIndex),
-			() => handleReactPageRequest(NotAuthorized, notAuthorizedIndex)
-		)
 	)
 	.use(networkingPlugin)
 	.on('error', (error) => {

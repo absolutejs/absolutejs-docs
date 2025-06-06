@@ -1,16 +1,14 @@
 import { isValidProviderOption, providers } from 'citra';
 import { eq } from 'drizzle-orm';
-import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
-import { NewUser, schema, SchemaType } from '../../../db/schema';
+import { DatabaseType, NewUser, schema } from '../../../db/schema';
 import { UserFunctionProps } from '../../types/types';
 
-export const getDBUser = async ({
-	authSub,
-	db
-}: {
+type GetDBUser = {
 	authSub: string;
-	db: NeonHttpDatabase<SchemaType>;
-}) => {
+	db: DatabaseType;
+};
+
+export const getDBUser = async ({ authSub, db }: GetDBUser) => {
 	const [user] = await db
 		.select()
 		.from(schema.users)
@@ -24,7 +22,7 @@ export const createDBUser = async ({
 	auth_sub,
 	db,
 	metadata
-}: NewUser & { db: NeonHttpDatabase<SchemaType> }) => {
+}: NewUser & { db: DatabaseType }) => {
 	const [newUser] = await db
 		.insert(schema.users)
 		.values({
@@ -40,7 +38,7 @@ export const createUser = ({
 	userIdentity,
 	authProvider,
 	db
-}: UserFunctionProps<SchemaType>) => {
+}: UserFunctionProps) => {
 	if (!isValidProviderOption(authProvider)) {
 		throw new Error(`Invalid auth provider: ${authProvider}`);
 	}
@@ -63,7 +61,7 @@ export const getUser = ({
 	userIdentity,
 	authProvider,
 	db
-}: UserFunctionProps<SchemaType>) => {
+}: UserFunctionProps) => {
 	if (!isValidProviderOption(authProvider)) {
 		throw new Error(`Invalid auth provider: ${authProvider}`);
 	}

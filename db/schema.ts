@@ -8,6 +8,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { PROVIDER_STATUSES } from '../src/constants';
 import { ProviderOption } from '@absolutejs/auth';
+import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 
 export const providerStatusEnum = pgEnum('provider_status', PROVIDER_STATUSES);
 
@@ -44,6 +45,7 @@ export const schema = {
 };
 
 export type SchemaType = typeof schema;
+export type DatabaseType = NeonHttpDatabase<SchemaType>;
 
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;

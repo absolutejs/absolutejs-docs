@@ -227,11 +227,16 @@ export default [
 	{
 		files: ['src/backend/server.ts'],
 		rules: {
-			'no-unused-vars': 'off'
+			'@typescript-eslint/no-unused-vars': 'off'
 		}
 	},
 	{
-		files: ['db/migrate.ts', 'src/backend/utils/absoluteAuthConfig.ts'],
+		files: [
+			'db/migrate.ts',
+			'src/backend/utils/absoluteAuthConfig.ts',
+			'src/backend/handlers/errorLogHandlers.ts',
+			'src/backend/handlers/providerHandlers.ts'
+		],
 		rules: {
 			'no-console': 'off'
 		}

@@ -7,3 +7,4 @@ export const PROVIDER_STATUSES = [
 	'missing',
 	'failed'
 ] as const;
+export const COPY_TIMEOUT_DURATION = 2000;

@@ -2,13 +2,12 @@ import {
 	createAuthConfiguration,
 	instantiateUserSession
 } from '@absolutejs/auth';
-import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
-import { SchemaType, User } from '../../../db/schema';
+import { DatabaseType, User } from '../../../db/schema';
+import { handleStatusUpdate } from '../handlers/providerHandlers';
 import { createUser, getUser } from '../handlers/userHandlers';
-import { handleStatusUpdate } from './handleStatusUpdate';
 import { providersConfiguration } from './providersConfiguration';
 
-export const absoluteAuthConfig = (db: NeonHttpDatabase<SchemaType>) =>
+export const absoluteAuthConfig = (db: DatabaseType) =>
 	createAuthConfiguration<User>({
 		providersConfiguration: providersConfiguration,
 		onCallbackError: async ({ error, authProvider }) => {

@@ -12,7 +12,7 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 
 export type SchemaType = typeof schema;
-export type DatabaseType = NeonHttpDatabase<SchemaType>
+export type DatabaseType = DatabaseType
 `;
 
 export const serverCode = `import {

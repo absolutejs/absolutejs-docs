@@ -30,7 +30,7 @@ export const Modal = ({
 	}, [isOpen, onOpen]);
 
 	useEffect(() => {
-		if (!isOpen) return;
+		if (!isOpen) return undefined;
 
 		document.body.style.overflow = 'hidden';
 

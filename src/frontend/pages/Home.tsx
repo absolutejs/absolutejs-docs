@@ -1,25 +1,15 @@
-import { CSSProperties } from 'react';
-import { CreateButton } from '../components/home/CreateButton';
-import { HomeHeader } from '../components/home/HomeHeader';
+import { AuthArticle } from '../components/home/AuthArticle';
+import { CodeQualityArticle } from '../components/home/CodeQualityArticle';
+import { CommandSection } from '../components/home/CommandSection';
+import { DatabaseArticle } from '../components/home/DatabaseArticle';
+import { PerformanceArticle } from '../components/home/PerformanceArticle';
+import { TypeSafeArticle } from '../components/home/TypeSafeArticle';
+import { UIArticle } from '../components/home/UIArticle';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
-import { frontendCode, serverCode, treatyCode } from '../data/edenCode';
 import { useAuthStatus } from '../hooks/useAuthStatus';
-import {
-	htmlDefault,
-	bodyDefault,
-	mainDefault,
-	headingStyle,
-	paragraphStyle
-} from '../styles/styles';
-import { CommandSection } from '../components/home/CommandSection';
 import { featureWrapper } from '../styles/homeStyles';
-import { TypeSafeArticle } from '../components/home/TypeSafeArticle';
-import { PerformanceArticle } from '../components/home/PerformanceArticle';
-import { UIArticle } from '../components/home/UIArticle';
-import { DatabaseArticle } from '../components/home/DatabaseArticle';
-import { CodeQualityArticle } from '../components/home/CodeQualityArticle';
-import { AuthArticle } from '../components/home/AuthArticle';
+import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 export const Home = () => {
 	const { user, handleSignOut } = useAuthStatus();
