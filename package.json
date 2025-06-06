@@ -36,15 +36,15 @@
 		"react-syntax-highlighter": "15.6.1",
 		"@neondatabase/serverless": "1.0.0",
 		"drizzle-orm": "0.41.0",
-		"@react-spring/web": "10.0.1"
+		"@react-spring/web": "9.7.5"
 	},
 	"devDependencies": {
 		"@types/react-syntax-highlighter": "15.5.13",
 		"@stylistic/eslint-plugin-ts": "4.2.0",
-		"@tanstack/eslint-plugin-query": "^5.78.0",
+		"@tanstack/eslint-plugin-query": "5.78.0",
 		"@types/bun": "1.2.12",
-		"@types/react": "19.1.4",
-		"@types/react-dom": "19.1.5",
+		"@types/react": "18.3.12",
+		"@types/react-dom": "18.3.1",
 		"drizzle-kit": "0.30.6",
 		"eslint": "9.26.0",
 		"eslint-plugin-absolute": "0.1.0",

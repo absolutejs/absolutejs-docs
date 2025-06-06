@@ -55,10 +55,10 @@ export const DropdownContainer = ({
 				borderRadius: '12px',
 				boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
 				marginTop: '2.25rem',
-				// opacity: spring.opacity,
+				opacity: spring.opacity,
 				position: 'absolute',
 				right: 0,
-				// scale: spring.scale,
+				scale: spring.scale,
 				top: '100%',
 				zIndex: 999
 			}}
