@@ -219,9 +219,9 @@ export const providerData: ProviderData = {
 	keycloak: {
 		createNewCredentialsUrl:
 			'https://www.keycloak.org/docs/latest/server_admin/#_clients',
+		logoUrl: '/assets/svg/keycloak-logo.svg',
 		manageCredentialsUrl:
 			'https://www.keycloak.org/docs/latest/server_admin/#_clients',
-		logoUrl: '/assets/svg/keycloak-logo.svg',
 		name: 'Keycloak',
 		primaryColor: '#4D4D4D'
 	},
