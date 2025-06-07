@@ -4,6 +4,7 @@ export const highlighterContainerStyle: CSSProperties = {
 	border: '1px solid #e1e1e8',
 	borderRadius: '5px',
 	overflow: 'hidden',
+	width: '100%',
 	position: 'relative'
 };
 

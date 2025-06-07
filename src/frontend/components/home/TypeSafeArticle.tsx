@@ -1,6 +1,12 @@
-import { serverCode, treatyCode, frontendCode } from '../../data/edenCode';
-import { featureCard, codeBlock } from '../../styles/homeStyles';
+import {
+	serverCode,
+	treatyCode,
+	frontendCode,
+	databaseCode
+} from '../../data/edenCode';
+import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
+import { PrismPlus } from '../utils/PrismPlus';
 
 export const TypeSafeArticle = () => (
 	<article style={featureCard}>
@@ -9,8 +15,9 @@ export const TypeSafeArticle = () => (
 			Maximize the power of TypeScript with AbsoluteJS. From the database,
 			to the backend, to the frontend, everything is type safe.
 		</p>
-		<pre style={codeBlock}>{serverCode}</pre>
-		<pre style={codeBlock}>{treatyCode}</pre>
-		<pre style={codeBlock}>{frontendCode}</pre>
+		<PrismPlus codeString={databaseCode} language="typescript" />
+		<PrismPlus codeString={serverCode} language="typescript" />
+		<PrismPlus codeString={treatyCode} language="typescript" />
+		<PrismPlus codeString={frontendCode} language="tsx" />
 	</article>
 );

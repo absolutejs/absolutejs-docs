@@ -28,6 +28,7 @@ export const featureCard: CSSProperties = {
 	borderRadius: '8px',
 	boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
 	display: 'flex',
+	width: '100%',
 	flexDirection: 'column',
 	padding: '1rem'
 };

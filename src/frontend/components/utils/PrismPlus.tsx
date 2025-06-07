@@ -106,6 +106,7 @@ export const PrismPlus = ({
 			<Prism
 				language={language}
 				style={codeStyle}
+				customStyle={{ padding: '1rem', margin: 0,}}
 				showLineNumbers={showLineNumbers}
 			>
 				{displayedCodeString}

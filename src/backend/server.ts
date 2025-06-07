@@ -26,10 +26,7 @@ if (manifest === null) {
 const homeIndex = manifest['HomeIndex'];
 const authTestingIndex = manifest['AuthTestingIndex'];
 
-if (
-	homeIndex === undefined ||
-	authTestingIndex === undefined
-) {
+if (homeIndex === undefined || authTestingIndex === undefined) {
 	throw new Error('Missing index file in manifest');
 }
 
