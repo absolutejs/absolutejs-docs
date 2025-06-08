@@ -1,5 +1,5 @@
 import { FaTimes } from 'react-icons/fa';
-import { primaryColor } from '../../styles/styles';
+import { primaryColor } from '../../styles/colors';
 
 type HamburgerHeaderProps = {
 	onClose: () => void;

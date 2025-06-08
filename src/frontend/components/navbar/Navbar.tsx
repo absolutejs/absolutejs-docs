@@ -3,12 +3,12 @@ import { useRef } from 'react';
 import { User } from '../../../../db/schema';
 import { navbarData } from '../../data/navbarData';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { tertiaryColor } from '../../styles/colors';
 import {
 	navbarContainerStyle,
 	hamburgerButtonStyle,
 	hamburgerBarStyle
 } from '../../styles/navbarStyles';
-import { tertiaryColor } from '../../styles/styles';
 import { HamburgerMenu } from '../hamburger/HamburgerMenu';
 import { NavbarLinks } from './NavbarLinks';
 import { NavbarUserButtons } from './NavbarUserButtons';

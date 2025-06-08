@@ -3,11 +3,11 @@ import { ReactNode, useRef } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import { NavbarLink as NavbarLinkType } from '../../../types/types';
 import { labelStyle } from '../../styles/authModalStyles';
+import { quaternaryColor } from '../../styles/colors';
 import {
 	dropdownStyle,
 	getNavbarDropdownListStyle
 } from '../../styles/navbarStyles';
-import { quaternaryColor } from '../../styles/styles';
 import { NavbarLink } from './NavbarLink';
 
 type NavbarDropdownProps = {

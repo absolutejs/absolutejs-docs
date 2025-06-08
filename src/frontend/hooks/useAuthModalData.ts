@@ -7,7 +7,7 @@ import { useToast } from '../components/utils/ToastProvider';
 import { ProviderInfo } from '../data/providerData';
 import { server } from '../eden/treaty';
 import { getContrastColor } from '../styles/authModalStyles';
-import { primaryColor } from '../styles/styles';
+import { primaryColor } from '../styles/colors';
 
 type UseAuthModalDataProps = {
 	modalContent: (ProviderInfo & { providerOption: ProviderOption }) | null;

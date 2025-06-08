@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { User } from '../../../../db/schema';
-import { buttonStyle, primaryColor } from '../../styles/styles';
+import { primaryColor } from '../../styles/colors';
+import { buttonStyle } from '../../styles/styles';
 import { ProfilePicture } from '../utils/ProfilePicture';
 
 type HamburgerUserButtonsProps = {

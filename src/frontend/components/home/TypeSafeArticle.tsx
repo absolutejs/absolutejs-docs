@@ -8,10 +8,10 @@ import {
 	frontendCode,
 	databaseCode
 } from '../../data/edenCode';
+import { useThemeStore } from '../../hooks/useThemeStore';
 import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 import { PrismPlus } from '../utils/PrismPlus';
-import { useThemeStore } from '../../hooks/useThemeStore';
 
 export const TypeSafeArticle = () => {
 	const theme = useThemeStore((state) => state.theme);

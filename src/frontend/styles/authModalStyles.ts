@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
-import { tertiaryColor } from './styles';
+import { tertiaryColor } from './colors';
 
 export const confirmInputStyle: CSSProperties = {
 	border: '1px solid #ccc',
