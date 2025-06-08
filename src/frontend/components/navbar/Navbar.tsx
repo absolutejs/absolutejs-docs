@@ -1,4 +1,4 @@
-import { useSpring } from '@react-spring/web';
+import { animated, SpringValue, useSpring } from '@react-spring/web';
 import { useRef } from 'react';
 import { User } from '../../../../db/schema';
 import { navbarData } from '../../data/navbarData';
@@ -12,13 +12,15 @@ import {
 import { HamburgerMenu } from '../hamburger/HamburgerMenu';
 import { NavbarLinks } from './NavbarLinks';
 import { NavbarUserButtons } from './NavbarUserButtons';
+import { ThemeColors } from '../../../types/types';
 
 type NavbarProps = {
 	user: User | undefined;
 	handleSignOut: () => Promise<void>;
+	themeSprings: ThemeColors;
 };
 
-export const Navbar = ({ user, handleSignOut }: NavbarProps) => {
+export const Navbar = ({ user, handleSignOut, themeSprings }: NavbarProps) => {
 	const breakpoint = useMediaQuery();
 	const isMobile = breakpoint === 'xs' || breakpoint === 'sm';
 
@@ -46,7 +48,10 @@ export const Navbar = ({ user, handleSignOut }: NavbarProps) => {
 	};
 
 	return (
-		<header ref={navRef} style={navbarContainerStyle}>
+		<animated.header
+			ref={navRef}
+			style={navbarContainerStyle(themeSprings)}
+		>
 			<a
 				href="/"
 				style={{
@@ -87,6 +92,6 @@ export const Navbar = ({ user, handleSignOut }: NavbarProps) => {
 				user={user}
 				handleSignOut={handleSignOut}
 			/>
-		</header>
+		</animated.header>
 	);
 };

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useThemeStore } from './useThemeStore';
 
 export const useInitTheme = () => {
-	const { setTheme } = useThemeStore();
+	const setTheme = useThemeStore((state) => state.setTheme);
 
 	useEffect(() => {
 		const storedTheme = window.localStorage.getItem('theme');

@@ -9,18 +9,24 @@ import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useInitTheme } from '../hooks/useInitTheme';
+import { useThemeColors } from '../hooks/useThemeColors';
 import { featureWrapper } from '../styles/homeStyles';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 export const Home = () => {
 	const { user, handleSignOut } = useAuthStatus();
 	useInitTheme();
+	const themeSprings = useThemeColors();
 
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head />
 			<body style={bodyDefault}>
-				<Navbar user={user} handleSignOut={handleSignOut} />
+				<Navbar
+					themeSprings={themeSprings}
+					user={user}
+					handleSignOut={handleSignOut}
+				/>
 				<main style={mainDefault}>
 					<CommandSection />
 					<section style={featureWrapper}>

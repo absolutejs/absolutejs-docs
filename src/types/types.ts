@@ -1,4 +1,4 @@
-import { AnimatedProps } from '@react-spring/web';
+import { AnimatedProps, SpringValue } from '@react-spring/web';
 import { CSSProperties, ReactNode } from 'react';
 import { DatabaseType } from '../../db/schema';
 
@@ -27,4 +27,12 @@ export type UserFunctionProps = {
 	authProvider: string;
 	userIdentity: Record<string, unknown>;
 	db: DatabaseType;
+};
+
+export type ThemeColors = {
+	themePrimary: SpringValue<string>;
+	themeSecondary: SpringValue<string>;
+	themeTertiary: SpringValue<string>;
+	contrastPrimary: SpringValue<string>;
+	contrastSecondary: SpringValue<string>;
 };

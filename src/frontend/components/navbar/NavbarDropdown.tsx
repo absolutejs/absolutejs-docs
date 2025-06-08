@@ -3,7 +3,6 @@ import { ReactNode, useRef } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import { NavbarLink as NavbarLinkType } from '../../../types/types';
 import { labelStyle } from '../../styles/authModalStyles';
-import { quaternaryColor } from '../../styles/colors';
 import {
 	dropdownStyle,
 	getNavbarDropdownListStyle
@@ -72,7 +71,6 @@ export const NavbarDropdown = ({ label, href, links }: NavbarDropdownProps) => {
 
 				<AnimatedFaChevronDown
 					style={{
-						color: quaternaryColor,
 						fontSize: '1.5rem',
 						marginLeft: '10px',
 						transform: dropdownSpring.transform,
