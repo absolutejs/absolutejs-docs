@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {
+	prism,
+	nightOwl
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import {
 	serverCode,
 	treatyCode,
@@ -10,10 +11,12 @@ import {
 import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 import { PrismPlus } from '../utils/PrismPlus';
+import { useThemeStore } from '../../hooks/useThemeStore';
 
 export const TypeSafeArticle = () => {
-	const [theme, setTheme] = useState('light');
-	const prismTheme = theme === 'light' ? prism : tomorrow;
+	const theme = useThemeStore((state) => state.theme);
+	console.log('TypeSafeArticle theme:', theme);
+	const prismTheme = theme === 'light' ? prism : nightOwl;
 
 	return (
 		<article style={featureCard}>
