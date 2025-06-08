@@ -15,7 +15,6 @@ import { PrismPlus } from '../utils/PrismPlus';
 
 export const TypeSafeArticle = () => {
 	const theme = useThemeStore((state) => state.theme);
-	console.log('TypeSafeArticle theme:', theme);
 	const prismTheme = theme === 'light' ? prism : nightOwl;
 
 	return (

@@ -7,14 +7,13 @@ export const useInitTheme = () => {
 	useEffect(() => {
 		const storedTheme = window.localStorage.getItem('theme');
 		const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-		console.log(mediaQuery);
 
 		const applySystemTheme = (event: MediaQueryListEvent) => {
 			setTheme(event.matches ? 'light' : 'dark');
 		};
 
 		if (storedTheme !== 'light' && storedTheme !== 'dark') {
-			mediaQuery.matches && setTheme('light');
+			void (mediaQuery.matches && setTheme('light'));
 			mediaQuery.addEventListener('change', applySystemTheme);
 		} else if (storedTheme === 'light') {
 			setTheme(storedTheme);
