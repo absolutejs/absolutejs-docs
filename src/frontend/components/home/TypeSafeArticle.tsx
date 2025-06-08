@@ -1,7 +1,9 @@
+import { animated } from '@react-spring/web';
 import {
 	prism,
 	nightOwl
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { ArticleProps } from '../../../types/types';
 import {
 	serverCode,
 	treatyCode,
@@ -13,12 +15,12 @@ import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 import { PrismPlus } from '../utils/PrismPlus';
 
-export const TypeSafeArticle = () => {
+export const TypeSafeArticle = ({ themeSprings }: ArticleProps) => {
 	const theme = useThemeStore((state) => state.theme);
 	const prismTheme = theme === 'light' ? prism : nightOwl;
 
 	return (
-		<article style={featureCard}>
+		<animated.article style={featureCard(themeSprings)}>
 			<h2 style={headingStyle}>Type Safe All Around</h2>
 			<p style={paragraphStyle}>
 				Maximize the power of TypeScript with AbsoluteJS. From the
@@ -45,6 +47,6 @@ export const TypeSafeArticle = () => {
 				language="tsx"
 				codeStyle={prismTheme}
 			/>
-		</article>
+		</animated.article>
 	);
 };

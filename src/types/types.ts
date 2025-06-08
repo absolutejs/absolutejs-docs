@@ -36,3 +36,7 @@ export type ThemeColors = {
 	contrastPrimary: SpringValue<string>;
 	contrastSecondary: SpringValue<string>;
 };
+
+export type ArticleProps = {
+	themeSprings: ThemeColors;
+};

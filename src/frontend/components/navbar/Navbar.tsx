@@ -1,6 +1,7 @@
-import { animated, SpringValue, useSpring } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import { useRef } from 'react';
 import { User } from '../../../../db/schema';
+import { ThemeColors } from '../../../types/types';
 import { navbarData } from '../../data/navbarData';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { tertiaryColor } from '../../styles/colors';
@@ -12,7 +13,6 @@ import {
 import { HamburgerMenu } from '../hamburger/HamburgerMenu';
 import { NavbarLinks } from './NavbarLinks';
 import { NavbarUserButtons } from './NavbarUserButtons';
-import { ThemeColors } from '../../../types/types';
 
 type NavbarProps = {
 	user: User | undefined;

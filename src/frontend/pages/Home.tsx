@@ -1,3 +1,4 @@
+import { animated } from '@react-spring/web';
 import { AuthArticle } from '../components/home/AuthArticle';
 import { CodeQualityArticle } from '../components/home/CodeQualityArticle';
 import { CommandSection } from '../components/home/CommandSection';
@@ -21,7 +22,7 @@ export const Home = () => {
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head />
-			<body style={bodyDefault}>
+			<animated.body style={bodyDefault(themeSprings)}>
 				<Navbar
 					themeSprings={themeSprings}
 					user={user}
@@ -30,15 +31,15 @@ export const Home = () => {
 				<main style={mainDefault}>
 					<CommandSection />
 					<section style={featureWrapper}>
-						<TypeSafeArticle />
-						<PerformanceArticle />
-						<UIArticle />
-						<DatabaseArticle />
-						<CodeQualityArticle />
-						<AuthArticle />
+						<TypeSafeArticle themeSprings={themeSprings} />
+						<PerformanceArticle themeSprings={themeSprings} />
+						<UIArticle themeSprings={themeSprings} />
+						<DatabaseArticle themeSprings={themeSprings} />
+						<CodeQualityArticle themeSprings={themeSprings} />
+						<AuthArticle themeSprings={themeSprings} />
 					</section>
 				</main>
-			</body>
+			</animated.body>
 		</html>
 	);
 };

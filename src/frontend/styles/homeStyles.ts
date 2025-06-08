@@ -1,4 +1,5 @@
 import { CSSProperties } from 'react';
+import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
 
 export const heroStyle: CSSProperties = {
 	alignItems: 'center',
@@ -22,9 +23,11 @@ export const featureWrapper: CSSProperties = {
 	padding: '3rem 1rem'
 };
 
-export const featureCard: CSSProperties = {
+export const featureCard = (
+	themeSprings: ThemeColors
+): AnimatedCSSProperties => ({
 	alignItems: 'center',
-	background: '#faf9f5',
+	background: themeSprings.themeTertiary,
 	border: '1px solid rgba(0,0,0,0.05)',
 	borderRadius: '8px',
 	boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
@@ -32,7 +35,7 @@ export const featureCard: CSSProperties = {
 	flexDirection: 'column',
 	padding: '1rem',
 	width: '100%'
-};
+});
 
 export const codeBlock: CSSProperties = {
 	background: '#f5f5f5',

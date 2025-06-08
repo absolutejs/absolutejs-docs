@@ -1,8 +1,10 @@
+import { animated } from '@react-spring/web';
+import { ArticleProps } from '../../../types/types';
 import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 
-export const PerformanceArticle = () => (
-	<article style={featureCard}>
+export const PerformanceArticle = ({ themeSprings }: ArticleProps) => (
+	<animated.article style={featureCard(themeSprings)}>
 		<h2 style={headingStyle}>21x Faster Than Express</h2>
 		<p style={paragraphStyle}>
 			Harness Bun's JIT performance with Elysia's minimal core for
@@ -20,5 +22,5 @@ export const PerformanceArticle = () => (
 		>
 			Learn more
 		</a>
-	</article>
+	</animated.article>
 );

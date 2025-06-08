@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
+import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
 
 export const styleReset = `
     * {
@@ -10,15 +11,17 @@ export const styleReset = `
     }
 `;
 
-export const bodyDefault: CSSProperties = {
-	backgroundColor: '#f5f5f5',
-	color: '#333',
+export const bodyDefault = (
+	themeSprings: ThemeColors
+): AnimatedCSSProperties => ({
+	backgroundColor: themeSprings.themeSecondary,
+	color: themeSprings.contrastPrimary,
 	display: 'flex',
 	flexDirection: 'column',
 	fontFamily: 'Poppins, sans-serif',
 	height: '100%',
 	margin: 0
-};
+});
 
 export const mainDefault: CSSProperties = {
 	display: 'flex',

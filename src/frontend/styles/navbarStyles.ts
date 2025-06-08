@@ -36,8 +36,8 @@ export const navbarContainerStyle = (
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	background: themeSprings.themePrimary,
-	color: themeSprings.contrastPrimary,
 	boxShadow: `0px 4px 14px rgba(0, 0, 0, 0.1)`,
+	color: themeSprings.contrastPrimary,
 	display: 'flex',
 	justifyContent: 'space-between',
 	left: 0,
