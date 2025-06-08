@@ -1,23 +1,20 @@
 import { ChangeEvent, useState } from 'react';
-import { AiOutlineCheck, AiOutlineCopy } from 'react-icons/ai';
 import { FiChevronDown } from 'react-icons/fi';
 import { Prism, SyntaxHighlighterProps } from 'react-syntax-highlighter';
-import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { COPY_TIMEOUT_DURATION } from '../../../constants';
 import {
 	highlighterContainerStyle,
 	highlighterHeaderStyle,
-	highlighterCopyButtonStyle,
 	highlighterSelectContainerStyle,
 	highlighterSelectStyle,
 	selectArrowStyle
 } from '../../styles/syntaxHighlighterStyles';
+import { CopyButton } from './CopyButton';
 
 type PrismPlusProps = {
 	codeString: string | string[];
 	language?: string;
 	showLineNumbers?: boolean;
-	codeStyle?: SyntaxHighlighterProps['style'];
+	codeStyle: SyntaxHighlighterProps['style'];
 	options?: string[];
 };
 
@@ -25,10 +22,9 @@ export const PrismPlus = ({
 	codeString,
 	language = 'tsx',
 	showLineNumbers = true,
-	codeStyle = nightOwl,
+	codeStyle,
 	options
 }: PrismPlusProps) => {
-	const [copied, setCopied] = useState(false);
 	const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
 	const codeStringsArray = Array.isArray(codeString)
@@ -38,20 +34,6 @@ export const PrismPlus = ({
 
 	const displayedCodeString =
 		codeStringsArray[selectedOptionIndex] ?? codeStringsArray[0] ?? '';
-
-	const handleCopy = () => {
-		navigator.clipboard
-			.writeText(displayedCodeString)
-			.then(() => {
-				setCopied(true);
-				setTimeout(() => setCopied(false), COPY_TIMEOUT_DURATION);
-
-				return null;
-			})
-			.catch((err) => {
-				console.error('Copy failed', err);
-			});
-	};
 
 	const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		setSelectedOptionIndex(Number(event.target.value));
@@ -88,25 +70,13 @@ export const PrismPlus = ({
 						<FiChevronDown style={selectArrowStyle} />
 					</div>
 				)}
-				<button onClick={handleCopy} style={highlighterCopyButtonStyle}>
-					{copied ? (
-						<>
-							<AiOutlineCheck />
-							Copied!
-						</>
-					) : (
-						<>
-							<AiOutlineCopy />
-							Copy Code
-						</>
-					)}
-				</button>
+				<CopyButton text={displayedCodeString} />
 			</div>
 			{/* @ts-expect-error react 19 thing where we have 18 types */}
 			<Prism
 				language={language}
 				style={codeStyle}
-				customStyle={{ padding: '1rem', margin: 0,}}
+				customStyle={{ margin: 0, padding: '1rem' }}
 				showLineNumbers={showLineNumbers}
 			>
 				{displayedCodeString}

@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import {
 	serverCode,
 	treatyCode,
@@ -8,16 +11,38 @@ import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 import { PrismPlus } from '../utils/PrismPlus';
 
-export const TypeSafeArticle = () => (
-	<article style={featureCard}>
-		<h2 style={headingStyle}>Type Safe All Around</h2>
-		<p style={paragraphStyle}>
-			Maximize the power of TypeScript with AbsoluteJS. From the database,
-			to the backend, to the frontend, everything is type safe.
-		</p>
-		<PrismPlus codeString={databaseCode} language="typescript" />
-		<PrismPlus codeString={serverCode} language="typescript" />
-		<PrismPlus codeString={treatyCode} language="typescript" />
-		<PrismPlus codeString={frontendCode} language="tsx" />
-	</article>
-);
+export const TypeSafeArticle = () => {
+	const [theme, setTheme] = useState('light');
+	const prismTheme = theme === 'light' ? prism : tomorrow;
+
+	return (
+		<article style={featureCard}>
+			<h2 style={headingStyle}>Type Safe All Around</h2>
+			<p style={paragraphStyle}>
+				Maximize the power of TypeScript with AbsoluteJS. From the
+				database, to the backend, to the frontend, you can be confident
+				in the shape of your data.
+			</p>
+			<PrismPlus
+				codeString={databaseCode}
+				language="typescript"
+				codeStyle={prismTheme}
+			/>
+			<PrismPlus
+				codeString={serverCode}
+				language="typescript"
+				codeStyle={prismTheme}
+			/>
+			<PrismPlus
+				codeString={treatyCode}
+				language="typescript"
+				codeStyle={prismTheme}
+			/>
+			<PrismPlus
+				codeString={frontendCode}
+				language="tsx"
+				codeStyle={prismTheme}
+			/>
+		</article>
+	);
+};

@@ -23,14 +23,15 @@ export const featureWrapper: CSSProperties = {
 };
 
 export const featureCard: CSSProperties = {
+	alignItems: 'center',
 	background: '#faf9f5',
 	border: '1px solid rgba(0,0,0,0.05)',
 	borderRadius: '8px',
 	boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
 	display: 'flex',
-	width: '100%',
 	flexDirection: 'column',
-	padding: '1rem'
+	padding: '1rem',
+	width: '100%'
 };
 
 export const codeBlock: CSSProperties = {
