@@ -5,6 +5,7 @@ import {
 } from '@absolutejs/auth';
 import { Dispatch, SetStateAction } from 'react';
 import { User } from '../../../../db/schema';
+import { ThemeColors } from '../../../types/types';
 import { ProviderInfo } from '../../data/providerData';
 import { useAuthModalData } from '../../hooks/useAuthModalData';
 import { boxStyle, credentialLinkStyle } from '../../styles/authModalStyles';
@@ -21,13 +22,15 @@ type AuthModalProps = {
 			(ProviderInfo & { providerOption: ProviderOption }) | null
 		>
 	>;
+	themeSprings: ThemeColors;
 };
 
 export const AuthModal = ({
 	modalContent,
 	user,
 	handleSignOut,
-	setModalContent
+	setModalContent,
+	themeSprings
 }: AuthModalProps) => {
 	if (!modalContent) return null;
 
@@ -92,7 +95,7 @@ export const AuthModal = ({
 		<Modal
 			style={{
 				alignItems: 'stretch',
-				backgroundColor: '#fff',
+				backgroundColor: themeSprings.themeSecondary,
 				border: `3px solid ${primaryColor}`,
 				borderRadius: '8px',
 				display: 'flex',

@@ -68,6 +68,7 @@ export const AuthGrid = ({
 			</div>
 
 			<AuthModal
+				themeSprings={themeSprings}
 				handleSignOut={handleSignOut}
 				user={user}
 				modalContent={modalContent}

@@ -1,11 +1,13 @@
+import { animated } from '@react-spring/web';
 import { ReactNode, useEffect, useRef, MouseEvent, CSSProperties } from 'react';
+import { AnimatedCSSProperties } from '../../../types/types';
 
 type ModalProps = {
 	isOpen: boolean;
 	onClose?: () => void;
 	onOpen?: (dialogRef: HTMLDialogElement | null) => void;
 	children: ReactNode;
-	style?: CSSProperties;
+	style?: CSSProperties | AnimatedCSSProperties;
 };
 
 export const Modal = ({
@@ -40,7 +42,7 @@ export const Modal = ({
 	}, [isOpen]);
 
 	return (
-		<dialog
+		<animated.dialog
 			ref={dialogRef}
 			onCancel={(event) => {
 				event.preventDefault();
@@ -53,6 +55,7 @@ export const Modal = ({
 				alignItems: 'center',
 				border: 'none',
 				borderRadius: style?.borderRadius,
+				color: 'inherit',
 				display: 'flex',
 				inset: 0,
 				justifyContent: 'center',
@@ -69,7 +72,7 @@ export const Modal = ({
 			`}</style>
 
 			{isOpen && (
-				<div
+				<animated.div
 					onClick={(event) => event.stopPropagation()}
 					style={{
 						...style,
@@ -87,6 +90,7 @@ export const Modal = ({
 						style={{
 							background: 'transparent',
 							border: 'none',
+							color: 'inherit',
 							cursor: 'pointer',
 							fontSize: '16px',
 							position: 'absolute',
@@ -97,8 +101,8 @@ export const Modal = ({
 						&times;
 					</button>
 					{children}
-				</div>
+				</animated.div>
 			)}
-		</dialog>
+		</animated.dialog>
 	);
 };

@@ -158,7 +158,7 @@ export const credentialLinkStyle = (
 ): CSSProperties => ({
 	border: `2px solid ${companyColor}`,
 	borderRadius: '4px',
-	color: 'black',
+	color: 'inherit',
 	flex: '1',
 	padding: '12px 0',
 	textAlign: 'center',
