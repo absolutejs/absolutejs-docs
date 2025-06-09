@@ -97,7 +97,7 @@ export const paragraphStyle = (
 	fontSize: '1.2rem',
 	lineHeight: '1.5',
 	marginBottom: '20px',
-	maxWidth: '600px',
+	maxWidth: '1200px',
 	textAlign: 'center'
 });
 

@@ -6,7 +6,7 @@ export const legendWrapperStyle: CSSProperties = {
 	borderRadius: '8px',
 	boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
 	margin: '0 auto 2rem',
-	maxWidth: '800px',
+	maxWidth: '1200px',
 	padding: '20px',
 	width: '100%'
 };

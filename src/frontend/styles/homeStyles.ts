@@ -12,7 +12,7 @@ export const heroStyle: CSSProperties = {
 export const navStyle: CSSProperties = {
 	display: 'flex',
 	gap: '1rem',
-	marginTop: '1rem'
+	marginTop: '2rem'
 };
 
 export const featureWrapper: CSSProperties = {
@@ -26,16 +26,7 @@ export const featureWrapper: CSSProperties = {
 export const featureCard = (
 	themeSprings: ThemeColors
 ): AnimatedCSSProperties => ({
-	alignItems: 'center',
-	background: themeSprings.themeTertiary,
-	border: '1px solid rgba(0,0,0,0.05)',
-	borderRadius: '8px',
-	boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-	display: 'flex',
-	flexDirection: 'column',
-	marginBottom: '2rem',
-	padding: '1rem',
-	width: '90%'
+	alignItems: 'center', background: themeSprings.themeTertiary, border: '1px solid rgba(0,0,0,0.05)', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', marginBottom: '2rem', maxWidth: '1200px', padding: '1rem', width: '90%',
 });
 
 export const codeBlock: CSSProperties = {
