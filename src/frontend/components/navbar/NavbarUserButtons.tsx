@@ -87,7 +87,7 @@ export const NavbarUserButtons = ({
 					onClose={closeDropdown}
 					ignoredElements={[userButtonRef]}
 				>
-					<AuthContainer />
+					<AuthContainer themeSprings={themeSprings} />
 				</DropdownContainer>
 			)}
 		</div>

@@ -7,13 +7,16 @@ import {
 	oauthIconStyle,
 	oauthButtonTextStyle
 } from '../../styles/authModalStyles';
+import { animated } from '@react-spring/web';
+import { ThemeColors } from '../../../types/types';
 
 type OAuthLinkProps = {
 	mode: 'login' | 'signup';
 	provider: Lowercase<ProviderOption> | undefined;
+	themeSprings: ThemeColors;
 };
 
-export const OAuthLink = ({ mode, provider }: OAuthLinkProps) => {
+export const OAuthLink = ({ mode, provider, themeSprings }: OAuthLinkProps) => {
 	const defaultData: ProviderInfo = {
 		createNewCredentialsUrl: '/oauth2/credentials/create',
 		logoUrl: '/assets/svg/todo-put-file.svg',
@@ -33,10 +36,11 @@ export const OAuthLink = ({ mode, provider }: OAuthLinkProps) => {
 		mode === 'login' ? `Sign in with ${name}` : `Sign up with ${name}`;
 
 	return (
-		<a
+		<animated.a
 			href={provider ? `/oauth2/${provider}/authorization` : undefined}
 			style={oauthButtonStyle({
 				isProviderSelected,
+				themeSprings,
 				providerPrimaryColor: isProviderSelected
 					? primaryColor
 					: '#999999'
@@ -54,6 +58,6 @@ export const OAuthLink = ({ mode, provider }: OAuthLinkProps) => {
 				)}
 				<span style={oauthButtonTextStyle}>{buttonText}</span>
 			</div>
-		</a>
+		</animated.a>
 	);
 };

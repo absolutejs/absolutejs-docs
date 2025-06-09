@@ -53,7 +53,7 @@ export const HamburgerUserButtons = ({
 				</span>
 			</div>
 		)}
-		<button
+		<animated.button
 			onClick={user ? () => handleSignOut() : openModal}
 			style={buttonStyle({
 				backgroundColor: primaryColor,
@@ -62,6 +62,6 @@ export const HamburgerUserButtons = ({
 			})}
 		>
 			{user ? 'SignOut' : 'Login'}
-		</button>
+		</animated.button>
 	</div>
 );

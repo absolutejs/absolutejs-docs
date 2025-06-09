@@ -47,16 +47,23 @@ export const oauthButtonContentStyle: CSSProperties = {
 	width: '100%'
 };
 
+type OAuthButtonStyleProps = {
+	isProviderSelected?: boolean;
+	providerPrimaryColor?: string;
+	themeSprings: ThemeColors;
+};
+
 export const oauthButtonStyle = ({
 	isProviderSelected = false,
-	providerPrimaryColor = '#747775'
-}): CSSProperties => ({
+	providerPrimaryColor = '#747775',
+	themeSprings
+}: OAuthButtonStyleProps): AnimatedCSSProperties => ({
 	alignItems: 'center',
-	backgroundColor: '#FFFFFF',
+	backgroundColor: themeSprings.themeTertiary,
 	border: `1px solid ${providerPrimaryColor}`,
 	borderRadius: '4px',
 	boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-	color: '#1f1f1f',
+	color: themeSprings.contrastPrimary,
 	cursor: isProviderSelected ? 'pointer' : 'not-allowed',
 	display: 'flex',
 	fontSize: '14px',
@@ -95,19 +102,24 @@ export const labelStyle = (
 	textDecoration: 'none'
 });
 
-export const loginLinkTextStyle: CSSProperties = {
+export const loginLinkTextStyle = (
+	themeSprings: ThemeColors
+): AnimatedCSSProperties => ({
 	backgroundColor: 'transparent',
 	border: 'none',
-	color: tertiaryColor,
+	color: themeSprings.contrastSecondary,
 	cursor: 'pointer',
 	fontSize: '14px',
 	fontWeight: 'bold',
 	textAlign: 'center'
-};
-export const loginTextStyle: CSSProperties = {
-	color: '#151414',
+});
+
+export const loginTextStyle = (
+	themeSprings: ThemeColors
+): AnimatedCSSProperties => ({
+	color: themeSprings.contrastPrimary,
 	textAlign: 'center'
-};
+});
 
 export const separatorStyle: CSSProperties = {
 	alignItems: 'center',

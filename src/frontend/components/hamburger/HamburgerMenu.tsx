@@ -103,7 +103,7 @@ export const HamburgerMenu = ({
 					setIsModalOpen(false);
 				}}
 			>
-				<AuthContainer />
+				<AuthContainer themeSprings={themeSprings} />
 			</Modal>
 		</animated.div>
 	);

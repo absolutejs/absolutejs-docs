@@ -9,8 +9,10 @@ import {
 import { Divider } from '../utils/Divider';
 import { ProviderDropdown } from '../utils/ProviderDropdown';
 import { OAuthLink } from './OAuthLink';
+import { ThemeProps } from '../../../types/types';
+import { animated } from '@react-spring/web';
 
-export const AuthContainer = () => {
+export const AuthContainer = ({ themeSprings }: ThemeProps) => {
 	const [currentProvider, setCurrentProvider] =
 		useState<Lowercase<ProviderOption>>();
 	const [mode, setMode] = useState<'login' | 'signup'>('login');
@@ -20,38 +22,56 @@ export const AuthContainer = () => {
 
 	return (
 		<div style={containerStyle}>
-			<a
+			<animated.a
 				href="/"
 				style={{
-					color: 'black',
+					color: themeSprings.contrastPrimary,
 					fontSize: '1.5rem',
 					fontWeight: 'bold',
 					textDecoration: 'none'
 				}}
 			>
 				AbsoluteJS
-			</a>
+			</animated.a>
 			<h1 style={headingStyle}>
 				{mode === 'login'
 					? 'Sign in to your Account'
 					: 'Create an account'}
 			</h1>
 
-			<OAuthLink mode={mode} provider="google" />
-			<OAuthLink mode={mode} provider="github" />
+			<OAuthLink
+				mode={mode}
+				provider="google"
+				themeSprings={themeSprings}
+			/>
+			<OAuthLink
+				mode={mode}
+				provider="github"
+				themeSprings={themeSprings}
+			/>
 
 			<Divider text="or" />
 
-			<ProviderDropdown setCurrentProvider={setCurrentProvider} />
+			<ProviderDropdown
+				setCurrentProvider={setCurrentProvider}
+				themeSprings={themeSprings}
+			/>
 
-			<OAuthLink mode={mode} provider={currentProvider} />
+			<OAuthLink
+				mode={mode}
+				provider={currentProvider}
+				themeSprings={themeSprings}
+			/>
 
-			<p style={loginTextStyle}>
+			<animated.p style={loginTextStyle(themeSprings)}>
 				{mode === 'login' ? 'Need an account? ' : 'Have an account? '}
-				<button style={loginLinkTextStyle} onClick={switchMode}>
+				<animated.button
+					style={loginLinkTextStyle(themeSprings)}
+					onClick={switchMode}
+				>
 					{mode === 'login' ? 'Sign Up' : 'Sign In'}
-				</button>
-			</p>
+				</animated.button>
+			</animated.p>
 		</div>
 	);
 };
