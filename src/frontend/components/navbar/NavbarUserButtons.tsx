@@ -1,5 +1,6 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useRef, useState } from 'react';
+import { IoSunny } from 'react-icons/io5';
 import { User } from '../../../../db/schema';
 import { ThemeColors } from '../../../types/types';
 import { profileButtonStyle } from '../../styles/navbarStyles';
@@ -7,7 +8,6 @@ import { buttonStyle } from '../../styles/styles';
 import { AuthContainer } from '../auth/AuthContainer';
 import { ProfilePicture } from '../utils/ProfilePicture';
 import { DropdownContainer } from './DropdownContainer';
-import { IoSunny } from 'react-icons/io5';
 import { ThemeButton } from './ThemeButton';
 
 type NavbarUserButtonsProps = {

@@ -9,13 +9,11 @@ import { UIArticle } from '../components/home/UIArticle';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { useAuthStatus } from '../hooks/useAuthStatus';
-import { useInitTheme } from '../hooks/useInitTheme';
 import { useThemeColors } from '../hooks/useThemeColors';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 export const Home = () => {
 	const { user, handleSignOut } = useAuthStatus();
-	useInitTheme();
 	const themeSprings = useThemeColors();
 
 	return (

@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useThemeStore } from './useThemeStore';
 
 export const useInitTheme = () => {
 	const setTheme = useThemeStore((state) => state.setTheme);
+	const [currentTheme, setCurrentTheme] = useState<
+		'light' | 'dark' | 'system:light' | 'system:dark'
+	>('dark');
 
 	useEffect(() => {
 		const storedTheme = window.localStorage.getItem('theme');
@@ -13,14 +16,24 @@ export const useInitTheme = () => {
 		};
 
 		if (storedTheme !== 'light' && storedTheme !== 'dark') {
-			void (mediaQuery.matches && setTheme('light'));
+			if (mediaQuery.matches) {
+				setTheme('light');
+				setCurrentTheme('system:light');
+			} else {
+				setCurrentTheme('system:dark');
+			}
 			mediaQuery.addEventListener('change', applySystemTheme);
 		} else if (storedTheme === 'light') {
 			setTheme(storedTheme);
+			setCurrentTheme('light');
+		} else if (storedTheme === 'dark') {
+			setCurrentTheme('dark');
 		}
 
 		return () => {
 			mediaQuery.removeEventListener('change', applySystemTheme);
 		};
 	}, [setTheme]);
+
+	return { currentTheme, setCurrentTheme, setTheme };
 };

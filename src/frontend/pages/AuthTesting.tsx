@@ -8,7 +8,6 @@ import { AuthTestingHero } from '../components/testing/AuthTestingHero';
 import { Legend } from '../components/testing/Legend';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useCleanPath } from '../hooks/useCleanPath';
-import { useInitTheme } from '../hooks/useInitTheme';
 import { useThemeColors } from '../hooks/useThemeColors';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
@@ -17,7 +16,6 @@ const queryClient = new QueryClient();
 export const AuthTesting = () => {
 	const { user, handleSignOut } = useAuthStatus();
 	useCleanPath();
-	useInitTheme();
 	const themeSprings = useThemeColors();
 
 	return (
