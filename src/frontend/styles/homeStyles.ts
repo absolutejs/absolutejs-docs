@@ -33,6 +33,7 @@ export const featureCard = (
 	boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
 	display: 'flex',
 	flexDirection: 'column',
+	marginBottom: '2rem',
 	padding: '1rem',
 	width: '90%'
 });

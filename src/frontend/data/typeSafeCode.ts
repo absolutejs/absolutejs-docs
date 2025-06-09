@@ -16,7 +16,7 @@ export type NewUser = typeof users.$inferInsert;
 export type SchemaType = typeof schema;
 export type DatabaseType = DatabaseType`;
 
-export const serverCode = `import { build, getEnvVar, handleReactPageRequest, networkingPlugin } from '@absolutejs/absolute';
+export const backendCode = `import { build, getEnvVar, handleReactPageRequest, networkingPlugin } from '@absolutejs/absolute';
 import { Home } from '../frontend/pages/Home';
 import { Elysia, env } from 'elysia';
 import { neon } from '@neondatabase/serverless';
