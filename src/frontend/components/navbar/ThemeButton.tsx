@@ -28,9 +28,11 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 			).matches;
 			setTheme(prefersLight ? 'light' : 'dark');
 			setCurrentTheme(prefersLight ? 'system:light' : 'system:dark');
+			window.localStorage.removeItem('theme');
 		} else {
 			setTheme(option);
 			setCurrentTheme(option);
+			window.localStorage.setItem('theme', option);
 		}
 		if (detailsRef.current) detailsRef.current.open = false;
 	};
