@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { AiOutlineMoon } from 'react-icons/ai';
 import { IoSunny } from 'react-icons/io5';
 import { ThemeProps } from '../../../types/types';
@@ -8,6 +8,18 @@ import { useInitTheme } from '../../hooks/useInitTheme';
 export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 	const { currentTheme, setCurrentTheme, setTheme } = useInitTheme();
 	const detailsRef = useRef<HTMLDetailsElement>(null);
+
+	useEffect(() => {
+		const onClickOutside = (e: MouseEvent) => {
+			const det = detailsRef.current;
+			if (!det?.open) return;
+			const tgt = e.target;
+			if (!(tgt instanceof Node)) return;
+			if (!det.contains(tgt)) det.open = false;
+		};
+		document.addEventListener('mousedown', onClickOutside);
+		return () => document.removeEventListener('mousedown', onClickOutside);
+	}, []);
 
 	const selectTheme = (option: 'system' | 'light' | 'dark') => {
 		if (option === 'system') {
