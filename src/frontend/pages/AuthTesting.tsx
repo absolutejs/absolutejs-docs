@@ -29,9 +29,9 @@ export const AuthTesting = () => {
 				/>
 				<main style={mainDefault}>
 					<QueryClientProvider client={queryClient}>
-						<h1
+						<animated.h1
 							style={{
-								color: '#222',
+								color: themeSprings.contrastPrimary,
 								fontSize: '2.25rem',
 								fontWeight: 600,
 								margin: '2rem 0',
@@ -40,11 +40,11 @@ export const AuthTesting = () => {
 						>
 							Citra and Absolute-Auth currently support{' '}
 							{providerOptions.length} OAuth 2.0 providers
-						</h1>
+						</animated.h1>
 
-						<AuthTestingHero />
+						<AuthTestingHero themeSprings={themeSprings} />
 
-						<Legend />
+						<Legend themeSprings={themeSprings} />
 
 						<AuthGrid
 							handleSignOut={handleSignOut}

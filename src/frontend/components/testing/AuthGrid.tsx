@@ -54,7 +54,7 @@ export const AuthGrid = ({
 						'repeat(auto-fill, minmax(180px, 1fr))',
 					margin: '0 auto 2rem',
 					maxWidth: '1200px',
-					width: '100%'
+					width: '90%'
 				}}
 			>
 				{providerOptions.map((provider) => (

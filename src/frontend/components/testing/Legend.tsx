@@ -1,3 +1,5 @@
+import { animated } from '@react-spring/web';
+import { ThemeProps } from '../../../types/types';
 import {
 	legendWrapperStyle,
 	legendTitleStyle,
@@ -11,8 +13,8 @@ import { TestedBadge } from './badges/TestedBadge';
 import { TestingBadge } from './badges/TestingBadge';
 import { UntestedBadge } from './badges/UntestedBadge';
 
-export const Legend = () => (
-	<div style={legendWrapperStyle}>
+export const Legend = ({ themeSprings }: ThemeProps) => (
+	<animated.div style={legendWrapperStyle(themeSprings)}>
 		<h2 style={legendTitleStyle}>Status Key</h2>
 		<div style={legendGridStyle}>
 			<TestedBadge />
@@ -45,5 +47,5 @@ export const Legend = () => (
 			Every test here updates our database in real time, informing all
 			users which routes are working.
 		</p>
-	</div>
+	</animated.div>
 );

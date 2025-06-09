@@ -1,15 +1,17 @@
 import { CSSProperties } from 'react';
+import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
 
-export const legendWrapperStyle: CSSProperties = {
-	backgroundColor: '#fff',
-	border: '1px solid #ddd',
+export const legendWrapperStyle = (
+	themeSprings: ThemeColors
+): AnimatedCSSProperties => ({
+	backgroundColor: themeSprings.themeTertiary,
 	borderRadius: '8px',
 	boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
 	margin: '0 auto 2rem',
 	maxWidth: '1200px',
 	padding: '20px',
-	width: '100%'
-};
+	width: '90%'
+});
 
 export const legendTitleStyle: CSSProperties = {
 	fontSize: '1.25rem',
