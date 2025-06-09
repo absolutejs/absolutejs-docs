@@ -5,10 +5,12 @@ import { headingStyle, paragraphStyle } from '../../styles/styles';
 
 export const UIArticle = ({ themeSprings }: ArticleProps) => (
 	<animated.article style={featureCard(themeSprings)}>
-		<h2 style={headingStyle}>Seamless UI Integration</h2>
-		<p style={paragraphStyle}>
+		<animated.h2 style={headingStyle(themeSprings)}>
+			Seamless UI Integration
+		</animated.h2>
+		<animated.p style={paragraphStyle(themeSprings)}>
 			Keep using React, Vue, Svelte, HTML, or HTMX—AbsoluteJS just plugs
 			them in.
-		</p>
+		</animated.p>
 	</animated.article>
 );

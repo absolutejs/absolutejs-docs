@@ -5,11 +5,13 @@ import { headingStyle, paragraphStyle } from '../../styles/styles';
 
 export const PerformanceArticle = ({ themeSprings }: ArticleProps) => (
 	<animated.article style={featureCard(themeSprings)}>
-		<h2 style={headingStyle}>21x Faster Than Express</h2>
-		<p style={paragraphStyle}>
+		<animated.h2 style={headingStyle(themeSprings)}>
+			21x Faster Than Express
+		</animated.h2>
+		<animated.p style={paragraphStyle(themeSprings)}>
 			Harness Bun's JIT performance with Elysia's minimal core for
 			ultrafast SSR.
-		</p>
+		</animated.p>
 		<a
 			href="https://bun.sh"
 			target="_blank"

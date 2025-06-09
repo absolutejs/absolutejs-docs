@@ -11,7 +11,6 @@ import { Head } from '../components/page/Head';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useInitTheme } from '../hooks/useInitTheme';
 import { useThemeColors } from '../hooks/useThemeColors';
-import { featureWrapper } from '../styles/homeStyles';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 export const Home = () => {
@@ -29,15 +28,14 @@ export const Home = () => {
 					handleSignOut={handleSignOut}
 				/>
 				<main style={mainDefault}>
-					<CommandSection />
-					<section style={featureWrapper}>
-						<TypeSafeArticle themeSprings={themeSprings} />
-						<PerformanceArticle themeSprings={themeSprings} />
-						<UIArticle themeSprings={themeSprings} />
-						<DatabaseArticle themeSprings={themeSprings} />
-						<CodeQualityArticle themeSprings={themeSprings} />
-						<AuthArticle themeSprings={themeSprings} />
-					</section>
+					<CommandSection themeSprings={themeSprings} />
+
+					<TypeSafeArticle themeSprings={themeSprings} />
+					<PerformanceArticle themeSprings={themeSprings} />
+					<UIArticle themeSprings={themeSprings} />
+					<DatabaseArticle themeSprings={themeSprings} />
+					<CodeQualityArticle themeSprings={themeSprings} />
+					<AuthArticle themeSprings={themeSprings} />
 				</main>
 			</animated.body>
 		</html>

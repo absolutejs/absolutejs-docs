@@ -21,12 +21,14 @@ export const TypeSafeArticle = ({ themeSprings }: ArticleProps) => {
 
 	return (
 		<animated.article style={featureCard(themeSprings)}>
-			<h2 style={headingStyle}>Type Safe All Around</h2>
-			<p style={paragraphStyle}>
+			<animated.h2 style={headingStyle(themeSprings)}>
+				Type Safe All Around
+			</animated.h2>
+			<animated.p style={paragraphStyle(themeSprings)}>
 				Maximize the power of TypeScript with AbsoluteJS. From the
 				database, to the backend, to the frontend, you can be confident
 				in the shape of your data.
-			</p>
+			</animated.p>
 			<PrismPlus
 				codeString={databaseCode}
 				language="typescript"

@@ -5,10 +5,12 @@ import { headingStyle, paragraphStyle } from '../../styles/styles';
 
 export const DatabaseArticle = ({ themeSprings }: ArticleProps) => (
 	<animated.article style={featureCard(themeSprings)}>
-		<h2 style={headingStyle}>Databases & ORMs</h2>
-		<p style={paragraphStyle}>
+		<animated.h2 style={headingStyle(themeSprings)}>
+			Databases & ORMs
+		</animated.h2>
+		<animated.p style={paragraphStyle(themeSprings)}>
 			Built-in adapters for Drizzle & Prisma alongside Postgres, MySQL,
 			and SQLite drivers.
-		</p>
+		</animated.p>
 	</animated.article>
 );
