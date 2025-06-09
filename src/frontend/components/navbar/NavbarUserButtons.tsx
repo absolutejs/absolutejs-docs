@@ -7,6 +7,8 @@ import { buttonStyle } from '../../styles/styles';
 import { AuthContainer } from '../auth/AuthContainer';
 import { ProfilePicture } from '../utils/ProfilePicture';
 import { DropdownContainer } from './DropdownContainer';
+import { IoSunny } from 'react-icons/io5';
+import { ThemeButton } from './ThemeButton';
 
 type NavbarUserButtonsProps = {
 	user: User | undefined;
@@ -79,6 +81,7 @@ export const NavbarUserButtons = ({
 					/>
 				</animated.a>
 			)}
+			<ThemeButton themeSprings={themeSprings} />
 			{isDropdownOpen === true && (
 				<DropdownContainer
 					themeSprings={themeSprings}
