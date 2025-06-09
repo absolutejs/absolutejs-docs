@@ -1,4 +1,5 @@
-export const databaseCode = `import { pgTable, varchar, timestamp, jsonb } from 'drizzle-orm/pg-core';
+export const databaseCode = `import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
+import { pgTable, varchar, timestamp, jsonb } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
     auth_sub: varchar('auth_sub', { length: 255 }).primaryKey(),
@@ -14,7 +15,7 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 
 export type SchemaType = typeof schema;
-export type DatabaseType = DatabaseType`;
+export type DatabaseType = NeonHttpDatabase<SchemaType>;`;
 
 export const backendCode = `import { build, getEnvVar, handleReactPageRequest, networkingPlugin } from '@absolutejs/absolute';
 import { Home } from '../frontend/pages/Home';
