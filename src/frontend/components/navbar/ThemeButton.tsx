@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { ChangeEvent, useState } from 'react';
+import { useRef } from 'react';
 import { AiOutlineMoon } from 'react-icons/ai';
 import { IoSunny } from 'react-icons/io5';
 import { ThemeProps } from '../../../types/types';
@@ -7,80 +7,97 @@ import { useInitTheme } from '../../hooks/useInitTheme';
 
 export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 	const { currentTheme, setCurrentTheme, setTheme } = useInitTheme();
-	const [isOpen, setIsOpen] = useState(false);
+	const detailsRef = useRef<HTMLDetailsElement>(null);
 
-	const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-		const { value } = event.target;
-
-		if (value === 'light') {
-			setTheme('light');
-			setCurrentTheme('light');
-		} else if (value === 'dark') {
-			setTheme('dark');
-			setCurrentTheme('dark');
-		} else {
+	const selectTheme = (option: 'system' | 'light' | 'dark') => {
+		if (option === 'system') {
 			const prefersLight = window.matchMedia(
 				'(prefers-color-scheme: light)'
 			).matches;
 			setTheme(prefersLight ? 'light' : 'dark');
 			setCurrentTheme(prefersLight ? 'system:light' : 'system:dark');
+		} else {
+			setTheme(option);
+			setCurrentTheme(option);
 		}
-
-		setIsOpen(false);
+		if (detailsRef.current) detailsRef.current.open = false;
 	};
 
-	const icon =
-		currentTheme === 'dark' || currentTheme === 'system:dark' ? (
-			<AiOutlineMoon style={{ height: '1.5rem', width: '1.5rem' }} />
-		) : (
-			<IoSunny style={{ height: '1.5rem', width: '1.5rem' }} />
-		);
+	const icon = currentTheme.includes('dark') ? (
+		<AiOutlineMoon style={{ width: 24, height: 24 }} />
+	) : (
+		<IoSunny style={{ width: 24, height: 24 }} />
+	);
+
+	const selected = currentTheme.startsWith('system')
+		? 'system'
+		: currentTheme;
 
 	return (
-		<animated.div style={{ margin: 'auto', position: 'relative' }}>
-			<animated.button
+		<animated.details
+			ref={detailsRef}
+			style={{
+				position: 'relative',
+				display: 'inline-block',
+				margin: 'auto'
+			}}
+		>
+			<animated.summary
 				style={{
-					alignItems: 'center',
+					listStyle: 'none',
+					margin: 0,
+					padding: 0,
 					backgroundColor: themeSprings.themeTertiary,
 					border: 'none',
 					borderRadius: '50%',
-					color: themeSprings.contrastPrimary,
 					cursor: 'pointer',
-					display: 'flex',
+					width: '2.5rem',
 					height: '2.5rem',
+					display: 'flex',
+					alignItems: 'center',
 					justifyContent: 'center',
-					padding: 0,
-					width: '2.5rem'
+					color: themeSprings.contrastPrimary
 				}}
-				onClick={() => setIsOpen((open) => !open)}
 			>
 				{icon}
-			</animated.button>
+			</animated.summary>
 
-			{isOpen && (
-				<animated.select
-					style={{
-						backgroundColor: themeSprings.themeTertiary,
-						border: 'none',
-						borderRadius: '0.25rem',
-						color: themeSprings.contrastPrimary,
-						cursor: 'pointer',
-						padding: '0.5rem',
-						position: 'absolute',
-						top: '3rem'
-					}}
-					value={
-						currentTheme.startsWith('system')
-							? 'system'
-							: currentTheme
-					}
-					onChange={handleSelectChange}
-				>
-					<option value="system">System</option>
-					<option value="light">Light</option>
-					<option value="dark">Dark</option>
-				</animated.select>
-			)}
-		</animated.div>
+			<animated.ul
+				style={{
+					position: 'absolute',
+					top: '3rem',
+					right: 0,
+					margin: 0,
+					padding: '0.5rem',
+					backgroundColor: themeSprings.themeTertiary,
+					borderRadius: '0.25rem',
+					listStyle: 'none',
+					minWidth: '6rem',
+					boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+				}}
+			>
+				{(['system', 'light', 'dark'] as const).map((opt) => (
+					<animated.li
+						key={opt}
+						onClick={() => selectTheme(opt)}
+						style={{
+							cursor: 'pointer',
+							padding: '0.25rem 0.5rem',
+							borderRadius: '0.25rem',
+							background:
+								opt === selected
+									? themeSprings.contrastPrimary
+									: 'transparent',
+							color:
+								opt === selected
+									? themeSprings.themeTertiary
+									: themeSprings.contrastPrimary
+						}}
+					>
+						{opt.charAt(0).toUpperCase() + opt.slice(1)}
+					</animated.li>
+				))}
+			</animated.ul>
+		</animated.details>
 	);
 };
