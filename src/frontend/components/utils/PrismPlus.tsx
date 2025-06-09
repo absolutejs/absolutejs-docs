@@ -1,6 +1,8 @@
+import { animated } from '@react-spring/web';
 import { ChangeEvent, useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { Prism, SyntaxHighlighterProps } from 'react-syntax-highlighter';
+import { ThemeColors } from '../../../types/types';
 import {
 	highlighterContainerStyle,
 	highlighterHeaderStyle,
@@ -16,6 +18,7 @@ type PrismPlusProps = {
 	showLineNumbers?: boolean;
 	codeStyle: SyntaxHighlighterProps['style'];
 	options?: string[];
+	themeSprings: ThemeColors;
 };
 
 export const PrismPlus = ({
@@ -23,7 +26,8 @@ export const PrismPlus = ({
 	language = 'tsx',
 	showLineNumbers = true,
 	codeStyle,
-	options
+	options,
+	themeSprings
 }: PrismPlusProps) => {
 	const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
@@ -50,8 +54,8 @@ export const PrismPlus = ({
 
 	return (
 		<div style={highlighterContainerStyle}>
-			<div style={highlighterHeaderStyle}>
-				<span style={{ color: '#333', fontSize: '0.9em' }}>
+			<animated.div style={highlighterHeaderStyle(themeSprings)}>
+				<span style={{ color: 'inherit', fontSize: '0.9em' }}>
 					{getDisplayLanguage(language)}
 				</span>
 				{options && options.length > 0 && (
@@ -71,7 +75,7 @@ export const PrismPlus = ({
 					</div>
 				)}
 				<CopyButton text={displayedCodeString} />
-			</div>
+			</animated.div>
 			{/* @ts-expect-error react 19 thing where we have 18 types */}
 			<Prism
 				language={language}

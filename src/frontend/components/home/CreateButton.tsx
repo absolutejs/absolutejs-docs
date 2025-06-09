@@ -6,9 +6,9 @@ export const CreateButton = ({ themeSprings }: ThemeProps) => (
 	<animated.div
 		style={{
 			alignItems: 'center',
-			backgroundColor: themeSprings.themePrimary,
-			border: `1px solid ${themeSprings.themeSecondary}`,
+			backgroundColor: themeSprings.themeTertiary,
 			borderRadius: '16px',
+			boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
 			color: themeSprings.contrastPrimary,
 			display: 'flex',
 			justifyContent: 'center',

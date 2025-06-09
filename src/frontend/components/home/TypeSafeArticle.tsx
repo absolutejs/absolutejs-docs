@@ -30,21 +30,25 @@ export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 				in the shape of your data.
 			</animated.p>
 			<PrismPlus
+				themeSprings={themeSprings}
 				codeString={databaseCode}
 				language="typescript"
 				codeStyle={prismTheme}
 			/>
 			<PrismPlus
+				themeSprings={themeSprings}
 				codeString={serverCode}
 				language="typescript"
 				codeStyle={prismTheme}
 			/>
 			<PrismPlus
+				themeSprings={themeSprings}
 				codeString={treatyCode}
 				language="typescript"
 				codeStyle={prismTheme}
 			/>
 			<PrismPlus
+				themeSprings={themeSprings}
 				codeString={frontendCode}
 				language="tsx"
 				codeStyle={prismTheme}

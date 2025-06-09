@@ -1,31 +1,22 @@
 import { CSSProperties } from 'react';
+import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
 
 export const highlighterContainerStyle: CSSProperties = {
-	border: '1px solid #e1e1e8',
 	borderRadius: '5px',
 	overflow: 'hidden',
 	position: 'relative',
 	width: '100%'
 };
 
-export const highlighterHeaderStyle: CSSProperties = {
+export const highlighterHeaderStyle = (
+	themeSprings: ThemeColors
+): AnimatedCSSProperties => ({
 	alignItems: 'center',
-	backgroundColor: '#f5f5f5',
-	borderBottom: '1px solid #e1e1e8',
+	backgroundColor: themeSprings.themeSecondary,
 	display: 'flex',
 	justifyContent: 'space-between',
 	padding: '5px 10px'
-};
-
-export const highlighterCopyButtonStyle: CSSProperties = {
-	alignItems: 'center',
-	backgroundColor: 'transparent',
-	border: 'none',
-	color: '#333',
-	cursor: 'pointer',
-	display: 'flex',
-	fontSize: '0.9em'
-};
+});
 
 export const highlighterSelectContainerStyle: CSSProperties = {
 	display: 'inline-block',
