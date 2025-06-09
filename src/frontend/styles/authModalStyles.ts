@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
+import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
 import { tertiaryColor } from './colors';
 
 export const confirmInputStyle: CSSProperties = {
@@ -84,13 +85,15 @@ export const headingStyle: CSSProperties = {
 	textAlign: 'center'
 };
 
-export const labelStyle: CSSProperties = {
-	color: tertiaryColor,
+export const labelStyle = (
+	themeSprings: ThemeColors
+): AnimatedCSSProperties => ({
+	color: themeSprings.contrastSecondary,
 	fontSize: '1.5rem',
 	marginBottom: '-2px',
 	textAlign: 'left',
 	textDecoration: 'none'
-};
+});
 
 export const loginLinkTextStyle: CSSProperties = {
 	backgroundColor: 'transparent',

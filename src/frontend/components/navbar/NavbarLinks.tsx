@@ -1,12 +1,17 @@
-import { isNavbarDropdown, NavbarElement } from '../../../types/types';
+import {
+	isNavbarDropdown,
+	NavbarElement,
+	ThemeColors
+} from '../../../types/types';
 import { NavbarDropdown } from './NavbarDropdown';
 import { NavbarLink } from './NavbarLink';
 
 type NavbarLinksProps = {
 	navbarData: NavbarElement[];
+	themeSprings: ThemeColors;
 };
 
-export const NavbarLinks = ({ navbarData }: NavbarLinksProps) => (
+export const NavbarLinks = ({ navbarData, themeSprings }: NavbarLinksProps) => (
 	<nav
 		style={{
 			alignItems: 'center',
@@ -19,6 +24,7 @@ export const NavbarLinks = ({ navbarData }: NavbarLinksProps) => (
 			if (isNavbarDropdown(element)) {
 				return (
 					<NavbarDropdown
+						themeSprings={themeSprings}
 						key={element.label}
 						label={element.label}
 						href={element.href}
@@ -29,6 +35,7 @@ export const NavbarLinks = ({ navbarData }: NavbarLinksProps) => (
 
 			return (
 				<NavbarLink
+					themeSprings={themeSprings}
 					key={element.label}
 					icon={element.icon}
 					href={element.href}

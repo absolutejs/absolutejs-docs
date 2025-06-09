@@ -1,7 +1,10 @@
 import { animated, useSpring } from '@react-spring/web';
 import { ReactNode, useRef } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
-import { NavbarLink as NavbarLinkType } from '../../../types/types';
+import {
+	NavbarLink as NavbarLinkType,
+	ThemeColors
+} from '../../../types/types';
 import { labelStyle } from '../../styles/authModalStyles';
 import {
 	dropdownStyle,
@@ -14,11 +17,17 @@ type NavbarDropdownProps = {
 	href: string;
 	links: NavbarLinkType[];
 	icon?: ReactNode;
+	themeSprings: ThemeColors;
 };
 
 const AnimatedFaChevronDown = animated(FaChevronDown);
 
-export const NavbarDropdown = ({ label, href, links }: NavbarDropdownProps) => {
+export const NavbarDropdown = ({
+	label,
+	href,
+	links,
+	themeSprings
+}: NavbarDropdownProps) => {
 	const dropdownRef = useRef<HTMLUListElement>(null);
 
 	const [dropdownSpring, dropdownApi] = useSpring(() => ({
@@ -65,9 +74,9 @@ export const NavbarDropdown = ({ label, href, links }: NavbarDropdownProps) => {
 				onMouseEnter={openDropdown}
 				onMouseLeave={closeDropdown}
 			>
-				<a href={href} style={labelStyle}>
+				<animated.a href={href} style={labelStyle(themeSprings)}>
 					{label}
-				</a>
+				</animated.a>
 
 				<AnimatedFaChevronDown
 					style={{
@@ -87,6 +96,7 @@ export const NavbarDropdown = ({ label, href, links }: NavbarDropdownProps) => {
 			>
 				{links.map((link, index) => (
 					<NavbarLink
+						themeSprings={themeSprings}
 						key={index}
 						icon={link.icon}
 						href={link.href}

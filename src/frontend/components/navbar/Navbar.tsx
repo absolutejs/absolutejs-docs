@@ -4,7 +4,6 @@ import { User } from '../../../../db/schema';
 import { ThemeColors } from '../../../types/types';
 import { navbarData } from '../../data/navbarData';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
-import { tertiaryColor } from '../../styles/colors';
 import {
 	navbarContainerStyle,
 	hamburgerButtonStyle,
@@ -52,17 +51,17 @@ export const Navbar = ({ user, handleSignOut, themeSprings }: NavbarProps) => {
 			ref={navRef}
 			style={navbarContainerStyle(themeSprings)}
 		>
-			<a
+			<animated.a
 				href="/"
 				style={{
-					color: tertiaryColor,
+					color: themeSprings.contrastPrimary,
 					fontSize: '1.5rem',
 					fontWeight: 'bold',
 					textDecoration: 'none'
 				}}
 			>
 				AbsoluteJS
-			</a>
+			</animated.a>
 
 			<div
 				style={{
@@ -70,7 +69,12 @@ export const Navbar = ({ user, handleSignOut, themeSprings }: NavbarProps) => {
 					display: 'flex'
 				}}
 			>
-				{!isMobile && <NavbarLinks navbarData={navbarData} />}
+				{!isMobile && (
+					<NavbarLinks
+						navbarData={navbarData}
+						themeSprings={themeSprings}
+					/>
+				)}
 
 				<NavbarUserButtons user={user} handleSignOut={handleSignOut} />
 
@@ -87,6 +91,7 @@ export const Navbar = ({ user, handleSignOut, themeSprings }: NavbarProps) => {
 			</div>
 
 			<HamburgerMenu
+				themeSprings={themeSprings}
 				spring={hamburgerMenuSpring}
 				springApi={hamburgerMenuApi}
 				user={user}

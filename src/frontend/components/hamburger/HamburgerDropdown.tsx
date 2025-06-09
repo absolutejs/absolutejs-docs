@@ -1,6 +1,6 @@
 import { animated, useSpring } from '@react-spring/web';
 import { ReactNode } from 'react';
-import { NavbarElement } from '../../../types/types';
+import { NavbarElement, ThemeColors } from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
 import { labelStyle } from '../../styles/authModalStyles';
 import { secondaryColor } from '../../styles/colors';
@@ -12,13 +12,15 @@ type HamburgerDropdownProps = {
 	href: string;
 	links: NavbarElement[];
 	icon?: ReactNode;
+	themeSprings: ThemeColors;
 };
 
 export const HamburgerDropdown = ({
 	label,
 	icon,
 	href,
-	links
+	links,
+	themeSprings
 }: HamburgerDropdownProps) => {
 	const {
 		ref,
@@ -54,10 +56,10 @@ export const HamburgerDropdown = ({
 					justifyContent: 'space-between'
 				}}
 			>
-				<a href={href} style={labelStyle}>
+				<animated.a href={href} style={labelStyle(themeSprings)}>
 					{icon}
 					<span>{label}</span>
-				</a>
+				</animated.a>
 				<AnimatedFaChevronDown
 					onClick={toggleDropdown}
 					style={{
@@ -80,6 +82,7 @@ export const HamburgerDropdown = ({
 			>
 				{links.map((link, index) => (
 					<NavbarLink
+						themeSprings={themeSprings}
 						key={index}
 						icon={link.icon}
 						href={link.href}
