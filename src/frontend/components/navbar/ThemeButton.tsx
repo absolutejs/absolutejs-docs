@@ -79,7 +79,7 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 			<animated.ul
 				style={{
 					position: 'absolute',
-					top: '3rem',
+					top: '3.5rem',
 					right: 0,
 					margin: 0,
 					padding: '0.5rem',
