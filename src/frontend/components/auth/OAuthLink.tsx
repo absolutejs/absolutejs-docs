@@ -1,5 +1,7 @@
+import { animated } from '@react-spring/web';
 import { ProviderOption } from 'citra';
 import { FiUser } from 'react-icons/fi';
+import { ThemeColors } from '../../../types/types';
 import { providerData, ProviderInfo } from '../../data/providerData';
 import {
 	oauthButtonStyle,
@@ -7,8 +9,6 @@ import {
 	oauthIconStyle,
 	oauthButtonTextStyle
 } from '../../styles/authModalStyles';
-import { animated } from '@react-spring/web';
-import { ThemeColors } from '../../../types/types';
 
 type OAuthLinkProps = {
 	mode: 'login' | 'signup';
@@ -40,10 +40,10 @@ export const OAuthLink = ({ mode, provider, themeSprings }: OAuthLinkProps) => {
 			href={provider ? `/oauth2/${provider}/authorization` : undefined}
 			style={oauthButtonStyle({
 				isProviderSelected,
-				themeSprings,
 				providerPrimaryColor: isProviderSelected
 					? primaryColor
-					: '#999999'
+					: '#999999',
+				themeSprings
 			})}
 		>
 			<div style={oauthButtonContentStyle}>

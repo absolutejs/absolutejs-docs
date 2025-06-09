@@ -1,6 +1,8 @@
+import { animated } from '@react-spring/web';
 import { ProviderOption } from 'citra';
 import { Dispatch, SetStateAction } from 'react';
 import { FiUser } from 'react-icons/fi';
+import { ThemeColors } from '../../../types/types';
 import { providerData, ProviderInfo } from '../../data/providerData';
 import {
 	oauthButtonStyle,
@@ -16,11 +18,13 @@ type OAuthButtonProps = {
 			(ProviderInfo & { providerOption: ProviderOption }) | null
 		>
 	>;
+	themeSprings: ThemeColors;
 };
 
 export const OAuthButton = ({
 	provider,
-	setModalContent
+	setModalContent,
+	themeSprings
 }: OAuthButtonProps) => {
 	const {
 		logoUrl,
@@ -31,10 +35,11 @@ export const OAuthButton = ({
 	} = providerData[provider];
 
 	return (
-		<button
+		<animated.button
 			style={oauthButtonStyle({
 				isProviderSelected: true,
-				providerPrimaryColor: primaryColor
+				providerPrimaryColor: primaryColor,
+				themeSprings: themeSprings
 			})}
 			onClick={() => {
 				const params = new URLSearchParams(window.location.search);
@@ -65,6 +70,6 @@ export const OAuthButton = ({
 				)}
 				<span style={oauthButtonTextStyle}>{name}</span>
 			</div>
-		</button>
+		</animated.button>
 	);
 };

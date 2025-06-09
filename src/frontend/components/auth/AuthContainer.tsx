@@ -1,5 +1,7 @@
 import { ProviderOption } from '@absolutejs/auth';
+import { animated } from '@react-spring/web';
 import { useState } from 'react';
+import { ThemeProps } from '../../../types/types';
 import {
 	containerStyle,
 	headingStyle,
@@ -9,8 +11,6 @@ import {
 import { Divider } from '../utils/Divider';
 import { ProviderDropdown } from '../utils/ProviderDropdown';
 import { OAuthLink } from './OAuthLink';
-import { ThemeProps } from '../../../types/types';
-import { animated } from '@react-spring/web';
 
 export const AuthContainer = ({ themeSprings }: ThemeProps) => {
 	const [currentProvider, setCurrentProvider] =

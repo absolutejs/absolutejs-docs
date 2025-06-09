@@ -1,4 +1,5 @@
 import { providerOptions } from '@absolutejs/auth';
+import { animated } from '@react-spring/web';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
@@ -7,6 +8,8 @@ import { AuthTestingHero } from '../components/testing/AuthTestingHero';
 import { Legend } from '../components/testing/Legend';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useCleanPath } from '../hooks/useCleanPath';
+import { useInitTheme } from '../hooks/useInitTheme';
+import { useThemeColors } from '../hooks/useThemeColors';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 const queryClient = new QueryClient();
@@ -14,12 +17,18 @@ const queryClient = new QueryClient();
 export const AuthTesting = () => {
 	const { user, handleSignOut } = useAuthStatus();
 	useCleanPath();
+	useInitTheme();
+	const themeSprings = useThemeColors();
 
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head />
-			<body style={bodyDefault}>
-				<Navbar user={user} handleSignOut={handleSignOut} />
+			<animated.body style={bodyDefault(themeSprings)}>
+				<Navbar
+					user={user}
+					handleSignOut={handleSignOut}
+					themeSprings={themeSprings}
+				/>
 				<main style={mainDefault}>
 					<QueryClientProvider client={queryClient}>
 						<h1
@@ -39,10 +48,14 @@ export const AuthTesting = () => {
 
 						<Legend />
 
-						<AuthGrid handleSignOut={handleSignOut} user={user} />
+						<AuthGrid
+							handleSignOut={handleSignOut}
+							user={user}
+							themeSprings={themeSprings}
+						/>
 					</QueryClientProvider>
 				</main>
-			</body>
+			</animated.body>
 		</html>
 	);
 };

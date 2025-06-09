@@ -1,8 +1,8 @@
+import { animated } from '@react-spring/web';
 import { ProviderOption, providerOptions } from 'citra';
 import { Dispatch, SetStateAction } from 'react';
-import { providerData } from '../../data/providerData';
 import { ThemeColors } from '../../../types/types';
-import { animated } from '@react-spring/web';
+import { providerData } from '../../data/providerData';
 
 type ProviderDropdownProps = {
 	setCurrentProvider: Dispatch<
@@ -27,10 +27,10 @@ export const ProviderDropdown = ({
 			}
 		}}
 		style={{
-			border: `1px solid ${themeSprings.contrastPrimary}`,
 			backgroundColor: themeSprings.themeTertiary,
-			color: themeSprings.contrastPrimary,
+			border: `1px solid ${themeSprings.contrastPrimary}`,
 			borderRadius: '4px',
+			color: themeSprings.contrastPrimary,
 			fontSize: '14px',
 			marginBottom: '10px',
 			padding: '14px',

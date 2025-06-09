@@ -1,7 +1,7 @@
+import { SpringValue } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
 import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
-import { SpringValue } from '@react-spring/web';
 
 export const styleReset = `
     * {
