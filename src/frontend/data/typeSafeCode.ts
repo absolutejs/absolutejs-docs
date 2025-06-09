@@ -33,14 +33,19 @@ if (manifest === null || manifest['HomeIndex'] === undefined) {
 }
 
 const sql = neon(getEnvVar('DATABASE_URL'))
-const db = drizzle(sql, {
-    schema
-});
+const db = drizzle(sql, { schema });
 
 const server = new Elysia()
     .get('/', () => handleReactPageRequest(Home, manifest['HomeIndex']))
     .get('/api/users/:subject', 
-    async ({ status, params: { subject } }) => db.select().from(schema.users).where(schema.users.auth_sub.eq(subject))
+    async ({ status, params: { subject } }) => {
+        try {
+            const [user] = db.select().from(schema.users).where(schema.users.auth_sub.eq(subject))
+            return user === undefined ? status(404, 'User not found') : user;
+        } catch ( error ) {
+            return status(500, 'Internal Server Error while fetching user');
+        }
+    }
 
 export type Server = typeof server;`;
 
@@ -54,4 +59,24 @@ const serverUrl =
 
 export const server = treaty<Server>(serverUrl);`;
 
-export const frontendCode = `const { data, error } = await server.api.users().get();`;
+export const frontendCode = `import { server } from '../eden/treaty';
+import { Head } from '../components/page/Head';
+import { bodyDefault, htmlDefault, mainDefault } from '../styles';
+
+export const Home = () => {
+    const { data, error } = await server.api.users().get();
+
+    if( error !== null ) return (error);
+
+    return (
+        <html lang="en" style={htmlDefault}>
+            <Head />
+            <body style={bodyDefault}>
+                <main style={mainDefault}>
+                    <h1>{data.auth_sub}</h1>
+                    <p>Created at: {data.created_at}</p>
+                </main>
+            </body>
+        </html>
+    );
+};`;

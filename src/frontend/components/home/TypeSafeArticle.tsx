@@ -19,7 +19,7 @@ export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 		typeArticleData.length
 	);
 
-	const { codeString, title, description } =
+	const { codeString, title, description, language } =
 		typeArticleData[currentTab] ?? {};
 
 	if (
@@ -49,7 +49,7 @@ export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 			<PrismPlus
 				themeSprings={themeSprings}
 				codeString={codeString}
-				language="typescript"
+				language={language}
 				codeStyle={prismTheme}
 			/>
 			<animated.p style={paragraphStyle(themeSprings)}>

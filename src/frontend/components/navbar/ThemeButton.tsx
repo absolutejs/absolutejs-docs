@@ -10,10 +10,10 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 	const detailsRef = useRef<HTMLDetailsElement>(null);
 
 	useEffect(() => {
-		const onClickOutside = (e: MouseEvent) => {
+		const onClickOutside = (event: MouseEvent) => {
 			const det = detailsRef.current;
 			if (!det?.open) return;
-			const tgt = e.target;
+			const tgt = event.target;
 			if (!(tgt instanceof Node)) return;
 			if (!det.contains(tgt)) det.open = false;
 		};

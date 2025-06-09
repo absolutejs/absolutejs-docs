@@ -37,7 +37,7 @@ export const typeArticleData: TypeArticleData[] = [
 	{
 		codeString: frontendCode,
 		description:
-			'When you use Treaty to make frontend requests, you get back a fully typed object with two fields: `data`, the successful response payload, and `error`, an object typed to any non-2xx response (status and body) the route is configured to return.',
+			'When you use the treaty to make frontend requests, you get back a fully typed object with two fields: `data`, the successful response payload, and `error`, an object typed to any non-2xx response (status and message) the route is configured to return.',
 		language: 'tsx',
 		title: 'Frontend'
 	}
