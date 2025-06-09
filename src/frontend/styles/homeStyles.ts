@@ -34,7 +34,7 @@ export const featureCard = (
 	display: 'flex',
 	flexDirection: 'column',
 	padding: '1rem',
-	width: '100%'
+	width: '90%'
 });
 
 export const codeBlock: CSSProperties = {

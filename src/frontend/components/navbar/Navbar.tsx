@@ -76,7 +76,11 @@ export const Navbar = ({ user, handleSignOut, themeSprings }: NavbarProps) => {
 					/>
 				)}
 
-				<NavbarUserButtons user={user} handleSignOut={handleSignOut} />
+				<NavbarUserButtons
+					user={user}
+					handleSignOut={handleSignOut}
+					themeSprings={themeSprings}
+				/>
 
 				{isMobile === true && (
 					<button

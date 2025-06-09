@@ -90,7 +90,7 @@ export const NavbarDropdown = ({
 
 			<animated.nav
 				ref={dropdownRef}
-				style={getNavbarDropdownListStyle(dropdownSpring)}
+				style={getNavbarDropdownListStyle(dropdownSpring, themeSprings)}
 				onMouseEnter={openDropdown}
 				onMouseLeave={closeDropdown}
 			>

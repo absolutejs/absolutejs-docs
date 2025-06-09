@@ -1,5 +1,6 @@
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { ReactNode, RefObject, useEffect, useRef } from 'react';
+import { ThemeColors } from '../../../types/types';
 
 type DropdownContainerProps = {
 	spring: {
@@ -10,6 +11,7 @@ type DropdownContainerProps = {
 	onClose?: () => void;
 	children?: ReactNode;
 	ignoredElements?: RefObject<HTMLElement | null>[];
+	themeSprings: ThemeColors;
 };
 
 export const DropdownContainer = ({
@@ -17,6 +19,7 @@ export const DropdownContainer = ({
 	springApi,
 	onClose,
 	children,
+	themeSprings,
 	ignoredElements = []
 }: DropdownContainerProps) => {
 	const dropdownRef = useRef<HTMLDivElement>(null);
@@ -51,7 +54,7 @@ export const DropdownContainer = ({
 		<animated.div
 			ref={dropdownRef}
 			style={{
-				backgroundColor: '#fff',
+				backgroundColor: themeSprings.themePrimary,
 				borderRadius: '12px',
 				boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
 				marginTop: '2.25rem',

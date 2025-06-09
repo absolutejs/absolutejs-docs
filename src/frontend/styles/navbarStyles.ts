@@ -67,13 +67,15 @@ export const optionStyle: CSSProperties = {
 	textDecoration: 'none',
 	whiteSpace: 'nowrap'
 };
-export const getNavbarDropdownListStyle = (dropdownSpring: {
-	height: SpringValue<number>;
-	opacity: SpringValue<number>;
-	transform: SpringValue<string>;
-}): AnimatedCSSProperties => ({
-	backgroundColor: '#fff',
-	border: '1px solid #ddd',
+export const getNavbarDropdownListStyle = (
+	dropdownSpring: {
+		height: SpringValue<number>;
+		opacity: SpringValue<number>;
+		transform: SpringValue<string>;
+	},
+	themeSprings: ThemeColors
+): AnimatedCSSProperties => ({
+	backgroundColor: themeSprings.themeTertiary,
 	borderRadius: '10px',
 	boxShadow: `0 4px 8px rgba(0, 0, 0, 0.1)`,
 	height: dropdownSpring.height,
@@ -81,7 +83,7 @@ export const getNavbarDropdownListStyle = (dropdownSpring: {
 	maxWidth: '250px',
 	opacity: dropdownSpring.opacity,
 	overflow: 'hidden',
-	padding: '15px 0',
+	padding: '0.5rem 1rem',
 	pointerEvents: dropdownSpring.opacity.to((opacity) =>
 		opacity > 0 ? 'auto' : 'none'
 	),

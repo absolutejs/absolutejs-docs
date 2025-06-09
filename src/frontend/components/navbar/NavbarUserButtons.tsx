@@ -1,6 +1,7 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useRef, useState } from 'react';
 import { User } from '../../../../db/schema';
+import { ThemeColors } from '../../../types/types';
 import { profileButtonStyle } from '../../styles/navbarStyles';
 import { buttonStyle } from '../../styles/styles';
 import { AuthContainer } from '../auth/AuthContainer';
@@ -10,11 +11,13 @@ import { DropdownContainer } from './DropdownContainer';
 type NavbarUserButtonsProps = {
 	user: User | undefined;
 	handleSignOut: () => Promise<void>;
+	themeSprings: ThemeColors;
 };
 
 export const NavbarUserButtons = ({
 	user,
-	handleSignOut
+	handleSignOut,
+	themeSprings
 }: NavbarUserButtonsProps) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -52,16 +55,16 @@ export const NavbarUserButtons = ({
 				position: 'relative'
 			}}
 		>
-			<button
+			<animated.button
 				ref={userButtonRef}
 				onClick={user ? () => handleSignOut() : handleLoginClick}
 				style={buttonStyle({
-					backgroundColor: '#000',
-					color: '#fff'
+					backgroundColor: themeSprings.themeTertiary,
+					color: themeSprings.contrastPrimary
 				})}
 			>
 				{user ? 'Sign Out' : 'Login'}
-			</button>
+			</animated.button>
 			{user !== undefined && (
 				<animated.a style={profileButtonStyle} href="/protected">
 					<ProfilePicture
@@ -78,6 +81,7 @@ export const NavbarUserButtons = ({
 			)}
 			{isDropdownOpen === true && (
 				<DropdownContainer
+					themeSprings={themeSprings}
 					spring={loginDropdownSpring}
 					springApi={loginDropdownApi}
 					onClose={closeDropdown}

@@ -1,6 +1,7 @@
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
 import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
+import { SpringValue } from '@react-spring/web';
 
 export const styleReset = `
     * {
@@ -24,6 +25,7 @@ export const bodyDefault = (
 });
 
 export const mainDefault: CSSProperties = {
+	alignItems: 'center',
 	display: 'flex',
 	flex: 1,
 	flexDirection: 'column'
@@ -34,15 +36,15 @@ export const htmlDefault: CSSProperties = {
 };
 
 type ButtonStyleProps = {
-	backgroundColor?: string;
-	color?: string;
+	backgroundColor?: string | SpringValue<string>;
+	color?: string | SpringValue<string>;
 	width?: string;
 };
 export const buttonStyle = ({
 	backgroundColor = 'none',
 	color = 'white',
 	width
-}: ButtonStyleProps): CSSProperties => ({
+}: ButtonStyleProps): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	backgroundColor,
 	border: 'none',
