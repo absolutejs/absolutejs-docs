@@ -10,6 +10,7 @@ import { useThemeStore } from '../../hooks/useThemeStore';
 import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 import { PrismPlus } from '../utils/PrismPlus';
+import { CodeSlider } from './CodeSlider';
 
 export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 	const theme = useThemeStore((state) => state.theme);
@@ -39,12 +40,21 @@ export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 				database, to the backend, to the frontend, you can be confident
 				in the shape of your data.
 			</animated.p>
+			<CodeSlider
+				handleTabClick={handleTabClick}
+				sliderSprings={sliderSprings}
+				tabs={typeArticleData.map((item) => item.title)}
+				themeSprings={themeSprings}
+			/>
 			<PrismPlus
 				themeSprings={themeSprings}
 				codeString={codeString}
 				language="typescript"
 				codeStyle={prismTheme}
 			/>
+			<animated.p style={paragraphStyle(themeSprings)}>
+				{description}
+			</animated.p>
 		</animated.article>
 	);
 };
