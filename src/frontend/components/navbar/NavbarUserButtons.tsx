@@ -1,8 +1,8 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useRef, useState } from 'react';
-import { IoSunny } from 'react-icons/io5';
 import { User } from '../../../../db/schema';
 import { ThemeColors } from '../../../types/types';
+import { useThemeStore } from '../../hooks/useThemeStore';
 import { profileButtonStyle } from '../../styles/navbarStyles';
 import { buttonStyle } from '../../styles/styles';
 import { AuthContainer } from '../auth/AuthContainer';
@@ -22,6 +22,7 @@ export const NavbarUserButtons = ({
 	themeSprings
 }: NavbarUserButtonsProps) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const theme = useThemeStore((state) => state.theme);
 
 	const openDropdown = () => {
 		setIsDropdownOpen(true);
@@ -70,14 +71,19 @@ export const NavbarUserButtons = ({
 			{user !== undefined && (
 				<animated.a style={profileButtonStyle} href="/protected">
 					<ProfilePicture
+						themeSprings={themeSprings}
 						userImage={
 							typeof user.metadata?.profile_picture === 'string'
 								? user.metadata.profile_picture
 								: undefined
 						}
-						backupImage={'/assets/svg/default-profile-icon.svg'}
-						width="100%"
-						height="100%"
+						backupImage={
+							theme === 'dark'
+								? '/assets/svg/default-profile-icon-light.svg'
+								: '/assets/svg/default-profile-icon.svg'
+						}
+						width="2.5rem"
+						height="2.5rem"
 					/>
 				</animated.a>
 			)}

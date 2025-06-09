@@ -90,6 +90,7 @@ export const HamburgerMenu = ({
 				/>
 
 				<HamburgerUserButtons
+					themeSprings={themeSprings}
 					user={user}
 					handleSignOut={handleSignOut}
 					openModal={() => {

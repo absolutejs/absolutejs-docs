@@ -1,5 +1,6 @@
 import { animated } from '@react-spring/web';
 import { User } from '../../../../db/schema';
+import { ThemeColors } from '../../../types/types';
 import { primaryColor } from '../../styles/colors';
 import { buttonStyle } from '../../styles/styles';
 import { ProfilePicture } from '../utils/ProfilePicture';
@@ -8,12 +9,14 @@ type HamburgerUserButtonsProps = {
 	user: User | undefined;
 	handleSignOut: () => Promise<void>;
 	openModal: () => void;
+	themeSprings: ThemeColors;
 };
 
 export const HamburgerUserButtons = ({
 	user,
 	handleSignOut,
-	openModal
+	openModal,
+	themeSprings
 }: HamburgerUserButtonsProps) => (
 	<div
 		style={{
@@ -33,6 +36,7 @@ export const HamburgerUserButtons = ({
 			>
 				<animated.a href="/portal">
 					<ProfilePicture
+						themeSprings={themeSprings}
 						userImage={
 							typeof user.metadata?.profile_picture === 'string'
 								? user.metadata.profile_picture
