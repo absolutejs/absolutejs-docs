@@ -1,12 +1,15 @@
+import { animated } from '@react-spring/web';
+import { ThemeProps } from '../../../types/types';
 import { CopyButton } from '../utils/CopyButton';
 
-export const CreateButton = () => (
-	<div
+export const CreateButton = ({ themeSprings }: ThemeProps) => (
+	<animated.div
 		style={{
 			alignItems: 'center',
-			backgroundColor: '#f0f0f0',
-			border: '1px solid #ccc',
+			backgroundColor: themeSprings.themePrimary,
+			border: `1px solid ${themeSprings.themeSecondary}`,
 			borderRadius: '16px',
+			color: themeSprings.contrastPrimary,
 			display: 'flex',
 			justifyContent: 'center',
 			padding: '10px 20px'
@@ -14,7 +17,6 @@ export const CreateButton = () => (
 	>
 		<code
 			style={{
-				color: '#333',
 				fontSize: '1.2rem',
 				marginRight: '2rem'
 			}}
@@ -22,5 +24,5 @@ export const CreateButton = () => (
 			bun create absolutejs
 		</code>
 		<CopyButton text="bun create absolutejs" />
-	</div>
+	</animated.div>
 );

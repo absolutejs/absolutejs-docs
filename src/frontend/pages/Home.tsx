@@ -29,7 +29,6 @@ export const Home = () => {
 				/>
 				<main style={mainDefault}>
 					<CommandSection themeSprings={themeSprings} />
-
 					<TypeSafeArticle themeSprings={themeSprings} />
 					<PerformanceArticle themeSprings={themeSprings} />
 					<UIArticle themeSprings={themeSprings} />

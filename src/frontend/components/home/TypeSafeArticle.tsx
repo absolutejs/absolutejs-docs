@@ -3,7 +3,7 @@ import {
 	prism,
 	nightOwl
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ArticleProps } from '../../../types/types';
+import { ThemeProps } from '../../../types/types';
 import {
 	serverCode,
 	treatyCode,
@@ -15,7 +15,7 @@ import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 import { PrismPlus } from '../utils/PrismPlus';
 
-export const TypeSafeArticle = ({ themeSprings }: ArticleProps) => {
+export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 	const theme = useThemeStore((state) => state.theme);
 	const prismTheme = theme === 'light' ? prism : nightOwl;
 

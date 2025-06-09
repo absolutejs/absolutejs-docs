@@ -1,8 +1,8 @@
 import { animated } from '@react-spring/web';
+import { ThemeProps } from '../../../types/types';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
-import { ArticleProps } from '../../../types/types';
 
-export const HomeHeader = ({ themeSprings }: ArticleProps) => (
+export const HomeHeader = ({ themeSprings }: ThemeProps) => (
 	<section
 		style={{
 			alignItems: 'center',

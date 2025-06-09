@@ -31,6 +31,7 @@ export const CopyButton = ({ text }: CopyButtonProps) => {
 				alignItems: 'center',
 				backgroundColor: 'transparent',
 				border: 'none',
+				color: 'inherit',
 				cursor: 'pointer',
 				display: 'flex',
 				justifyContent: 'center'

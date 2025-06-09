@@ -1,12 +1,12 @@
-import { ArticleProps } from '../../../types/types';
+import { ThemeProps } from '../../../types/types';
 import { heroStyle, navStyle } from '../../styles/homeStyles';
 import { CreateButton } from './CreateButton';
 import { HomeHeader } from './HomeHeader';
 
-export const CommandSection = ({ themeSprings }: ArticleProps) => (
+export const CommandSection = ({ themeSprings }: ThemeProps) => (
 	<section style={heroStyle}>
 		<HomeHeader themeSprings={themeSprings} />
-		<CreateButton />
+		<CreateButton themeSprings={themeSprings} />
 		<nav style={navStyle}>
 			<a
 				href="/playground"
