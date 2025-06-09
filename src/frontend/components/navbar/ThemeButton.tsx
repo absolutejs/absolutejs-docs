@@ -18,6 +18,7 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 			if (!det.contains(tgt)) det.open = false;
 		};
 		document.addEventListener('mousedown', onClickOutside);
+
 		return () => document.removeEventListener('mousedown', onClickOutside);
 	}, []);
 
@@ -38,9 +39,9 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 	};
 
 	const icon = currentTheme.includes('dark') ? (
-		<AiOutlineMoon style={{ width: 24, height: 24 }} />
+		<AiOutlineMoon style={{ height: 24, width: 24 }} />
 	) : (
-		<IoSunny style={{ width: 24, height: 24 }} />
+		<IoSunny style={{ height: 24, width: 24 }} />
 	);
 
 	const selected = currentTheme.startsWith('system')
@@ -51,26 +52,26 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 		<animated.details
 			ref={detailsRef}
 			style={{
-				position: 'relative',
 				display: 'inline-block',
-				margin: 'auto'
+				margin: 'auto',
+				position: 'relative'
 			}}
 		>
 			<animated.summary
 				style={{
-					listStyle: 'none',
-					margin: 0,
-					padding: 0,
+					alignItems: 'center',
 					backgroundColor: themeSprings.themeTertiary,
 					border: 'none',
 					borderRadius: '50%',
+					color: themeSprings.contrastPrimary,
 					cursor: 'pointer',
-					width: '2.5rem',
-					height: '2.5rem',
 					display: 'flex',
-					alignItems: 'center',
+					height: '2.5rem',
 					justifyContent: 'center',
-					color: themeSprings.contrastPrimary
+					listStyle: 'none',
+					margin: 0,
+					padding: 0,
+					width: '2.5rem'
 				}}
 			>
 				{icon}
@@ -78,16 +79,16 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 
 			<animated.ul
 				style={{
-					position: 'absolute',
-					top: '3.5rem',
-					right: 0,
-					margin: 0,
-					padding: '0.5rem',
 					backgroundColor: themeSprings.themeTertiary,
 					borderRadius: '0.25rem',
+					boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
 					listStyle: 'none',
+					margin: 0,
 					minWidth: '6rem',
-					boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+					padding: '0.5rem',
+					position: 'absolute',
+					right: 0,
+					top: '3.5rem'
 				}}
 			>
 				{(['system', 'light', 'dark'] as const).map((opt) => (
@@ -95,17 +96,17 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 						key={opt}
 						onClick={() => selectTheme(opt)}
 						style={{
-							cursor: 'pointer',
-							padding: '0.25rem 0.5rem',
-							borderRadius: '0.25rem',
 							background:
 								opt === selected
 									? themeSprings.contrastPrimary
 									: 'transparent',
+							borderRadius: '0.25rem',
 							color:
 								opt === selected
 									? themeSprings.themeTertiary
-									: themeSprings.contrastPrimary
+									: themeSprings.contrastPrimary,
+							cursor: 'pointer',
+							padding: '0.25rem 0.5rem'
 						}}
 					>
 						{opt.charAt(0).toUpperCase() + opt.slice(1)}

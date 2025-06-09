@@ -1,4 +1,5 @@
 import { useSpring } from '@react-spring/web';
+import { useEffect } from 'react';
 import {
 	darkPrimaryColor,
 	darkSecondaryColor,
@@ -8,7 +9,6 @@ import {
 	lightTertiaryColor
 } from '../styles/colors';
 import { useThemeStore } from './useThemeStore';
-import { useEffect } from 'react';
 
 export const useThemeColors = () => {
 	const theme = useThemeStore((state) => state.theme);

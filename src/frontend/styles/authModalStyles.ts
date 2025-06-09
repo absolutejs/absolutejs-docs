@@ -95,7 +95,7 @@ export const labelStyle = (
 	themeSprings: ThemeColors
 ): AnimatedCSSProperties => ({
 	color: themeSprings.contrastSecondary,
-	fontSize: '1.5rem',
+	fontSize: '1.2rem',
 	marginBottom: '-2px',
 	textAlign: 'left',
 	textDecoration: 'none'

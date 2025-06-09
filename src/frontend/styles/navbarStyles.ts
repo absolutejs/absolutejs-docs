@@ -56,7 +56,7 @@ export const navbarDrowdownLinkStyle = (
 	border: 'none',
 	color: themeSprings.contrastSecondary,
 	display: 'flex',
-	fontSize: '1.5rem',
+	fontSize: '1.2rem',
 	textDecoration: 'none'
 });
 
