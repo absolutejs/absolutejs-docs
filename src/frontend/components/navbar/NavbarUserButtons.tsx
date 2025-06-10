@@ -9,6 +9,7 @@ import { AuthContainer } from '../auth/AuthContainer';
 import { ProfilePicture } from '../utils/ProfilePicture';
 import { DropdownContainer } from './DropdownContainer';
 import { ThemeButton } from './ThemeButton';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 type NavbarUserButtonsProps = {
 	user: User | undefined;
@@ -22,6 +23,8 @@ export const NavbarUserButtons = ({
 	themeSprings
 }: NavbarUserButtonsProps) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const { isSizeOrLess } = useMediaQuery();
+	const isMobile = isSizeOrLess('sm');
 	const theme = useThemeStore((state) => state.theme);
 
 	const openDropdown = () => {
@@ -68,7 +71,7 @@ export const NavbarUserButtons = ({
 			>
 				{user ? 'Sign Out' : 'Login'}
 			</animated.button>
-			{user !== undefined && (
+			{user !== undefined && !isMobile && (
 				<animated.a style={profileButtonStyle} href="/protected">
 					<ProfilePicture
 						themeSprings={themeSprings}
