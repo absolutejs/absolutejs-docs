@@ -5,7 +5,17 @@ type JsonLineProps = {
 	needsNewline: boolean;
 };
 
-const colorMap: Record<'light' | 'dark', Record<string, string>> = {
+type ThemeMode = 'light' | 'dark';
+type ColorKey =
+	| 'boolean'
+	| 'key'
+	| 'null'
+	| 'number'
+	| 'punctuation'
+	| 'string'
+	| 'text';
+
+const colorMap: Record<ThemeMode, Record<ColorKey, string>> = {
 	dark: {
 		boolean: '#8be9fd',
 		key: '#ff79c6',
@@ -26,53 +36,42 @@ const colorMap: Record<'light' | 'dark', Record<string, string>> = {
 	}
 };
 
+const tokenPattern =
+	/("(?:\\u[0-9A-Fa-f]{4}|\\[^u]|[^\\"])*"(?:\s*:)?|true|false|null|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|[[\]{},])/g;
+
+const colorRules: [RegExp, ColorKey][] = [
+	[/^".*":$/, 'key'],
+	[/^"/, 'string'],
+	[/^(true|false)$/, 'boolean'],
+	[/^null$/, 'null'],
+	[/^-?\d/, 'number']
+];
+
+const defaultColorKey: ColorKey = 'punctuation';
+
+const getTokenColorKey = (token: string) =>
+	colorRules.find(([pattern]) => pattern.test(token))?.[1] ?? defaultColorKey;
+
 export const JsonLine = ({ line, needsNewline }: JsonLineProps) => {
-	const theme = useThemeStore((s) => s.theme);
-	const isDark = theme === 'dark';
-	const colors = isDark ? colorMap.dark : colorMap.light;
-	const elements: React.ReactNode[] = [];
-	let lastIndex = 0;
-	const tokenPattern =
-		/("(?:\\u[0-9A-Fa-f]{4}|\\[^u]|[^\\"])*"(?:\s*:)?|true|false|null|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|[[\]{},])/g;
+	const theme = useThemeStore((state) => state.theme);
+	const colors = theme === 'dark' ? colorMap.dark : colorMap.light;
 
-	for (const match of line.matchAll(tokenPattern)) {
-		const token = match[0];
-		const idx = match.index;
-
-		if (lastIndex < idx) {
-			elements.push(
-				<span style={{ color: colors.text }} key={lastIndex}>
-					{line.slice(lastIndex, idx)}
-				</span>
-			);
-		}
-
-		let styleColor = colors.punctuation;
-		if (/^".*":$/.test(token)) styleColor = colors.key;
-		else if (/^"/.test(token)) styleColor = colors.string;
-		else if (/^(true|false)$/.test(token)) styleColor = colors.boolean;
-		else if (token === 'null') styleColor = colors.null;
-		else if (/^-?\d/.test(token)) styleColor = colors.number;
-
-		elements.push(
-			<span style={{ color: styleColor }} key={idx}>
-				{token}
-			</span>
-		);
-		lastIndex = idx + token.length;
-	}
-
-	if (lastIndex < line.length) {
-		elements.push(
-			<span style={{ color: colors.text }} key={lastIndex}>
-				{line.slice(lastIndex)}
-			</span>
-		);
-	}
+	const segments = line.split(tokenPattern).filter((segment) => segment);
 
 	return (
 		<span>
-			{elements}
+			{segments.map((segment, idx) => (
+				<span
+					key={idx}
+					style={{
+						color: tokenPattern.test(segment)
+							? colors[getTokenColorKey(segment)]
+							: colors.text
+					}}
+				>
+					{segment}
+				</span>
+			))}
 			{needsNewline && '\n'}
 		</span>
 	);
