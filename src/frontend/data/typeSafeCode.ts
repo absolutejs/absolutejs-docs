@@ -64,7 +64,7 @@ import { Head } from '../components/page/Head';
 import { bodyDefault, htmlDefault, mainDefault } from '../styles';
 
 export const Home = () => {
-    const { data, error } = await server.api.users().get();
+    const { data, error } = await server.api.users({subject:"EXAMPLE|12345"}).get();
 
     if( error !== null ) return (error);
 
