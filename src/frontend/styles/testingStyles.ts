@@ -20,16 +20,6 @@ export const legendTitleStyle: CSSProperties = {
 	textAlign: 'center'
 };
 
-export const legendGridStyle: CSSProperties = {
-	alignItems: 'center',
-	columnGap: '12px',
-	display: 'grid',
-	gridTemplateColumns: 'auto 1fr',
-	margin: '0 auto',
-	rowGap: '12px',
-	width: 'max-content'
-};
-
 export const legendFooterStyle: CSSProperties = {
 	margin: '16px 0 0',
 	textAlign: 'center'

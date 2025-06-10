@@ -35,6 +35,7 @@ export const AuthTesting = () => {
 								fontSize: '2.25rem',
 								fontWeight: 600,
 								margin: '2rem 0',
+								padding: '0 1rem',
 								textAlign: 'center'
 							}}
 						>
