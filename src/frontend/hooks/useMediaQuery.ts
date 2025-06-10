@@ -50,5 +50,15 @@ export const useMediaQuery = (customBreakpoints = defaultBreakpoints) => {
 		};
 	}, [customBreakpoints]);
 
-	return breakpoint;
+	const isSizeOrGreater = (target: Breakpoint) =>
+		customBreakpoints[breakpoint] >= customBreakpoints[target];
+
+	const isSizeOrLess = (target: Breakpoint) =>
+		customBreakpoints[breakpoint] <= customBreakpoints[target];
+
+	return {
+		breakpoint,
+		isSizeOrGreater,
+		isSizeOrLess
+	};
 };

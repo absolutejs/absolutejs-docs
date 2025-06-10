@@ -7,23 +7,23 @@ export type LegendData = {
 
 export const legendData: LegendData[] = [
 	{
-		status: 'tested',
-		message: 'Verified routes actively working and community-tested.'
+		message: 'Verified routes actively working and community-tested.',
+		status: 'tested'
 	},
 	{
-		status: 'untested',
-		message: 'Pending external or restricted access.'
+		message: 'Pending external or restricted access.',
+		status: 'untested'
 	},
 	{
-		status: 'testing',
-		message: 'Feature currently under development on our end.'
+		message: 'Feature currently under development on our end.',
+		status: 'testing'
 	},
 	{
-		status: 'missing',
-		message: 'Functionality not supported by the provider.'
+		message: 'Functionality not supported by the provider.',
+		status: 'missing'
 	},
 	{
-		status: 'failed',
-		message: 'Library or endpoint issues (not user error).'
+		message: 'Library or endpoint issues (not user error).',
+		status: 'failed'
 	}
 ];

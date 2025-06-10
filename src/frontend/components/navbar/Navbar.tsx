@@ -20,8 +20,8 @@ type NavbarProps = {
 };
 
 export const Navbar = ({ user, handleSignOut, themeSprings }: NavbarProps) => {
-	const breakpoint = useMediaQuery();
-	const isMobile = breakpoint === 'xs' || breakpoint === 'sm';
+	const { isSizeOrLess } = useMediaQuery();
+	const isMobile = isSizeOrLess('sm');
 
 	const navRef = useRef<HTMLDivElement>(null);
 

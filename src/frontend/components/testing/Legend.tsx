@@ -1,11 +1,11 @@
 import { animated } from '@react-spring/web';
 import { ThemeProps } from '../../../types/types';
+import { legendData } from '../../data/legendData';
 import {
 	legendWrapperStyle,
 	legendTitleStyle,
 	legendFooterStyle
 } from '../../styles/testingStyles';
-import { legendData } from '../../data/legendData';
 import { LegendKey } from './LegendKey';
 
 export const Legend = ({ themeSprings }: ThemeProps) => (
