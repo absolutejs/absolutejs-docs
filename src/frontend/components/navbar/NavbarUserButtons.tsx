@@ -7,6 +7,7 @@ import { useThemeStore } from '../../hooks/useThemeStore';
 import { profileButtonStyle } from '../../styles/navbarStyles';
 import { buttonStyle } from '../../styles/styles';
 import { AuthContainer } from '../auth/AuthContainer';
+import { Modal } from '../utils/Modal';
 import { ProfilePicture } from '../utils/ProfilePicture';
 import { DropdownContainer } from './DropdownContainer';
 import { ThemeButton } from './ThemeButton';
@@ -91,7 +92,7 @@ export const NavbarUserButtons = ({
 				</animated.a>
 			)}
 			<ThemeButton themeSprings={themeSprings} />
-			{isDropdownOpen === true && (
+			{isDropdownOpen === true && !isMobile && (
 				<DropdownContainer
 					themeSprings={themeSprings}
 					spring={loginDropdownSpring}
@@ -101,6 +102,19 @@ export const NavbarUserButtons = ({
 				>
 					<AuthContainer themeSprings={themeSprings} />
 				</DropdownContainer>
+			)}
+			{isDropdownOpen === true && isMobile && (
+				<Modal
+					style={{
+						backgroundColor: themeSprings.themeSecondary
+					}}
+					isOpen={isDropdownOpen}
+					onClose={() => {
+						setIsDropdownOpen(false);
+					}}
+				>
+					<AuthContainer themeSprings={themeSprings} />
+				</Modal>
 			)}
 		</div>
 	);
