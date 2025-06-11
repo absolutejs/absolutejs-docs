@@ -1,3 +1,4 @@
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { JsonLine } from './JsonLine';
 
 type HighlightedJsonProps = {
@@ -15,13 +16,16 @@ export const HighlightedJson = ({
 		.slice(1, -1)
 		.map((line) => line.replace(/^ {2}/, ''));
 
+	const { isSizeOrLess } = useMediaQuery();
+	const isMobile = isSizeOrLess('sm');
+
 	return (
 		<pre
 			style={{
 				border: `2px solid ${primaryColor}`,
 				borderRadius: '4px',
 				fontFamily: 'monospace',
-				height: '250px',
+				height: isMobile ? '200px' : '300px',
 				margin: '0 0 8px',
 				overflow: 'auto',
 				padding: '16px',

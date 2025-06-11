@@ -8,6 +8,7 @@ import { User } from '../../../../db/schema';
 import { ThemeColors } from '../../../types/types';
 import { ProviderInfo } from '../../data/providerData';
 import { useAuthModalData } from '../../hooks/useAuthModalData';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { boxStyle, credentialLinkStyle } from '../../styles/authModalStyles';
 import { HighlightedJson } from '../utils/HighlightedJson';
 import { Modal } from '../utils/Modal';
@@ -33,6 +34,9 @@ export const AuthModal = ({
 	themeSprings
 }: AuthModalProps) => {
 	if (!modalContent) return null;
+
+	const { isSizeOrLess } = useMediaQuery();
+	const isMobile = isSizeOrLess('sm');
 
 	const primaryColor = modalContent?.primaryColor ?? '#000';
 	const provider = user?.auth_sub?.split('|')[0]?.toLocaleLowerCase();
@@ -124,7 +128,7 @@ export const AuthModal = ({
 		>
 			<h2
 				style={{
-					fontSize: '1.75rem',
+					fontSize: isMobile ? '1.5rem' : '2rem',
 					fontWeight: 'bold',
 					margin: 0,
 					textAlign: 'center'
@@ -136,7 +140,11 @@ export const AuthModal = ({
 			<img
 				src={modalContent?.logoUrl}
 				alt={`${modalContent?.name} logo`}
-				style={{ alignSelf: 'center', height: '120px', width: '120px' }}
+				style={{
+					alignSelf: 'center',
+					height: isMobile ? '60px' : '120px',
+					width: isMobile ? '60px' : '120px'
+				}}
 			/>
 
 			<nav style={{ display: 'flex', gap: '16px' }}>
@@ -159,7 +167,7 @@ export const AuthModal = ({
 			</nav>
 
 			{!isAuthorized && (
-				<pre style={boxStyle(primaryColor)}>
+				<pre style={boxStyle(primaryColor, isMobile)}>
 					<code>
 						Authorize with this provider for this session to test.
 					</code>
@@ -167,7 +175,7 @@ export const AuthModal = ({
 			)}
 
 			{isAuthorized && !profile && (
-				<pre style={boxStyle(primaryColor)}>
+				<pre style={boxStyle(primaryColor, isMobile)}>
 					<code>Fetch your profile to see your data.</code>
 				</pre>
 			)}
@@ -191,7 +199,11 @@ export const AuthModal = ({
 						type={action.href ? 'link' : 'button'}
 						href={action.href}
 						disabled={action.disabled}
-						label={action.label}
+						label={
+							isMobile
+								? (action.label.split(' ')[0] ?? '')
+								: (action.label ?? '')
+						}
 						onClick={action.onClick}
 						color={primaryColor}
 					/>

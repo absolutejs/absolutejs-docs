@@ -20,11 +20,14 @@ export const containerStyle = (isMobile: boolean): CSSProperties => ({
 	padding: '20px'
 });
 
-export const boxStyle = (primaryColor: string): CSSProperties => ({
+export const boxStyle = (
+	primaryColor: string,
+	isMobile: boolean
+): CSSProperties => ({
 	border: `2px solid ${primaryColor}`,
 	borderRadius: '4px',
 	fontFamily: 'monospace',
-	height: '250px',
+	height: isMobile ? '200px' : '300px',
 	margin: '0 0 8px',
 	overflow: 'auto',
 	padding: '16px',
