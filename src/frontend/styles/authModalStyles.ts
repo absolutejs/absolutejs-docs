@@ -9,16 +9,16 @@ export const confirmInputStyle: CSSProperties = {
 	padding: '10px',
 	width: '100%'
 };
-export const containerStyle: CSSProperties = {
+export const containerStyle = (isMobile: boolean): CSSProperties => ({
 	alignItems: 'center',
 	display: 'flex',
 	flex: 1,
 	flexDirection: 'column',
 	justifyContent: 'center',
 	margin: '0 auto',
-	minWidth: '400px',
+	minWidth: isMobile ? '300px' : '400px',
 	padding: '20px'
-};
+});
 
 export const boxStyle = (primaryColor: string): CSSProperties => ({
 	border: `2px solid ${primaryColor}`,

@@ -53,6 +53,7 @@ export const Modal = ({
 			}}
 			style={{
 				alignItems: 'center',
+				background: 'transparent',
 				border: 'none',
 				borderRadius: style?.borderRadius,
 				color: 'inherit',

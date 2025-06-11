@@ -101,7 +101,8 @@ export const HamburgerMenu = ({
 			</nav>
 			<Modal
 				style={{
-					backgroundColor: themeSprings.themeSecondary
+					backgroundColor: themeSprings.themeSecondary,
+					borderRadius: '0.5rem'
 				}}
 				isOpen={isModalOpen}
 				onClose={() => {

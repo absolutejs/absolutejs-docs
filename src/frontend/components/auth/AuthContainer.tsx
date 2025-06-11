@@ -2,6 +2,7 @@ import { ProviderOption } from '@absolutejs/auth';
 import { animated } from '@react-spring/web';
 import { useState } from 'react';
 import { ThemeProps } from '../../../types/types';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {
 	containerStyle,
 	headingStyle,
@@ -19,9 +20,11 @@ export const AuthContainer = ({ themeSprings }: ThemeProps) => {
 	const switchMode = () => {
 		setMode((prev) => (prev === 'login' ? 'signup' : 'login'));
 	};
+	const { isSizeOrLess } = useMediaQuery();
+	const isMobile = isSizeOrLess('sm');
 
 	return (
-		<div style={containerStyle}>
+		<div style={containerStyle(isMobile)}>
 			<animated.a
 				href="/"
 				style={{

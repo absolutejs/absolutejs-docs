@@ -106,7 +106,8 @@ export const NavbarUserButtons = ({
 			{isDropdownOpen === true && isMobile && (
 				<Modal
 					style={{
-						backgroundColor: themeSprings.themeSecondary
+						backgroundColor: themeSprings.themeSecondary,
+						borderRadius: '0.5rem'
 					}}
 					isOpen={isDropdownOpen}
 					onClose={() => {

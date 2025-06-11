@@ -65,7 +65,7 @@ export const HamburgerUserButtons = ({
 				width: '100%'
 			})}
 		>
-			{user ? 'SignOut' : 'Login'}
+			{user ? 'Sign Out' : 'Login'}
 		</animated.button>
 	</div>
 );
