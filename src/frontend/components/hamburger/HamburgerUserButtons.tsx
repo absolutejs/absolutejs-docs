@@ -60,8 +60,8 @@ export const HamburgerUserButtons = ({
 		<animated.button
 			onClick={user ? () => handleSignOut() : openModal}
 			style={buttonStyle({
-				backgroundColor: primaryColor,
-				color: 'white',
+				backgroundColor: themeSprings.themeTertiary,
+				color: themeSprings.contrastPrimary,
 				width: '100%'
 			})}
 		>

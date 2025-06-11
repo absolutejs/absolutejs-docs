@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import { NavbarElement, ThemeColors } from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
 import { labelStyle } from '../../styles/authModalStyles';
-import { secondaryColor } from '../../styles/colors';
 import { NavbarLink } from '../navbar/NavbarLink';
 import { AnimatedFaChevronDown } from '../utils/AnimatedComponents';
 
@@ -63,7 +62,6 @@ export const HamburgerDropdown = ({
 				<AnimatedFaChevronDown
 					onClick={toggleDropdown}
 					style={{
-						color: secondaryColor,
 						cursor: 'pointer',
 						fontSize: '1.7rem',
 						marginLeft: '10px',

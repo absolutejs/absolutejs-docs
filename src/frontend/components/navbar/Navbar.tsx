@@ -1,13 +1,13 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useRef } from 'react';
+import { RxHamburgerMenu } from 'react-icons/rx';
 import { User } from '../../../../db/schema';
 import { ThemeColors } from '../../../types/types';
 import { navbarData } from '../../data/navbarData';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {
 	navbarContainerStyle,
-	hamburgerButtonStyle,
-	hamburgerBarStyle
+	hamburgerButtonStyle
 } from '../../styles/navbarStyles';
 import { HamburgerMenu } from '../hamburger/HamburgerMenu';
 import { NavbarLinks } from './NavbarLinks';
@@ -87,9 +87,7 @@ export const Navbar = ({ user, handleSignOut, themeSprings }: NavbarProps) => {
 						style={hamburgerButtonStyle}
 						onClick={toggleHamburgerMenu}
 					>
-						<div style={hamburgerBarStyle} />
-						<div style={hamburgerBarStyle} />
-						<div style={hamburgerBarStyle} />
+						<RxHamburgerMenu size={36} />
 					</button>
 				)}
 			</div>

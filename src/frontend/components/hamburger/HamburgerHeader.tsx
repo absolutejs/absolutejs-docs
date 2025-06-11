@@ -1,15 +1,20 @@
+import { animated } from '@react-spring/web';
 import { FaTimes } from 'react-icons/fa';
-import { primaryColor } from '../../styles/colors';
+import { ThemeColors } from '../../../types/types';
 
 type HamburgerHeaderProps = {
 	onClose: () => void;
+	themeSprings: ThemeColors;
 };
 
-export const HamburgerHeader = ({ onClose }: HamburgerHeaderProps) => (
-	<div
+export const HamburgerHeader = ({
+	onClose,
+	themeSprings
+}: HamburgerHeaderProps) => (
+	<animated.div
 		style={{
 			alignItems: 'center',
-			backgroundColor: primaryColor,
+			backgroundColor: themeSprings.themePrimary,
 			boxShadow: `0px 4px 14px rgba(0, 0, 0, 0.1)`,
 			display: 'flex',
 			justifyContent: 'space-between',
@@ -24,21 +29,20 @@ export const HamburgerHeader = ({ onClose }: HamburgerHeaderProps) => (
 		<a
 			href="/"
 			style={{
-				color: '#fff',
+				color: 'inherit',
 				fontSize: '1.5rem',
 				fontWeight: 'bold',
 				textDecoration: 'none'
 			}}
 		>
-			Absolute Auth
+			AbsoluteJS
 		</a>
 		<FaTimes
 			style={{
-				color: '#fff',
 				cursor: 'pointer',
 				fontSize: '34px'
 			}}
 			onClick={onClose}
 		/>
-	</div>
+	</animated.div>
 );

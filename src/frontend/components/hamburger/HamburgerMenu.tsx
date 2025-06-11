@@ -30,7 +30,7 @@ export const HamburgerMenu = ({
 	return (
 		<animated.div
 			style={{
-				background: '#fff',
+				background: themeSprings.themeSecondary,
 				display: 'flex',
 				flexDirection: 'column',
 				height: '100%',
@@ -45,6 +45,7 @@ export const HamburgerMenu = ({
 			}}
 		>
 			<HamburgerHeader
+				themeSprings={themeSprings}
 				onClose={() =>
 					void springApi.start({ transform: 'translateX(100%)' })
 				}
@@ -99,6 +100,9 @@ export const HamburgerMenu = ({
 				/>
 			</nav>
 			<Modal
+				style={{
+					backgroundColor: themeSprings.themeSecondary
+				}}
 				isOpen={isModalOpen}
 				onClose={() => {
 					setIsModalOpen(false);

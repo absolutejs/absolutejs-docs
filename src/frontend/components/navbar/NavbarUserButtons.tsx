@@ -2,6 +2,7 @@ import { animated, useSpring } from '@react-spring/web';
 import { useRef, useState } from 'react';
 import { User } from '../../../../db/schema';
 import { ThemeColors } from '../../../types/types';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useThemeStore } from '../../hooks/useThemeStore';
 import { profileButtonStyle } from '../../styles/navbarStyles';
 import { buttonStyle } from '../../styles/styles';
@@ -9,7 +10,6 @@ import { AuthContainer } from '../auth/AuthContainer';
 import { ProfilePicture } from '../utils/ProfilePicture';
 import { DropdownContainer } from './DropdownContainer';
 import { ThemeButton } from './ThemeButton';
-import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 type NavbarUserButtonsProps = {
 	user: User | undefined;

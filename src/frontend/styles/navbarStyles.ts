@@ -1,7 +1,6 @@
 import { SpringValue } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
-import { primaryColor } from './colors';
 
 export const dropdownStyle: CSSProperties = {
 	alignItems: 'center',
@@ -10,16 +9,12 @@ export const dropdownStyle: CSSProperties = {
 	position: 'relative',
 	zIndex: 1000
 };
-export const hamburgerBarStyle: CSSProperties = {
-	backgroundColor: primaryColor,
-	borderRadius: '5px',
-	height: '7px',
-	width: '100%'
-};
+
 export const hamburgerButtonStyle: CSSProperties = {
 	alignItems: 'center',
 	background: 'transparent',
 	border: 'none',
+	color: 'inherit',
 	cursor: 'pointer',
 	display: 'flex',
 	flexDirection: 'column',
