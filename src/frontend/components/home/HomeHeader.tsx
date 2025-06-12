@@ -16,13 +16,13 @@ export const HomeHeader = ({ themeSprings }: ThemeProps) => (
 		</animated.h1>
 		<animated.p style={paragraphStyle(themeSprings)}>
 			AbsoluteJS brings together every aspect of modern web development.
-			It covers user interfaces, data handling, code quality, and
-			authentication.
+			It covers user interfaces, data handling, code quality,
+			authentication, and payment processing.
 		</animated.p>
 		<animated.p style={paragraphStyle(themeSprings)}>
-			Powered by Bun & Elysia, it delivers blazing server side rendered
-			performance and full TypeScript support all the way through, so you
-			can focus on building great apps instead of configuring tools.
+			With AbsoluteJS, you can build fullstack applications with
+			lightning-fast performance, a rich user experience, and a consistent
+			developer experience.
 		</animated.p>
 	</section>
 );
