@@ -1,7 +1,7 @@
 import { animated } from '@react-spring/web';
 import { ThemeProps } from '../../../types/types';
-import { CopyButton } from '../utils/CopyButton';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { CopyButton } from '../utils/CopyButton';
 
 export const CreateButton = ({ themeSprings }: ThemeProps) => {
 	const { isSizeOrLess } = useMediaQuery();
@@ -23,8 +23,8 @@ export const CreateButton = ({ themeSprings }: ThemeProps) => {
 			<code
 				style={{
 					fontSize: isMobile ? '1rem' : '1.2rem',
-					textWrap: 'nowrap',
-					marginRight: '2rem'
+					marginRight: '2rem',
+					textWrap: 'nowrap'
 				}}
 			>
 				bun create absolutejs

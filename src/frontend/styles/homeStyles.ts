@@ -47,3 +47,29 @@ export const codeBlock: CSSProperties = {
 	overflowX: 'auto',
 	padding: '1rem'
 };
+
+export const navContainerStyle: CSSProperties = {
+	alignItems: 'center',
+	display: 'flex',
+	gap: '16px',
+	justifyContent: 'center',
+	padding: '12px 0'
+};
+
+export const linkContainerStyle = (
+	themeSprings: ThemeColors
+): AnimatedCSSProperties => ({
+	alignItems: 'center',
+	backgroundColor: themeSprings.themePrimary,
+	borderRadius: '4px',
+	color: themeSprings.contrastPrimary,
+	display: 'inline-flex',
+	padding: '8px 12px',
+	textDecoration: 'none'
+});
+
+export const logoImageStyle: CSSProperties = {
+	height: '2.5rem',
+	marginRight: '8px',
+	width: '2.5rem'
+};

@@ -1,6 +1,11 @@
 import { animated } from '@react-spring/web';
 import { ThemeProps } from '../../../types/types';
-import { featureCard } from '../../styles/homeStyles';
+import {
+	featureCard,
+	linkContainerStyle,
+	logoImageStyle,
+	navContainerStyle
+} from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 
 export const PerformanceArticle = ({ themeSprings }: ThemeProps) => (
@@ -16,5 +21,35 @@ export const PerformanceArticle = ({ themeSprings }: ThemeProps) => (
 			and streamed to the client, minimizing client-side processing for a
 			smooth, responsive UX.
 		</animated.p>
+
+		<nav style={navContainerStyle}>
+			<animated.a
+				href="https://bun.sh"
+				target="_blank"
+				rel="noopener noreferrer"
+				style={linkContainerStyle(themeSprings)}
+			>
+				<img
+					src="/assets/svg/bun-logo.svg"
+					alt="Bun Logo"
+					style={logoImageStyle}
+				/>
+				Learn more about Bun
+			</animated.a>
+
+			<animated.a
+				href="https://elysiajs.com"
+				target="_blank"
+				rel="noopener noreferrer"
+				style={linkContainerStyle(themeSprings)}
+			>
+				<img
+					src="/assets/svg/elysia.svg"
+					alt="Elysia Logo"
+					style={logoImageStyle}
+				/>
+				Learn more about Elysia
+			</animated.a>
+		</nav>
 	</animated.article>
 );
