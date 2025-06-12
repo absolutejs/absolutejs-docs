@@ -18,7 +18,7 @@ export const navbarData: NavbarElement[] = [
 				label: 'Citra'
 			},
 			{
-				href: '/auth',
+				href: '/authentication',
 				label: 'Abs Auth'
 			},
 			{
@@ -32,7 +32,7 @@ export const navbarData: NavbarElement[] = [
 		label: 'Testing',
 		links: [
 			{
-				href: '/testing/auth',
+				href: '/testing/authentication',
 				label: 'Authentication'
 			}
 		]

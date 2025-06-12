@@ -49,7 +49,7 @@ const server = new Elysia()
 	.use(providerPlugin(db))
 	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
 	.get('/', () => handleReactPageRequest(Home, homeIndex))
-	.get('/testing/auth', () =>
+	.get('/testing/authentication', () =>
 		handleReactPageRequest(AuthTesting, authTestingIndex)
 	)
 	.use(networkingPlugin)

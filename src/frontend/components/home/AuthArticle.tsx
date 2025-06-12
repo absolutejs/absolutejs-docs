@@ -1,7 +1,7 @@
 import { animated } from '@react-spring/web';
 import { ThemeProps } from '../../../types/types';
 import { featureCard } from '../../styles/homeStyles';
-import { headingStyle, paragraphStyle } from '../../styles/styles';
+import { buttonStyle, headingStyle, paragraphStyle } from '../../styles/styles';
 
 export const AuthArticle = ({ themeSprings }: ThemeProps) => (
 	<animated.article style={featureCard(themeSprings)}>
@@ -22,5 +22,14 @@ export const AuthArticle = ({ themeSprings }: ThemeProps) => (
 			focus on your application logic without extra fees or vendor
 			lock-in.
 		</animated.p>
+		<animated.a
+			href="/testing/authentication"
+			style={buttonStyle({
+				backgroundColor: themeSprings.themePrimary,
+				color: themeSprings.contrastPrimary
+			})}
+		>
+			Test the OAuth2 Providers
+		</animated.a>
 	</animated.article>
 );
