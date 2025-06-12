@@ -10,6 +10,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { Elysia, env } from 'elysia';
 import { schema, User } from '../../db/schema';
 import { AuthTesting } from '../frontend/pages/AuthTesting';
+import { Documentation } from '../frontend/pages/Documentation';
 import { Home } from '../frontend/pages/Home';
 import { providerPlugin } from './plugins/providerPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
@@ -24,9 +25,14 @@ if (manifest === null) {
 }
 
 const homeIndex = manifest['HomeIndex'];
+const documentationIndex = manifest['DocumentationIndex'];
 const authTestingIndex = manifest['AuthTestingIndex'];
 
-if (homeIndex === undefined || authTestingIndex === undefined) {
+if (
+	homeIndex === undefined ||
+	authTestingIndex === undefined ||
+	documentationIndex === undefined
+) {
 	throw new Error('Missing index file in manifest');
 }
 
@@ -49,6 +55,9 @@ const server = new Elysia()
 	.use(providerPlugin(db))
 	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
 	.get('/', () => handleReactPageRequest(Home, homeIndex))
+	.get('/documentation', () =>
+		handleReactPageRequest(Documentation, documentationIndex)
+	)
 	.get('/testing/authentication', () =>
 		handleReactPageRequest(AuthTesting, authTestingIndex)
 	)
