@@ -9,8 +9,14 @@ export const UIArticle = ({ themeSprings }: ThemeProps) => (
 			Seamless UI Integration
 		</animated.h2>
 		<animated.p style={paragraphStyle(themeSprings)}>
-			Keep using React, Vue, Svelte, HTML, or HTMX—AbsoluteJS just plugs
-			them in.
+			AbsoluteJS is a true multi-page app framework. Build each route
+			using React, Angular, Vue, Svelte, HTML, or HTMX. AbsoluteJS
+			automatically handles the build process and outputs ready to run
+			JavaScript. To port an existing page, simply drop its components
+			into the matching folder, with no custom build steps, hidden config,
+			or framework specific tooling required. The result is uniform
+			performance, a seamless user experience, and a developer workflow
+			that is both lightning fast and future proof.
 		</animated.p>
 	</animated.article>
 );

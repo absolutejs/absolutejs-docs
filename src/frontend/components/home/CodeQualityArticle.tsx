@@ -9,8 +9,13 @@ export const CodeQualityArticle = ({ themeSprings }: ThemeProps) => (
 			Code Quality Tools
 		</animated.h2>
 		<animated.p style={paragraphStyle(themeSprings)}>
-			Ships with ESLint, Prettier, and Biome configurations for zero-setup
-			code quality.
+			When you scaffold a new project, choose either ESLint with Prettier
+			or Biome. Each option includes opinionated default configurations.
+			Our custom ESLint rules ensure clean, readable, and type safe code.
+			All settings remain fully editable so you can tailor rules to your
+			needs. By catching style issues and potential errors before code
+			reaches reviews, AbsoluteJS keeps teams aligned, accelerates PR
+			approvals, and maintains consistent code quality.
 		</animated.p>
 	</animated.article>
 );
