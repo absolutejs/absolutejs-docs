@@ -5,6 +5,7 @@ import { Sidebar } from '../components/sidebar/Sidebar';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useThemeColors } from '../hooks/useThemeColors';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
+import { Overview } from '../components/documentation/Overview';
 
 export const Documentation = () => {
 	const { user, handleSignOut } = useAuthStatus();
@@ -27,25 +28,7 @@ export const Documentation = () => {
 						}}
 					>
 						<Sidebar themeSprings={themeSprings} />
-						<div
-							style={{
-								display: 'flex',
-								flex: 1,
-								flexDirection: 'column',
-								padding: '1rem 2rem'
-							}}
-						>
-							<h1>Documentation</h1>
-							<p>
-								Welcome to the documentation page. Here you will
-								find all the information you need to get started
-								with our application.
-							</p>
-							<p>
-								Feel free to explore the various sections and
-								learn more about the features we offer.
-							</p>
-						</div>
+						<Overview />
 					</div>
 				</main>
 			</animated.body>
