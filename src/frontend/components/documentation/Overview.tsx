@@ -7,14 +7,13 @@ export const Overview = () => (
 			padding: '1rem 2rem'
 		}}
 	>
-		<h1>Documentation</h1>
+		<h1>Overview</h1>
 		<p>
-			Welcome to the documentation page. Here you will find all the
-			information you need to get started with our application.
-		</p>
-		<p>
-			Feel free to explore the various sections and learn more about the
-			features we offer.
+			The documentation provides a comprehensive guide to the features and
+            functionality of the platform. It covers various aspects including
+            installation, configuration, and usage of different packages. The
+            documentation is designed to help users quickly get started and 
+            effectively utilize the platform's capabilities.
 		</p>
 	</div>
 );

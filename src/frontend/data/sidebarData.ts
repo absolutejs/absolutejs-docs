@@ -2,7 +2,7 @@ import { NavbarElement } from '../../types/types';
 
 export const sidebarData: NavbarElement[] = [
 	{
-		href: '/documentation/overview',
+		href: '/documentation',
 		label: 'Overview'
 	},
 	{
@@ -25,7 +25,7 @@ export const sidebarData: NavbarElement[] = [
 		links: [
 			{
 				href: '/documentation/packages/create',
-				label: 'Create Absolute'
+				label: 'Create'
 			},
 			{
 				href: '/documentation/packages/citra',
@@ -33,11 +33,11 @@ export const sidebarData: NavbarElement[] = [
 			},
 			{
 				href: '/documentation/packages/auth',
-				label: 'Absolute Auth'
+				label: 'Auth'
 			},
 			{
 				href: '/documentation/packages/eslint',
-				label: 'Eslint Rules'
+				label: 'Eslint'
 			}
 		]
 	}

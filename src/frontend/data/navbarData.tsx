@@ -6,24 +6,24 @@ export const navbarData: NavbarElement[] = [
 		label: 'Documentation'
 	},
 	{
-		href: '/packages',
+		href: '/documentation/packages',
 		label: 'Packages',
 		links: [
 			{
-				href: '/create',
-				label: 'Create Abs'
+				href: '/documentation/packages/auth',
+				label: 'Auth'
 			},
 			{
-				href: '/citra',
+				href: '/documentation/packages/citra',
 				label: 'Citra'
 			},
 			{
-				href: '/authentication',
-				label: 'Abs Auth'
+				href: '/documentation/packages/create',
+				label: 'Create'
 			},
 			{
-				href: '/eslint',
-				label: 'Eslint Rules'
+				href: '/documentation/packages/eslint',
+				label: 'Eslint'
 			}
 		]
 	},
