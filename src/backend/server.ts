@@ -55,8 +55,8 @@ const server = new Elysia()
 	.use(providerPlugin(db))
 	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
 	.get('/', () => handleReactPageRequest(Home, homeIndex))
-	.get('/documentation', () =>
-		handleReactPageRequest(Documentation, documentationIndex)
+	.get('/documentation/:section?', ({params:{section}}) =>
+		handleReactPageRequest(Documentation, documentationIndex, { section: section ?? 'overview' })
 	)
 	.get('/testing/authentication', () =>
 		handleReactPageRequest(AuthTesting, authTestingIndex)

@@ -4,7 +4,7 @@
     "": {
       "name": "@absolutejs/docs",
       "dependencies": {
-        "@absolutejs/absolute": "0.6.0",
+        "@absolutejs/absolute": "0.6.1",
         "@absolutejs/auth": "0.14.3",
         "@elysiajs/eden": "1.2.0",
         "@elysiajs/static": "1.3.0",
@@ -43,7 +43,7 @@
     },
   },
   "packages": {
-    "@absolutejs/absolute": ["@absolutejs/absolute@0.6.0", "", { "peerDependencies": { "elysia": ">= 1.2.0", "react": ">= 19.1.0", "react-dom": ">= 19.1.0" } }, "sha512-NJH3QcIoEyRDR13x70wZErAijGWETztDtMKB9elFYRDnrNGRh4NCQWnD4kwiTtyPdvUh/M26mEEKZ2315mBa7g=="],
+    "@absolutejs/absolute": ["@absolutejs/absolute@0.6.1", "", { "peerDependencies": { "elysia": ">= 1.3.0", "react": ">= 19.1.0", "react-dom": ">= 19.1.0" } }, "sha512-GIx+reXS259gDuPifSTStOq0wZ9PjtbVtZHA+lQMAYlPxvYD+H2ZkEbeXDHOyaky5Pw9+Qn5afAXTaf6VIKAjA=="],
 
     "@absolutejs/auth": ["@absolutejs/auth@0.14.3", "", { "dependencies": { "citra": "0.23.3" }, "peerDependencies": { "elysia": ">= 1.2.25" } }, "sha512-JCD4ec7ZiVqwjZ0gr1hWyg5fTtJA83hAW0gnhrEA9Gd5ZgrcwK/ITNT4h+r3zPk3jVbYG1E4zLWiURSMRXEeFg=="],
 

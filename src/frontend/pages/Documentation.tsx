@@ -7,7 +7,11 @@ import { useThemeColors } from '../hooks/useThemeColors';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 import { Overview } from '../components/documentation/Overview';
 
-export const Documentation = () => {
+type DocumentationProps = {
+	section: string;
+};
+
+export const Documentation = ({section}: DocumentationProps) => {
 	const { user, handleSignOut } = useAuthStatus();
 	const themeSprings = useThemeColors();
 
