@@ -21,6 +21,7 @@ export const bodyDefault = (
 	flexDirection: 'column',
 	fontFamily: 'Poppins, sans-serif',
 	height: '100%',
+	lineHeight: '1.4',
 	margin: 0
 });
 
