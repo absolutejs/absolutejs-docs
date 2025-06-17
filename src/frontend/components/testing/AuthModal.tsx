@@ -5,7 +5,7 @@ import {
 } from '@absolutejs/auth';
 import { Dispatch, SetStateAction } from 'react';
 import { User } from '../../../../db/schema';
-import { ThemeColors } from '../../../types/types';
+import { ThemeSprings } from '../../../types/types';
 import { ProviderInfo } from '../../data/providerData';
 import { useAuthModalData } from '../../hooks/useAuthModalData';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -23,7 +23,7 @@ type AuthModalProps = {
 			(ProviderInfo & { providerOption: ProviderOption }) | null
 		>
 	>;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const AuthModal = ({
@@ -181,7 +181,11 @@ export const AuthModal = ({
 			)}
 
 			{isAuthorized && profile && (
-				<HighlightedJson data={profile} primaryColor={primaryColor} />
+				<HighlightedJson
+					themeSprings={themeSprings}
+					data={profile}
+					primaryColor={primaryColor}
+				/>
 			)}
 
 			<nav

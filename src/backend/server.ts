@@ -7,11 +7,12 @@ import { absoluteAuth } from '@absolutejs/auth';
 import { staticPlugin } from '@elysiajs/static';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { Elysia, env } from 'elysia';
+import { Elysia, env, t } from 'elysia';
 import { schema, User } from '../../db/schema';
 import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { Documentation } from '../frontend/pages/Documentation';
 import { Home } from '../frontend/pages/Home';
+import { themeCookie } from '../types/typebox';
 import { providerPlugin } from './plugins/providerPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 
@@ -54,12 +55,30 @@ const server = new Elysia()
 	)
 	.use(providerPlugin(db))
 	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
-	.get('/', () => handleReactPageRequest(Home, homeIndex))
-	.get('/documentation/:section?', ({params:{section}}) =>
-		handleReactPageRequest(Documentation, documentationIndex, { section: section ?? 'overview' })
+	.get(
+		'/',
+		({ cookie: { theme } }) =>
+			handleReactPageRequest(Home, homeIndex, {
+				theme: theme?.value
+			}),
+		{ cookie: themeCookie }
 	)
-	.get('/testing/authentication', () =>
-		handleReactPageRequest(AuthTesting, authTestingIndex)
+	.get(
+		'/documentation/:section?',
+		({ params: { section }, cookie: { theme } }) =>
+			handleReactPageRequest(Documentation, documentationIndex, {
+				section: section ?? 'overview',
+				theme: theme?.value
+			}),
+		{ cookie: themeCookie }
+	)
+	.get(
+		'/testing/authentication',
+		({ cookie: { theme } }) =>
+			handleReactPageRequest(AuthTesting, authTestingIndex, {
+				theme: theme?.value
+			}),
+		{ cookie: themeCookie }
 	)
 	.use(networkingPlugin)
 	.on('error', (error) => {

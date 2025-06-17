@@ -1,6 +1,6 @@
 import { animated, SpringValue } from '@react-spring/web';
 import { ONE_HUNDRED_PERCENT } from '../../../constants';
-import { ThemeColors } from '../../../types/types';
+import { ThemeSprings } from '../../../types/types';
 
 type CodeSliderProps = {
 	handleTabClick: (index: number) => void;
@@ -8,7 +8,7 @@ type CodeSliderProps = {
 		left: SpringValue<string>;
 	};
 	tabs: string[];
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const CodeSlider = ({

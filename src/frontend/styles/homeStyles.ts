@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
 
 export const heroStyle: CSSProperties = {
 	alignItems: 'center',
@@ -24,7 +24,7 @@ export const featureWrapper: CSSProperties = {
 };
 
 export const featureCard = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	background: themeSprings.themeTertiary,
@@ -57,7 +57,7 @@ export const navContainerStyle: CSSProperties = {
 };
 
 export const linkContainerStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	backgroundColor: themeSprings.themePrimary,

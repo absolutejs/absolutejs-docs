@@ -1,14 +1,17 @@
+import { ThemeSprings } from '../../../types/types';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { JsonLine } from './JsonLine';
 
 type HighlightedJsonProps = {
 	data: unknown;
 	primaryColor: string;
+	themeSprings: ThemeSprings;
 };
 
 export const HighlightedJson = ({
 	data,
-	primaryColor
+	primaryColor,
+	themeSprings
 }: HighlightedJsonProps) => {
 	const jsonString = JSON.stringify(data ?? {}, null, 2);
 	const jsonLines = jsonString
@@ -35,6 +38,7 @@ export const HighlightedJson = ({
 			<code>
 				{jsonLines.map((line, lineIndex) => (
 					<JsonLine
+						themeSprings={themeSprings}
 						key={lineIndex}
 						line={line}
 						needsNewline={lineIndex < jsonLines.length - 1}

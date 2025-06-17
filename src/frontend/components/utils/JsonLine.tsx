@@ -1,8 +1,10 @@
-import { useThemeStore } from '../../hooks/useThemeStore';
+import { animated } from '@react-spring/web';
+import { ThemeSprings } from '../../../types/types';
 
 type JsonLineProps = {
 	line: string;
 	needsNewline: boolean;
+	themeSprings: ThemeSprings;
 };
 
 type ThemeMode = 'light' | 'dark';
@@ -52,25 +54,33 @@ const defaultColorKey: ColorKey = 'punctuation';
 const getTokenColorKey = (token: string) =>
 	colorRules.find(([pattern]) => pattern.test(token))?.[1] ?? defaultColorKey;
 
-export const JsonLine = ({ line, needsNewline }: JsonLineProps) => {
-	const theme = useThemeStore((state) => state.theme);
-	const colors = theme === 'dark' ? colorMap.dark : colorMap.light;
+export const JsonLine = ({
+	line,
+	needsNewline,
+	themeSprings
+}: JsonLineProps) => {
+	// const colors = theme === 'dark' ? colorMap.dark : colorMap.light;
+	const colors = themeSprings.theme.to((mode) =>
+		mode === 'dark' ? colorMap.dark : colorMap.light
+	);
 
 	const segments = line.split(tokenPattern).filter((segment) => segment);
 
 	return (
 		<span>
 			{segments.map((segment, idx) => (
-				<span
+				<animated.span
 					key={idx}
 					style={{
-						color: tokenPattern.test(segment)
-							? colors[getTokenColorKey(segment)]
-							: colors.text
+						color: colors.to((c) =>
+							tokenPattern.test(segment)
+								? c[getTokenColorKey(segment)]
+								: c.text
+						)
 					}}
 				>
 					{segment}
-				</span>
+				</animated.span>
 			))}
 			{needsNewline && '\n'}
 		</span>

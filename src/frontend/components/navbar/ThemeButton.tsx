@@ -1,12 +1,14 @@
-import { animated } from '@react-spring/web';
+import { animated, to } from '@react-spring/web';
 import { useRef, useEffect } from 'react';
-import { AiOutlineMoon } from 'react-icons/ai';
-import { IoSunny } from 'react-icons/io5';
-import { ThemeProps } from '../../../types/types';
-import { useInitTheme } from '../../hooks/useInitTheme';
+import { SetTheme, ThemeSprings } from '../../../types/types';
+import { AnimatedMoon, AnimatedSun } from '../utils/AnimatedComponents';
 
-export const ThemeButton = ({ themeSprings }: ThemeProps) => {
-	const { currentTheme, setCurrentTheme, setTheme } = useInitTheme();
+type ThemeButtonProps = {
+	setTheme: SetTheme;
+	themeSprings: ThemeSprings;
+};
+
+export const ThemeButton = ({ themeSprings, setTheme }: ThemeButtonProps) => {
 	const detailsRef = useRef<HTMLDetailsElement>(null);
 
 	useEffect(() => {
@@ -23,30 +25,15 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 	}, []);
 
 	const selectTheme = (option: 'system' | 'light' | 'dark') => {
-		if (option === 'system') {
-			const prefersLight = window.matchMedia(
-				'(prefers-color-scheme: light)'
-			).matches;
-			setTheme(prefersLight ? 'light' : 'dark');
-			setCurrentTheme(prefersLight ? 'system:light' : 'system:dark');
-			window.localStorage.removeItem('theme');
-		} else {
-			setTheme(option);
-			setCurrentTheme(option);
-			window.localStorage.setItem('theme', option);
-		}
+		setTheme(option);
 		if (detailsRef.current) detailsRef.current.open = false;
 	};
 
-	const icon = currentTheme.includes('dark') ? (
-		<AiOutlineMoon style={{ height: 24, width: 24 }} />
-	) : (
-		<IoSunny style={{ height: 24, width: 24 }} />
-	);
+	const selected = themeSprings.theme.to((t) => {
+		const sel = t.startsWith('system') ? 'system' : t;
 
-	const selected = currentTheme.startsWith('system')
-		? 'system'
-		: currentTheme;
+		return sel;
+	});
 
 	return (
 		<animated.details
@@ -71,10 +58,30 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 					listStyle: 'none',
 					margin: 0,
 					padding: 0,
+					position: 'relative',
 					width: '2.5rem'
 				}}
 			>
-				{icon}
+				<AnimatedMoon
+					style={{
+						height: 24,
+						opacity: themeSprings.theme.to((t) =>
+							t.endsWith('dark') ? 1 : 0
+						),
+						position: 'absolute',
+						width: 24
+					}}
+				/>
+				<AnimatedSun
+					style={{
+						height: 24,
+						opacity: themeSprings.theme.to((t) =>
+							t.endsWith('dark') ? 0 : 1
+						),
+						position: 'absolute',
+						width: 24
+					}}
+				/>
 			</animated.summary>
 
 			<animated.ul
@@ -91,27 +98,37 @@ export const ThemeButton = ({ themeSprings }: ThemeProps) => {
 					top: '3.5rem'
 				}}
 			>
-				{(['system', 'light', 'dark'] as const).map((opt) => (
-					<animated.li
-						key={opt}
-						onClick={() => selectTheme(opt)}
-						style={{
-							background:
-								opt === selected
-									? themeSprings.contrastPrimary
-									: 'transparent',
-							borderRadius: '0.25rem',
-							color:
-								opt === selected
-									? themeSprings.themeTertiary
-									: themeSprings.contrastPrimary,
-							cursor: 'pointer',
-							padding: '0.25rem 0.5rem'
-						}}
-					>
-						{opt.charAt(0).toUpperCase() + opt.slice(1)}
-					</animated.li>
-				))}
+				{(['system', 'light', 'dark'] as const).map((opt) => {
+					const background = to(
+						[selected, themeSprings.themePrimary],
+						(sel, bkg) => (sel === opt ? bkg : 'transparent')
+					);
+					const color = to(
+						[
+							selected,
+							themeSprings.contrastPrimary,
+							themeSprings.contrastSecondary
+						],
+						(sel, tertiary, contrast) =>
+							sel === opt ? tertiary : contrast
+					);
+
+					return (
+						<animated.li
+							key={opt}
+							onClick={() => selectTheme(opt)}
+							style={{
+								background,
+								borderRadius: '0.25rem',
+								color,
+								cursor: 'pointer',
+								padding: '0.25rem 0.5rem'
+							}}
+						>
+							{opt.charAt(0).toUpperCase() + opt.slice(1)}
+						</animated.li>
+					);
+				})}
 			</animated.ul>
 		</animated.details>
 	);

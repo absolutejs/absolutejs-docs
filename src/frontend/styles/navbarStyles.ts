@@ -1,6 +1,6 @@
 import { SpringValue } from '@react-spring/web';
 import { CSSProperties } from 'react';
-import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
 
 export const dropdownStyle: CSSProperties = {
 	alignItems: 'center',
@@ -27,7 +27,7 @@ export const hamburgerButtonStyle: CSSProperties = {
 };
 
 export const navbarContainerStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	background: themeSprings.themePrimary,
@@ -44,7 +44,7 @@ export const navbarContainerStyle = (
 });
 
 export const navbarDrowdownLinkStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	background: 'none',
@@ -68,7 +68,7 @@ export const getNavbarDropdownListStyle = (
 		opacity: SpringValue<number>;
 		transform: SpringValue<string>;
 	},
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	backgroundColor: themeSprings.themeTertiary,
 	borderRadius: '10px',

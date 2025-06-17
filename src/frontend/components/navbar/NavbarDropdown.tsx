@@ -3,7 +3,7 @@ import { ReactNode, useRef } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import {
 	NavbarLink as NavbarLinkType,
-	ThemeColors
+	ThemeSprings
 } from '../../../types/types';
 import { labelStyle } from '../../styles/authModalStyles';
 import {
@@ -17,7 +17,7 @@ type NavbarDropdownProps = {
 	href: string;
 	links: NavbarLinkType[];
 	icon?: ReactNode;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 const AnimatedFaChevronDown = animated(FaChevronDown);

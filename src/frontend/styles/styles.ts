@@ -1,7 +1,7 @@
 import { SpringValue } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
-import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
 
 export const styleReset = `
     * {
@@ -13,7 +13,7 @@ export const styleReset = `
 `;
 
 export const bodyDefault = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	backgroundColor: themeSprings.themeSecondary,
 	color: themeSprings.contrastPrimary,
@@ -35,16 +35,23 @@ export const htmlDefault: CSSProperties = {
 	height: '100%'
 };
 
-type ButtonStyleProps = {
-	backgroundColor?: string | SpringValue<string>;
-	color?: string | SpringValue<string>;
+type ButtonStyleProps<
+	BG extends string = string,
+	FG extends string = string
+> = {
+	backgroundColor?: string | SpringValue<BG>;
+	color?: string | SpringValue<FG>;
 	width?: string;
 };
-export const buttonStyle = ({
-	backgroundColor = 'none',
-	color = 'white',
+
+export const buttonStyle = <
+	BG extends string = string,
+	FG extends string = string
+>({
+	backgroundColor,
+	color,
 	width
-}: ButtonStyleProps): AnimatedCSSProperties => ({
+}: ButtonStyleProps<BG, FG>): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	backgroundColor,
 	border: 'none',
@@ -82,7 +89,7 @@ export const formButtonStyle = (isFullOpacity?: boolean): CSSProperties => ({
 });
 
 export const headingStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	color: themeSprings.contrastPrimary,
 	fontSize: '2.5rem',
@@ -91,7 +98,7 @@ export const headingStyle = (
 });
 
 export const paragraphStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	color: themeSprings.contrastSecondary,
 	fontSize: '1.2rem',

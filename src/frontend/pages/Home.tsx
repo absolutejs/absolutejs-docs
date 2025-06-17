@@ -9,12 +9,16 @@ import { UIArticle } from '../components/home/UIArticle';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { useAuthStatus } from '../hooks/useAuthStatus';
-import { useThemeColors } from '../hooks/useThemeColors';
+import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
-export const Home = () => {
+type HomeProps = {
+	theme: ThemeMode | undefined;
+};
+
+export const Home = ({ theme }: HomeProps) => {
 	const { user, handleSignOut } = useAuthStatus();
-	const themeSprings = useThemeColors();
+	const [themeSprings, setTheme] = useTheme(theme);
 
 	return (
 		<html lang="en" style={htmlDefault}>
@@ -24,6 +28,7 @@ export const Home = () => {
 					themeSprings={themeSprings}
 					user={user}
 					handleSignOut={handleSignOut}
+					setTheme={setTheme}
 				/>
 				<main style={mainDefault}>
 					<CommandSection themeSprings={themeSprings} />

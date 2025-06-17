@@ -1,7 +1,7 @@
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { useState } from 'react';
 import { User } from '../../../../db/schema';
-import { isNavbarDropdown, ThemeColors } from '../../../types/types';
+import { isNavbarDropdown, ThemeSprings } from '../../../types/types';
 import { navbarData } from '../../data/navbarData';
 import { AuthContainer } from '../auth/AuthContainer';
 import { NavbarLink } from '../navbar/NavbarLink';
@@ -15,7 +15,7 @@ type HamburgerMenuProps = {
 	springApi: SpringRef<{ transform: string }>;
 	user: User | undefined;
 	handleSignOut: () => Promise<void>;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const HamburgerMenu = ({

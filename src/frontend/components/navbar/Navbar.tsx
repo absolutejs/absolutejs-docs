@@ -2,7 +2,7 @@ import { animated, useSpring } from '@react-spring/web';
 import { useRef } from 'react';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { User } from '../../../../db/schema';
-import { ThemeColors } from '../../../types/types';
+import { SetTheme, ThemeSprings } from '../../../types/types';
 import { navbarData } from '../../data/navbarData';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {
@@ -16,10 +16,16 @@ import { NavbarUserButtons } from './NavbarUserButtons';
 type NavbarProps = {
 	user: User | undefined;
 	handleSignOut: () => Promise<void>;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
+	setTheme: SetTheme;
 };
 
-export const Navbar = ({ user, handleSignOut, themeSprings }: NavbarProps) => {
+export const Navbar = ({
+	user,
+	handleSignOut,
+	themeSprings,
+	setTheme
+}: NavbarProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
 
@@ -80,6 +86,7 @@ export const Navbar = ({ user, handleSignOut, themeSprings }: NavbarProps) => {
 					user={user}
 					handleSignOut={handleSignOut}
 					themeSprings={themeSprings}
+					setTheme={setTheme}
 				/>
 
 				{isMobile === true && (

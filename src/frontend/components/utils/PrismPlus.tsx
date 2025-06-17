@@ -1,8 +1,12 @@
 import { animated } from '@react-spring/web';
 import { ChangeEvent, useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
-import { Prism, SyntaxHighlighterProps } from 'react-syntax-highlighter';
-import { ThemeColors } from '../../../types/types';
+import { Prism } from 'react-syntax-highlighter';
+import {
+	prism,
+	nightOwl
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { ThemeSprings } from '../../../types/types';
 import {
 	highlighterContainerStyle,
 	highlighterHeaderStyle,
@@ -16,19 +20,22 @@ type PrismPlusProps = {
 	codeString: string | string[];
 	language?: string;
 	showLineNumbers?: boolean;
-	codeStyle: SyntaxHighlighterProps['style'];
 	options?: string[];
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const PrismPlus = ({
 	codeString,
 	language = 'tsx',
 	showLineNumbers = true,
-	codeStyle,
 	options,
 	themeSprings
 }: PrismPlusProps) => {
+	// eslint-disable-next-line absolute/localize-react-props
+	const codeStyle = themeSprings.theme.to((theme) =>
+		theme === 'light' ? prism : nightOwl
+	);
+
 	const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
 	const codeStringsArray = Array.isArray(codeString)
@@ -79,7 +86,7 @@ export const PrismPlus = ({
 			{/* @ts-expect-error react 19 thing where we have 18 types */}
 			<Prism
 				language={language}
-				style={codeStyle}
+				style={codeStyle.get()}
 				customStyle={{
 					margin: 0,
 					marginBottom: '1.5rem',

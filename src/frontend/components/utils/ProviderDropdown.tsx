@@ -1,14 +1,14 @@
 import { animated } from '@react-spring/web';
 import { ProviderOption, providerOptions } from 'citra';
 import { Dispatch, SetStateAction } from 'react';
-import { ThemeColors } from '../../../types/types';
+import { ThemeSprings } from '../../../types/types';
 import { providerData } from '../../data/providerData';
 
 type ProviderDropdownProps = {
 	setCurrentProvider: Dispatch<
 		SetStateAction<Lowercase<ProviderOption> | undefined>
 	>;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const ProviderDropdown = ({

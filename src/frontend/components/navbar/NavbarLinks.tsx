@@ -1,14 +1,14 @@
 import {
 	isNavbarDropdown,
 	NavbarElement,
-	ThemeColors
+	ThemeSprings
 } from '../../../types/types';
 import { NavbarDropdown } from './NavbarDropdown';
 import { NavbarLink } from './NavbarLink';
 
 type NavbarLinksProps = {
 	navbarData: NavbarElement[];
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const NavbarLinks = ({ navbarData, themeSprings }: NavbarLinksProps) => (

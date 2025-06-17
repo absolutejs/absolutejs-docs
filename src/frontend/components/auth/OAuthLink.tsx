@@ -1,7 +1,7 @@
 import { animated } from '@react-spring/web';
 import { ProviderOption } from 'citra';
 import { FiUser } from 'react-icons/fi';
-import { ThemeColors } from '../../../types/types';
+import { ThemeSprings } from '../../../types/types';
 import { providerData, ProviderInfo } from '../../data/providerData';
 import {
 	oauthButtonStyle,
@@ -13,7 +13,7 @@ import {
 type OAuthLinkProps = {
 	mode: 'login' | 'signup';
 	provider: Lowercase<ProviderOption> | undefined;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const OAuthLink = ({ mode, provider, themeSprings }: OAuthLinkProps) => {

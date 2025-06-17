@@ -1,20 +1,13 @@
 import { animated } from '@react-spring/web';
-import {
-	prism,
-	nightOwl
-} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { ThemeProps } from '../../../types/types';
 import { typeArticleData } from '../../data/typeArticleData';
 import { useTabSprings } from '../../hooks/useTabSprings';
-import { useThemeStore } from '../../hooks/useThemeStore';
 import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 import { PrismPlus } from '../utils/PrismPlus';
 import { CodeSlider } from './CodeSlider';
 
 export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
-	const theme = useThemeStore((state) => state.theme);
-	const prismTheme = theme === 'light' ? prism : nightOwl;
 	const { handleTabClick, currentTab, sliderSprings } = useTabSprings(
 		typeArticleData.length
 	);
@@ -50,7 +43,6 @@ export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 				themeSprings={themeSprings}
 				codeString={codeString}
 				language={language}
-				codeStyle={prismTheme}
 			/>
 			<animated.p style={paragraphStyle(themeSprings)}>
 				{description}

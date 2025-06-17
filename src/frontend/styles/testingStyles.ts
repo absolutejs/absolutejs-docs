@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
-import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
 
 export const legendWrapperStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	backgroundColor: themeSprings.themeTertiary,
 	borderRadius: '8px',

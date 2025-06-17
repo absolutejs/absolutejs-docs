@@ -4,3 +4,6 @@ export const isNonEmptyString = (
 
 export const isObject = (value: unknown): value is Record<string, unknown> =>
 	typeof value === 'object' && value !== null;
+
+export const isLightOrDark = (value: unknown): value is 'light' | 'dark' =>
+	value === 'light' || value === 'dark';

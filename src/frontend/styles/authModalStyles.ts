@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
-import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
 
 export const confirmInputStyle: CSSProperties = {
 	border: '1px solid #ccc',
@@ -52,7 +52,7 @@ export const oauthButtonContentStyle: CSSProperties = {
 type OAuthButtonStyleProps = {
 	isProviderSelected?: boolean;
 	providerPrimaryColor?: string;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const oauthButtonStyle = ({
@@ -95,7 +95,7 @@ export const headingStyle: CSSProperties = {
 };
 
 export const labelStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	color: themeSprings.contrastSecondary,
 	fontSize: '1.2rem',
@@ -105,7 +105,7 @@ export const labelStyle = (
 });
 
 export const loginLinkTextStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	backgroundColor: 'transparent',
 	border: 'none',
@@ -117,7 +117,7 @@ export const loginLinkTextStyle = (
 });
 
 export const loginTextStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	color: themeSprings.contrastPrimary,
 	textAlign: 'center'

@@ -1,6 +1,6 @@
 import { animated, useSpring } from '@react-spring/web';
 import { ReactNode } from 'react';
-import { NavbarElement, ThemeColors } from '../../../types/types';
+import { NavbarElement, ThemeSprings } from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
 import { labelStyle } from '../../styles/authModalStyles';
 import { NavbarLink } from '../navbar/NavbarLink';
@@ -11,7 +11,7 @@ type SidebarDropdownProps = {
 	href: string;
 	links: NavbarElement[];
 	icon?: ReactNode;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const SidebarDropdown = ({

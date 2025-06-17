@@ -1,6 +1,6 @@
 import { animated } from '@react-spring/web';
 import { ReactNode } from 'react';
-import { ThemeColors } from '../../../types/types';
+import { ThemeSprings } from '../../../types/types';
 import {
 	optionStyle,
 	navbarDrowdownLinkStyle
@@ -10,7 +10,7 @@ type NavbarLinkProps = {
 	icon?: ReactNode;
 	href: string;
 	label: string;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const NavbarLink = ({

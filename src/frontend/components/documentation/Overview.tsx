@@ -10,10 +10,10 @@ export const Overview = () => (
 		<h1>Overview</h1>
 		<p>
 			The documentation provides a comprehensive guide to the features and
-            functionality of the platform. It covers various aspects including
-            installation, configuration, and usage of different packages. The
-            documentation is designed to help users quickly get started and 
-            effectively utilize the platform's capabilities.
+			functionality of the platform. It covers various aspects including
+			installation, configuration, and usage of different packages. The
+			documentation is designed to help users quickly get started and
+			effectively utilize the platform's capabilities.
 		</p>
 	</div>
 );

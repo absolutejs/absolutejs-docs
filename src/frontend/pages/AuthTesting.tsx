@@ -8,21 +8,26 @@ import { AuthTestingHero } from '../components/testing/AuthTestingHero';
 import { Legend } from '../components/testing/Legend';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useCleanPath } from '../hooks/useCleanPath';
-import { useThemeColors } from '../hooks/useThemeColors';
+import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 const queryClient = new QueryClient();
 
-export const AuthTesting = () => {
-	const { user, handleSignOut } = useAuthStatus();
+type AuthTestingProps = {
+	theme: ThemeMode | undefined;
+};
+
+export const AuthTesting = ({ theme }: AuthTestingProps) => {
 	useCleanPath();
-	const themeSprings = useThemeColors();
+	const { user, handleSignOut } = useAuthStatus();
+	const [themeSprings, setTheme] = useTheme(theme);
 
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head />
 			<animated.body style={bodyDefault(themeSprings)}>
 				<Navbar
+					setTheme={setTheme}
 					user={user}
 					handleSignOut={handleSignOut}
 					themeSprings={themeSprings}

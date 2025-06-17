@@ -5,7 +5,7 @@ import {
 } from '@absolutejs/auth';
 import { useState } from 'react';
 import { User } from '../../../../db/schema';
-import { ThemeColors } from '../../../types/types';
+import { ThemeSprings } from '../../../types/types';
 import { providerData, ProviderInfo } from '../../data/providerData';
 import { OAuthButton } from '../auth/OAuthButton';
 import { ToastProvider } from '../utils/ToastProvider';
@@ -14,7 +14,7 @@ import { AuthModal } from './AuthModal';
 type AuthGridProps = {
 	user: User | undefined;
 	handleSignOut: () => Promise<void>;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const AuthGrid = ({

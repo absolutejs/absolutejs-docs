@@ -1,6 +1,7 @@
-import { AnimatedProps, SpringValue } from '@react-spring/web';
+import { AnimatedProps } from '@react-spring/web';
 import { CSSProperties, ReactNode } from 'react';
 import { DatabaseType } from '../../db/schema';
+import { useTheme } from '../frontend/hooks/useTheme';
 
 export type AnimatedCSSProperties = AnimatedProps<CSSProperties>;
 
@@ -29,14 +30,9 @@ export type UserFunctionProps = {
 	db: DatabaseType;
 };
 
-export type ThemeColors = {
-	themePrimary: SpringValue<string>;
-	themeSecondary: SpringValue<string>;
-	themeTertiary: SpringValue<string>;
-	contrastPrimary: SpringValue<string>;
-	contrastSecondary: SpringValue<string>;
-};
+export type ThemeSprings = ReturnType<typeof useTheme>[0];
+export type SetTheme = ReturnType<typeof useTheme>[1];
 
 export type ThemeProps = {
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };

@@ -1,6 +1,6 @@
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { ReactNode, RefObject, useEffect, useRef } from 'react';
-import { ThemeColors } from '../../../types/types';
+import { ThemeSprings } from '../../../types/types';
 
 type DropdownContainerProps = {
 	spring: {
@@ -11,7 +11,7 @@ type DropdownContainerProps = {
 	onClose?: () => void;
 	children?: ReactNode;
 	ignoredElements?: RefObject<HTMLElement | null>[];
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const DropdownContainer = ({

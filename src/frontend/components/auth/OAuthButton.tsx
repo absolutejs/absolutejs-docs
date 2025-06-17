@@ -2,7 +2,7 @@ import { animated } from '@react-spring/web';
 import { ProviderOption } from 'citra';
 import { Dispatch, SetStateAction } from 'react';
 import { FiUser } from 'react-icons/fi';
-import { ThemeColors } from '../../../types/types';
+import { ThemeSprings } from '../../../types/types';
 import { providerData, ProviderInfo } from '../../data/providerData';
 import {
 	oauthButtonStyle,
@@ -18,7 +18,7 @@ type OAuthButtonProps = {
 			(ProviderInfo & { providerOption: ProviderOption }) | null
 		>
 	>;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const OAuthButton = ({

@@ -1,12 +1,12 @@
 import { animated } from '@react-spring/web';
-import { ThemeColors } from '../../../types/types';
+import { ThemeSprings } from '../../../types/types';
 
 type ProfilePictureProps = {
 	userImage: string | null | undefined;
 	backupImage: string;
 	width?: string;
 	height?: string;
-	themeSprings: ThemeColors;
+	themeSprings: ThemeSprings;
 };
 
 export const ProfilePicture = ({

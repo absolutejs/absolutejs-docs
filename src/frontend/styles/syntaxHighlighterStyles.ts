@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { AnimatedCSSProperties, ThemeColors } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
 
 export const highlighterContainerStyle: CSSProperties = {
 	borderRadius: '5px',
@@ -9,7 +9,7 @@ export const highlighterContainerStyle: CSSProperties = {
 };
 
 export const highlighterHeaderStyle = (
-	themeSprings: ThemeColors
+	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	backgroundColor: themeSprings.themeSecondary,
