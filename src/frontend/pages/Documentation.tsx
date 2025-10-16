@@ -6,6 +6,7 @@ import { Sidebar } from '../components/sidebar/Sidebar';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
+import { Database } from '../components/documentation/Database';
 
 type DocumentationProps = {
 	section: string;

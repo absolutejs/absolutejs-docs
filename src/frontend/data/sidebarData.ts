@@ -38,7 +38,11 @@ export const sidebarData: NavbarElement[] = [
 			{
 				href: '/documentation/packages/eslint',
 				label: 'Eslint'
-			}
+			},
 		]
+	},
+	{
+		href: '/documentation/databases',
+		label: 'Databases',
 	}
 ];

@@ -17,3 +17,5 @@ export const Overview = () => (
 		</p>
 	</div>
 );
+
+export default Overview;
