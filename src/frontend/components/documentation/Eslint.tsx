@@ -9,11 +9,10 @@ const Eslint = () => (
 	>
 		<h1>ESlint Rules</h1>
 		<p>
-			Getting started with AbsoluteJS is fast and simple. 
-			Use the command below to install the framework and set up your environment in seconds. 
-			Once installed, you can immediately begin building scalable, high-performance web applications 
-			with minimal configuration. Whether you’re starting a new project or integrating AbsoluteJS into an existing codebase, 
-			this quick setup ensures you’re ready to code right away.
+			AbsoluteJS includes first-class support for ESLint to help you maintain clean, consistent, and bug-free code. 
+            With the built-in configuration, you can easily enforce best practices and align your project’s style across the team. 
+            The setup is optimized for modern JavaScript and TypeScript workflows, ensuring smooth integration with your development environment. 
+            You can also extend or override the default rules to fit your team’s specific coding standards.
 		</p>
 	</div>
 );
