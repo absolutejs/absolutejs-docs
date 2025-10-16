@@ -7,6 +7,9 @@ import { useAuthStatus } from '../hooks/useAuthStatus';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
+//Import statement for Quick Install component
+import QuickInstall from '../components/documentation/QuickInstall';
+
 type DocumentationProps = {
 	section: string;
 	theme: ThemeMode | undefined;
@@ -34,7 +37,7 @@ export const Documentation = ({ section, theme }: DocumentationProps) => {
 						}}
 					>
 						<Sidebar themeSprings={themeSprings} />
-						<Overview />
+						<QuickInstall />
 					</div>
 				</main>
 			</animated.body>
