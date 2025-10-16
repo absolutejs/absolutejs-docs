@@ -7,6 +7,9 @@ import { useAuthStatus } from '../hooks/useAuthStatus';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
+//import statement for Eslint component
+import Eslint from '../components/documentation/Eslint';
+
 type DocumentationProps = {
 	section: string;
 	theme: ThemeMode | undefined;
@@ -34,7 +37,7 @@ export const Documentation = ({ section, theme }: DocumentationProps) => {
 						}}
 					>
 						<Sidebar themeSprings={themeSprings} />
-						<Overview />
+						<Eslint />
 					</div>
 				</main>
 			</animated.body>
