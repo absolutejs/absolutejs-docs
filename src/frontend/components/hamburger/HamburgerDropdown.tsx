@@ -1,6 +1,9 @@
 import { animated, useSpring } from '@react-spring/web';
 import { ReactNode } from 'react';
-import { NavbarElement, ThemeSprings } from '../../../types/types';
+import {
+	ThemeSprings,
+	NavbarLink as NavbarLinkType
+} from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
 import { labelStyle } from '../../styles/authModalStyles';
 import { NavbarLink } from '../navbar/NavbarLink';
@@ -9,7 +12,7 @@ import { AnimatedFaChevronDown } from '../utils/AnimatedComponents';
 type HamburgerDropdownProps = {
 	label: string;
 	href: string;
-	links: NavbarElement[];
+	links: NavbarLinkType[];
 	icon?: ReactNode;
 	themeSprings: ThemeSprings;
 };

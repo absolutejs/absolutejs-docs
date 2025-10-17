@@ -1,6 +1,8 @@
-import { AnimatedProps } from '@react-spring/web';
+import { AnimatedComponent, AnimatedProps } from '@react-spring/web';
 import { CSSProperties, ReactNode } from 'react';
+import { IconType } from 'react-icons';
 import { DatabaseType } from '../../db/schema';
+import { docsViews } from '../frontend/data/sidebarData';
 import { useTheme } from '../frontend/hooks/useTheme';
 
 export type AnimatedCSSProperties = AnimatedProps<CSSProperties>;
@@ -23,6 +25,26 @@ export const isNavbarDropdown = (
 ): element is NavbarDropdown => 'links' in element;
 
 export type NavbarElement = NavbarLink | NavbarDropdown;
+
+export type MenuDropdown = {
+	label: string;
+	buttons: MenuButton[];
+	icon: AnimatedComponent<IconType>;
+};
+
+export type MenuButton = {
+	id: DocsView;
+	label: string;
+	icon?: AnimatedComponent<IconType>;
+	// view: LazyExoticComponent<ComponentType<null>>;
+};
+
+export type MenuItem = MenuDropdown | MenuButton;
+
+export const isMenuDropdown = (element: MenuItem): element is MenuDropdown =>
+	'buttons' in element;
+
+export type DocsView = keyof typeof docsViews;
 
 export type UserFunctionProps = {
 	authProvider: string;

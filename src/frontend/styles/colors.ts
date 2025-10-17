@@ -4,7 +4,7 @@ export const tertiaryColor = '#4A4E69';
 
 export const lightPrimaryColor = '#FAFAFA';
 export const lightSecondaryColor = '#ECEFF1';
-export const lightTertiaryColor = '#CFD8DC';
+export const lightTertiaryColor = '#9E9E9E';
 
 export const darkPrimaryColor = '#0B0B0B';
 export const darkSecondaryColor = '#14141E';

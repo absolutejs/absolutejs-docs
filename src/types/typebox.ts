@@ -1,4 +1,6 @@
 import { t } from 'elysia/type-system';
+import { docsViews } from '../frontend/data/sidebarData';
+import { isValidViewId } from './typeGuards';
 
 export const themeCookie = t.Cookie({
 	theme: t.Optional(
@@ -10,3 +12,11 @@ export const themeCookie = t.Cookie({
 		])
 	)
 });
+
+export const docsViewEnum = t.Enum(
+	Object.fromEntries(
+		Object.keys(docsViews)
+			.filter(isValidViewId)
+			.map((key) => [key, key])
+	)
+);

@@ -97,9 +97,12 @@ export const headingStyle: CSSProperties = {
 export const labelStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
+	backgroundColor: 'transparent',
+	border: 'none',
 	color: themeSprings.contrastSecondary,
-	fontSize: '1.2rem',
-	marginBottom: '-2px',
+	display: 'flex',
+	fontSize: '1rem',
+	fontWeight: 'bold',
 	textAlign: 'left',
 	textDecoration: 'none'
 });
