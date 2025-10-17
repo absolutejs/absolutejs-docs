@@ -41,7 +41,8 @@ export const ThemeButton = ({ themeSprings, setTheme }: ThemeButtonProps) => {
 			style={{
 				display: 'inline-block',
 				margin: 'auto',
-				position: 'relative'
+				position: 'relative',
+				zIndex: 1000
 			}}
 		>
 			<animated.summary
@@ -95,7 +96,8 @@ export const ThemeButton = ({ themeSprings, setTheme }: ThemeButtonProps) => {
 					padding: '0.5rem',
 					position: 'absolute',
 					right: 0,
-					top: '3.5rem'
+					top: '3.5rem',
+					zIndex: 1000
 				}}
 			>
 				{(['system', 'light', 'dark'] as const).map((opt) => {

@@ -9,7 +9,10 @@ export const Sidebar = ({ themeSprings }: ThemeProps) => (
 		style={{
 			borderColor: themeSprings.themeTertiary,
 			borderRight: '2px solid',
-			padding: '1rem'
+			padding: '1rem',
+			minWidth: '250px',
+			width: '250px',
+			flexShrink: 0
 		}}
 	>
 		{sidebarData.map((element) => {

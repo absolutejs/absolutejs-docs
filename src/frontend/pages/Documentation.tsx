@@ -33,11 +33,12 @@ export const Documentation = ({ section, theme }: DocumentationProps) => {
 					<div
 						style={{
 							display: 'flex',
-							flex: 1
+							flex: 1,
+							width: '100%'
 						}}
 					>
 						<Sidebar themeSprings={themeSprings} />
-						<Eslint />
+						<Eslint title="ESLint Rules" themeSprings={themeSprings} />
 					</div>
 				</main>
 			</animated.body>
