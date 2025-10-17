@@ -1,24 +1,40 @@
-import { animated, useSpring } from '@react-spring/web';
-import { ReactNode } from 'react';
-import { NavbarElement, ThemeSprings } from '../../../types/types';
+import {
+	animated,
+	AnimatedComponent,
+	SpringRef,
+	SpringValue,
+	useSpring
+} from '@react-spring/web';
+import { IconType } from 'react-icons';
+import { ThemeSprings, MenuButton, DocsView } from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
 import { labelStyle } from '../../styles/authModalStyles';
-import { NavbarLink } from '../navbar/NavbarLink';
 import { AnimatedFaChevronDown } from '../utils/AnimatedComponents';
+import { SidebarLink } from './SidebarLink';
 
 type SidebarDropdownProps = {
 	label: string;
-	href: string;
-	links: NavbarElement[];
-	icon?: ReactNode;
+	linksSprings: {
+		borderColor: SpringValue<string>;
+	}[];
+	linksApi: SpringRef<{
+		borderColor: string;
+	}>;
+	buttons: MenuButton[];
+	icon?: AnimatedComponent<IconType>;
+	navigateToView: (newView: DocsView) => void;
 	themeSprings: ThemeSprings;
+	startIndex: number;
 };
 
 export const SidebarDropdown = ({
 	label,
 	icon,
-	href,
-	links,
+	linksSprings,
+	linksApi,
+	buttons,
+	startIndex,
+	navigateToView,
 	themeSprings
 }: SidebarDropdownProps) => {
 	const {
@@ -29,11 +45,11 @@ export const SidebarDropdown = ({
 		config: { friction: 30, tension: 250 },
 		height: 0,
 		opacity: 0,
-		transform: 'rotate(180deg)'
+		transform: 'rotate(-90deg)'
 	}));
 
 	// TODO: Update the rule to handle icons or other components someone doesnt control
-	// eslint-disable-next-line absolute/localize-react-props
+
 	const toggleDropdown = () => {
 		if (ref === null) return;
 
@@ -42,34 +58,41 @@ export const SidebarDropdown = ({
 		void dropdownApi.start({
 			height: isOpen ? 0 : scrollHeight,
 			opacity: isOpen ? 0 : 1,
-			transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+			transform: isOpen ? 'rotate(-90deg)' : 'rotate(0deg)'
 		});
 	};
 
+	const Icon = icon;
+
 	return (
 		<div style={{ width: '100%' }}>
-			<div
+			<animated.button
+				onClick={toggleDropdown}
 				style={{
 					alignItems: 'center',
+					backgroundColor: 'transparent',
+					border: 'none',
+					color: themeSprings.contrastSecondary,
+					cursor: 'pointer',
 					display: 'flex',
-					justifyContent: 'space-between'
+					justifyContent: 'space-between',
+					padding: '1rem 0',
+					width: '100%'
 				}}
 			>
-				<animated.a href={href} style={labelStyle(themeSprings)}>
-					{icon}
+				<animated.p style={labelStyle(themeSprings)}>
+					{Icon && <Icon style={{ marginRight: '0.5rem' }} />}
 					<span>{label}</span>
-				</animated.a>
+				</animated.p>
 				<AnimatedFaChevronDown
-					onClick={toggleDropdown}
 					style={{
-						cursor: 'pointer',
-						fontSize: '1.7rem',
-						marginLeft: '10px',
+						fontSize: '0.75rem',
+						marginLeft: '2rem',
 						transform: dropdownSprings.transform,
 						transformOrigin: 'center'
 					}}
 				/>
-			</div>
+			</animated.button>
 			<animated.nav
 				ref={ref}
 				style={{
@@ -78,13 +101,17 @@ export const SidebarDropdown = ({
 					overflow: 'hidden'
 				}}
 			>
-				{links.map((link, index) => (
-					<NavbarLink
+				{buttons.map((button, index) => (
+					<SidebarLink
+						linkSprings={linksSprings[startIndex + index]}
+						index={startIndex + index}
+						linksApi={linksApi}
+						navigateToView={navigateToView}
 						themeSprings={themeSprings}
 						key={index}
-						icon={link.icon}
-						href={link.href}
-						label={link.label}
+						icon={button.icon}
+						id={button.id}
+						label={button.label}
 					/>
 				))}
 			</animated.nav>

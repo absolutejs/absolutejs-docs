@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-import { NavbarElement } from '../../types/types';
-
-export const sidebarData: NavbarElement[] = [
-=======
 import { animated } from '@react-spring/web';
 import {
 	FaBook,
@@ -22,7 +17,6 @@ import { AbsoluteAuthView } from '../components/documentation/packages/AbsoluteA
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { EslintView } from '../components/documentation/packages/EslintView';
-import { ServerState } from '../components/documentation/data/ServerState';
 
 const definePortalViews = <T>(views: T) => views;
 
@@ -50,7 +44,7 @@ export const docsViews = definePortalViews({
 	quickstart: Overview,
 	react: Overview,
 	'routing-and-handlers': Overview,
-	'server state': ServerState,
+	'server state': Overview,
 	'ssr-model': Overview,
 	svelte: Overview,
 	types: Overview,
@@ -58,81 +52,24 @@ export const docsViews = definePortalViews({
 });
 
 export const sidebarData: MenuItem[] = [
->>>>>>> Stashed changes
 	{
-		href: '/documentation',
+		icon: animated(FaBook),
+		id: 'overview',
 		label: 'Overview'
 	},
 	{
-		href: '/documentation/getting-started',
-		label: 'Getting Started',
-		links: [
-			{
-				href: '/documentation/getting-started/installation',
-				label: 'Installation'
-			},
-			{
-				href: '/documentation/getting-started/quickstart',
-				label: 'Quickstart'
-			}
-		]
-	},
-	{
-<<<<<<< Updated upstream
-		href: '/documentation/packages',
-		label: 'Packages',
-		links: [
-			{
-				href: '/documentation/packages/create',
-				label: 'Create'
-			},
-			{
-				href: '/documentation/packages/citra',
-				label: 'Citra'
-			},
-			{
-				href: '/documentation/packages/auth',
-				label: 'Auth'
-			},
-			{
-				href: '/documentation/packages/eslint',
-				label: 'Eslint'
-			}
-		]
-=======
 		buttons: [
-			{ id: 'ssr-model', label: 'SSR Model' },
-			{ id: 'build-and-manifest', label: 'Build & Manifest' },
-			{ id: 'routing-and-handlers', label: 'Routing & Handlers' }
+			{ id: 'installation', label: 'Installation' },
+			{ id: 'quickstart', label: 'Quickstart' }
 		],
-		icon: animated(FaLayerGroup),
-		label: 'Core Concepts'
-	},
-	{
-		buttons: [
-			{ id: 'react', label: 'React' },
-			{ id: 'svelte', label: 'Svelte' },
-			{ id: 'html', label: 'HTML' },
-			{ id: 'htmx', label: 'HTMX' },
-			{ id: 'vue', label: 'Vue' },
-			{ id: 'angular', label: 'Angular' }
-		],
-		icon: animated(FaCubes),
-		label: 'Frontends'
-	},
-	{
-		buttons: [
-			{ id: 'elysia-integration', label: 'Elysia Integration' },
-			{ id: 'plugin', label: 'Plugin' }
-		],
-		icon: animated(FaServer),
-		label: 'Server'
+		icon: animated(FaRocket),
+		label: 'Getting Started'
 	},
 	{
 		buttons: [
 			{ id: 'absolute-auth', label: 'Absolute Auth' },
 			{ id: 'citra', label: 'Citra' },
-			{ id: 'create-absolutejs', label: 'Create' },
+			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
 			{ id: 'eslint', label: 'ESLint' }
 		],
 		icon: animated(FaPuzzlePiece),
@@ -168,6 +105,5 @@ export const sidebarData: MenuItem[] = [
 		],
 		icon: animated(FaCode),
 		label: 'Reference'
->>>>>>> Stashed changes
 	}
 ];

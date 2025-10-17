@@ -32,7 +32,7 @@ export const AuthTesting = ({ theme }: AuthTestingProps) => {
 					handleSignOut={handleSignOut}
 					themeSprings={themeSprings}
 				/>
-				<main style={mainDefault}>
+				<main style={mainDefault()}>
 					<QueryClientProvider client={queryClient}>
 						<animated.h1
 							style={{
