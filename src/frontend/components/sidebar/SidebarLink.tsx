@@ -43,13 +43,14 @@ export const SidebarLink = ({
 				alignItems: 'center',
 				backgroundColor: 'transparent',
 				border: 'none',
-				borderColor: linkSprings?.borderColor,
-				borderLeft: !isOverview ? '3px solid' : 'none',
+				borderLeftWidth: isOverview ? '0' : '3px',
+				borderLeftStyle: isOverview ? 'none' : 'solid',
+				borderLeftColor: linkSprings?.borderColor,
 				color: themeSprings.contrastSecondary,
 				cursor: 'pointer',
 				display: 'flex',
-				marginLeft: !isOverview ? '0.5rem' : '0',
-				paddingLeft: !isOverview ? '1rem' : '0',
+				marginLeft: isOverview ? '0' : '0.5rem',
+				paddingLeft: isOverview ? '0' : '1rem',
 				width: '100%'
 			}}
 			onClick={() => {
