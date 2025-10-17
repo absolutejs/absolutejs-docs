@@ -100,6 +100,7 @@ export const Sidebar = ({
 					<SidebarLink
 						index={-1}
 						icon={element.icon}
+						linksApi={linksApi}
 						id={element.id}
 						key={element.label}
 						navigateToView={navigateToView}
