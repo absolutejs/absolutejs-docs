@@ -36,11 +36,11 @@ export const bodyDefault = (
 export const mainDefault = (
 	overflow?: CSSProperties['overflow']
 ): CSSProperties => ({
-	alignItems: 'center',
 	display: 'flex',
 	flex: 1,
 	flexDirection: 'column',
-	overflow
+	overflow,
+	width: '100%'
 });
 
 export const htmlDefault: CSSProperties = {
@@ -119,14 +119,13 @@ export const h2Style = (
 	fontWeight: '600',
 	marginBottom: '20px',
 	marginTop: '0px',
+	padding: '12px 20px',
 	paddingBottom: '16px',
 	borderBottom: `3px solid ${themeSprings.themeTertiary.get()}`,
 	position: 'relative',
 	display: 'inline-block',
 	background: `linear-gradient(135deg, ${themeSprings.themeTertiary.get()}20, transparent)`,
-	padding: '12px 20px',
-	borderRadius: '8px 8px 0 0',
-	borderBottom: `3px solid ${themeSprings.themeTertiary.get()}`
+	borderRadius: '8px 8px 0 0'
 });
 
 export const h3Style = (

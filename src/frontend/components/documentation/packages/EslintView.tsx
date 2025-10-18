@@ -4,6 +4,7 @@ import { PrismPlus } from "../../utils/PrismPlus";
 import { ThemeProps } from "../../../../types/springTypes";
 import type { ThemeSprings } from "../../../../types/springTypes";
 import { useTheme } from "../../../hooks/useTheme";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 import { headingStyle, h2Style, h3Style, beforeAfterContainerStyle, beforeAfterColumnStyle, beforeAfterHeadingStyle, sectionStyle, ruleDescriptionStyle, introStyle, tableOfContentsStyle } from "../../../styles/styles";
 
 export const EslintView = ({ themeSprings }: { themeSprings?: ThemeSprings }) => {
@@ -11,6 +12,11 @@ export const EslintView = ({ themeSprings }: { themeSprings?: ThemeSprings }) =>
 	// The fallback ensures backward compatibility but the passed themeSprings should be used
 	const [fallbackTS] = useTheme(undefined);
 	const ts = themeSprings ?? fallbackTS;
+	const { isSizeOrLess } = useMediaQuery();
+
+	// Responsive breakpoints
+	const isMobile = isSizeOrLess('sm'); // 640px and below
+	const isTablet = isSizeOrLess('md'); // 768px and below
 
 	return (
 	<>
@@ -25,9 +31,11 @@ export const EslintView = ({ themeSprings }: { themeSprings?: ThemeSprings }) =>
 				display: 'flex',
 				flex: 1,
 				flexDirection: 'column',
-				padding: '1rem 2rem',
+				padding: isMobile ? '0.5rem 1rem' : isTablet ? '1rem 1.5rem' : '1rem 2rem',
 				overflow: 'auto',
 				minHeight: 0,
+				minWidth: 0, // Allow shrinking
+				width: '100%', // Ensure it takes available width
 				scrollbarWidth: 'none', // Firefox
 				msOverflowStyle: 'none', // IE/Edge
 			}}

@@ -3,6 +3,7 @@ import { ThemeSprings } from '../../../types/springTypes';
 import { DocsView, isMenuDropdown } from '../../../types/types';
 import { sidebarData } from '../../data/sidebarData';
 import { useSidebarSprings } from '../../hooks/springs/useSidebarSprings';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { SidebarDropdown } from './SidebarDropdown';
 import { SidebarLink } from './SidebarLink';
 
@@ -19,6 +20,11 @@ export const Sidebar = ({
 }: SidebarProps) => {
 	const { linksSprings, linksApi, startIndexForDropdown } =
 		useSidebarSprings(view);
+	const { isSizeOrLess } = useMediaQuery();
+
+	// Responsive breakpoints
+	const isTablet = isSizeOrLess('md'); // 768px and below
+	const isMobile = isSizeOrLess('sm'); // 640px and below
 
 	return (
 		<>
@@ -41,12 +47,16 @@ export const Sidebar = ({
 				className="sidebar-scroll-container"
 				style={{
 					borderColor: themeSprings.themeTertiary,
-					borderRight: '2px solid',
-					flexShrink: 0,
-					height: '100%',
-					maxHeight: '100%',
+					borderRight: isMobile ? 'none' : '2px solid',
+					borderBottom: isMobile ? '2px solid' : 'none',
+					flexShrink: isTablet ? 1 : 0, // Allow shrinking on smaller screens
+					height: isMobile ? 'auto' : '100%',
+					maxHeight: isMobile ? '200px' : '100%',
+					width: isMobile ? '100%' : (isTablet ? '200px' : '250px'), // Responsive width
+					minWidth: isMobile ? 'auto' : (isTablet ? '180px' : '200px'),
 					overflowY: 'auto',
-					padding: '1rem',
+					overflowX: 'hidden',
+					padding: isMobile ? '0.5rem' : '1rem',
 					scrollbarWidth: 'thin', // Firefox
 					scrollbarColor: `${themeSprings.themeTertiary.get()} ${themeSprings.themeSecondary.get()}`, // Firefox
 					msOverflowStyle: 'scrollbar' // IE/Edge
