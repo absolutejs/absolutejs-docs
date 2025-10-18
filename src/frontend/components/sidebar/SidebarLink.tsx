@@ -15,6 +15,7 @@ type SidebarLinkProps = {
 	linkSprings?: SidebarLinksSprings[number];
 	linksApi?: SidebarLinksApi;
 	id: DocsView;
+	view: DocsView;
 	index: number;
 	navigateToView: (newView: DocsView) => void;
 };
@@ -24,6 +25,7 @@ export const SidebarLink = ({
 	linkSprings,
 	linksApi,
 	index,
+	view,
 	id,
 	navigateToView,
 	label,
@@ -49,20 +51,40 @@ export const SidebarLink = ({
 				position: 'relative',
 				width: '100%'
 			}}
+			onMouseEnter={() => {
+				linksApi?.start((i) => {
+					if (i !== index || view === id) return undefined;
+
+					return { backgroundColor: lightTertiaryColor };
+				});
+			}}
+			onMouseLeave={() => {
+				linksApi?.start((i) => {
+					if (i !== index || view === id) return undefined;
+
+					return { backgroundColor: 'transparent' };
+				});
+			}}
 			onClick={() => {
 				navigateToView(id);
 				linksApi?.start((i) => {
 					if (i === index) {
-						return { borderColor: primaryColor };
+						return {
+							backgroundColor: primaryColor,
+							borderColor: primaryColor
+						};
 					}
 
-					return { borderColor: lightTertiaryColor };
+					return {
+						backgroundColor: 'transparent',
+						borderColor: lightTertiaryColor
+					};
 				});
 			}}
 		>
-			<div
+			<animated.div
 				style={{
-					backgroundColor: 'red',
+					backgroundColor: linkSprings?.backgroundColor,
 					inset: 0,
 					opacity: 0.3,
 					pointerEvents: 'none',

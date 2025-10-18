@@ -36,6 +36,7 @@ export const Sidebar = ({
 				if (isMenuDropdown(element)) {
 					return (
 						<SidebarDropdown
+							view={view}
 							linksSprings={linksSprings}
 							linksApi={linksApi}
 							startIndex={startIndexForDropdown(index)}
@@ -58,6 +59,7 @@ export const Sidebar = ({
 
 				return (
 					<SidebarLink
+						view={view}
 						index={-1}
 						icon={element.icon}
 						linksApi={linksApi}
