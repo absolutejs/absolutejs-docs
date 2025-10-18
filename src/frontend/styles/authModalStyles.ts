@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
-import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/springTypes';
 
 export const confirmInputStyle: CSSProperties = {
 	border: '1px solid #ccc',

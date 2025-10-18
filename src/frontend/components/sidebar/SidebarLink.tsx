@@ -1,24 +1,19 @@
-import {
-	animated,
-	AnimatedComponent,
-	SpringRef,
-	SpringValue,
-	useSpring
-} from '@react-spring/web';
+import { animated, AnimatedComponent } from '@react-spring/web';
 import { IconType } from 'react-icons';
-import { DocsView, ThemeSprings } from '../../../types/types';
+import {
+	SidebarLinksApi,
+	SidebarLinksSprings,
+	ThemeSprings
+} from '../../../types/springTypes';
+import { DocsView } from '../../../types/types';
 import { lightTertiaryColor, primaryColor } from '../../styles/colors';
 
 type SidebarLinkProps = {
 	icon?: AnimatedComponent<IconType>;
 	label: string;
 	themeSprings: ThemeSprings;
-	linkSprings?: {
-		borderColor: SpringValue<string>;
-	};
-	linksApi?: SpringRef<{
-		borderColor: string;
-	}>;
+	linkSprings?: SidebarLinksSprings[number];
+	linksApi?: SidebarLinksApi;
 	id: DocsView;
 	index: number;
 	navigateToView: (newView: DocsView) => void;
@@ -43,14 +38,15 @@ export const SidebarLink = ({
 				alignItems: 'center',
 				backgroundColor: 'transparent',
 				border: 'none',
-				borderLeftWidth: isOverview ? '0' : '3px',
-				borderLeftStyle: isOverview ? 'none' : 'solid',
 				borderLeftColor: linkSprings?.borderColor,
+				borderLeftStyle: isOverview ? 'none' : 'solid',
+				borderLeftWidth: isOverview ? '0' : '3px',
 				color: themeSprings.contrastSecondary,
 				cursor: 'pointer',
 				display: 'flex',
 				marginLeft: isOverview ? '0' : '0.5rem',
 				paddingLeft: isOverview ? '0' : '1rem',
+				position: 'relative',
 				width: '100%'
 			}}
 			onClick={() => {
@@ -64,6 +60,16 @@ export const SidebarLink = ({
 				});
 			}}
 		>
+			<div
+				style={{
+					backgroundColor: 'red',
+					inset: 0,
+					opacity: 0.3,
+					pointerEvents: 'none',
+					position: 'absolute',
+					zIndex: -1
+				}}
+			/>
 			{Icon && <Icon />}
 			<animated.span
 				style={{

@@ -1,9 +1,7 @@
 import { animated, useSpring } from '@react-spring/web';
 import { ReactNode } from 'react';
-import {
-	ThemeSprings,
-	NavbarLink as NavbarLinkType
-} from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
+import { NavbarLink as NavbarLinkType } from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
 import { labelStyle } from '../../styles/authModalStyles';
 import { NavbarLink } from '../navbar/NavbarLink';

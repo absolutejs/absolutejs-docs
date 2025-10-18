@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { ThemeProps } from '../../../types/types';
+import { ThemeProps } from '../../../types/springTypes';
 
 export const AuthTestingHero = ({ themeSprings }: ThemeProps) => (
 	<animated.p

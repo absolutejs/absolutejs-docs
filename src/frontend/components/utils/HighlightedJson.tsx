@@ -1,4 +1,4 @@
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { JsonLine } from './JsonLine';
 

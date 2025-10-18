@@ -5,7 +5,7 @@ import {
 } from '@absolutejs/auth';
 import { Dispatch, SetStateAction } from 'react';
 import { User } from '../../../../db/schema';
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 import { ProviderInfo } from '../../data/providerData';
 import { useAuthModalData } from '../../hooks/useAuthModalData';
 import { useMediaQuery } from '../../hooks/useMediaQuery';

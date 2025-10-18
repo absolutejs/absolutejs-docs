@@ -6,7 +6,7 @@ import {
 	prism,
 	nightOwl
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 import {
 	highlighterContainerStyle,
 	highlighterHeaderStyle,
