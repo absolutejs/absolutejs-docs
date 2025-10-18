@@ -1,15 +1,22 @@
 import { SpringValue } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
-import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/springTypes';
 
 export const styleReset = `
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-weight: inherit;
+        font: inherit;
+		letter-spacing: 0.1rem;
     }
+
+	button {
+		cursor: pointer;
+		background: none;
+		border: none;
+	}
 `;
 
 export const bodyDefault = (
@@ -19,7 +26,6 @@ export const bodyDefault = (
 	color: themeSprings.contrastPrimary,
 	display: 'flex',
 	flexDirection: 'column',
-	fontFamily: 'Poppins, sans-serif',
 	height: '100%',
 	lineHeight: '1.4',
 	margin: 0,
@@ -27,17 +33,20 @@ export const bodyDefault = (
 	overflowX: 'hidden'
 });
 
-export const mainDefault: CSSProperties = {
+export const mainDefault = (
+	overflow?: CSSProperties['overflow']
+): CSSProperties => ({
+	alignItems: 'center',
 	display: 'flex',
 	flex: 1,
 	flexDirection: 'column',
-	width: '100%'
-};
+	overflow
+});
 
 export const htmlDefault: CSSProperties = {
-	height: '100%',
-	width: '100%',
-	overflowX: 'hidden'
+	colorScheme: 'light dark',
+	fontFamily: 'Poppins, sans-serif',
+	height: '100%'
 };
 
 type ButtonStyleProps<

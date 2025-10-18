@@ -1,6 +1,6 @@
 import { animated } from '@react-spring/web';
 import { ReactNode } from 'react';
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 import {
 	optionStyle,
 	navbarDrowdownLinkStyle

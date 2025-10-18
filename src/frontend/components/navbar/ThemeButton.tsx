@@ -1,6 +1,6 @@
 import { animated, to } from '@react-spring/web';
 import { useRef, useEffect } from 'react';
-import { SetTheme, ThemeSprings } from '../../../types/types';
+import { SetTheme, ThemeSprings } from '../../../types/springTypes';
 import { AnimatedMoon, AnimatedSun } from '../utils/AnimatedComponents';
 
 type ThemeButtonProps = {

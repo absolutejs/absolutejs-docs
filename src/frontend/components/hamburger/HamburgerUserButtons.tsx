@@ -1,6 +1,6 @@
 import { animated } from '@react-spring/web';
 import { User } from '../../../../db/schema';
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 import { buttonStyle } from '../../styles/styles';
 import { AnimatedProfilePicture } from '../utils/AnimatedComponents';
 

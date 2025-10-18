@@ -1,7 +1,7 @@
 import { animated } from '@react-spring/web';
-import { ThemeProps } from '../../../types/types';
+import { ThemeProps } from '../../../types/springTypes';
 import { typeArticleData } from '../../data/typeArticleData';
-import { useTabSprings } from '../../hooks/useTabSprings';
+import { useTabSprings } from '../../hooks/springs/useTabSprings';
 import { featureCard } from '../../styles/homeStyles';
 import { headingStyle, paragraphStyle } from '../../styles/styles';
 import { PrismPlus } from '../utils/PrismPlus';
