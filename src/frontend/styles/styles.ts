@@ -132,7 +132,7 @@ export const h3Style = (
 
 export const beforeAfterContainerStyle: CSSProperties = {
 	display: 'flex',
-	flexDirection: 'row',
+	flexDirection: 'column',
 	gap: '24px',
 	marginBottom: '40px',
 	marginTop: '20px'
@@ -184,6 +184,19 @@ export const sectionStyle = (
 	position: 'relative',
 	overflow: 'hidden',
 	zIndex: 0
+});
+
+export const tableOfContentsStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	backgroundColor: themeSprings.themePrimary,
+	borderRadius: '16px',
+	padding: '32px',
+	marginBottom: '40px',
+	boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+	border: `1px solid ${themeSprings.themeTertiary.get()}`,
+	position: 'sticky',
+	top: '20px'
 });
 
 export const ruleDescriptionStyle = (
