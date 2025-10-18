@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { Prism } from 'react-syntax-highlighter';
 import {
@@ -31,12 +31,29 @@ export const PrismPlus = ({
 	options,
 	themeSprings
 }: PrismPlusProps) => {
-	// eslint-disable-next-line absolute/localize-react-props
-	const codeStyle = themeSprings.theme.to((theme) =>
-		theme === 'light' ? prism : nightOwl
-	);
-
 	const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+	const [renderKey, setRenderKey] = useState(0);
+
+	// Force re-render when theme changes by incrementing renderKey
+	useEffect(() => {
+		let currentTheme = themeSprings.theme.get();
+		
+		const checkTheme = () => {
+			const newTheme = themeSprings.theme.get();
+			if (newTheme !== currentTheme) {
+				currentTheme = newTheme;
+				setRenderKey(prev => prev + 1);
+			}
+		};
+
+		const interval = setInterval(checkTheme, 100);
+		return () => clearInterval(interval);
+	}, [themeSprings.theme]);
+
+	// Get current theme and appropriate style
+	const currentTheme = themeSprings.theme.get();
+	const isDark = currentTheme.endsWith('dark');
+	const codeStyle = isDark ? nightOwl : prism;
 
 	const codeStringsArray = Array.isArray(codeString)
 		? codeString
@@ -85,8 +102,9 @@ export const PrismPlus = ({
 			</animated.div>
 			{/* @ts-expect-error react 19 thing where we have 18 types */}
 			<Prism
+				key={`${renderKey}-${selectedOptionIndex}-${currentTheme}`}
 				language={language}
-				style={codeStyle.get()}
+				style={codeStyle}
 				customStyle={{
 					margin: 0,
 					marginBottom: '1.5rem',

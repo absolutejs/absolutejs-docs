@@ -21,17 +21,37 @@ export const Sidebar = ({
 		useSidebarSprings(view);
 
 	return (
-		<animated.aside
-			style={{
-				borderColor: themeSprings.themeTertiary,
-				borderRight: '2px solid',
-				flexShrink: 0,
-				height: '100%',
-				maxHeight: '100%',
-				overflowY: 'auto',
-				padding: '1rem'
-			}}
-		>
+		<>
+			<style>
+				{`.sidebar-scroll-container::-webkit-scrollbar {
+					width: 8px;
+				}
+				.sidebar-scroll-container::-webkit-scrollbar-track {
+					background: ${themeSprings.themeSecondary.get()};
+				}
+				.sidebar-scroll-container::-webkit-scrollbar-thumb {
+					background: ${themeSprings.themeTertiary.get()};
+					border-radius: 4px;
+				}
+				.sidebar-scroll-container::-webkit-scrollbar-thumb:hover {
+					background: ${themeSprings.contrastSecondary.get()};
+				}`}
+			</style>
+			<animated.aside
+				className="sidebar-scroll-container"
+				style={{
+					borderColor: themeSprings.themeTertiary,
+					borderRight: '2px solid',
+					flexShrink: 0,
+					height: '100%',
+					maxHeight: '100%',
+					overflowY: 'auto',
+					padding: '1rem',
+					scrollbarWidth: 'thin', // Firefox
+					scrollbarColor: `${themeSprings.themeTertiary.get()} ${themeSprings.themeSecondary.get()}`, // Firefox
+					msOverflowStyle: 'scrollbar' // IE/Edge
+				}}
+			>
 			{sidebarData.map((element, index) => {
 				if (isMenuDropdown(element)) {
 					return (
@@ -72,5 +92,6 @@ export const Sidebar = ({
 				);
 			})}
 		</animated.aside>
+		</>
 	);
 };

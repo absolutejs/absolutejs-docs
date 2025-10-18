@@ -1,3 +1,4 @@
+import React from 'react';
 import { animated } from '@react-spring/web';
 import { DocsView } from '../../types/types';
 import { Navbar } from '../components/navbar/Navbar';
@@ -7,10 +8,10 @@ import { docsViews } from '../data/sidebarData';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
+import type { ThemeSprings } from '../../types/springTypes';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
-//import statement for Eslint component
-import Eslint from '../components/documentation/Eslint';
+// Eslint component is now EslintView imported via docsViews
 
 type DocumentationProps = {
 	theme: ThemeMode | undefined;
@@ -23,6 +24,15 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 	const [view, navigateToView] = useDocsNavigation(initialView);
 
 	const ActiveView = docsViews[view];
+
+	// Special handling for EslintView to pass themeSprings
+	const renderActiveView = () => {
+		if (view === 'eslint') {
+			const EslintComponent = ActiveView as React.ComponentType<{ themeSprings?: ThemeSprings }>;
+			return <EslintComponent themeSprings={themeSprings} />;
+		}
+		return <ActiveView />;
+	};
 
 	return (
 		<html lang="en" style={htmlDefault}>
@@ -48,7 +58,7 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 							themeSprings={themeSprings}
 							navigateToView={navigateToView}
 						/>
-						<ActiveView />
+						{renderActiveView()}
 					</div>
 				</main>
 			</animated.body>
