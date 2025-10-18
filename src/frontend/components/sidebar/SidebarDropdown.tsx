@@ -1,4 +1,5 @@
 import { animated, AnimatedComponent, useSpring } from '@react-spring/web';
+import { useEffect } from 'react';
 import { IconType } from 'react-icons';
 import {
 	SidebarLinksApi,
@@ -20,11 +21,13 @@ type SidebarDropdownProps = {
 	navigateToView: (newView: DocsView) => void;
 	themeSprings: ThemeSprings;
 	startIndex: number;
+	view: DocsView;
 };
 
 export const SidebarDropdown = ({
 	label,
 	icon,
+	view,
 	linksSprings,
 	linksApi,
 	buttons,
@@ -56,6 +59,17 @@ export const SidebarDropdown = ({
 			transform: isOpen ? 'rotate(-90deg)' : 'rotate(0deg)'
 		});
 	};
+
+	useEffect(() => {
+		const buttonIds = buttons.map((button) => button.id);
+		if (buttonIds.includes(view)) {
+			void dropdownApi.start({
+				height: scrollHeight,
+				opacity: 1,
+				transform: 'rotate(0deg)'
+			});
+		}
+	}, [scrollHeight]);
 
 	const Icon = icon;
 
@@ -98,6 +112,7 @@ export const SidebarDropdown = ({
 			>
 				{buttons.map((button, index) => (
 					<SidebarLink
+						view={view}
 						linkSprings={linksSprings[startIndex + index]}
 						index={startIndex + index}
 						linksApi={linksApi}
