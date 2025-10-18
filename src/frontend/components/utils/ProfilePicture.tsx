@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 
 type ProfilePictureProps = {
 	userImage: string | null | undefined;

@@ -1,7 +1,8 @@
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { useState } from 'react';
 import { User } from '../../../../db/schema';
-import { isNavbarDropdown, ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
+import { isNavbarDropdown } from '../../../types/types';
 import { navbarData } from '../../data/navbarData';
 import { AuthContainer } from '../auth/AuthContainer';
 import { NavbarLink } from '../navbar/NavbarLink';

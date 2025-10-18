@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { ThemeProps } from '../../../types/types';
+import { ThemeProps } from '../../../types/springTypes';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { CopyButton } from '../utils/CopyButton';
 

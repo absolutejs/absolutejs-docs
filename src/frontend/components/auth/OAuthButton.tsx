@@ -2,7 +2,7 @@ import { animated } from '@react-spring/web';
 import { ProviderOption } from 'citra';
 import { Dispatch, SetStateAction } from 'react';
 import { FiUser } from 'react-icons/fi';
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 import { providerData, ProviderInfo } from '../../data/providerData';
 import {
 	oauthButtonStyle,

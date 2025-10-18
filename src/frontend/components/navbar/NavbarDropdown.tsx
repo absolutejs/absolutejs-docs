@@ -1,10 +1,8 @@
 import { animated, useSpring } from '@react-spring/web';
 import { ReactNode, useRef } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
-import {
-	NavbarLink as NavbarLinkType,
-	ThemeSprings
-} from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
+import { NavbarLink as NavbarLinkType } from '../../../types/types';
 import { labelStyle } from '../../styles/authModalStyles';
 import {
 	dropdownStyle,

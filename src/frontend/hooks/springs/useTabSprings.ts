@@ -1,6 +1,6 @@
 import { useSpring } from '@react-spring/web';
 import { useState } from 'react';
-import { ONE_HUNDRED_PERCENT } from '../../constants';
+import { ONE_HUNDRED_PERCENT } from '../../../constants';
 
 export const useTabSprings = (numTabs: number) => {
 	const [currentTab, setCurrentTab] = useState(0);

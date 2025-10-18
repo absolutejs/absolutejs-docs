@@ -1,7 +1,7 @@
 import { ProviderOption } from '@absolutejs/auth';
 import { animated } from '@react-spring/web';
 import { useState } from 'react';
-import { ThemeProps } from '../../../types/types';
+import { ThemeProps } from '../../../types/springTypes';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {
 	containerStyle,
