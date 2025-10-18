@@ -1,4 +1,4 @@
-import { ThemeProps } from '../../../types/types';
+import { ThemeProps } from '../../../types/springTypes';
 import { heroStyle, navStyle } from '../../styles/homeStyles';
 import { CreateButton } from './CreateButton';
 import { HomeHeader } from './HomeHeader';

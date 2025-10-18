@@ -1,12 +1,11 @@
-import {
-	animated,
-	AnimatedComponent,
-	SpringRef,
-	SpringValue,
-	useSpring
-} from '@react-spring/web';
+import { animated, AnimatedComponent, useSpring } from '@react-spring/web';
 import { IconType } from 'react-icons';
-import { ThemeSprings, MenuButton, DocsView } from '../../../types/types';
+import {
+	SidebarLinksApi,
+	SidebarLinksSprings,
+	ThemeSprings
+} from '../../../types/springTypes';
+import { MenuButton, DocsView } from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
 import { labelStyle } from '../../styles/authModalStyles';
 import { AnimatedFaChevronDown } from '../utils/AnimatedComponents';
@@ -14,12 +13,8 @@ import { SidebarLink } from './SidebarLink';
 
 type SidebarDropdownProps = {
 	label: string;
-	linksSprings: {
-		borderColor: SpringValue<string>;
-	}[];
-	linksApi: SpringRef<{
-		borderColor: string;
-	}>;
+	linksSprings: SidebarLinksSprings;
+	linksApi: SidebarLinksApi;
 	buttons: MenuButton[];
 	icon?: AnimatedComponent<IconType>;
 	navigateToView: (newView: DocsView) => void;

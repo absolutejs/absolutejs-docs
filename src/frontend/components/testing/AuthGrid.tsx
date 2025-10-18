@@ -5,7 +5,7 @@ import {
 } from '@absolutejs/auth';
 import { useState } from 'react';
 import { User } from '../../../../db/schema';
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 import { providerData, ProviderInfo } from '../../data/providerData';
 import { OAuthButton } from '../auth/OAuthButton';
 import { ToastProvider } from '../utils/ToastProvider';

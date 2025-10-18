@@ -1,6 +1,6 @@
 import { SpringValue } from '@react-spring/web';
 import { CSSProperties } from 'react';
-import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/springTypes';
 
 export const dropdownStyle: CSSProperties = {
 	alignItems: 'center',

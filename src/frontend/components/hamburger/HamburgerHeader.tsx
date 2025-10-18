@@ -1,6 +1,6 @@
 import { animated } from '@react-spring/web';
 import { FaTimes } from 'react-icons/fa';
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 
 type HamburgerHeaderProps = {
 	onClose: () => void;

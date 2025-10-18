@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/springTypes';
 
 export const highlighterContainerStyle: CSSProperties = {
 	borderRadius: '5px',

@@ -2,7 +2,7 @@ import { animated, useSpring } from '@react-spring/web';
 import { useRef } from 'react';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { User } from '../../../../db/schema';
-import { SetTheme, ThemeSprings } from '../../../types/types';
+import { ThemeSprings, SetTheme } from '../../../types/springTypes';
 import { navbarData } from '../../data/navbarData';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {

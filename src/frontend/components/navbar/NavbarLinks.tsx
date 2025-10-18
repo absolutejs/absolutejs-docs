@@ -1,8 +1,5 @@
-import {
-	isNavbarDropdown,
-	NavbarElement,
-	ThemeSprings
-} from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
+import { isNavbarDropdown, NavbarElement } from '../../../types/types';
 import { NavbarDropdown } from './NavbarDropdown';
 import { NavbarLink } from './NavbarLink';
 

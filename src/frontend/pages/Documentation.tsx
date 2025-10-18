@@ -1,6 +1,5 @@
 import { animated } from '@react-spring/web';
 import { DocsView } from '../../types/types';
-import { Overview } from '../components/documentation/overview/OverviewView';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { Sidebar } from '../components/sidebar/Sidebar';

@@ -1,7 +1,7 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useRef, useState } from 'react';
 import { User } from '../../../../db/schema';
-import { SetTheme, ThemeSprings } from '../../../types/types';
+import { ThemeSprings, SetTheme } from '../../../types/springTypes';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { profileButtonStyle } from '../../styles/navbarStyles';
 import { buttonStyle } from '../../styles/styles';
