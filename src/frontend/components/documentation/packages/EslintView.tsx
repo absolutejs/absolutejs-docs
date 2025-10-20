@@ -114,7 +114,7 @@ export const EslintView = ({ themeSprings }: { themeSprings?: ThemeSprings }) =>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/explicit-object-types</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
 					Requires objects to have explicit TypeScript type annotations instead of relying on implicit inference. 
-					This is meant for stricter definitions of objects so the type can be reused. Note that `const` is allowed here because it gives the object a constant shape.
+					This is meant for stricter definitions of objects so the type can be reused. Note that `as const` is allowed here because it gives the object a constant shape.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
@@ -157,18 +157,16 @@ export const defaultConfig: Config = {
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/localize-react-props</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					If you declare a variable like `const x = 5` and only use it as a prop in a singular component, then that variable should be declared inside the component instead of passed as a prop.
+					This rule encourages keeping component logic and data as close to where they’re used as possible. If a variable is only used as a prop for a single component, it should be defined inside that component rather than being passed down as a prop.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>Before</animated.h3>
 						<PrismPlus
 							language="tsx"
-							codeString={`const title = "Save changes";
+							codeString={`const x = 5;
 
-function MyComponent() {
-	return <Button title={title} />;
-}`}
+<MyComponent value={x} />;`}
 							themeSprings={ts}
 							showLineNumbers={false}
 						/>
@@ -177,10 +175,10 @@ function MyComponent() {
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>After</animated.h3>
 						<PrismPlus
 							language="tsx"
-							codeString={`function MyComponent() {
-	const title = "Save changes";
-	return <Button title={title} />;
-}`}
+							codeString={`const MyComponent = () => {
+  const value = 5;
+  return <div>{value}</div>;
+};`}
 							themeSprings={ts}
 							showLineNumbers={false}
 						/>
@@ -324,14 +322,16 @@ const MyComponent = () => (
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/no-button-navigation</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-				Specifically checks for operations performed on the browser’s navigator object, not on any routing or navigation library.
+				This rule prevents using button clicks (or other UI event handlers) to directly manipulate the browser’s navigator object. In other words, you shouldn’t perform navigation actions like window.location, navigator.pushState, or similar operations inside button event handlers.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>Before</animated.h3>
 						<PrismPlus
 							language="tsx"
-							codeString={`<button onClick={() => router.push('/docs')}>Docs</button>`}
+							codeString={`<button onClick={() => (window.location.href = '/home')}>
+  Go Home
+</button>`}
 							themeSprings={ts}
 							showLineNumbers={false}
 						/>
@@ -340,7 +340,7 @@ const MyComponent = () => (
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>After</animated.h3>
 						<PrismPlus
 							language="tsx"
-							codeString={`<Link to="/docs">Docs</Link>`}
+							codeString={`<Button onClick={handleNavigateToHome}>Go Home</Button>`}
 							themeSprings={ts}
 							showLineNumbers={false}
 						/>
@@ -356,16 +356,16 @@ const MyComponent = () => (
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/no-explicit-return-type</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					Disallows explicit return types where TypeScript can infer them, as inferred types are more reliable and malleable.
+				This rule disallows adding explicit return type annotations to functions when TypeScript can already infer the type automatically. TypeScript’s type inference system is highly accurate and adapts as your code changes — meaning that explicitly declaring return types in these cases can make your code more rigid and harder to maintain.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>Before</animated.h3>
 						<PrismPlus
 							language="typescript"
-							codeString={`function add(a: number, b: number): number {
-	return a + b;
-}`}
+							codeString={`const getUserName = (user: User): string => {
+  return user.name;
+};`}
 							themeSprings={ts}
 							showLineNumbers={false}
 						/>
@@ -374,9 +374,9 @@ const MyComponent = () => (
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>After</animated.h3>
 						<PrismPlus
 							language="typescript"
-							codeString={`function add(a: number, b: number) {
-	return a + b;
-}`}
+							codeString={`const getUserName = (user: User) => {
+  return user.name;
+};`}
 							themeSprings={ts}
 							showLineNumbers={false}
 						/>
@@ -399,9 +399,9 @@ const MyComponent = () => (
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>Before</animated.h3>
 						<PrismPlus
 							language="tsx"
-							codeString={`interface Props {
-	style: { marginTop: number };
-}
+							codeString={`type Props = {
+  style: { marginTop: number };
+};
 
 const MyComp = ({ style }: Props) => <div style={style} />;`}
 							themeSprings={ts}
@@ -412,13 +412,13 @@ const MyComp = ({ style }: Props) => <div style={style} />;`}
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>After</animated.h3>
 						<PrismPlus
 							language="tsx"
-							codeString={`interface StyleProps {
-	marginTop: number;
-}
+							codeString={`type StyleProps = {
+  marginTop: number;
+};
 
-interface Props {
-	style: StyleProps;
-}
+type Props = {
+  style: StyleProps;
+};
 
 const MyComp = ({ style }: Props) => <div style={style} />;`}
 							themeSprings={ts}
@@ -444,9 +444,15 @@ const MyComp = ({ style }: Props) => <div style={style} />;`}
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>Before</animated.h3>
 						<PrismPlus
 							language="tsx"
-							codeString={`<div style={{ color: 'red', padding: 4 }} />
-<div style={{ color: 'blue', margin: 8 }} />
-<div style={{ color: 'green', border: '1px solid' }} />`}
+							codeString={`const styles = {
+  redBox: { color: 'red', padding: 4 },
+  blueBox: { color: 'blue', margin: 8 },
+  greenBox: { color: 'green', border: '1px solid' },
+};
+
+<div style={styles.redBox} />
+<div style={styles.blueBox} />
+<div style={styles.greenBox} />`}
 							themeSprings={ts}
 							showLineNumbers={false}
 						/>
@@ -455,15 +461,13 @@ const MyComp = ({ style }: Props) => <div style={style} />;`}
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>After</animated.h3>
 						<PrismPlus
 							language="tsx"
-							codeString={`const styles = {
-	redBox: { color: 'red', padding: 4 },
-	blueBox: { color: 'blue', margin: 8 },
-	greenBox: { color: 'green', border: '1px solid' }
-};
+							codeString={`const redBox = { color: 'red', padding: 4 };
+const blueBox = { color: 'blue', margin: 8 };
+const greenBox = { color: 'green', border: '1px solid' };
 
-<div style={styles.redBox} />
-<div style={styles.blueBox} />
-<div style={styles.greenBox} />`}
+<div style={redBox} />
+<div style={blueBox} />
+<div style={greenBox} />`}
 							themeSprings={ts}
 							showLineNumbers={false}
 						/>
@@ -479,20 +483,25 @@ const MyComp = ({ style }: Props) => <div style={style} />;`}
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/no-nested-jsx-return</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					Prevents defining JSX-returning functions inside render logic. Encourages extracting those into separate components.
+					This rule prevents returning multiple nested elements inside a loop (like .map()). When rendering lists, each loop should return only one top-level element. If you need to return something more complex, move it into its own component to keep your code clean and easy to understand.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>Before</animated.h3>
 				<PrismPlus
 					language="tsx"
-					codeString={`function List({ items }) {
-	return (
-		<ul>{items.map(item => {
-			return <li>{() => <span>{item.name}</span>}</li>;
-		})}</ul>
-	);
-}`}
+					codeString={`const items = ['apple', 'banana', 'cherry'];
+
+const List = () => (
+  <div>
+    {items.map((item) => (
+      <div>
+        <h3>{item}</h3>
+        <p>Delicious fruit</p>
+      </div>
+    ))}
+  </div>
+);`}
 					themeSprings={ts}
 					showLineNumbers={false}
 				/>
@@ -501,13 +510,22 @@ const MyComp = ({ style }: Props) => <div style={style} />;`}
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>After</animated.h3>
 				<PrismPlus
 					language="tsx"
-					codeString={`function Item({ item }) {
-	return <li>{item.name}</li>;
-}
+					codeString={`const items = ['apple', 'banana', 'cherry'];
 
-function List({ items }) {
-	return <ul>{items.map(it => <Item key={it.id} item={it} />)}</ul>;
-}`}
+const FruitItem = ({ name }: { name: string }) => (
+  <div>
+    <h3>{name}</h3>
+    <p>Delicious fruit</p>
+  </div>
+);
+
+const List = () => (
+  <div>
+    {items.map((item) => (
+      <FruitItem key={item} name={item} />
+    ))}
+  </div>
+);`}
 					themeSprings={ts}
 					showLineNumbers={false}
 				/>
@@ -531,7 +549,7 @@ function List({ items }) {
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>Before</animated.h3>
 				<PrismPlus
 					language="tsx"
-					codeString={`function MaybeButton({ enabled }) {
+					codeString={`const MaybeButton({ enabled }) {
 	if (enabled) return <Button />;
 	return null;
 }`}
@@ -559,16 +577,14 @@ function List({ items }) {
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/no-transition-cssproperties</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					Disallows transitions on non-performant CSS properties (like width, height, top, left) so that it doesn't conflict with react-spring.
+					This rule prevents using the transition CSS property completely. Using CSS transitions can interfere with React Spring’s animation system, causing unexpected or broken animations. All animations and transitions should be handled through React Spring instead of native CSS transitions.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>Before</animated.h3>
 				<PrismPlus
 					language="css"
-					codeString={`.box {
-	transition: width 200ms ease;
-}`}
+					codeString={`<div style={{ transition: 'all 0.3s ease' }} />`}
 					themeSprings={ts}
 					showLineNumbers={false}
 				/>
@@ -577,9 +593,9 @@ function List({ items }) {
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>After</animated.h3>
 				<PrismPlus
 					language="css"
-					codeString={`.box {
-	transition: transform 200ms ease;
-}`}
+					codeString={`import { animated } from '@react-spring/web';
+
+const Box = () => <animated.div style={{ opacity: 1 }} />;`}
 					themeSprings={ts}
 					showLineNumbers={false}
 				/>
@@ -595,8 +611,8 @@ function List({ items }) {
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/no-unnecessary-div</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					Removes redundant wrapper &lt;div&gt; elements that add no semantic or layout value. 
-					Even if they're wrapping it for style, it encourages them to move that to the child component.
+					This rule removes unnecessary wrapper &lt;div&gt elements that don’t provide meaningful structure or purpose.
+					If a wrapper is only used for styling, that styling should be moved into the child component instead.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
@@ -706,9 +722,13 @@ function List({ items }) {
 						<animated.h3 style={beforeAfterHeadingStyle(ts)}>Before</animated.h3>
 				<PrismPlus
 					language="tsx"
-					codeString={`const styles = { big: { fontSize: 20 } };
+					codeString={`// Comp.tsx
+const styles = {
+  big: { fontSize: 20 },
+};
+
 export default function Comp() {
-	return <div style={styles.big}>x</div>;
+  return <div style={styles.big}>x</div>;
 }`}
 					themeSprings={ts}
 					showLineNumbers={false}
@@ -719,12 +739,13 @@ export default function Comp() {
 				<PrismPlus
 					language="typescript"
 					codeString={`// Comp.styles.ts
-export const styles = { big: { fontSize: 20 } };
+export const big = { fontSize: 20 };
 
 // Comp.tsx
-import { styles } from './Comp.styles';
+import * as styles from './Comp.styles';
+
 export default function Comp() {
-	return <div style={styles.big}>x</div>;
+  return <div style={styles.big}>x</div>;
 }`}
 					themeSprings={ts}
 					showLineNumbers={false}
