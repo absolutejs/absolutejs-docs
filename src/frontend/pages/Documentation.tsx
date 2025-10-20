@@ -1,5 +1,7 @@
+import React from 'react';
 import { animated } from '@react-spring/web';
 import { DocsView } from '../../types/types';
+import type { ThemeSprings } from '../../types/springTypes';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { Sidebar } from '../components/sidebar/Sidebar';
@@ -23,6 +25,15 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 	const [view, navigateToView] = useDocsNavigation(initialView);
 
 	const ActiveView = docsViews[view];
+
+	// Function to render the active view with themeSprings when needed
+	const renderActiveView = () => {
+		if (view === 'installation' || view === 'eslint') {
+			const Component = ActiveView as React.ComponentType<{ themeSprings?: ThemeSprings }>;
+			return <Component themeSprings={themeSprings} />;
+		}
+		return <ActiveView />;
+	};
 
 	return (
 		<html lang="en" style={htmlDefault}>
@@ -48,7 +59,7 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 							themeSprings={themeSprings}
 							navigateToView={navigateToView}
 						/>
-						<ActiveView />
+						{renderActiveView()}
 					</div>
 				</main>
 			</animated.body>
