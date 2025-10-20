@@ -30,7 +30,7 @@ export const Home = ({ theme }: HomeProps) => {
 					handleSignOut={handleSignOut}
 					setTheme={setTheme}
 				/>
-				<main style={mainDefault}>
+				<main style={mainDefault()}>
 					<CommandSection themeSprings={themeSprings} />
 					<TypeSafeArticle themeSprings={themeSprings} />
 					<PerformanceArticle themeSprings={themeSprings} />

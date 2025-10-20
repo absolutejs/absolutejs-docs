@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
-import { AnimatedCSSProperties, ThemeSprings } from '../../types/types';
+import { AnimatedCSSProperties, ThemeSprings } from '../../types/springTypes';
 
 export const confirmInputStyle: CSSProperties = {
 	border: '1px solid #ccc',
@@ -97,9 +97,12 @@ export const headingStyle: CSSProperties = {
 export const labelStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
+	backgroundColor: 'transparent',
+	border: 'none',
 	color: themeSprings.contrastSecondary,
-	fontSize: '1.2rem',
-	marginBottom: '-2px',
+	display: 'flex',
+	fontSize: '1rem',
+	fontWeight: 'bold',
 	textAlign: 'left',
 	textDecoration: 'none'
 });

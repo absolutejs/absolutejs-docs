@@ -1,7 +1,8 @@
 import {
+	asset,
 	build,
 	handleReactPageRequest,
-	networkingPlugin
+	networking
 } from '@absolutejs/absolute';
 import { absoluteAuth } from '@absolutejs/auth';
 import { staticPlugin } from '@elysiajs/static';
@@ -12,7 +13,7 @@ import { schema, User } from '../../db/schema';
 import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { Documentation } from '../frontend/pages/Documentation';
 import { Home } from '../frontend/pages/Home';
-import { themeCookie } from '../types/typebox';
+import { docsViewEnum, themeCookie } from '../types/typebox';
 import { providerPlugin } from './plugins/providerPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 
@@ -20,22 +21,6 @@ const manifest = await build({
 	assetsDirectory: 'src/backend/assets',
 	reactDirectory: 'src/frontend'
 });
-
-if (manifest === null) {
-	throw new Error('Build manifest is null');
-}
-
-const homeIndex = manifest['HomeIndex'];
-const documentationIndex = manifest['DocumentationIndex'];
-const authTestingIndex = manifest['AuthTestingIndex'];
-
-if (
-	homeIndex === undefined ||
-	authTestingIndex === undefined ||
-	documentationIndex === undefined
-) {
-	throw new Error('Missing index file in manifest');
-}
 
 if (env.DATABASE_URL === undefined) {
 	throw new Error('DATABASE_URL is not set in .env file');
@@ -58,29 +43,40 @@ const server = new Elysia()
 	.get(
 		'/',
 		({ cookie: { theme } }) =>
-			handleReactPageRequest(Home, homeIndex, {
+			handleReactPageRequest(Home, asset(manifest, 'HomeIndex'), {
 				theme: theme?.value
 			}),
 		{ cookie: themeCookie }
 	)
 	.get(
-		'/documentation/:section?',
-		({ params: { section }, cookie: { theme } }) =>
-			handleReactPageRequest(Documentation, documentationIndex, {
-				section: section ?? 'overview',
-				theme: theme?.value
-			}),
-		{ cookie: themeCookie }
+		'/documentation/:view?',
+		({ params: { view }, cookie: { theme } }) =>
+			handleReactPageRequest(
+				Documentation,
+				asset(manifest, 'DocumentationIndex'),
+				{
+					initialView: view ?? 'overview',
+					theme: theme?.value
+				}
+			),
+		{
+			cookie: themeCookie,
+			params: t.Object({ view: t.Optional(docsViewEnum) })
+		}
 	)
 	.get(
 		'/testing/authentication',
 		({ cookie: { theme } }) =>
-			handleReactPageRequest(AuthTesting, authTestingIndex, {
-				theme: theme?.value
-			}),
+			handleReactPageRequest(
+				AuthTesting,
+				asset(manifest, 'AuthTestingIndex'),
+				{
+					theme: theme?.value
+				}
+			),
 		{ cookie: themeCookie }
 	)
-	.use(networkingPlugin)
+	.use(networking)
 	.on('error', (error) => {
 		const { request } = error;
 		console.error(

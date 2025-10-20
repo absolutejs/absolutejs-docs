@@ -1,6 +1,6 @@
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { ReactNode, RefObject, useEffect, useRef } from 'react';
-import { ThemeSprings } from '../../../types/types';
+import { ThemeSprings } from '../../../types/springTypes';
 
 type DropdownContainerProps = {
 	spring: {

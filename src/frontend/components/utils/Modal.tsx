@@ -1,6 +1,6 @@
 import { animated } from '@react-spring/web';
 import { ReactNode, useEffect, useRef, MouseEvent, CSSProperties } from 'react';
-import { AnimatedCSSProperties } from '../../../types/types';
+import { AnimatedCSSProperties } from '../../../types/springTypes';
 
 type ModalProps = {
 	isOpen: boolean;
