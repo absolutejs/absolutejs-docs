@@ -28,7 +28,7 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 
 	// Function to render the active view with themeSprings when needed
 	const renderActiveView = () => {
-		if (view === 'installation' || view === 'eslint') {
+		if (view === 'installation' || view === 'quickstart' || view === 'eslint') {
 			const Component = ActiveView as React.ComponentType<{ themeSprings?: ThemeSprings }>;
 			return <Component themeSprings={themeSprings} />;
 		}

@@ -18,6 +18,7 @@ import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { EslintView } from '../components/documentation/packages/EslintView';
 import { InstallationView } from '../components/documentation/gettingStarted/InstallationView';
+import { QuickstartView } from '../components/documentation/gettingStarted/QuickstartView';
 
 const definePortalViews = <T>(views: T) => views;
 
@@ -42,7 +43,7 @@ export const docsViews = definePortalViews({
 	'page-handlers': Overview,
 	plugin: Overview,
 	'production-build': Overview,
-	quickstart: Overview,
+	quickstart: QuickstartView,
 	react: Overview,
 	'routing-and-handlers': Overview,
 	'server state': Overview,

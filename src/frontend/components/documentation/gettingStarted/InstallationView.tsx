@@ -549,7 +549,7 @@ bun tsc --version`}
 					/>
 
 					<animated.p style={{ color: ts.contrastSecondary, fontSize: '1rem', lineHeight: '1.6', marginTop: '24px' }}>
-						Great! You're all set to begin developing with AbsoluteJS. Check out the other documentation sections to learn about creating your first project.
+						Great! You're all set to begin developing with AbsoluteJS. Check out our quickstart documentation to learn about getting started with creating your first project.
 					</animated.p>
 				</animated.section>
 			</div>

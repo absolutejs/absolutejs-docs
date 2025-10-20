@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { Prism } from 'react-syntax-highlighter';
 import {
@@ -37,6 +37,22 @@ export const PrismPlus = ({
 	);
 
 	const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+	const [renderKey, setRenderKey] = useState(0);
+
+	// Force re-render when theme changes since react-syntax-highlighter doesn't automatically update
+	useEffect(() => {
+		let lastTheme = themeSprings.theme.get();
+		
+		const interval = setInterval(() => {
+			const currentTheme = themeSprings.theme.get();
+			if (currentTheme !== lastTheme) {
+				lastTheme = currentTheme;
+				setRenderKey(prev => prev + 1);
+			}
+		}, 100);
+
+		return () => clearInterval(interval);
+	}, [themeSprings.theme]);
 
 	const codeStringsArray = Array.isArray(codeString)
 		? codeString
@@ -45,6 +61,10 @@ export const PrismPlus = ({
 
 	const displayedCodeString =
 		codeStringsArray[selectedOptionIndex] ?? codeStringsArray[0] ?? '';
+
+	// Get current theme statically for the Prism component
+	const currentTheme = themeSprings.theme.get();
+	const staticCodeStyle = currentTheme === 'light' ? prism : nightOwl;
 
 	const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		setSelectedOptionIndex(Number(event.target.value));
@@ -85,8 +105,9 @@ export const PrismPlus = ({
 			</animated.div>
 			{/* @ts-expect-error react 19 thing where we have 18 types */}
 			<Prism
+				key={`${renderKey}-${selectedOptionIndex}-${currentTheme}`}
 				language={language}
-				style={codeStyle.get()}
+				style={staticCodeStyle}
 				customStyle={{
 					margin: 0,
 					marginBottom: '1.5rem',
