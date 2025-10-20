@@ -54,28 +54,55 @@ export const EslintView = ({ themeSprings }: { themeSprings?: ThemeSprings }) =>
 				...tableOfContentsStyle(ts),
 				position: 'relative', // Override the sticky positioning
 				top: 'auto',
-				backgroundColor: ts.themeTertiary // Use themeTertiary which was working well in dark mode and should switch properly now
+				backgroundColor: ts.themeTertiary, // Use themeTertiary which was working well in dark mode and should switch properly now
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				textAlign: 'center'
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), marginTop: 0, marginBottom: '24px', color: ts.contrastPrimary }}>Table of Contents</animated.h2>
-				<animated.div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-					<animated.a href="#explicit-object-types" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/explicit-object-types</animated.a>
-					<animated.a href="#localize-react-props" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/localize-react-props</animated.a>
-					<animated.a href="#max-depth-extended" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/max-depth-extended</animated.a>
-					<animated.a href="#max-jsxnesting" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/max-jsxnesting</animated.a>
-					<animated.a href="#min-var-length" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/min-var-length</animated.a>
-					<animated.a href="#no-button-navigation" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-button-navigation</animated.a>
-					<animated.a href="#no-explicit-return-type" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-explicit-return-type</animated.a>
-					<animated.a href="#no-inline-prop-types" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-inline-prop-types</animated.a>
-					<animated.a href="#no-multi-style-objects" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-multi-style-objects</animated.a>
-					<animated.a href="#no-nested-jsx-return" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-nested-jsx-return</animated.a>
-					<animated.a href="#no-or-none-component" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-or-none-component</animated.a>
-					<animated.a href="#no-transition-cssproperties" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-transition-cssproperties</animated.a>
-					<animated.a href="#no-unnecessary-div" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-unnecessary-div</animated.a>
-					<animated.a href="#no-unnecessary-key" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-unnecessary-key</animated.a>
-					<animated.a href="#no-useless-function" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/no-useless-function</animated.a>
-					<animated.a href="#seperate-style-files" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/seperate-style-files</animated.a>
-					<animated.a href="#sort-exports" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/sort-exports</animated.a>
-					<animated.a href="#sort-keys-fixable" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem' }}>• absolute/sort-keys-fixable</animated.a>
+				<animated.div style={{ 
+					display: 'flex', 
+					flexDirection: isMobile ? 'column' : isTablet ? 'column' : 'row',
+					gap: isMobile ? '12px' : isTablet ? '12px' : '24px',
+					flexWrap: 'wrap',
+					justifyContent: 'center',
+					alignItems: 'flex-start'
+				}}>
+					<animated.div style={{ 
+						display: 'flex', 
+						flexDirection: 'column', 
+						gap: '12px',
+						flex: isMobile || isTablet ? 'none' : '1',
+						alignItems: 'center'
+					}}>
+						<animated.a href="#explicit-object-types" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/explicit-object-types</animated.a>
+						<animated.a href="#localize-react-props" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/localize-react-props</animated.a>
+						<animated.a href="#max-depth-extended" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/max-depth-extended</animated.a>
+						<animated.a href="#max-jsxnesting" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/max-jsxnesting</animated.a>
+						<animated.a href="#min-var-length" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/min-var-length</animated.a>
+						<animated.a href="#no-button-navigation" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-button-navigation</animated.a>
+						<animated.a href="#no-explicit-return-type" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-explicit-return-type</animated.a>
+						<animated.a href="#no-inline-prop-types" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-inline-prop-types</animated.a>
+						<animated.a href="#no-multi-style-objects" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-multi-style-objects</animated.a>
+					</animated.div>
+					<animated.div style={{ 
+						display: 'flex', 
+						flexDirection: 'column', 
+						gap: '12px',
+						flex: isMobile || isTablet ? 'none' : '1',
+						alignItems: 'center'
+					}}>
+						<animated.a href="#no-nested-jsx-return" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-nested-jsx-return</animated.a>
+						<animated.a href="#no-or-none-component" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-or-none-component</animated.a>
+						<animated.a href="#no-transition-cssproperties" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-transition-cssproperties</animated.a>
+						<animated.a href="#no-unnecessary-div" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-unnecessary-div</animated.a>
+						<animated.a href="#no-unnecessary-key" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-unnecessary-key</animated.a>
+						<animated.a href="#no-useless-function" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/no-useless-function</animated.a>
+						<animated.a href="#seperate-style-files" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/seperate-style-files</animated.a>
+						<animated.a href="#sort-exports" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/sort-exports</animated.a>
+						<animated.a href="#sort-keys-fixable" style={{ color: ts.contrastSecondary, textDecoration: 'none', fontSize: '1.1rem', textAlign: 'center' }}>absolute/sort-keys-fixable</animated.a>
+					</animated.div>
 				</animated.div>
 			</animated.div>
 			{/* absolute/explicit-object-types */}
