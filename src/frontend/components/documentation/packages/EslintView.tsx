@@ -290,7 +290,7 @@ const MyComponent = () => (
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/min-var-length</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					Enforces a minimum variable name length (default: 3). Improves readability and discourages overly short variable names.
+					Enforces a minimum variable name length, like default: 3. Improves readability and discourages overly short variable names.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
@@ -322,7 +322,7 @@ const MyComponent = () => (
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/no-button-navigation</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-				This rule prevents using button clicks (or other UI event handlers) to directly manipulate the browser’s navigator object. In other words, you shouldn’t perform navigation actions like window.location, navigator.pushState, or similar operations inside button event handlers.
+				This rule prevents using button clicks, or other UI event handlers, to directly manipulate the browser’s navigator object. In other words, you shouldn’t perform navigation actions like window.location, navigator.pushState, or similar operations inside button event handlers.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
@@ -483,7 +483,7 @@ const greenBox = { color: 'green', border: '1px solid' };
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/no-nested-jsx-return</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					This rule prevents returning multiple nested elements inside a loop (like .map()). When rendering lists, each loop should return only one top-level element. If you need to return something more complex, move it into its own component to keep your code clean and easy to understand.
+					This rule prevents returning multiple nested elements inside a loop, like .map(). When rendering lists, each loop should return only one top-level element. If you need to return something more complex, move it into its own component to keep your code clean and easy to understand.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
@@ -541,7 +541,7 @@ const List = () => (
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/no-or-none-component</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					Prevents components that inconsistently return different types (like a component or null). 
+					Prevents components that inconsistently return different types, like a component or null. 
 					Encourages conditional rendering instead of “Maybe” component patterns.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
@@ -646,7 +646,7 @@ const Box = () => <animated.div style={{ opacity: 1 }} />;`}
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/no-unnecessary-key</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					Disallows keys where not needed or inappropriate (like static elements). 
+					Disallows keys where not needed or inappropriate, like static elements. 
 					Encourages correct key usage in dynamic lists.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
@@ -714,7 +714,7 @@ const Box = () => <animated.div style={{ opacity: 1 }} />;`}
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/seperate-style-files</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					Requires that style definitions be located in separate files (e.g., .styles.ts or .css). 
+					Requires that style definitions be located in separate files, like .styles.ts or .css. 
 					This keeps component logic and styling concerns separated.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
@@ -797,7 +797,7 @@ export function b() {}`}
 			}}>
 				<animated.h2 style={{ ...h2Style(ts), color: ts.contrastPrimary }}>absolute/sort-keys-fixable</animated.h2>
 				<animated.p style={{ ...ruleDescriptionStyle(ts), color: ts.contrastSecondary }}>
-					This is just the same as the sort-keys ESLint rule with an addition. While it does enforce consistent key ordering within objects it also provides automatic fixing to sort keys alphabetically (built in function for --fix rather than manual order changes).
+					This is just the same as the sort-keys ESLint rule with an addition. While it does enforce consistent key ordering within objects it also provides automatic fixing to sort keys alphabetically, the built in function for --fix rather than manual order changes.
 				</animated.p>
 				<div style={beforeAfterContainerStyle}>
 					<div style={beforeAfterColumnStyle}>
