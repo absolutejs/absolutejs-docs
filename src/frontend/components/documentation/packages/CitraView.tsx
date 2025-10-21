@@ -1,4 +1,12 @@
+import { citraDocsCode } from '../../../data/citraDocsCode';
 import { CodeBlock } from '../../utils/CodeBlock';
+
+const gettingStarted = await CodeBlock({ code: citraDocsCode['gettingStarted'] });
+const buildingAuthUrl = await CodeBlock({ code: citraDocsCode['buildingAuthUrl'] });
+const callback = await CodeBlock({ code: citraDocsCode['callback'] });
+const fetchUserProfile = await CodeBlock({ code: citraDocsCode['fetchUserProfile'] });
+const refreshAccessToken = await CodeBlock({ code: citraDocsCode['refreshAccessToken'] });
+const revokeToken = await CodeBlock({ code: citraDocsCode['revokeToken'] });
 
 export const CitraView = () => (
 	<div
@@ -6,9 +14,12 @@ export const CitraView = () => (
 			display: 'flex',
 			flex: 1,
 			flexDirection: 'column',
-			padding: '1rem 2rem'
+			padding: '1rem 2rem',
+			overflowX: 'hidden',
+			overflowY: 'auto'
 		}}
 	>
+		<link rel='stylesheet' href='https://esm.sh/@shikijs/twoslash@latest/style-rich.css' />
 		<h1>Citra</h1>
 
 		<section>
@@ -21,10 +32,12 @@ export const CitraView = () => (
 
 		<section>
 			<h2>Why Citra?</h2>
-			<ul>
-				<li><strong>Interchangeability</strong>: All OAuth 2.0 providers follow the same authorization flow, and Citra abstracts this process into a unified interface.</li>
-				<li><strong>Type Safety</strong>: Leverage TypeScript generics and type guards to catch configuration mistakes at compile time.</li>
-			</ul>
+			<p>
+				<strong>Interchangeability</strong>: All OAuth 2.0 providers follow the same authorization flow, and Citra abstracts this process into a unified interface.
+			</p>
+			<p>
+				<strong>Type Safety</strong>: Leverage TypeScript generics and type guards to catch configuration mistakes at compile time.
+			</p>
 			<p>
 				Inspired by Arctic, Citra reduces boilerplate and minimizes integration errors by enforcing a uniform configuration approach.
 			</p>
@@ -32,92 +45,57 @@ export const CitraView = () => (
 
 		<section>
 			<h2>Installation</h2>
-			<CodeBlock language="bash">{`bun install citra`}</CodeBlock>
 		</section>
 
 		<section>
-			<h2>Getting Started</h2>
-			<p>Import Citra and create a client for your desired provider: (expand on type safe parameters)</p>
-			<CodeBlock language="typescript">{`import { createOAuth2Client } from 'citra';
-
-const googleClient = await createOAuth2Client('google', {
-  clientId: 'YOUR_CLIENT_ID',
-  clientSecret: 'YOUR_CLIENT_SECRET',
-  redirectUri: 'https://yourapp.com/auth/callback'
-});`}</CodeBlock>
+			<h2>
+				Getting Started
+			</h2>
+			<p>
+				Citra uses strong TypeScript typing to help you build OAuth clients safely and correctly. Each supported provider includes its own typed configuration schema, ensuring you can't accidentally pass unsupported parameters or omit required ones.
+			</p>
+			<div dangerouslySetInnerHTML={{ __html: gettingStarted }} />
 		</section>
 
 		<section>
-			<h2>Building the Authorization URL</h2>
-			<p>Generate the authorization URL from the provider metadata (including a PKCE verifier when required): (expand on customizable parameters like scope, etc)</p>
-			<CodeBlock language="typescript">{`
-			import { generateState, generateCodeVerifier } from 'citra';
-
-			const currentState = generateState();
-			const codeVerifier = generateCodeVerifier();
-			const authUrl = await googleClient.createAuthorizationUrl({
-				codeVerifier,
-				scope: ['profile', 'openid'],
-				searchParams: [
-					['access_type', 'offline'],
-					['prompt', 'consent']
-				],
-				state: currentState
-			});
-
-			// Store state and PKCE verifier in HttpOnly cookies
-			const headers = new Headers();
-			headers.set('Location', authUrl.toString());
-			headers.append(
-			'Set-Cookie',
-			\`oauth_state=\${currentState}; HttpOnly; Path=/; Secure; SameSite=Lax\`
-			);
-			headers.append(
-			'Set-Cookie',
-			\`pkce_code_verifier=\${codeVerifier}; HttpOnly; Path=/; Secure; SameSite=Lax\`
-			);`}
-			</CodeBlock>
+			<h2>
+				Building the Authorization URL
+			</h2>
+			<p>
+				Once your client is initialized, you can generate a fully customized authorization URL for redirecting users to the provider's login page. Every option is strongly typed and context-aware, but you retain full control over advanced parameters like PKCE, scopes, and provider-specific query strings.
+			</p>
+			<div dangerouslySetInnerHTML={{ __html: buildingAuthUrl }} />
 		</section>
 
 		<section>
-			<h2>Handling the Callback</h2>
-			<p>Exchange the code and verifier for an OAuth2TokenResponse:</p>
-			<CodeBlock language="typescript">{`const params = new URL(request.url).searchParams;
-const code = params.get('code');
-const callback_state = params.get('state');
-
-const cookieHeader = request.headers.get('cookie') ?? '';
-const cookies = parse(cookieHeader);
-const stored_state = cookies['state'];
-const code_verifier = cookies['code_verifier'];
-
-if (callback_state !== stored_state.value) {
-  return new Response('Invalid state mismatch', { status: 400 });
-}
-
-const tokenResponse = await googleClient.validateAuthorizationCode({
-  code,
-  codeVerifier
-});`}</CodeBlock>
+			<h2>
+				Handling the Callback
+			</h2>
+			<p>
+				Exchange the code and verifier for an OAuth2TokenResponse:
+			</p>
+			<div dangerouslySetInnerHTML={{ __html: callback }} />
 		</section>
 
 		<section>
-			<h2>Fetching the User Profile</h2>
-			<p>Exchange the access token for user information:</p>
-			<CodeBlock language="typescript">{`const profile = await googleClient.fetchUserProfile(tokenResponse.access_token);
-console.log(profile);`}</CodeBlock>
+			<h2>
+				Fetching the User Profile
+			</h2>
+			<p>
+				Exchange the access token for user information:
+			</p>
+			<div dangerouslySetInnerHTML={{ __html: fetchUserProfile }} />
 		</section>
 
 		<section>
-			<h2>Refreshing and Revoking Tokens</h2>
-			<p>If supported by the provider, you can refresh and revoke tokens:</p>
-			<CodeBlock language="typescript">{`const { refresh_token, access_token } = tokenResponse;`}</CodeBlock>
-			<CodeBlock language="typescript">{`if (refresh_token) {
-  const newTokens = await googleClient.refreshAccessToken(refresh_token);
-}`}</CodeBlock>
-			<CodeBlock language="typescript">{`if (isRevocableProvider(googleClient)) {
-  await googleClient.revokeToken(access_token);
-}`}</CodeBlock>
+			<h2>
+				Refreshing and Revoking Tokens
+			</h2>
+			<p>
+				If supported by the provider, you can refresh and revoke tokens:
+			</p>
+			<div dangerouslySetInnerHTML={{ __html: refreshAccessToken }} />
+			<div dangerouslySetInnerHTML={{ __html: revokeToken }} />
 		</section>
 
 		<section>
@@ -133,7 +111,7 @@ console.log(profile);`}</CodeBlock>
 			</ul>
 		</section>
 
-		<section>
+		{/* <section>
 			<h2>Type Safety</h2>
 			<p>Citra provides comprehensive TypeScript definitions:</p>
 			<ul>
@@ -143,6 +121,6 @@ console.log(profile);`}</CodeBlock>
 				<li><strong>RevocableProvider</strong>: Providers supporting token revocation</li>
 				<li><strong>ScopeRequiredProvider</strong>: Providers requiring explicit scopes</li>
 			</ul>
-		</section>
+		</section> */}
 	</div>
 );
