@@ -1,4 +1,11 @@
 import { CodeBlock } from '../../utils/CodeBlock';
+import { authDocsCode } from '../../../data/authDocsCode';
+
+const basicSetup = await CodeBlock({ code: authDocsCode.basicSetup });
+const protectRoute = await CodeBlock({ code: authDocsCode.protectRoute });
+const handleAuthFlow = await CodeBlock({ code: authDocsCode.handleAuthFlow });
+const reactFrontend = await CodeBlock({ code: authDocsCode.reactFrontend });
+const userManagement = await CodeBlock({ code: authDocsCode.userManagement });
 
 export const AbsoluteAuthView = () => (
     <div
@@ -6,9 +13,12 @@ export const AbsoluteAuthView = () => (
             display: 'flex',
             flex: 1,
             flexDirection: 'column',
-            padding: '1rem 2rem'
+            padding: '1rem 2rem',
+            overflowX: 'hidden',
+            overflowY: 'auto'
         }}
     >
+        <link rel='stylesheet' href='https://esm.sh/@shikijs/twoslash@latest/style-rich.css' />
         <h1>Absolute Auth</h1>
 
         <section>
@@ -36,51 +46,18 @@ export const AbsoluteAuthView = () => (
 
         <section>
             <h2>Installation</h2>
-            <CodeBlock language="bash">{`bun add @absolutejs/auth`}</CodeBlock>
         </section>
 
         <section>
             <h2>Quick Start</h2>
             <h3>1. Basic Setup</h3>
-            <CodeBlock language="typescript">{`import { Elysia } from 'elysia';
-import { absoluteAuth } from '@absolutejs/auth';
-
-const app = new Elysia()
-  .use(await absoluteAuth({
-    providersConfiguration: {
-      google: {
-        credentials: {
-          clientId: process.env.GOOGLE_CLIENT_ID!,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-          redirectUri: 'http://localhost:3000/oauth2/callback'
-        },
-        scope: ['profile', 'email']
-      }
-    }
-  }))
-  .listen(3000);`}</CodeBlock>
+            <div dangerouslySetInnerHTML={{ __html: basicSetup }} />
 
             <h3>2. Protect Routes</h3>
-            <CodeBlock language="typescript">{`app.get('/protected', ({ protectRoute }) =>
-  protectRoute(
-    (user) => \`Hello \${user.name}!\`,
-    () => 'Please log in'
-  )
-);`}</CodeBlock>
+            <div dangerouslySetInnerHTML={{ __html: protectRoute }} />
 
             <h3>3. Handle Authentication Flow</h3>
-            <CodeBlock language="typescript">{`// Redirect to provider authorization
-app.get('/login/:provider', ({ params, redirect }) => {
-  return redirect(\`/oauth2/\${params.provider}/authorization\`);
-});
-
-// Check user status
-app.get('/status', async ({ cookie }) => {
-  const response = await fetch('/oauth2/status', {
-    headers: { cookie: cookie.toString() }
-  });
-  return response.json();
-});`}</CodeBlock>
+            <div dangerouslySetInnerHTML={{ __html: handleAuthFlow }} />
         </section>
 
         <section>
@@ -137,88 +114,11 @@ app.get('/status', async ({ cookie }) => {
         <section>
             <h2>User Management</h2>
             <p>Implement custom user creation and retrieval:</p>
-            <CodeBlock language="typescript">{`const config = {
-  providersConfiguration,
-  onCallbackSuccess: async ({ authProvider, tokenResponse, session, userSessionId }) => {
-    return instantiateUserSession({
-      authProvider,
-      tokenResponse,
-      session,
-      userSessionId,
-      getUser: async (userIdentity) => {
-        // Find user in your database
-        return await db.users.findByAuthSub(userIdentity.sub);
-      },
-      onNewUser: async (userIdentity) => {
-        // Create new user in your database
-        return await db.users.create({
-          authSub: userIdentity.sub,
-          email: userIdentity.email,
-          name: userIdentity.name
-        });
-      }
-    });
-  }
-};`}</CodeBlock>
+            <div dangerouslySetInnerHTML={{ __html: userManagement }} />
         </section>
-
-        <section>
-            <h2>Supported Providers</h2>
-            <p>Absolute Auth supports 50+ authentication providers:</p>
-            <h3>Popular Providers</h3>
-            <ul>
-                <li>Google - OAuth 2.0 with OpenID Connect</li>
-                <li>GitHub - OAuth 2.0</li>
-                <li>Discord - OAuth 2.0 with OpenID Connect</li>
-                <li>Microsoft Entra ID - OAuth 2.0 with OpenID Connect</li>
-                <li>Apple - OAuth 2.0 with PKCE</li>
-                <li>Facebook - OAuth 2.0</li>
-                <li>Twitter - OAuth 2.0</li>
-                <li>LinkedIn - OAuth 2.0 with OpenID Connect</li>
-            </ul>
-            <h3>Enterprise Providers</h3>
-            <ul>
-                <li>Auth0 - OAuth 2.0 with OpenID Connect</li>
-                <li>Okta - OAuth 2.0 with OpenID Connect</li>
-                <li>Keycloak - OAuth 2.0 with OpenID Connect</li>
-                <li>WorkOS - OAuth 2.0 with OpenID Connect</li>
-            </ul>
-            <h3>Gaming & Social</h3>
-            <ul>
-                <li>Twitch - OAuth 2.0 with OpenID Connect</li>
-                <li>Steam - OAuth 2.0</li>
-                <li>Epic Games - OAuth 2.0</li>
-                <li>Battle.net - OAuth 2.0</li>
-            </ul>
-        </section>
-
         <section>
             <h2>React Frontend Integration</h2>
-            <CodeBlock language="typescript">{`// Frontend authentication hook
-export const useAuth = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch('/oauth2/status')
-      .then(res => res.json())
-      .then(data => {
-        setUser(data);
-        setLoading(false);
-      });
-  }, []);
-
-  const login = (provider: string) => {
-    window.location.href = \`/oauth2/\${provider}/authorization\`;
-  };
-
-  const logout = async () => {
-    await fetch('/oauth2/signout', { method: 'DELETE' });
-    setUser(null);
-  };
-
-  return { user, loading, login, logout };
-};`}</CodeBlock>
+            <div dangerouslySetInnerHTML={{ __html: reactFrontend }} />
         </section>
     </div>
 );
