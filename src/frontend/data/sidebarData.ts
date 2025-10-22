@@ -17,13 +17,16 @@ import { AbsoluteAuthView } from '../components/documentation/packages/AbsoluteA
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { EslintView } from '../components/documentation/packages/EslintView';
+import { APIBuildView } from '../components/documentation/reference/APIBuildView';
+import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
+import { TypesView } from '../components/documentation/reference/TypesView';
 
 const definePortalViews = <T>(views: T) => views;
 
 export const docsViews = definePortalViews({
 	'absolute-auth': AbsoluteAuthView,
 	angular: Overview,
-	'api-build': Overview,
+	'api-build': APIBuildView,
 	assets: Overview,
 	'build-and-manifest': Overview,
 	citra: CitraView,
@@ -38,7 +41,7 @@ export const docsViews = definePortalViews({
 	htmx: Overview,
 	installation: Overview,
 	overview: Overview,
-	'page-handlers': Overview,
+	'page-handlers': PageHandlersView,
 	plugin: Overview,
 	'production-build': Overview,
 	quickstart: Overview,
@@ -47,7 +50,7 @@ export const docsViews = definePortalViews({
 	'server state': Overview,
 	'ssr-model': Overview,
 	svelte: Overview,
-	types: Overview,
+	types: TypesView,
 	vue: Overview
 });
 
