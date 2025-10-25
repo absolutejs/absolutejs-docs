@@ -15,6 +15,8 @@ import { Home } from '../frontend/pages/Home';
 import { themeCookie } from '../types/typebox';
 import { providerPlugin } from './plugins/providerPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
+import { SandBox } from '../frontend/pages/SandBox';
+
 
 const manifest = await build({
 	assetsDirectory: 'src/backend/assets',
@@ -73,6 +75,22 @@ const server = new Elysia()
 		{ cookie: themeCookie }
 	)
 	.get(
+    '/documentation/packages/:view',
+    ({ params: { view }, cookie: { theme } }) =>
+        handleReactPageRequest(
+            Documentation,
+            asset(manifest, 'DocumentationIndex'),
+            {
+                initialView: view ?? 'create',
+                theme: theme?.value
+            }
+        ),
+    {
+        cookie: themeCookie,
+        params: t.Object({ view: docsViewEnum })
+    }
+)
+	.get(
 		'/testing/authentication',
 		({ cookie: { theme } }) =>
 			handleReactPageRequest(AuthTesting, authTestingIndex, {
@@ -80,7 +98,20 @@ const server = new Elysia()
 			}),
 		{ cookie: themeCookie }
 	)
+<<<<<<< Updated upstream
 	.use(networkingPlugin)
+=======
+	.get(
+		'/sandbox/:view?',
+		({ params: { view }, cookie: { theme } }) =>
+			handleReactPageRequest(SandBox, asset(manifest, 'SandBoxIndex'), {
+				view: view ?? 'create-absolutejs',
+				theme: theme?.value
+			}),
+		{ cookie: themeCookie }
+	)
+	.use(networking)
+>>>>>>> Stashed changes
 	.on('error', (error) => {
 		const { request } = error;
 		console.error(

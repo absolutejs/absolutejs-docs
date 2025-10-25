@@ -18,7 +18,7 @@ export const navbarData: NavbarElement[] = [
 				label: 'Citra'
 			},
 			{
-				href: '/documentation/packages/create',
+				href: '/documentation/packages/create-absolutejs',
 				label: 'Create'
 			},
 			{

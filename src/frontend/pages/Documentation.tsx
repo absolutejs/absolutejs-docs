@@ -30,11 +30,25 @@ export const Documentation = ({ section, theme }: DocumentationProps) => {
 					<div
 						style={{
 							display: 'flex',
+<<<<<<< Updated upstream
 							flex: 1
 						}}
 					>
 						<Sidebar themeSprings={themeSprings} />
 						<Overview />
+=======
+							flex: 1,
+							minHeight: 0,
+							overflow: 'auto'
+						}}
+					>
+						<Sidebar
+							view={view}
+							themeSprings={themeSprings}
+							navigateToView={navigateToView}
+						/>
+						<ActiveView themeSprings={themeSprings} />
+>>>>>>> Stashed changes
 					</div>
 				</main>
 			</animated.body>
