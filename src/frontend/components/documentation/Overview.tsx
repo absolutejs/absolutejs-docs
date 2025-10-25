@@ -1,7 +1,7 @@
 import { animated } from "@react-spring/web";
 import { PrismPlus } from "../utils/PrismPlus";
-import { DocLayout } from "./DocLayout";
 import { ThemeProps } from "../../../types/types";
+import { providerOptions } from "@absolutejs/auth";
 
 const helloWorldCode = `import { Elysia } from 'elysia'
 
@@ -13,7 +13,6 @@ new Elysia()
 
 export const Overview = ({ themeSprings }: ThemeProps) => {
 	return (
-		<DocLayout title="Overview" themeSprings={themeSprings}>
 			<animated.div
 				style={{
 					padding: "2rem",
@@ -80,7 +79,7 @@ export const Overview = ({ themeSprings }: ThemeProps) => {
 					together from the start. Choose from multiple frameworks working in
 					harmony. Enjoy sensible defaults with optional configuration. Experience
 					automatic type syncing across your entire stack. Get authentication
-					ready to use with 66 providers. Simply run one command and start
+					ready to use with {providerOptions.length} providers. Simply run one command and start
 					building your actual application.
 				</animated.p>
 
@@ -240,7 +239,7 @@ export type Server = typeof server;`}
 							marginBottom: '1rem'
 						}}
 					>
-						2. Built-in Authentication with 66 Providers
+						2. Built-in Authentication with {providerOptions.length} Providers
 					</animated.h2>
 					<animated.p
 						style={{
@@ -250,7 +249,7 @@ export type Server = typeof server;`}
 							marginBottom: '1rem'
 						}}
 					>
-						Setting up OAuth manually usually takes weeks, but with AbsoluteJS it takes seconds. We've already integrated 66 OAuth providers covering social media, development tools, gaming platforms, finance, and enterprise solutions.
+						Setting up Authentication manually usually takes weeks, but with AbsoluteJS it takes seconds. We've already integrated {providerOptions.length} authentication providers covering social media, development tools, gaming platforms, finance, and enterprise solutions.
 					</animated.p>
 					<animated.ul
 						style={{
@@ -260,7 +259,8 @@ export type Server = typeof server;`}
 							marginLeft: "2rem"
 						}}
 					>
-						<li style={{ marginBottom: "0.5rem" }}>Elegible providers ID</li>
+						<li style={{ marginBottom: "0.5rem" }}>
+							Elegible providers ID</li>
 						<li style={{ marginBottom: "0.5rem" }}>OpenID Connect support</li>
 						<li style={{ marginBottom: "0.5rem" }}>Token refresh happens automatically before expiration</li>
 						<li style={{ marginBottom: "0.5rem" }}>Secure cookies for session management</li>
@@ -398,6 +398,5 @@ export type Server = typeof server;`}
 					</animated.ul>
 				</animated.section>
 			</animated.div>
-		</DocLayout>
 	);
 };
