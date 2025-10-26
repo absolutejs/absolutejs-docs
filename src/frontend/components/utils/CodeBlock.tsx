@@ -1,22 +1,27 @@
-import { codeToHtml } from 'shiki';
 import { transformerTwoslash, rendererRich } from '@shikijs/twoslash';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { codeWrapperStyle } from '../../styles/docsStyles';
+import { createHighlighter } from 'shiki';
+
 type CodeBlockProps = {
     code: string;
     theme?: string;
 };
 
+const highlighterPromise = createHighlighter({ langs: ['typescript'], themes: ['night-owl'] })
+
 export async function CodeBlock({ code, theme }: CodeBlockProps) {
-    const html = await codeToHtml(code, {
-        lang: 'ts',
-        theme: theme ?? 'night-owl',
+    return '<p>Code</p>' // Temporary
+    
+    const highlighter = await highlighterPromise;
+    const html = highlighter.codeToHtml(code, {
         transformers: [transformerTwoslash({
             renderer: rendererRich()
         })],
+        lang: 'ts',
+        theme: theme ?? 'night-owl',
     });
-    
     return html;
 }
 

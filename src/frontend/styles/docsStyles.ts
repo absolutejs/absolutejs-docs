@@ -1,4 +1,5 @@
 import { CSSProperties } from "react";
+import { lightTertiaryColor } from "./colors";
 
 export const titleStyle: CSSProperties = {
 	fontSize: '3rem',
@@ -15,8 +16,9 @@ export const headingStyle: CSSProperties = {
 	fontSize: '1.875rem',
 	fontWeight: '600',
 	marginBottom: '1rem',
-	borderBottom: '2px solid #e2e8f0',
-	paddingBottom: '0.5rem'
+	borderTop: `2px solid ${lightTertiaryColor}`, 
+	paddingTop: '1rem',
+	scrollMarginTop: '2rem'
 };
 
 export const paragraphStyle: CSSProperties = {
@@ -60,4 +62,5 @@ export const listItemStyle: CSSProperties = {
 
 export const h1Style: CSSProperties = {
 	fontSize: '3rem',
+	marginBottom: '1rem',
 };

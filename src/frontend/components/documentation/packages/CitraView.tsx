@@ -1,6 +1,7 @@
 import { citraDocsCode } from '../../../data/citraDocsCode';
 import { h1Style, headingStyle, sectionStyle, paragraphStyle, listStyle, listItemStyle, codeWrapperStyle, paragraphLargeStyle, paragraphSpacedStyle, strongStyle } from '../../../styles/docsStyles';
 import { CodeBlock, BashCodeBlock } from '../../utils/CodeBlock';
+import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const gettingStarted = await CodeBlock({ code: citraDocsCode['gettingStarted'] });
 const buildingAuthUrl = await CodeBlock({ code: citraDocsCode['buildingAuthUrl'] });
@@ -9,26 +10,50 @@ const fetchUserProfile = await CodeBlock({ code: citraDocsCode['fetchUserProfile
 const refreshAccessToken = await CodeBlock({ code: citraDocsCode['refreshAccessToken'] });
 const revokeToken = await CodeBlock({ code: citraDocsCode['revokeToken'] });
 
+const tocItems: TocItem[] = [
+	{ label: 'Introduction', href: '#introduction' },
+	{ label: 'Why Citra?', href: '#why-citra' },
+	{ label: 'Installation', href: '#installation' },
+	{ label: 'Getting Started', href: '#getting-started' },
+	{ label: 'Building the Authorization URL', href: '#building-auth-url' },
+	{ label: 'Handling the Callback', href: '#handling-callback' },
+	{ label: 'Fetching the User Profile', href: '#fetching-user-profile' },
+	{ label: 'Refreshing and Revoking Tokens', href: '#refreshing-revoking-tokens' },
+	{ label: 'Supported Providers', href: '#supported-providers' }
+];
+
 export const CitraView = () => (
 	<div
 		style={{
 			display: 'flex',
 			flex: 1,
-			flexDirection: 'column',
-			padding: '2rem',
-			lineHeight: '1.7',
+			position: 'relative',
 			overflowX: 'hidden',
 			overflowY: 'auto'
 		}}
 	>
 		<link rel='stylesheet' href='https://esm.sh/@shikijs/twoslash@latest/style-rich.css' />
-		<h1 style={h1Style}>
-			Citra
-		</h1>
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Introduction
-			</h2>
+		
+		{/* Main Content - Centered */}
+		<div
+			style={{
+				display: 'flex',
+				flex: 1,
+				flexDirection: 'column',
+				padding: '2rem',
+				paddingBottom: '4rem',
+				lineHeight: '1.7',
+				maxWidth: '60%',
+				margin: '0 auto'
+			}}
+		>
+			<h1 style={h1Style} id="citra">
+				Citra
+			</h1>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="introduction">
+					Introduction
+				</h2>
 			<p style={paragraphLargeStyle}>
 				Citra is a curated collection of OAuth 2.0 provider configurations, each bundled with the correct endpoints and request details.
 				It provides a ready-to-use foundation for integrating secure authentication into JavaScript and TypeScript applications.
@@ -36,7 +61,7 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
+			<h2 style={headingStyle} id="why-citra">
 				Why Citra?
 			</h2>
 			<p style={paragraphStyle}>
@@ -57,7 +82,7 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
+			<h2 style={headingStyle} id="installation">
 				Installation
 			</h2>
 			<BashCodeBlock>
@@ -66,7 +91,7 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
+			<h2 style={headingStyle} id="getting-started">
 				Getting Started
 			</h2>
 			<p style={paragraphSpacedStyle}>
@@ -78,7 +103,7 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
+			<h2 style={headingStyle} id="building-auth-url">
 				Building the Authorization URL
 			</h2>
 			<p style={paragraphSpacedStyle}>
@@ -90,7 +115,7 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
+			<h2 style={headingStyle} id="handling-callback">
 				Handling the Callback
 			</h2>
 			<p style={paragraphSpacedStyle}>
@@ -102,7 +127,7 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
+			<h2 style={headingStyle} id="fetching-user-profile">
 				Fetching the User Profile
 			</h2>
 			<p style={paragraphSpacedStyle}>
@@ -114,7 +139,7 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
+			<h2 style={headingStyle} id="refreshing-revoking-tokens">
 				Refreshing and Revoking Tokens
 			</h2>
 			<p style={paragraphSpacedStyle}>
@@ -129,7 +154,7 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
+			<h2 style={headingStyle} id="supported-providers">
 				Supported Providers
 			</h2>
 			<p style={paragraphStyle}>
@@ -168,5 +193,8 @@ export const CitraView = () => (
 				<li><strong>ScopeRequiredProvider</strong>: Providers requiring explicit scopes</li>
 			</ul>
 		</section> */}
+		</div>
+
+		<TableOfContents items={tocItems} />
 	</div>
 );
