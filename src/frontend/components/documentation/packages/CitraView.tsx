@@ -1,5 +1,5 @@
 import { citraDocsCode } from '../../../data/citraDocsCode';
-import { h1Style, headingStyle, sectionStyle, paragraphStyle, listStyle, listItemStyle, codeWrapperStyle, paragraphLargeStyle, paragraphSpacedStyle, strongStyle } from '../../../styles/docsStyles';
+import { h1Style, headingStyle, sectionStyle, paragraphStyle, listStyle, listItemStyle, codeWrapperStyle, paragraphLargeStyle, paragraphSpacedStyle, strongStyle, mainContentStyle } from '../../../styles/docsStyles';
 import { CodeBlock, BashCodeBlock } from '../../utils/CodeBlock';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -36,16 +36,7 @@ export const CitraView = () => (
 		
 		{/* Main Content - Centered */}
 		<div
-			style={{
-				display: 'flex',
-				flex: 1,
-				flexDirection: 'column',
-				padding: '2rem',
-				paddingBottom: '4rem',
-				lineHeight: '1.7',
-				maxWidth: '60%',
-				margin: '0 auto'
-			}}
+			style={mainContentStyle}
 		>
 			<h1 style={h1Style} id="citra">
 				Citra

@@ -1,6 +1,7 @@
 import { CodeBlock } from '../../utils/CodeBlock';
 import { pageHandlersDocsCode } from '../../../data/pageHandlersDocsCode';
-import { h1Style, sectionStyle, headingStyle, paragraphLargeStyle, paragraphSpacedStyle, paragraphStyle, strongStyle, listStyle, listItemStyle, codeWrapperStyle } from '../../../styles/docsStyles';
+import { h1Style, sectionStyle, headingStyle, paragraphLargeStyle, paragraphSpacedStyle, paragraphStyle, strongStyle, listStyle, listItemStyle, codeWrapperStyle, mainContentStyle } from '../../../styles/docsStyles';
+import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const reactHandler = await CodeBlock({ code: pageHandlersDocsCode.reactHandler });
 const svelteHandler = await CodeBlock({ code: pageHandlersDocsCode.svelteHandler });
@@ -12,36 +13,55 @@ const multipleFrameworks = await CodeBlock({ code: pageHandlersDocsCode.multiple
 const propsExample = await CodeBlock({ code: pageHandlersDocsCode.propsExample });
 const elysiaIntegration = await CodeBlock({ code: pageHandlersDocsCode.elysiaIntegration });
 
+const tocItems: TocItem[] = [
+	{ label: 'Overview', href: '#overview' },
+	{ label: 'General Handler Behavior', href: '#general-handler-behavior' },
+	{ label: 'Important Requirements', href: '#important-requirements' },
+	{ label: 'handleReactPageRequest', href: '#handlereactpagerequest' },
+	{ label: 'handleSveltePageRequest', href: '#handlesveltepagerequest' },
+	{ label: 'handleVuePageRequest', href: '#handlevuepagerequest' },
+	{ label: 'handleHTMLPageRequest', href: '#handlehtmlpagerequest' },
+	{ label: 'handleHTMXPageRequest', href: '#handlehtmxpagerequest' },
+	{ label: 'generateHeadElement', href: '#generateheadelement' },
+	{ label: 'Props Serialization', href: '#props-serialization' },
+	{ label: 'Using Multiple Frameworks', href: '#using-multiple-frameworks' },
+	{ label: 'Elysia Integration', href: '#elysia-integration' },
+	{ label: 'Key Takeaways', href: '#key-takeaways' }
+];
+
 export const PageHandlersView = () => (
 	<div
 		style={{
 			display: 'flex',
 			flex: 1,
-			flexDirection: 'column',
-			padding: '2rem',
-			lineHeight: '1.7',
+			position: 'relative',
 			overflowX: 'hidden',
 			overflowY: 'auto'
 		}}
 	>
 		<link rel='stylesheet' href='https://esm.sh/@shikijs/twoslash@latest/style-rich.css' />
-		<h1 style={h1Style}>
-			Page Handlers
-		</h1>
+		
+		{/* Main Content - Centered */}
+		<div
+			style={mainContentStyle}
+		>
+			<h1 style={h1Style} id="page-handlers">
+				Page Handlers
+			</h1>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Overview
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="overview">
+					Overview
+				</h2>
 			<p style={paragraphLargeStyle}>
 				AbsoluteJS provides specialized handler functions for different frontend frameworks. These handlers work seamlessly with Elysia's routing system to perform server-side rendering for framework-based pages or serve static files directly.
 			</p>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				General Handler Behavior
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="general-handler-behavior">
+					General Handler Behavior
+				</h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					<strong style={strongStyle}>Framework handlers</strong> (React/Svelte/Vue) perform server-side rendering
@@ -59,12 +79,12 @@ export const PageHandlersView = () => (
 					Typically used with <code>.get()</code> routes for page rendering
 				</li>
 			</ul>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Important Requirements
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="important-requirements">
+					Important Requirements
+				</h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					<strong style={strongStyle}>Manifest requirement</strong>: Framework handlers (React, Svelte, Vue) require the manifest from <code>build()</code>
@@ -82,12 +102,12 @@ export const PageHandlersView = () => (
 					<strong style={strongStyle}>Static handlers</strong>: HTML/HTMX handlers work without a manifest
 				</li>
 			</ul>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				handleReactPageRequest
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="handlereactpagerequest">
+					handleReactPageRequest
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				Handles server-side rendering for React pages.
 			</p>
@@ -114,12 +134,12 @@ export const PageHandlersView = () => (
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: reactHandler }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				handleSveltePageRequest
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="handlesveltepagerequest">
+					handleSveltePageRequest
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				Handles server-side rendering for Svelte pages.
 			</p>
@@ -149,12 +169,12 @@ export const PageHandlersView = () => (
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: svelteHandler }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				handleVuePageRequest
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="handlevuepagerequest">
+					handleVuePageRequest
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				Handles server-side rendering for Vue pages.
 			</p>
@@ -187,12 +207,12 @@ export const PageHandlersView = () => (
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: vueHandler }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				handleHTMLPageRequest
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="handlehtmlpagerequest">
+					handleHTMLPageRequest
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				Serves static HTML files.
 			</p>
@@ -213,12 +233,12 @@ export const PageHandlersView = () => (
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: htmlHandler }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				handleHTMXPageRequest
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="handlehtmxpagerequest">
+					handleHTMXPageRequest
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				Serves HTMX template files.
 			</p>
@@ -239,12 +259,12 @@ export const PageHandlersView = () => (
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: htmxHandler }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				generateHeadElement
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="generateheadelement">
+					generateHeadElement
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				Helper function for generating HTML head elements for Vue pages.
 			</p>
@@ -271,48 +291,48 @@ export const PageHandlersView = () => (
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: generateHead }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Props Serialization
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="props-serialization">
+					Props Serialization
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				Props passed to components must be JSON-serializable. Only simple data types are allowed:
 			</p>
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: propsExample }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Using Multiple Frameworks
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="using-multiple-frameworks">
+					Using Multiple Frameworks
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				You can serve different frameworks on different routes within the same application:
 			</p>
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: multipleFrameworks }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Elysia Integration
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="elysia-integration">
+					Elysia Integration
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				Handlers work seamlessly with Elysia's built-in features like route params, cookies, and query parameters:
 			</p>
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: elysiaIntegration }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Key Takeaways
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="key-takeaways">
+					Key Takeaways
+				</h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					Framework handlers require the manifest from <code>build()</code>
@@ -333,6 +353,9 @@ export const PageHandlersView = () => (
 					Static handlers (HTML/HTMX) don't require a manifest
 				</li>
 			</ul>
-		</section>
+			</section>
+		</div>
+
+		<TableOfContents items={tocItems} />
 	</div>
 );

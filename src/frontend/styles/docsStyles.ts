@@ -1,6 +1,17 @@
 import { CSSProperties } from "react";
 import { lightTertiaryColor } from "./colors";
 
+export const mainContentStyle: CSSProperties = {
+	display: 'flex',
+	flex: 1,
+	flexDirection: 'column',
+	padding: '2rem 0',
+	paddingRight: '4rem',
+	maxWidth: '60%',
+	margin: '0 auto',
+	lineHeight: '1.7'
+}
+
 export const titleStyle: CSSProperties = {
 	fontSize: '3rem',
 	fontWeight: '700',
@@ -9,14 +20,14 @@ export const titleStyle: CSSProperties = {
 };
 
 export const sectionStyle: CSSProperties = {
-	marginBottom: '3rem'
+	marginBottom: '2rem'
 };
 
 export const headingStyle: CSSProperties = {
 	fontSize: '1.875rem',
 	fontWeight: '600',
 	marginBottom: '1rem',
-	borderTop: `2px solid ${lightTertiaryColor}`, 
+	borderTop: `1px solid ${lightTertiaryColor}`,
 	paddingTop: '1rem',
 	scrollMarginTop: '2rem'
 };

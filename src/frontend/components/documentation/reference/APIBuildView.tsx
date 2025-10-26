@@ -1,6 +1,7 @@
 import { CodeBlock } from '../../utils/CodeBlock';
 import { apiBuildDocsCode } from '../../../data/apiBuildDocsCode';
-import { h1Style, sectionStyle, headingStyle, paragraphLargeStyle, paragraphSpacedStyle, paragraphStyle, strongStyle, listStyle, listItemStyle, codeWrapperStyle } from '../../../styles/docsStyles';
+import { h1Style, sectionStyle, headingStyle, paragraphLargeStyle, paragraphSpacedStyle, paragraphStyle, strongStyle, listStyle, listItemStyle, codeWrapperStyle, mainContentStyle } from '../../../styles/docsStyles';
+import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const basicBuild = await CodeBlock({ code: apiBuildDocsCode.basicBuild });
 const htmlOnlyBuild = await CodeBlock({ code: apiBuildDocsCode.htmlOnlyBuild });
@@ -9,48 +10,63 @@ const assetFunction = await CodeBlock({ code: apiBuildDocsCode.assetFunction });
 const fullExample = await CodeBlock({ code: apiBuildDocsCode.fullExample });
 const allOptions = await CodeBlock({ code: apiBuildDocsCode.allOptions });
 
+const tocItems: TocItem[] = [
+	{ label: 'Overview', href: '#overview' },
+	{ label: 'Basic Usage', href: '#basic-usage' },
+	{ label: 'Configuration Options', href: '#configuration-options' },
+	{ label: 'Return Value', href: '#return-value' },
+	{ label: 'HTML/HTMX Build', href: '#html-htmx-build' },
+	{ label: 'Framework Build with Manifest', href: '#framework-build-with-manifest' },
+	{ label: 'The asset() Function', href: '#the-asset-function' },
+	{ label: 'Complete Example', href: '#complete-example' },
+	{ label: 'Important Notes', href: '#important-notes' }
+];
+
 export const APIBuildView = () => (
 	<div
 		style={{
 			display: 'flex',
 			flex: 1,
-			flexDirection: 'column',
-			padding: '2rem',
-			lineHeight: '1.7',
+			position: 'relative',
 			overflowX: 'hidden',
 			overflowY: 'auto'
 		}}
 	>
 		<link rel='stylesheet' href='https://esm.sh/@shikijs/twoslash@latest/style-rich.css' />
-		<h1 style={h1Style}>
-			API: build()
-		</h1>
+		
+		{/* Main Content - Centered */}
+		<div
+			style={mainContentStyle}
+		>
+			<h1 style={h1Style} id="api-build">
+				API: build()
+			</h1>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Overview
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="overview">
+					Overview
+				</h2>
 			<p style={paragraphLargeStyle}>
 				The <code>build()</code> function is the core API for building your AbsoluteJS application. It compiles and optimizes all frontend code automatically, processes Tailwind CSS if configured, and generates a manifest for framework-based applications.
 			</p>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Basic Usage
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="basic-usage">
+					Basic Usage
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				The <code>build()</code> function accepts a configuration object with paths to your source directories and build output:
 			</p>
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: basicBuild }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Configuration Options
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="configuration-options">
+					Configuration Options
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				All available configuration options:
 			</p>
@@ -83,12 +99,12 @@ export const APIBuildView = () => (
 					<strong style={strongStyle}>tailwind</strong>: Tailwind CSS configuration with <code>input</code> and <code>output</code> paths (optional)
 				</li>
 			</ul>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Return Value
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="return-value">
+					Return Value
+				</h2>
 			<p style={paragraphStyle}>
 				The <code>build()</code> function's return value depends on your frontend setup:
 			</p>
@@ -100,36 +116,36 @@ export const APIBuildView = () => (
 					<strong style={strongStyle}>HTML/HTMX only</strong>: Completes the build but does not return a manifest
 				</li>
 			</ul>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				HTML/HTMX Build
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="html-htmx-build">
+					HTML/HTMX Build
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				When using only HTML/HTMX without frameworks, the build completes but doesn't return a manifest:
 			</p>
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: htmlOnlyBuild }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Framework Build with Manifest
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="framework-build-with-manifest">
+					Framework Build with Manifest
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				When using frameworks, store the returned manifest for use in your page handlers:
 			</p>
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: frameworkBuild }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				The asset() Function
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="the-asset-function">
+					The asset() Function
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				The <code>asset()</code> helper function works alongside <code>build()</code> to retrieve correct file paths from the manifest:
 			</p>
@@ -150,24 +166,24 @@ export const APIBuildView = () => (
 			<p style={paragraphStyle}>
 				<strong style={strongStyle}>Returns:</strong> The path to the compiled asset as a string
 			</p>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Complete Example
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="complete-example">
+					Complete Example
+				</h2>
 			<p style={paragraphSpacedStyle}>
 				Here's a full example showing how to build your app and use the manifest in page handlers:
 			</p>
 			<div style={codeWrapperStyle}>
 				<div dangerouslySetInnerHTML={{ __html: fullExample }} />
 			</div>
-		</section>
+			</section>
 
-		<section style={sectionStyle}>
-			<h2 style={headingStyle}>
-				Important Notes
-			</h2>
+			<section style={sectionStyle}>
+				<h2 style={headingStyle} id="important-notes">
+					Important Notes
+				</h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					The build process compiles and optimizes all frontend code automatically
@@ -185,6 +201,9 @@ export const APIBuildView = () => (
 					When using only HTML/HTMX, <code>build()</code> completes but doesn't return a manifest
 				</li>
 			</ul>
-		</section>
+			</section>
+		</div>
+
+		<TableOfContents items={tocItems} />
 	</div>
 );

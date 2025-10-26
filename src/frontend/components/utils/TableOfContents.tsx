@@ -14,18 +14,18 @@ type TableOfContentsProps = {
 
 const navStyle: CSSProperties = {
 	position: 'sticky',
-	top: '2rem',
-	right: '2rem',
-	width: '250px',
+	top: '4rem',
+	right: '4rem',
+	width: '20%',
 	height: 'fit-content',
-	padding: '1.5rem',
-	borderLeft: `2px solid ${lightTertiaryColor}`,
+	padding: '0 1.5rem',
+	borderLeft: `1px solid ${lightTertiaryColor}`,
 	overflowY: 'auto',
 	maxHeight: 'calc(100vh - 4rem)'
 };
 
 const titleStyle: CSSProperties = {
-	fontSize: '0.875rem',
+	fontSize: '1rem',
 	fontWeight: '600',
 	marginBottom: '1rem',
 	color: '#ffffff',
@@ -39,13 +39,13 @@ const listStyle: CSSProperties = {
 	margin: 0,
 	display: 'flex',
 	flexDirection: 'column',
-	gap: '0.5rem'
+	gap: '0.75rem'
 };
 
 const linkStyle: CSSProperties = {
 	color: '#ffffff',
 	textDecoration: 'none',
-	fontSize: '0.875rem',
+	fontSize: '1rem',
 	transition: 'color 0.2s'
 };
 
