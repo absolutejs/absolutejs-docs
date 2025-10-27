@@ -23,11 +23,11 @@ export const sectionStyle: CSSProperties = {
 	marginBottom: '2rem'
 };
 
-export const headingStyle = (themeSprings: ThemeSprings): AnimatedCSSProperties => ({
-	fontSize: '1.875rem',
+export const headingStyle = (themeSprings: ThemeSprings, subheading: boolean = false): AnimatedCSSProperties => ({
+	fontSize: subheading ? '1.5rem' : '1.875rem',
 	fontWeight: '600',
 	marginBottom: '1rem',
-	borderTop: themeSprings.themeTertiary.to(color => `2px solid ${color}`),
+	borderTop: subheading ? 'none' : themeSprings.themeTertiary.to(color => `2px solid ${color}`),
 	paddingTop: '1rem',
 	scrollMarginTop: '2rem'
 });
