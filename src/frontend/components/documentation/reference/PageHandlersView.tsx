@@ -2,6 +2,8 @@ import { CodeBlock } from '../../utils/CodeBlock';
 import { pageHandlersDocsCode } from '../../../data/pageHandlersDocsCode';
 import { h1Style, sectionStyle, headingStyle, paragraphLargeStyle, paragraphSpacedStyle, paragraphStyle, strongStyle, listStyle, listItemStyle, codeWrapperStyle, mainContentStyle } from '../../../styles/docsStyles';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { ThemeProps } from '../../../../types/springTypes';
+import { animated } from '@react-spring/web';
 
 const reactHandler = await CodeBlock({ code: pageHandlersDocsCode.reactHandler });
 const svelteHandler = await CodeBlock({ code: pageHandlersDocsCode.svelteHandler });
@@ -29,7 +31,7 @@ const tocItems: TocItem[] = [
 	{ label: 'Key Takeaways', href: '#key-takeaways' }
 ];
 
-export const PageHandlersView = () => (
+export const PageHandlersView = ({ themeSprings }: ThemeProps) => (
 	<div
 		style={{
 			display: 'flex',
@@ -50,18 +52,18 @@ export const PageHandlersView = () => (
 			</h1>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="overview">
+				<animated.h2 style={headingStyle(themeSprings)} id="overview">
 					Overview
-				</h2>
+				</animated.h2>
 			<p style={paragraphLargeStyle}>
 				AbsoluteJS provides specialized handler functions for different frontend frameworks. These handlers work seamlessly with Elysia's routing system to perform server-side rendering for framework-based pages or serve static files directly.
 			</p>
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="general-handler-behavior">
+				<animated.h2 style={headingStyle(themeSprings)} id="general-handler-behavior">
 					General Handler Behavior
-				</h2>
+				</animated.h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					<strong style={strongStyle}>Framework handlers</strong> (React/Svelte/Vue) perform server-side rendering
@@ -82,9 +84,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="important-requirements">
+				<animated.h2 style={headingStyle(themeSprings)} id="important-requirements">
 					Important Requirements
-				</h2>
+				</animated.h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					<strong style={strongStyle}>Manifest requirement</strong>: Framework handlers (React, Svelte, Vue) require the manifest from <code>build()</code>
@@ -105,9 +107,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="handlereactpagerequest">
+				<animated.h2 style={headingStyle(themeSprings)} id="handlereactpagerequest">
 					handleReactPageRequest
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Handles server-side rendering for React pages.
 			</p>
@@ -137,9 +139,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="handlesveltepagerequest">
+				<animated.h2 style={headingStyle(themeSprings)} id="handlesveltepagerequest">
 					handleSveltePageRequest
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Handles server-side rendering for Svelte pages.
 			</p>
@@ -172,9 +174,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="handlevuepagerequest">
+				<animated.h2 style={headingStyle(themeSprings)} id="handlevuepagerequest">
 					handleVuePageRequest
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Handles server-side rendering for Vue pages.
 			</p>
@@ -210,9 +212,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="handlehtmlpagerequest">
+				<animated.h2 style={headingStyle(themeSprings)} id="handlehtmlpagerequest">
 					handleHTMLPageRequest
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Serves static HTML files.
 			</p>
@@ -236,9 +238,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="handlehtmxpagerequest">
+				<animated.h2 style={headingStyle(themeSprings)} id="handlehtmxpagerequest">
 					handleHTMXPageRequest
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Serves HTMX template files.
 			</p>
@@ -262,9 +264,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="generateheadelement">
+				<animated.h2 style={headingStyle(themeSprings)} id="generateheadelement">
 					generateHeadElement
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Helper function for generating HTML head elements for Vue pages.
 			</p>
@@ -294,9 +296,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="props-serialization">
+				<animated.h2 style={headingStyle(themeSprings)} id="props-serialization">
 					Props Serialization
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Props passed to components must be JSON-serializable. Only simple data types are allowed:
 			</p>
@@ -306,9 +308,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="using-multiple-frameworks">
+				<animated.h2 style={headingStyle(themeSprings)} id="using-multiple-frameworks">
 					Using Multiple Frameworks
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				You can serve different frameworks on different routes within the same application:
 			</p>
@@ -318,9 +320,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="elysia-integration">
+				<animated.h2 style={headingStyle(themeSprings)} id="elysia-integration">
 					Elysia Integration
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Handlers work seamlessly with Elysia's built-in features like route params, cookies, and query parameters:
 			</p>
@@ -330,9 +332,9 @@ export const PageHandlersView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="key-takeaways">
+				<animated.h2 style={headingStyle(themeSprings)} id="key-takeaways">
 					Key Takeaways
-				</h2>
+				</animated.h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					Framework handlers require the manifest from <code>build()</code>
@@ -356,6 +358,6 @@ export const PageHandlersView = () => (
 			</section>
 		</div>
 
-		<TableOfContents items={tocItems} />
+		<TableOfContents themeSprings={themeSprings} items={tocItems} />
 	</div>
 );

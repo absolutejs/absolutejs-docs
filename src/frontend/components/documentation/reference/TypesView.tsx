@@ -2,6 +2,8 @@ import { CodeBlock } from '../../utils/CodeBlock';
 import { typesDocsCode } from '../../../data/typesDocsCode';
 import { h1Style, sectionStyle, headingStyle, paragraphLargeStyle, paragraphSpacedStyle, paragraphStyle, strongStyle, listStyle, listItemStyle, codeWrapperStyle, mainContentStyle } from '../../../styles/docsStyles';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { ThemeProps } from '../../../../types/springTypes';
+import { animated } from '@react-spring/web';
 
 const createConfiguration = await CodeBlock({ code: typesDocsCode.createConfiguration });
 const frontendDirectories = await CodeBlock({ code: typesDocsCode.frontendDirectories });
@@ -36,7 +38,7 @@ const tocItems: TocItem[] = [
 	{ label: 'Key Takeaways', href: '#key-takeaways' }
 ];
 
-export const TypesView = () => (
+export const TypesView = ({ themeSprings }: ThemeProps) => (
 	<div
 		style={{
 			display: 'flex',
@@ -57,18 +59,18 @@ export const TypesView = () => (
 			</h1>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="overview">
+				<animated.h2 style={headingStyle(themeSprings)} id="overview">
 					Overview
-				</h2>
+				</animated.h2>
 			<p style={paragraphLargeStyle}>
 				AbsoluteJS uses TypeScript throughout for type safety. The type system ensures valid project setup, prevents invalid framework combinations, and catches configuration errors at compile time.
 			</p>
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="type-system-philosophy">
+				<animated.h2 style={headingStyle(themeSprings)} id="type-system-philosophy">
 					Type System Philosophy
-				</h2>
+				</animated.h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					<strong style={strongStyle}>Configuration types</strong> ensure valid project setup
@@ -86,9 +88,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="the-manifest-type">
+				<animated.h2 style={headingStyle(themeSprings)} id="the-manifest-type">
 					The Manifest Type
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				The Manifest is a simple object structure mapping names to file paths:
 			</p>
@@ -112,9 +114,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="createconfiguration">
+				<animated.h2 style={headingStyle(themeSprings)} id="createconfiguration">
 					CreateConfiguration
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Main configuration type for project setup:
 			</p>
@@ -124,9 +126,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="frontenddirectories">
+				<animated.h2 style={headingStyle(themeSprings)} id="frontenddirectories">
 					FrontendDirectories
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Maps frontend frameworks to their directory paths:
 			</p>
@@ -136,9 +138,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="frontend">
+				<animated.h2 style={headingStyle(themeSprings)} id="frontend">
 					Frontend
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Available frontend frameworks:
 			</p>
@@ -148,9 +150,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="tailwindconfig">
+				<animated.h2 style={headingStyle(themeSprings)} id="tailwindconfig">
 					TailwindConfig
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Tailwind CSS configuration:
 			</p>
@@ -160,9 +162,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="databaseengine">
+				<animated.h2 style={headingStyle(themeSprings)} id="databaseengine">
 					DatabaseEngine
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Supported database engines:
 			</p>
@@ -172,9 +174,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="orm">
+				<animated.h2 style={headingStyle(themeSprings)} id="orm">
 					ORM
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Supported ORMs:
 			</p>
@@ -184,9 +186,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="authprovider">
+				<animated.h2 style={headingStyle(themeSprings)} id="authprovider">
 					AuthProvider
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Authentication providers:
 			</p>
@@ -196,9 +198,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="importentry">
+				<animated.h2 style={headingStyle(themeSprings)} id="importentry">
 					ImportEntry
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Plugin import configuration:
 			</p>
@@ -208,9 +210,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="packagemanager">
+				<animated.h2 style={headingStyle(themeSprings)} id="packagemanager">
 					PackageManager
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Supported package managers:
 			</p>
@@ -234,9 +236,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="buildoptions-type">
+				<animated.h2 style={headingStyle(themeSprings)} id="buildoptions-type">
 					BuildOptions Type
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				The <code>build()</code> function accepts configuration matching the build options type:
 			</p>
@@ -246,9 +248,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="how-types-work-together">
+				<animated.h2 style={headingStyle(themeSprings)} id="how-types-work-together">
 					How Types Work Together
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				The type system ensures all parts of AbsoluteJS work together seamlessly:
 			</p>
@@ -272,9 +274,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="type-safety-benefits">
+				<animated.h2 style={headingStyle(themeSprings)} id="type-safety-benefits">
 					Type Safety Benefits
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				TypeScript catches configuration errors before runtime:
 			</p>
@@ -284,9 +286,9 @@ export const TypesView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="key-takeaways">
+				<animated.h2 style={headingStyle(themeSprings)} id="key-takeaways">
 					Key Takeaways
-				</h2>
+				</animated.h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					AbsoluteJS uses TypeScript throughout for comprehensive type safety
@@ -310,6 +312,6 @@ export const TypesView = () => (
 			</section>
 		</div>
 
-		<TableOfContents items={tocItems} />
+		<TableOfContents themeSprings={themeSprings} items={tocItems} />
 	</div>
 );

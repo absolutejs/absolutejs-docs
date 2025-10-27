@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { lightTertiaryColor } from "./colors";
+import { ThemeSprings, AnimatedCSSProperties } from "../../types/springTypes";
 
 export const mainContentStyle: CSSProperties = {
 	display: 'flex',
@@ -23,14 +23,14 @@ export const sectionStyle: CSSProperties = {
 	marginBottom: '2rem'
 };
 
-export const headingStyle: CSSProperties = {
+export const headingStyle = (themeSprings: ThemeSprings): AnimatedCSSProperties => ({
 	fontSize: '1.875rem',
 	fontWeight: '600',
 	marginBottom: '1rem',
-	borderTop: `1px solid ${lightTertiaryColor}`,
+	borderTop: themeSprings.themeTertiary.to(color => `2px solid ${color}`),
 	paddingTop: '1rem',
 	scrollMarginTop: '2rem'
-};
+});
 
 export const paragraphStyle: CSSProperties = {
 	fontSize: '1.0625rem',

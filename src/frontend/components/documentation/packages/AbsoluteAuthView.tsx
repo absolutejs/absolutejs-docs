@@ -2,6 +2,8 @@ import { CodeBlock, BashCodeBlock } from '../../utils/CodeBlock';
 import { authDocsCode } from '../../../data/authDocsCode';
 import { h1Style, sectionStyle, headingStyle, paragraphLargeStyle, paragraphSpacedStyle, strongStyle, listStyle, listItemStyle, codeWrapperStyle, mainContentStyle } from '../../../styles/docsStyles';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { ThemeProps } from '../../../../types/springTypes';
+import { animated } from '@react-spring/web';
 
 const basicSetup = await CodeBlock({ code: authDocsCode.basicSetup });
 const protectRoute = await CodeBlock({ code: authDocsCode.protectRoute });
@@ -19,7 +21,7 @@ const tocItems: TocItem[] = [
   { label: 'React Frontend Integration', href: '#react-frontend-integration' }
 ];
 
-export const AbsoluteAuthView = () => (
+export const AbsoluteAuthView = ({ themeSprings }: ThemeProps) => (
   <div
     style={{
       display: 'flex',
@@ -38,7 +40,7 @@ export const AbsoluteAuthView = () => (
       <h1 style={h1Style} id="absolute-auth">Absolute Auth</h1>
 
       <section style={sectionStyle}>
-        <h2 style={headingStyle} id="overview">Overview</h2>
+        <animated.h2 style={headingStyle(themeSprings)} id="overview">Overview</animated.h2>
         <p style={paragraphLargeStyle}>
           Absolute Auth is a comprehensive TypeScript-based authentication system built for Elysia applications.
           It provides a complete OAuth 2.0 and OpenID Connect solution with support for 50+ authentication providers
@@ -47,7 +49,7 @@ export const AbsoluteAuthView = () => (
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={headingStyle} id="key-features">Key Features</h2>
+        <animated.h2 style={headingStyle(themeSprings)} id="key-features">Key Features</animated.h2>
         <ul style={listStyle}>
           <li style={listItemStyle}><strong style={strongStyle}>Multi-Provider Support</strong>: 50+ OAuth 2.0 and OpenID Connect providers</li>
           <li style={listItemStyle}><strong style={strongStyle}>Type-Safe</strong>: Full TypeScript support with comprehensive type definitions</li>
@@ -61,14 +63,14 @@ export const AbsoluteAuthView = () => (
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={headingStyle} id="installation">Installation</h2>
+        <animated.h2 style={headingStyle(themeSprings)} id="installation">Installation</animated.h2>
         <BashCodeBlock>
           {`bun install absolute-auth`}
         </BashCodeBlock>
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={headingStyle} id="quick-start">Quick Start</h2>
+        <animated.h2 style={headingStyle(themeSprings)} id="quick-start">Quick Start</animated.h2>
         <h3 style={paragraphLargeStyle}>1. Basic Setup</h3>
         <div style={codeWrapperStyle}>
           <div dangerouslySetInnerHTML={{ __html: basicSetup }} />
@@ -86,7 +88,7 @@ export const AbsoluteAuthView = () => (
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={headingStyle} id="authentication-routes">Authentication Routes</h2>
+        <animated.h2 style={headingStyle(themeSprings)} id="authentication-routes">Authentication Routes</animated.h2>
         <p style={paragraphSpacedStyle}>The library automatically creates the following routes:</p>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
           <thead>
@@ -137,20 +139,20 @@ export const AbsoluteAuthView = () => (
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={headingStyle} id="user-management">User Management</h2>
+        <animated.h2 style={headingStyle(themeSprings)} id="user-management">User Management</animated.h2>
         <p style={paragraphSpacedStyle}>Implement custom user creation and retrieval:</p>
         <div style={codeWrapperStyle}>
           <div dangerouslySetInnerHTML={{ __html: userManagement }} />
         </div>
       </section>
       <section style={sectionStyle}>
-        <h2 style={headingStyle} id="react-frontend-integration">React Frontend Integration</h2>
+        <animated.h2 style={headingStyle(themeSprings)} id="react-frontend-integration">React Frontend Integration</animated.h2>
         <div style={codeWrapperStyle}>
           <div dangerouslySetInnerHTML={{ __html: reactFrontend }} />
         </div>
       </section>
     </div>
 
-    <TableOfContents items={tocItems} />
+    <TableOfContents themeSprings={themeSprings} items={tocItems} />
   </div>
 );

@@ -2,6 +2,8 @@ import { citraDocsCode } from '../../../data/citraDocsCode';
 import { h1Style, headingStyle, sectionStyle, paragraphStyle, listStyle, listItemStyle, codeWrapperStyle, paragraphLargeStyle, paragraphSpacedStyle, strongStyle, mainContentStyle } from '../../../styles/docsStyles';
 import { CodeBlock, BashCodeBlock } from '../../utils/CodeBlock';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { ThemeProps } from '../../../../types/springTypes';
+import { animated } from '@react-spring/web';
 
 const gettingStarted = await CodeBlock({ code: citraDocsCode['gettingStarted'] });
 const buildingAuthUrl = await CodeBlock({ code: citraDocsCode['buildingAuthUrl'] });
@@ -22,7 +24,7 @@ const tocItems: TocItem[] = [
 	{ label: 'Supported Providers', href: '#supported-providers' }
 ];
 
-export const CitraView = () => (
+export const CitraView = ({ themeSprings }: ThemeProps) => (
 	<div
 		style={{
 			display: 'flex',
@@ -42,9 +44,9 @@ export const CitraView = () => (
 				Citra
 			</h1>
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="introduction">
+				<animated.h2 style={headingStyle(themeSprings)} id="introduction">
 					Introduction
-				</h2>
+				</animated.h2>
 			<p style={paragraphLargeStyle}>
 				Citra is a curated collection of OAuth 2.0 provider configurations, each bundled with the correct endpoints and request details.
 				It provides a ready-to-use foundation for integrating secure authentication into JavaScript and TypeScript applications.
@@ -52,9 +54,9 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle} id="why-citra">
+			<animated.h2 style={headingStyle(themeSprings)} id="why-citra">
 				Why Citra?
-			</h2>
+			</animated.h2>
 			<p style={paragraphStyle}>
 				<strong style={strongStyle}>
 					Interchangeability
@@ -73,18 +75,18 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle} id="installation">
+			<animated.h2 style={headingStyle(themeSprings)} id="installation">
 				Installation
-			</h2>
+			</animated.h2>
 			<BashCodeBlock>
 				{`bun install citra`}
 			</BashCodeBlock>
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle} id="getting-started">
+			<animated.h2 style={headingStyle(themeSprings)} id="getting-started">
 				Getting Started
-			</h2>
+			</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Citra uses strong TypeScript typing to help you build OAuth clients safely and correctly. Each supported provider includes its own typed configuration schema, ensuring you can't accidentally pass unsupported parameters or omit required ones.
 			</p>
@@ -94,9 +96,9 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle} id="building-auth-url">
+			<animated.h2 style={headingStyle(themeSprings)} id="building-auth-url">
 				Building the Authorization URL
-			</h2>
+			</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Once your client is initialized, you can generate a fully customized authorization URL for redirecting users to the provider's login page. Every option is strongly typed and context-aware, but you retain full control over advanced parameters like PKCE, scopes, and provider-specific query strings.
 			</p>
@@ -106,9 +108,9 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle} id="handling-callback">
+			<animated.h2 style={headingStyle(themeSprings)} id="handling-callback">
 				Handling the Callback
-			</h2>
+			</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Exchange the code and verifier for an OAuth2TokenResponse:
 			</p>
@@ -118,9 +120,9 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle} id="fetching-user-profile">
+			<animated.h2 style={headingStyle(themeSprings)} id="fetching-user-profile">
 				Fetching the User Profile
-			</h2>
+			</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Exchange the access token for user information:
 			</p>
@@ -130,9 +132,9 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle} id="refreshing-revoking-tokens">
+			<animated.h2 style={headingStyle(themeSprings)} id="refreshing-revoking-tokens">
 				Refreshing and Revoking Tokens
-			</h2>
+			</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				If supported by the provider, you can refresh and revoke tokens:
 			</p>
@@ -145,9 +147,9 @@ export const CitraView = () => (
 		</section>
 
 		<section style={sectionStyle}>
-			<h2 style={headingStyle} id="supported-providers">
+			<animated.h2 style={headingStyle(themeSprings)} id="supported-providers">
 				Supported Providers
-			</h2>
+			</animated.h2>
 			<p style={paragraphStyle}>
 				Citra supports 50+ OAuth 2.0 providers including:
 			</p>
@@ -186,6 +188,6 @@ export const CitraView = () => (
 		</section> */}
 		</div>
 
-		<TableOfContents items={tocItems} />
+		<TableOfContents themeSprings={themeSprings} items={tocItems} />
 	</div>
 );

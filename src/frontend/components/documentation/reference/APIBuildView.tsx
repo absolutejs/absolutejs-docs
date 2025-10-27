@@ -2,6 +2,8 @@ import { CodeBlock } from '../../utils/CodeBlock';
 import { apiBuildDocsCode } from '../../../data/apiBuildDocsCode';
 import { h1Style, sectionStyle, headingStyle, paragraphLargeStyle, paragraphSpacedStyle, paragraphStyle, strongStyle, listStyle, listItemStyle, codeWrapperStyle, mainContentStyle } from '../../../styles/docsStyles';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { animated } from '@react-spring/web';
+import { ThemeProps } from '../../../../types/springTypes';
 
 const basicBuild = await CodeBlock({ code: apiBuildDocsCode.basicBuild });
 const htmlOnlyBuild = await CodeBlock({ code: apiBuildDocsCode.htmlOnlyBuild });
@@ -22,7 +24,7 @@ const tocItems: TocItem[] = [
 	{ label: 'Important Notes', href: '#important-notes' }
 ];
 
-export const APIBuildView = () => (
+export const APIBuildView = ({ themeSprings }: ThemeProps) => (
 	<div
 		style={{
 			display: 'flex',
@@ -43,18 +45,18 @@ export const APIBuildView = () => (
 			</h1>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="overview">
+				<animated.h2 style={headingStyle(themeSprings)} id="overview">
 					Overview
-				</h2>
+				</animated.h2>
 			<p style={paragraphLargeStyle}>
 				The <code>build()</code> function is the core API for building your AbsoluteJS application. It compiles and optimizes all frontend code automatically, processes Tailwind CSS if configured, and generates a manifest for framework-based applications.
 			</p>
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="basic-usage">
+				<animated.h2 style={headingStyle(themeSprings)} id="basic-usage">
 					Basic Usage
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				The <code>build()</code> function accepts a configuration object with paths to your source directories and build output:
 			</p>
@@ -64,9 +66,9 @@ export const APIBuildView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="configuration-options">
+				<animated.h2 style={headingStyle(themeSprings)} id="configuration-options">
 					Configuration Options
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				All available configuration options:
 			</p>
@@ -102,9 +104,9 @@ export const APIBuildView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="return-value">
+				<animated.h2 style={headingStyle(themeSprings)} id="return-value">
 					Return Value
-				</h2>
+				</animated.h2>
 			<p style={paragraphStyle}>
 				The <code>build()</code> function's return value depends on your frontend setup:
 			</p>
@@ -119,9 +121,9 @@ export const APIBuildView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="html-htmx-build">
+				<animated.h2 style={headingStyle(themeSprings)} id="html-htmx-build">
 					HTML/HTMX Build
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				When using only HTML/HTMX without frameworks, the build completes but doesn't return a manifest:
 			</p>
@@ -131,9 +133,9 @@ export const APIBuildView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="framework-build-with-manifest">
+				<animated.h2 style={headingStyle(themeSprings)} id="framework-build-with-manifest">
 					Framework Build with Manifest
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				When using frameworks, store the returned manifest for use in your page handlers:
 			</p>
@@ -143,9 +145,9 @@ export const APIBuildView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="the-asset-function">
+				<animated.h2 style={headingStyle(themeSprings)} id="the-asset-function">
 					The asset() Function
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				The <code>asset()</code> helper function works alongside <code>build()</code> to retrieve correct file paths from the manifest:
 			</p>
@@ -169,9 +171,9 @@ export const APIBuildView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="complete-example">
+				<animated.h2 style={headingStyle(themeSprings)} id="complete-example">
 					Complete Example
-				</h2>
+				</animated.h2>
 			<p style={paragraphSpacedStyle}>
 				Here's a full example showing how to build your app and use the manifest in page handlers:
 			</p>
@@ -181,9 +183,9 @@ export const APIBuildView = () => (
 			</section>
 
 			<section style={sectionStyle}>
-				<h2 style={headingStyle} id="important-notes">
+				<animated.h2 style={headingStyle(themeSprings)} id="important-notes">
 					Important Notes
-				</h2>
+				</animated.h2>
 			<ul style={listStyle}>
 				<li style={listItemStyle}>
 					The build process compiles and optimizes all frontend code automatically
@@ -204,6 +206,6 @@ export const APIBuildView = () => (
 			</section>
 		</div>
 
-		<TableOfContents items={tocItems} />
+		<TableOfContents themeSprings={themeSprings} items={tocItems} />
 	</div>
 );
