@@ -36,7 +36,7 @@ const app = new Elysia()
     }
   }))
   .listen(3000);
-// @noErrors
+
     app.get('/protected', ({ protectRoute }) =>
   protectRoute(
     (user) => \`Hello \${user.name}!\`,
@@ -72,7 +72,7 @@ app.get('/status', async ({ cookie }) => {
   });
   return response.json();
 });`, 'userManagement': `
-// @noErrors
+
 const config = {
   providersConfiguration,
   onCallbackSuccess: async ({ authProvider, tokenResponse, session, userSessionId }) => {

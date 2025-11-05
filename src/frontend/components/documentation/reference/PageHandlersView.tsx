@@ -116,7 +116,7 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => (
 			<p style={paragraphStyle}>
 				<strong style={strongStyle}>Signature:</strong>
 			</p>
-			<pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+			<pre style={{ padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
 				<code>handleReactPageRequest(Component: ReactComponent, assetPath: string, props?: object)</code>
 			</pre>
 			<p style={paragraphStyle}>
@@ -148,7 +148,7 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => (
 			<p style={paragraphStyle}>
 				<strong style={strongStyle}>Signature:</strong>
 			</p>
-			<pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+			<pre style={{ padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
 				<code>handleSveltePageRequest(Component: SvelteComponent, componentAsset: string, indexAsset: string, props?: object)</code>
 			</pre>
 			<p style={paragraphStyle}>
@@ -183,7 +183,7 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => (
 			<p style={paragraphStyle}>
 				<strong style={strongStyle}>Signature:</strong>
 			</p>
-			<pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+			<pre style={{ padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
 				<code>handleVuePageRequest(Component: VueComponent, componentAsset: string, indexAsset: string, headElement: HeadElement, props?: object)</code>
 			</pre>
 			<p style={paragraphStyle}>
@@ -221,7 +221,7 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => (
 			<p style={paragraphStyle}>
 				<strong style={strongStyle}>Signature:</strong>
 			</p>
-			<pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+			<pre style={{ padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
 				<code>handleHTMLPageRequest(path: string)</code>
 			</pre>
 			<p style={paragraphStyle}>
@@ -247,7 +247,7 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => (
 			<p style={paragraphStyle}>
 				<strong style={strongStyle}>Signature:</strong>
 			</p>
-			<pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+			<pre style={{ padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
 				<code>handleHTMXPageRequest(path: string)</code>
 			</pre>
 			<p style={paragraphStyle}>
@@ -273,7 +273,7 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => (
 			<p style={paragraphStyle}>
 				<strong style={strongStyle}>Signature:</strong>
 			</p>
-			<pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+			<pre style={{ padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
 				<code>generateHeadElement(&#123; cssPath?: string, title?: string, description?: string &#125;)</code>
 			</pre>
 			<p style={paragraphStyle}>

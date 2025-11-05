@@ -1,6 +1,6 @@
 // TODO: Fix code samples
 export const typesDocsCode = {
-    'createConfiguration': `// @noErrors
+    'createConfiguration': `
 type CreateConfiguration = {
   assetsDirectory: string;
   authProvider: AuthProvider;
@@ -22,7 +22,7 @@ type CreateConfiguration = {
   databaseHost: DatabaseHost;
 }`,
 
-    'frontendDirectories': `// @noErrors
+    'frontendDirectories': `
 type FrontendDirectories = Partial<Record<Frontend, string>>
 
 // Example usage:
@@ -32,14 +32,14 @@ const directories: FrontendDirectories = {
   vue: './src/frontend/vue'
 };`,
 
-    'frontend': `// @noErrors
+    'frontend': `
 type Frontend = 'react' | 'svelte' | 'vue' | 'html' | 'htmx' | 'angular'
 
 // Example usage:
 const selectedFrameworks: Frontend[] = ['react', 'svelte'];
 const primaryFramework: Frontend = 'react';`,
 
-    'tailwindConfig': `// @noErrors
+    'tailwindConfig': `
 type TailwindConfig = {
   input: string;
   output: string;
@@ -54,7 +54,7 @@ const tailwindConfig: TailwindConfig = {
 // Or disabled:
 const noTailwind: TailwindConfig = undefined;`,
 
-    'databaseEngine': `// @noErrors
+    'databaseEngine': `
 type DatabaseEngine = 
   | 'postgresql'
   | 'mysql'
@@ -67,7 +67,7 @@ type DatabaseEngine =
 const dbEngine: DatabaseEngine = 'postgresql';
 const noDatabase: DatabaseEngine = 'none';`,
 
-    'orm': `// @noErrors
+    'orm': `
 type ORM = 
   | 'drizzle'
   | 'prisma'
@@ -78,7 +78,7 @@ type ORM =
 const selectedORM: ORM = 'drizzle';
 const noORM: ORM = 'none';`,
 
-    'authProvider': `// @noErrors
+    'authProvider': `
 type AuthProvider = 
   | 'github'
   | 'google'
@@ -90,7 +90,7 @@ type AuthProvider =
 const provider: AuthProvider = 'github';
 const noAuth: AuthProvider = 'none';`,
 
-    'importEntry': `// @noErrors
+    'importEntry': `
 type ImportEntry = {
   packageName: string;
   isPlugin: boolean;
@@ -107,7 +107,7 @@ const pluginImport: ImportEntry = {
   }
 };`,
 
-    'manifestType': `// @noErrors
+    'manifestType': `
 type Manifest = Record<string, string>
 
 // Example manifest structure:
@@ -124,7 +124,7 @@ import { asset } from '@absolutejs/absolute';
 const homePath = asset(manifest, 'HomeIndex');
 // Returns: '/dist/HomeIndex-abc123.js'`,
 
-    'typesWorkingTogether': `// @noErrors
+    'typesWorkingTogether': `
 import { build, asset, handleReactPageRequest } from '@absolutejs/absolute';
 import type { Manifest } from '@absolutejs/absolute';
 import { Elysia } from 'elysia';
@@ -155,7 +155,7 @@ const app = new Elysia()
   )
   .listen(3000);`,
 
-    'buildOptionsType': `// @noErrors
+    'buildOptionsType': `
 // Build function signature with types
 type BuildOptions = {
   assetsDirectory: string;
@@ -181,7 +181,7 @@ const manifest = await build({
   reactDirectory: './src/react' // TypeScript ensures valid paths
 });`,
 
-    'packageManager': `// @noErrors
+    'packageManager': `
 type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun'
 
 // Example usage in configuration:
@@ -197,7 +197,7 @@ const config = {
 // - bun: Fast all-in-one JavaScript runtime`,
 
     'typeSafety': `// TypeScript catches errors at compile time
-// @noErrors
+
 // ✅ Valid configuration
 const validConfig = {
   frontends: ['react', 'svelte'] as Frontend[],

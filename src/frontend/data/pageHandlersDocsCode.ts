@@ -4,7 +4,7 @@ export const pageHandlersDocsCode = {
 import { Elysia } from 'elysia';
 import { Home } from './components/Home';
 import { manifest } from './build';
-// @noErrors
+
 const app = new Elysia()
   .get('/', ({ cookie: { theme } }) => 
     handleReactPageRequest(
@@ -19,7 +19,7 @@ const app = new Elysia()
 import { Elysia } from 'elysia';
 import SvelteExample from './components/SvelteExample.svelte';
 import { manifest } from './build';
-// @noErrors
+
 const app = new Elysia()
   .get('/svelte', () =>
     handleSveltePageRequest(
@@ -38,7 +38,7 @@ const app = new Elysia()
 import { Elysia } from 'elysia';
 import VueExample from './components/VueExample.vue';
 import { manifest } from './build';
-// @noErrors
+
 
 const app = new Elysia()
   .get('/vue', () =>
@@ -96,7 +96,7 @@ import { manifest } from './build';
 import Home from './react/Home';
 import About from './svelte/About.svelte';
 import Contact from './vue/Contact.vue';
-// @noErrors
+
 
 const app = new Elysia()
   // React page
@@ -135,7 +135,7 @@ const app = new Elysia()
     'propsExample': `import { handleReactPageRequest, asset } from '@absolutejs/absolute';
 import { Dashboard } from './components/Dashboard';
 import { manifest } from './build';
-// @noErrors
+
 
 // Valid props - simple data types
 const validProps = {
@@ -171,7 +171,7 @@ const invalidProps = {
 import { Elysia } from 'elysia';
 import { Profile } from './components/Profile';
 import { manifest } from './build';
-// @noErrors
+
 
 const app = new Elysia()
   // Using route params

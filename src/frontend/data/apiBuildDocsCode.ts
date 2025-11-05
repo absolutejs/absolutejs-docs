@@ -53,7 +53,7 @@ const homePath = asset(manifest, 'HomeIndex');
 console.log(homePath); // Output: '/dist/HomeIndex-abc123.js'
 
 // Use in page handler
-// @noErrors
+
 app.get('/', () => {
   const scriptPath = asset(manifest, 'HomeIndex');
   return new Response(
