@@ -59,5 +59,5 @@ export const tocListStyle: CSSProperties = {
 };
 
 export const tocLinkStyle = (themeSprings: ThemeSprings): AnimatedCSSProperties => ({
-	color: themeSprings.contrastPrimary, fontSize: '1rem', textDecoration: 'none', transition: 'color 0.2s', wordBreak: 'break-word'
+	color: themeSprings.contrastPrimary, fontSize: '1rem', textDecoration: 'none', wordBreak: 'break-word'
 });

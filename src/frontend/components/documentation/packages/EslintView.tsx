@@ -18,7 +18,7 @@ interface EslintDocsSectionProps {
 	themeSprings: ThemeSprings;
 }
 
-const EslintDocsSection = ({ section, themeSprings }: EslintDocsSectionProps) => {
+const EslintDocsSectionView = ({ section, themeSprings }: EslintDocsSectionProps) => {
 	const { handleTabClick, currentTab, sliderSprings } = useTabSprings(2);
 
 	return (
@@ -66,7 +66,7 @@ export const EslintView = ({ themeSprings }: ThemeProps) => {
 				</p>
 
 				{eslintDocsData.map((section) => (
-					<EslintDocsSection
+					<EslintDocsSectionView
 						key={section.href}
 						section={section}
 						themeSprings={themeSprings}
