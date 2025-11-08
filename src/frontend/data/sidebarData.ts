@@ -17,6 +17,7 @@ import { AbsoluteAuthView } from '../components/documentation/packages/AbsoluteA
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { EslintView } from '../components/documentation/packages/EslintView';
+import { TypesView } from '../components/documentation/reference/TypesView';
 
 const definePortalViews = <T>(views: T) => views;
 
@@ -47,7 +48,7 @@ export const docsViews = definePortalViews({
 	'server state': Overview,
 	'ssr-model': Overview,
 	svelte: Overview,
-	types: Overview,
+	types: TypesView,
 	vue: Overview
 });
 
