@@ -45,7 +45,7 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 							themeSprings={themeSprings}
 							navigateToView={navigateToView}
 						/>
-						<ActiveView themeSprings={themeSprings}/>
+						<ActiveView themeSprings={themeSprings} />
 					</div>
 				</main>
 			</animated.body>

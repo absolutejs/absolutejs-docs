@@ -1,6 +1,11 @@
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../types/springTypes';
-import { tocNavStyle, tocTitleStyle, tocListStyle, tocLinkStyle } from '../../styles/docsStyles';
+import {
+	tocNavStyle,
+	tocTitleStyle,
+	tocListStyle
+} from '../../styles/docsStyles';
+import { TocListItem } from './TocItem';
 
 export type TocItem = {
 	label: string;
@@ -13,27 +18,20 @@ type TableOfContentsProps = {
 	title?: string;
 };
 
-type TocListItemProps = {
-	item: TocItem;
-	themeSprings: ThemeSprings;
-};
-
-const TocListItem = ({ item, themeSprings }: TocListItemProps) => (
-	<li>
-		<animated.a href={item.href} style={tocLinkStyle(themeSprings)}>
-			{item.label}
-		</animated.a>
-	</li>
-);
-
-export const TableOfContents = ({ themeSprings, items, title = 'On This Page' }: TableOfContentsProps) => (
+export const TableOfContents = ({
+	themeSprings,
+	items,
+	title = 'On This Page'
+}: TableOfContentsProps) => (
 	<animated.nav style={tocNavStyle(themeSprings)}>
-		<animated.h3 style={tocTitleStyle(themeSprings)}>
-			{title}
-		</animated.h3>
+		<animated.h3 style={tocTitleStyle(themeSprings)}>{title}</animated.h3>
 		<ul style={tocListStyle}>
 			{items.map((item) => (
-				<TocListItem key={item.href} item={item} themeSprings={themeSprings} />
+				<TocListItem
+					key={item.href}
+					item={item}
+					themeSprings={themeSprings}
+				/>
 			))}
 		</ul>
 	</animated.nav>

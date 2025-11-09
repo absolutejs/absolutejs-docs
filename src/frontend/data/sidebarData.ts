@@ -16,7 +16,7 @@ import { Overview } from '../components/documentation/overview/OverviewView';
 import { AbsoluteAuthView } from '../components/documentation/packages/AbsoluteAuthView';
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
-import { EslintView } from '../components/documentation/packages/EslintView';
+import { EslintView } from '../components/documentation/packages/eslint/EslintView';
 
 const definePortalViews = <T>(views: T) => views;
 
