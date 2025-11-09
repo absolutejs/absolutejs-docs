@@ -1,15 +1,14 @@
-import { EslintDocsSection } from '../../../../data/documentation/eslintDocsData';
+import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../../../types/springTypes';
+import { EslintDocsSection } from '../../../../data/documentation/eslintDocsData';
 import { useTabSprings } from '../../../../hooks/springs/useTabSprings';
-import { CodeSlider } from '../../../home/CodeSlider';
-import { PrismPlus } from '../../../utils/PrismPlus';
 import {
 	sectionStyle,
 	headingStyle,
 	paragraphStyle
 } from '../../../../styles/docsStyles';
-import { animated } from '@react-spring/web';
-import { useEffect } from 'react';
+import { CodeSlider } from '../../../home/CodeSlider';
+import { PrismPlus } from '../../../utils/PrismPlus';
 
 interface EslintSectionProps {
 	section: EslintDocsSection;

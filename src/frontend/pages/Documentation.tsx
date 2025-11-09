@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web';
+import { useEffect } from 'react';
 import { DocsView } from '../../types/types';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
@@ -20,6 +21,19 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 	const [view, navigateToView] = useDocsNavigation(initialView);
 
 	const ActiveView = docsViews[view];
+
+	const SCROLL_TIMEOUT = 500;
+	useEffect(() => {
+		const { hash } = window.location;
+		if (!hash) return;
+
+		const element = document.querySelector(hash);
+		if (element) {
+			setTimeout(() => {
+				element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}, SCROLL_TIMEOUT);
+		}
+	}, []);
 
 	return (
 		<html lang="en" style={htmlDefault}>
