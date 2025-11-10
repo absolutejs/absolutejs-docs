@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web';
+import { useEffect } from 'react';
 import { DocsView } from '../../types/types';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
@@ -45,7 +46,7 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 							themeSprings={themeSprings}
 							navigateToView={navigateToView}
 						/>
-						<ActiveView />
+						<ActiveView themeSprings={themeSprings} />
 					</div>
 				</main>
 			</animated.body>
