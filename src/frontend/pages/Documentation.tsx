@@ -22,19 +22,6 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 
 	const ActiveView = docsViews[view];
 
-	const SCROLL_TIMEOUT = 500;
-	useEffect(() => {
-		const { hash } = window.location;
-		if (!hash) return;
-
-		const element = document.querySelector(hash);
-		if (element) {
-			setTimeout(() => {
-				element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			}, SCROLL_TIMEOUT);
-		}
-	}, []);
-
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head />

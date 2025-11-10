@@ -10,7 +10,7 @@ import {
 import { CodeSlider } from '../../../home/CodeSlider';
 import { PrismPlus } from '../../../utils/PrismPlus';
 
-interface EslintSectionProps {
+type EslintSectionProps = {
 	section: EslintDocsSection;
 	themeSprings: ThemeSprings;
 }
