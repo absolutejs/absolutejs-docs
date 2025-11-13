@@ -23,7 +23,7 @@ app.get('/protected', ({ protectRoute }) =>
     (user) => \`Hello \${user.name}!\`,
     () => 'Please log in'
   )
-);` 
+);`;
 
 export const handleAuthFlow = `\
 // Redirect to provider authorization
@@ -91,4 +91,4 @@ export const useAuth = () => {
   };
 
   return { user, loading, login, logout };
-};`
+};`;
