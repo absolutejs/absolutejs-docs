@@ -13,7 +13,7 @@ import {
 } from 'react-icons/fa';
 import { MenuItem } from '../../types/types';
 import { Overview } from '../components/documentation/overview/OverviewView';
-import { AbsoluteAuthView } from '../components/documentation/packages/AbsoluteAuthView';
+import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
