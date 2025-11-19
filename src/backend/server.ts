@@ -16,6 +16,8 @@ import { Home } from '../frontend/pages/Home';
 import { docsViewEnum, themeCookie } from '../types/typebox';
 import { providerPlugin } from './plugins/providerPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
+import { Playground } from '../frontend/pages/Playground';
+
 
 const manifest = await build({
 	assetsDirectory: 'src/backend/assets',
@@ -76,6 +78,19 @@ const server = new Elysia()
 			),
 		{ cookie: themeCookie }
 	)
+		.get(
+		'/playground',
+		({ cookie: { theme } }) =>
+			handleReactPageRequest(
+				Playground,
+				asset(manifest, 'PlaygroundIndex'),
+				{
+					theme: theme?.value
+				}
+			),
+		{ cookie: themeCookie }
+	)
+
 	.use(networking)
 	.on('error', (error) => {
 		const { request } = error;
