@@ -1,8 +1,11 @@
-// src/frontend/components/playground/PlaygroundForm.tsx
-
+import { buildCliCommand, type PlaygroundConfig } from '../../../backend/utils/buildCliCommand';
 import { useState, ChangeEvent } from 'react';
 import { animated } from '@react-spring/web';
 import { ThemeProps, ThemeSprings } from '../../../types/springTypes';
+import { server } from '../../eden/treaty';
+import { LoadingProgress } from './LoadingProgress';
+import { ErrorDisplay } from './ErrorDisplay';
+import { StackBlitzPreview } from './StackBlitzPreview';
 import {
 	playgroundWrapperStyle,
 	formCardStyle,
@@ -15,7 +18,6 @@ import {
 	textInputStyle,
 	checkboxRowStyle
 } from '../../styles/playgroundStyles';
-
 type DatabaseEngine =
 	| 'none'
 	| 'postgresql'
@@ -24,11 +26,8 @@ type DatabaseEngine =
 	| 'mariadb'
 	| 'gel'
 	| 'mongodb';
-
 type ORM = 'drizzle' | 'prisma' | undefined;
-
 type CodeQualityTool = 'eslint+prettier' | 'biome';
-
 const drizzleDialects: DatabaseEngine[] = [
 	'gel',
 	'mysql',
@@ -36,22 +35,18 @@ const drizzleDialects: DatabaseEngine[] = [
 	'postgresql',
 	'sqlite'
 ];
-
 const prismaDialects: DatabaseEngine[] = [
 	'postgresql',
 	'mysql',
 	'mariadb',
 	'mongodb'
 ];
-
 const pluginOptions = [
 	'@elysiajs/cors',
 	'@elysiajs/swagger',
 	'elysia-rate-limit'
 ] as const;
-
 type PluginValue = (typeof pluginOptions)[number];
-
 const FRONTEND_OPTIONS = [
 	{ key: 'react', label: 'React' },
 	{ key: 'html', label: 'HTML' },
@@ -59,35 +54,57 @@ const FRONTEND_OPTIONS = [
 	{ key: 'svelte', label: 'Svelte' },
 	{ key: 'vue', label: 'Vue' }
 ] as const;
-
+interface StackBlitzProject {
+	title: string;
+	description: string;
+	template: 'node' | 'javascript' | 'typescript';
+	files: Record<string, string>;
+	settings?: {
+		compile?: {
+			trigger?: 'auto' | 'keystroke' | 'save';
+			clearConsole?: boolean;
+		};
+	};
+}
 export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 	const [projectName, setProjectName] = useState('absolutejs-project');
 	const [configurationType, setConfigurationType] = useState<'default' | 'custom'>('default');
 	const [frontends, setFrontends] = useState<string[]>(['react']);
-	const [databaseEngine, setDatabaseEngine] =
-		useState<DatabaseEngine>('postgresql');
+	const [databaseEngine, setDatabaseEngine] = useState<DatabaseEngine>('postgresql');
 	const [databaseHost, setDatabaseHost] = useState<
 		'none' | 'neon' | 'planetscale' | 'turso' | undefined
 	>('neon');
 	const [orm, setOrm] = useState<ORM>('drizzle');
-	const [authProvider, setAuthProvider] =
-		useState<'none' | 'absoluteAuth'>('absoluteAuth');
-	const [codeQualityTool, setCodeQualityTool] =
-		useState<CodeQualityTool>('eslint+prettier');
+	const [authProvider, setAuthProvider] = useState<'none' | 'absoluteAuth'>('absoluteAuth');
+	const [codeQualityTool, setCodeQualityTool] = useState<CodeQualityTool>('eslint+prettier');
 	const [useTailwind, setUseTailwind] = useState(true);
 	const [useHtmlScripts, setUseHtmlScripts] = useState(true);
 	const [selectedPlugins, setSelectedPlugins] = useState<PluginValue[]>([
 		'@elysiajs/cors',
 		'@elysiajs/swagger'
 	]);
-
+	const [copied, setCopied] = useState(false);
+	const [isGenerating, setIsGenerating] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const [stackBlitzProject, setStackBlitzProject] = useState<StackBlitzProject | null>(null);
+	const config: PlaygroundConfig = {
+		projectName,
+		configurationType,
+		frontends,
+		databaseEngine,
+		databaseHost,
+		orm,
+		authProvider,
+		codeQualityTool,
+		useTailwind,
+		useHtmlScripts,
+		selectedPlugins
+	};
+	const cliCommand = buildCliCommand(config);
 	const supportsDrizzle = drizzleDialects.includes(databaseEngine);
 	const supportsPrisma = prismaDialects.includes(databaseEngine);
-
 	const handleDatabaseChange = (engine: DatabaseEngine) => {
 		setDatabaseEngine(engine);
-
-		// Database host defaults
 		if (engine === 'postgresql') {
 			setDatabaseHost('neon');
 		} else if (engine === 'sqlite') {
@@ -95,8 +112,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 		} else {
 			setDatabaseHost(undefined);
 		}
-
-		// ORM defaults based on the *new* engine
 		const engineSupportsDrizzle = drizzleDialects.includes(engine);
 		const engineSupportsPrisma = prismaDialects.includes(engine);
 
@@ -108,7 +123,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 			setOrm('prisma');
 		}
 	};
-
 	const handleFrontendToggle = (key: string) => {
 		setFrontends((prev) =>
 			prev.includes(key)
@@ -116,7 +130,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 				: [...prev, key]
 		);
 	};
-
 	const handlePluginToggle = (value: PluginValue) => {
 		setSelectedPlugins((prev) =>
 			prev.includes(value)
@@ -124,9 +137,47 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 				: [...prev, value]
 		);
 	};
+	const handleCopy = async () => {
+		try {
+			await navigator.clipboard.writeText(cliCommand);
+			setCopied(true);
+			setTimeout(() => setCopied(false), 2000);
+		} catch (err) {
+			console.error('Failed to copy:', err);
+		}
+	};
+	const handleGenerate = async () => {
+		setIsGenerating(true);
+		setError(null);
+		setStackBlitzProject(null);
+		try {
+			const response = await server.api.v1.sandbox.generate.post(config);
 
+			if (response.error) {
+				setError(response.error.value as string);
+			} else if (response.data) {
+				console.log('Project generated successfully!');
+				console.log('CLI Command:', response.data.cliCommand);
+				if (response.data.stackBlitzProject) {
+					setStackBlitzProject(response.data.stackBlitzProject as StackBlitzProject);
+				}
+			}
+		} catch (err) {
+			console.error('Error generating project:', err);
+			setError('Failed to generate project. Please try again.');
+		} finally {
+			setIsGenerating(false);
+		}
+	};
+	const handleReset = () => {
+		setStackBlitzProject(null);
+		setError(null);
+		setCopied(false);
+	};
+	const handleDismissError = () => {
+		setError(null);
+	};
 	const renderORMOptions = (springs: ThemeSprings) => {
-		// `springs` kept in signature for future styling hooks if needed
 		if (!supportsDrizzle && !supportsPrisma) {
 			return (
 				<p style={{ fontSize: '0.85rem', opacity: 0.8 }}>
@@ -134,7 +185,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 				</p>
 			);
 		}
-
 		return (
 			<div style={inputsGridStyle}>
 				{supportsDrizzle && (
@@ -174,7 +224,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 			</div>
 		);
 	};
-
 	const renderDatabaseHostOptions = () => {
 		if (databaseEngine === 'postgresql') {
 			return (
@@ -212,7 +261,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 				</div>
 			);
 		}
-
 		if (databaseEngine === 'sqlite') {
 			return (
 				<div style={inputsGridStyle}>
@@ -239,14 +287,12 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 				</div>
 			);
 		}
-
 		return (
 			<p style={{ fontSize: '0.85rem', opacity: 0.8 }}>
 				No external host options are required for this engine.
 			</p>
 		);
 	};
-
 	return (
 		<animated.section
 			style={{
@@ -259,7 +305,7 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 			<animated.div
 				style={{
 					...formCardStyle(themeSprings),
-					maxWidth: '800px',
+					maxWidth: '900px',
 					width: '100%'
 				}}
 			>
@@ -270,8 +316,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 						<code>bun create absolutejs</code> prompts.
 					</p>
 				</div>
-
-				{/* Project name + config type */}
 				<div style={{ marginBottom: '1.25rem' }}>
 					<label htmlFor="project-name" style={sectionTitleStyle}>
 						Project name
@@ -291,7 +335,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 						positional argument in the CLI.
 					</p>
 				</div>
-
 				<fieldset style={fieldsetStyle}>
 					<legend style={legendStyle}>Folder naming configuration</legend>
 					<p style={sectionSubtitleStyle}>
@@ -321,8 +364,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 						</label>
 					</div>
 				</fieldset>
-
-				{/* Frontends */}
 				<fieldset style={fieldsetStyle}>
 					<legend style={legendStyle}>Frontends</legend>
 					<p style={sectionSubtitleStyle}>
@@ -342,8 +383,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 						))}
 					</div>
 				</fieldset>
-
-				{/* Database */}
 				<fieldset style={fieldsetStyle}>
 					<legend style={legendStyle}>Database engine</legend>
 					<p style={sectionSubtitleStyle}>
@@ -374,8 +413,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 						))}
 					</div>
 				</fieldset>
-
-				{/* Database host */}
 				<fieldset style={fieldsetStyle}>
 					<legend style={legendStyle}>Database host</legend>
 					<p style={sectionSubtitleStyle}>
@@ -384,8 +421,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 					</p>
 					{renderDatabaseHostOptions()}
 				</fieldset>
-
-				{/* ORM */}
 				<fieldset style={fieldsetStyle}>
 					<legend style={legendStyle}>ORM</legend>
 					<p style={sectionSubtitleStyle}>
@@ -394,8 +429,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 					</p>
 					{renderORMOptions(themeSprings)}
 				</fieldset>
-
-				{/* Auth provider */}
 				<fieldset style={fieldsetStyle}>
 					<legend style={legendStyle}>Auth provider</legend>
 					<p style={sectionSubtitleStyle}>
@@ -425,8 +458,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 						</label>
 					</div>
 				</fieldset>
-
-				{/* Code quality tool */}
 				<fieldset style={fieldsetStyle}>
 					<legend style={legendStyle}>Code quality</legend>
 					<p style={sectionSubtitleStyle}>
@@ -455,8 +486,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 						</label>
 					</div>
 				</fieldset>
-
-				{/* Tailwind & HTML scripts */}
 				<fieldset style={fieldsetStyle}>
 					<legend style={legendStyle}>Styling &amp; scripts</legend>
 					<div style={inputsGridStyle}>
@@ -480,8 +509,6 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 						</label>
 					</div>
 				</fieldset>
-
-				{/* Elysia plugins */}
 				<fieldset style={fieldsetStyle}>
 					<legend style={legendStyle}>Additional Elysia plugins</legend>
 					<p style={sectionSubtitleStyle}>
@@ -501,6 +528,104 @@ export const PlaygroundForm = ({ themeSprings }: ThemeProps) => {
 						))}
 					</div>
 				</fieldset>
+				<div style={{
+					marginTop: '2rem',
+					padding: '1.5rem',
+					backgroundColor: 'rgba(0, 0, 0, 0.3)',
+					borderRadius: '8px',
+					border: '1px solid rgba(255, 255, 255, 0.1)'
+				}}>
+					<h3 style={{
+						fontSize: '1.1rem',
+						fontWeight: 600,
+						marginBottom: '0.75rem'
+					}}>
+						Generated Command
+					</h3>
+					<pre style={{
+						backgroundColor: 'rgba(0, 0, 0, 0.5)',
+						padding: '1rem',
+						borderRadius: '6px',
+						overflowX: 'auto',
+						fontFamily: 'monospace',
+						fontSize: '0.9rem',
+						lineHeight: 1.5,
+						margin: '0.5rem 0'
+					}}>
+						{cliCommand}
+					</pre>
+
+					<div style={{
+						display: 'flex',
+						gap: '0.75rem',
+						marginTop: '1rem',
+						flexWrap: 'wrap'
+					}}>
+						<button
+							onClick={handleCopy}
+							disabled={isGenerating}
+							style={{
+								padding: '0.5rem 1rem',
+								backgroundColor: copied ? '#10b981' : '#6b7280',
+								color: 'white',
+								border: 'none',
+								borderRadius: '4px',
+								cursor: isGenerating ? 'not-allowed' : 'pointer',
+								fontSize: '0.9rem',
+								fontWeight: 500,
+								transition: 'background-color 0.2s',
+								opacity: isGenerating ? 0.6 : 1
+							}}
+						>
+							{copied ? '✓ Copied!' : '📋 Copy Command'}
+						</button>
+
+						<button
+							onClick={handleGenerate}
+							disabled={isGenerating}
+							style={{
+								padding: '0.5rem 1.5rem',
+								backgroundColor: isGenerating ? '#9ca3af' : '#0070f3',
+								color: 'white',
+								border: 'none',
+								borderRadius: '4px',
+								cursor: isGenerating ? 'not-allowed' : 'pointer',
+								fontSize: '0.9rem',
+								fontWeight: 500,
+								transition: 'background-color 0.2s'
+							}}
+						>
+							{isGenerating ? '⏳ Generating...' : '🚀 Generate Sandbox'}
+						</button>
+					</div>
+
+					<p style={{
+						fontSize: '0.85rem',
+						opacity: 0.8,
+						marginTop: '0.75rem',
+						marginBottom: 0
+					}}>
+						Copy and run this command in your terminal to create your project locally
+					</p>
+				</div>
+				{isGenerating && (
+					<LoadingProgress themeSprings={themeSprings} />
+				)}
+				{error && !isGenerating && (
+					<ErrorDisplay
+						error={error}
+						onRetry={handleGenerate}
+						onDismiss={handleDismissError}
+						themeSprings={themeSprings}
+					/>
+				)}
+				{stackBlitzProject && !isGenerating && (
+					<StackBlitzPreview
+						project={stackBlitzProject}
+						onReset={handleReset}
+						themeSprings={themeSprings}
+					/>
+				)}
 			</animated.div>
 		</animated.section>
 	);
