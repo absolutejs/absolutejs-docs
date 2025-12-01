@@ -13,7 +13,7 @@ import { PrismPlus } from '../../../utils/PrismPlus';
 type EslintSectionProps = {
 	section: EslintDocsSection;
 	themeSprings: ThemeSprings;
-}
+};
 
 export const EslintSection = ({
 	section,
