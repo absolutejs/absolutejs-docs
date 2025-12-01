@@ -17,13 +17,14 @@ import { AbsoluteAuthView } from '../components/documentation/packages/AbsoluteA
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
+import { APIBuildView } from '../components/documentation/reference/APIBuildView';
 
 const definePortalViews = <T>(views: T) => views;
 
 export const docsViews = definePortalViews({
 	'absolute-auth': AbsoluteAuthView,
 	angular: Overview,
-	'api-build': Overview,
+	'api-build': APIBuildView,
 	assets: Overview,
 	'build-and-manifest': Overview,
 	citra: CitraView,
