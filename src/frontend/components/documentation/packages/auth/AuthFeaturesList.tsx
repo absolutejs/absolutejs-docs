@@ -1,3 +1,4 @@
+import { providers } from 'citra';
 import {
 	listStyle,
 	listItemStyle,
@@ -7,8 +8,9 @@ import {
 export const AuthFeaturesList = () => (
 	<ul style={listStyle}>
 		<li style={listItemStyle}>
-			<strong style={strongStyle}>Multi-Provider Support</strong>: 50+
-			OAuth 2.0 and OpenID Connect providers
+			<strong style={strongStyle}>Multi-Provider Support</strong>:{' '}
+			{Object.keys(providers).length} OAuth 2.0 providers, with OpenID
+			Connect support for compatible providers
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>Type-Safe</strong>: Full TypeScript

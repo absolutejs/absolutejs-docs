@@ -61,9 +61,9 @@ export const AbsoluteAuthView = ({ themeSprings }: ThemeProps) => {
 					<p style={paragraphLargeStyle}>
 						Absolute Auth is a comprehensive TypeScript-based
 						authentication system built for Elysia applications. It
-						provides a complete OAuth 2.0 and OpenID Connect
-						solution with support for 50+ authentication providers
-						including Google, GitHub, Discord, and many more.
+						provides a complete OAuth 2.0 solution with optional
+						OpenID Connect capabilities for providers that implement
+						the OpenID standard.
 					</p>
 				</section>
 

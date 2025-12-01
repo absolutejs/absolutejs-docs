@@ -1,14 +1,15 @@
 export const basicSetup = `\
 import { Elysia } from 'elysia';
 import { absoluteAuth } from '@absolutejs/auth';
+import { getEnv } from '@absolutejs/absolute';
 
 const app = new Elysia()
   .use(await absoluteAuth({
     providersConfiguration: {
       google: {
         credentials: {
-          clientId: process.env.GOOGLE_CLIENT_ID!,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+          clientId: getEnv('GOOGLE_CLIENT_ID'),
+          clientSecret: getEnv('GOOGLE_CLIENT_SECRET'),
           redirectUri: 'http://localhost:3000/oauth2/callback'
         },
         scope: ['profile', 'email']
