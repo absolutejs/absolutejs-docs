@@ -17,6 +17,7 @@ import { AbsoluteAuthView } from '../components/documentation/packages/AbsoluteA
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
+import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
 
 const definePortalViews = <T>(views: T) => views;
 
@@ -38,7 +39,7 @@ export const docsViews = definePortalViews({
 	htmx: Overview,
 	installation: Overview,
 	overview: Overview,
-	'page-handlers': Overview,
+	'page-handlers': PageHandlersView,
 	plugin: Overview,
 	'production-build': Overview,
 	quickstart: Overview,
