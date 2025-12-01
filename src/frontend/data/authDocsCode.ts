@@ -41,60 +41,28 @@ const response = await fetch('/oauth2/status', {
 });
 
 const data = await response.json();
-// data is either: { user } or an auth error`
+// data is either: { user } or an auth error`;
 
-export const signout = `await fetch('/oauth2/signout', { method: 'DELETE' });`
+export const signout = `await fetch('/oauth2/signout', { method: 'DELETE' });`;
 
 export const userManagement = `\
-const config = {
-  providersConfiguration,
-  onCallbackSuccess: async ({ authProvider, tokenResponse, session, userSessionId }) => {
-    return instantiateUserSession({
-      authProvider,
-      tokenResponse,
-      session,
-      userSessionId,
-      getUser: async (userIdentity) => {
-        // Find user in your database
-        return await db.users.findByAuthSub(userIdentity.sub);
-      },
-      onNewUser: async (userIdentity) => {
-        // Create new user in your database
-        return await db.users.create({
-          authSub: userIdentity.sub,
-          email: userIdentity.email,
-          name: userIdentity.name
-        });
-      }
-    });
-  }
-};`;
-
-export const reactFrontend = `\
-import { useState, useEffect } from 'react';
-
-// Frontend authentication hook
-export const useAuth = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch('/oauth2/status')
-      .then(res => res.json())
-      .then(data => {
-        setUser(data);
-        setLoading(false);
+onCallbackSuccess: async ({ authProvider, tokenResponse, session, userSessionId }) => {
+  return instantiateUserSession({
+    authProvider,
+    tokenResponse,
+    session,
+    userSessionId,
+    getUser: async (userIdentity) => {
+      // Find user in your database
+      return await db.users.findByAuthSub(userIdentity.sub);
+    },
+    onNewUser: async (userIdentity) => {
+      // Create new user in your database
+      return await db.users.create({
+        authSub: userIdentity.sub,
+        email: userIdentity.email,
+        name: userIdentity.name
       });
-  }, []);
-
-  const login = (provider: string) => {
-    window.location.href = \`/oauth2/\${provider}/authorization\`;
-  };
-
-  const logout = async () => {
-    await fetch('/oauth2/signout', { method: 'DELETE' });
-    setUser(null);
-  };
-
-  return { user, loading, login, logout };
+    }
+  });
 };`;
