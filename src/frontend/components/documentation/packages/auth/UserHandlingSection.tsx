@@ -7,20 +7,19 @@ import {
 	paragraphSpacedStyle,
 	listStyle,
 	strongStyle,
-	listItemStyle,
-	paragraphLargeStyle
+	listItemStyle
 } from '../../../../styles/docsStyles';
 import { PrismPlus } from '../../../utils/PrismPlus';
 export const UserHandlingSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
-		<animated.h2 style={headingStyle(themeSprings)} id="user-management">
-			User Management
+		<animated.h2 style={headingStyle(themeSprings)} id="user-handling">
+			Custom User Handling
 		</animated.h2>
 		<p style={paragraphSpacedStyle}>
 			Absolute Auth does not provide database adapters. Instead, it
-			exposes hooks throughout the OAuth lifecycle, allowing you integrate
-			any persistence layer or user model. These hooks provide full
-			control over user creation, updates, and session handling while
+			exposes hooks throughout the OAuth lifecycle, allowing you to
+			integrate any persistence layer or user model. These hooks provide
+			full control over user creation, updates, and session handling while
 			keeping the OAuth flow standardized and database-agnostic.
 		</p>
 		<animated.h2 style={headingStyle(themeSprings, true)}>

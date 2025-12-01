@@ -36,21 +36,16 @@ export const AuthFlowSection = ({ themeSprings }: ThemeProps) => (
 		/>
 		<p style={paragraphSpacedStyle}>
 			This triggers the built-in authorization route, which handles:
-			<ul style={listStyle}>
-				<li style={listItemStyle}>
-					generating state + PKCE (if required)
-				</li>
-				<li style={listItemStyle}>storing the provider name</li>
-				<li style={listItemStyle}>storing the origin URL</li>
-				<li style={listItemStyle}>
-					building and redirecting to the provider's authorization URL
-				</li>
-			</ul>
 		</p>
-		<animated.h3
-			style={headingStyle(themeSprings, true)}
-			id="handle-auth-flow"
-		>
+		<ul style={listStyle}>
+			<li style={listItemStyle}>generating state + PKCE (if required)</li>
+			<li style={listItemStyle}>storing the provider name</li>
+			<li style={listItemStyle}>storing the origin URL</li>
+			<li style={listItemStyle}>
+				building and redirecting to the provider's authorization URL
+			</li>
+		</ul>
+		<animated.h3 style={headingStyle(themeSprings, true)}>
 			Check whether the user is logged in
 		</animated.h3>
 		<PrismPlus
@@ -59,10 +54,7 @@ export const AuthFlowSection = ({ themeSprings }: ThemeProps) => (
 			showLineNumbers={false}
 			themeSprings={themeSprings}
 		/>
-		<animated.h3
-			style={headingStyle(themeSprings, true)}
-			id="handle-auth-flow"
-		>
+		<animated.h3 style={headingStyle(themeSprings, true)}>
 			Sign the user out
 		</animated.h3>
 		<PrismPlus
@@ -73,13 +65,13 @@ export const AuthFlowSection = ({ themeSprings }: ThemeProps) => (
 		/>
 		<p style={paragraphSpacedStyle}>
 			This calls the built-in sign-out route, which:
-			<ul style={listStyle}>
-				<li style={listItemStyle}>
-					runs your onSignOut hook (if provided)
-				</li>
-				<li style={listItemStyle}>deletes the user session</li>
-				<li style={listItemStyle}>clears authentication cookies</li>
-			</ul>
 		</p>
+		<ul style={listStyle}>
+			<li style={listItemStyle}>
+				runs your onSignOut hook (if provided)
+			</li>
+			<li style={listItemStyle}>deletes the user session</li>
+			<li style={listItemStyle}>clears authentication cookies</li>
+		</ul>
 	</section>
 );
