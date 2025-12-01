@@ -4,7 +4,7 @@ import { absoluteAuth } from '@absolutejs/auth';
 import { getEnv } from '@absolutejs/absolute';
 
 const app = new Elysia()
-  .use(await absoluteAuth({
+  .use(absoluteAuth<User>({
     providersConfiguration: {
       google: {
         credentials: {
@@ -21,24 +21,29 @@ const app = new Elysia()
 export const protectRoute = `\
 app.get('/protected', ({ protectRoute }) =>
   protectRoute(
-    (user) => \`Hello \${user.name}!\`,
-    () => 'Please log in'
+    (user) => {
+      return \`Hello, \${user.name}!\`;
+    },
+    (error) => {
+      console.error('Authentication failed:', error);
+      return 'Please log in';
+    }
   )
 );`;
 
-export const handleAuthFlow = `\
-// Redirect to provider authorization
-app.get('/login/:provider', ({ params, redirect }) => {
-  return redirect(\`/oauth2/\${params.provider}/authorization\`);
+export const startOAuthFlow = `\
+// Redirect the user to the provider's authorization URL
+redirect('/oauth2/google/authorization');`;
+
+export const checkStatus = `\
+const response = await fetch('/oauth2/status', {
+  headers: { cookie: cookie.toString() }
 });
 
-// Check user status
-app.get('/status', async ({ cookie }) => {
-  const response = await fetch('/oauth2/status', {
-    headers: { cookie: cookie.toString() }
-  });
-  return response.json();
-});`;
+const data = await response.json();
+// data is either: { user } or an auth error`
+
+export const signout = `await fetch('/oauth2/signout', { method: 'DELETE' });`
 
 export const userManagement = `\
 const config = {

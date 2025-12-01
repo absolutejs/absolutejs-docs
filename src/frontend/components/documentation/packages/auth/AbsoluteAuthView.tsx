@@ -3,7 +3,6 @@ import { ThemeProps } from '../../../../../types/springTypes';
 import {
 	basicSetup,
 	protectRoute,
-	handleAuthFlow,
 	userManagement,
 	reactFrontend
 } from '../../../../data/authDocsCode';
@@ -20,12 +19,15 @@ import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { AuthFeaturesList } from './AuthFeaturesList';
 import { AuthRoutesTable } from './AuthRoutesTable';
+import { AuthFlowSection } from './AuthFlowSection';
 
 const tocItems: TocItem[] = [
 	{ href: '#overview', label: 'Overview' },
 	{ href: '#key-features', label: 'Key Features' },
 	{ href: '#installation', label: 'Installation' },
-	{ href: '#quick-start', label: 'Quick Start' },
+	{ href: '#basic-setup', label: 'Basic Setup' },
+	{ href: '#protect-route', label: 'Protect Route' },
+	{ href: '#handle-auth-flow', label: 'Handle Auth Flow' },
 	{ href: '#authentication-routes', label: 'Authentication Routes' },
 	{ href: '#user-management', label: 'User Management' },
 	{ href: '#react-frontend-integration', label: 'React Frontend Integration' }
@@ -95,36 +97,43 @@ export const AbsoluteAuthView = ({ themeSprings }: ThemeProps) => {
 				<section style={sectionStyle}>
 					<animated.h2
 						style={headingStyle(themeSprings)}
-						id="quick-start"
+						id="basic-setup"
 					>
-						Quick Start
+						Basic Setup
 					</animated.h2>
-					<h3 style={paragraphLargeStyle}>Basic Setup</h3>
 					<PrismPlus
 						codeString={basicSetup}
 						language="typescript"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
+				</section>
 
-					<h3 style={paragraphLargeStyle}>Protect Routes</h3>
+				<section style={sectionStyle}>
+					<animated.h2
+						style={headingStyle(themeSprings)}
+						id="protect-route"
+					>
+						Protect Routes
+					</animated.h2>
+					<p style={paragraphSpacedStyle}>
+						The protectRoute helper function is used to protect
+						routes that require authentication, which accepts two
+						callbacks. The user object is specifically typed to be the
+						exact user shape and the error object is exactly one of
+						the specific authentication errors that may be returned,
+						giving you complete type safety for both success and
+						failure paths.
+					</p>
 					<PrismPlus
 						codeString={protectRoute}
 						language="typescript"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-
-					<h3 style={paragraphLargeStyle}>
-						Handle Authentication Flow
-					</h3>
-					<PrismPlus
-						codeString={handleAuthFlow}
-						language="typescript"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
-					/>
 				</section>
+
+				<AuthFlowSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
 					<animated.h2
