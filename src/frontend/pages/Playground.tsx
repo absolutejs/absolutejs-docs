@@ -1,15 +1,14 @@
 import { animated } from '@react-spring/web';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
-import { PlaygroundHero } from '../components/playground/PlaygroundHero';
-import { PlaygroundForm } from '../components/playground/PlaygroundForm';
+import { PlaygroundPage } from '../components/playground/PlaygroundPage';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
-import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
+import { htmlDefault, bodyDefault } from '../styles/styles';
 
-type PlaygroundProps = {
+interface PlaygroundProps {
 	theme: ThemeMode | undefined;
-};
+}
 
 export const Playground = ({ theme }: PlaygroundProps) => {
 	const { user, handleSignOut } = useAuthStatus();
@@ -25,10 +24,7 @@ export const Playground = ({ theme }: PlaygroundProps) => {
 					handleSignOut={handleSignOut}
 					setTheme={setTheme}
 				/>
-				<main style={mainDefault()}>
-					<PlaygroundHero themeSprings={themeSprings} />
-					<PlaygroundForm themeSprings={themeSprings} />
-				</main>
+				<PlaygroundPage themeSprings={themeSprings} />
 			</animated.body>
 		</html>
 	);
