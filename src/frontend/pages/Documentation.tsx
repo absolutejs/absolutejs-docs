@@ -1,5 +1,4 @@
 import { animated } from '@react-spring/web';
-import { useEffect } from 'react';
 import { DocsView } from '../../types/types';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
