@@ -85,6 +85,7 @@ export const multipleFrameworks = `import {
   handleSveltePageRequest, 
   handleVuePageRequest,
   handleHTMLPageRequest,
+  generateHeadElement,
   asset 
 } from '@absolutejs/absolute';
 import { Elysia } from 'elysia';
@@ -131,6 +132,7 @@ const app = new Elysia()
   .listen(3000);`;
 
 export const propsExample = `import { handleReactPageRequest, asset } from '@absolutejs/absolute';
+import { Elysia } from 'elysia';
 import { Dashboard } from './components/Dashboard';
 import { manifest } from './build';
 
@@ -148,13 +150,15 @@ const validProps = {
   metadata: null                  // null
 };
 
-app.get('/dashboard', () =>
-  handleReactPageRequest(
-    Dashboard,
-    asset(manifest, 'DashboardIndex'),
-    validProps
+const app = new Elysia()
+  .get('/dashboard', () =>
+    handleReactPageRequest(
+      Dashboard,
+      asset(manifest, 'DashboardIndex'),
+      validProps
+    )
   )
-);
+  .listen(3000);
 
 // Invalid props - will cause errors
 const invalidProps = {
@@ -167,7 +171,7 @@ const invalidProps = {
 
 export const elysiaIntegration = `import { handleReactPageRequest, asset } from '@absolutejs/absolute';
 import { Elysia } from 'elysia';
-import { Profile } from './components/Profile';
+import { Profile, Dashboard, SearchResults } from './components';
 import { manifest } from './build';
 
 
