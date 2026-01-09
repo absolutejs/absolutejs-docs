@@ -6,10 +6,7 @@ import {
 	vueHandler,
 	htmlHandler,
 	htmxHandler,
-	generateHead,
-	multipleFrameworks,
-	propsExample,
-	elysiaIntegration
+	generateHead
 } from '../../../data/documentation/pageHandlersDocsCode';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
@@ -36,11 +33,7 @@ const tocItems: TocItem[] = [
 	{ href: '#handlevuepagerequest', label: 'handleVuePageRequest' },
 	{ href: '#handlehtmlpagerequest', label: 'handleHTMLPageRequest' },
 	{ href: '#handlehtmxpagerequest', label: 'handleHTMXPageRequest' },
-	{ href: '#generateheadelement', label: 'generateHeadElement' },
-	{ href: '#props-serialization', label: 'Props Serialization' },
-	{ href: '#using-multiple-frameworks', label: 'Using Multiple Frameworks' },
-	{ href: '#elysia-integration', label: 'Elysia Integration' },
-	{ href: '#key-takeaways', label: 'Key Takeaways' }
+	{ href: '#generateheadelement', label: 'generateHeadElement' }
 ];
 
 export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
@@ -122,12 +115,8 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 							manifest from build()
 						</li>
 						<li style={listItemStyle}>
-							Props passed to components must be simple data
-							(strings, numbers, objects, arrays)
-						</li>
-						<li style={listItemStyle}>
-							Props cannot include functions, class instances, or
-							complex objects
+							Props passed to components can be any valid
+							JavaScript object or function
 						</li>
 						<li style={listItemStyle}>
 							Always use with asset(manifest, key) to get correct
@@ -153,7 +142,11 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						<strong style={strongStyle}>Signature:</strong>
 					</p>
 					<PrismPlus
-						codeString={`handleReactPageRequest(Component: ReactComponent, assetPath: string, props?: object)`}
+						codeString={`handleReactPageRequest<Props extends Record<string, unknown> = Record<never, never>>(
+  pageComponent: ReactComponent<Props>,
+  index: string,
+  ...props: keyof Props extends never ? [] : [props: Props]
+): Promise<Response>`}
 						showLineNumbers={false}
 						language="typescript"
 						themeSprings={themeSprings}
@@ -163,10 +156,11 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 					</p>
 					<ul style={listStyle}>
 						<li style={listItemStyle}>
-							Component: Your React component
+							pageComponent: Your React component
 						</li>
 						<li style={listItemStyle}>
-							assetPath: Asset path from asset(manifest, key)
+							index: The index path used to hydrate the page with
+							JavaScript
 						</li>
 						<li style={listItemStyle}>
 							props: Props to pass to the component (optional)
@@ -194,7 +188,12 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						<strong style={strongStyle}>Signature:</strong>
 					</p>
 					<PrismPlus
-						codeString={`handleSveltePageRequest(Component: SvelteComponent, componentAsset: string, indexAsset: string, props?: object)`}
+						codeString={`handleSveltePageRequest<P extends Record<string, unknown>>(
+  PageComponent: SvelteComponent<P>,
+  pagePath: string,
+  indexPath: string,
+  props: P
+): Promise<Response>`}
 						showLineNumbers={false}
 						language="typescript"
 						themeSprings={themeSprings}
@@ -204,16 +203,20 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 					</p>
 					<ul style={listStyle}>
 						<li style={listItemStyle}>
-							Component: Your Svelte component
+							PageComponent: The raw Svelte component (used only
+							for type inference to ensure props have the correct
+							type)
 						</li>
 						<li style={listItemStyle}>
-							componentAsset: Asset path for the component
+							pagePath: The path to the compiled Svelte page that
+							will be imported and used
 						</li>
 						<li style={listItemStyle}>
-							indexAsset: Asset path for the index file
+							indexPath: The index path used to hydrate the page
+							with JavaScript
 						</li>
 						<li style={listItemStyle}>
-							props: Props to pass to the component (optional)
+							props: Props to pass to the component
 						</li>
 					</ul>
 					<PrismPlus
@@ -238,7 +241,13 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						<strong style={strongStyle}>Signature:</strong>
 					</p>
 					<PrismPlus
-						codeString={`handleVuePageRequest(Component: VueComponent, componentAsset: string, indexAsset: string, headElement: HeadElement, props?: object)`}
+						codeString={`handleVuePageRequest<Props extends Record<string, unknown> = Record<never, never>>(
+  _PageComponent: VueComponent<Props>,
+  pagePath: string,
+  indexPath: string,
+  headTag?: \`<head>\${string}</head>\`,
+  ...props: keyof Props extends never ? [] : [props: Props]
+): Promise<Response>`}
 						showLineNumbers={false}
 						language="typescript"
 						themeSprings={themeSprings}
@@ -248,17 +257,24 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 					</p>
 					<ul style={listStyle}>
 						<li style={listItemStyle}>
-							Component: Your Vue component
+							_PageComponent: The raw Vue component (used only for
+							type inference to ensure props have the correct
+							type)
 						</li>
 						<li style={listItemStyle}>
-							componentAsset: Asset path for the component
+							pagePath: The path to the compiled Vue page that
+							will be imported and used
 						</li>
 						<li style={listItemStyle}>
-							indexAsset: Asset path for the index file
+							indexPath: The index path used to hydrate the page
+							with JavaScript
 						</li>
 						<li style={listItemStyle}>
-							headElement: Generated head element from
-							generateHeadElement()
+							headTag: Vue components cannot include page elements
+							like the head, so we create it inside the handler
+							and attach the head component you pass. You have the
+							option to use generateHeadElement() so you don't
+							have to write the whole thing manually (optional)
 						</li>
 						<li style={listItemStyle}>
 							props: Props to pass to the component (optional)
@@ -382,96 +398,6 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						language="typescript"
 						themeSprings={themeSprings}
 					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="props-serialization"
-					>
-						Props Serialization
-					</animated.h2>
-					<p style={paragraphSpacedStyle}>
-						Props passed to components must be JSON-serializable.
-						Only simple data types are allowed:
-					</p>
-					<PrismPlus
-						codeString={propsExample}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="using-multiple-frameworks"
-					>
-						Using Multiple Frameworks
-					</animated.h2>
-					<p style={paragraphSpacedStyle}>
-						You can serve different frameworks on different routes
-						within the same application:
-					</p>
-					<PrismPlus
-						codeString={multipleFrameworks}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="elysia-integration"
-					>
-						Elysia Integration
-					</animated.h2>
-					<p style={paragraphSpacedStyle}>
-						Handlers work seamlessly with Elysia's built-in features
-						like route params, cookies, and query parameters:
-					</p>
-					<PrismPlus
-						codeString={elysiaIntegration}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="key-takeaways"
-					>
-						Key Takeaways
-					</animated.h2>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Framework handlers require the manifest from build()
-						</li>
-						<li style={listItemStyle}>
-							Always use asset(manifest, key) to get correct file
-							paths
-						</li>
-						<li style={listItemStyle}>
-							Props must be JSON-serializable (no functions, class
-							instances, etc.)
-						</li>
-						<li style={listItemStyle}>
-							Each framework handler has slightly different
-							signature requirements
-						</li>
-						<li style={listItemStyle}>
-							You can mix multiple frameworks in the same
-							application
-						</li>
-						<li style={listItemStyle}>
-							Static handlers (HTML/HTMX) don't require a manifest
-						</li>
-					</ul>
 				</section>
 			</div>
 

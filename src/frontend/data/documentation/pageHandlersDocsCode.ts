@@ -4,11 +4,11 @@ import { Home } from './components/Home';
 import { manifest } from './build';
 
 const app = new Elysia()
-  .get('/', ({ cookie: { theme } }) => 
+  .get('/', () => 
     handleReactPageRequest(
       Home,
       asset(manifest, 'HomeIndex'),
-      { theme: theme?.value }
+      { count: 0 }
     )
   )
   .listen(3000);`;
@@ -58,7 +58,7 @@ export const htmlHandler = `import { handleHTMLPageRequest } from '@absolutejs/a
 import { Elysia } from 'elysia';
 
 const app = new Elysia()
-  .get('/static', () =>
+  .get('/html', () =>
     handleHTMLPageRequest('build/pages/HTMLExample.html')
   )
   .listen(3000);`;
