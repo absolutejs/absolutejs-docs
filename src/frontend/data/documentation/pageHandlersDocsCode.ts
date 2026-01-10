@@ -1,6 +1,6 @@
 export const reactHandler = `import { handleReactPageRequest, asset } from '@absolutejs/absolute';
 import { Elysia } from 'elysia';
-import { Home } from './components/Home';
+import { Home } from './pages/Home';
 import { manifest } from './build';
 
 const app = new Elysia()

@@ -5,8 +5,7 @@ import {
 	svelteHandler,
 	vueHandler,
 	htmlHandler,
-	htmxHandler,
-	generateHead
+	htmxHandler
 } from '../../../data/documentation/pageHandlersDocsCode';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
@@ -32,8 +31,7 @@ const tocItems: TocItem[] = [
 	{ href: '#handlesveltepagerequest', label: 'handleSveltePageRequest' },
 	{ href: '#handlevuepagerequest', label: 'handleVuePageRequest' },
 	{ href: '#handlehtmlpagerequest', label: 'handleHTMLPageRequest' },
-	{ href: '#handlehtmxpagerequest', label: 'handleHTMXPageRequest' },
-	{ href: '#generateheadelement', label: 'generateHeadElement' }
+	{ href: '#handlehtmxpagerequest', label: 'handleHTMXPageRequest' }
 ];
 
 export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
@@ -116,14 +114,22 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						</li>
 						<li style={listItemStyle}>
 							Props passed to components can be any valid
-							JavaScript object or function
+							JavaScript object or function. Props are
+							type-enforced to match the exact type that the page
+							component requires and are optional if the page
+							doesn't have any props
 						</li>
 						<li style={listItemStyle}>
-							Always use with asset(manifest, key) to get correct
-							paths
+							Always use asset(manifest, key) to extract artifacts
+							from the manifest. This function will error if the
+							artifact doesn't exist, keeping your code safe
+							(since the manifest isn't typesafe yet)
 						</li>
 						<li style={listItemStyle}>
-							HTML/HTMX handlers work without a manifest
+							HTML/HTMX handlers don't need to use the manifest to
+							retrieve an index, but they still need to be put
+							through the build process to update resource paths to
+							the built versions of JS and CSS files
 						</li>
 					</ul>
 				</section>
@@ -136,7 +142,10 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						handleReactPageRequest
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Handles server-side rendering for React pages.
+						Handles server-side rendering for React pages. Unlike
+						other handlers, the page component is actually used by
+						this function: we call createElement to convert the TSX
+						into valid HTML, then hydrate it with the index.
 					</p>
 					<p style={paragraphStyle}>
 						<strong style={strongStyle}>Signature:</strong>
@@ -156,14 +165,17 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 					</p>
 					<ul style={listStyle}>
 						<li style={listItemStyle}>
-							pageComponent: Your React component
+							pageComponent: Your React page component (imported
+							from the pages directory)
 						</li>
 						<li style={listItemStyle}>
 							index: The index path used to hydrate the page with
 							JavaScript
 						</li>
 						<li style={listItemStyle}>
-							props: Props to pass to the component (optional)
+							props: Props to pass to the component (type-enforced
+							to match the component's prop requirements,
+							optional)
 						</li>
 					</ul>
 					<PrismPlus
@@ -182,22 +194,38 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						handleSveltePageRequest
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Handles server-side rendering for Svelte pages.
+						Handles server-side rendering for Svelte pages. The page
+						component is only used for type inference to ensure
+						props have the correct type; it has no functional
+						purpose otherwise.
 					</p>
 					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Signature:</strong>
+						<strong style={strongStyle}>Signature (overloaded):</strong>
 					</p>
 					<PrismPlus
-						codeString={`handleSveltePageRequest<P extends Record<string, unknown>>(
+						codeString={`// Without props
+handleSveltePageRequest(
+  PageComponent: SvelteComponent<Record<string, never>>,
+  pagePath: string,
+  indexPath: string
+): Promise<Response>;
+
+// With props
+handleSveltePageRequest<P extends Record<string, unknown>>(
   PageComponent: SvelteComponent<P>,
   pagePath: string,
   indexPath: string,
   props: P
-): Promise<Response>`}
+): Promise<Response>;`}
 						showLineNumbers={false}
 						language="typescript"
 						themeSprings={themeSprings}
 					/>
+					<p style={paragraphSpacedStyle}>
+						The signature is overloaded to allow no props to be
+						passed in a type-safe manner. If there are no props, it
+						won't let you pass them.
+					</p>
 					<p style={paragraphStyle}>
 						<strong style={strongStyle}>Parameters:</strong>
 					</p>
@@ -217,6 +245,7 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						</li>
 						<li style={listItemStyle}>
 							props: Props to pass to the component
+							(type-enforced, optional if component has no props)
 						</li>
 					</ul>
 					<PrismPlus
@@ -235,7 +264,10 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						handleVuePageRequest
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Handles server-side rendering for Vue pages.
+						Handles server-side rendering for Vue pages. The page
+						component is only used for type inference to ensure
+						props have the correct type; it has no functional
+						purpose otherwise.
 					</p>
 					<p style={paragraphStyle}>
 						<strong style={strongStyle}>Signature:</strong>
@@ -277,7 +309,9 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 							have to write the whole thing manually (optional)
 						</li>
 						<li style={listItemStyle}>
-							props: Props to pass to the component (optional)
+							props: Props to pass to the component
+							(type-enforced to match the component's prop
+							requirements, optional)
 						</li>
 					</ul>
 					<PrismPlus
@@ -302,7 +336,7 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						<strong style={strongStyle}>Signature:</strong>
 					</p>
 					<PrismPlus
-						codeString={`handleHTMLPageRequest(path: string)`}
+						codeString={`handleHTMLPageRequest(html: string): Bun.BunFile`}
 						showLineNumbers={false}
 						language="typescript"
 						themeSprings={themeSprings}
@@ -312,9 +346,13 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 					</p>
 					<ul style={listStyle}>
 						<li style={listItemStyle}>
-							path: Path to the HTML file
+							html: Path to the HTML file
 						</li>
 					</ul>
+					<p style={paragraphStyle}>
+						<strong style={strongStyle}>Returns:</strong>{' '}
+						Bun.BunFile
+					</p>
 					<PrismPlus
 						codeString={htmlHandler}
 						showLineNumbers={false}
@@ -337,7 +375,7 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 						<strong style={strongStyle}>Signature:</strong>
 					</p>
 					<PrismPlus
-						codeString={`handleHTMXPageRequest(path: string)`}
+						codeString={`handleHTMXPageRequest(htmx: string): Bun.BunFile`}
 						showLineNumbers={false}
 						language="typescript"
 						themeSprings={themeSprings}
@@ -347,53 +385,15 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 					</p>
 					<ul style={listStyle}>
 						<li style={listItemStyle}>
-							path: Path to the HTMX template file
+							htmx: Path to the HTMX template file
 						</li>
 					</ul>
+					<p style={paragraphStyle}>
+						<strong style={strongStyle}>Returns:</strong>{' '}
+						Bun.BunFile
+					</p>
 					<PrismPlus
 						codeString={htmxHandler}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="generateheadelement"
-					>
-						generateHeadElement
-					</animated.h2>
-					<p style={paragraphSpacedStyle}>
-						Helper function for generating HTML head elements for
-						Vue pages.
-					</p>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Signature:</strong>
-					</p>
-					<PrismPlus
-						codeString={`generateHeadElement({ cssPath?: string, title?: string, description?: string })`}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Parameters:</strong>
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							cssPath: Path to CSS file (optional)
-						</li>
-						<li style={listItemStyle}>
-							title: Page title (optional)
-						</li>
-						<li style={listItemStyle}>
-							description: Page description (optional)
-						</li>
-					</ul>
-					<PrismPlus
-						codeString={generateHead}
 						showLineNumbers={false}
 						language="typescript"
 						themeSprings={themeSprings}
