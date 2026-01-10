@@ -38,11 +38,25 @@ const callback_state = params.get('state');
 
 // Retrieve stored state and code verifier from cookies
 const cookieHeader = request.headers.get('cookie') ?? '';
-const cookies = Object.fromEntries(
-  cookieHeader.split('; ').map(c => c.split('='))
-);
+const cookies = cookieHeader.trim()
+  ? Object.fromEntries(
+      cookieHeader
+        .split('; ')
+        .filter(c => c.includes('='))
+        .map(c => c.split('='))
+    )
+  : {};
+
 const stored_state = cookies['oauth_state'];
 const codeVerifier = cookies['pkce_code_verifier'];
+
+// Validate required cookies are present
+if (!stored_state) {
+  throw new Error('Missing oauth_state cookie');
+}
+if (!codeVerifier) {
+  throw new Error('Missing pkce_code_verifier cookie');
+}
 
 // Validate state to prevent CSRF attacks
 if (!callback_state || callback_state !== stored_state) {
