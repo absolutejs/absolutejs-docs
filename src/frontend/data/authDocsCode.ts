@@ -32,22 +32,31 @@ app.get('/protected', ({ protectRoute }) =>
 );`;
 
 export const startOAuthFlow = `\
-// Redirect the user to the provider's authorization URL
-redirect('/oauth2/google/authorization');`;
+// Option 1: Redirect the user to the provider's authorization URL
+redirect('/oauth2/google/authorization');
+
+// Option 2: Use an anchor element
+<a href="/oauth2/google/authorization">Sign in with Google</a>`;
 
 export const checkStatus = `\
-const response = await fetch('/oauth2/status', {
-  headers: { cookie: cookie.toString() }
-});
+import { server } from './eden/treaty';
 
-const data = await response.json();
-// data is either: { user } or an auth error`;
+const { data, error } = await server.oauth2.status.get();
 
-export const signout = `await fetch('/oauth2/signout', { method: 'DELETE' });`;
+if (error) {
+  console.error('Not authenticated:', error);
+} else {
+  console.log('User:', data.user);
+}`;
+
+export const signout = `\
+import { server } from './eden/treaty';
+
+await server.oauth2.signout.delete();`;
 
 export const userManagement = `\
-onCallbackSuccess: async ({ authProvider, tokenResponse, session, userSessionId }) => {
-  return instantiateUserSession({
+onCallbackSuccess: async ({ authProvider, tokenResponse, session, userSessionId }) =>
+  instantiateUserSession({
     authProvider,
     tokenResponse,
     session,
@@ -64,5 +73,4 @@ onCallbackSuccess: async ({ authProvider, tokenResponse, session, userSessionId 
         name: userIdentity.name
       });
     }
-  });
-};`;
+  })`;

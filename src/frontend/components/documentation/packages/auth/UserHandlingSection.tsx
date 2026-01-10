@@ -37,14 +37,84 @@ export const UserHandlingSection = ({ themeSprings }: ThemeProps) => (
 			themeSprings={themeSprings}
 		/>
 		<animated.h2 style={headingStyle(themeSprings, true)}>
-			Other Available Hooks
+			AbsoluteAuth Configuration Props
 		</animated.h2>
+		<p style={paragraphSpacedStyle}>
+			The absoluteAuth plugin accepts the following configuration
+			options:
+		</p>
+		<animated.h3
+			style={Object.assign({}, headingStyle(themeSprings, true), {
+				marginTop: '1.5rem'
+			})}
+		>
+			Required Props
+		</animated.h3>
+		<ul style={listStyle}>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>providersConfiguration</strong>:
+				OAuth provider credentials and settings
+			</li>
+		</ul>
+		<animated.h3
+			style={Object.assign({}, headingStyle(themeSprings, true), {
+				marginTop: '1.5rem'
+			})}
+		>
+			Route Configuration
+		</animated.h3>
+		<ul style={listStyle}>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>authorizeRoute</strong>: Custom
+				authorization route (default: /oauth2/:provider/authorization)
+			</li>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>callbackRoute</strong>: Custom
+				callback route (default: /oauth2/callback)
+			</li>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>statusRoute</strong>: Custom status
+				route (default: /oauth2/status)
+			</li>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>signoutRoute</strong>: Custom
+				sign-out route (default: /oauth2/signout)
+			</li>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>profileRoute</strong>: Custom
+				profile route (default: /oauth2/profile)
+			</li>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>refreshRoute</strong>: Custom
+				refresh route (default: /oauth2/tokens)
+			</li>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>revokeRoute</strong>: Custom
+				revocation route (default: /oauth2/revocation)
+			</li>
+		</ul>
+		<animated.h3
+			style={Object.assign({}, headingStyle(themeSprings, true), {
+				marginTop: '1.5rem'
+			})}
+		>
+			Lifecycle Hooks
+		</animated.h3>
 		<ul style={{ ...listStyle, marginBottom: '2rem' }}>
 			<li style={listItemStyle}>
 				<strong style={strongStyle}>
 					onAuthorizeSuccess / onAuthorizeError
 				</strong>
-				: Called before redirected to provider
+				: Called before redirecting to provider
+			</li>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>onCallbackSuccess</strong>: Called
+				after successful token exchange (use with
+				instantiateUserSession)
+			</li>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>onCallbackError</strong>: Called
+				when callback fails
 			</li>
 			<li style={listItemStyle}>
 				<strong style={strongStyle}>
