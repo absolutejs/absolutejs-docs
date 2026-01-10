@@ -8,6 +8,7 @@ import {
 	refreshAccessToken,
 	revokeToken
 } from '../../../data/citraDocsCode';
+import { providerData } from '../../../data/providerData';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	mainContentStyle,
@@ -42,6 +43,9 @@ const tocItems: TocItem[] = [
 export const CitraView = ({ themeSprings }: ThemeProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
+
+	const providers = Object.values(providerData);
+	const providersCount = providers.length;
 
 	return (
 		<div
@@ -222,25 +226,15 @@ export const CitraView = ({ themeSprings }: ThemeProps) => {
 						Supported Providers
 					</animated.h2>
 					<p style={paragraphStyle}>
-						Citra supports 50+ OAuth 2.0 providers including:
+						Citra supports {providersCount} OAuth 2.0 providers
+						including:
 					</p>
 					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Google, GitHub, Discord, Microsoft Entra ID
-						</li>
-						<li style={listItemStyle}>
-							Apple, Facebook, Twitter, LinkedIn
-						</li>
-						<li style={listItemStyle}>
-							Auth0, Okta, Keycloak, WorkOS
-						</li>
-						<li style={listItemStyle}>
-							Twitch, Steam, Epic Games, Battle.net
-						</li>
-						<li style={listItemStyle}>
-							GitLab, Bitbucket, Linear, Notion
-						</li>
-						<li style={listItemStyle}>And many more...</li>
+						{providers.map((provider) => (
+							<li key={provider.name} style={listItemStyle}>
+								{provider.name}
+							</li>
+						))}
 					</ul>
 				</section>
 

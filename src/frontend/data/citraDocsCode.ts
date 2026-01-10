@@ -60,24 +60,25 @@ const tokenResponse = await googleClient.validateAuthorizationCode({
   codeVerifier
 });`;
 
-export const fetchUserProfile = `// Assuming you have code and codeVerifier from the callback
-const code = 'authorization_code_from_callback';
-const codeVerifier = 'code_verifier_from_cookie';
+export const fetchUserProfile = `// Get the access token from server session
+const session = await getSession(request);
+const accessToken = session.accessToken;
 
-const tokenResponse = await googleClient.validateAuthorizationCode({
-  code,
-  codeVerifier
-});
-
-const profile = await googleClient.fetchUserProfile(tokenResponse.access_token);
+const profile = await googleClient.fetchUserProfile(accessToken);
 console.log(profile);`;
 
-export const refreshAccessToken = `const { refresh_token } = { refresh_token: 'refresh_token_from_callback' };
-if (refresh_token) {
-  const newTokens = await googleClient.refreshAccessToken(refresh_token);
+export const refreshAccessToken = `// Get the refresh token from server session
+const session = await getSession(request);
+const refreshToken = session.refreshToken;
+
+if (refreshToken) {
+  const newTokens = await googleClient.refreshAccessToken(refreshToken);
 }`;
 
-export const revokeToken = `const { access_token } = { access_token: 'access_token_from_callback' };
+export const revokeToken = `// Get the access token from server session
+const session = await getSession(request);
+const accessToken = session.accessToken;
+
 if (isRevocableProviderOption('google')) {
-  await googleClient.revokeToken(access_token);
+  await googleClient.revokeToken(accessToken);
 }`;
