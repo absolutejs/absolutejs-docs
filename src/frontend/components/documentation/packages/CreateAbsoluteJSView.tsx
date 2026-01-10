@@ -88,7 +88,16 @@ export const CreateAbsoluteJSView = ({ themeSprings }: ThemeProps) => {
 						After running Create-AbsoluteJS, your project will
 						include:
 					</p>
-					<ul style={{ ...listStyle, marginBottom: '2rem' }}>
+					<ul
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: '0.75rem',
+							listStyle: 'disc',
+							marginBottom: '2rem',
+							marginLeft: '1.5rem'
+						}}
+					>
 						<li style={listItemStyle}>
 							An organized src/ folder with separate frontend and
 							backend directories
@@ -109,7 +118,16 @@ export const CreateAbsoluteJSView = ({ themeSprings }: ThemeProps) => {
 					<p style={paragraphStyle}>
 						The following scripts are available:
 					</p>
-					<ul style={{ ...listStyle, marginBottom: '2rem' }}>
+					<ul
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: '0.75rem',
+							listStyle: 'disc',
+							marginBottom: '2rem',
+							marginLeft: '1.5rem'
+						}}
+					>
 						<li style={listItemStyle}>
 							bun dev - Start the development server
 						</li>
@@ -122,6 +140,10 @@ export const CreateAbsoluteJSView = ({ themeSprings }: ThemeProps) => {
 						<li style={listItemStyle}>bun format - Format code</li>
 						<li style={listItemStyle}>
 							bun typecheck - Type check code
+						</li>
+						<li style={listItemStyle}>
+							bun db:studio - Open database studio (if ORM is
+							present)
 						</li>
 						<li style={listItemStyle}>
 							bun db:&lt;engine&gt; - Open database shell (if
@@ -148,7 +170,7 @@ export const CreateAbsoluteJSView = ({ themeSprings }: ThemeProps) => {
 						prompts or pre-configure options:
 					</p>
 					<PrismPlus
-						language="bash"
+						language="text"
 						codeString={`\
 Usage: create-absolute [options] [project-name]
 
@@ -194,6 +216,7 @@ Options:
 	--vue-dir <directory>           Specify the directory for and use the Vue frontend`}
 						themeSprings={themeSprings}
 						showLineNumbers={false}
+						wrapLongLines={false}
 					/>
 				</section>
 				<section style={sectionStyle}>
@@ -204,14 +227,11 @@ Options:
 						Configuration Options
 					</animated.h2>
 					<animated.h2
-						style={{
-							...headingStyle(themeSprings, true),
-							paddingTop: '-2rem'
-						}}
+						style={headingStyle(themeSprings, true)}
 					>
 						Frontend Frameworks
 					</animated.h2>
-					<p>
+					<p style={paragraphStyle}>
 						Create-AbsoluteJS supports multiple frontend frameworks
 					</p>
 					<ul style={listStyle}>
@@ -257,6 +277,45 @@ Options:
 							Drizzle or Prisma integration
 						</li>
 					</ul>
+				</section>
+				<section
+					style={{
+						alignItems: 'center',
+						display: 'flex',
+						flexDirection: 'column',
+						gap: '1rem',
+						marginTop: '3rem',
+						paddingBottom: '2rem'
+					}}
+				>
+					<p style={paragraphStyle}>
+						Ready to try it out? Explore a live example:
+					</p>
+					<animated.a
+						href="#"
+						onClick={(e) => e.preventDefault()}
+						style={{
+							background: themeSprings.themePrimary,
+							borderRadius: '8px',
+							color: themeSprings.contrastPrimary,
+							cursor: 'pointer',
+							fontSize: '1.1rem',
+							fontWeight: '600',
+							padding: '12px 32px',
+							textDecoration: 'none',
+							transition: 'transform 0.2s, opacity 0.2s'
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.transform = 'scale(1.05)';
+							e.currentTarget.style.opacity = '0.9';
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.transform = 'scale(1)';
+							e.currentTarget.style.opacity = '1';
+						}}
+					>
+						Try on CodeSandbox
+					</animated.a>
 				</section>
 			</div>
 			{!isMobile && (
