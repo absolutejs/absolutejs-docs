@@ -36,7 +36,7 @@ export const startOAuthFlow = `\
 redirect('/oauth2/google/authorization');`;
 
 export const checkStatus = `\
-import { server } from './eden/treaty';
+import { server } from '/src/frontend/utils/edenTreaty';
 
 const { data, error } = await server.oauth2.status.get();
 
@@ -47,7 +47,7 @@ if (error) {
 }`;
 
 export const signout = `\
-import { server } from './eden/treaty';
+import { server } from '/src/frontend/utils/edenTreaty';
 
 const { data, error } = await server.oauth2.signout.delete();
 
