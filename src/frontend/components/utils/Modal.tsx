@@ -75,12 +75,15 @@ export const Modal = ({
 			{isOpen && (
 				<animated.div
 					onClick={(event) => event.stopPropagation()}
-					style={{
-						...style,
-						minWidth: '300px',
-						padding: '20px',
-						position: 'relative'
-					}}
+					style={Object.assign(
+						{},
+						{
+							minWidth: '300px',
+							padding: '20px',
+							position: 'relative'
+						},
+						style
+					)}
 				>
 					<button
 						onClick={() => {

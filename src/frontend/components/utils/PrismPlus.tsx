@@ -22,6 +22,7 @@ type PrismPlusProps = {
 	showLineNumbers?: boolean;
 	options?: string[];
 	themeSprings: ThemeSprings;
+	wrapLongLines?: boolean;
 };
 
 export const PrismPlus = ({
@@ -29,7 +30,8 @@ export const PrismPlus = ({
 	language = 'tsx',
 	showLineNumbers = true,
 	options,
-	themeSprings
+	themeSprings,
+	wrapLongLines = true
 }: PrismPlusProps) => {
 	// eslint-disable-next-line absolute/localize-react-props
 	const codeStyle = themeSprings.theme.to((theme) =>
@@ -90,9 +92,11 @@ export const PrismPlus = ({
 				customStyle={{
 					margin: 0,
 					marginBottom: '1.5rem',
-					padding: '1rem'
+					padding: '1rem',
+					overflowX: wrapLongLines ? 'visible' : 'auto'
 				}}
 				showLineNumbers={showLineNumbers}
+				wrapLongLines={wrapLongLines}
 			>
 				{displayedCodeString}
 			</Prism>
