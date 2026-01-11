@@ -102,15 +102,16 @@ export const UserHandlingSection = ({ themeSprings }: ThemeProps) => (
 		</animated.h3>
 		<ul style={{ ...listStyle, marginBottom: '2rem' }}>
 			<li style={listItemStyle}>
-				<strong style={strongStyle}>
-					onAuthorizeSuccess / onAuthorizeError
-				</strong>
-				: Called before redirecting to provider
+				<strong style={strongStyle}>onAuthorizeSuccess</strong>: Called
+				before redirecting to provider
+			</li>
+			<li style={listItemStyle}>
+				<strong style={strongStyle}>onAuthorizeError</strong>: Called
+				when it fails to generate an authorization url
 			</li>
 			<li style={listItemStyle}>
 				<strong style={strongStyle}>onCallbackSuccess</strong>: Called
-				after successful token exchange (use with
-				instantiateUserSession)
+				after successful token exchange
 			</li>
 			<li style={listItemStyle}>
 				<strong style={strongStyle}>onCallbackError</strong>: Called
