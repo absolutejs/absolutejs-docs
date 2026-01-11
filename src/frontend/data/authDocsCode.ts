@@ -12,7 +12,7 @@ const app = new Elysia()
           clientSecret: getEnv('GOOGLE_CLIENT_SECRET'),
           redirectUri: 'http://localhost:3000/oauth2/callback'
         },
-        scope: ['profile', 'email']
+        scope: ['openid', 'profile', 'email']
       }
     }
   }))
