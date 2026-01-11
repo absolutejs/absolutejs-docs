@@ -19,7 +19,7 @@ const app = new Elysia()
   .listen(3000);`;
 
 export const protectRoute = `\
-app.get('/protected', ({ protectRoute }) =>
+app.get('/protected', ({ status, protectRoute }) =>
   protectRoute(
     (user) => {
       return \`Hello, \${user.name}!\`;
