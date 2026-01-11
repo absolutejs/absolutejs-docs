@@ -13,24 +13,22 @@ import { schema, User } from '../../db/schema';
 import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { Documentation } from '../frontend/pages/Documentation';
 import { Home } from '../frontend/pages/Home';
+import { Playground } from '../frontend/pages/Playground';
 import { docsViewEnum, themeCookie } from '../types/typebox';
 import { providerPlugin } from './plugins/providerPlugin';
+import { sandboxPlugin } from './plugins/sandboxPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
-
 const manifest = await build({
 	assetsDirectory: 'src/backend/assets',
 	reactDirectory: 'src/frontend'
 });
-
 if (env.DATABASE_URL === undefined) {
 	throw new Error('DATABASE_URL is not set in .env file');
 }
-
 const sql = neon(env.DATABASE_URL);
 const db = drizzle(sql, {
 	schema
 });
-
 const server = new Elysia()
 	.use(
 		staticPlugin({
@@ -39,6 +37,7 @@ const server = new Elysia()
 		})
 	)
 	.use(providerPlugin(db))
+	.use(sandboxPlugin())
 	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
 	.get(
 		'/',
@@ -76,6 +75,19 @@ const server = new Elysia()
 			),
 		{ cookie: themeCookie }
 	)
+		.get(
+		'/playground',
+		({ cookie: { theme } }) =>
+			handleReactPageRequest(
+				Playground,
+				asset(manifest, 'PlaygroundIndex'),
+				{
+					theme: theme?.value
+				}
+			),
+		{ cookie: themeCookie }
+	)
+
 	.use(networking)
 	.on('error', (error) => {
 		const { request } = error;
@@ -83,7 +95,6 @@ const server = new Elysia()
 			`Server error on ${request.method} ${request.url}: ${error.message}`
 		);
 	});
-
 export type Server = typeof server;
 
 // TODO : avoid using localhost as per RFC 8252 8.3 https://datatracker.ietf.org/doc/html/rfc8252#section-8.3
