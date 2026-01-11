@@ -29,11 +29,11 @@ app.get('/protected', ({ status, protectRoute }) =>
 );`;
 
 export const startOAuthFlow = `\
-// Option 1: Redirect the user to the provider's authorization URL
-redirect('/oauth2/google/authorization');
+// Option 1: Use an anchor element
+<a href="/oauth2/google/authorization">Sign in with Google</a>
 
-// Option 2: Use an anchor element
-<a href="/oauth2/google/authorization">Sign in with Google</a>`;
+// Option 2: Redirect the user to the provider's authorization URL
+redirect('/oauth2/google/authorization');`;
 
 export const checkStatus = `\
 import { server } from './eden/treaty';
