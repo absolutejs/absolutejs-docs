@@ -49,7 +49,13 @@ if (error) {
 export const signout = `\
 import { server } from './eden/treaty';
 
-await server.oauth2.signout.delete();`;
+const { data, error } = await server.oauth2.signout.delete();
+
+if (error) {
+  console.error('Signout failed:', error);
+} else {
+  console.log('Successfully signed out');
+}`;
 
 export const userManagement = `\
 onCallbackSuccess: async ({ authProvider, tokenResponse, session, userSessionId }) =>
