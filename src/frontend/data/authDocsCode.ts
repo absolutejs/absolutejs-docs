@@ -24,10 +24,7 @@ app.get('/protected', ({ protectRoute }) =>
     (user) => {
       return \`Hello, \${user.name}!\`;
     },
-    (error) => {
-      console.error('Authentication failed:', error);
-      return 'Please log in';
-    }
+    (error) => status(error.code, error.message)
   )
 );`;
 
