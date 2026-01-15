@@ -1,11 +1,12 @@
 import { animated } from '@react-spring/web';
-import { AuthArticle } from '../components/home/AuthArticle';
-import { CodeQualityArticle } from '../components/home/CodeQualityArticle';
+import { BenchmarkChart } from '../components/home/BenchmarkChart';
 import { CommandSection } from '../components/home/CommandSection';
-import { DatabaseArticle } from '../components/home/DatabaseArticle';
+import { CTASection } from '../components/home/CTASection';
+import { EdenSection } from '../components/home/EdenSection';
+import { FeaturesGrid } from '../components/home/FeaturesGrid';
+import { FrameworksShowcase } from '../components/home/FrameworksShowcase';
 import { PerformanceArticle } from '../components/home/PerformanceArticle';
 import { TypeSafeArticle } from '../components/home/TypeSafeArticle';
-import { UIArticle } from '../components/home/UIArticle';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { useAuthStatus } from '../hooks/useAuthStatus';
@@ -32,12 +33,13 @@ export const Home = ({ theme }: HomeProps) => {
 				/>
 				<main style={mainDefault()}>
 					<CommandSection themeSprings={themeSprings} />
+					<FeaturesGrid themeSprings={themeSprings} />
+					<FrameworksShowcase themeSprings={themeSprings} />
+					<EdenSection themeSprings={themeSprings} />
+					<BenchmarkChart themeSprings={themeSprings} />
 					<TypeSafeArticle themeSprings={themeSprings} />
 					<PerformanceArticle themeSprings={themeSprings} />
-					<UIArticle themeSprings={themeSprings} />
-					<DatabaseArticle themeSprings={themeSprings} />
-					<CodeQualityArticle themeSprings={themeSprings} />
-					<AuthArticle themeSprings={themeSprings} />
+					<CTASection themeSprings={themeSprings} />
 				</main>
 			</animated.body>
 		</html>

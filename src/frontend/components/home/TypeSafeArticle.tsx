@@ -2,8 +2,12 @@ import { animated } from '@react-spring/web';
 import { ThemeProps } from '../../../types/springTypes';
 import { typeArticleData } from '../../data/typeArticleData';
 import { useTabSprings } from '../../hooks/springs/useTabSprings';
-import { featureCard } from '../../styles/homeStyles';
-import { headingStyle, paragraphStyle } from '../../styles/styles';
+import {
+	sectionStyle,
+	sectionSubtitleStyle,
+	sectionTitleStyle,
+	showcaseCardStyle
+} from '../../styles/homeStyles';
 import { PrismPlus } from '../utils/PrismPlus';
 import { CodeSlider } from './CodeSlider';
 
@@ -24,29 +28,37 @@ export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 	}
 
 	return (
-		<animated.article style={featureCard(themeSprings)}>
-			<animated.h2 style={headingStyle(themeSprings)}>
+		<section style={sectionStyle}>
+			<animated.h2 style={sectionTitleStyle(themeSprings)}>
 				Type Safe All Around
 			</animated.h2>
-			<animated.p style={paragraphStyle(themeSprings)}>
-				Maximize the power of TypeScript with AbsoluteJS. From the
-				database, to the backend, to the frontend, you can be confident
-				in the shape of your data.
+			<animated.p style={sectionSubtitleStyle(themeSprings)}>
+				From database to frontend — your data stays typed
 			</animated.p>
-			<CodeSlider
-				handleTabClick={handleTabClick}
-				sliderSprings={sliderSprings}
-				tabs={typeArticleData.map((item) => item.title)}
-				themeSprings={themeSprings}
-			/>
-			<PrismPlus
-				themeSprings={themeSprings}
-				codeString={codeString}
-				language={language}
-			/>
-			<animated.p style={paragraphStyle(themeSprings)}>
-				{description}
-			</animated.p>
-		</animated.article>
+			<animated.div style={showcaseCardStyle(themeSprings)}>
+				<CodeSlider
+					handleTabClick={handleTabClick}
+					sliderSprings={sliderSprings}
+					tabs={typeArticleData.map((item) => item.title)}
+					themeSprings={themeSprings}
+				/>
+				<PrismPlus
+					themeSprings={themeSprings}
+					codeString={codeString}
+					language={language}
+				/>
+				<animated.p
+					style={{
+						color: themeSprings.contrastSecondary,
+						fontSize: '0.95rem',
+						lineHeight: 1.6,
+						marginTop: '1rem',
+						textAlign: 'center'
+					}}
+				>
+					{description}
+				</animated.p>
+			</animated.div>
+		</section>
 	);
 };

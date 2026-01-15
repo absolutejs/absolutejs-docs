@@ -3,12 +3,11 @@ import { ReactNode, useRef } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import { ThemeSprings } from '../../../types/springTypes';
 import { NavbarLink as NavbarLinkType } from '../../../types/types';
-import { labelStyle } from '../../styles/authModalStyles';
 import {
+	dropdownItemStyle,
 	dropdownStyle,
 	getNavbarDropdownListStyle
 } from '../../styles/navbarStyles';
-import { NavbarLink } from './NavbarLink';
 
 type NavbarDropdownProps = {
 	label: string;
@@ -29,7 +28,7 @@ export const NavbarDropdown = ({
 	const dropdownRef = useRef<HTMLUListElement>(null);
 
 	const [dropdownSpring, dropdownApi] = useSpring(() => ({
-		config: { friction: 30, tension: 250 },
+		config: { friction: 26, tension: 300 },
 		height: 0,
 		opacity: 0,
 		transform: 'rotate(-180deg)'
@@ -54,52 +53,47 @@ export const NavbarDropdown = ({
 	};
 
 	return (
-		<div style={dropdownStyle}>
-			<div
+		<div
+			style={dropdownStyle}
+			onMouseEnter={openDropdown}
+			onMouseLeave={closeDropdown}
+		>
+			<animated.a
+				href={href}
 				style={{
 					alignItems: 'center',
+					color: themeSprings.contrastPrimary,
 					display: 'flex',
-					flexDirection: 'row',
-					height: '110px',
-					justifyContent: 'center',
-					left: 0,
-					margin: '0 15px',
-					position: 'relative',
-					top: '100%',
-					width: '100%',
-					zIndex: 999
+					fontSize: '1.1rem',
+					fontWeight: 500,
+					gap: '6px',
+					padding: '12px 16px',
+					textDecoration: 'none'
 				}}
-				onMouseEnter={openDropdown}
-				onMouseLeave={closeDropdown}
 			>
-				<animated.a href={href} style={labelStyle(themeSprings)}>
-					{label}
-				</animated.a>
-
+				{label}
 				<AnimatedFaChevronDown
 					style={{
-						fontSize: '1.5rem',
-						marginLeft: '10px',
+						fontSize: '0.75rem',
 						transform: dropdownSpring.transform,
 						transformOrigin: 'center'
 					}}
 				/>
-			</div>
+			</animated.a>
 
 			<animated.nav
 				ref={dropdownRef}
 				style={getNavbarDropdownListStyle(dropdownSpring, themeSprings)}
-				onMouseEnter={openDropdown}
-				onMouseLeave={closeDropdown}
 			>
 				{links.map((link, index) => (
-					<NavbarLink
-						themeSprings={themeSprings}
+					<animated.a
 						key={index}
-						icon={link.icon}
 						href={link.href}
-						label={link.label}
-					/>
+						style={dropdownItemStyle(themeSprings)}
+					>
+						{link.icon}
+						{link.label}
+					</animated.a>
 				))}
 			</animated.nav>
 		</div>

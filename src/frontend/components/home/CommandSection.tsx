@@ -1,5 +1,11 @@
+import { animated } from '@react-spring/web';
 import { ThemeProps } from '../../../types/springTypes';
-import { heroStyle, navStyle } from '../../styles/homeStyles';
+import {
+	heroStyle,
+	navStyle,
+	primaryButtonStyle,
+	secondaryButtonStyle
+} from '../../styles/homeStyles';
 import { CreateButton } from './CreateButton';
 import { HomeHeader } from './HomeHeader';
 
@@ -8,38 +14,15 @@ export const CommandSection = ({ themeSprings }: ThemeProps) => (
 		<HomeHeader themeSprings={themeSprings} />
 		<CreateButton themeSprings={themeSprings} />
 		<nav style={navStyle}>
-			<a
-				href="/playground"
-				style={{
-					alignItems: 'center',
-					background: '#0070f3',
-					border: '1px solid #0070f3',
-					borderRadius: '4px',
-					color: '#fff',
-					display: 'inline-flex',
-					justifyContent: 'center',
-					padding: '0.75rem 1.5rem',
-					textDecoration: 'none'
-				}}
-			>
-				Try in Browser
+			<a href="/documentation" style={primaryButtonStyle}>
+				Get Started
 			</a>
-			<a
-				href="/docs"
-				style={{
-					alignItems: 'center',
-					background: 'transparent',
-					border: '1px solid #0070f3',
-					borderRadius: '4px',
-					color: '#0070f3',
-					display: 'inline-flex',
-					justifyContent: 'center',
-					padding: '0.75rem 1.5rem',
-					textDecoration: 'none'
-				}}
+			<animated.a
+				href="/documentation/packages/absolute"
+				style={secondaryButtonStyle(themeSprings)}
 			>
-				Read Docs
-			</a>
+				Documentation
+			</animated.a>
 		</nav>
 	</section>
 );
