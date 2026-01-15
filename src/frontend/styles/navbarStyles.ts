@@ -62,6 +62,21 @@ export const optionStyle: CSSProperties = {
 	textDecoration: 'none',
 	whiteSpace: 'nowrap'
 };
+
+export const dropdownItemStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	alignItems: 'center',
+	backgroundColor: 'transparent',
+	borderRadius: '8px',
+	color: themeSprings.contrastPrimary,
+	display: 'flex',
+	fontSize: '0.95rem',
+	fontWeight: 500,
+	padding: '10px 14px',
+	textDecoration: 'none',
+	transition: 'background-color 0.15s ease'
+});
 export const getNavbarDropdownListStyle = (
 	dropdownSpring: {
 		height: SpringValue<number>;
