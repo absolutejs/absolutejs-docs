@@ -1,0 +1,237 @@
+import { animated } from '@react-spring/web';
+import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsNavigation } from '../DocsNavigation';
+import {
+	elysiaDerive,
+	elysiaGroups,
+	elysiaPlugins,
+	elysiaServer,
+	elysiaTypeSafety
+} from '../../../data/documentation/elysiaIntegrationDocsCode';
+import { useMediaQuery } from '../../../hooks/useMediaQuery';
+import {
+	h1Style,
+	listItemStyle,
+	listStyle,
+	mainContentStyle,
+	paragraphLargeStyle,
+	paragraphSpacedStyle,
+	sectionStyle,
+	strongStyle
+} from '../../../styles/docsStyles';
+import {
+	featureCardStyle,
+	gradientHeadingStyle,
+	heroGradientStyle
+} from '../../../styles/gradientStyles';
+import { PrismPlus } from '../../utils/PrismPlus';
+import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+
+const tocItems: TocItem[] = [
+	{ href: '#elysia-foundation', label: 'Elysia Foundation' },
+	{ href: '#type-safety', label: 'End-to-End Type Safety' },
+	{ href: '#plugins', label: 'Using Plugins' },
+	{ href: '#derive', label: 'Derive & Dependency Injection' },
+	{ href: '#groups', label: 'Route Groups' }
+];
+
+export const ElysiaIntegrationView = ({
+	currentPageId,
+	onNavigate,
+	themeSprings
+}: DocsViewProps) => {
+	const { isSizeOrLess } = useMediaQuery();
+	const isMobile = isSizeOrLess('sm');
+
+	return (
+		<div
+			style={{
+				display: 'flex',
+				flex: 1,
+				overflowX: 'hidden',
+				overflowY: 'auto',
+				position: 'relative'
+			}}
+		>
+			<div style={mainContentStyle}>
+				<animated.div style={heroGradientStyle(themeSprings)}>
+					<h1 style={h1Style} id="elysia-integration">
+						Elysia Integration
+					</h1>
+					<p style={paragraphLargeStyle}>
+						Your AbsoluteJS server IS an Elysia server. Everything
+						you know about Elysia works here—plugins, middleware,
+						type derivation, and route groups.
+					</p>
+				</animated.div>
+
+				<section style={sectionStyle}>
+					<animated.h2
+						style={gradientHeadingStyle(themeSprings)}
+						id="elysia-foundation"
+					>
+						Built on Elysia
+					</animated.h2>
+					<p style={paragraphLargeStyle}>
+						AbsoluteJS doesn&apos;t wrap or abstract Elysia—it
+						enhances it. You write standard Elysia code with
+						AbsoluteJS page handlers mixed in:
+					</p>
+					<PrismPlus
+						codeString={elysiaServer}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<animated.h2
+						style={gradientHeadingStyle(themeSprings)}
+						id="type-safety"
+					>
+						End-to-End Type Safety
+					</animated.h2>
+					<p style={paragraphLargeStyle}>
+						Elysia&apos;s revolutionary type system integrates
+						seamlessly with AbsoluteJS. Schema validation, error
+						handling, and data flow are all fully typed.
+					</p>
+					<div
+						style={{
+							display: 'grid',
+							gap: '1rem',
+							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+							marginBottom: '1.5rem',
+							marginTop: '1rem'
+						}}
+					>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									Schema Validation
+								</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								Request bodies, params, and queries are
+								validated AND typed automatically.
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									Typed Errors
+								</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								Error responses have proper types—no more
+								unknown error shapes.
+							</p>
+						</animated.div>
+					</div>
+					<PrismPlus
+						codeString={elysiaTypeSafety}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+						<li style={listItemStyle}>
+							<strong style={strongStyle}>
+								Database → Handler
+							</strong>
+							: Query results maintain their types
+						</li>
+						<li style={listItemStyle}>
+							<strong style={strongStyle}>
+								Handler → Response
+							</strong>
+							: Return types are inferred and validated
+						</li>
+						<li style={listItemStyle}>
+							<strong style={strongStyle}>Error → Client</strong>:
+							Error shapes are typed, not unknown
+						</li>
+					</ul>
+				</section>
+
+				<section style={sectionStyle}>
+					<animated.h2
+						style={gradientHeadingStyle(themeSprings)}
+						id="plugins"
+					>
+						Using Plugins
+					</animated.h2>
+					<p style={paragraphSpacedStyle}>
+						Use any Elysia plugin alongside AbsoluteJS:
+					</p>
+					<PrismPlus
+						codeString={elysiaPlugins}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<animated.h2
+						style={gradientHeadingStyle(themeSprings)}
+						id="derive"
+					>
+						Derive &amp; Dependency Injection
+					</animated.h2>
+					<p style={paragraphSpacedStyle}>
+						Use Elysia&apos;s derive for dependency injection.
+						Derived values are available in all subsequent handlers
+						with full type inference:
+					</p>
+					<PrismPlus
+						codeString={elysiaDerive}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<animated.h2
+						style={gradientHeadingStyle(themeSprings)}
+						id="groups"
+					>
+						Route Groups
+					</animated.h2>
+					<p style={paragraphSpacedStyle}>
+						Organize routes with groups. Each group can have its own
+						middleware:
+					</p>
+					<PrismPlus
+						codeString={elysiaGroups}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
+			</div>
+
+			{!isMobile && (
+				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+			)}
+		</div>
+	);
+};

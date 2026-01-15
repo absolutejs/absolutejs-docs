@@ -6,50 +6,77 @@ import {
 	FaLayerGroup,
 	FaServer,
 	FaDatabase,
-	FaBolt,
 	FaCloudUploadAlt,
 	FaCode,
-	FaPuzzlePiece
+	FaPuzzlePiece,
+	FaCog,
+	FaLightbulb
 } from 'react-icons/fa';
 import { MenuItem } from '../../types/types';
+import { AssetsView } from '../components/documentation/config/AssetsView';
+import { EnvironmentVariablesView } from '../components/documentation/config/EnvironmentVariablesView';
+import { HeadMetaTagsView } from '../components/documentation/config/HeadMetaTagsView';
+import { TailwindCSSView } from '../components/documentation/config/TailwindCSSView';
+import { BuildManifestView } from '../components/documentation/core/BuildManifestView';
+import { RoutingHandlersView } from '../components/documentation/core/RoutingHandlersView';
+import { SSRModelView } from '../components/documentation/core/SSRModelView';
+import { DataFetchingView } from '../components/documentation/data/DataFetchingView';
+import { ServerStateView } from '../components/documentation/data/ServerStateView';
+import { DockerView } from '../components/documentation/deployment/DockerView';
+import { HostingView } from '../components/documentation/deployment/HostingView';
+import { ProductionBuildView } from '../components/documentation/deployment/ProductionBuildView';
+import { ExamplesRecipesView } from '../components/documentation/examples/ExamplesRecipesView';
+import { AngularView } from '../components/documentation/frontends/AngularView';
+import { HTMLView } from '../components/documentation/frontends/HTMLView';
+import { HTMXView } from '../components/documentation/frontends/HTMXView';
+import { ReactView } from '../components/documentation/frontends/ReactView';
+import { SvelteView } from '../components/documentation/frontends/SvelteView';
+import { VueView } from '../components/documentation/frontends/VueView';
+import { InstallationView } from '../components/documentation/getting-started/InstallationView';
+import { QuickstartView } from '../components/documentation/getting-started/QuickstartView';
 import { Overview } from '../components/documentation/overview/OverviewView';
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
+import { TypesView } from '../components/documentation/reference/TypesView';
+import { ElysiaIntegrationView } from '../components/documentation/server/ElysiaIntegrationView';
+import { NetworkingPluginView } from '../components/documentation/server/NetworkingPluginView';
 
 const definePortalViews = <T>(views: T) => views;
 
 export const docsViews = definePortalViews({
 	'absolute-auth': AbsoluteAuthView,
-	angular: Overview,
-	'api-build': Overview,
-	assets: Overview,
-	'build-and-manifest': Overview,
+	angular: AngularView,
+	assets: AssetsView,
+	'build-and-manifest': BuildManifestView,
 	citra: CitraView,
 	'create-absolutejs': CreateAbsoluteJSView,
-	'data-fetching': Overview,
-	docker: Overview,
-	'elysia-integration': Overview,
-	'error-handling': Overview,
+	'data-fetching': DataFetchingView,
+	docker: DockerView,
+	'elysia-integration': ElysiaIntegrationView,
+	'environment-variables': EnvironmentVariablesView,
 	eslint: EslintView,
-	hosting: Overview,
-	html: Overview,
-	htmx: Overview,
-	installation: Overview,
+	'examples-recipes': ExamplesRecipesView,
+	'head-meta-tags': HeadMetaTagsView,
+	hosting: HostingView,
+	html: HTMLView,
+	htmx: HTMXView,
+	installation: InstallationView,
+	'networking-plugin': NetworkingPluginView,
 	overview: Overview,
 	'page-handlers': PageHandlersView,
-	plugin: Overview,
-	'production-build': Overview,
-	quickstart: Overview,
-	react: Overview,
-	'routing-and-handlers': Overview,
-	'server state': Overview,
-	'ssr-model': Overview,
-	svelte: Overview,
-	types: Overview,
-	vue: Overview
+	'production-build': ProductionBuildView,
+	quickstart: QuickstartView,
+	react: ReactView,
+	'routing-and-handlers': RoutingHandlersView,
+	'server-state': ServerStateView,
+	'ssr-model': SSRModelView,
+	svelte: SvelteView,
+	'tailwind-css': TailwindCSSView,
+	types: TypesView,
+	vue: VueView
 });
 
 export const sidebarData: MenuItem[] = [
@@ -82,7 +109,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'html', label: 'HTML' },
 			{ id: 'htmx', label: 'HTMX' },
 			{ id: 'vue', label: 'Vue' },
-			{ id: 'angular', label: 'Angular' }
+			{ id: 'angular', label: 'Angular (Coming Soon)' }
 		],
 		icon: animated(FaCubes),
 		label: 'Frontends'
@@ -90,7 +117,7 @@ export const sidebarData: MenuItem[] = [
 	{
 		buttons: [
 			{ id: 'elysia-integration', label: 'Elysia Integration' },
-			{ id: 'plugin', label: 'Plugin' }
+			{ id: 'networking-plugin', label: 'Networking Plugin' }
 		],
 		icon: animated(FaServer),
 		label: 'Server'
@@ -103,20 +130,25 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'eslint', label: 'ESLint' }
 		],
 		icon: animated(FaPuzzlePiece),
-		label: 'Plugins'
+		label: 'Ecosystem'
 	},
 	{
 		buttons: [
 			{ id: 'data-fetching', label: 'Data Fetching' },
-			{ id: 'server state', label: 'Server State' }
+			{ id: 'server-state', label: 'Server State' }
 		],
 		icon: animated(FaDatabase),
 		label: 'Data & State'
 	},
 	{
-		buttons: [{ id: 'assets', label: 'Assets' }],
-		icon: animated(FaBolt),
-		label: 'Assets & Performance'
+		buttons: [
+			{ id: 'environment-variables', label: 'Environment Variables' },
+			{ id: 'tailwind-css', label: 'Tailwind CSS' },
+			{ id: 'head-meta-tags', label: 'Head & Meta Tags' },
+			{ id: 'assets', label: 'Assets' }
+		],
+		icon: animated(FaCog),
+		label: 'Configuration'
 	},
 	{
 		buttons: [
@@ -128,8 +160,12 @@ export const sidebarData: MenuItem[] = [
 		label: 'Deployment'
 	},
 	{
+		buttons: [{ id: 'examples-recipes', label: 'Examples & Recipes' }],
+		icon: animated(FaLightbulb),
+		label: 'Examples'
+	},
+	{
 		buttons: [
-			{ id: 'api-build', label: 'API: build()' },
 			{ id: 'page-handlers', label: 'Page Handlers' },
 			{ id: 'types', label: 'Types' }
 		],

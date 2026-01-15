@@ -4,9 +4,9 @@ import { EslintDocsSection } from '../../../../data/documentation/eslintDocsData
 import { useTabSprings } from '../../../../hooks/springs/useTabSprings';
 import {
 	sectionStyle,
-	headingStyle,
-	paragraphStyle
+	paragraphSpacedStyle
 } from '../../../../styles/docsStyles';
+import { gradientHeadingStyle } from '../../../../styles/gradientStyles';
 import { CodeSlider } from '../../../home/CodeSlider';
 import { PrismPlus } from '../../../utils/PrismPlus';
 
@@ -23,10 +23,10 @@ export const EslintSection = ({
 
 	return (
 		<section style={sectionStyle} id={section.href.replace('#', '')}>
-			<animated.h2 style={headingStyle(themeSprings)}>
+			<animated.h2 style={gradientHeadingStyle(themeSprings)}>
 				{section.title}
 			</animated.h2>
-			<p style={paragraphStyle}>{section.description}</p>
+			<p style={paragraphSpacedStyle}>{section.description}</p>
 			<CodeSlider
 				handleTabClick={handleTabClick}
 				sliderSprings={sliderSprings}
@@ -38,7 +38,7 @@ export const EslintSection = ({
 					currentTab === 0 ? section.beforeCode : section.afterCode
 				}
 				language="typescript"
-				showLineNumbers={false}
+				showLineNumbers={true}
 				themeSprings={themeSprings}
 			/>
 		</section>

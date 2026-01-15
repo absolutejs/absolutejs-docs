@@ -12,6 +12,11 @@ export type ThemeProps = {
 	themeSprings: ThemeSprings;
 };
 
+export type DocsViewProps = ThemeProps & {
+	currentPageId: string;
+	onNavigate: (pageId: string) => void;
+};
+
 export type SidebarLinksSprings = ReturnType<
 	typeof useSidebarSprings
 >['linksSprings'];

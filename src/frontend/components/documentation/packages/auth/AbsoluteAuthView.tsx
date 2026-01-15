@@ -1,15 +1,19 @@
 import { animated } from '@react-spring/web';
-import { ThemeProps } from '../../../../../types/springTypes';
+import { DocsViewProps } from '../../../../../types/springTypes';
+import { DocsNavigation } from '../../DocsNavigation';
 import { basicSetup, protectRoute } from '../../../../data/authDocsCode';
 import { useMediaQuery } from '../../../../hooks/useMediaQuery';
 import {
 	mainContentStyle,
 	h1Style,
 	sectionStyle,
-	headingStyle,
 	paragraphSpacedStyle,
 	paragraphLargeStyle
 } from '../../../../styles/docsStyles';
+import {
+	gradientHeadingStyle,
+	heroGradientStyle
+} from '../../../../styles/gradientStyles';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { AuthFeaturesList } from './AuthFeaturesList';
@@ -18,7 +22,6 @@ import { AuthRoutesTable } from './AuthRoutesTable';
 import { UserHandlingSection } from './UserHandlingSection';
 
 const tocItems: TocItem[] = [
-	{ href: '#overview', label: 'Overview' },
 	{ href: '#key-features', label: 'Key Features' },
 	{ href: '#installation', label: 'Installation' },
 	{ href: '#basic-setup', label: 'Basic Setup' },
@@ -28,7 +31,11 @@ const tocItems: TocItem[] = [
 	{ href: '#user-handling', label: 'Custom User Handling' }
 ];
 
-export const AbsoluteAuthView = ({ themeSprings }: ThemeProps) => {
+export const AbsoluteAuthView = ({
+	currentPageId,
+	onNavigate,
+	themeSprings
+}: DocsViewProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
 
@@ -42,41 +49,32 @@ export const AbsoluteAuthView = ({ themeSprings }: ThemeProps) => {
 				position: 'relative'
 			}}
 		>
-			{/* Main Content - Centered */}
 			<div style={mainContentStyle}>
-				<h1 style={h1Style} id="absolute-auth">
-					Absolute Auth
-				</h1>
-
-				<section style={sectionStyle}>
-					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="overview"
-					>
-						Overview
-					</animated.h2>
+				<animated.div style={heroGradientStyle(themeSprings)}>
+					<h1 style={h1Style} id="absolute-auth">
+						Absolute Auth
+					</h1>
 					<p style={paragraphLargeStyle}>
-						Absolute Auth is a comprehensive TypeScript-based
-						authentication system built for Elysia applications. It
-						provides a complete OAuth 2.0 solution with optional
-						OpenID Connect capabilities for providers that implement
-						the OpenID standard.
+						A comprehensive TypeScript-based authentication system
+						built for Elysia applications. Complete OAuth 2.0
+						solution with optional OpenID Connect capabilities and
+						end-to-end type safety.
 					</p>
-				</section>
+				</animated.div>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="key-features"
 					>
 						Key Features
 					</animated.h2>
-					<AuthFeaturesList />
+					<AuthFeaturesList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="installation"
 					>
 						Installation
@@ -91,7 +89,7 @@ export const AbsoluteAuthView = ({ themeSprings }: ThemeProps) => {
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="basic-setup"
 					>
 						Basic Setup
@@ -99,31 +97,30 @@ export const AbsoluteAuthView = ({ themeSprings }: ThemeProps) => {
 					<PrismPlus
 						codeString={basicSetup}
 						language="typescript"
-						showLineNumbers={false}
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="protect-route"
 					>
 						Protect Routes
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						The protectRoute helper function is used to protect
-						routes that require authentication, which accepts two
-						callbacks. The user object is specifically typed to be
-						the exact user shape and the error object is exactly one
-						of the specific authentication errors that may be
-						returned, giving you complete type safety for both
-						success and failure paths.
+						The protectRoute helper function protects routes that
+						require authentication. It accepts two callbacks with
+						fully typed parameters - the user object matches your
+						exact user shape, and the error object is one of the
+						specific authentication errors, giving you complete type
+						safety for both success and failure paths.
 					</p>
 					<PrismPlus
 						codeString={protectRoute}
 						language="typescript"
-						showLineNumbers={false}
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -132,7 +129,7 @@ export const AbsoluteAuthView = ({ themeSprings }: ThemeProps) => {
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="authentication-routes"
 					>
 						Authentication Routes
@@ -140,10 +137,16 @@ export const AbsoluteAuthView = ({ themeSprings }: ThemeProps) => {
 					<p style={paragraphSpacedStyle}>
 						The library automatically creates the following routes:
 					</p>
-					<AuthRoutesTable />
+					<AuthRoutesTable themeSprings={themeSprings} />
 				</section>
 
 				<UserHandlingSection themeSprings={themeSprings} />
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 			</div>
 
 			{!isMobile && (

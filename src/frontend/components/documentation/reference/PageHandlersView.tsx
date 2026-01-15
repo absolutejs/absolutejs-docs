@@ -1,5 +1,6 @@
 import { animated } from '@react-spring/web';
-import { ThemeProps } from '../../../../types/springTypes';
+import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsNavigation } from '../DocsNavigation';
 import {
 	reactHandler,
 	svelteHandler,
@@ -12,31 +13,145 @@ import {
 	mainContentStyle,
 	h1Style,
 	sectionStyle,
-	headingStyle,
 	paragraphLargeStyle,
-	listStyle,
-	listItemStyle,
-	paragraphStyle,
-	strongStyle,
-	paragraphSpacedStyle
+	paragraphSpacedStyle,
+	tableContainerStyle,
+	tableStyle,
+	tableHeaderStyle,
+	tableCellStyle,
+	tableCodeStyle
 } from '../../../styles/docsStyles';
+import {
+	gradientHeadingStyle,
+	heroGradientStyle,
+	featureCardStyle
+} from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
-	{ href: '#overview', label: 'Overview' },
-	{ href: '#general-handler-behavior', label: 'General Handler Behavior' },
-	{ href: '#important-requirements', label: 'Important Requirements' },
-	{ href: '#handlereactpagerequest', label: 'handleReactPageRequest' },
-	{ href: '#handlesveltepagerequest', label: 'handleSveltePageRequest' },
-	{ href: '#handlevuepagerequest', label: 'handleVuePageRequest' },
-	{ href: '#handlehtmlpagerequest', label: 'handleHTMLPageRequest' },
-	{ href: '#handlehtmxpagerequest', label: 'handleHTMXPageRequest' }
+	{ href: '#handler-behavior', label: 'Handler Behavior' },
+	{ href: '#handlereactpagerequest', label: 'React Handler' },
+	{ href: '#handlesveltepagerequest', label: 'Svelte Handler' },
+	{ href: '#handlevuepagerequest', label: 'Vue Handler' },
+	{ href: '#handlehtmlpagerequest', label: 'HTML Handler' },
+	{ href: '#handlehtmxpagerequest', label: 'HTMX Handler' }
 ];
 
-export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
+const reactParams = [
+	{
+		param: 'pageComponent',
+		type: 'React.ComponentType<Props>',
+		description: 'Your React page component from the pages directory'
+	},
+	{
+		param: 'index',
+		type: 'string',
+		description: 'Path to the hydration script from asset(manifest, key)'
+	},
+	{
+		param: 'props',
+		type: 'Props',
+		description:
+			'Type-safe props matching the component requirements (optional)'
+	}
+];
+
+const svelteParams = [
+	{
+		param: 'PageComponent',
+		type: 'SvelteComponent<Props>',
+		description: 'Raw Svelte component (used only for type inference)'
+	},
+	{
+		param: 'pagePath',
+		type: 'string',
+		description: 'Path to compiled Svelte page for SSR'
+	},
+	{
+		param: 'indexPath',
+		type: 'string',
+		description: 'Path to hydration script from asset(manifest, key)'
+	},
+	{
+		param: 'props',
+		type: 'Props',
+		description: 'Type-safe props (optional if component has no props)'
+	}
+];
+
+const vueParams = [
+	{
+		param: '_PageComponent',
+		type: 'VueComponent<Props>',
+		description: 'Raw Vue component (used only for type inference)'
+	},
+	{
+		param: 'pagePath',
+		type: 'string',
+		description: 'Path to compiled Vue page for SSR'
+	},
+	{
+		param: 'indexPath',
+		type: 'string',
+		description: 'Path to hydration script from asset(manifest, key)'
+	},
+	{
+		param: 'headTag',
+		type: '`<head>...</head>`',
+		description: 'Custom head element (use generateHeadElement helper)'
+	},
+	{
+		param: 'props',
+		type: 'Props',
+		description: 'Type-safe props (optional if component has no props)'
+	}
+];
+
+export const PageHandlersView = ({
+	currentPageId,
+	onNavigate,
+	themeSprings
+}: DocsViewProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
+
+	const renderParamsTable = (
+		params: { param: string; type: string; description: string }[]
+	) => (
+		<div style={tableContainerStyle}>
+			<animated.table style={tableStyle(themeSprings)}>
+				<thead>
+					<tr>
+						<animated.th style={tableHeaderStyle(themeSprings)}>
+							Parameter
+						</animated.th>
+						<animated.th style={tableHeaderStyle(themeSprings)}>
+							Type
+						</animated.th>
+						<animated.th style={tableHeaderStyle(themeSprings)}>
+							Description
+						</animated.th>
+					</tr>
+				</thead>
+				<tbody>
+					{params.map((p, i) => (
+						<tr key={i}>
+							<animated.td style={tableCellStyle(themeSprings)}>
+								<code style={tableCodeStyle}>{p.param}</code>
+							</animated.td>
+							<animated.td style={tableCellStyle(themeSprings)}>
+								<code style={tableCodeStyle}>{p.type}</code>
+							</animated.td>
+							<animated.td style={tableCellStyle(themeSprings)}>
+								{p.description}
+							</animated.td>
+						</tr>
+					))}
+				</tbody>
+			</animated.table>
+		</div>
+	);
 
 	return (
 		<div
@@ -48,357 +163,270 @@ export const PageHandlersView = ({ themeSprings }: ThemeProps) => {
 				position: 'relative'
 			}}
 		>
-			{/* Main Content - Centered */}
 			<div style={mainContentStyle}>
-				<h1 style={h1Style} id="page-handlers">
-					Page Handlers
-				</h1>
+				<animated.div style={heroGradientStyle(themeSprings)}>
+					<h1 style={h1Style} id="page-handlers">
+						Page Handlers
+					</h1>
+					<p style={paragraphLargeStyle}>
+						Specialized handler functions for server-side rendering
+						with different frontend frameworks. All handlers provide
+						complete type safety from server to client.
+					</p>
+				</animated.div>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="overview"
+						style={gradientHeadingStyle(themeSprings)}
+						id="handler-behavior"
 					>
-						Overview
+						Handler Behavior
 					</animated.h2>
-					<p style={paragraphLargeStyle}>
-						AbsoluteJS provides specialized handler functions for
-						different frontend frameworks. These handlers work
-						seamlessly with Elysia's routing system to perform
-						server-side rendering for framework-based pages or serve
-						static files directly.
+					<div
+						style={{
+							display: 'grid',
+							gap: '1rem',
+							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+							marginBottom: '1.5rem',
+							marginTop: '1rem'
+						}}
+					>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									marginBottom: '0.5rem',
+									fontWeight: 600
+								}}
+							>
+								Framework Handlers
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								React, Svelte, Vue handlers perform server-side
+								rendering and return hydrated HTML.
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									marginBottom: '0.5rem',
+									fontWeight: 600
+								}}
+							>
+								Static Handlers
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								HTML and HTMX handlers serve pre-built files
+								directly without SSR processing.
+							</p>
+						</animated.div>
+					</div>
+					<p style={paragraphSpacedStyle}>
+						All handlers work seamlessly with Elysia's routing
+						system and return properly formatted responses.
+						Framework handlers require the manifest from{' '}
+						<code style={tableCodeStyle}>build()</code>. Always use{' '}
+						<code style={tableCodeStyle}>asset(manifest, key)</code>{' '}
+						to look up script paths—it will throw if the artifact
+						doesn't exist.
 					</p>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="general-handler-behavior"
-					>
-						General Handler Behavior
-					</animated.h2>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Framework handlers (React/Svelte/Vue) perform
-							server-side rendering
-						</li>
-						<li style={listItemStyle}>
-							Static handlers (HTML/HTMX) serve pre-built files
-							directly
-						</li>
-						<li style={listItemStyle}>
-							All handlers are designed to work seamlessly with
-							Elysia's routing system
-						</li>
-						<li style={listItemStyle}>
-							Each handler returns a properly formatted response
-							for the browser
-						</li>
-						<li style={listItemStyle}>
-							Typically used with .get() routes for page rendering
-						</li>
-					</ul>
-				</section>
-
-				<section style={sectionStyle}>
-					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="important-requirements"
-					>
-						Important Requirements
-					</animated.h2>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Framework handlers (React, Svelte, Vue) require the
-							manifest from build()
-						</li>
-						<li style={listItemStyle}>
-							Props passed to components can be any valid
-							JavaScript object or function. Props are
-							type-enforced to match the exact type that the page
-							component requires and are optional if the page
-							doesn't have any props
-						</li>
-						<li style={listItemStyle}>
-							Always use asset(manifest, key) to extract artifacts
-							from the manifest. This function will error if the
-							artifact doesn't exist, keeping your code safe
-							(since the manifest isn't typesafe yet)
-						</li>
-						<li style={listItemStyle}>
-							HTML/HTMX handlers don't need to use the manifest to
-							retrieve an index, but they still need to be put
-							through the build process to update resource paths to
-							the built versions of JS and CSS files
-						</li>
-					</ul>
-				</section>
-
-				<section style={sectionStyle}>
-					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="handlereactpagerequest"
 					>
 						handleReactPageRequest
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Handles server-side rendering for React pages. Unlike
-						other handlers, the page component is actually used by
-						this function: we call createElement to convert the TSX
-						into valid HTML, then hydrate it with the index.
+						Handles server-side rendering for React pages. The
+						component is rendered to HTML with createElement, then
+						hydrated on the client with the provided index script.
 					</p>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Signature:</strong>
-					</p>
-					<PrismPlus
-						codeString={`handleReactPageRequest<Props extends Record<string, unknown> = Record<never, never>>(
-  pageComponent: ReactComponent<Props>,
-  index: string,
-  ...props: keyof Props extends never ? [] : [props: Props]
-): Promise<Response>`}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Parameters:</strong>
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							pageComponent: Your React page component (imported
-							from the pages directory)
-						</li>
-						<li style={listItemStyle}>
-							index: The index path used to hydrate the page with
-							JavaScript
-						</li>
-						<li style={listItemStyle}>
-							props: Props to pass to the component (type-enforced
-							to match the component's prop requirements,
-							optional)
-						</li>
-					</ul>
+					{renderParamsTable(reactParams)}
 					<PrismPlus
 						codeString={reactHandler}
-						showLineNumbers={false}
 						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="handlesveltepagerequest"
 					>
 						handleSveltePageRequest
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Handles server-side rendering for Svelte pages. The page
-						component is only used for type inference to ensure
-						props have the correct type; it has no functional
-						purpose otherwise.
+						Handles server-side rendering for Svelte pages. The
+						component parameter is only used for type inference—the
+						actual rendering uses the compiled page at pagePath.
 					</p>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Signature (overloaded):</strong>
-					</p>
-					<PrismPlus
-						codeString={`// Without props
-handleSveltePageRequest(
-  PageComponent: SvelteComponent<Record<string, never>>,
-  pagePath: string,
-  indexPath: string
-): Promise<Response>;
-
-// With props
-handleSveltePageRequest<P extends Record<string, unknown>>(
-  PageComponent: SvelteComponent<P>,
-  pagePath: string,
-  indexPath: string,
-  props: P
-): Promise<Response>;`}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-					<p style={paragraphSpacedStyle}>
-						The signature is overloaded to allow no props to be
-						passed in a type-safe manner. If there are no props, it
-						won't let you pass them.
-					</p>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Parameters:</strong>
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							PageComponent: The raw Svelte component (used only
-							for type inference to ensure props have the correct
-							type)
-						</li>
-						<li style={listItemStyle}>
-							pagePath: The path to the compiled Svelte page that
-							will be imported and used
-						</li>
-						<li style={listItemStyle}>
-							indexPath: The index path used to hydrate the page
-							with JavaScript
-						</li>
-						<li style={listItemStyle}>
-							props: Props to pass to the component
-							(type-enforced, optional if component has no props)
-						</li>
-					</ul>
+					{renderParamsTable(svelteParams)}
 					<PrismPlus
 						codeString={svelteHandler}
-						showLineNumbers={false}
 						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="handlevuepagerequest"
 					>
 						handleVuePageRequest
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Handles server-side rendering for Vue pages. The page
-						component is only used for type inference to ensure
-						props have the correct type; it has no functional
-						purpose otherwise.
+						Handles server-side rendering for Vue pages. Vue
+						components cannot include page elements like head, so
+						you pass a headTag parameter (use generateHeadElement
+						helper for convenience).
 					</p>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Signature:</strong>
-					</p>
-					<PrismPlus
-						codeString={`handleVuePageRequest<Props extends Record<string, unknown> = Record<never, never>>(
-  _PageComponent: VueComponent<Props>,
-  pagePath: string,
-  indexPath: string,
-  headTag?: \`<head>\${string}</head>\`,
-  ...props: keyof Props extends never ? [] : [props: Props]
-): Promise<Response>`}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Parameters:</strong>
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							_PageComponent: The raw Vue component (used only for
-							type inference to ensure props have the correct
-							type)
-						</li>
-						<li style={listItemStyle}>
-							pagePath: The path to the compiled Vue page that
-							will be imported and used
-						</li>
-						<li style={listItemStyle}>
-							indexPath: The index path used to hydrate the page
-							with JavaScript
-						</li>
-						<li style={listItemStyle}>
-							headTag: Vue components cannot include page elements
-							like the head, so we create it inside the handler
-							and attach the head component you pass. You have the
-							option to use generateHeadElement() so you don't
-							have to write the whole thing manually (optional)
-						</li>
-						<li style={listItemStyle}>
-							props: Props to pass to the component
-							(type-enforced to match the component's prop
-							requirements, optional)
-						</li>
-					</ul>
+					{renderParamsTable(vueParams)}
 					<PrismPlus
 						codeString={vueHandler}
-						showLineNumbers={false}
 						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="handlehtmlpagerequest"
 					>
 						handleHTMLPageRequest
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Serves static HTML files.
+						Serves static HTML files directly. The file still goes
+						through the build process to update resource paths to
+						their bundled versions.
 					</p>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Signature:</strong>
-					</p>
-					<PrismPlus
-						codeString={`handleHTMLPageRequest(html: string): Bun.BunFile`}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Parameters:</strong>
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							html: Path to the HTML file
-						</li>
-					</ul>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Returns:</strong>{' '}
-						Bun.BunFile
-					</p>
+					<div style={tableContainerStyle}>
+						<animated.table style={tableStyle(themeSprings)}>
+							<thead>
+								<tr>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Parameter
+									</animated.th>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Type
+									</animated.th>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Description
+									</animated.th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<animated.td
+										style={tableCellStyle(themeSprings)}
+									>
+										<code style={tableCodeStyle}>html</code>
+									</animated.td>
+									<animated.td
+										style={tableCellStyle(themeSprings)}
+									>
+										<code style={tableCodeStyle}>
+											string
+										</code>
+									</animated.td>
+									<animated.td
+										style={tableCellStyle(themeSprings)}
+									>
+										Path to the HTML file
+									</animated.td>
+								</tr>
+							</tbody>
+						</animated.table>
+					</div>
 					<PrismPlus
 						codeString={htmlHandler}
-						showLineNumbers={false}
 						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="handlehtmxpagerequest"
 					>
 						handleHTMXPageRequest
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Serves HTMX template files.
+						Serves HTMX template files. Like HTML handler, files go
+						through the build process for path updates.
 					</p>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Signature:</strong>
-					</p>
-					<PrismPlus
-						codeString={`handleHTMXPageRequest(htmx: string): Bun.BunFile`}
-						showLineNumbers={false}
-						language="typescript"
-						themeSprings={themeSprings}
-					/>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Parameters:</strong>
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							htmx: Path to the HTMX template file
-						</li>
-					</ul>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Returns:</strong>{' '}
-						Bun.BunFile
-					</p>
+					<div style={tableContainerStyle}>
+						<animated.table style={tableStyle(themeSprings)}>
+							<thead>
+								<tr>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Parameter
+									</animated.th>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Type
+									</animated.th>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Description
+									</animated.th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<animated.td
+										style={tableCellStyle(themeSprings)}
+									>
+										<code style={tableCodeStyle}>htmx</code>
+									</animated.td>
+									<animated.td
+										style={tableCellStyle(themeSprings)}
+									>
+										<code style={tableCodeStyle}>
+											string
+										</code>
+									</animated.td>
+									<animated.td
+										style={tableCellStyle(themeSprings)}
+									>
+										Path to the HTMX template file
+									</animated.td>
+								</tr>
+							</tbody>
+						</animated.table>
+					</div>
 					<PrismPlus
 						codeString={htmxHandler}
-						showLineNumbers={false}
 						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 			</div>
 
 			{!isMobile && (

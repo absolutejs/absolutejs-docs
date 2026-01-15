@@ -1,27 +1,187 @@
 import { animated } from '@react-spring/web';
-import { ThemeProps } from '../../../../types/springTypes';
+import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsNavigation } from '../DocsNavigation';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	mainContentStyle,
 	h1Style,
-	headingStyle,
-	listStyle,
-	listItemStyle,
+	sectionStyle,
 	paragraphLargeStyle,
-	paragraphStyle,
-	sectionStyle
+	paragraphSpacedStyle,
+	strongStyle,
+	tableContainerStyle,
+	tableStyle,
+	tableHeaderStyle,
+	tableCellStyle,
+	tableCodeStyle
 } from '../../../styles/docsStyles';
+import {
+	gradientHeadingStyle,
+	heroGradientStyle,
+	featureCardStyle
+} from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#quick-start', label: 'Quick Start' },
 	{ href: '#project-overview', label: 'Project Overview' },
-	{ href: '#reference', label: 'Reference' },
-	{ href: '#configuration-options', label: 'Configuration Options' }
+	{ href: '#cli-options', label: 'CLI Options' },
+	{ href: '#configuration', label: 'Configuration' }
 ];
 
-export const CreateAbsoluteJSView = ({ themeSprings }: ThemeProps) => {
+const scripts = [
+	{
+		script: 'bun dev',
+		description: 'Start the development server with hot reload'
+	},
+	{ script: 'bun build', description: 'Build the project for production' },
+	{ script: 'bun lint', description: 'Run code quality checks' },
+	{
+		script: 'bun format',
+		description: 'Format code with configured formatter'
+	},
+	{ script: 'bun typecheck', description: 'Run TypeScript type checking' },
+	{
+		script: 'bun db:studio',
+		description: 'Open database studio (if ORM configured)'
+	},
+	{
+		script: 'bun db:push',
+		description: 'Push schema changes to database (if ORM configured)'
+	},
+	{
+		script: 'bun db:<engine>',
+		description:
+			'Start local database container (if using local database without a host)'
+	}
+];
+
+const cliOptions = [
+	// General options
+	{ flag: '--help, -h', description: 'Show help message and exit' },
+	{
+		flag: '--debug, -d',
+		description: 'Display a summary of project configuration after creation'
+	},
+	{
+		flag: '--skip',
+		description:
+			'Skip non-required prompts; uses defaults and "absolutejs-project" if no name provided'
+	},
+	{
+		flag: '--install',
+		description: 'Use the same package manager to install dependencies'
+	},
+	{ flag: '--git', description: 'Initialize a Git repository' },
+	{ flag: '--lts', description: 'Use LTS versions of required packages' },
+	{
+		flag: '--directory <mode>',
+		description: 'Directory-naming strategy: "default" or "custom"'
+	},
+	// Frontend options
+	{ flag: '--react', description: 'Include a React frontend' },
+	{
+		flag: '--react-dir <directory>',
+		description: 'Specify the directory for and use the React frontend'
+	},
+	{ flag: '--svelte', description: 'Include a Svelte frontend' },
+	{
+		flag: '--svelte-dir <directory>',
+		description: 'Specify the directory for and use the Svelte frontend'
+	},
+	{ flag: '--vue', description: 'Include a Vue frontend' },
+	{
+		flag: '--vue-dir <directory>',
+		description: 'Specify the directory for and use the Vue frontend'
+	},
+	{ flag: '--angular', description: 'Include an Angular frontend' },
+	{
+		flag: '--angular-dir <directory>',
+		description: 'Specify the directory for and use the Angular frontend'
+	},
+	{ flag: '--htmx', description: 'Include an HTMX frontend' },
+	{
+		flag: '--htmx-dir <directory>',
+		description: 'Specify the directory for and use the HTMX frontend'
+	},
+	{ flag: '--html', description: 'Include a plain HTML frontend' },
+	{
+		flag: '--html-dir <directory>',
+		description: 'Specify the directory for and use the HTML frontend'
+	},
+	{
+		flag: '--html-scripts',
+		description: 'Enable HTML scripting with TypeScript'
+	},
+	// Database options
+	{
+		flag: '--db <engine>',
+		description:
+			'Database engine: postgresql, mysql, sqlite, mongodb, mariadb, gel, singlestore, cockroachdb, mssql, or none'
+	},
+	{
+		flag: '--db-dir <directory>',
+		description: 'Directory name for your database files'
+	},
+	{
+		flag: '--db-host <host>',
+		description: 'Database host provider: neon, planetscale, or none'
+	},
+	{
+		flag: '--orm <orm>',
+		description: 'ORM to configure: drizzle, prisma, or none'
+	},
+	// Auth options
+	{
+		flag: '--auth <plugin>',
+		description: 'Pre-configured auth plugin: "abs" or none'
+	},
+	{
+		flag: '--abs-provider',
+		description:
+			'A provider for Absolute-Auth (e.g., google, github, discord)'
+	},
+	// Build options
+	{
+		flag: '--assets <directory>',
+		description: 'Directory name for your static assets'
+	},
+	{
+		flag: '--build <directory>',
+		description: 'Output directory for build artifacts'
+	},
+	// Elysia plugins
+	{
+		flag: '--plugin <plugin>',
+		description:
+			'Elysia plugin(s) to include (repeatable); "none" skips plugin setup'
+	},
+	// Tooling options
+	{ flag: '--tailwind', description: 'Include Tailwind CSS setup' },
+	{
+		flag: '--tailwind-input <file>',
+		description: 'Path to your Tailwind CSS entry file'
+	},
+	{
+		flag: '--tailwind-output <file>',
+		description: 'Path for the generated Tailwind CSS bundle'
+	},
+	{
+		flag: '--biome',
+		description: 'Use Biome for code quality and formatting'
+	},
+	{
+		flag: '--eslint+prettier',
+		description: 'Use ESLint + Prettier for code quality and formatting'
+	}
+];
+
+export const CreateAbsoluteJSView = ({
+	currentPageId,
+	onNavigate,
+	themeSprings
+}: DocsViewProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
 
@@ -36,22 +196,25 @@ export const CreateAbsoluteJSView = ({ themeSprings }: ThemeProps) => {
 			}}
 		>
 			<div style={mainContentStyle}>
-				<animated.h1 style={h1Style}>Create-AbsoluteJS</animated.h1>
-				<p style={paragraphLargeStyle}>
-					Create-AbsoluteJS is a scaffolding tool that helps you
-					quickly bootstrap new applications. Instead of manually
-					creating folders, installing packages, and configuring
-					files, Create-AbsoluteJS handles all setup through a single
-					command with an interactive CLI experience.
-				</p>
+				<animated.div style={heroGradientStyle(themeSprings)}>
+					<h1 style={h1Style} id="create-absolutejs">
+						Create AbsoluteJS
+					</h1>
+					<p style={paragraphLargeStyle}>
+						Scaffolding tool that bootstraps new AbsoluteJS
+						applications with an interactive CLI. Configure
+						frameworks, databases, auth, and tooling in one command.
+					</p>
+				</animated.div>
+
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="quick-start"
 					>
 						Quick Start
 					</animated.h2>
-					<p style={paragraphStyle}>
+					<p style={paragraphSpacedStyle}>
 						Create a new AbsoluteJS project in seconds:
 					</p>
 					<PrismPlus
@@ -60,97 +223,117 @@ export const CreateAbsoluteJSView = ({ themeSprings }: ThemeProps) => {
 						themeSprings={themeSprings}
 						showLineNumbers={false}
 					/>
-					<p style={paragraphStyle}>
-						The CLI will guide you through an interactive setup,
-						asking about:
+					<p style={paragraphSpacedStyle}>
+						The CLI guides you through an interactive setup for:
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>Frontend frameworks</li>
-						<li style={listItemStyle}>Database engine</li>
-						<li style={listItemStyle}>Authentication provider</li>
-						<li style={listItemStyle}>ORM</li>
-						<li style={listItemStyle}>Code quality tools</li>
-						<li style={listItemStyle}>Additional plugins</li>
-					</ul>
-					<p style={paragraphStyle}>
-						Once complete, your project will be fully configured and
-						ready for development.
-					</p>
+					<div
+						style={{
+							display: 'grid',
+							gap: '1rem',
+							gridTemplateColumns: isMobile
+								? '1fr'
+								: 'repeat(3, 1fr)',
+							marginBottom: '1.5rem',
+							marginTop: '1rem'
+						}}
+					>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>Frontends</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								React, Svelte, Vue, HTMX, HTML
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>Databases</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								PostgreSQL, MySQL, SQLite, MongoDB
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>Tooling</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								Drizzle/Prisma, Tailwind, ESLint
+							</p>
+						</animated.div>
+					</div>
 				</section>
+
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="project-overview"
 					>
 						Project Overview
 					</animated.h2>
-					<p style={paragraphStyle}>
-						After running Create-AbsoluteJS, your project will
-						include:
+					<p style={paragraphSpacedStyle}>
+						After running Create-AbsoluteJS, your project includes
+						an organized src/ folder with separate frontend and
+						backend directories, pre-configured settings, and all
+						necessary dependencies installed.
 					</p>
-					<ul
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							gap: '0.75rem',
-							listStyle: 'disc',
-							marginBottom: '2rem',
-							marginLeft: '1.5rem'
-						}}
+					<animated.h3
+						style={gradientHeadingStyle(themeSprings, true)}
 					>
-						<li style={listItemStyle}>
-							An organized src/ folder with separate frontend and
-							backend directories
-						</li>
-						<li style={listItemStyle}>
-							Pre-configured settings in tsconfig.json,
-							eslint.config.mjs, and other files
-						</li>
-						<li style={listItemStyle}>
-							Pre-built package.json with all necessary
-							dependencies installed
-						</li>
-						<li style={listItemStyle}>
-							Generated connection files and schema if a local
-							database option is selected
-						</li>
-					</ul>
-					<p style={paragraphStyle}>
-						The following scripts are available:
-					</p>
-					<ul
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							gap: '0.75rem',
-							listStyle: 'disc',
-							marginBottom: '2rem',
-							marginLeft: '1.5rem'
-						}}
-					>
-						<li style={listItemStyle}>
-							bun dev - Start the development server
-						</li>
-						<li style={listItemStyle}>
-							bun build - Build the project for production
-						</li>
-						<li style={listItemStyle}>
-							bun lint - Run code quality checks
-						</li>
-						<li style={listItemStyle}>bun format - Format code</li>
-						<li style={listItemStyle}>
-							bun typecheck - Type check code
-						</li>
-						<li style={listItemStyle}>
-							bun db:studio - Open database studio (if ORM is
-							present)
-						</li>
-						<li style={listItemStyle}>
-							bun db:&lt;engine&gt; - Open database shell (if
-							local database option is selected)
-						</li>
-					</ul>
-					<p style={paragraphStyle}>Start developing:</p>
+						Available Scripts
+					</animated.h3>
+					<div style={tableContainerStyle}>
+						<animated.table style={tableStyle(themeSprings)}>
+							<thead>
+								<tr>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Script
+									</animated.th>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Description
+									</animated.th>
+								</tr>
+							</thead>
+							<tbody>
+								{scripts.map((s, i) => (
+									<tr key={i}>
+										<animated.td
+											style={tableCellStyle(themeSprings)}
+										>
+											<code style={tableCodeStyle}>
+												{s.script}
+											</code>
+										</animated.td>
+										<animated.td
+											style={tableCellStyle(themeSprings)}
+										>
+											{s.description}
+										</animated.td>
+									</tr>
+								))}
+							</tbody>
+						</animated.table>
+					</div>
+					<p style={paragraphSpacedStyle}>Start developing:</p>
 					<PrismPlus
 						language="bash"
 						codeString={'cd my-app\nbun run dev'}
@@ -158,165 +341,199 @@ export const CreateAbsoluteJSView = ({ themeSprings }: ThemeProps) => {
 						showLineNumbers={false}
 					/>
 				</section>
+
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="reference"
+						style={gradientHeadingStyle(themeSprings)}
+						id="cli-options"
 					>
-						Reference
+						CLI Options
 					</animated.h2>
-					<p style={paragraphStyle}>
+					<p style={paragraphSpacedStyle}>
 						Customize your setup with command-line flags to skip
 						prompts or pre-configure options:
 					</p>
-					<PrismPlus
-						language="text"
-						codeString={`\
-Usage: create-absolute [options] [project-name]
-
-Arguments:
-	project-name                    Name of the application to create.
-									If omitted, defaults to 'absolutejs-project'
-
-Options:
-	--help, -h                      Show this help message and exit
-	--debug, -d                     Display a summary of the project configuration after creation
-
-	--angular                       Include an Angular frontend
-	--angular-dir <directory>       Specify the directory for and use the Angular frontend
-	--assets <directory>            Directory name for your static assets
-	--auth <plugin>                 Pre-configured auth plugin (currently only "absolute-auth") or 'none'
-	--biome                         Use Biome for code quality and formatting
-	--build <directory>             Output directory for build artifacts
-	--db <engine>                   Database engine (postgresql | mysql | sqlite | mongodb | mariadb 
-													| gel | singlestore | cockroachdb | mssql) or 'none'
-	--db-dir <directory>            Directory name for your database files
-	--db-host <host>                Database host provider (neon | planetscale) or 'none'
-	--directory <mode>              Directory-naming strategy: "default" or "custom"
-	--eslint+prettier               Use ESLint + Prettier for code quality and formatting
-	--git                           Initialize a Git repository
-	--html                          Include a plain HTML frontend
-	--html-dir <directory>          Specify the directory for and use the HTML frontend
-	--html-scripts                  Enable HTML scripting with TypeScript
-	--htmx                          Include an HTMX frontend
-	--htmx-dir <directory>          Specify the directory for and use the HTMX frontend
-	--install                       Use the same package manager to install dependencies
-	--lts                           Use LTS versions of required packages
-	--orm <orm>                     ORM to configure: "drizzle" | "prisma" | 'none'
-	--plugin <plugin>               Elysia plugin(s) to include (repeatable); 'none' skips plugin setup
-	--react                         Include a React frontend
-	--react-dir <directory>         Specify the directory for and use the React frontend
-	--skip                          Skip non-required prompts; uses 'none' for all optional configs
-	--svelte                        Include a Svelte frontend
-	--svelte-dir <directory>        Specify the directory for and use the Svelte frontend
-	--tailwind                      Include Tailwind CSS setup
-	--tailwind-input <file>         Path to your Tailwind CSS entry file
-	--tailwind-output <file>        Path for the generated Tailwind CSS bundle
-	--vue                           Include a Vue frontend
-	--vue-dir <directory>           Specify the directory for and use the Vue frontend`}
-						themeSprings={themeSprings}
-						showLineNumbers={false}
-						wrapLongLines={false}
-					/>
+					<div style={tableContainerStyle}>
+						<animated.table style={tableStyle(themeSprings)}>
+							<thead>
+								<tr>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Flag
+									</animated.th>
+									<animated.th
+										style={tableHeaderStyle(themeSprings)}
+									>
+										Description
+									</animated.th>
+								</tr>
+							</thead>
+							<tbody>
+								{cliOptions.map((opt, i) => (
+									<tr key={i}>
+										<animated.td
+											style={tableCellStyle(themeSprings)}
+										>
+											<code style={tableCodeStyle}>
+												{opt.flag}
+											</code>
+										</animated.td>
+										<animated.td
+											style={tableCellStyle(themeSprings)}
+										>
+											{opt.description}
+										</animated.td>
+									</tr>
+								))}
+							</tbody>
+						</animated.table>
+					</div>
 				</section>
+
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="configuration-options"
+						style={gradientHeadingStyle(themeSprings)}
+						id="configuration"
 					>
 						Configuration Options
 					</animated.h2>
-					<animated.h2
-						style={headingStyle(themeSprings, true)}
+
+					<animated.h3
+						style={gradientHeadingStyle(themeSprings, true)}
 					>
-						Frontend Frameworks
-					</animated.h2>
-					<p style={paragraphStyle}>
-						Create-AbsoluteJS supports multiple frontend frameworks
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							React, Vue, Svelte, Angular, HTMX, HTML
-						</li>
-						<li style={listItemStyle}>
-							Multiple frameworks can be selected
-						</li>
-						<li style={listItemStyle}>
-							Each framework gets its own directory in the project
-							structure
-						</li>
-					</ul>
-					<animated.h2 style={headingStyle(themeSprings, true)}>
 						Database Options
-					</animated.h2>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							PostgreSQL, MySQL, SQLite, MongoDB, MariaDB, GEL,
-							SingleStore, CockroachDB, SQL Server
-						</li>
-						<li style={listItemStyle}>
-							Local development: Automatic Docker Compose setup
-							with pre-configured containers, environment
-							variables, and scripts
-						</li>
-						<li style={listItemStyle}>
-							Hosted providers: First-class support for Neon
-							(PostgreSQL), PlanetScale (MySQL), and Turso
-							(SQLite)
-						</li>
-					</ul>
-					<animated.h2 style={headingStyle(themeSprings, true)}>
-						Additional Features
-					</animated.h2>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>Tailwind CSS (optional)</li>
-						<li style={listItemStyle}>
-							Pre-configured Absolute Auth setup
-						</li>
-						<li style={listItemStyle}>
-							Drizzle or Prisma integration
-						</li>
-					</ul>
-				</section>
-				<section
-					style={{
-						alignItems: 'center',
-						display: 'flex',
-						flexDirection: 'column',
-						gap: '1rem',
-						marginTop: '3rem',
-						paddingBottom: '2rem'
-					}}
-				>
-					<p style={paragraphStyle}>
-						Ready to try it out? Explore a live example:
-					</p>
-					<animated.a
-						href="#"
-						onClick={(e) => e.preventDefault()}
+					</animated.h3>
+					<div
 						style={{
-							background: themeSprings.themePrimary,
-							borderRadius: '8px',
-							color: themeSprings.contrastPrimary,
-							cursor: 'pointer',
-							fontSize: '1.1rem',
-							fontWeight: '600',
-							padding: '12px 32px',
-							textDecoration: 'none',
-							transition: 'transform 0.2s, opacity 0.2s'
-						}}
-						onMouseEnter={(e) => {
-							e.currentTarget.style.transform = 'scale(1.05)';
-							e.currentTarget.style.opacity = '0.9';
-						}}
-						onMouseLeave={(e) => {
-							e.currentTarget.style.transform = 'scale(1)';
-							e.currentTarget.style.opacity = '1';
+							display: 'grid',
+							gap: '1rem',
+							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+							marginBottom: '1.5rem',
+							marginTop: '1rem'
 						}}
 					>
-						Try on CodeSandbox
-					</animated.a>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									Local Development
+								</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								Automatic Docker Compose setup with
+								pre-configured containers, environment
+								variables, and scripts.
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									Hosted Providers
+								</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								First-class support for Neon (PostgreSQL),
+								PlanetScale (MySQL), and Turso (SQLite).
+							</p>
+						</animated.div>
+					</div>
+
+					<animated.h3
+						style={gradientHeadingStyle(themeSprings, true)}
+					>
+						Additional Features
+					</animated.h3>
+					<div
+						style={{
+							display: 'grid',
+							gap: '1rem',
+							gridTemplateColumns: isMobile
+								? '1fr'
+								: 'repeat(2, 1fr)',
+							marginBottom: '2rem',
+							marginTop: '1rem'
+						}}
+					>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									Code Quality Tools
+								</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								Choose between ESLint + Prettier or Biome, both
+								fully configured with sensible default rules out
+								of the box.
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									Tailwind CSS
+								</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								Optional utility-first CSS framework setup
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									Absolute Auth
+								</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								Pre-configured OAuth 2.0 authentication
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									ORM Integration
+								</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								Drizzle or Prisma with type-safe queries
+							</p>
+						</animated.div>
+					</div>
 				</section>
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 			</div>
 			{!isMobile && (
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />

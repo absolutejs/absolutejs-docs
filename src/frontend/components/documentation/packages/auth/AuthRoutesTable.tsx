@@ -1,70 +1,104 @@
-export const AuthRoutesTable = () => (
-	<table
-		style={{ borderCollapse: 'collapse', marginTop: '1rem', width: '100%' }}
-	>
-		<thead>
-			<tr style={{ borderBottom: '2px solid #ddd' }}>
-				<th style={{ padding: '0.5rem', textAlign: 'left' }}>Route</th>
-				<th style={{ padding: '0.5rem', textAlign: 'left' }}>Method</th>
-				<th style={{ padding: '0.5rem', textAlign: 'left' }}>
-					Description
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr style={{ borderBottom: '1px solid #ddd' }}>
-				<td style={{ padding: '0.5rem' }}>
-					<code>/oauth2/:provider/authorization</code>
-				</td>
-				<td style={{ padding: '0.5rem' }}>GET</td>
-				<td style={{ padding: '0.5rem' }}>Initiate OAuth flow</td>
-			</tr>
-			<tr style={{ borderBottom: '1px solid #ddd' }}>
-				<td style={{ padding: '0.5rem' }}>
-					<code>/oauth2/callback</code>
-				</td>
-				<td style={{ padding: '0.5rem' }}>GET</td>
-				<td style={{ padding: '0.5rem' }}>Handle OAuth callback</td>
-			</tr>
-			<tr style={{ borderBottom: '1px solid #ddd' }}>
-				<td style={{ padding: '0.5rem' }}>
-					<code>/oauth2/status</code>
-				</td>
-				<td style={{ padding: '0.5rem' }}>GET</td>
-				<td style={{ padding: '0.5rem' }}>
-					Check user authentication status
-				</td>
-			</tr>
-			<tr style={{ borderBottom: '1px solid #ddd' }}>
-				<td style={{ padding: '0.5rem' }}>
-					<code>/oauth2/profile</code>
-				</td>
-				<td style={{ padding: '0.5rem' }}>GET</td>
-				<td style={{ padding: '0.5rem' }}>
-					Get user profile from provider
-				</td>
-			</tr>
-			<tr style={{ borderBottom: '1px solid #ddd' }}>
-				<td style={{ padding: '0.5rem' }}>
-					<code>/oauth2/tokens</code>
-				</td>
-				<td style={{ padding: '0.5rem' }}>POST</td>
-				<td style={{ padding: '0.5rem' }}>Refresh access token</td>
-			</tr>
-			<tr style={{ borderBottom: '1px solid #ddd' }}>
-				<td style={{ padding: '0.5rem' }}>
-					<code>/oauth2/revocation</code>
-				</td>
-				<td style={{ padding: '0.5rem' }}>POST</td>
-				<td style={{ padding: '0.5rem' }}>Revoke access token</td>
-			</tr>
-			<tr>
-				<td style={{ padding: '0.5rem' }}>
-					<code>/oauth2/signout</code>
-				</td>
-				<td style={{ padding: '0.5rem' }}>DELETE</td>
-				<td style={{ padding: '0.5rem' }}>Sign out user</td>
-			</tr>
-		</tbody>
-	</table>
+import { animated } from '@react-spring/web';
+import { ThemeProps } from '../../../../../types/springTypes';
+import {
+	tableContainerStyle,
+	tableStyle,
+	tableHeaderStyle,
+	tableCellStyle,
+	tableCodeStyle
+} from '../../../../styles/docsStyles';
+
+const routes = [
+	{
+		route: '/oauth2/:provider/authorization',
+		method: 'GET',
+		description: 'Initiate OAuth flow with specified provider'
+	},
+	{
+		route: '/oauth2/callback',
+		method: 'GET',
+		description: 'Handle OAuth callback and token exchange'
+	},
+	{
+		route: '/oauth2/status',
+		method: 'GET',
+		description: 'Check current user authentication status'
+	},
+	{
+		route: '/oauth2/profile',
+		method: 'GET',
+		description: 'Fetch user profile from OAuth provider'
+	},
+	{
+		route: '/oauth2/tokens',
+		method: 'POST',
+		description: 'Refresh access token using refresh token'
+	},
+	{
+		route: '/oauth2/revocation',
+		method: 'POST',
+		description: 'Revoke access or refresh token'
+	},
+	{
+		route: '/oauth2/signout',
+		method: 'DELETE',
+		description: 'Sign out user and clear session'
+	}
+];
+
+export const AuthRoutesTable = ({ themeSprings }: ThemeProps) => (
+	<div style={tableContainerStyle}>
+		<animated.table style={tableStyle(themeSprings)}>
+			<thead>
+				<tr>
+					<animated.th style={tableHeaderStyle(themeSprings)}>
+						Route
+					</animated.th>
+					<animated.th style={tableHeaderStyle(themeSprings)}>
+						Method
+					</animated.th>
+					<animated.th style={tableHeaderStyle(themeSprings)}>
+						Description
+					</animated.th>
+				</tr>
+			</thead>
+			<tbody>
+				{routes.map((route, index) => (
+					<tr key={index}>
+						<animated.td style={tableCellStyle(themeSprings)}>
+							<code style={tableCodeStyle}>{route.route}</code>
+						</animated.td>
+						<animated.td style={tableCellStyle(themeSprings)}>
+							<span
+								style={{
+									background:
+										route.method === 'GET'
+											? 'rgba(76, 175, 80, 0.2)'
+											: route.method === 'POST'
+												? 'rgba(33, 150, 243, 0.2)'
+												: 'rgba(244, 67, 54, 0.2)',
+									borderRadius: '0.25rem',
+									color:
+										route.method === 'GET'
+											? '#4CAF50'
+											: route.method === 'POST'
+												? '#2196F3'
+												: '#F44336',
+									fontFamily: 'monospace',
+									fontSize: '0.8rem',
+									fontWeight: 600,
+									padding: '0.2rem 0.5rem'
+								}}
+							>
+								{route.method}
+							</span>
+						</animated.td>
+						<animated.td style={tableCellStyle(themeSprings)}>
+							{route.description}
+						</animated.td>
+					</tr>
+				))}
+			</tbody>
+		</animated.table>
+	</div>
 );

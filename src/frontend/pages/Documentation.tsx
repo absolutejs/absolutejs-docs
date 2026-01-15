@@ -1,11 +1,14 @@
-import { animated } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import { DocsView } from '../../types/types';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
+import { MobileSidebar } from '../components/sidebar/MobileSidebar';
+import { MobileSidebarToggle } from '../components/sidebar/MobileSidebarToggle';
 import { Sidebar } from '../components/sidebar/Sidebar';
 import { docsViews } from '../data/sidebarData';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
@@ -18,6 +21,17 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 	const { user, handleSignOut } = useAuthStatus();
 	const [themeSprings, setTheme] = useTheme(theme);
 	const [view, navigateToView] = useDocsNavigation(initialView);
+	const { isSizeOrLess } = useMediaQuery();
+	const isMobile = isSizeOrLess('md');
+
+	const [sidebarSpring, sidebarSpringApi] = useSpring(() => ({
+		config: { friction: 40, tension: 275 },
+		transform: 'translateX(-100%)'
+	}));
+
+	const toggleSidebar = () => {
+		void sidebarSpringApi.start({ transform: 'translateX(0%)' });
+	};
 
 	const ActiveView = docsViews[view];
 
@@ -40,12 +54,34 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 							overflow: 'hidden'
 						}}
 					>
-						<Sidebar
-							view={view}
+						{isMobile ? (
+							<>
+								<MobileSidebarToggle
+									onToggle={toggleSidebar}
+									themeSprings={themeSprings}
+								/>
+								<MobileSidebar
+									spring={sidebarSpring}
+									springApi={sidebarSpringApi}
+									view={view}
+									themeSprings={themeSprings}
+									navigateToView={navigateToView}
+								/>
+							</>
+						) : (
+							<Sidebar
+								view={view}
+								themeSprings={themeSprings}
+								navigateToView={navigateToView}
+							/>
+						)}
+						<ActiveView
 							themeSprings={themeSprings}
-							navigateToView={navigateToView}
+							currentPageId={view}
+							onNavigate={(pageId) =>
+								navigateToView(pageId as DocsView)
+							}
 						/>
-						<ActiveView themeSprings={themeSprings} />
 					</div>
 				</main>
 			</animated.body>

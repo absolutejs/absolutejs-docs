@@ -108,3 +108,63 @@ export const tocLinkStyle = (
 	textDecoration: 'none',
 	wordBreak: 'break-word'
 });
+
+// Table Styles for Props/Config
+export const tableContainerStyle: CSSProperties = {
+	marginBottom: '1.5rem',
+	marginTop: '1rem',
+	overflowX: 'auto',
+	width: '100%'
+};
+
+export const tableStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	background: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark') ? 'rgba(30,30,46,0.5)' : 'rgba(255,255,255,0.8)'
+	),
+	border: themeSprings.themeTertiary.to((color) => `1px solid ${color}`),
+	borderCollapse: 'collapse',
+	borderRadius: '0.5rem',
+	fontSize: '0.95rem',
+	overflow: 'hidden',
+	width: '100%'
+});
+
+export const tableHeaderStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	background: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? 'rgba(160,231,229,0.1)'
+			: 'rgba(160,231,229,0.15)'
+	),
+	borderBottom: themeSprings.themeTertiary.to(
+		(color) => `2px solid ${color}`
+	),
+	color: themeSprings.contrastPrimary,
+	fontSize: '0.875rem',
+	fontWeight: '600',
+	letterSpacing: '0.025em',
+	padding: '0.875rem 1rem',
+	textAlign: 'left',
+	textTransform: 'uppercase'
+});
+
+export const tableCellStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	borderBottom: themeSprings.themeTertiary.to(
+		(color) => `1px solid ${color}`
+	),
+	padding: '0.875rem 1rem',
+	verticalAlign: 'top'
+});
+
+export const tableCodeStyle: CSSProperties = {
+	background: 'rgba(160,231,229,0.1)',
+	borderRadius: '0.25rem',
+	fontFamily: 'monospace',
+	fontSize: '0.875rem',
+	padding: '0.2rem 0.5rem'
+};

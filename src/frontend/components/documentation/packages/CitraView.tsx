@@ -1,5 +1,6 @@
 import { animated } from '@react-spring/web';
-import { ThemeProps } from '../../../../types/springTypes';
+import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsNavigation } from '../DocsNavigation';
 import {
 	buildingAuthUrl,
 	callback,
@@ -13,34 +14,39 @@ import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	mainContentStyle,
 	h1Style,
-	paragraphStyle,
 	sectionStyle,
-	headingStyle,
 	paragraphLargeStyle,
 	strongStyle,
 	paragraphSpacedStyle,
-	listItemStyle,
-	listStyle
+	tableContainerStyle,
+	tableStyle,
+	tableHeaderStyle,
+	tableCellStyle
 } from '../../../styles/docsStyles';
+import {
+	gradientHeadingStyle,
+	heroGradientStyle,
+	featureCardStyle
+} from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
-	{ href: '#introduction', label: 'Introduction' },
 	{ href: '#why-citra', label: 'Why Citra?' },
 	{ href: '#installation', label: 'Installation' },
 	{ href: '#getting-started', label: 'Getting Started' },
-	{ href: '#building-auth-url', label: 'Building the Authorization URL' },
-	{ href: '#handling-callback', label: 'Handling the Callback' },
-	{ href: '#fetching-user-profile', label: 'Fetching the User Profile' },
-	{
-		href: '#refreshing-revoking-tokens',
-		label: 'Refreshing and Revoking Tokens'
-	},
+	{ href: '#building-auth-url', label: 'Authorization URL' },
+	{ href: '#handling-callback', label: 'Handling Callback' },
+	{ href: '#fetching-user-profile', label: 'User Profile' },
+	{ href: '#refreshing-revoking-tokens', label: 'Token Management' },
 	{ href: '#supported-providers', label: 'Supported Providers' }
 ];
 
-export const CitraView = ({ themeSprings }: ThemeProps) => {
+export const CitraView = ({
+	currentPageId,
+	onNavigate,
+	themeSprings
+}: DocsViewProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
 
@@ -57,46 +63,67 @@ export const CitraView = ({ themeSprings }: ThemeProps) => {
 				position: 'relative'
 			}}
 		>
-			{/* Main Content - Centered */}
 			<div style={mainContentStyle}>
-				<h1 style={h1Style} id="citra">
-					Citra
-				</h1>
-				<section style={sectionStyle}>
-					<animated.h2
-						style={headingStyle(themeSprings)}
-						id="introduction"
-					>
-						Introduction
-					</animated.h2>
+				<animated.div style={heroGradientStyle(themeSprings)}>
+					<h1 style={h1Style} id="citra">
+						Citra
+					</h1>
 					<p style={paragraphLargeStyle}>
-						Citra is a curated collection of OAuth 2.0 provider
+						A curated collection of OAuth 2.0 provider
 						configurations, each bundled with the correct endpoints
-						and request details. It provides a ready-to-use
-						foundation for integrating secure authentication into
-						JavaScript and TypeScript applications.
+						and request details. Ready-to-use foundation for secure
+						authentication in TypeScript applications.
 					</p>
-				</section>
+				</animated.div>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="why-citra"
 					>
 						Why Citra?
 					</animated.h2>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Interchangeability</strong>:
-						All OAuth 2.0 providers follow the same authorization
-						flow, and Citra abstracts this process into a unified
-						interface.
-					</p>
-					<p style={paragraphStyle}>
-						<strong style={strongStyle}>Type Safety</strong>:
-						Leverage TypeScript generics and type guards to catch
-						configuration mistakes at compile time.
-					</p>
-					<p style={paragraphStyle}>
+					<div
+						style={{
+							display: 'grid',
+							gap: '1rem',
+							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+							marginBottom: '1.5rem',
+							marginTop: '1rem'
+						}}
+					>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									Interchangeability
+								</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								All OAuth 2.0 providers follow the same flow.
+								Citra abstracts this into a unified interface.
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p
+								style={{
+									...paragraphSpacedStyle,
+									marginBottom: '0.5rem'
+								}}
+							>
+								<strong style={strongStyle}>Type Safety</strong>
+							</p>
+							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+								TypeScript generics and type guards catch
+								configuration mistakes at compile time.
+							</p>
+						</animated.div>
+					</div>
+					<p style={paragraphSpacedStyle}>
 						Inspired by Arctic, Citra reduces boilerplate and
 						minimizes integration errors by enforcing a uniform
 						configuration approach.
@@ -105,13 +132,14 @@ export const CitraView = ({ themeSprings }: ThemeProps) => {
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="installation"
 					>
 						Installation
 					</animated.h2>
 					<PrismPlus
 						codeString={`bun install citra`}
+						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
@@ -119,68 +147,69 @@ export const CitraView = ({ themeSprings }: ThemeProps) => {
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="getting-started"
 					>
 						Getting Started
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
 						Citra uses strong TypeScript typing to help you build
-						OAuth clients safely and correctly. Each supported
-						provider includes its own typed configuration schema,
-						ensuring you can't accidentally pass unsupported
-						parameters or omit required ones.
+						OAuth clients safely. Each provider includes its own
+						typed configuration schema, ensuring you can't pass
+						unsupported parameters or omit required ones.
 					</p>
 					<PrismPlus
 						codeString={gettingStarted}
-						showLineNumbers={false}
+						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="building-auth-url"
 					>
 						Building the Authorization URL
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Once your client is initialized, you can generate a
-						fully customized authorization URL for redirecting users
-						to the provider's login page. Every option is strongly
-						typed and context-aware, but you retain full control
-						over advanced parameters like PKCE, scopes, and
-						provider-specific query strings.
+						Generate a fully customized authorization URL for
+						redirecting users to the provider's login page. Every
+						option is strongly typed and context-aware, with full
+						control over PKCE, scopes, and provider-specific
+						parameters.
 					</p>
 					<PrismPlus
 						codeString={buildingAuthUrl}
-						showLineNumbers={false}
+						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="handling-callback"
 					>
 						Handling the Callback
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
-						Exchange the code and verifier for an
-						OAuth2TokenResponse:
+						Exchange the authorization code and PKCE verifier for an
+						OAuth2 token response:
 					</p>
 					<PrismPlus
 						codeString={callback}
-						showLineNumbers={false}
+						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="fetching-user-profile"
 					>
 						Fetching the User Profile
@@ -190,17 +219,18 @@ export const CitraView = ({ themeSprings }: ThemeProps) => {
 					</p>
 					<PrismPlus
 						codeString={fetchUserProfile}
-						showLineNumbers={false}
+						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="refreshing-revoking-tokens"
 					>
-						Refreshing and Revoking Tokens
+						Token Management
 					</animated.h2>
 					<p style={paragraphSpacedStyle}>
 						If supported by the provider, you can refresh and revoke
@@ -208,47 +238,81 @@ export const CitraView = ({ themeSprings }: ThemeProps) => {
 					</p>
 					<PrismPlus
 						codeString={refreshAccessToken}
-						showLineNumbers={false}
+						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus
 						codeString={revokeToken}
-						showLineNumbers={false}
+						language="typescript"
+						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<animated.h2
-						style={headingStyle(themeSprings)}
+						style={gradientHeadingStyle(themeSprings)}
 						id="supported-providers"
 					>
 						Supported Providers
 					</animated.h2>
-					<p style={paragraphStyle}>
-						Citra supports {providersCount} OAuth 2.0 providers
-						including:
+					<p style={paragraphSpacedStyle}>
+						Citra supports {providersCount} OAuth 2.0 providers:
 					</p>
-					<ul style={listStyle}>
+					<div
+						style={{
+							display: 'grid',
+							gap: '0.75rem',
+							gridTemplateColumns: isMobile
+								? 'repeat(2, 1fr)'
+								: 'repeat(auto-fill, minmax(180px, 1fr))',
+							marginTop: '1rem'
+						}}
+					>
 						{providers.map((provider) => (
-							<li key={provider.name} style={listItemStyle}>
-								{provider.name}
-							</li>
+							<animated.div
+								key={provider.name}
+								style={{
+									...featureCardStyle(themeSprings),
+									alignItems: 'center',
+									display: 'flex',
+									gap: '0.75rem',
+									padding: '0.75rem 1rem'
+								}}
+							>
+								<img
+									src={provider.logoUrl}
+									alt={`${provider.name} logo`}
+									style={{
+										borderRadius: '4px',
+										flexShrink: 0,
+										height: '24px',
+										objectFit: 'contain',
+										width: '24px'
+									}}
+								/>
+								<span
+									style={{
+										fontSize: '0.9rem',
+										fontWeight: 500,
+										overflow: 'hidden',
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap'
+									}}
+								>
+									{provider.name}
+								</span>
+							</animated.div>
 						))}
-					</ul>
+					</div>
 				</section>
 
-				{/* <section>
-			<h2>Type Safety</h2>
-			<p>Citra provides comprehensive TypeScript definitions:</p>
-			<ul>
-				<li><strong>PKCEProvider</strong>: Providers with PKCE support</li>
-				<li><strong>OIDCProvider</strong>: Providers with OpenID Connect</li>
-				<li><strong>RefreshableProvider</strong>: Providers supporting token refresh</li>
-				<li><strong>RevocableProvider</strong>: Providers supporting token revocation</li>
-				<li><strong>ScopeRequiredProvider</strong>: Providers requiring explicit scopes</li>
-			</ul>
-		</section> */}
+				<DocsNavigation
+					currentPageId={currentPageId}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 			</div>
 
 			{!isMobile && (
