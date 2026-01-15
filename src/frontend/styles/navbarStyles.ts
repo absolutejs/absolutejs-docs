@@ -70,20 +70,24 @@ export const getNavbarDropdownListStyle = (
 	},
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
-	backgroundColor: themeSprings.themeTertiary,
-	borderRadius: '10px',
-	boxShadow: `0 4px 8px rgba(0, 0, 0, 0.1)`,
+	backgroundColor: themeSprings.themePrimary,
+	borderRadius: '12px',
+	boxShadow: `0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1)`,
+	display: 'flex',
+	flexDirection: 'column',
+	gap: '4px',
 	height: dropdownSpring.height,
-	left: 0,
-	maxWidth: '250px',
+	left: '50%',
+	marginLeft: '-80px',
+	minWidth: '160px',
 	opacity: dropdownSpring.opacity,
 	overflow: 'hidden',
-	padding: '0.5rem 1rem',
+	padding: '8px',
 	pointerEvents: dropdownSpring.opacity.to((opacity) =>
 		opacity > 0 ? 'auto' : 'none'
 	),
 	position: 'absolute',
-	top: '100%',
+	top: 'calc(100% + 8px)',
 	whiteSpace: 'nowrap',
 	width: 'auto'
 });

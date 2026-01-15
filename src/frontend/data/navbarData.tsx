@@ -6,9 +6,13 @@ export const navbarData: NavbarElement[] = [
 		label: 'Documentation'
 	},
 	{
-		href: '/documentation/packages',
-		label: 'Packages',
+		href: '/documentation',
+		label: 'Ecosystem',
 		links: [
+			{
+				href: '/documentation/packages/absolute',
+				label: 'Absolute'
+			},
 			{
 				href: '/documentation/packages/auth',
 				label: 'Auth'
@@ -23,7 +27,7 @@ export const navbarData: NavbarElement[] = [
 			},
 			{
 				href: '/documentation/packages/eslint',
-				label: 'Eslint'
+				label: 'ESLint'
 			}
 		]
 	},
