@@ -8,7 +8,7 @@ export const heroGradientStyle = (
 	background: themeSprings.theme.to((theme) =>
 		theme.endsWith('dark')
 			? 'linear-gradient(135deg, rgba(160,231,229,0.12) 0%, rgba(180,248,200,0.08) 30%, transparent 60%)'
-			: 'linear-gradient(135deg, rgba(160,231,229,0.18) 0%, rgba(180,248,200,0.12) 30%, transparent 60%)'
+			: 'linear-gradient(135deg, rgba(13,148,136,0.12) 0%, rgba(5,150,105,0.08) 30%, transparent 60%)'
 	),
 	borderRadius: '1rem',
 	marginBottom: '2rem',
@@ -22,9 +22,13 @@ export const gradientHeadingStyle = (
 	background: themeSprings.theme.to((theme) =>
 		theme.endsWith('dark')
 			? 'linear-gradient(90deg, rgba(160,231,229,0.08) 0%, transparent 40%)'
-			: 'linear-gradient(90deg, rgba(160,231,229,0.12) 0%, transparent 40%)'
+			: 'linear-gradient(90deg, rgba(13,148,136,0.08) 0%, transparent 40%)'
 	),
-	borderLeft: `3px solid ${primaryColor}`,
+	borderLeft: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? `3px solid ${primaryColor}`
+			: '3px solid #0D9488'
+	),
 	borderTop: 'none',
 	fontSize: subheading ? '1.5rem' : '1.875rem',
 	fontWeight: '600',
@@ -35,7 +39,7 @@ export const gradientHeadingStyle = (
 });
 
 export const gradientTextStyle: CSSProperties = {
-	background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
+	background: `linear-gradient(135deg, #14B8A6 0%, #10B981 100%)`,
 	backgroundClip: 'text',
 	WebkitBackgroundClip: 'text',
 	WebkitTextFillColor: 'transparent'
@@ -93,7 +97,7 @@ export const featureCardStyle = (
 	background: themeSprings.theme.to((theme) =>
 		theme.endsWith('dark')
 			? 'linear-gradient(145deg, rgba(160,231,229,0.05) 0%, rgba(30,30,46,0.8) 100%)'
-			: 'linear-gradient(145deg, rgba(160,231,229,0.08) 0%, rgba(255,255,255,0.95) 100%)'
+			: 'linear-gradient(145deg, rgba(13,148,136,0.06) 0%, rgba(255,255,255,0.95) 100%)'
 	),
 	border: themeSprings.themeTertiary.to((color) => `1px solid ${color}`),
 	borderRadius: '0.75rem',

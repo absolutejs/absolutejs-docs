@@ -64,7 +64,7 @@ const directionLabelStyle: CSSProperties = {
 };
 
 const pageLabelStyle = (themeSprings: ThemeSprings) => ({
-	color: themeSprings.themeSecondary,
+	color: themeSprings.contrastPrimary,
 	fontSize: '1rem',
 	fontWeight: 600
 });

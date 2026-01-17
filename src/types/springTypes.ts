@@ -15,6 +15,9 @@ export type ThemeProps = {
 export type DocsViewProps = ThemeProps & {
 	currentPageId: string;
 	onNavigate: (pageId: string) => void;
+	tocOpen?: boolean;
+	onTocToggle?: () => void;
+	isMobileOrTablet?: boolean;
 };
 
 export type SidebarLinksSprings = ReturnType<

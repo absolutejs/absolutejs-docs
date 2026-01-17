@@ -18,7 +18,6 @@ export const MobileSidebarToggle = ({
 			backgroundColor: themeSprings.themeTertiary,
 			border: 'none',
 			borderRadius: '50%',
-			bottom: '1.5rem',
 			boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
 			color: themeSprings.contrastPrimary,
 			cursor: 'pointer',
@@ -27,6 +26,7 @@ export const MobileSidebarToggle = ({
 			justifyContent: 'center',
 			left: '1.5rem',
 			position: 'fixed',
+			top: '6rem',
 			width: '56px',
 			zIndex: 9999
 		}}

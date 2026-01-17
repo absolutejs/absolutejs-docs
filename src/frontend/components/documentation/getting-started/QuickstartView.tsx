@@ -23,6 +23,7 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { primaryColor } from '../../../styles/colors';
@@ -38,10 +39,14 @@ const tocItems: TocItem[] = [
 export const QuickstartView = ({
 	currentPageId,
 	onNavigate,
-	themeSprings
+	themeSprings,
+	tocOpen,
+	onTocToggle,
+	isMobileOrTablet
 }: DocsViewProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
+	const showDesktopToc = !isMobileOrTablet;
 
 	return (
 		<div
@@ -213,8 +218,17 @@ export const QuickstartView = ({
 				/>
 			</div>
 
-			{!isMobile && (
+			{showDesktopToc && (
 				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+			)}
+
+			{isMobileOrTablet && onTocToggle && (
+				<MobileTableOfContents
+					themeSprings={themeSprings}
+					items={tocItems}
+					isOpen={tocOpen ?? false}
+					onToggle={onTocToggle}
+				/>
 			)}
 		</div>
 	);

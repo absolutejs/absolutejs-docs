@@ -25,6 +25,7 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
@@ -39,10 +40,14 @@ const tocItems: TocItem[] = [
 export const VueView = ({
 	currentPageId,
 	onNavigate,
-	themeSprings
+	themeSprings,
+	tocOpen,
+	onTocToggle,
+	isMobileOrTablet
 }: DocsViewProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
+	const showDesktopToc = !isMobileOrTablet;
 
 	return (
 		<div
@@ -234,8 +239,16 @@ export const VueView = ({
 				/>
 			</div>
 
-			{!isMobile && (
+			{showDesktopToc && (
 				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+			)}
+			{isMobileOrTablet && onTocToggle && (
+				<MobileTableOfContents
+					themeSprings={themeSprings}
+					items={tocItems}
+					isOpen={tocOpen ?? false}
+					onToggle={onTocToggle}
+				/>
 			)}
 		</div>
 	);

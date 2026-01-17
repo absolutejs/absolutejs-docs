@@ -7,7 +7,7 @@ export const mainContentStyle: CSSProperties = {
 	flexDirection: 'column',
 	lineHeight: '1.7',
 	margin: '0 auto',
-	maxWidth: '60%',
+	maxWidth: '75%',
 	padding: '2rem 0',
 	paddingRight: '4rem'
 };

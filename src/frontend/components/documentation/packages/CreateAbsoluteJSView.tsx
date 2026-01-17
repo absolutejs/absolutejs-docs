@@ -21,6 +21,7 @@ import {
 	featureCardStyle
 } from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
@@ -180,10 +181,14 @@ const cliOptions = [
 export const CreateAbsoluteJSView = ({
 	currentPageId,
 	onNavigate,
-	themeSprings
+	themeSprings,
+	tocOpen,
+	onTocToggle,
+	isMobileOrTablet
 }: DocsViewProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
+	const showDesktopToc = !isMobileOrTablet;
 
 	return (
 		<div
@@ -535,8 +540,16 @@ export const CreateAbsoluteJSView = ({
 					themeSprings={themeSprings}
 				/>
 			</div>
-			{!isMobile && (
+			{showDesktopToc && (
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
+			)}
+			{isMobileOrTablet && onTocToggle && (
+				<MobileTableOfContents
+					themeSprings={themeSprings}
+					items={tocItems}
+					isOpen={tocOpen ?? false}
+					onToggle={onTocToggle}
+				/>
 			)}
 		</div>
 	);

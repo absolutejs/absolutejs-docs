@@ -9,6 +9,7 @@ import {
 	paragraphLargeStyle
 } from '../../../../styles/docsStyles';
 import { heroGradientStyle } from '../../../../styles/gradientStyles';
+import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { EslintSection } from './EslintSection';
 
@@ -20,10 +21,14 @@ const tocItems: TocItem[] = eslintDocsData.map((section) => ({
 export const EslintView = ({
 	currentPageId,
 	onNavigate,
-	themeSprings
+	themeSprings,
+	tocOpen,
+	onTocToggle,
+	isMobileOrTablet
 }: DocsViewProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
+	const showDesktopToc = !isMobileOrTablet;
 
 	return (
 		<div
@@ -62,8 +67,16 @@ export const EslintView = ({
 				/>
 			</div>
 
-			{!isMobile && (
+			{showDesktopToc && (
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
+			)}
+			{isMobileOrTablet && onTocToggle && (
+				<MobileTableOfContents
+					themeSprings={themeSprings}
+					items={tocItems}
+					isOpen={tocOpen ?? false}
+					onToggle={onTocToggle}
+				/>
 			)}
 		</div>
 	);

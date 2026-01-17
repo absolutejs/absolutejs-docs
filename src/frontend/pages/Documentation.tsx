@@ -1,4 +1,5 @@
 import { animated, useSpring } from '@react-spring/web';
+import { useState } from 'react';
 import { DocsView } from '../../types/types';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
@@ -23,14 +24,22 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 	const [view, navigateToView] = useDocsNavigation(initialView);
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('md');
+	const isTablet = isSizeOrLess('lg') && !isMobile;
+	const isMobileOrTablet = isMobile || isTablet;
 
 	const [sidebarSpring, sidebarSpringApi] = useSpring(() => ({
 		config: { friction: 40, tension: 275 },
 		transform: 'translateX(-100%)'
 	}));
 
+	const [tocOpen, setTocOpen] = useState(false);
+
 	const toggleSidebar = () => {
 		void sidebarSpringApi.start({ transform: 'translateX(0%)' });
+	};
+
+	const toggleToc = () => {
+		setTocOpen((prev) => !prev);
 	};
 
 	const ActiveView = docsViews[view];
@@ -81,6 +90,9 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 							onNavigate={(pageId) =>
 								navigateToView(pageId as DocsView)
 							}
+							tocOpen={tocOpen}
+							onTocToggle={toggleToc}
+							isMobileOrTablet={isMobileOrTablet}
 						/>
 					</div>
 				</main>
