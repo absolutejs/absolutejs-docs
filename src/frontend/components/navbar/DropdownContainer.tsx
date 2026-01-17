@@ -6,8 +6,9 @@ type DropdownContainerProps = {
 	spring: {
 		opacity: SpringValue<number>;
 		scale: SpringValue<number>;
+		y: SpringValue<number>;
 	};
-	springApi: SpringRef<{ opacity: number; scale: number }>;
+	springApi: SpringRef<{ opacity: number; scale: number; y: number }>;
 	onClose?: () => void;
 	children?: ReactNode;
 	ignoredElements?: RefObject<HTMLElement | null>[];
@@ -38,8 +39,13 @@ export const DropdownContainer = ({
 				dropdownRef.current &&
 				!dropdownRef.current.contains(event.target)
 			) {
-				void springApi.start({ opacity: 0, scale: 0 });
-				onClose?.();
+				void springApi.start({
+					config: { friction: 26, tension: 350 },
+					opacity: 0,
+					scale: 0.95,
+					y: -10
+				});
+				setTimeout(() => onClose?.(), 150);
 			}
 		};
 
@@ -55,14 +61,17 @@ export const DropdownContainer = ({
 			ref={dropdownRef}
 			style={{
 				backgroundColor: themeSprings.themePrimary,
-				borderRadius: '12px',
-				boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-				marginTop: '2.25rem',
+				border: '1px solid rgba(128, 128, 128, 0.15)',
+				borderRadius: '16px',
+				boxShadow:
+					'0 12px 40px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.12)',
 				opacity: spring.opacity,
 				position: 'absolute',
 				right: 0,
 				scale: spring.scale,
-				top: '100%',
+				top: 'calc(100% + 12px)',
+				transform: spring.y.to((y) => `translateY(${y}px)`),
+				transformOrigin: 'top right',
 				zIndex: 999
 			}}
 		>

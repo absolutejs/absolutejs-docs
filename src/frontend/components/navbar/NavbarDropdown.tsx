@@ -1,5 +1,5 @@
 import { animated, useSpring } from '@react-spring/web';
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import { ThemeSprings } from '../../../types/springTypes';
 import { NavbarLink as NavbarLinkType } from '../../../types/types';
@@ -17,7 +17,40 @@ type NavbarDropdownProps = {
 	themeSprings: ThemeSprings;
 };
 
+type DropdownItemProps = {
+	href: string;
+	icon?: ReactNode;
+	label: string;
+	themeSprings: ThemeSprings;
+};
+
 const AnimatedFaChevronDown = animated(FaChevronDown);
+
+const DropdownItem = ({
+	href,
+	icon,
+	label,
+	themeSprings
+}: DropdownItemProps) => {
+	const [isHovered, setIsHovered] = useState(false);
+
+	return (
+		<animated.a
+			href={href}
+			onMouseEnter={() => setIsHovered(true)}
+			onMouseLeave={() => setIsHovered(false)}
+			style={{
+				...dropdownItemStyle(themeSprings),
+				backgroundColor: isHovered
+					? themeSprings.themeTertiary
+					: 'transparent'
+			}}
+		>
+			{icon}
+			{label}
+		</animated.a>
+	);
+};
 
 export const NavbarDropdown = ({
 	label,
@@ -86,14 +119,13 @@ export const NavbarDropdown = ({
 				style={getNavbarDropdownListStyle(dropdownSpring, themeSprings)}
 			>
 				{links.map((link, index) => (
-					<animated.a
+					<DropdownItem
 						key={index}
 						href={link.href}
-						style={dropdownItemStyle(themeSprings)}
-					>
-						{link.icon}
-						{link.label}
-					</animated.a>
+						icon={link.icon}
+						label={link.label}
+						themeSprings={themeSprings}
+					/>
 				))}
 			</animated.nav>
 		</div>

@@ -1,80 +1,118 @@
 import { ProviderOption } from '@absolutejs/auth';
-import { animated } from '@react-spring/web';
+import { animated, useSpring } from '@react-spring/web';
 import { useState } from 'react';
-import { ThemeProps } from '../../../types/springTypes';
+import { ThemeProps, ThemeSprings } from '../../../types/springTypes';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
-import {
-	containerStyle,
-	headingStyle,
-	loginTextStyle,
-	loginLinkTextStyle
-} from '../../styles/authModalStyles';
 import { Divider } from '../utils/Divider';
 import { ProviderDropdown } from '../utils/ProviderDropdown';
 import { OAuthLink } from './OAuthLink';
 
+type SignupLinkProps = {
+	themeSprings: ThemeSprings;
+};
+
+const SignupLink = ({ themeSprings }: SignupLinkProps) => {
+	const [hoverSpring, hoverApi] = useSpring(() => ({
+		config: { friction: 20, tension: 300 },
+		opacity: 0
+	}));
+
+	return (
+		<animated.p
+			style={{
+				color: themeSprings.contrastSecondary,
+				fontSize: '0.875rem',
+				marginTop: '8px',
+				textAlign: 'center'
+			}}
+		>
+			{"Don't have an account? "}
+			<animated.a
+				href="/signup"
+				onMouseEnter={() => hoverApi.start({ opacity: 1 })}
+				onMouseLeave={() => hoverApi.start({ opacity: 0 })}
+				style={{
+					color: themeSprings.contrastPrimary,
+					fontSize: '0.875rem',
+					fontWeight: 600,
+					opacity: hoverSpring.opacity.to((o) => 0.7 + o * 0.3),
+					textDecoration: 'underline'
+				}}
+			>
+				Sign up
+			</animated.a>
+		</animated.p>
+	);
+};
+
 export const AuthContainer = ({ themeSprings }: ThemeProps) => {
 	const [currentProvider, setCurrentProvider] =
 		useState<Lowercase<ProviderOption>>();
-	const [mode, setMode] = useState<'login' | 'signup'>('login');
-	const switchMode = () => {
-		setMode((prev) => (prev === 'login' ? 'signup' : 'login'));
-	};
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
 
 	return (
-		<div style={containerStyle(isMobile)}>
-			<animated.a
-				href="/"
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				padding: isMobile ? '24px 20px' : '32px 36px',
+				width: isMobile ? '320px' : '420px'
+			}}
+		>
+			<animated.h1
 				style={{
 					color: themeSprings.contrastPrimary,
 					fontSize: '1.5rem',
-					fontWeight: 'bold',
-					textDecoration: 'none'
+					fontWeight: 600,
+					marginBottom: '24px',
+					textAlign: 'center'
 				}}
 			>
-				AbsoluteJS
-			</animated.a>
-			<h1 style={headingStyle}>
-				{mode === 'login'
-					? 'Sign in to your Account'
-					: 'Create an account'}
-			</h1>
+				Welcome Back
+			</animated.h1>
 
-			<OAuthLink
-				mode={mode}
-				provider="google"
-				themeSprings={themeSprings}
-			/>
-			<OAuthLink
-				mode={mode}
-				provider="github"
-				themeSprings={themeSprings}
-			/>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '12px'
+				}}
+			>
+				<OAuthLink
+					mode="login"
+					provider="google"
+					themeSprings={themeSprings}
+				/>
+				<OAuthLink
+					mode="login"
+					provider="github"
+					themeSprings={themeSprings}
+				/>
+			</div>
 
-			<Divider text="or" />
+			<Divider text="or continue with" />
 
-			<ProviderDropdown
-				setCurrentProvider={setCurrentProvider}
-				themeSprings={themeSprings}
-			/>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '12px'
+				}}
+			>
+				<ProviderDropdown
+					setCurrentProvider={setCurrentProvider}
+					themeSprings={themeSprings}
+				/>
 
-			<OAuthLink
-				mode={mode}
-				provider={currentProvider}
-				themeSprings={themeSprings}
-			/>
+				<OAuthLink
+					mode="login"
+					provider={currentProvider}
+					themeSprings={themeSprings}
+				/>
+			</div>
 
-			<animated.p style={loginTextStyle(themeSprings)}>
-				{mode === 'login' ? 'Need an account? ' : 'Have an account? '}
-				<animated.button
-					style={loginLinkTextStyle(themeSprings)}
-					onClick={switchMode}
-				>
-					{mode === 'login' ? 'Sign Up' : 'Sign In'}
-				</animated.button>
-			</animated.p>
+			<SignupLink themeSprings={themeSprings} />
 		</div>
 	);
 };

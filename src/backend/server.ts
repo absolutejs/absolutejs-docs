@@ -13,6 +13,7 @@ import { schema, User } from '../../db/schema';
 import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { Documentation } from '../frontend/pages/Documentation';
 import { Home } from '../frontend/pages/Home';
+import { Signup } from '../frontend/pages/Signup';
 import { docsViewEnum, themeCookie } from '../types/typebox';
 import { providerPlugin } from './plugins/providerPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
@@ -44,6 +45,14 @@ const server = new Elysia()
 		'/',
 		({ cookie: { theme } }) =>
 			handleReactPageRequest(Home, asset(manifest, 'HomeIndex'), {
+				theme: theme?.value
+			}),
+		{ cookie: themeCookie }
+	)
+	.get(
+		'/signup',
+		({ cookie: { theme } }) =>
+			handleReactPageRequest(Signup, asset(manifest, 'SignupIndex'), {
 				theme: theme?.value
 			}),
 		{ cookie: themeCookie }

@@ -9,12 +9,14 @@ export const PerformanceArticle = ({ themeSprings }: ThemeProps) => (
 			style={{
 				alignItems: 'center',
 				background: themeSprings.themeTertiary,
+				border: '1px solid rgba(128, 128, 128, 0.12)',
 				borderRadius: '24px',
 				boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
 				display: 'flex',
 				flexDirection: 'column',
 				gap: '2rem',
-				maxWidth: '900px',
+				maxWidth: '1200px',
+				overflow: 'hidden',
 				padding: '3rem 2rem',
 				position: 'relative',
 				width: '100%'

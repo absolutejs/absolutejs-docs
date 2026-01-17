@@ -14,7 +14,7 @@ export const LegendKey = ({ status, message }: LegendData) => {
 					alignItems: 'center',
 					display: 'flex',
 					justifyContent: 'flex-start',
-					margin: '8px auto',
+					margin: '12px auto',
 					maxWidth: 600,
 					width: '80%'
 				}}
@@ -42,7 +42,7 @@ export const LegendKey = ({ status, message }: LegendData) => {
 				alignItems: 'center',
 				display: 'flex',
 				flexDirection: 'column',
-				margin: '8px auto',
+				margin: '12px auto',
 				width: '90%'
 			}}
 		>

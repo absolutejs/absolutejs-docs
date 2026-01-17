@@ -10,23 +10,19 @@ export const navbarData: NavbarElement[] = [
 		label: 'Ecosystem',
 		links: [
 			{
-				href: '/documentation/packages/absolute',
-				label: 'Absolute'
-			},
-			{
-				href: '/documentation/packages/auth',
+				href: '/documentation/absolute-auth',
 				label: 'Auth'
 			},
 			{
-				href: '/documentation/packages/citra',
+				href: '/documentation/citra',
 				label: 'Citra'
 			},
 			{
-				href: '/documentation/packages/create',
+				href: '/documentation/create-absolutejs',
 				label: 'Create'
 			},
 			{
-				href: '/documentation/packages/eslint',
+				href: '/documentation/eslint',
 				label: 'ESLint'
 			}
 		]

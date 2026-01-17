@@ -8,7 +8,8 @@ import {
 	oauthButtonStyle,
 	oauthButtonContentStyle,
 	oauthIconStyle,
-	oauthButtonTextStyle
+	oauthButtonTextStyle,
+	DARK_LOGO_PROVIDERS
 } from '../../styles/authModalStyles';
 
 type OAuthButtonProps = {
@@ -60,13 +61,22 @@ export const OAuthButton = ({
 		>
 			<div style={oauthButtonContentStyle}>
 				{provider ? (
-					<img
+					<animated.img
 						src={logoUrl}
 						alt={`${name} logo`}
-						style={oauthIconStyle}
+						style={{
+							...oauthIconStyle(),
+							filter: DARK_LOGO_PROVIDERS.has(provider)
+								? themeSprings.theme.to((t) =>
+										t.endsWith('dark')
+											? 'brightness(0) invert(1)'
+											: 'none'
+									)
+								: 'none'
+						}}
 					/>
 				) : (
-					<FiUser style={oauthIconStyle} />
+					<FiUser style={oauthIconStyle()} />
 				)}
 				<span style={oauthButtonTextStyle}>{name}</span>
 			</div>

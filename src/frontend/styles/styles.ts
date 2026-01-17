@@ -72,7 +72,7 @@ export const buttonStyle = <
 	cursor: 'pointer',
 	display: 'flex',
 	fontSize: '1rem',
-	fontWeight: 'bold',
+	fontWeight: 500,
 	justifyContent: 'center',
 	margin: '0.3125rem',
 	padding: '0.625rem 1rem',

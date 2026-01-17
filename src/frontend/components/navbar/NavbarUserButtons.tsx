@@ -28,14 +28,26 @@ export const NavbarUserButtons = ({
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
 
+	const [loginDropdownSpring, loginDropdownApi] = useSpring(() => ({
+		config: { friction: 22, tension: 280 },
+		opacity: 0,
+		scale: 0.95,
+		y: -10
+	}));
+
 	const openDropdown = () => {
 		setIsDropdownOpen(true);
-		void loginDropdownApi.start({ opacity: 1, scale: 1 });
+		void loginDropdownApi.start({ opacity: 1, scale: 1, y: 0 });
 	};
 
 	const closeDropdown = () => {
-		setIsDropdownOpen(false);
-		void loginDropdownApi.start({ opacity: 0, scale: 0 });
+		void loginDropdownApi.start({
+			config: { friction: 26, tension: 350 },
+			opacity: 0,
+			scale: 0.95,
+			y: -10
+		});
+		setTimeout(() => setIsDropdownOpen(false), 150);
 	};
 
 	const handleLoginClick = () => {
@@ -46,18 +58,14 @@ export const NavbarUserButtons = ({
 		}
 	};
 
-	const [loginDropdownSpring, loginDropdownApi] = useSpring(() => ({
-		config: { friction: 20, tension: 250 },
-		opacity: 0,
-		scale: 0
-	}));
-
 	const userButtonRef = useRef<HTMLButtonElement>(null);
 
 	return (
 		<div
 			style={{
+				alignItems: 'center',
 				display: 'flex',
+				gap: '0.5rem',
 				marginLeft: '1rem',
 				position: 'relative'
 			}}
@@ -65,10 +73,16 @@ export const NavbarUserButtons = ({
 			<animated.button
 				ref={userButtonRef}
 				onClick={user ? () => handleSignOut() : handleLoginClick}
-				style={buttonStyle({
-					backgroundColor: themeSprings.themeTertiary,
-					color: themeSprings.contrastPrimary
-				})}
+				style={{
+					...buttonStyle({
+						backgroundColor: themeSprings.themeTertiary,
+						color: themeSprings.contrastPrimary
+					}),
+					border: '1px solid rgba(128, 128, 128, 0.12)',
+					borderRadius: '10px',
+					margin: 0,
+					padding: '0.5rem 1rem'
+				}}
 			>
 				{user ? 'Sign Out' : 'Login'}
 			</animated.button>

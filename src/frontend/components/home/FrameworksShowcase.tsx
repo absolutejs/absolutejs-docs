@@ -21,37 +21,37 @@ const frameworks: Framework[] = [
 		name: 'React',
 		icon: <FaReact />,
 		color: '#61DAFB',
-		href: '/documentation/frameworks/react'
+		href: '/documentation/react'
 	},
 	{
 		name: 'Vue',
 		icon: <FaVuejs />,
 		color: '#4FC08D',
-		href: '/documentation/frameworks/vue'
+		href: '/documentation/vue'
 	},
 	{
 		name: 'Svelte',
 		icon: <SiSvelte />,
 		color: '#FF3E00',
-		href: '/documentation/frameworks/svelte'
+		href: '/documentation/svelte'
 	},
 	{
 		name: 'HTML',
 		icon: <FaHtml5 />,
 		color: '#E34F26',
-		href: '/documentation/frameworks/html'
+		href: '/documentation/html'
 	},
 	{
 		name: 'HTMX',
 		icon: <SiHtmx />,
 		color: '#3D72D7',
-		href: '/documentation/frameworks/htmx'
+		href: '/documentation/htmx'
 	},
 	{
 		name: 'Angular',
 		icon: <FaAngular />,
 		color: '#DD0031',
-		href: '/documentation/frameworks/angular',
+		href: '/documentation/angular',
 		status: 'Soon'
 	}
 ];
@@ -75,8 +75,9 @@ export const FrameworksShowcase = ({ themeSprings }: ThemeProps) => (
 				flexWrap: 'wrap',
 				gap: '1.25rem',
 				justifyContent: 'center',
-				maxWidth: '900px',
-				padding: '1rem'
+				maxWidth: '1200px',
+				padding: '1rem',
+				width: '100%'
 			}}
 		>
 			{frameworks.map((framework, index) => (
@@ -86,6 +87,7 @@ export const FrameworksShowcase = ({ themeSprings }: ThemeProps) => (
 					style={{
 						alignItems: 'center',
 						background: themeSprings.themeTertiary,
+						border: '1px solid rgba(128, 128, 128, 0.12)',
 						borderRadius: '16px',
 						boxShadow: '0 4px 24px rgba(0, 0, 0, 0.06)',
 						display: 'flex',

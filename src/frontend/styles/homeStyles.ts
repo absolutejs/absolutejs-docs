@@ -58,14 +58,13 @@ export const secondaryButtonStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
-	background: 'transparent',
-	border: '2px solid',
-	borderColor: themeSprings.contrastSecondary,
+	background: themeSprings.themeTertiary,
+	border: '1px solid rgba(128, 128, 128, 0.12)',
 	borderRadius: '12px',
 	color: themeSprings.contrastPrimary,
 	display: 'inline-flex',
 	fontSize: '1rem',
-	fontWeight: 600,
+	fontWeight: 500,
 	justifyContent: 'center',
 	padding: '0.875rem 1.75rem',
 	textDecoration: 'none'
@@ -84,6 +83,7 @@ export const featureCard = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	background: themeSprings.themeTertiary,
+	border: '1px solid rgba(128, 128, 128, 0.12)',
 	borderRadius: '16px',
 	boxShadow: '0 4px 24px rgba(0, 0, 0, 0.06)',
 	display: 'flex',
@@ -125,7 +125,8 @@ export const sectionStyle: CSSProperties = {
 	alignItems: 'center',
 	display: 'flex',
 	flexDirection: 'column',
-	padding: '4rem 1rem',
+	overflow: 'hidden',
+	padding: '4rem 2rem',
 	width: '100%'
 };
 
@@ -154,17 +155,19 @@ export const showcaseCardStyle = (
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	background: themeSprings.themeTertiary,
+	border: '1px solid rgba(128, 128, 128, 0.12)',
 	borderRadius: '20px',
 	boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
 	display: 'flex',
 	flexDirection: 'column',
-	maxWidth: '900px',
+	maxWidth: '1200px',
+	overflow: 'hidden',
 	padding: '2.5rem',
 	width: '100%'
 });
 
 export const codeBlock: CSSProperties = {
-	background: '#f5f5f5',
+	background: '#F8F6F2',
 	borderRadius: '4px',
 	fontFamily: 'monospace',
 	marginTop: '1rem',

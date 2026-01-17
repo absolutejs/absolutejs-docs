@@ -104,9 +104,11 @@ export const BenchmarkChart = ({ themeSprings }: ThemeProps) => (
 		<animated.div
 			style={{
 				background: themeSprings.themeTertiary,
+				border: '1px solid rgba(128, 128, 128, 0.12)',
 				borderRadius: '20px',
 				boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
-				maxWidth: '900px',
+				maxWidth: '1200px',
+				overflow: 'hidden',
 				padding: '2rem',
 				width: '100%'
 			}}

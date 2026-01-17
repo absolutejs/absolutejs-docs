@@ -16,23 +16,50 @@ export const containerStyle = (isMobile: boolean): CSSProperties => ({
 	flexDirection: 'column',
 	justifyContent: 'center',
 	margin: '0 auto',
-	minWidth: isMobile ? '300px' : '400px',
-	padding: '20px'
+	minWidth: isMobile ? '300px' : '340px',
+	padding: '24px 28px'
 });
+
+/* eslint-disable no-magic-numbers */
+const ensureMinimumBrightness = (hex: string, minBrightness = 80): string => {
+	const r = parseInt(hex.slice(1, 3), 16);
+	const g = parseInt(hex.slice(3, 5), 16);
+	const b = parseInt(hex.slice(5, 7), 16);
+	const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+	if (brightness < minBrightness) {
+		return '#808080';
+	}
+
+	return hex;
+};
+/* eslint-enable no-magic-numbers */
 
 export const boxStyle = (
 	primaryColor: string,
 	isMobile: boolean
-): CSSProperties => ({
-	border: `2px solid ${primaryColor}`,
-	borderRadius: '4px',
-	fontFamily: 'monospace',
-	height: isMobile ? '200px' : '300px',
-	margin: '0 0 8px',
-	overflow: 'auto',
-	padding: '16px',
-	whiteSpace: 'pre-wrap'
-});
+): CSSProperties => {
+	const safeColor = ensureMinimumBrightness(primaryColor);
+
+	return {
+		alignItems: 'center',
+		backgroundColor: `${safeColor}12`,
+		border: `1px solid ${safeColor}40`,
+		borderRadius: '12px',
+		display: 'flex',
+		fontFamily:
+			'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
+		fontSize: '0.875rem',
+		height: isMobile ? '180px' : '260px',
+		justifyContent: 'center',
+		lineHeight: 1.6,
+		margin: 0,
+		overflow: 'auto',
+		padding: '20px 24px',
+		textAlign: 'center',
+		whiteSpace: 'pre-wrap'
+	};
+};
 
 export const buttonContainerStyle: CSSProperties = {
 	alignItems: 'center',
@@ -57,21 +84,22 @@ type OAuthButtonStyleProps = {
 
 export const oauthButtonStyle = ({
 	isProviderSelected = false,
-	providerPrimaryColor = '#747775',
 	themeSprings
 }: OAuthButtonStyleProps): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	backgroundColor: themeSprings.themeTertiary,
-	border: `1px solid ${providerPrimaryColor}`,
-	borderRadius: '4px',
-	boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+	border: '1px solid rgba(128, 128, 128, 0.12)',
+	borderRadius: '12px',
+	boxShadow:
+		'0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06)',
 	color: themeSprings.contrastPrimary,
 	cursor: isProviderSelected ? 'pointer' : 'not-allowed',
 	display: 'flex',
-	fontSize: '14px',
+	fontSize: '0.9rem',
+	fontWeight: 500,
 	justifyContent: 'center',
-	marginBottom: '10px',
-	padding: '10px',
+	opacity: isProviderSelected ? 1 : HALF,
+	padding: '16px 20px',
 	textDecoration: 'none',
 	textWrap: 'nowrap',
 	width: '100%'
@@ -82,15 +110,58 @@ export const oauthButtonTextStyle: CSSProperties = {
 	textAlign: 'center',
 	textOverflow: 'ellipsis'
 };
-export const oauthIconStyle: CSSProperties = {
+
+// Providers with dark/black logos that need inversion in dark mode
+export const DARK_LOGO_PROVIDERS = new Set([
+	'42',
+	'amazon',
+	'anilist',
+	'apple',
+	'atlassian',
+	'auth0',
+	'authentik',
+	'autodesk',
+	'battlenet',
+	'bitbucket',
+	'box',
+	'bungie',
+	'coinbase',
+	'discord',
+	'dribbble',
+	'dropbox',
+	'epicgames',
+	'gitea',
+	'gitlab',
+	'kakao',
+	'keycloak',
+	'kick',
+	'lichess',
+	'linear',
+	'myanimelist',
+	'notion',
+	'okta',
+	'patreon',
+	'polar',
+	'roblox',
+	'salesforce',
+	'shikimori',
+	'strava',
+	'tiktok',
+	'vk',
+	'withings'
+]);
+
+export const oauthIconStyle = (): CSSProperties => ({
 	height: '24px',
 	marginRight: '10px',
 	objectFit: 'contain',
 	width: '24px'
-};
+});
 export const headingStyle: CSSProperties = {
-	fontSize: '1.5rem',
-	marginBottom: '20px',
+	fontSize: '1.25rem',
+	fontWeight: 600,
+	marginBottom: '24px',
+	marginTop: '8px',
 	textAlign: 'center'
 };
 
@@ -130,13 +201,15 @@ export const separatorStyle: CSSProperties = {
 	alignItems: 'center',
 	display: 'flex',
 	justifyContent: 'center',
-	margin: '20px 0',
+	margin: '24px 0',
 	width: '100%'
 };
 export const separatorTextStyle: CSSProperties = {
-	color: '#747775',
-	fontSize: '14px',
-	padding: '0 10px'
+	color: '#888',
+	fontSize: '0.8rem',
+	fontWeight: 500,
+	padding: '0 16px',
+	textTransform: 'uppercase'
 };
 
 export const separatorLineStyle = ({
@@ -162,11 +235,14 @@ export const getContrastColor = (hex: string) => {
 export const credentialLinkStyle = (
 	companyColor = '#747775'
 ): CSSProperties => ({
-	border: `2px solid ${companyColor}`,
-	borderRadius: '4px',
+	backgroundColor: `${companyColor}10`,
+	border: `1px solid ${companyColor}40`,
+	borderRadius: '10px',
 	color: 'inherit',
 	flex: '1',
-	padding: '12px 0',
+	fontSize: '0.875rem',
+	fontWeight: 500,
+	padding: '12px 16px',
 	textAlign: 'center',
 	textDecoration: 'none'
 });
@@ -175,15 +251,21 @@ export const opButtonStyle = (
 	disabled: boolean,
 	providerPrimaryColor = '#747775'
 ): CSSProperties => ({
-	backgroundColor: providerPrimaryColor,
-	border: `2px solid ${providerPrimaryColor}`,
-	borderRadius: '4px',
-	color: getContrastColor(providerPrimaryColor),
+	backgroundColor: disabled
+		? 'rgba(128, 128, 128, 0.15)'
+		: providerPrimaryColor,
+	border: disabled
+		? '1px solid rgba(128, 128, 128, 0.2)'
+		: `1px solid ${providerPrimaryColor}`,
+	borderRadius: '10px',
+	color: disabled
+		? 'rgba(128, 128, 128, 0.6)'
+		: getContrastColor(providerPrimaryColor),
 	cursor: disabled ? 'not-allowed' : 'pointer',
-	fontSize: '1rem',
-	lineHeight: '1.2rem',
-	opacity: disabled ? HALF : 1,
-	padding: '12px 0',
+	fontSize: '0.875rem',
+	fontWeight: 500,
+	lineHeight: '1.4',
+	padding: '12px 16px',
 	textAlign: 'center',
 	textDecoration: 'none',
 	width: '100%'

@@ -5,23 +5,26 @@ export const legendWrapperStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	backgroundColor: themeSprings.themeTertiary,
-	borderRadius: '8px',
-	boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-	margin: '0 auto 2rem',
+	borderRadius: '12px',
+	boxShadow:
+		'0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+	margin: '0 auto 2.5rem',
 	maxWidth: '1200px',
-	padding: '20px',
+	padding: '28px 32px',
 	width: '90%'
 });
 
 export const legendTitleStyle: CSSProperties = {
-	fontSize: '1.25rem',
+	fontSize: '1.35rem',
 	fontWeight: 600,
-	margin: '0 0 16px',
+	margin: '0 0 20px',
 	textAlign: 'center'
 };
 
 export const legendFooterStyle: CSSProperties = {
-	margin: '16px 0 0',
+	lineHeight: 1.6,
+	margin: '20px 0 0',
+	opacity: 0.8,
 	textAlign: 'center'
 };
 

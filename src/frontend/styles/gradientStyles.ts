@@ -60,7 +60,7 @@ export const cardGradientStyle = (
 	background: themeSprings.theme.to((theme) =>
 		theme.endsWith('dark')
 			? 'linear-gradient(145deg, rgba(30,30,46,0.6) 0%, rgba(20,20,30,0.8) 100%)'
-			: 'linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(236,239,241,0.95) 100%)'
+			: 'linear-gradient(145deg, rgba(255,255,254,0.95) 0%, rgba(245,243,239,0.98) 100%)'
 	),
 	border: themeSprings.themeTertiary.to((color) => `1px solid ${color}`),
 	borderRadius: '0.75rem',
@@ -73,7 +73,7 @@ export const codeBlockGradientStyle = (
 	background: themeSprings.theme.to((theme) =>
 		theme.endsWith('dark')
 			? 'linear-gradient(180deg, rgba(30,30,46,0.9) 0%, rgba(20,20,30,0.95) 100%)'
-			: 'linear-gradient(180deg, rgba(245,245,245,0.9) 0%, rgba(236,239,241,0.95) 100%)'
+			: 'linear-gradient(180deg, rgba(255,255,254,0.92) 0%, rgba(245,243,239,0.96) 100%)'
 	),
 	border: themeSprings.themeTertiary.to((color) => `1px solid ${color}`),
 	borderRadius: '0.5rem',

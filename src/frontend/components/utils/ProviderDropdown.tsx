@@ -28,32 +28,19 @@ export const ProviderDropdown = ({
 		}}
 		style={{
 			backgroundColor: themeSprings.themeTertiary,
-			border: `1px solid ${themeSprings.contrastPrimary}`,
-			borderRadius: '4px',
+			border: '1px solid rgba(128, 128, 128, 0.12)',
+			borderRadius: '10px',
 			color: themeSprings.contrastPrimary,
-			fontSize: '14px',
-			marginBottom: '10px',
-			padding: '14px',
-			textAlign: 'center',
+			cursor: 'pointer',
+			fontSize: '0.9rem',
+			fontWeight: 500,
+			padding: '14px 20px',
 			width: '100%'
 		}}
 	>
-		<option
-			value={-1}
-			style={{
-				fontWeight: 'bold'
-			}}
-		>
-			Select provider
-		</option>
+		<option value={-1}>Select another provider</option>
 		{providerOptions.map((provider, index) => (
-			<option
-				key={provider}
-				value={index}
-				style={{
-					textAlign: 'left'
-				}}
-			>
+			<option key={provider} value={index}>
 				{providerData[provider].name}
 			</option>
 		))}

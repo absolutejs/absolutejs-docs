@@ -19,22 +19,22 @@ type ColorKey =
 
 const colorMap: Record<ThemeMode, Record<ColorKey, string>> = {
 	dark: {
-		boolean: '#8be9fd',
-		key: '#ff79c6',
-		null: '#6272a4',
-		number: '#bd93f9',
-		punctuation: '#f8f8f2',
-		string: '#50fa7b',
-		text: '#f8f8f2'
+		boolean: '#93c5fd',
+		key: '#f9a8d4',
+		null: '#9ca3af',
+		number: '#c4b5fd',
+		punctuation: '#d1d5db',
+		string: '#86efac',
+		text: '#e5e7eb'
 	},
 	light: {
-		boolean: '#0000ff',
-		key: '#a31515',
-		null: '#808080',
-		number: '#098658',
-		punctuation: '#000000',
-		string: '#008000',
-		text: '#000000'
+		boolean: '#2563eb',
+		key: '#be185d',
+		null: '#6b7280',
+		number: '#7c3aed',
+		punctuation: '#374151',
+		string: '#059669',
+		text: '#1f2937'
 	}
 };
 
@@ -59,9 +59,8 @@ export const JsonLine = ({
 	needsNewline,
 	themeSprings
 }: JsonLineProps) => {
-	// const colors = theme === 'dark' ? colorMap.dark : colorMap.light;
 	const colors = themeSprings.theme.to((mode) =>
-		mode === 'dark' ? colorMap.dark : colorMap.light
+		mode.endsWith('dark') ? colorMap.dark : colorMap.light
 	);
 
 	const segments = line.split(tokenPattern).filter((segment) => segment);

@@ -5,11 +5,13 @@ export const AuthTestingHero = ({ themeSprings }: ThemeProps) => (
 	<animated.p
 		style={{
 			backgroundColor: themeSprings.themeTertiary,
-			borderRadius: '8px',
-			boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-			margin: '0 auto 2rem',
+			borderRadius: '12px',
+			boxShadow:
+				'0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+			lineHeight: 1.7,
+			margin: '0 auto 2.5rem',
 			maxWidth: '1200px',
-			padding: '20px',
+			padding: '28px 32px',
 			textAlign: 'center',
 			width: '90%'
 		}}

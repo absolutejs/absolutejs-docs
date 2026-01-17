@@ -1,8 +1,8 @@
-import { ImWarning } from 'react-icons/im';
+import { PiWarningFill } from 'react-icons/pi';
 import { badgeStyle } from '../../../styles/testingStyles';
 
 export const FailedBadge = () => (
 	<span style={badgeStyle('#e53935')}>
-		<ImWarning />
+		<PiWarningFill />
 	</span>
 );

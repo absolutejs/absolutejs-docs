@@ -73,9 +73,9 @@ export const dropdownItemStyle = (
 	display: 'flex',
 	fontSize: '0.95rem',
 	fontWeight: 500,
+	gap: '8px',
 	padding: '10px 14px',
-	textDecoration: 'none',
-	transition: 'background-color 0.15s ease'
+	textDecoration: 'none'
 });
 export const getNavbarDropdownListStyle = (
 	dropdownSpring: {
@@ -86,6 +86,7 @@ export const getNavbarDropdownListStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	backgroundColor: themeSprings.themePrimary,
+	border: '1px solid rgba(128, 128, 128, 0.15)',
 	borderRadius: '12px',
 	boxShadow: `0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1)`,
 	display: 'flex',

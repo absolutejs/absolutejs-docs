@@ -7,7 +7,8 @@ import {
 	oauthButtonStyle,
 	oauthButtonContentStyle,
 	oauthIconStyle,
-	oauthButtonTextStyle
+	oauthButtonTextStyle,
+	DARK_LOGO_PROVIDERS
 } from '../../styles/authModalStyles';
 
 type OAuthLinkProps = {
@@ -40,21 +41,27 @@ export const OAuthLink = ({ mode, provider, themeSprings }: OAuthLinkProps) => {
 			href={provider ? `/oauth2/${provider}/authorization` : undefined}
 			style={oauthButtonStyle({
 				isProviderSelected,
-				providerPrimaryColor: isProviderSelected
-					? primaryColor
-					: '#999999',
 				themeSprings
 			})}
 		>
 			<div style={oauthButtonContentStyle}>
 				{provider ? (
-					<img
+					<animated.img
 						src={logoUrl}
 						alt={`${name} logo`}
-						style={oauthIconStyle}
+						style={{
+							...oauthIconStyle(),
+							filter: DARK_LOGO_PROVIDERS.has(provider)
+								? themeSprings.theme.to((t) =>
+										t.endsWith('dark')
+											? 'brightness(0) invert(1)'
+											: 'none'
+									)
+								: 'none'
+						}}
 					/>
 				) : (
-					<FiUser style={oauthIconStyle} />
+					<FiUser style={oauthIconStyle()} />
 				)}
 				<span style={oauthButtonTextStyle}>{buttonText}</span>
 			</div>

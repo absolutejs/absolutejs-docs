@@ -12,6 +12,7 @@ export const CreateButton = ({ themeSprings }: ThemeProps) => {
 			style={{
 				alignItems: 'center',
 				backgroundColor: themeSprings.themeTertiary,
+				border: '1px solid rgba(128, 128, 128, 0.12)',
 				borderRadius: '16px',
 				boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
 				color: themeSprings.contrastPrimary,

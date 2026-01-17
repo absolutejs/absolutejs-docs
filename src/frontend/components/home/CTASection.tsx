@@ -10,7 +10,7 @@ const ctaContainerStyle: CSSProperties = {
 	display: 'flex',
 	flexDirection: 'column',
 	gap: '1.5rem',
-	maxWidth: '900px',
+	maxWidth: '1200px',
 	padding: '3rem 2rem',
 	textAlign: 'center',
 	width: '100%'

@@ -49,10 +49,10 @@ export const AuthGrid = ({
 			<div
 				style={{
 					display: 'grid',
-					gap: '12px',
+					gap: '16px',
 					gridTemplateColumns:
 						'repeat(auto-fill, minmax(180px, 1fr))',
-					margin: '0 auto 2rem',
+					margin: '0 auto 3rem',
 					maxWidth: '1200px',
 					width: '90%'
 				}}
