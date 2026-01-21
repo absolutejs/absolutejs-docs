@@ -35,19 +35,7 @@ export const AuthModal = ({
 	setModalContent,
 	themeSprings
 }: AuthModalProps) => {
-	if (!modalContent) return null;
-
 	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
-
-	const primaryColor = modalContent?.primaryColor ?? '#000';
-	const provider = user?.auth_sub?.split('|')[0]?.toLocaleLowerCase();
-
-	const isAuthorized =
-		provider !== undefined && modalContent?.providerOption === provider;
-	const isRefreshable = isAuthorized && isRefreshableProviderOption(provider);
-	const isRevocable = isAuthorized && isRevocableProviderOption(provider);
-
 	const {
 		fetchProfile,
 		handleRefresh,
@@ -59,6 +47,17 @@ export const AuthModal = ({
 		handleSignOut,
 		modalContent
 	});
+
+	if (!modalContent) return null;
+
+	const isMobile = isSizeOrLess('sm');
+	const primaryColor = modalContent.primaryColor ?? '#000';
+	const provider = user?.auth_sub?.split('|')[0]?.toLocaleLowerCase();
+
+	const isAuthorized =
+		provider !== undefined && modalContent.providerOption === provider;
+	const isRefreshable = isAuthorized && isRefreshableProviderOption(provider);
+	const isRevocable = isAuthorized && isRevocableProviderOption(provider);
 
 	const actions: Array<{
 		disabled: boolean;
@@ -112,7 +111,7 @@ export const AuthModal = ({
 				padding: isMobile ? '24px' : '40px',
 				width: '680px'
 			}}
-			onOpen={(dialogRef) => registerHost(dialogRef)}
+			contentRef={registerHost}
 			isOpen={modalContent !== null}
 			onClose={() => {
 				const params = new URLSearchParams(window.location.search);
@@ -126,7 +125,6 @@ export const AuthModal = ({
 				window.history.replaceState(null, '', newUrl);
 
 				setModalContent(null);
-				registerHost(null);
 			}}
 		>
 			<header

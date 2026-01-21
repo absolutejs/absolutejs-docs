@@ -1,4 +1,4 @@
-import { providerOptions } from '@absolutejs/auth';
+import { ProviderOption, providerOptions } from '@absolutejs/auth';
 import { animated } from '@react-spring/web';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Navbar } from '../components/navbar/Navbar';
@@ -14,9 +14,10 @@ const queryClient = new QueryClient();
 
 type AuthTestingProps = {
 	theme: ThemeMode | undefined;
+	initialProvider: ProviderOption | undefined;
 };
 
-export const AuthTesting = ({ theme }: AuthTestingProps) => {
+export const AuthTesting = ({ theme, initialProvider }: AuthTestingProps) => {
 	useCleanPath();
 	const { user, handleSignOut } = useAuthStatus();
 	const [themeSprings, setTheme] = useTheme(theme);
@@ -99,6 +100,7 @@ export const AuthTesting = ({ theme }: AuthTestingProps) => {
 							handleSignOut={handleSignOut}
 							user={user}
 							themeSprings={themeSprings}
+							initialProvider={initialProvider}
 						/>
 					</QueryClientProvider>
 				</main>

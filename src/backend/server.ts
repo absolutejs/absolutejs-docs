@@ -10,6 +10,7 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { Elysia, env, t } from 'elysia';
 import { schema, User } from '../../db/schema';
+import { isValidProviderOption } from '@absolutejs/auth';
 import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { Documentation } from '../frontend/pages/Documentation';
 import { Home } from '../frontend/pages/Home';
@@ -75,15 +76,22 @@ const server = new Elysia()
 	)
 	.get(
 		'/testing/authentication',
-		({ cookie: { theme } }) =>
+		({ cookie: { theme }, query }) =>
 			handleReactPageRequest(
 				AuthTesting,
 				asset(manifest, 'AuthTestingIndex'),
 				{
-					theme: theme?.value
+					theme: theme?.value,
+					initialProvider:
+						query.provider && isValidProviderOption(query.provider)
+							? query.provider
+							: undefined
 				}
 			),
-		{ cookie: themeCookie }
+		{
+			cookie: themeCookie,
+			query: t.Object({ provider: t.Optional(t.String()) })
+		}
 	)
 	.use(networking)
 	.on('error', (error) => {

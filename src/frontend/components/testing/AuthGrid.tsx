@@ -1,8 +1,4 @@
-import {
-	isValidProviderOption,
-	ProviderOption,
-	providerOptions
-} from '@absolutejs/auth';
+import { ProviderOption, providerOptions } from '@absolutejs/auth';
 import { useState } from 'react';
 import { User } from '../../../../db/schema';
 import { ThemeSprings } from '../../../types/springTypes';
@@ -15,33 +11,28 @@ type AuthGridProps = {
 	user: User | undefined;
 	handleSignOut: () => Promise<void>;
 	themeSprings: ThemeSprings;
+	initialProvider: ProviderOption | undefined;
 };
 
 export const AuthGrid = ({
 	user,
 	handleSignOut,
-	themeSprings
+	themeSprings,
+	initialProvider
 }: AuthGridProps) => {
 	const [modalContent, setModalContent] = useState<
 		(ProviderInfo & { providerOption: ProviderOption }) | null
 	>(() => {
-		if (typeof window === 'undefined') return null;
-		const params = new URLSearchParams(window.location.search);
-		const raw = params.get('provider');
-		if (raw && isValidProviderOption(raw)) {
-			const data = providerData[raw];
-
-			return {
-				createNewCredentialsUrl: data.createNewCredentialsUrl,
-				logoUrl: data.logoUrl,
-				manageCredentialsUrl: data.manageCredentialsUrl,
-				name: data.name,
-				primaryColor: data.primaryColor,
-				providerOption: raw
-			};
-		}
-
-		return null;
+		if (!initialProvider) return null;
+		const data = providerData[initialProvider];
+		return {
+			createNewCredentialsUrl: data.createNewCredentialsUrl,
+			logoUrl: data.logoUrl,
+			manageCredentialsUrl: data.manageCredentialsUrl,
+			name: data.name,
+			primaryColor: data.primaryColor,
+			providerOption: initialProvider
+		};
 	});
 
 	return (
