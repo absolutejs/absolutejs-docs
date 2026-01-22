@@ -65,13 +65,13 @@ export const MobileSidebar = ({
 					flexDirection: 'column',
 					height: '100%',
 					left: 0,
-					maxWidth: '320px',
+					maxWidth: '280px',
 					overflowY: 'auto',
 					padding: '1rem',
 					position: 'fixed',
 					top: 0,
 					transform: spring.transform,
-					width: '85%',
+					width: '80%',
 					zIndex: 10000
 				}}
 			>
@@ -83,15 +83,15 @@ export const MobileSidebar = ({
 						),
 						display: 'flex',
 						justifyContent: 'space-between',
-						marginBottom: '1rem',
-						paddingBottom: '1rem'
+						marginBottom: '0.75rem',
+						paddingBottom: '0.75rem'
 					}}
 				>
 					<animated.span
 						style={{
 							color: themeSprings.contrastPrimary,
-							fontSize: '1.25rem',
-							fontWeight: 'bold'
+							fontSize: '1rem',
+							fontWeight: 600
 						}}
 					>
 						Documentation
@@ -105,9 +105,9 @@ export const MobileSidebar = ({
 							color: themeSprings.contrastSecondary,
 							cursor: 'pointer',
 							display: 'flex',
-							fontSize: '1.25rem',
+							fontSize: '1rem',
 							justifyContent: 'center',
-							padding: '0.5rem'
+							padding: '0.25rem'
 						}}
 					>
 						<FaTimes />

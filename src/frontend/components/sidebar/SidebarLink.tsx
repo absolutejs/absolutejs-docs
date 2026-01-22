@@ -7,7 +7,7 @@ import {
 	ThemeSprings
 } from '../../../types/springTypes';
 import { DocsView } from '../../../types/types';
-import { lightTertiaryColor, primaryColor } from '../../styles/colors';
+import { primaryColor } from '../../styles/colors';
 
 type SidebarLinkProps = {
 	icon?: AnimatedComponent<IconType>;
@@ -36,18 +36,20 @@ export const SidebarLink = ({
 	const isOverview = id === 'overview';
 	const isActive = view === id;
 
-	const [overviewSpring, overviewSpringApi] = useSpring(() => ({
+	const [springStyles, springApi] = useSpring(() => ({
 		backgroundColor: isActive ? primaryColor : 'transparent',
-		config: { friction: 30, tension: 250 }
+		opacity: isActive ? 1 : 0,
+		config: { tension: 300, friction: 26 }
 	}));
 
 	useEffect(() => {
 		if (isOverview) {
-			void overviewSpringApi.start({
-				backgroundColor: isActive ? primaryColor : 'transparent'
+			void springApi.start({
+				backgroundColor: isActive ? primaryColor : 'transparent',
+				opacity: isActive ? 1 : 0
 			});
 		}
-	}, [isActive, isOverview, overviewSpringApi]);
+	}, [isActive, isOverview, springApi]);
 
 	return (
 		<animated.button
@@ -55,62 +57,58 @@ export const SidebarLink = ({
 				alignItems: 'center',
 				backgroundColor: 'transparent',
 				border: 'none',
-				borderLeftColor: linkSprings?.borderColor,
-				borderLeftStyle: isOverview ? 'none' : 'solid',
-				borderLeftWidth: isOverview ? '0' : '3px',
+				borderRadius: '4px',
 				color: themeSprings.contrastSecondary,
 				cursor: 'pointer',
 				display: 'flex',
-				marginLeft: isOverview ? '0' : '0.5rem',
-				paddingLeft: isOverview ? '0' : '1rem',
+				padding: '0 0.5rem',
 				position: 'relative',
 				width: '100%'
 			}}
 			onMouseEnter={() => {
-				if (isOverview) {
-					if (!isActive) {
-						void overviewSpringApi.start({
-							backgroundColor: lightTertiaryColor
+				if (!isActive) {
+					if (isOverview) {
+						void springApi.start({ opacity: 1 });
+					} else {
+						linksApi?.start((i) => {
+							if (i !== index || view === id) return undefined;
+							return { opacity: 1 };
 						});
 					}
-				} else {
-					linksApi?.start((i) => {
-						if (i !== index || view === id) return undefined;
-						return { backgroundColor: lightTertiaryColor };
-					});
 				}
 			}}
 			onMouseLeave={() => {
-				if (isOverview) {
-					if (!isActive) {
-						void overviewSpringApi.start({
-							backgroundColor: 'transparent'
+				if (!isActive) {
+					if (isOverview) {
+						void springApi.start({ opacity: 0 });
+					} else {
+						linksApi?.start((i) => {
+							if (i !== index || view === id) return undefined;
+							return { opacity: 0 };
 						});
 					}
-				} else {
-					linksApi?.start((i) => {
-						if (i !== index || view === id) return undefined;
-						return { backgroundColor: 'transparent' };
-					});
 				}
 			}}
 			onClick={() => {
 				navigateToView(id);
 				if (isOverview) {
-					void overviewSpringApi.start({
-						backgroundColor: primaryColor
+					void springApi.start({
+						backgroundColor: primaryColor,
+						opacity: 1
 					});
 				} else {
 					linksApi?.start((i) => {
 						if (i === index) {
 							return {
 								backgroundColor: primaryColor,
-								borderColor: primaryColor
+								borderColor: primaryColor,
+								opacity: 1
 							};
 						}
 						return {
 							backgroundColor: 'transparent',
-							borderColor: lightTertiaryColor
+							borderColor: 'transparent',
+							opacity: 0
 						};
 					});
 				}
@@ -118,26 +116,53 @@ export const SidebarLink = ({
 		>
 			<animated.div
 				style={{
-					backgroundColor: isOverview
-						? overviewSpring.backgroundColor
-						: linkSprings?.backgroundColor,
+					background: themeSprings.theme.to((t) =>
+						t.endsWith('dark')
+							? 'rgba(255, 255, 255, 0.06)'
+							: 'rgba(0, 0, 0, 0.04)'
+					),
+					borderRadius: '4px',
 					inset: 0,
-					opacity: 0.3,
+					opacity: isOverview ? springStyles.opacity : linkSprings?.opacity,
 					pointerEvents: 'none',
 					position: 'absolute',
 					zIndex: -1
 				}}
 			/>
-			{Icon && <Icon />}
+			<animated.div
+				style={{
+					backgroundColor: isOverview
+						? springStyles.backgroundColor
+						: linkSprings?.backgroundColor,
+					borderRadius: '2px',
+					height: '100%',
+					left: 0,
+					position: 'absolute',
+					top: 0,
+					width: '3px'
+				}}
+			/>
+			{Icon && (
+				<animated.div
+					style={{
+						alignItems: 'center',
+						color: themeSprings.contrastSecondary,
+						display: 'flex',
+						fontSize: '0.875rem',
+						marginLeft: '0.5rem',
+						opacity: 0.5
+					}}
+				>
+					<Icon />
+				</animated.div>
+			)}
 			<animated.span
 				style={{
-					alignItems: 'center',
 					color: themeSprings.contrastSecondary,
-					display: 'flex',
-					fontSize: '1rem',
-					fontWeight: isOverview ? 'bold' : 'normal',
-					marginLeft: icon ? '0.5rem' : '0',
-					padding: '0.5rem 0',
+					fontSize: '0.875rem',
+					fontWeight: isOverview ? 500 : 400,
+					marginLeft: icon ? '0.5rem' : '0.75rem',
+					padding: '0.4rem 0',
 					textDecoration: 'none'
 				}}
 			>

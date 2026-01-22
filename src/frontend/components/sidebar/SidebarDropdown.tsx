@@ -8,7 +8,6 @@ import {
 } from '../../../types/springTypes';
 import { MenuButton, DocsView } from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
-import { labelStyle } from '../../styles/authModalStyles';
 import { AnimatedFaChevronDown } from '../utils/AnimatedComponents';
 import { SidebarLink } from './SidebarLink';
 
@@ -40,7 +39,7 @@ export const SidebarDropdown = ({
 		dimensions: { scrollHeight }
 	} = useContainerQuery<HTMLDivElement>();
 	const [dropdownSprings, dropdownApi] = useSpring(() => ({
-		config: { friction: 30, tension: 250 },
+		config: { tension: 300, friction: 26 },
 		height: 0,
 		opacity: 0,
 		transform: 'rotate(-90deg)'
@@ -74,7 +73,7 @@ export const SidebarDropdown = ({
 	const Icon = icon;
 
 	return (
-		<div style={{ width: '100%' }}>
+		<div style={{ marginTop: '0.5rem', width: '100%' }}>
 			<animated.button
 				onClick={toggleDropdown}
 				style={{
@@ -85,18 +84,31 @@ export const SidebarDropdown = ({
 					cursor: 'pointer',
 					display: 'flex',
 					justifyContent: 'space-between',
-					padding: '1rem 0',
+					padding: '0.5rem 0.25rem',
 					width: '100%'
 				}}
 			>
-				<animated.p style={labelStyle(themeSprings)}>
-					{Icon && <Icon style={{ marginRight: '0.5rem' }} />}
+				<animated.span
+					style={{
+						alignItems: 'center',
+						color: themeSprings.contrastSecondary,
+						display: 'flex',
+						fontSize: '0.75rem',
+						fontWeight: 600,
+						letterSpacing: '0.03em',
+						opacity: 0.6,
+						textTransform: 'uppercase'
+					}}
+				>
+					{Icon && (
+						<Icon style={{ fontSize: '0.75rem', marginRight: '0.4rem' }} />
+					)}
 					<span>{label}</span>
-				</animated.p>
+				</animated.span>
 				<AnimatedFaChevronDown
 					style={{
-						fontSize: '0.75rem',
-						marginLeft: '2rem',
+						fontSize: '0.5rem',
+						opacity: 0.4,
 						transform: dropdownSprings.transform,
 						transformOrigin: 'center'
 					}}

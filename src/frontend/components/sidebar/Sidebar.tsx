@@ -24,12 +24,12 @@ export const Sidebar = ({
 		<animated.aside
 			style={{
 				borderColor: themeSprings.themeTertiary,
-				borderRight: '2px solid',
+				borderRight: '1px solid',
 				flexShrink: 0,
 				height: '100%',
 				maxHeight: '100%',
 				overflowY: 'auto',
-				padding: '1rem'
+				padding: '0.75rem 0.5rem'
 			}}
 		>
 			{sidebarData.map((element, index) => {

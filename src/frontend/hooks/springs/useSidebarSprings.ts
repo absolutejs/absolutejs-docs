@@ -1,7 +1,7 @@
 import { useSprings } from '@react-spring/web';
 import { DocsView, isMenuDropdown } from '../../../types/types';
 import { sidebarData } from '../../data/sidebarData';
-import { primaryColor, lightTertiaryColor } from '../../styles/colors';
+import { primaryColor } from '../../styles/colors';
 
 type Acc = {
 	counts: number[];
@@ -41,9 +41,9 @@ export const useSidebarSprings = (view: DocsView) => {
 
 	const [linksSprings, linksApi] = useSprings(totalButtons, (index) => ({
 		backgroundColor: index === selectedIndex ? primaryColor : 'transparent',
-		borderColor:
-			index === selectedIndex ? primaryColor : lightTertiaryColor,
-		config: { duration: 150, friction: 30, tension: 250 }
+		borderColor: index === selectedIndex ? primaryColor : 'transparent',
+		opacity: index === selectedIndex ? 1 : 0,
+		config: { tension: 300, friction: 26 }
 	}));
 
 	const startIndexForDropdown = (dropdownIndex: number) =>
