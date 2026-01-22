@@ -9,7 +9,6 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 ## Commands
 
 - **Dev server**: `bun run dev` (runs `src/backend/server.ts` with watch mode)
-- **Lint**: `bun run lint`
 - **Type check**: `bun run typecheck`
 - **Format**: `bun run format`
 - **Database studio**: `bun run db:studio`

@@ -1,4 +1,5 @@
-import { animated, AnimatedComponent } from '@react-spring/web';
+import { animated, AnimatedComponent, useSpring } from '@react-spring/web';
+import { useEffect } from 'react';
 import { IconType } from 'react-icons';
 import {
 	SidebarLinksApi,
@@ -33,6 +34,20 @@ export const SidebarLink = ({
 }: SidebarLinkProps) => {
 	const Icon = icon;
 	const isOverview = id === 'overview';
+	const isActive = view === id;
+
+	const [overviewSpring, overviewSpringApi] = useSpring(() => ({
+		backgroundColor: isActive ? primaryColor : 'transparent',
+		config: { friction: 30, tension: 250 }
+	}));
+
+	useEffect(() => {
+		if (isOverview) {
+			void overviewSpringApi.start({
+				backgroundColor: isActive ? primaryColor : 'transparent'
+			});
+		}
+	}, [isActive, isOverview, overviewSpringApi]);
 
 	return (
 		<animated.button
@@ -52,39 +67,60 @@ export const SidebarLink = ({
 				width: '100%'
 			}}
 			onMouseEnter={() => {
-				linksApi?.start((i) => {
-					if (i !== index || view === id) return undefined;
-
-					return { backgroundColor: lightTertiaryColor };
-				});
+				if (isOverview) {
+					if (!isActive) {
+						void overviewSpringApi.start({
+							backgroundColor: lightTertiaryColor
+						});
+					}
+				} else {
+					linksApi?.start((i) => {
+						if (i !== index || view === id) return undefined;
+						return { backgroundColor: lightTertiaryColor };
+					});
+				}
 			}}
 			onMouseLeave={() => {
-				linksApi?.start((i) => {
-					if (i !== index || view === id) return undefined;
-
-					return { backgroundColor: 'transparent' };
-				});
+				if (isOverview) {
+					if (!isActive) {
+						void overviewSpringApi.start({
+							backgroundColor: 'transparent'
+						});
+					}
+				} else {
+					linksApi?.start((i) => {
+						if (i !== index || view === id) return undefined;
+						return { backgroundColor: 'transparent' };
+					});
+				}
 			}}
 			onClick={() => {
 				navigateToView(id);
-				linksApi?.start((i) => {
-					if (i === index) {
+				if (isOverview) {
+					void overviewSpringApi.start({
+						backgroundColor: primaryColor
+					});
+				} else {
+					linksApi?.start((i) => {
+						if (i === index) {
+							return {
+								backgroundColor: primaryColor,
+								borderColor: primaryColor
+							};
+						}
 						return {
-							backgroundColor: primaryColor,
-							borderColor: primaryColor
+							backgroundColor: 'transparent',
+							borderColor: lightTertiaryColor
 						};
-					}
-
-					return {
-						backgroundColor: 'transparent',
-						borderColor: lightTertiaryColor
-					};
-				});
+					});
+				}
 			}}
 		>
 			<animated.div
 				style={{
-					backgroundColor: linkSprings?.backgroundColor,
+					backgroundColor: isOverview
+						? overviewSpring.backgroundColor
+						: linkSprings?.backgroundColor,
 					inset: 0,
 					opacity: 0.3,
 					pointerEvents: 'none',

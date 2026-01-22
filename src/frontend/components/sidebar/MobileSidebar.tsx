@@ -8,8 +8,11 @@ import { SidebarDropdown } from './SidebarDropdown';
 import { SidebarLink } from './SidebarLink';
 
 type MobileSidebarProps = {
-	spring: { transform: SpringValue<string> };
-	springApi: SpringRef<{ transform: string }>;
+	spring: {
+		overlayOpacity: SpringValue<number>;
+		transform: SpringValue<string>;
+	};
+	springApi: SpringRef<{ overlayOpacity: number; transform: string }>;
 	view: DocsView;
 	themeSprings: ThemeSprings;
 	navigateToView: (newView: DocsView) => void;
@@ -26,7 +29,10 @@ export const MobileSidebar = ({
 		useSidebarSprings(view);
 
 	const handleClose = () => {
-		void springApi.start({ transform: 'translateX(-100%)' });
+		void springApi.start({
+			overlayOpacity: 0,
+			transform: 'translateX(-100%)'
+		});
 	};
 
 	const handleNavigate = (newView: DocsView) => {
@@ -42,11 +48,9 @@ export const MobileSidebar = ({
 					backgroundColor: 'rgba(0, 0, 0, 0.5)',
 					height: '100%',
 					left: 0,
-					opacity: spring.transform.to((transformValue) =>
-						transformValue === 'translateX(0%)' ? 1 : 0
-					),
-					pointerEvents: spring.transform.to((transformValue) =>
-						transformValue === 'translateX(0%)' ? 'auto' : 'none'
+					opacity: spring.overlayOpacity,
+					pointerEvents: spring.overlayOpacity.to((opacity) =>
+						opacity > 0.1 ? 'auto' : 'none'
 					),
 					position: 'fixed',
 					top: 0,

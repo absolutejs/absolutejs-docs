@@ -29,13 +29,17 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 
 	const [sidebarSpring, sidebarSpringApi] = useSpring(() => ({
 		config: { friction: 40, tension: 275 },
+		overlayOpacity: 0,
 		transform: 'translateX(-100%)'
 	}));
 
 	const [tocOpen, setTocOpen] = useState(false);
 
 	const toggleSidebar = () => {
-		void sidebarSpringApi.start({ transform: 'translateX(0%)' });
+		void sidebarSpringApi.start({
+			overlayOpacity: 1,
+			transform: 'translateX(0%)'
+		});
 	};
 
 	const toggleToc = () => {

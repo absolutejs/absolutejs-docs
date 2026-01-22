@@ -22,6 +22,7 @@ const containerStyle: CSSProperties = {
 	gap: '1rem',
 	justifyContent: 'space-between',
 	marginTop: '3rem',
+	paddingBottom: '3rem',
 	paddingTop: '2rem'
 };
 
@@ -53,15 +54,19 @@ const navButtonStyle = (
 	transition: 'all 0.2s ease'
 });
 
-const directionLabelStyle: CSSProperties = {
+const directionLabelStyle = (themeSprings: ThemeSprings) => ({
 	alignItems: 'center',
-	color: 'rgba(160, 231, 229, 0.8)',
+	color: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? 'rgba(160, 231, 229, 0.8)'
+			: 'rgba(0, 90, 90, 0.8)'
+	),
 	display: 'flex',
 	fontSize: '0.8rem',
 	fontWeight: 500,
 	gap: '0.5rem',
-	textTransform: 'uppercase'
-};
+	textTransform: 'uppercase' as const
+});
 
 const pageLabelStyle = (themeSprings: ThemeSprings) => ({
 	color: themeSprings.contrastPrimary,
@@ -111,10 +116,10 @@ export const DocsNavigation = ({
 					onClick={() => handleClick(prevPage.id)}
 					style={navButtonStyle(themeSprings, 'prev')}
 				>
-					<span style={directionLabelStyle}>
+					<animated.span style={directionLabelStyle(themeSprings)}>
 						<FaArrowLeft size={12} />
 						Previous
-					</span>
+					</animated.span>
 					<animated.span style={pageLabelStyle(themeSprings)}>
 						{prevPage.label}
 					</animated.span>
@@ -128,15 +133,15 @@ export const DocsNavigation = ({
 					onClick={() => handleClick(nextPage.id)}
 					style={navButtonStyle(themeSprings, 'next')}
 				>
-					<span
+					<animated.span
 						style={{
-							...directionLabelStyle,
+							...directionLabelStyle(themeSprings),
 							justifyContent: 'flex-end'
 						}}
 					>
 						Next
 						<FaArrowRight size={12} />
-					</span>
+					</animated.span>
 					<animated.span style={pageLabelStyle(themeSprings)}>
 						{nextPage.label}
 					</animated.span>
