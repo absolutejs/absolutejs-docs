@@ -6,9 +6,9 @@ import {
 	createProject,
 	createProjectWithOptions,
 	manualInstall,
-	minimalServer,
-	projectStructure
+	minimalServer
 } from '../../../data/documentation/installationDocsCode';
+import { ProjectStructureGraph } from './ProjectStructureGraph';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
@@ -142,12 +142,7 @@ export const InstallationView = ({
 					<p style={paragraphSpacedStyle}>
 						A new AbsoluteJS project has this structure:
 					</p>
-					<PrismPlus
-						codeString={projectStructure}
-						language="text"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
-					/>
+					<ProjectStructureGraph themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

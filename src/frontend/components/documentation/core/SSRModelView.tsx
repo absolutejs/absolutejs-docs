@@ -7,7 +7,6 @@ import {
 	propsInjection,
 	renderToStream
 } from '../../../data/documentation/ssrModelDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	mainContentStyle,
@@ -17,14 +16,13 @@ import {
 	strongStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
-import { primaryColor } from '../../../styles/colors';
+import { SSRLifecycleDiagram } from '../../diagrams/SSRLifecycleDiagram';
 
 const tocItems: TocItem[] = [
 	{ href: '#how-ssr-works', label: 'How SSR Works' },
@@ -42,8 +40,6 @@ export const SSRModelView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -78,90 +74,14 @@ export const SSRModelView = ({
 						AbsoluteJS provides a unified SSR model that works the
 						same way regardless of which frontend framework you use.
 					</p>
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							gap: '1rem',
-							marginBottom: '1.5rem',
-							marginTop: '1rem'
-						}}
-					>
-						{[
-							{
-								step: 1,
-								title: 'Request',
-								description:
-									'A request comes in to your Elysia server'
-							},
-							{
-								step: 2,
-								title: 'Build',
-								description:
-									'Server runs build() once at startup to create the manifest'
-							},
-							{
-								step: 3,
-								title: 'Route',
-								description:
-									'Route handler calls the page handler (handleReactPageRequest, etc.)'
-							},
-							{
-								step: 4,
-								title: 'Render',
-								description:
-									'Page handler renders your component to an HTML stream'
-							},
-							{
-								step: 5,
-								title: 'Stream',
-								description:
-									'HTML is sent to the client with hydration scripts'
-							},
-							{
-								step: 6,
-								title: 'Hydrate',
-								description:
-									'Client hydrates the page, making it fully interactive'
-							}
-						].map((item) => (
-							<animated.div
-								key={item.step}
-								style={{
-									...featureCardStyle(themeSprings),
-									alignItems: 'center',
-									display: 'flex',
-									gap: '1rem'
-								}}
-							>
-								<div
-									style={{
-										alignItems: 'center',
-										background: `linear-gradient(135deg, ${primaryColor} 0%, rgba(180,248,200,1) 100%)`,
-										borderRadius: '50%',
-										color: '#0B0B0B',
-										display: 'flex',
-										flexShrink: 0,
-										fontSize: '1rem',
-										fontWeight: 700,
-										height: '2rem',
-										justifyContent: 'center',
-										width: '2rem'
-									}}
-								>
-									{item.step}
-								</div>
-								<div>
-									<strong style={strongStyle}>
-										{item.title}
-									</strong>
-									<span style={{ marginLeft: '0.5rem' }}>
-										— {item.description}
-									</span>
-								</div>
-							</animated.div>
-						))}
-					</div>
+					<SSRLifecycleDiagram themeSprings={themeSprings} />
+					<p style={paragraphSpacedStyle}>
+						The SSR lifecycle has two distinct phases: a one-time{' '}
+						<strong style={strongStyle}>startup phase</strong> when
+						your server boots, and a{' '}
+						<strong style={strongStyle}>request phase</strong> that
+						repeats for each incoming request.
+					</p>
 				</section>
 
 				<section style={sectionStyle}>

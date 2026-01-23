@@ -26,6 +26,7 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { BuildPipelineDiagram } from '../../diagrams/BuildPipelineDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -84,6 +85,7 @@ export const BuildManifestView = ({
 						returns a manifest mapping entry points to their bundled
 						assets.
 					</p>
+					<BuildPipelineDiagram themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={buildSignature}
 						language="typescript"

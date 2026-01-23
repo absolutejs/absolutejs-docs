@@ -99,6 +99,10 @@ const lifecycleHooks = [
 	{
 		hook: 'onSignOut',
 		description: 'Called before session destruction'
+	},
+	{
+		hook: 'onSessionCleanup',
+		description: 'Called when expired sessions are removed during cleanup'
 	}
 ];
 

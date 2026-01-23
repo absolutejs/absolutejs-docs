@@ -27,6 +27,7 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TypeSafetyFlowDiagram } from '../../diagrams/TypeSafetyFlowDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -264,6 +265,7 @@ export const DataFetchingView = ({
 						your route handlers to your components. TypeScript
 						catches mismatches at compile time.
 					</p>
+					<TypeSafetyFlowDiagram themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={dataFetchingTyped}
 						language="typescript"

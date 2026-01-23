@@ -123,7 +123,9 @@ export const SidebarLink = ({
 					),
 					borderRadius: '4px',
 					inset: 0,
-					opacity: isOverview ? springStyles.opacity : linkSprings?.opacity,
+					opacity: isOverview
+						? springStyles.opacity
+						: linkSprings?.opacity,
 					pointerEvents: 'none',
 					position: 'absolute',
 					zIndex: -1

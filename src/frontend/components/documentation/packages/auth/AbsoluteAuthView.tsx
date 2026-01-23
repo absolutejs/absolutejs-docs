@@ -17,9 +17,11 @@ import {
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
+import { OAuthFlowDiagram } from '../../../diagrams/OAuthFlowDiagram';
 import { AuthFeaturesList } from './AuthFeaturesList';
 import { AuthFlowSection } from './AuthFlowSection';
 import { AuthRoutesTable } from './AuthRoutesTable';
+import { SessionManagementSection } from './SessionManagementSection';
 import { UserHandlingSection } from './UserHandlingSection';
 
 const tocItems: TocItem[] = [
@@ -29,6 +31,7 @@ const tocItems: TocItem[] = [
 	{ href: '#protect-route', label: 'Protect Route' },
 	{ href: '#handle-auth-flow', label: 'Handle Auth Flow' },
 	{ href: '#authentication-routes', label: 'Authentication Routes' },
+	{ href: '#session-management', label: 'Session Management' },
 	{ href: '#user-handling', label: 'Custom User Handling' }
 ];
 
@@ -75,6 +78,7 @@ export const AbsoluteAuthView = ({
 						Key Features
 					</animated.h2>
 					<AuthFeaturesList themeSprings={themeSprings} />
+					<OAuthFlowDiagram themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -144,6 +148,8 @@ export const AbsoluteAuthView = ({
 					</p>
 					<AuthRoutesTable themeSprings={themeSprings} />
 				</section>
+
+				<SessionManagementSection themeSprings={themeSprings} />
 
 				<UserHandlingSection themeSprings={themeSprings} />
 

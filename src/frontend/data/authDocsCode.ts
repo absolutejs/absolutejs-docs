@@ -77,3 +77,37 @@ onCallbackSuccess: async ({ authProvider, tokenResponse, session, userSessionId 
       });
     }
   })`;
+
+export const sessionConfigExample = `\
+.use(await absoluteAuth<User>({
+  providersConfiguration: { /* ... */ },
+
+  // Session lifetime configuration
+  sessionDurationMs: 86400000,            // 24 hours (default)
+  unregisteredSessionDurationMs: 3600000, // 1 hour (default)
+  cleanupIntervalMs: 300000,              // 5 minutes (default)
+  maxSessions: 5,                         // Max sessions per user (default)
+
+  // Called when sessions are cleaned up
+  onSessionCleanup: async ({ removedSessions, removedUnregisteredSessions }) => {
+    console.log(\`Cleaned up \${removedSessions.size} expired sessions\`);
+  }
+}))`;
+
+export const cleanupSessionsExample = `\
+// The cleanupSessions function is derived from the auth middleware
+// and available in all route handlers
+
+app.post('/admin/cleanup', async ({ cleanupSessions }) => {
+  // Manually trigger session cleanup
+  await cleanupSessions();
+  return { message: 'Sessions cleaned up' };
+});
+
+// You can also use it in scheduled tasks
+app.get('/health', async ({ cleanupSessions }) => {
+  // Cleanup runs automatically via cleanupIntervalMs,
+  // but can be triggered manually if needed
+  await cleanupSessions();
+  return { status: 'healthy' };
+})`;

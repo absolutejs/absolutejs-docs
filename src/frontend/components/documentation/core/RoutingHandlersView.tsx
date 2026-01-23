@@ -22,6 +22,7 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { RequestAnatomyDiagram } from '../../diagrams/RequestAnatomyDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -78,6 +79,7 @@ export const RoutingHandlersView = ({
 						Routes are defined using Elysia&apos;s routing methods.
 						Each route handler returns a page handler call:
 					</p>
+					<RequestAnatomyDiagram themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={basicRouting}
 						language="typescript"

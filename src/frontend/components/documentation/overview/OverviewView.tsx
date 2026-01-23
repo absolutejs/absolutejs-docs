@@ -1,4 +1,6 @@
 import { animated } from '@react-spring/web';
+import { FaAngular, FaHtml5, FaReact, FaVuejs } from 'react-icons/fa';
+import { SiHtmx, SiSvelte } from 'react-icons/si';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
@@ -22,6 +24,7 @@ import {
 	gradientTextStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { FrameworkEcosystemDiagram } from '../../diagrams/FrameworkEcosystemDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -192,32 +195,121 @@ export const Overview = ({
 					>
 						Framework Support
 					</animated.h2>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>React</strong> — Full
-							SSR with streaming and hydration
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Svelte</strong> —
-							Component SSR with client-side hydration
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Vue</strong> — SSR with
-							props injection and hydration
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>HTML</strong> — Static
-							HTML file serving
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>HTMX</strong> —
-							HTMX-powered templates
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Angular</strong> —
-							Coming soon
-						</li>
-					</ul>
+					<FrameworkEcosystemDiagram themeSprings={themeSprings} />
+					<animated.div
+						style={{
+							display: 'grid',
+							gap: '0.75rem',
+							gridTemplateColumns: isMobile
+								? 'repeat(2, 1fr)'
+								: 'repeat(3, 1fr)',
+							marginTop: '1.5rem'
+						}}
+					>
+						{[
+							{
+								color: '#61DAFB',
+								description:
+									'Full SSR with streaming and hydration',
+								icon: FaReact,
+								isComingSoon: false,
+								name: 'React'
+							},
+							{
+								color: '#FF3E00',
+								description:
+									'Component SSR with client-side hydration',
+								icon: SiSvelte,
+								isComingSoon: false,
+								name: 'Svelte'
+							},
+							{
+								color: '#42B883',
+								description:
+									'SSR with props injection and hydration',
+								icon: FaVuejs,
+								isComingSoon: false,
+								name: 'Vue'
+							},
+							{
+								color: '#E34F26',
+								description:
+									'HTML pages with optional JavaScript',
+								icon: FaHtml5,
+								isComingSoon: false,
+								name: 'HTML'
+							},
+							{
+								color: '#3366CC',
+								description:
+									'HTMX-powered interactive templates',
+								icon: SiHtmx,
+								isComingSoon: false,
+								name: 'HTMX'
+							},
+							{
+								color: '#DD0031',
+								description: 'Coming soon',
+								icon: FaAngular,
+								isComingSoon: true,
+								name: 'Angular'
+							}
+						].map((fw) => (
+							<animated.div
+								key={fw.name}
+								style={{
+									alignItems: 'center',
+									background: themeSprings.theme.to(
+										(theme) =>
+											theme.endsWith('dark')
+												? 'rgba(30, 30, 46, 0.6)'
+												: 'rgba(255, 255, 255, 0.8)'
+									),
+									border: themeSprings.themeTertiary.to(
+										(color) => `1px solid ${color}`
+									),
+									borderLeft: `3px solid ${fw.color}`,
+									borderRadius: '0.5rem',
+									display: 'flex',
+									gap: '0.75rem',
+									opacity: fw.isComingSoon ? 0.5 : 1,
+									padding: '0.75rem 1rem'
+								}}
+							>
+								<fw.icon
+									color={fw.color}
+									size={24}
+									style={{ flexShrink: 0 }}
+								/>
+								<div style={{ minWidth: 0 }}>
+									<p
+										style={{
+											fontSize: '0.9rem',
+											fontWeight: 600,
+											margin: 0
+										}}
+									>
+										{fw.name}
+									</p>
+									<animated.p
+										style={{
+											color: themeSprings.theme.to(
+												(theme) =>
+													theme.endsWith('dark')
+														? 'rgba(232, 232, 236, 0.6)'
+														: 'rgba(42, 42, 50, 0.6)'
+											),
+											fontSize: '0.75rem',
+											lineHeight: 1.4,
+											margin: 0
+										}}
+									>
+										{fw.description}
+									</animated.p>
+								</div>
+							</animated.div>
+						))}
+					</animated.div>
 				</section>
 
 				<section style={sectionStyle}>

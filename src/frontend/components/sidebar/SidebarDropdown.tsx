@@ -101,7 +101,12 @@ export const SidebarDropdown = ({
 					}}
 				>
 					{Icon && (
-						<Icon style={{ fontSize: '0.75rem', marginRight: '0.4rem' }} />
+						<Icon
+							style={{
+								fontSize: '0.75rem',
+								marginRight: '0.4rem'
+							}}
+						/>
 					)}
 					<span>{label}</span>
 				</animated.span>
