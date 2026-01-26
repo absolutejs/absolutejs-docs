@@ -8,7 +8,6 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 
 ## Commands
 
-- **Dev server**: `bun run dev` (runs `src/backend/server.ts` with watch mode)
 - **Type check**: `bun run typecheck`
 - **Format**: `bun run format`
 - **Database studio**: `bun run db:studio`
@@ -44,15 +43,6 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 - **types.ts**: Shared TypeScript types
 
 ## Key Patterns
-
-### ESLint Rules
-
-Uses `eslint-plugin-absolute` with strict rules:
-
-- `absolute/seperate-style-files`: Styles must be in separate `.ts` files, not inline
-- `absolute/no-inline-prop-types`: Component props must be defined as separate types
-- `import/no-default-export`: Named exports only (except config files)
-- `no-console`: Only `console.warn` and `console.error` allowed
 
 ### React Components
 
