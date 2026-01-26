@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import {
 	vueBuild,
 	vueComponent,
@@ -54,8 +55,9 @@ export const VueView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -71,12 +73,14 @@ export const VueView = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="build-config"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Build Configuration
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Add Vue to your build by specifying the directory
 						containing your Vue components:
@@ -90,12 +94,14 @@ export const VueView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="page-handler"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Page Handler
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Use <code>handleVuePageRequest</code> with{' '}
 						<code>asset()</code> to get the compiled paths for both
@@ -112,12 +118,14 @@ export const VueView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="generate-head"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Generate Head
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>generateHeadElement</code> creates the head tag
 						string from a structured object. This provides a
@@ -147,12 +155,14 @@ export const VueView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="vue-components"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Components
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Use Vue 3 Single File Components with the Composition
 						API. defineProps provides type-safe prop access:
@@ -166,12 +176,14 @@ export const VueView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="type-safety"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Type Safety
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						Vue 3&apos;s defineProps with TypeScript generics
 						provides complete compile-time type checking. Errors are
@@ -206,12 +218,14 @@ export const VueView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="vue-imports"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Vue Imports
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						When using Vue and Svelte in the same project,
 						TypeScript may have conflicts between <code>.vue</code>{' '}

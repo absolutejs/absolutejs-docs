@@ -10,12 +10,16 @@ type SidebarProps = {
 	view: DocsView;
 	themeSprings: ThemeSprings;
 	navigateToView: (newView: DocsView) => void;
+	openSections: Set<string>;
+	onToggleSection: (label: string) => void;
 };
 
 export const Sidebar = ({
 	view,
 	themeSprings,
-	navigateToView
+	navigateToView,
+	openSections,
+	onToggleSection
 }: SidebarProps) => {
 	const { linksSprings, linksApi, startIndexForDropdown } =
 		useSidebarSprings(view);
@@ -46,6 +50,8 @@ export const Sidebar = ({
 							buttons={element.buttons}
 							icon={element.icon}
 							themeSprings={themeSprings}
+							isOpen={openSections.has(element.label)}
+							onToggle={() => onToggleSection(element.label)}
 						/>
 					);
 				}

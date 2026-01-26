@@ -21,6 +21,7 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { RequestAnatomyDiagram } from '../../diagrams/RequestAnatomyDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -52,8 +53,9 @@ export const RoutingHandlersView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -69,12 +71,14 @@ export const RoutingHandlersView = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="basic-routing"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Basic Routing
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Routes are defined using Elysia&apos;s routing methods.
 						Each route handler returns a page handler call:
@@ -89,12 +93,14 @@ export const RoutingHandlersView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="route-parameters"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Route Parameters
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Dynamic route segments are defined with colons and
 						accessed via params:
@@ -108,12 +114,14 @@ export const RoutingHandlersView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="query-parameters"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Query Parameters
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Access query string parameters via the query object:
 					</p>
@@ -126,12 +134,14 @@ export const RoutingHandlersView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="cookies-headers"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Cookies &amp; Headers
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Access cookies and headers directly in your route
 						handlers:
@@ -145,12 +155,14 @@ export const RoutingHandlersView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="elysia-patterns"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Elysia Patterns
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Your AbsoluteJS server IS an Elysia server. All Elysia
 						routing patterns work including groups, guards, and type
@@ -165,12 +177,14 @@ export const RoutingHandlersView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="page-handlers"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Page Handlers
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Each frontend framework has its own page handler with a
 						consistent pattern:

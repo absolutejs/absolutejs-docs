@@ -21,6 +21,7 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -48,8 +49,9 @@ export const EnvironmentVariablesView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -65,12 +67,14 @@ export const EnvironmentVariablesView = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="accessing-env"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Accessing Environment Variables
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Use getEnv to read environment variables from your .env
 						file. It throws an error if the variable is missing,
@@ -85,12 +89,14 @@ export const EnvironmentVariablesView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="required-vars"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Required Variables
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Common environment variables for AbsoluteJS
 						applications:
@@ -125,12 +131,14 @@ export const EnvironmentVariablesView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="type-safety"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Fail-Fast Validation
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						getEnv validates environment variables at startup. If a
 						variable is missing, your server fails immediately with

@@ -20,6 +20,7 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -47,8 +48,9 @@ export const AssetsView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -63,12 +65,14 @@ export const AssetsView = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="assets-directory"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Assets Directory
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Configure an assets directory in your build for bundled
 						assets:
@@ -82,12 +86,14 @@ export const AssetsView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="static-plugin"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Static Plugin
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Use Elysia&apos;s static plugin to serve files from a
 						public directory:
@@ -101,12 +107,14 @@ export const AssetsView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="asset-types"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Asset Types
-					</animated.h2>
+					</AnchorHeading>
 					<ul style={listStyle}>
 						<li style={listItemStyle}>
 							<strong style={strongStyle}>Images</strong>: PNG,

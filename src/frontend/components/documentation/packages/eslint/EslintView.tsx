@@ -6,7 +6,8 @@ import { useMediaQuery } from '../../../../hooks/useMediaQuery';
 import {
 	mainContentStyle,
 	h1Style,
-	paragraphLargeStyle
+	paragraphLargeStyle,
+	githubButtonStyle
 } from '../../../../styles/docsStyles';
 import { heroGradientStyle } from '../../../../styles/gradientStyles';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
@@ -35,8 +36,9 @@ export const EslintView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -50,6 +52,14 @@ export const EslintView = ({
 						fix problems in your code with static analysis that
 						enforces coding standards and best practices.
 					</p>
+					<animated.a
+						href="https://github.com/absolutejs/eslint-plugin-absolute"
+						target="_blank"
+						rel="noopener noreferrer"
+						style={githubButtonStyle(themeSprings)}
+					>
+						View on GitHub
+					</animated.a>
 				</animated.div>
 
 				{eslintDocsData.map((section) => (

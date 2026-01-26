@@ -18,6 +18,7 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -45,8 +46,9 @@ export const TailwindCSSView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -62,12 +64,14 @@ export const TailwindCSSView = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="build-config"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Build Configuration
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Enable Tailwind CSS by providing the config and CSS
 						paths in your build:
@@ -81,12 +85,14 @@ export const TailwindCSSView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="tailwind-config"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Tailwind Config
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Create a standard Tailwind configuration file:
 					</p>
@@ -99,12 +105,14 @@ export const TailwindCSSView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="css-file"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						CSS File
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Create your CSS entry point with Tailwind directives:
 					</p>

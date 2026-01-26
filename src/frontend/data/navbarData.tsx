@@ -24,6 +24,10 @@ export const navbarData: NavbarElement[] = [
 			{
 				href: '/documentation/eslint',
 				label: 'ESLint'
+			},
+			{
+				href: '/documentation/scoped-state',
+				label: 'Scoped State'
 			}
 		]
 	},

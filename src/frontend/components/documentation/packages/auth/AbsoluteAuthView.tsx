@@ -8,12 +8,14 @@ import {
 	h1Style,
 	sectionStyle,
 	paragraphSpacedStyle,
-	paragraphLargeStyle
+	paragraphLargeStyle,
+	githubButtonStyle
 } from '../../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
+import { AnchorHeading } from '../../../utils/AnchorHeading';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
@@ -52,8 +54,9 @@ export const AbsoluteAuthView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -68,26 +71,38 @@ export const AbsoluteAuthView = ({
 						solution with optional OpenID Connect capabilities and
 						end-to-end type safety.
 					</p>
+					<animated.a
+						href="https://github.com/absolutejs/absolute-auth"
+						target="_blank"
+						rel="noopener noreferrer"
+						style={githubButtonStyle(themeSprings)}
+					>
+						View on GitHub
+					</animated.a>
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="key-features"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Key Features
-					</animated.h2>
+					</AnchorHeading>
 					<AuthFeaturesList themeSprings={themeSprings} />
 					<OAuthFlowDiagram themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="installation"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Installation
-					</animated.h2>
+					</AnchorHeading>
 					<PrismPlus
 						codeString={`bun install @absolutejs/auth`}
 						language="bash"
@@ -97,12 +112,14 @@ export const AbsoluteAuthView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="basic-setup"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Basic Setup
-					</animated.h2>
+					</AnchorHeading>
 					<PrismPlus
 						codeString={basicSetup}
 						language="typescript"
@@ -112,12 +129,14 @@ export const AbsoluteAuthView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="protect-route"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Protect Routes
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The protectRoute helper function protects routes that
 						require authentication. It accepts two callbacks with
@@ -137,12 +156,14 @@ export const AbsoluteAuthView = ({
 				<AuthFlowSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="authentication-routes"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Authentication Routes
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The library automatically creates the following routes:
 					</p>

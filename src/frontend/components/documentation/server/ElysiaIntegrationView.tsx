@@ -24,6 +24,7 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -53,8 +54,9 @@ export const ElysiaIntegrationView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -71,12 +73,14 @@ export const ElysiaIntegrationView = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="elysia-foundation"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Built on Elysia
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						AbsoluteJS doesn&apos;t wrap or abstract Elysia—it
 						enhances it. You write standard Elysia code with
@@ -91,12 +95,14 @@ export const ElysiaIntegrationView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="type-safety"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						End-to-End Type Safety
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						Elysia&apos;s revolutionary type system integrates
 						seamlessly with AbsoluteJS. Schema validation, error
@@ -171,12 +177,14 @@ export const ElysiaIntegrationView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="plugins"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Using Plugins
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Use any Elysia plugin alongside AbsoluteJS:
 					</p>
@@ -189,12 +197,14 @@ export const ElysiaIntegrationView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="derive"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Derive &amp; Dependency Injection
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Use Elysia&apos;s derive for dependency injection.
 						Derived values are available in all subsequent handlers
@@ -209,12 +219,14 @@ export const ElysiaIntegrationView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="groups"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Route Groups
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Organize routes with groups. Each group can have its own
 						middleware:

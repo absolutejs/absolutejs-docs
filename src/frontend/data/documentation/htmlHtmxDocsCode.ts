@@ -111,3 +111,40 @@ new Elysia()
       </ul>
     \`;
   })`;
+
+export const htmxScopedStateSetup = `\
+import Elysia from 'elysia';
+import { scopedState } from 'elysia-scoped-state';
+import { handleHTMXPageRequest } from '@absolutejs/absolute';
+
+new Elysia()
+  .use(
+    scopedState({
+      count: { value: 0 },
+      cart: { value: [] }
+    })
+  )
+  .get('/app', () => handleHTMXPageRequest('./build/pages/app.html'))
+  .get('/api/count', ({ scopedStore }) => {
+    // Returns this user's count only
+    return \`<span>\${scopedStore.count}</span>\`;
+  })
+  .post('/api/increment', ({ scopedStore }) => {
+    // Only increments this user's count
+    return \`<span>\${++scopedStore.count}</span>\`;
+  })
+  .listen(3000);`;
+
+export const htmxScopedStateHtml = `\
+<!-- Each user's button clicks only affect their own count -->
+<div>
+  Count: <span id="count" hx-get="/api/count" hx-trigger="load">0</span>
+</div>
+
+<button hx-post="/api/increment" hx-target="#count" hx-swap="innerHTML">
+  +1
+</button>
+
+<!-- User A clicks 5 times → sees 5 -->
+<!-- User B visits the page → sees 0 (their own fresh state) -->
+<!-- User B clicks 2 times → sees 2 (independent from User A) -->`;

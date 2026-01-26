@@ -26,6 +26,7 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TypeSafetyFlowDiagram } from '../../diagrams/TypeSafetyFlowDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -55,8 +56,9 @@ export const DataFetchingView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -72,12 +74,14 @@ export const DataFetchingView = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="server-side"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Server-Side Fetching
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						All data fetching happens on the server in your route
 						handlers. Data is passed to components as type-safe
@@ -134,12 +138,14 @@ export const DataFetchingView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="eden-treaty"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Eden Treaty
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						For client-side data fetching, AbsoluteJS uses Eden
 						Treaty instead of raw fetch requests. Eden provides
@@ -254,12 +260,14 @@ export const DataFetchingView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="type-flow"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						End-to-End Type Flow
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						Types flow seamlessly from your database schema through
 						your route handlers to your components. TypeScript
@@ -291,12 +299,14 @@ export const DataFetchingView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="status-responses"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Type-Safe Status Responses
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Status responses are also type-safe. Elysia&apos;s
 						status() function returns typed responses for any HTTP

@@ -24,6 +24,7 @@ import {
 	gradientTextStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import { FrameworkEcosystemDiagram } from '../../diagrams/FrameworkEcosystemDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
@@ -54,8 +55,9 @@ export const Overview = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -82,12 +84,14 @@ export const Overview = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="what-is-absolutejs"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						What is AbsoluteJS?
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						AbsoluteJS is a full-stack meta framework that unifies
 						server-side rendering across multiple frontend
@@ -106,12 +110,14 @@ export const Overview = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="key-features"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Key Features
-					</animated.h2>
+					</AnchorHeading>
 					<div
 						style={{
 							display: 'grid',
@@ -189,12 +195,14 @@ export const Overview = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="framework-support"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Framework Support
-					</animated.h2>
+					</AnchorHeading>
 					<FrameworkEcosystemDiagram themeSprings={themeSprings} />
 					<animated.div
 						style={{
@@ -313,12 +321,14 @@ export const Overview = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="quick-example"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Quick Example
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Here&apos;s a minimal AbsoluteJS server with React:
 					</p>
@@ -331,12 +341,14 @@ export const Overview = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="next-steps"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Next Steps
-					</animated.h2>
+					</AnchorHeading>
 					<ul style={listStyle}>
 						<li style={listItemStyle}>
 							<strong style={strongStyle}>Installation</strong> —

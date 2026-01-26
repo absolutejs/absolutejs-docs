@@ -168,3 +168,21 @@ export const tableCodeStyle: CSSProperties = {
 	fontSize: '0.875rem',
 	padding: '0.2rem 0.5rem'
 };
+
+export const githubButtonStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	alignItems: 'center',
+	background: themeSprings.themeTertiary,
+	border: '1px solid rgba(128, 128, 128, 0.2)',
+	borderRadius: '8px',
+	color: themeSprings.contrastPrimary,
+	display: 'inline-flex',
+	fontSize: '0.9rem',
+	fontWeight: 500,
+	gap: '0.5rem',
+	marginTop: '1rem',
+	padding: '0.625rem 1rem',
+	textDecoration: 'none',
+	transition: 'transform 0.15s ease, box-shadow 0.15s ease'
+});

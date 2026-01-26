@@ -21,13 +21,16 @@ import {
 	tableContainerStyle,
 	tableStyle,
 	tableHeaderStyle,
-	tableCellStyle
+	tableCellStyle,
+	githubButtonStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle,
 	featureCardStyle
 } from '../../../styles/gradientStyles';
+import { DARK_LOGO_PROVIDERS } from '../../../styles/authModalStyles';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -63,8 +66,9 @@ export const CitraView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -79,15 +83,25 @@ export const CitraView = ({
 						and request details. Ready-to-use foundation for secure
 						authentication in TypeScript applications.
 					</p>
+					<animated.a
+						href="https://github.com/absolutejs/citra"
+						target="_blank"
+						rel="noopener noreferrer"
+						style={githubButtonStyle(themeSprings)}
+					>
+						View on GitHub
+					</animated.a>
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="why-citra"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Why Citra?
-					</animated.h2>
+					</AnchorHeading>
 					<div
 						style={{
 							display: 'grid',
@@ -136,12 +150,14 @@ export const CitraView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="installation"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Installation
-					</animated.h2>
+					</AnchorHeading>
 					<PrismPlus
 						codeString={`bun install citra`}
 						language="bash"
@@ -151,12 +167,14 @@ export const CitraView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="getting-started"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Getting Started
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Citra uses strong TypeScript typing to help you build
 						OAuth clients safely. Each provider includes its own
@@ -172,12 +190,14 @@ export const CitraView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="building-auth-url"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Building the Authorization URL
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Generate a fully customized authorization URL for
 						redirecting users to the provider's login page. Every
@@ -194,12 +214,14 @@ export const CitraView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="handling-callback"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Handling the Callback
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Exchange the authorization code and PKCE verifier for an
 						OAuth2 token response:
@@ -213,12 +235,14 @@ export const CitraView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="fetching-user-profile"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Fetching the User Profile
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Exchange the access token for user information:
 					</p>
@@ -231,12 +255,14 @@ export const CitraView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="refreshing-revoking-tokens"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Token Management
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						If supported by the provider, you can refresh and revoke
 						tokens:
@@ -256,12 +282,14 @@ export const CitraView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="supported-providers"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Supported Providers
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Citra supports {providersCount} OAuth 2.0 providers:
 					</p>
@@ -275,41 +303,60 @@ export const CitraView = ({
 							marginTop: '1rem'
 						}}
 					>
-						{providers.map((provider) => (
-							<animated.div
-								key={provider.name}
-								style={{
-									...featureCardStyle(themeSprings),
-									alignItems: 'center',
-									display: 'flex',
-									gap: '0.75rem',
-									padding: '0.75rem 1rem'
-								}}
-							>
-								<img
-									src={provider.logoUrl}
-									alt={`${provider.name} logo`}
+						{providers.map((provider) => {
+							const providerKey = Object.keys(providerData).find(
+								(key) =>
+									providerData[
+										key as keyof typeof providerData
+									].name === provider.name
+							);
+							const needsInvert =
+								providerKey &&
+								DARK_LOGO_PROVIDERS.has(providerKey);
+
+							return (
+								<animated.div
+									key={provider.name}
 									style={{
-										borderRadius: '4px',
-										flexShrink: 0,
-										height: '24px',
-										objectFit: 'contain',
-										width: '24px'
-									}}
-								/>
-								<span
-									style={{
-										fontSize: '0.9rem',
-										fontWeight: 500,
-										overflow: 'hidden',
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap'
+										...featureCardStyle(themeSprings),
+										alignItems: 'center',
+										display: 'flex',
+										gap: '0.75rem',
+										padding: '0.75rem 1rem'
 									}}
 								>
-									{provider.name}
-								</span>
-							</animated.div>
-						))}
+									<animated.img
+										src={provider.logoUrl}
+										alt={`${provider.name} logo`}
+										style={{
+											borderRadius: '4px',
+											filter: needsInvert
+												? themeSprings.theme.to((t) =>
+														t.endsWith('dark')
+															? 'brightness(0) invert(1)'
+															: 'none'
+													)
+												: 'none',
+											flexShrink: 0,
+											height: '24px',
+											objectFit: 'contain',
+											width: '24px'
+										}}
+									/>
+									<span
+										style={{
+											fontSize: '0.9rem',
+											fontWeight: 500,
+											overflow: 'hidden',
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap'
+										}}
+									>
+										{provider.name}
+									</span>
+								</animated.div>
+							);
+						})}
 					</div>
 				</section>
 

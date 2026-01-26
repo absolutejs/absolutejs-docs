@@ -1,11 +1,14 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import {
 	htmxApiEndpoint,
 	htmxBuild,
 	htmxExample,
-	htmxHandler
+	htmxHandler,
+	htmxScopedStateHtml,
+	htmxScopedStateSetup
 } from '../../../data/documentation/htmlHtmxDocsCode';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
@@ -30,7 +33,8 @@ const tocItems: TocItem[] = [
 	{ href: '#build-config', label: 'Build Configuration' },
 	{ href: '#page-handler', label: 'Page Handler' },
 	{ href: '#example', label: 'Example' },
-	{ href: '#api-endpoints', label: 'API Endpoints' }
+	{ href: '#api-endpoints', label: 'API Endpoints' },
+	{ href: '#scoped-state', label: 'Per-User State' }
 ];
 
 export const HTMXView = ({
@@ -50,8 +54,9 @@ export const HTMXView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -67,12 +72,14 @@ export const HTMXView = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="build-config"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Build Configuration
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Add HTMX to your build by specifying the directory
 						containing your HTMX pages:
@@ -86,12 +93,14 @@ export const HTMXView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="page-handler"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Page Handler
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Pass the path to the built HTML file to{' '}
 						<code>handleHTMXPageRequest</code>:
@@ -105,12 +114,14 @@ export const HTMXView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="example"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Example
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						HTMX pages use HTML attributes to trigger server
 						requests and update the DOM:
@@ -124,12 +135,14 @@ export const HTMXView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="api-endpoints"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						API Endpoints
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						HTMX requests are handled by regular Elysia endpoints
 						that return HTML fragments:
@@ -158,6 +171,95 @@ export const HTMXView = ({
 							: Skip the JSON/parse cycle for simpler data flow
 						</li>
 					</ul>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						level="h2"
+						id="scoped-state"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Per-User State with Scoped State
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						When building interactive HTMX applications, you often
+						need state that&apos;s specific to each user. For
+						example, a counter button should only increment that
+						user&apos;s count, not everyone&apos;s. The{' '}
+						<code>elysia-scoped-state</code> plugin solves this by
+						automatically managing per-user sessions.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Without scoped state, all users would share the same
+						server state. With scoped state, each user gets their
+						own isolated state slice:
+					</p>
+					<PrismPlus
+						codeString={htmxScopedStateSetup}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p
+						style={{
+							...paragraphSpacedStyle,
+							marginTop: '1.5rem'
+						}}
+					>
+						The HTML stays the same, but now each user&apos;s
+						interactions only affect their own state:
+					</p>
+					<PrismPlus
+						codeString={htmxScopedStateHtml}
+						language="html"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+						<li style={listItemStyle}>
+							<strong style={strongStyle}>
+								Automatic sessions
+							</strong>
+							: A secure <code>user_session_id</code> cookie is
+							created on first visit
+						</li>
+						<li style={listItemStyle}>
+							<strong style={strongStyle}>User isolation</strong>:
+							Each user&apos;s <code>scopedStore</code> is
+							completely independent
+						</li>
+						<li style={listItemStyle}>
+							<strong style={strongStyle}>
+								No client-side state
+							</strong>
+							: All state lives on the server, perfect for
+							HTMX&apos;s HTML-over-the-wire approach
+						</li>
+					</ul>
+					<p
+						style={{
+							...paragraphSpacedStyle,
+							marginTop: '1rem'
+						}}
+					>
+						See the{' '}
+						<a
+							href="#"
+							onClick={(e) => {
+								e.preventDefault();
+								onNavigate('scoped-state');
+							}}
+							style={{
+								color: 'inherit',
+								textDecoration: 'underline'
+							}}
+						>
+							Scoped State documentation
+						</a>{' '}
+						for more details on configuration options and advanced
+						usage.
+					</p>
 				</section>
 
 				<DocsNavigation

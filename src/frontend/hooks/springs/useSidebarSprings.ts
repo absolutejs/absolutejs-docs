@@ -39,12 +39,17 @@ export const useSidebarSprings = (view: DocsView) => {
 		{ counts: [], offset: 0, selectedIndex: -1, totalButtons: 0 }
 	);
 
-	const [linksSprings, linksApi] = useSprings(totalButtons, (index) => ({
-		backgroundColor: index === selectedIndex ? primaryColor : 'transparent',
-		borderColor: index === selectedIndex ? primaryColor : 'transparent',
-		opacity: index === selectedIndex ? 1 : 0,
-		config: { tension: 300, friction: 26 }
-	}));
+	const [linksSprings, linksApi] = useSprings(
+		totalButtons,
+		(index) => ({
+			backgroundColor:
+				index === selectedIndex ? primaryColor : 'transparent',
+			borderColor: index === selectedIndex ? primaryColor : 'transparent',
+			opacity: index === selectedIndex ? 1 : 0,
+			config: { tension: 300, friction: 26 }
+		}),
+		[selectedIndex]
+	);
 
 	const startIndexForDropdown = (dropdownIndex: number) =>
 		dropdownButtonCounts

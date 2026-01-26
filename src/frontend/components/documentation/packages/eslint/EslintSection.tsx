@@ -1,4 +1,3 @@
-import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../../../types/springTypes';
 import { EslintDocsSection } from '../../../../data/documentation/eslintDocsData';
 import { useTabSprings } from '../../../../hooks/springs/useTabSprings';
@@ -7,6 +6,7 @@ import {
 	paragraphSpacedStyle
 } from '../../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../../styles/gradientStyles';
+import { AnchorHeading } from '../../../utils/AnchorHeading';
 import { CodeSlider } from '../../../home/CodeSlider';
 import { PrismPlus } from '../../../utils/PrismPlus';
 
@@ -22,10 +22,15 @@ export const EslintSection = ({
 	const { handleTabClick, currentTab, sliderSprings } = useTabSprings(2);
 
 	return (
-		<section style={sectionStyle} id={section.href.replace('#', '')}>
-			<animated.h2 style={gradientHeadingStyle(themeSprings)}>
+		<section style={sectionStyle}>
+			<AnchorHeading
+				level="h2"
+				id={section.href.replace('#', '')}
+				style={gradientHeadingStyle(themeSprings)}
+				themeSprings={themeSprings}
+			>
 				{section.title}
-			</animated.h2>
+			</AnchorHeading>
 			<p style={paragraphSpacedStyle}>{section.description}</p>
 			<CodeSlider
 				handleTabClick={handleTabClick}

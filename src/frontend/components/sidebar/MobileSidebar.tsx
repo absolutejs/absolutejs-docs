@@ -16,6 +16,8 @@ type MobileSidebarProps = {
 	view: DocsView;
 	themeSprings: ThemeSprings;
 	navigateToView: (newView: DocsView) => void;
+	openSections: Set<string>;
+	onToggleSection: (label: string) => void;
 };
 
 export const MobileSidebar = ({
@@ -23,7 +25,9 @@ export const MobileSidebar = ({
 	springApi,
 	view,
 	themeSprings,
-	navigateToView
+	navigateToView,
+	openSections,
+	onToggleSection
 }: MobileSidebarProps) => {
 	const { linksSprings, linksApi, startIndexForDropdown } =
 		useSidebarSprings(view);
@@ -129,6 +133,10 @@ export const MobileSidebar = ({
 									buttons={element.buttons}
 									icon={element.icon}
 									themeSprings={themeSprings}
+									isOpen={openSections.has(element.label)}
+									onToggle={() =>
+										onToggleSection(element.label)
+									}
 								/>
 							);
 						}

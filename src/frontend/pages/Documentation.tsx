@@ -1,12 +1,12 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useState } from 'react';
-import { DocsView } from '../../types/types';
+import { DocsView, isMenuDropdown } from '../../types/types';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { MobileSidebar } from '../components/sidebar/MobileSidebar';
 import { MobileSidebarToggle } from '../components/sidebar/MobileSidebarToggle';
 import { Sidebar } from '../components/sidebar/Sidebar';
-import { docsViews } from '../data/sidebarData';
+import { docsViews, sidebarData } from '../data/sidebarData';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
 import { useMediaQuery } from '../hooks/useMediaQuery';
@@ -18,6 +18,17 @@ type DocumentationProps = {
 	initialView: DocsView;
 };
 
+const findSectionForView = (view: DocsView): string | null => {
+	for (const section of sidebarData) {
+		if (isMenuDropdown(section)) {
+			if (section.buttons.some((btn) => btn.id === view)) {
+				return section.label;
+			}
+		}
+	}
+	return null;
+};
+
 export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 	const { user, handleSignOut } = useAuthStatus();
 	const [themeSprings, setTheme] = useTheme(theme);
@@ -27,6 +38,11 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 	const isTablet = isSizeOrLess('lg') && !isMobile;
 	const isMobileOrTablet = isMobile || isTablet;
 
+	const [openSections, setOpenSections] = useState<Set<string>>(() => {
+		const initial = findSectionForView(initialView);
+		return initial ? new Set([initial]) : new Set();
+	});
+
 	const [sidebarSpring, sidebarSpringApi] = useSpring(() => ({
 		config: { friction: 40, tension: 275 },
 		overlayOpacity: 0,
@@ -34,6 +50,26 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 	}));
 
 	const [tocOpen, setTocOpen] = useState(false);
+
+	const handleNavigate = (newView: DocsView) => {
+		navigateToView(newView);
+		const section = findSectionForView(newView);
+		if (section) {
+			setOpenSections((current) => new Set([...current, section]));
+		}
+	};
+
+	const handleToggleSection = (label: string) => {
+		setOpenSections((current) => {
+			const next = new Set(current);
+			if (next.has(label)) {
+				next.delete(label);
+			} else {
+				next.add(label);
+			}
+			return next;
+		});
+	};
 
 	const toggleSidebar = () => {
 		void sidebarSpringApi.start({
@@ -78,21 +114,25 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 									springApi={sidebarSpringApi}
 									view={view}
 									themeSprings={themeSprings}
-									navigateToView={navigateToView}
+									navigateToView={handleNavigate}
+									openSections={openSections}
+									onToggleSection={handleToggleSection}
 								/>
 							</>
 						) : (
 							<Sidebar
 								view={view}
 								themeSprings={themeSprings}
-								navigateToView={navigateToView}
+								navigateToView={handleNavigate}
+								openSections={openSections}
+								onToggleSection={handleToggleSection}
 							/>
 						)}
 						<ActiveView
 							themeSprings={themeSprings}
 							currentPageId={view}
 							onNavigate={(pageId) =>
-								navigateToView(pageId as DocsView)
+								handleNavigate(pageId as DocsView)
 							}
 							tocOpen={tocOpen}
 							onTocToggle={toggleToc}

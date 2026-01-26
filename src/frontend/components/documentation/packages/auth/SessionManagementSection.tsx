@@ -11,16 +11,19 @@ import {
 	listItemStyle
 } from '../../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../../styles/gradientStyles';
+import { AnchorHeading } from '../../../utils/AnchorHeading';
 import { PrismPlus } from '../../../utils/PrismPlus';
 
 export const SessionManagementSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
-		<animated.h2
-			style={gradientHeadingStyle(themeSprings)}
+		<AnchorHeading
+			level="h2"
 			id="session-management"
+			style={gradientHeadingStyle(themeSprings)}
+			themeSprings={themeSprings}
 		>
 			Session Management
-		</animated.h2>
+		</AnchorHeading>
 		<p style={paragraphSpacedStyle}>
 			Absolute Auth provides automatic session management with
 			configurable lifetimes and cleanup. Sessions are automatically

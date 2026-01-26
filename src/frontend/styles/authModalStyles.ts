@@ -115,6 +115,7 @@ export const oauthButtonTextStyle: CSSProperties = {
 export const DARK_LOGO_PROVIDERS = new Set([
 	'42',
 	'amazon',
+	'amazoncognito',
 	'anilist',
 	'apple',
 	'atlassian',
@@ -130,6 +131,7 @@ export const DARK_LOGO_PROVIDERS = new Set([
 	'dribbble',
 	'dropbox',
 	'epicgames',
+	'etsy',
 	'gitea',
 	'gitlab',
 	'kakao',
@@ -137,6 +139,7 @@ export const DARK_LOGO_PROVIDERS = new Set([
 	'kick',
 	'lichess',
 	'linear',
+	'mercadopago',
 	'myanimelist',
 	'notion',
 	'okta',
@@ -147,6 +150,7 @@ export const DARK_LOGO_PROVIDERS = new Set([
 	'shikimori',
 	'strava',
 	'tiktok',
+	'twitter',
 	'vk',
 	'withings'
 ]);

@@ -37,6 +37,7 @@ import { QuickstartView } from '../components/documentation/getting-started/Quic
 import { Overview } from '../components/documentation/overview/OverviewView';
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
+import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
@@ -71,6 +72,7 @@ export const docsViews = definePortalViews({
 	quickstart: QuickstartView,
 	react: ReactView,
 	'routing-and-handlers': RoutingHandlersView,
+	'scoped-state': ScopedStateView,
 	'server-state': ServerStateView,
 	'ssr-model': SSRModelView,
 	svelte: SvelteView,
@@ -127,7 +129,8 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'absolute-auth', label: 'Absolute Auth' },
 			{ id: 'citra', label: 'Citra' },
 			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
-			{ id: 'eslint', label: 'ESLint' }
+			{ id: 'eslint', label: 'ESLint' },
+			{ id: 'scoped-state', label: 'Scoped State' }
 		],
 		icon: animated(FaPuzzlePiece),
 		label: 'Ecosystem'

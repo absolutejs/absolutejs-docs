@@ -2,6 +2,7 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import {
 	h1Style,
 	mainContentStyle,
@@ -26,8 +27,9 @@ export const AngularView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -42,12 +44,14 @@ export const AngularView = ({
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="coming-soon"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Coming Soon
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						We&apos;re actively working on Angular SSR support.
 						Angular will use platform-server utilities for

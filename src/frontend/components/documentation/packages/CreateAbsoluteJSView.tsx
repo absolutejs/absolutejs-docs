@@ -13,13 +13,15 @@ import {
 	tableStyle,
 	tableHeaderStyle,
 	tableCellStyle,
-	tableCodeStyle
+	tableCodeStyle,
+	githubButtonStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle,
 	featureCardStyle
 } from '../../../styles/gradientStyles';
+import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -195,8 +197,9 @@ export const CreateAbsoluteJSView = ({
 			style={{
 				display: 'flex',
 				flex: 1,
+				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'auto',
+				overflowY: 'scroll',
 				position: 'relative'
 			}}
 		>
@@ -210,15 +213,25 @@ export const CreateAbsoluteJSView = ({
 						applications with an interactive CLI. Configure
 						frameworks, databases, auth, and tooling in one command.
 					</p>
+					<animated.a
+						href="https://github.com/absolutejs/create-absolutejs"
+						target="_blank"
+						rel="noopener noreferrer"
+						style={githubButtonStyle(themeSprings)}
+					>
+						View on GitHub
+					</animated.a>
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="quick-start"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Quick Start
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Create a new AbsoluteJS project in seconds:
 					</p>
@@ -285,12 +298,14 @@ export const CreateAbsoluteJSView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="project-overview"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Project Overview
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						After running Create-AbsoluteJS, your project includes
 						an organized src/ folder with separate frontend and
@@ -348,12 +363,14 @@ export const CreateAbsoluteJSView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="cli-options"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						CLI Options
-					</animated.h2>
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Customize your setup with command-line flags to skip
 						prompts or pre-configure options:
@@ -397,12 +414,14 @@ export const CreateAbsoluteJSView = ({
 				</section>
 
 				<section style={sectionStyle}>
-					<animated.h2
-						style={gradientHeadingStyle(themeSprings)}
+					<AnchorHeading
+						level="h2"
 						id="configuration"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
 					>
 						Configuration Options
-					</animated.h2>
+					</AnchorHeading>
 
 					<animated.h3
 						style={gradientHeadingStyle(themeSprings, true)}

@@ -11,6 +11,7 @@ import {
 	tableCodeStyle
 } from '../../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../../styles/gradientStyles';
+import { AnchorHeading } from '../../../utils/AnchorHeading';
 import { PrismPlus } from '../../../utils/PrismPlus';
 
 const routeConfigProps = [
@@ -108,12 +109,14 @@ const lifecycleHooks = [
 
 export const UserHandlingSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
-		<animated.h2
-			style={gradientHeadingStyle(themeSprings)}
+		<AnchorHeading
+			level="h2"
 			id="user-handling"
+			style={gradientHeadingStyle(themeSprings)}
+			themeSprings={themeSprings}
 		>
 			Custom User Handling
-		</animated.h2>
+		</AnchorHeading>
 		<p style={paragraphSpacedStyle}>
 			Absolute Auth does not provide database adapters. Instead, it
 			exposes hooks throughout the OAuth lifecycle, allowing you to

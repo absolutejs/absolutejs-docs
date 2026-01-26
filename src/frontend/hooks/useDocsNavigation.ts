@@ -23,7 +23,7 @@ export const useDocsNavigation = (initialView: DocsView) => {
 			window.history.pushState(
 				{ view: newView },
 				'',
-				`${nextPath}${search}${hash}`
+				`${nextPath}${search}`
 			);
 		}
 		setView(newView);

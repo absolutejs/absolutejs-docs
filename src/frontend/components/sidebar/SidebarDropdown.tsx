@@ -1,5 +1,4 @@
 import { animated, AnimatedComponent, useSpring } from '@react-spring/web';
-import { useEffect } from 'react';
 import { IconType } from 'react-icons';
 import {
 	SidebarLinksApi,
@@ -21,6 +20,8 @@ type SidebarDropdownProps = {
 	themeSprings: ThemeSprings;
 	startIndex: number;
 	view: DocsView;
+	isOpen: boolean;
+	onToggle: () => void;
 };
 
 export const SidebarDropdown = ({
@@ -32,50 +33,35 @@ export const SidebarDropdown = ({
 	buttons,
 	startIndex,
 	navigateToView,
-	themeSprings
+	themeSprings,
+	isOpen,
+	onToggle
 }: SidebarDropdownProps) => {
 	const {
 		ref,
 		dimensions: { scrollHeight }
 	} = useContainerQuery<HTMLDivElement>();
-	const [dropdownSprings, dropdownApi] = useSpring(() => ({
-		config: { tension: 300, friction: 26 },
-		height: 0,
-		opacity: 0,
-		transform: 'rotate(-90deg)'
-	}));
 
 	// TODO: Update the rule to handle icons or other components someone doesnt control
 
-	const toggleDropdown = () => {
-		if (ref === null) return;
+	// Only animate when we have a measured height, otherwise use auto
+	const hasHeight = scrollHeight > 0;
+	const dropdownSprings = useSpring({
+		config: { tension: 300, friction: 26 },
+		height: isOpen ? scrollHeight : 0,
+		opacity: isOpen ? 1 : 0,
+		transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)'
+	});
 
-		const isOpen = dropdownSprings.opacity.get() > 0;
-
-		void dropdownApi.start({
-			height: isOpen ? 0 : scrollHeight,
-			opacity: isOpen ? 0 : 1,
-			transform: isOpen ? 'rotate(-90deg)' : 'rotate(0deg)'
-		});
-	};
-
-	useEffect(() => {
-		const buttonIds = buttons.map((button) => button.id);
-		if (buttonIds.includes(view)) {
-			void dropdownApi.start({
-				height: scrollHeight,
-				opacity: 1,
-				transform: 'rotate(0deg)'
-			});
-		}
-	}, [scrollHeight]);
+	// Use auto height until we have a measurement
+	const heightStyle = !hasHeight && isOpen ? 'auto' : dropdownSprings.height;
 
 	const Icon = icon;
 
 	return (
 		<div style={{ marginTop: '0.5rem', width: '100%' }}>
 			<animated.button
-				onClick={toggleDropdown}
+				onClick={onToggle}
 				style={{
 					alignItems: 'center',
 					backgroundColor: 'transparent',
@@ -122,7 +108,7 @@ export const SidebarDropdown = ({
 			<animated.nav
 				ref={ref}
 				style={{
-					height: dropdownSprings.height,
+					height: heightStyle,
 					opacity: dropdownSprings.opacity,
 					overflow: 'hidden'
 				}}

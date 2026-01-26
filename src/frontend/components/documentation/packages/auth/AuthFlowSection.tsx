@@ -12,16 +12,19 @@ import {
 	listItemStyle
 } from '../../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../../styles/gradientStyles';
+import { AnchorHeading } from '../../../utils/AnchorHeading';
 import { PrismPlus } from '../../../utils/PrismPlus';
 
 export const AuthFlowSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
-		<animated.h2
-			style={gradientHeadingStyle(themeSprings)}
+		<AnchorHeading
+			level="h2"
 			id="handle-auth-flow"
+			style={gradientHeadingStyle(themeSprings)}
+			themeSprings={themeSprings}
 		>
 			Handle Authentication Flow
-		</animated.h2>
+		</AnchorHeading>
 		<p style={paragraphSpacedStyle}>
 			When you use the Absolute Auth plugin, it automatically creates all
 			the authentication routes you need. You do not implement your own
