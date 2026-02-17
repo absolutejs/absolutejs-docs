@@ -54,9 +54,9 @@ export const SSRModelView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="ssr-model">
+					<h1 style={h1Style(isMobileOrTablet)} id="ssr-model">
 						SSR Model
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -185,6 +185,7 @@ export const SSRModelView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

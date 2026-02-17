@@ -55,9 +55,9 @@ export const HostingView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="hosting">
+					<h1 style={h1Style(isMobileOrTablet)} id="hosting">
 						Hosting
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -190,6 +190,7 @@ export const HostingView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

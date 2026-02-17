@@ -54,9 +54,9 @@ export const AssetsView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="assets">
+					<h1 style={h1Style(isMobileOrTablet)} id="assets">
 						Assets
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -137,6 +137,7 @@ export const AssetsView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

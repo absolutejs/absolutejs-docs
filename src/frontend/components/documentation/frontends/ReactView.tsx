@@ -66,9 +66,9 @@ export const ReactView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="react">
+					<h1 style={h1Style(isMobileOrTablet)} id="react">
 						React
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -330,6 +330,7 @@ export const ReactView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

@@ -55,9 +55,9 @@ export const ProductionBuildView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="production-build">
+					<h1 style={h1Style(isMobileOrTablet)} id="production-build">
 						Production Build
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -188,6 +188,7 @@ export const ProductionBuildView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

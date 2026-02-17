@@ -44,7 +44,8 @@ export const mainDefault = (
 export const htmlDefault: CSSProperties = {
 	colorScheme: 'light dark',
 	fontFamily: 'Poppins, sans-serif',
-	height: '100%'
+	height: '100%',
+	overflowX: 'hidden'
 };
 
 type ButtonStyleProps<
