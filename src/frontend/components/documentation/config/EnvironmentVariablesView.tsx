@@ -55,9 +55,12 @@ export const EnvironmentVariablesView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="environment-variables">
+					<h1
+						style={h1Style(isMobileOrTablet)}
+						id="environment-variables"
+					>
 						Environment Variables
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -155,6 +158,7 @@ export const EnvironmentVariablesView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

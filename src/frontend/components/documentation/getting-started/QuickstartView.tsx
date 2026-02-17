@@ -60,9 +60,9 @@ export const QuickstartView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="quickstart">
+					<h1 style={h1Style(isMobileOrTablet)} id="quickstart">
 						Quickstart
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -225,6 +225,7 @@ export const QuickstartView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

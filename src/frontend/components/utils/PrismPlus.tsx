@@ -93,7 +93,7 @@ export const PrismPlus = ({
 					margin: 0,
 					marginBottom: '1.5rem',
 					padding: '1rem',
-					overflowX: wrapLongLines ? 'visible' : 'auto'
+					overflowX: 'auto'
 				}}
 				showLineNumbers={showLineNumbers}
 				wrapLongLines={wrapLongLines}

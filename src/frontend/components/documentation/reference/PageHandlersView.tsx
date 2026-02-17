@@ -170,9 +170,9 @@ export const PageHandlersView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="page-handlers">
+					<h1 style={h1Style(isMobileOrTablet)} id="page-handlers">
 						Page Handlers
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -443,6 +443,7 @@ export const PageHandlersView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

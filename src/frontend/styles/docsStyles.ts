@@ -1,16 +1,20 @@
 import { CSSProperties } from 'react';
 import { ThemeSprings, AnimatedCSSProperties } from '../../types/springTypes';
 
-export const mainContentStyle: CSSProperties = {
+export const mainContentStyle = (
+	isMobileOrTablet?: boolean
+): CSSProperties => ({
 	display: 'flex',
 	flex: 1,
 	flexDirection: 'column',
 	lineHeight: '1.7',
 	margin: '0 auto',
-	maxWidth: '75%',
-	padding: '2rem 0',
-	paddingRight: '4rem'
-};
+	maxWidth: isMobileOrTablet ? '100%' : '75%',
+	minWidth: 0,
+	overflow: 'hidden',
+	padding: isMobileOrTablet ? '1.5rem 1.25rem' : '2rem 0',
+	paddingRight: isMobileOrTablet ? '1.25rem' : '4rem'
+});
 
 export const sectionStyle: CSSProperties = {
 	marginBottom: '2rem'
@@ -59,10 +63,10 @@ export const listItemStyle: CSSProperties = {
 	marginBottom: '0.5rem'
 };
 
-export const h1Style: CSSProperties = {
-	fontSize: '3rem',
+export const h1Style = (isMobileOrTablet?: boolean): CSSProperties => ({
+	fontSize: isMobileOrTablet ? '2rem' : '3rem',
 	marginBottom: '1rem'
-};
+});
 
 // Table of Contents Styles
 export const tocNavStyle = (
@@ -72,6 +76,7 @@ export const tocNavStyle = (
 	borderLeftColor: themeSprings.contrastSecondary.to((color) => color),
 	height: 'fit-content',
 	maxHeight: 'calc(100vh - 4rem)',
+	minWidth: '200px',
 	overflowY: 'auto',
 	padding: '0 1.5rem',
 	position: 'sticky',

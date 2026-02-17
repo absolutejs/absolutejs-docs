@@ -18,7 +18,7 @@ export const CommandSection = ({ themeSprings }: ThemeProps) => (
 				Get Started
 			</a>
 			<animated.a
-				href="/documentation/packages/absolute"
+				href="/documentation/overview"
 				style={secondaryButtonStyle(themeSprings)}
 			>
 				Documentation

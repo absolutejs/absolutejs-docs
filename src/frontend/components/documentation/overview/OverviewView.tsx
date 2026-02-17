@@ -61,10 +61,13 @@ export const Overview = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						style={{ ...h1Style, ...gradientTextStyle }}
+						style={{
+							...h1Style(isMobileOrTablet),
+							...gradientTextStyle
+						}}
 						id="overview"
 					>
 						AbsoluteJS
@@ -367,6 +370,7 @@ export const Overview = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

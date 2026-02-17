@@ -54,9 +54,9 @@ export const DockerView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="docker">
+					<h1 style={h1Style(isMobileOrTablet)} id="docker">
 						Docker
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -155,6 +155,7 @@ export const DockerView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

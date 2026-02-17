@@ -60,9 +60,9 @@ export const AbsoluteAuthView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="absolute-auth">
+					<h1 style={h1Style(isMobileOrTablet)} id="absolute-auth">
 						Absolute Auth
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -176,6 +176,7 @@ export const AbsoluteAuthView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

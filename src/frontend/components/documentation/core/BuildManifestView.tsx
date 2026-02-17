@@ -63,9 +63,12 @@ export const BuildManifestView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="build-and-manifest">
+					<h1
+						style={h1Style(isMobileOrTablet)}
+						id="build-and-manifest"
+					>
 						Build &amp; Manifest
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -227,6 +230,7 @@ export const BuildManifestView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

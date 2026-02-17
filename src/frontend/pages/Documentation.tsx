@@ -34,7 +34,7 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 	const [themeSprings, setTheme] = useTheme(theme);
 	const [view, navigateToView] = useDocsNavigation(initialView);
 	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('md');
+	const isMobile = isSizeOrLess('lg');
 	const isTablet = isSizeOrLess('lg') && !isMobile;
 	const isMobileOrTablet = isMobile || isTablet;
 
@@ -94,7 +94,7 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 					user={user}
 					handleSignOut={handleSignOut}
 				/>
-				<main style={mainDefault('hidden')}>
+				<main style={{ ...mainDefault('hidden'), alignItems: 'stretch' }}>
 					<div
 						style={{
 							display: 'flex',

@@ -72,9 +72,9 @@ export const CitraView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="citra">
+					<h1 style={h1Style(isMobileOrTablet)} id="citra">
 						Citra
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -362,6 +362,7 @@ export const CitraView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

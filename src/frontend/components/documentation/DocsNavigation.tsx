@@ -12,23 +12,26 @@ type NavItem = {
 
 type DocsNavigationProps = {
 	currentPageId: string;
+	isMobileOrTablet?: boolean;
 	onNavigate: (pageId: string) => void;
 	themeSprings: ThemeSprings;
 };
 
-const containerStyle: CSSProperties = {
+const containerStyle = (isMobileOrTablet?: boolean): CSSProperties => ({
 	borderTop: '1px solid rgba(160, 231, 229, 0.2)',
 	display: 'flex',
+	flexDirection: isMobileOrTablet ? 'column' : 'row',
 	gap: '1rem',
 	justifyContent: 'space-between',
 	marginTop: '3rem',
 	paddingBottom: '3rem',
 	paddingTop: '2rem'
-};
+});
 
 const navButtonStyle = (
 	themeSprings: ThemeSprings,
-	direction: 'prev' | 'next'
+	direction: 'prev' | 'next',
+	isMobileOrTablet?: boolean
 ) => ({
 	alignItems: direction === 'prev' ? 'flex-start' : 'flex-end',
 	background: themeSprings.theme.to((theme) =>
@@ -47,7 +50,7 @@ const navButtonStyle = (
 	flex: 1,
 	flexDirection: 'column' as const,
 	gap: '0.5rem',
-	maxWidth: 'calc(50% - 0.5rem)',
+	maxWidth: isMobileOrTablet ? '100%' : 'calc(50% - 0.5rem)',
 	padding: '1rem 1.25rem',
 	textAlign: direction as 'left' | 'right',
 	textDecoration: 'none',
@@ -76,6 +79,7 @@ const pageLabelStyle = (themeSprings: ThemeSprings) => ({
 
 export const DocsNavigation = ({
 	currentPageId,
+	isMobileOrTablet,
 	onNavigate,
 	themeSprings
 }: DocsNavigationProps) => {
@@ -110,11 +114,15 @@ export const DocsNavigation = ({
 	};
 
 	return (
-		<div style={containerStyle}>
+		<div style={containerStyle(isMobileOrTablet)}>
 			{prevPage ? (
 				<animated.button
 					onClick={() => handleClick(prevPage.id)}
-					style={navButtonStyle(themeSprings, 'prev')}
+					style={navButtonStyle(
+						themeSprings,
+						'prev',
+						isMobileOrTablet
+					)}
 				>
 					<animated.span style={directionLabelStyle(themeSprings)}>
 						<FaArrowLeft size={12} />
@@ -125,13 +133,24 @@ export const DocsNavigation = ({
 					</animated.span>
 				</animated.button>
 			) : (
-				<div style={{ flex: 1, maxWidth: 'calc(50% - 0.5rem)' }} />
+				<div
+					style={{
+						flex: 1,
+						maxWidth: isMobileOrTablet
+							? '100%'
+							: 'calc(50% - 0.5rem)'
+					}}
+				/>
 			)}
 
 			{nextPage ? (
 				<animated.button
 					onClick={() => handleClick(nextPage.id)}
-					style={navButtonStyle(themeSprings, 'next')}
+					style={navButtonStyle(
+						themeSprings,
+						'next',
+						isMobileOrTablet
+					)}
 				>
 					<animated.span
 						style={{
@@ -147,7 +166,14 @@ export const DocsNavigation = ({
 					</animated.span>
 				</animated.button>
 			) : (
-				<div style={{ flex: 1, maxWidth: 'calc(50% - 0.5rem)' }} />
+				<div
+					style={{
+						flex: 1,
+						maxWidth: isMobileOrTablet
+							? '100%'
+							: 'calc(50% - 0.5rem)'
+					}}
+				/>
 			)}
 		</div>
 	);

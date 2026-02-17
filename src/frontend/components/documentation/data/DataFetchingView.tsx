@@ -62,9 +62,9 @@ export const DataFetchingView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="data-fetching">
+					<h1 style={h1Style(isMobileOrTablet)} id="data-fetching">
 						Data Fetching
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -322,6 +322,7 @@ export const DataFetchingView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

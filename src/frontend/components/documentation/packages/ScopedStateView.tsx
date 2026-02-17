@@ -66,9 +66,9 @@ export const ScopedStateView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="scoped-state">
+					<h1 style={h1Style(isMobileOrTablet)} id="scoped-state">
 						Elysia Scoped State
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -428,6 +428,7 @@ export const ScopedStateView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>

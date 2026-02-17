@@ -61,9 +61,12 @@ export const NetworkingPluginView = ({
 				position: 'relative'
 			}}
 		>
-			<div style={mainContentStyle}>
+			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style} id="networking-plugin">
+					<h1
+						style={h1Style(isMobileOrTablet)}
+						id="networking-plugin"
+					>
 						Networking Plugin
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -226,6 +229,7 @@ export const NetworkingPluginView = ({
 
 				<DocsNavigation
 					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
 					themeSprings={themeSprings}
 				/>
