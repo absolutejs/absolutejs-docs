@@ -6,9 +6,11 @@ import {
 	telemetryQueryHandlers
 } from '../handlers/telemetryHandlers';
 import { isRateLimited } from '../utils/rateLimit';
+import { getEnv } from '@absolutejs/absolute';
 import { protectRoutePlugin } from '@absolutejs/auth';
 
 const MAX_BODY_BYTES = 10_240;
+const whitelistedAdmins = getEnv('ADMIN_SUBS')?.split(',').map(s => s.trim()) ?? [];
 
 export const telemetryPlugin = (db: DatabaseType) =>
 	new Elysia()
@@ -23,14 +25,14 @@ export const telemetryPlugin = (db: DatabaseType) =>
 					return status(413, 'Payload too large');
 				}
 
-				// const ip =
-				// 	request.headers
-				// 		.get('x-forwarded-for')
-				// 		?.split(',')[0]
-				// 		?.trim() ?? 'unknown';
-				// if (isRateLimited(ip)) {
-				// 	return status(429, 'Too many requests');
-				// }
+				const ip =
+					request.headers
+						.get('x-forwarded-for')
+						?.split(',')[0]
+						?.trim() ?? 'unknown';
+				if (isRateLimited(ip)) {
+					return status(429, 'Too many requests');
+				}
 
 				const {
 					event,
@@ -79,52 +81,63 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				})
 			}
 		)
-		.get('/api/v1/telemetry/kpi-summary', ({ protectRoute }) =>
+		.get('/api/v1/telemetry/kpi-summary', ({ protectRoute, status }) =>
 			protectRoute(
-				async () => Response.json(await getKpiSummary(db)),
-				async () => new Response('Access denied', { status: 403 })
+				async (user) => {
+					if (!whitelistedAdmins.includes(user.auth_sub)) {
+						return status(403, 'Access denied');
+					}
+
+					const kpiSummary = await getKpiSummary(db);
+
+					return kpiSummary;
+				},
+				() => status(403, 'Access denied')
 			)
 		)
-		.get('/api/v1/telemetry/versions', async ({ protectRoute }) =>
+		.get('/api/v1/telemetry/versions', async ({ protectRoute, status }) =>
 			protectRoute(
-				async () => {
+				async (user) => {
+					if (!whitelistedAdmins.includes(user.auth_sub)) {
+						return status(403, 'Access denied');
+					}
 					const res = await fetch(
 						'https://registry.npmjs.org/@absolutejs/absolute'
 					);
 					if (!res.ok)
-						return new Response('Failed to fetch versions', {
-							status: 502
-						});
+						return status(502, 'Failed to fetch versions');
 					const json = await res.json();
 					const versions = Object.keys(
 						json.versions as Record<string, unknown>
 					)
 						.filter((v) => {
-							const [major, minor] = v.split('.').map(Number);
-							return major > 0 || (major === 0 && minor >= 17);
+							const parts = v.split('.').map(Number);
+							const [major, minor] = parts;
+							return major != null && minor != null && (major > 0 || (major === 0 && minor >= 17));
 						})
 						.reverse();
-					return Response.json(versions);
+					return versions;
 				},
-				async () => new Response('Access denied', { status: 403 })
+				() => status(403, 'Access denied')
 			)
 		)
 		.get(
 			'/api/v1/telemetry/:key',
-			({ params: { key }, query, protectRoute }) =>
+			({ params: { key }, query, protectRoute, status }) =>
 				protectRoute(
-					async () => {
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return status(403, 'Access denied');
+						}
 						const handler =
 							telemetryQueryHandlers[
 								key as keyof typeof telemetryQueryHandlers
 							];
 						if (!handler)
-							return new Response('Unknown query', {
-								status: 404
-							});
+							return status(404, 'Unknown query');
 						return Response.json(await handler(db, query.version));
 					},
-					async () => new Response('Access denied', { status: 403 })
+					() => status(403, 'Access denied')
 				),
 			{
 				params: t.Object({ key: t.String() }),

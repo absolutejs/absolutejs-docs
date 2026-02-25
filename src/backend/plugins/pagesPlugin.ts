@@ -1,6 +1,6 @@
 import { Elysia, t } from 'elysia';
 import { DatabaseType, User } from '../../../db/schema';
-import { handleReactPageRequest, asset, Result } from '@absolutejs/absolute';
+import { handleReactPageRequest, asset, Result, getEnv } from '@absolutejs/absolute';
 import {
 	getStatus,
 	isValidProviderOption,
@@ -12,6 +12,8 @@ import { Home } from '../../frontend/pages/Home';
 import { Signup } from '../../frontend/pages/Signup';
 import { TelemetryDashboard } from '../../frontend/pages/TelemetryDashboard';
 import { docsViewEnum, pageCookie } from '../../types/typebox';
+
+const whitelistedAdmins = getEnv('ADMIN_SUBS')?.split(',').map(s => s.trim()) ?? [];
 
 export const pagesPlugin = (result: Awaited<Result>) =>
 	new Elysia()
@@ -118,12 +120,17 @@ export const pagesPlugin = (result: Awaited<Result>) =>
 		)
 		.get('/telemetry', ({ cookie: { theme }, protectRoute, redirect }) =>
 			protectRoute(
-				async (user) =>
-					handleReactPageRequest(
+				async (user) =>{
+					if (!whitelistedAdmins.includes(user.auth_sub)) {
+						return redirect('/signup/telemetry');
+					}
+					
+					return handleReactPageRequest(
 						TelemetryDashboard,
 						asset(result, 'TelemetryDashboardIndex'),
 						{ theme: theme?.value, user }
-					),
+					)
+				},
 				async () => redirect('/signup/telemetry')
 			)
 		);
