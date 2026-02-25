@@ -12,15 +12,15 @@
 	"author": "Alex Kahn",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"format": "absolutejs prettier --write",
-		"dev": "absolutejs dev",
-		"lint": "absolutejs eslint",
+		"format": "absolute prettier --write",
+		"dev": "absolute dev",
+		"lint": "absolute eslint",
 		"typecheck": "bun run tsc --noEmit",
 		"db:studio": "drizzle-kit studio",
 		"db:push": "drizzle-kit push"
 	},
 	"dependencies": {
-		"@absolutejs/absolute": "0.16.12",
+		"@absolutejs/absolute": "0.17.0",
 		"@absolutejs/auth": "0.22.1",
 		"@elysiajs/eden": "1.4.8",
 		"@elysiajs/static": "1.4.7",
