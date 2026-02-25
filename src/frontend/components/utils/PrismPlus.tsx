@@ -85,7 +85,6 @@ export const PrismPlus = ({
 				)}
 				<CopyButton text={displayedCodeString} />
 			</animated.div>
-			{/* @ts-expect-error react 19 thing where we have 18 types */}
 			<Prism
 				language={language}
 				style={codeStyle.get()}

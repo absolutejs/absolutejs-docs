@@ -14,18 +14,12 @@ import { NavbarLinks } from './NavbarLinks';
 import { NavbarUserButtons } from './NavbarUserButtons';
 
 type NavbarProps = {
-	user: User | undefined;
-	handleSignOut: () => Promise<void>;
+	user: User | null;
 	themeSprings: ThemeSprings;
 	setTheme: SetTheme;
 };
 
-export const Navbar = ({
-	user,
-	handleSignOut,
-	themeSprings,
-	setTheme
-}: NavbarProps) => {
+export const Navbar = ({ user, themeSprings, setTheme }: NavbarProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
 
@@ -84,7 +78,6 @@ export const Navbar = ({
 
 				<NavbarUserButtons
 					user={user}
-					handleSignOut={handleSignOut}
 					themeSprings={themeSprings}
 					setTheme={setTheme}
 				/>
@@ -104,7 +97,6 @@ export const Navbar = ({
 				spring={hamburgerMenuSpring}
 				springApi={hamburgerMenuApi}
 				user={user}
-				handleSignOut={handleSignOut}
 			/>
 		</animated.header>
 	);

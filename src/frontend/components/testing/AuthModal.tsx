@@ -15,10 +15,10 @@ import { boxStyle, DARK_LOGO_PROVIDERS } from '../../styles/authModalStyles';
 import { HighlightedJson } from '../utils/HighlightedJson';
 import { Modal } from '../utils/Modal';
 import { ProviderAction } from './ProviderAction';
+import { handleSignOut } from '../../utils/authFunctions';
 
 type AuthModalProps = {
-	user: User | undefined;
-	handleSignOut: () => Promise<void>;
+	user: User | null;
 	modalContent: (ProviderInfo & { providerOption: ProviderOption }) | null;
 	setModalContent: Dispatch<
 		SetStateAction<
@@ -31,7 +31,6 @@ type AuthModalProps = {
 export const AuthModal = ({
 	modalContent,
 	user,
-	handleSignOut,
 	setModalContent,
 	themeSprings
 }: AuthModalProps) => {

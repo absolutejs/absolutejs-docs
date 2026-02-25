@@ -24,8 +24,11 @@ export const absoluteAuthConfig = (db: DatabaseType) =>
 			authProvider,
 			providerInstance,
 			tokenResponse,
-			userSessionId,
-			session
+			session,
+			unregisteredSession,
+			cookie,
+			originUrl,
+			redirect
 		}) => {
 			await handleStatusUpdate({
 				authProvider,
@@ -39,9 +42,10 @@ export const absoluteAuthConfig = (db: DatabaseType) =>
 				authProvider,
 				providerInstance,
 				session,
+				unregisteredSession,
 				tokenResponse,
-				userSessionId,
-				createUser: async (userIdentity) => {
+				user_session_id: cookie.user_session_id,
+				onNewUser: async (userIdentity) => {
 					const user = await createUser({
 						authProvider,
 						db,
@@ -62,6 +66,12 @@ export const absoluteAuthConfig = (db: DatabaseType) =>
 					return user;
 				}
 			});
+
+			const signupRedirectMatch = originUrl.match(/^\/signup\/(.+)$/);
+
+			if (signupRedirectMatch) {
+				return redirect(`/${signupRedirectMatch[1]}`);
+			}
 		},
 		onProfileError: async ({ error, authProvider }) => {
 			await handleStatusUpdate({
@@ -131,6 +141,6 @@ export const absoluteAuthConfig = (db: DatabaseType) =>
 				);
 			}
 
-			session[userSessionId] = undefined;
+			delete session[userSessionId];
 		}
 	});

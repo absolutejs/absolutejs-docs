@@ -50,3 +50,9 @@ package-lock.json
 
 # dist folder
 /dist
+
+#absolutejs
+.absolutejs/
+
+#claude
+.claude/

@@ -10,17 +10,16 @@ import { AnimatedProfilePicture } from '../utils/AnimatedComponents';
 import { Modal } from '../utils/Modal';
 import { DropdownContainer } from './DropdownContainer';
 import { ThemeButton } from './ThemeButton';
+import { handleSignOut } from '../../utils/authFunctions';
 
 type NavbarUserButtonsProps = {
-	user: User | undefined;
-	handleSignOut: () => Promise<void>;
+	user: User | null;
 	themeSprings: ThemeSprings;
 	setTheme: SetTheme;
 };
 
 export const NavbarUserButtons = ({
 	user,
-	handleSignOut,
 	themeSprings,
 	setTheme
 }: NavbarUserButtonsProps) => {
@@ -91,7 +90,7 @@ export const NavbarUserButtons = ({
 					<AnimatedProfilePicture
 						themeSprings={themeSprings}
 						userImage={
-							typeof user.metadata?.profile_picture === 'string'
+							typeof user?.metadata?.profile_picture === 'string'
 								? user.metadata.profile_picture
 								: undefined
 						}

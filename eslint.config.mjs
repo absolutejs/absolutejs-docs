@@ -19,9 +19,6 @@ import tseslint from 'typescript-eslint';
 
 export default [
 	{
-		ignores: ['example/build/**']
-	},
-	{
 		languageOptions: {
 			globals: globals.browser,
 			parser: tsParser,
@@ -53,7 +50,6 @@ export default [
 
 	{
 		files: ['**/*.{js,mjs,cjs,ts,tsx,jsx}'],
-		ignores: ['example/build/**'],
 		plugins: {
 			absolute: absolutePlugin,
 			import: importPlugin,
@@ -186,7 +182,7 @@ export default [
 		}
 	},
 	{
-		files: ['example/**/*.{js,jsx,ts,tsx}'],
+		files: ['src/**/*.{ts,tsx}'],
 		plugins: {
 			'jsx-a11y': jsxA11yPlugin,
 			react: reactPlugin,

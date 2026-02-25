@@ -1,4 +1,3 @@
-example/
 drizzle/
 tests/
 node_modules/
@@ -25,7 +24,6 @@ tsconfig.json
 CHANGELOG.md
 heap.json
 
-example
 tests
 test
 docs

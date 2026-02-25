@@ -5,21 +5,25 @@ import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { AuthGrid } from '../components/testing/AuthGrid';
 import { Legend } from '../components/testing/Legend';
-import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useCleanPath } from '../hooks/useCleanPath';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
+import { User } from '../../../db/schema';
 
 const queryClient = new QueryClient();
 
 type AuthTestingProps = {
+	user: User | null;
 	theme: ThemeMode | undefined;
 	initialProvider: ProviderOption | undefined;
 };
 
-export const AuthTesting = ({ theme, initialProvider }: AuthTestingProps) => {
+export const AuthTesting = ({
+	user,
+	theme,
+	initialProvider
+}: AuthTestingProps) => {
 	useCleanPath();
-	const { user, handleSignOut } = useAuthStatus();
 	const [themeSprings, setTheme] = useTheme(theme);
 
 	return (
@@ -29,7 +33,6 @@ export const AuthTesting = ({ theme, initialProvider }: AuthTestingProps) => {
 				<Navbar
 					setTheme={setTheme}
 					user={user}
-					handleSignOut={handleSignOut}
 					themeSprings={themeSprings}
 				/>
 				<main style={mainDefault()}>
@@ -97,7 +100,6 @@ export const AuthTesting = ({ theme, initialProvider }: AuthTestingProps) => {
 						<Legend themeSprings={themeSprings} />
 
 						<AuthGrid
-							handleSignOut={handleSignOut}
 							user={user}
 							themeSprings={themeSprings}
 							initialProvider={initialProvider}

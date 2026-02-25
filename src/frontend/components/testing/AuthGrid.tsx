@@ -8,15 +8,13 @@ import { ToastProvider } from '../utils/ToastProvider';
 import { AuthModal } from './AuthModal';
 
 type AuthGridProps = {
-	user: User | undefined;
-	handleSignOut: () => Promise<void>;
+	user: User | null;
 	themeSprings: ThemeSprings;
 	initialProvider: ProviderOption | undefined;
 };
 
 export const AuthGrid = ({
 	user,
-	handleSignOut,
 	themeSprings,
 	initialProvider
 }: AuthGridProps) => {
@@ -60,7 +58,6 @@ export const AuthGrid = ({
 
 			<AuthModal
 				themeSprings={themeSprings}
-				handleSignOut={handleSignOut}
 				user={user}
 				modalContent={modalContent}
 				setModalContent={setModalContent}

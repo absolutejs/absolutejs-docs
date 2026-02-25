@@ -42,6 +42,10 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 - **typebox.ts**: TypeBox schemas for API validation (used with Elysia)
 - **types.ts**: Shared TypeScript types
 
+## Rules
+
+- **No type assertions.** Never use `as any`, `as unknown`, or other TypeScript type assertions (`as X`). They break type inference chains — especially in Elysia plugin composition where eden treaty relies on full type flow through `.use()`. If TypeScript can't infer a type, fix the underlying type issue instead of casting.
+
 ## Key Patterns
 
 ### React Components

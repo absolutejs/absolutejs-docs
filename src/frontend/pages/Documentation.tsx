@@ -7,13 +7,14 @@ import { MobileSidebar } from '../components/sidebar/MobileSidebar';
 import { MobileSidebarToggle } from '../components/sidebar/MobileSidebarToggle';
 import { Sidebar } from '../components/sidebar/Sidebar';
 import { docsViews, sidebarData } from '../data/sidebarData';
-import { useAuthStatus } from '../hooks/useAuthStatus';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
+import { User } from '../../../db/schema';
 
 type DocumentationProps = {
+	user: User | null;
 	theme: ThemeMode | undefined;
 	initialView: DocsView;
 };
@@ -29,8 +30,11 @@ const findSectionForView = (view: DocsView): string | null => {
 	return null;
 };
 
-export const Documentation = ({ theme, initialView }: DocumentationProps) => {
-	const { user, handleSignOut } = useAuthStatus();
+export const Documentation = ({
+	user,
+	theme,
+	initialView
+}: DocumentationProps) => {
 	const [themeSprings, setTheme] = useTheme(theme);
 	const [view, navigateToView] = useDocsNavigation(initialView);
 	const { isSizeOrLess } = useMediaQuery();
@@ -92,9 +96,10 @@ export const Documentation = ({ theme, initialView }: DocumentationProps) => {
 					setTheme={setTheme}
 					themeSprings={themeSprings}
 					user={user}
-					handleSignOut={handleSignOut}
 				/>
-				<main style={{ ...mainDefault('hidden'), alignItems: 'stretch' }}>
+				<main
+					style={{ ...mainDefault('hidden'), alignItems: 'stretch' }}
+				>
 					<div
 						style={{
 							display: 'flex',

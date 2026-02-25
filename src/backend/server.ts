@@ -1,10 +1,14 @@
 import {
 	asset,
 	build,
+	BuildConfig,
+	devBuild,
+	getEnv,
 	handleReactPageRequest,
+	hmr,
 	networking
 } from '@absolutejs/absolute';
-import { absoluteAuth } from '@absolutejs/auth';
+import { absoluteAuth, getStatus } from '@absolutejs/auth';
 import { staticPlugin } from '@elysiajs/static';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
@@ -15,23 +19,25 @@ import { AuthTesting } from '../frontend/pages/AuthTesting';
 import { Documentation } from '../frontend/pages/Documentation';
 import { Home } from '../frontend/pages/Home';
 import { Signup } from '../frontend/pages/Signup';
-import { docsViewEnum, themeCookie } from '../types/typebox';
+import { docsViewEnum } from '../types/typebox';
+import { TelemetryDashboard } from '../frontend/pages/TelemetryDashboard';
 import { providerPlugin } from './plugins/providerPlugin';
+import { telemetryPlugin } from './plugins/telemetryPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
+import { pagesPlugin } from './plugins/pagesPlugin';
 
-const manifest = await build({
-	assetsDirectory: 'src/backend/assets',
-	reactDirectory: 'src/frontend'
-});
-
-if (env.DATABASE_URL === undefined) {
-	throw new Error('DATABASE_URL is not set in .env file');
-}
-
-const sql = neon(env.DATABASE_URL);
+const sql = neon(getEnv('DATABASE_URL'));
 const db = drizzle(sql, {
 	schema
 });
+
+const buildConfig: BuildConfig = {
+	assetsDirectory: './src/backend/assets',
+	reactDirectory: './src/frontend'
+};
+
+const isDev = env.NODE_ENV === 'development';
+const result = isDev ? await devBuild(buildConfig) : await build(buildConfig);
 
 const server = new Elysia()
 	.use(
@@ -42,57 +48,8 @@ const server = new Elysia()
 	)
 	.use(providerPlugin(db))
 	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
-	.get(
-		'/',
-		({ cookie: { theme } }) =>
-			handleReactPageRequest(Home, asset(manifest, 'HomeIndex'), {
-				theme: theme?.value
-			}),
-		{ cookie: themeCookie }
-	)
-	.get(
-		'/signup',
-		({ cookie: { theme } }) =>
-			handleReactPageRequest(Signup, asset(manifest, 'SignupIndex'), {
-				theme: theme?.value
-			}),
-		{ cookie: themeCookie }
-	)
-	.get(
-		'/documentation/:view?',
-		({ params: { view }, cookie: { theme } }) =>
-			handleReactPageRequest(
-				Documentation,
-				asset(manifest, 'DocumentationIndex'),
-				{
-					initialView: view ?? 'overview',
-					theme: theme?.value
-				}
-			),
-		{
-			cookie: themeCookie,
-			params: t.Object({ view: t.Optional(docsViewEnum) })
-		}
-	)
-	.get(
-		'/testing/authentication',
-		({ cookie: { theme }, query }) =>
-			handleReactPageRequest(
-				AuthTesting,
-				asset(manifest, 'AuthTestingIndex'),
-				{
-					theme: theme?.value,
-					initialProvider:
-						query.provider && isValidProviderOption(query.provider)
-							? query.provider
-							: undefined
-				}
-			),
-		{
-			cookie: themeCookie,
-			query: t.Object({ provider: t.Optional(t.String()) })
-		}
-	)
+	.use(telemetryPlugin(db))
+	.use(pagesPlugin(result))
 	.use(networking)
 	.on('error', (error) => {
 		const { request } = error;
@@ -100,6 +57,13 @@ const server = new Elysia()
 			`Server error on ${request.method} ${request.url}: ${error.message}`
 		);
 	});
+
+if (
+	typeof result.hmrState !== 'string' &&
+	typeof result.manifest === 'object'
+) {
+	server.use(hmr(result.hmrState, result.manifest));
+}
 
 export type Server = typeof server;
 

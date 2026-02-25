@@ -3,17 +3,16 @@ import { User } from '../../../../db/schema';
 import { ThemeSprings } from '../../../types/springTypes';
 import { buttonStyle } from '../../styles/styles';
 import { AnimatedProfilePicture } from '../utils/AnimatedComponents';
+import { handleSignOut } from '../../utils/authFunctions';
 
 type HamburgerUserButtonsProps = {
-	user: User | undefined;
-	handleSignOut: () => Promise<void>;
+	user: User | null;
 	openModal: () => void;
 	themeSprings: ThemeSprings;
 };
 
 export const HamburgerUserButtons = ({
 	user,
-	handleSignOut,
 	openModal,
 	themeSprings
 }: HamburgerUserButtonsProps) => (
@@ -36,7 +35,7 @@ export const HamburgerUserButtons = ({
 		>
 			{user ? 'Sign Out' : 'Login'}
 		</animated.button>
-		{user !== undefined && (
+		{user !== null && (
 			<div
 				style={{
 					alignItems: 'center',
@@ -50,7 +49,7 @@ export const HamburgerUserButtons = ({
 					<AnimatedProfilePicture
 						themeSprings={themeSprings}
 						userImage={
-							typeof user.metadata?.profile_picture === 'string'
+							typeof user?.metadata?.profile_picture === 'string'
 								? user.metadata.profile_picture
 								: undefined
 						}
@@ -71,10 +70,10 @@ export const HamburgerUserButtons = ({
 						textAlign: 'center'
 					}}
 				>
-					{typeof user.metadata?.given_name === 'string'
+					{typeof user?.metadata?.given_name === 'string'
 						? user.metadata.given_name
 						: ''}{' '}
-					{typeof user.metadata?.family_name === 'string'
+					{typeof user?.metadata?.family_name === 'string'
 						? user.metadata.family_name
 						: ''}
 				</animated.span>

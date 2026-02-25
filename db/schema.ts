@@ -3,6 +3,7 @@ import {
 	pgEnum,
 	pgTable,
 	text,
+	uuid,
 	timestamp,
 	varchar
 } from 'drizzle-orm/pg-core';
@@ -37,11 +38,25 @@ export const unknownErrorLogs = pgTable('unknown_error_logs', {
 	timestamp: timestamp().notNull().defaultNow()
 });
 
+export const telemetryEvents = pgTable('telemetry_events', {
+	id: uuid().primaryKey().defaultRandom(),
+	event: varchar({ length: 255 }).notNull(),
+	anonymous_id: varchar({ length: 255 }).notNull(),
+	version: varchar({ length: 100 }),
+	os: varchar({ length: 100 }),
+	arch: varchar({ length: 50 }),
+	bun_version: varchar({ length: 50 }),
+	client_timestamp: timestamp().notNull(),
+	server_timestamp: timestamp().notNull().defaultNow(),
+	payload: jsonb().$type<Record<string, unknown>>().default({})
+});
+
 export const schema = {
 	users,
 	providers,
 	errorLogs,
-	unknownErrorLogs
+	unknownErrorLogs,
+	telemetryEvents
 };
 
 export type SchemaType = typeof schema;
@@ -58,3 +73,6 @@ export type NewErrorLog = typeof errorLogs.$inferInsert;
 
 export type UnknownErrorLog = typeof unknownErrorLogs.$inferSelect;
 export type NewUnknownErrorLog = typeof unknownErrorLogs.$inferInsert;
+
+export type TelemetryEvent = typeof telemetryEvents.$inferSelect;
+export type NewTelemetryEvent = typeof telemetryEvents.$inferInsert;

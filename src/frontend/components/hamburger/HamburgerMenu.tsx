@@ -14,8 +14,7 @@ import { HamburgerUserButtons } from './HamburgerUserButtons';
 type HamburgerMenuProps = {
 	spring: { transform: SpringValue<string> };
 	springApi: SpringRef<{ transform: string }>;
-	user: User | undefined;
-	handleSignOut: () => Promise<void>;
+	user: User | null;
 	themeSprings: ThemeSprings;
 };
 
@@ -23,8 +22,7 @@ export const HamburgerMenu = ({
 	spring,
 	springApi,
 	user,
-	themeSprings,
-	handleSignOut
+	themeSprings
 }: HamburgerMenuProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -94,7 +92,6 @@ export const HamburgerMenu = ({
 				<HamburgerUserButtons
 					themeSprings={themeSprings}
 					user={user}
-					handleSignOut={handleSignOut}
 					openModal={() => {
 						setIsModalOpen(true);
 					}}

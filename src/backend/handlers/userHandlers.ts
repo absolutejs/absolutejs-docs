@@ -1,4 +1,8 @@
-import { isValidProviderOption, providers } from 'citra';
+import {
+	extractPropFromIdentity,
+	isValidProviderOption,
+	providers
+} from 'citra';
 import { eq } from 'drizzle-orm';
 import { DatabaseType, NewUser, schema } from '../../../db/schema';
 import { UserFunctionProps } from '../../types/types';
@@ -46,8 +50,11 @@ export const createUser = ({
 	const provider = authProvider.toUpperCase();
 	const providerConfiguration = providers[authProvider];
 
-	const subject =
-		providerConfiguration.extractSubjectFromIdentity(userIdentity);
+	const subject = extractPropFromIdentity(
+		userIdentity,
+		providerConfiguration.subject,
+		providerConfiguration.subjectType
+	);
 	const authSub = `${provider}|${subject}`;
 
 	return createDBUser({
@@ -69,8 +76,11 @@ export const getUser = ({
 	const provider = authProvider.toUpperCase();
 	const providerConfiguration = providers[authProvider];
 
-	const subject =
-		providerConfiguration.extractSubjectFromIdentity(userIdentity);
+	const subject = extractPropFromIdentity(
+		userIdentity,
+		providerConfiguration.subject,
+		providerConfiguration.subjectType
+	);
 	const authSub = `${provider}|${subject}`;
 
 	return getDBUser({ authSub, db });

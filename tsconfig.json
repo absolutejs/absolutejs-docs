@@ -8,9 +8,11 @@
 		"forceConsistentCasingInFileNames": true,
 		"outDir": "dist",
 		"strict": true,
-		"declaration": true,
+		// "declaration": true,
 		"skipLibCheck": true,
+		"incremental": true,
 		"noUncheckedIndexedAccess": true,
+		"tsBuildInfoFile": ".absolutejs/tsconfig.tsbuildinfo",
 		"lib": ["DOM", "DOM.Iterable", "ESNext"]
 	}
 }
