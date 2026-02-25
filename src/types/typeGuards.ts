@@ -1,4 +1,8 @@
 import { docsViews } from '../frontend/data/sidebarData';
+import {
+	TelemetryView,
+	telemetryViewIds
+} from '../frontend/data/telemetrySidebarData';
 import { DocsView } from './types';
 
 export const isNonEmptyString = (
@@ -13,3 +17,8 @@ export const isLightOrDark = (value: unknown): value is 'light' | 'dark' =>
 
 export const isValidViewId = (viewId: string): viewId is DocsView =>
 	viewId in docsViews;
+
+export const isValidTelemetryViewId = (
+	viewId: string
+): viewId is TelemetryView =>
+	(telemetryViewIds as readonly string[]).includes(viewId);

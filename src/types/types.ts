@@ -23,23 +23,25 @@ export const isNavbarDropdown = (
 
 export type NavbarElement = NavbarLink | NavbarDropdown;
 
-export type MenuDropdown = {
+export type MenuDropdown<V extends string = DocsView> = {
 	label: string;
-	buttons: MenuButton[];
+	buttons: MenuButton<V>[];
 	icon: AnimatedComponent<IconType>;
 };
 
-export type MenuButton = {
-	id: DocsView;
+export type MenuButton<V extends string = DocsView> = {
+	id: V;
 	label: string;
 	icon?: AnimatedComponent<IconType>;
-	// view: LazyExoticComponent<ComponentType<null>>;
 };
 
-export type MenuItem = MenuDropdown | MenuButton;
+export type MenuItem<V extends string = DocsView> =
+	| MenuDropdown<V>
+	| MenuButton<V>;
 
-export const isMenuDropdown = (element: MenuItem): element is MenuDropdown =>
-	'buttons' in element;
+export const isMenuDropdown = <V extends string>(
+	element: MenuItem<V>
+): element is MenuDropdown<V> => 'buttons' in element;
 
 export type DocsView = keyof typeof docsViews;
 

@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { DatabaseType, User } from '../../../db/schema';
 import {
+	getKpiSummary,
 	insertTelemetryEvent,
 	telemetryQueryHandlers
 } from '../handlers/telemetryHandlers';
@@ -78,6 +79,12 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				})
 			}
 		)
+		.get('/api/v1/telemetry/kpi-summary', ({ protectRoute }) =>
+			protectRoute(
+				async () => Response.json(await getKpiSummary(db)),
+				async () => new Response('Access denied', { status: 403 })
+			)
+		)
 		.get('/api/v1/telemetry/versions', async ({ protectRoute }) =>
 			protectRoute(
 				async () => {
@@ -91,7 +98,12 @@ export const telemetryPlugin = (db: DatabaseType) =>
 					const json = await res.json();
 					const versions = Object.keys(
 						json.versions as Record<string, unknown>
-					).reverse();
+					)
+						.filter((v) => {
+							const [major, minor] = v.split('.').map(Number);
+							return major > 0 || (major === 0 && minor >= 17);
+						})
+						.reverse();
 					return Response.json(versions);
 				},
 				async () => new Response('Access denied', { status: 403 })

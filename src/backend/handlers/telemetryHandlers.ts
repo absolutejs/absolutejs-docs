@@ -76,6 +76,8 @@ export const getBuildErrorsByPass = async (
 	db
 		.select({
 			pass: sql<string>`${schema.telemetryEvents.payload}->>'pass'`,
+			incremental: sql<string>`${schema.telemetryEvents.payload}->>'incremental'`,
+			message: sql<string>`LEFT(${schema.telemetryEvents.payload}->>'message', 200)`,
 			...(!version ? { version: schema.telemetryEvents.version } : {}),
 			count: count()
 		})
@@ -88,6 +90,8 @@ export const getBuildErrorsByPass = async (
 		)
 		.groupBy(
 			sql`${schema.telemetryEvents.payload}->>'pass'`,
+			sql`${schema.telemetryEvents.payload}->>'incremental'`,
+			sql`LEFT(${schema.telemetryEvents.payload}->>'message', 200)`,
 			...(!version ? [schema.telemetryEvents.version] : [])
 		)
 		.orderBy(desc(count()));
@@ -99,6 +103,7 @@ export const getFrameworkPopularity = async (
 	db
 		.select({
 			framework: sql<string>`${schema.telemetryEvents.payload}->>'framework'`,
+			tailwind: sql<string>`${schema.telemetryEvents.payload}->>'tailwind'`,
 			count: count()
 		})
 		.from(schema.telemetryEvents)
@@ -108,7 +113,10 @@ export const getFrameworkPopularity = async (
 				versionFilter(version)
 			)
 		)
-		.groupBy(sql`${schema.telemetryEvents.payload}->>'framework'`)
+		.groupBy(
+			sql`${schema.telemetryEvents.payload}->>'framework'`,
+			sql`${schema.telemetryEvents.payload}->>'tailwind'`
+		)
 		.orderBy(desc(count()));
 
 export const getHMRReliability = async (db: DatabaseType, version?: string) =>
@@ -145,7 +153,12 @@ export const getBuildDurationDistribution = async (
 	db
 		.select({
 			duration_bucket: sql<string>`${buildDurationCase}`,
-			...(!version ? { version: schema.telemetryEvents.version } : {}),
+			...(!version
+				? {
+						version: schema.telemetryEvents.version,
+						frameworks: sql<string>`${schema.telemetryEvents.payload}->>'frameworks'`
+					}
+				: {}),
 			count: count()
 		})
 		.from(schema.telemetryEvents)
@@ -157,7 +170,12 @@ export const getBuildDurationDistribution = async (
 		)
 		.groupBy(
 			buildDurationCase,
-			...(!version ? [schema.telemetryEvents.version] : [])
+			...(!version
+				? [
+						schema.telemetryEvents.version,
+						sql`${schema.telemetryEvents.payload}->>'frameworks'`
+					]
+				: [])
 		);
 
 export const getVersionAdoption = async (db: DatabaseType) =>
@@ -192,6 +210,7 @@ export const getServerCrashFrequency = async (
 	db
 		.select({
 			date: sql<string>`DATE(${schema.telemetryEvents.server_timestamp})`,
+			exit_code: sql<string>`${schema.telemetryEvents.payload}->>'exitCode'`,
 			...(!version ? { version: schema.telemetryEvents.version } : {}),
 			count: count()
 		})
@@ -204,6 +223,7 @@ export const getServerCrashFrequency = async (
 		)
 		.groupBy(
 			sql`DATE(${schema.telemetryEvents.server_timestamp})`,
+			sql`${schema.telemetryEvents.payload}->>'exitCode'`,
 			...(!version ? [schema.telemetryEvents.version] : [])
 		)
 		.orderBy(desc(sql`DATE(${schema.telemetryEvents.server_timestamp})`));
@@ -261,6 +281,7 @@ export const getDevSessionDuration = async (
 	db
 		.select({
 			duration_bucket: sql<string>`${sessionDurationCase}`,
+			entry: sql<string>`${schema.telemetryEvents.payload}->>'entry'`,
 			count: count()
 		})
 		.from(schema.telemetryEvents)
@@ -270,7 +291,160 @@ export const getDevSessionDuration = async (
 				versionFilter(version)
 			)
 		)
-		.groupBy(sessionDurationCase);
+		.groupBy(
+			sessionDurationCase,
+			sql`${schema.telemetryEvents.payload}->>'entry'`
+		);
+
+export const getBuildEmpty = async (db: DatabaseType, version?: string) =>
+	db
+		.select({
+			frameworks: sql<string>`${schema.telemetryEvents.payload}->>'frameworks'`,
+			count: count()
+		})
+		.from(schema.telemetryEvents)
+		.where(
+			combine(
+				eq(schema.telemetryEvents.event, 'build:empty'),
+				versionFilter(version)
+			)
+		)
+		.groupBy(sql`${schema.telemetryEvents.payload}->>'frameworks'`)
+		.orderBy(desc(count()));
+
+export const getMissingManifest = async (db: DatabaseType, version?: string) =>
+	db
+		.select({
+			asset_name: sql<string>`${schema.telemetryEvents.payload}->>'assetName'`,
+			asset_type: sql<string>`${schema.telemetryEvents.payload}->>'assetType'`,
+			html_file: sql<string>`${schema.telemetryEvents.payload}->>'htmlFile'`,
+			count: count()
+		})
+		.from(schema.telemetryEvents)
+		.where(
+			combine(
+				eq(
+					schema.telemetryEvents.event,
+					'build:missing-manifest-entry'
+				),
+				versionFilter(version)
+			)
+		)
+		.groupBy(
+			sql`${schema.telemetryEvents.payload}->>'assetName'`,
+			sql`${schema.telemetryEvents.payload}->>'assetType'`,
+			sql`${schema.telemetryEvents.payload}->>'htmlFile'`
+		)
+		.orderBy(desc(count()));
+
+export const getDevStarts = async (db: DatabaseType, version?: string) =>
+	db
+		.select({
+			entry: sql<string>`${schema.telemetryEvents.payload}->>'entry'`,
+			count: count()
+		})
+		.from(schema.telemetryEvents)
+		.where(
+			combine(
+				eq(schema.telemetryEvents.event, 'dev:start'),
+				versionFilter(version)
+			)
+		)
+		.groupBy(sql`${schema.telemetryEvents.payload}->>'entry'`)
+		.orderBy(desc(count()));
+
+export const getHMRErrors = async (db: DatabaseType, version?: string) =>
+	db
+		.select({
+			event: schema.telemetryEvents.event,
+			framework_or_operation: sql<string>`COALESCE(
+				${schema.telemetryEvents.payload}->>'frameworks',
+				${schema.telemetryEvents.payload}->>'framework',
+				${schema.telemetryEvents.payload}->>'operation',
+				${schema.telemetryEvents.payload}->>'logCount'
+			)`,
+			count: count()
+		})
+		.from(schema.telemetryEvents)
+		.where(
+			combine(
+				sql`${schema.telemetryEvents.event} IN ('hmr:error', 'hmr:rebuild-error', 'hmr:client-build-failed', 'hmr:graph-error')`,
+				versionFilter(version)
+			)
+		)
+		.groupBy(
+			schema.telemetryEvents.event,
+			sql`COALESCE(
+				${schema.telemetryEvents.payload}->>'frameworks',
+				${schema.telemetryEvents.payload}->>'framework',
+				${schema.telemetryEvents.payload}->>'operation',
+				${schema.telemetryEvents.payload}->>'logCount'
+			)`
+		)
+		.orderBy(desc(count()));
+
+export const getHMRRebuildErrors = async (db: DatabaseType, version?: string) =>
+	db
+		.select({
+			framework: sql<string>`${schema.telemetryEvents.payload}->>'framework'`,
+			avg_duration_ms: sql<number>`AVG((${schema.telemetryEvents.payload}->>'durationMs')::int)`,
+			avg_file_count: sql<number>`AVG((${schema.telemetryEvents.payload}->>'fileCount')::int)`,
+			frameworks: sql<string>`${schema.telemetryEvents.payload}->>'frameworks'`,
+			...(!version ? { version: schema.telemetryEvents.version } : {}),
+			count: count()
+		})
+		.from(schema.telemetryEvents)
+		.where(
+			combine(
+				eq(schema.telemetryEvents.event, 'hmr:rebuild-error'),
+				versionFilter(version)
+			)
+		)
+		.groupBy(
+			sql`${schema.telemetryEvents.payload}->>'framework'`,
+			sql`${schema.telemetryEvents.payload}->>'frameworks'`,
+			...(!version ? [schema.telemetryEvents.version] : [])
+		)
+		.orderBy(desc(count()));
+
+export const getKpiSummary = async (db: DatabaseType) => {
+	const [totalResult, errorResult, buildResult, frameworkResult] =
+		await Promise.all([
+			db.select({ count: count() }).from(schema.telemetryEvents),
+			db
+				.select({ count: count() })
+				.from(schema.telemetryEvents)
+				.where(sql`${schema.telemetryEvents.event} LIKE '%error%'`),
+			db
+				.select({
+					avg_ms: sql<number>`AVG((${schema.telemetryEvents.payload}->>'durationMs')::int)`
+				})
+				.from(schema.telemetryEvents)
+				.where(eq(schema.telemetryEvents.event, 'build:complete')),
+			db
+				.select({
+					framework: sql<string>`${schema.telemetryEvents.payload}->>'framework'`,
+					count: count()
+				})
+				.from(schema.telemetryEvents)
+				.where(eq(schema.telemetryEvents.event, 'build:start'))
+				.groupBy(sql`${schema.telemetryEvents.payload}->>'framework'`)
+				.orderBy(desc(count()))
+				.limit(1)
+		]);
+
+	const total = totalResult[0]?.count ?? 0;
+	const errors = errorResult[0]?.count ?? 0;
+	const avgBuildMs = buildResult[0]?.avg_ms ?? null;
+	const topFramework = frameworkResult[0]?.framework ?? null;
+
+	return {
+		totalEvents: total,
+		errorRate: total > 0 ? Number(((errors / total) * 100).toFixed(1)) : 0,
+		avgBuildMs: avgBuildMs !== null ? Math.round(avgBuildMs) : null,
+		topFramework
+	};
+};
 
 export const telemetryQueryHandlers: Record<
 	string,
@@ -286,5 +460,10 @@ export const telemetryQueryHandlers: Record<
 	'server-crashes': getServerCrashFrequency,
 	'cli-commands': getCliCommandUsage,
 	'hmr-rebuilds': getHMRRebuildStats,
-	'dev-sessions': getDevSessionDuration
+	'dev-sessions': getDevSessionDuration,
+	'build-empty': getBuildEmpty,
+	'missing-manifest': getMissingManifest,
+	'dev-starts': getDevStarts,
+	'hmr-errors': getHMRErrors,
+	'hmr-rebuild-errors': getHMRRebuildErrors
 };

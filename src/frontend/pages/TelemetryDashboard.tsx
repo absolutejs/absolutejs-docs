@@ -1,107 +1,79 @@
-import { animated } from '@react-spring/web';
-import { CSSProperties, useCallback, useEffect, useState } from 'react';
-import { ThemeMode, useTheme } from '../hooks/useTheme';
-import { Head } from '../components/page/Head';
-import { Navbar } from '../components/navbar/Navbar';
-import { TelemetryTable } from '../components/telemetry/TelemetryTable';
-import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
+import { animated, useSpring } from '@react-spring/web';
+import {
+	CSSProperties,
+	ComponentType,
+	useCallback,
+	useEffect,
+	useState
+} from 'react';
 import { User } from '../../../db/schema';
+import { KpiSummary, TelemetrySectionProps } from '../../types/telemetryTypes';
+import { Navbar } from '../components/navbar/Navbar';
+import { Head } from '../components/page/Head';
+import { MobileSidebarToggle } from '../components/sidebar/MobileSidebarToggle';
+import { TelemetryMobileSidebar } from '../components/telemetry/TelemetryMobileSidebar';
+import { TelemetrySidebar } from '../components/telemetry/TelemetrySidebar';
+import { BuildPerformanceSection } from '../components/telemetry/sections/BuildPerformanceSection';
+import { DevSessionsSection } from '../components/telemetry/sections/DevSessionsSection';
+import { ErrorsCrashesSection } from '../components/telemetry/sections/ErrorsCrashesSection';
+import { HmrPerformanceSection } from '../components/telemetry/sections/HmrPerformanceSection';
+import { OverviewSection } from '../components/telemetry/sections/OverviewSection';
+import { UsageAdoptionSection } from '../components/telemetry/sections/UsageAdoptionSection';
+import {
+	TelemetryView,
+	findSectionForTelemetryView
+} from '../data/telemetrySidebarData';
+import { useMediaQuery } from '../hooks/useMediaQuery';
+import { useTelemetryNavigation } from '../hooks/useTelemetryNavigation';
+import { ThemeMode, useTheme } from '../hooks/useTheme';
+import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 type TelemetryDashboardProps = {
 	user: User;
 	theme: ThemeMode | undefined;
 };
 
-type QueryConfig = {
-	key: string;
-	title: string;
-	columns: string[];
-	columnsWithVersion?: string[];
-};
-
-const queries: QueryConfig[] = [
-	{
-		key: 'error-rates',
-		title: 'Error Rates by Event',
-		columns: ['event', 'count'],
-		columnsWithVersion: ['event', 'version', 'count']
-	},
-	{
-		key: 'build-errors',
-		title: 'Build Errors by Pass',
-		columns: ['pass', 'count'],
-		columnsWithVersion: ['pass', 'version', 'count']
-	},
-	{
-		key: 'framework-popularity',
-		title: 'Framework Popularity',
-		columns: ['framework', 'count']
-	},
-	{
-		key: 'hmr-reliability',
-		title: 'HMR Reliability',
-		columns: ['event', 'count'],
-		columnsWithVersion: ['event', 'version', 'count']
-	},
-	{
-		key: 'build-duration',
-		title: 'Build Duration Distribution',
-		columns: ['duration_bucket', 'count'],
-		columnsWithVersion: ['duration_bucket', 'version', 'count']
-	},
-	{
-		key: 'version-adoption',
-		title: 'Version Adoption',
-		columns: ['version', 'count']
-	},
-	{
-		key: 'platform-breakdown',
-		title: 'Platform Breakdown',
-		columns: ['os', 'arch', 'count']
-	},
-	{
-		key: 'server-crashes',
-		title: 'Server Crash Frequency',
-		columns: ['date', 'count'],
-		columnsWithVersion: ['date', 'version', 'count']
-	},
-	{
-		key: 'cli-commands',
-		title: 'CLI Command Usage',
-		columns: ['command', 'count']
-	},
-	{
-		key: 'hmr-rebuilds',
-		title: 'HMR Rebuild Stats',
-		columns: ['framework', 'avg_duration_ms', 'avg_file_count', 'count'],
-		columnsWithVersion: [
-			'framework',
-			'version',
-			'avg_duration_ms',
-			'avg_file_count',
-			'count'
-		]
-	},
-	{
-		key: 'dev-sessions',
-		title: 'Dev Session Duration',
-		columns: ['duration_bucket', 'count']
-	}
+const queryKeys = [
+	'error-rates',
+	'build-errors',
+	'framework-popularity',
+	'hmr-reliability',
+	'build-duration',
+	'version-adoption',
+	'platform-breakdown',
+	'server-crashes',
+	'cli-commands',
+	'hmr-rebuilds',
+	'dev-sessions',
+	'build-empty',
+	'missing-manifest',
+	'dev-starts',
+	'hmr-errors',
+	'hmr-rebuild-errors'
 ];
 
-const containerStyle: CSSProperties = {
-	display: 'flex',
-	flexDirection: 'column',
-	gap: '1.5rem',
-	maxWidth: '1200px',
-	padding: '2rem',
-	width: '100%'
-};
-
-const headerStyle: CSSProperties = {
-	fontSize: '2rem',
-	fontWeight: 600,
-	marginBottom: '0.5rem'
+// Map each sidebar view ID to its section component
+const viewToSection: Record<
+	TelemetryView,
+	ComponentType<TelemetrySectionProps>
+> = {
+	overview: OverviewSection,
+	'error-rates': ErrorsCrashesSection,
+	'build-errors': ErrorsCrashesSection,
+	'server-crashes': ErrorsCrashesSection,
+	'hmr-errors': ErrorsCrashesSection,
+	'build-duration': BuildPerformanceSection,
+	'build-empty': BuildPerformanceSection,
+	'missing-manifest': BuildPerformanceSection,
+	'hmr-reliability': HmrPerformanceSection,
+	'hmr-rebuilds': HmrPerformanceSection,
+	'hmr-rebuild-errors': HmrPerformanceSection,
+	'framework-popularity': UsageAdoptionSection,
+	'version-adoption': UsageAdoptionSection,
+	'platform-breakdown': UsageAdoptionSection,
+	'cli-commands': UsageAdoptionSection,
+	'dev-sessions': DevSessionsSection,
+	'dev-starts': DevSessionsSection
 };
 
 const errorStyle: CSSProperties = {
@@ -110,17 +82,51 @@ const errorStyle: CSSProperties = {
 	textAlign: 'center'
 };
 
+const contentStyle: CSSProperties = {
+	flex: 1,
+	maxWidth: '1200px',
+	overflowY: 'auto',
+	padding: '2rem'
+};
+
 export const TelemetryDashboard = ({
 	user,
 	theme
 }: TelemetryDashboardProps) => {
 	const [themeSprings, setTheme] = useTheme(theme);
+	const [view, navigateToView] = useTelemetryNavigation('overview');
+	const { isSizeOrLess } = useMediaQuery();
+	const isMobile = isSizeOrLess('lg');
+
+	const [openSections, setOpenSections] = useState<Set<string>>(() => {
+		const initial = findSectionForTelemetryView('overview');
+		return initial ? new Set([initial]) : new Set();
+	});
+
+	const [sidebarSpring, sidebarSpringApi] = useSpring(() => ({
+		config: { friction: 40, tension: 275 },
+		overlayOpacity: 0,
+		transform: 'translateX(-100%)'
+	}));
+
 	const [data, setData] = useState<Record<string, Record<string, unknown>[]>>(
 		{}
 	);
+	const [kpi, setKpi] = useState<KpiSummary | null>(null);
 	const [error, setError] = useState<string>();
 	const [versions, setVersions] = useState<string[]>([]);
 
+	// Fetch KPI summary
+	useEffect(() => {
+		fetch('/api/v1/telemetry/kpi-summary')
+			.then((res) => (res.ok ? res.json() : null))
+			.then((json) => {
+				if (json) setKpi(json);
+			})
+			.catch(() => {});
+	}, []);
+
+	// Fetch versions
 	useEffect(() => {
 		fetch('/api/v1/telemetry/versions')
 			.then((res) => (res.ok ? res.json() : []))
@@ -147,9 +153,10 @@ export const TelemetryDashboard = ({
 		}
 	}, []);
 
+	// Fetch all queries on mount
 	useEffect(() => {
-		for (const queryConfig of queries) {
-			fetchQuery(queryConfig.key);
+		for (const key of queryKeys) {
+			fetchQuery(key);
 		}
 	}, [fetchQuery]);
 
@@ -160,6 +167,35 @@ export const TelemetryDashboard = ({
 		[fetchQuery]
 	);
 
+	const handleNavigate = (newView: TelemetryView) => {
+		navigateToView(newView);
+		const section = findSectionForTelemetryView(newView);
+		if (section) {
+			setOpenSections((current) => new Set([...current, section]));
+		}
+	};
+
+	const handleToggleSection = (label: string) => {
+		setOpenSections((current) => {
+			const next = new Set(current);
+			if (next.has(label)) {
+				next.delete(label);
+			} else {
+				next.add(label);
+			}
+			return next;
+		});
+	};
+
+	const toggleSidebar = () => {
+		void sidebarSpringApi.start({
+			overlayOpacity: 1,
+			transform: 'translateX(0%)'
+		});
+	};
+
+	const ActiveSection = viewToSection[view];
+
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head title="Telemetry Dashboard - AbsoluteJS" />
@@ -169,36 +205,58 @@ export const TelemetryDashboard = ({
 					user={user}
 					setTheme={setTheme}
 				/>
-				<main style={mainDefault()}>
-					<div style={containerStyle}>
-						<div style={headerStyle}>Telemetry Dashboard</div>
-						{error ? (
-							<div style={errorStyle}>{error}</div>
-						) : (
-							queries.map((queryConfig) => (
-								<TelemetryTable
-									key={queryConfig.key}
-									queryKey={queryConfig.key}
-									title={queryConfig.title}
-									columns={queryConfig.columns}
-									columnsWithVersion={
-										queryConfig.columnsWithVersion
-									}
-									rows={data[queryConfig.key] ?? []}
+				<main
+					style={{
+						...mainDefault('hidden'),
+						alignItems: 'stretch'
+					}}
+				>
+					<div
+						style={{
+							display: 'flex',
+							flex: 1,
+							minHeight: 0,
+							overflow: 'hidden'
+						}}
+					>
+						{isMobile ? (
+							<>
+								<MobileSidebarToggle
+									onToggle={toggleSidebar}
 									themeSprings={themeSprings}
-									versions={
-										queryConfig.columnsWithVersion
-											? versions
-											: undefined
-									}
-									onVersionChange={
-										queryConfig.columnsWithVersion
-											? handleVersionChange
-											: undefined
-									}
 								/>
-							))
+								<TelemetryMobileSidebar
+									spring={sidebarSpring}
+									springApi={sidebarSpringApi}
+									view={view}
+									themeSprings={themeSprings}
+									navigateToView={handleNavigate}
+									openSections={openSections}
+									onToggleSection={handleToggleSection}
+								/>
+							</>
+						) : (
+							<TelemetrySidebar
+								view={view}
+								themeSprings={themeSprings}
+								navigateToView={handleNavigate}
+								openSections={openSections}
+								onToggleSection={handleToggleSection}
+							/>
 						)}
+						<div style={contentStyle}>
+							{error ? (
+								<div style={errorStyle}>{error}</div>
+							) : (
+								<ActiveSection
+									data={data}
+									kpi={kpi}
+									versions={versions}
+									themeSprings={themeSprings}
+									onVersionChange={handleVersionChange}
+								/>
+							)}
+						</div>
 					</div>
 				</main>
 			</animated.body>

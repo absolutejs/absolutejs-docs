@@ -5,26 +5,26 @@ import {
 	SidebarLinksSprings,
 	ThemeSprings
 } from '../../../types/springTypes';
-import { MenuButton, DocsView } from '../../../types/types';
+import { MenuButton } from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
 import { AnimatedFaChevronDown } from '../utils/AnimatedComponents';
 import { SidebarLink } from './SidebarLink';
 
-type SidebarDropdownProps = {
+type SidebarDropdownProps<V extends string> = {
 	label: string;
 	linksSprings: SidebarLinksSprings;
 	linksApi: SidebarLinksApi;
-	buttons: MenuButton[];
+	buttons: MenuButton<V>[];
 	icon?: AnimatedComponent<IconType>;
-	navigateToView: (newView: DocsView) => void;
+	navigateToView: (newView: V) => void;
 	themeSprings: ThemeSprings;
 	startIndex: number;
-	view: DocsView;
+	view: V;
 	isOpen: boolean;
 	onToggle: () => void;
 };
 
-export const SidebarDropdown = ({
+export const SidebarDropdown = <V extends string>({
 	label,
 	icon,
 	view,
@@ -36,7 +36,7 @@ export const SidebarDropdown = ({
 	themeSprings,
 	isOpen,
 	onToggle
-}: SidebarDropdownProps) => {
+}: SidebarDropdownProps<V>) => {
 	const {
 		ref,
 		dimensions: { scrollHeight }

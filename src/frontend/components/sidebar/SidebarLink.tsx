@@ -6,22 +6,21 @@ import {
 	SidebarLinksSprings,
 	ThemeSprings
 } from '../../../types/springTypes';
-import { DocsView } from '../../../types/types';
 import { primaryColor } from '../../styles/colors';
 
-type SidebarLinkProps = {
+type SidebarLinkProps<V extends string> = {
 	icon?: AnimatedComponent<IconType>;
 	label: string;
 	themeSprings: ThemeSprings;
 	linkSprings?: SidebarLinksSprings[number];
 	linksApi?: SidebarLinksApi;
-	id: DocsView;
-	view: DocsView;
+	id: V;
+	view: V;
 	index: number;
-	navigateToView: (newView: DocsView) => void;
+	navigateToView: (newView: V) => void;
 };
 
-export const SidebarLink = ({
+export const SidebarLink = <V extends string>({
 	icon,
 	linkSprings,
 	linksApi,
@@ -31,7 +30,7 @@ export const SidebarLink = ({
 	navigateToView,
 	label,
 	themeSprings
-}: SidebarLinkProps) => {
+}: SidebarLinkProps<V>) => {
 	const Icon = icon;
 	const isOverview = id === 'overview';
 	const isActive = view === id;
