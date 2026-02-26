@@ -1,6 +1,11 @@
 import { Elysia, t } from 'elysia';
 import { DatabaseType, User } from '../../../db/schema';
-import { handleReactPageRequest, asset, Result, getEnv } from '@absolutejs/absolute';
+import {
+	handleReactPageRequest,
+	asset,
+	Result,
+	getEnv
+} from '@absolutejs/absolute';
 import {
 	getStatus,
 	isValidProviderOption,
@@ -11,9 +16,16 @@ import { Documentation } from '../../frontend/pages/Documentation';
 import { Home } from '../../frontend/pages/Home';
 import { Signup } from '../../frontend/pages/Signup';
 import { TelemetryDashboard } from '../../frontend/pages/TelemetryDashboard';
-import { docsViewEnum, pageCookie } from '../../types/typebox';
+import {
+	docsViewEnum,
+	pageCookie,
+	telemetryViewEnum
+} from '../../types/typebox';
 
-const whitelistedAdmins = getEnv('ADMIN_SUBS')?.split(',').map(s => s.trim()) ?? [];
+const whitelistedAdmins =
+	getEnv('ADMIN_SUBS')
+		?.split(',')
+		.map((s) => s.trim()) ?? [];
 
 export const pagesPlugin = (result: Awaited<Result>) =>
 	new Elysia()
@@ -118,19 +130,30 @@ export const pagesPlugin = (result: Awaited<Result>) =>
 				query: t.Object({ provider: t.Optional(t.String()) })
 			}
 		)
-		.get('/telemetry', ({ cookie: { theme }, protectRoute, redirect }) =>
-			protectRoute(
-				async (user) =>{
-					if (!whitelistedAdmins.includes(user.auth_sub)) {
-						return redirect('/signup/telemetry');
-					}
-					
-					return handleReactPageRequest(
-						TelemetryDashboard,
-						asset(result, 'TelemetryDashboardIndex'),
-						{ theme: theme?.value, user }
-					)
-				},
-				async () => redirect('/signup/telemetry')
-			)
+		.get(
+			'/telemetry/:view?',
+			({ params: { view }, cookie: { theme }, protectRoute, redirect }) =>
+				protectRoute(
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return redirect('/signup/telemetry');
+						}
+
+						return handleReactPageRequest(
+							TelemetryDashboard,
+							asset(result, 'TelemetryDashboardIndex'),
+							{
+								initialView: view ?? 'overview',
+								theme: theme?.value,
+								user
+							}
+						);
+					},
+					async () => redirect('/signup/telemetry')
+				),
+			{
+				params: t.Object({
+					view: t.Optional(telemetryViewEnum)
+				})
+			}
 		);

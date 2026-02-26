@@ -1,5 +1,6 @@
 import { t } from 'elysia/type-system';
 import { docsViews } from '../frontend/data/sidebarData';
+import { telemetryViewIds } from '../frontend/data/telemetrySidebarData';
 import { isValidViewId } from './typeGuards';
 import { userSessionIdTypebox } from '@absolutejs/auth';
 
@@ -23,4 +24,8 @@ export const docsViewEnum = t.Enum(
 			.filter(isValidViewId)
 			.map((key) => [key, key])
 	)
+);
+
+export const telemetryViewEnum = t.Enum(
+	Object.fromEntries(telemetryViewIds.map((key) => [key, key]))
 );

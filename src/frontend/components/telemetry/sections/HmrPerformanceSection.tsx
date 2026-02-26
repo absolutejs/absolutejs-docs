@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react';
 import { TelemetrySectionProps } from '../../../../types/telemetryTypes';
+
 import { TelemetryTable } from '../TelemetryTable';
 
 const gapStyle: CSSProperties = {

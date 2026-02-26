@@ -1,4 +1,4 @@
-import { animated, useSpring } from '@react-spring/web';
+import { animated } from '@react-spring/web';
 import {
 	CSSProperties,
 	ComponentType,
@@ -10,8 +10,6 @@ import { User } from '../../../db/schema';
 import { KpiSummary, TelemetrySectionProps } from '../../types/telemetryTypes';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
-import { MobileSidebarToggle } from '../components/sidebar/MobileSidebarToggle';
-import { TelemetryMobileSidebar } from '../components/telemetry/TelemetryMobileSidebar';
 import { TelemetrySidebar } from '../components/telemetry/TelemetrySidebar';
 import { BuildPerformanceSection } from '../components/telemetry/sections/BuildPerformanceSection';
 import { DevSessionsSection } from '../components/telemetry/sections/DevSessionsSection';
@@ -19,16 +17,14 @@ import { ErrorsCrashesSection } from '../components/telemetry/sections/ErrorsCra
 import { HmrPerformanceSection } from '../components/telemetry/sections/HmrPerformanceSection';
 import { OverviewSection } from '../components/telemetry/sections/OverviewSection';
 import { UsageAdoptionSection } from '../components/telemetry/sections/UsageAdoptionSection';
-import {
-	TelemetryView,
-	findSectionForTelemetryView
-} from '../data/telemetrySidebarData';
+import { TelemetryView } from '../data/telemetrySidebarData';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { useTelemetryNavigation } from '../hooks/useTelemetryNavigation';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 
 type TelemetryDashboardProps = {
+	initialView: TelemetryView;
 	user: User;
 	theme: ThemeMode | undefined;
 };
@@ -52,28 +48,16 @@ const queryKeys = [
 	'hmr-rebuild-errors'
 ];
 
-// Map each sidebar view ID to its section component
 const viewToSection: Record<
 	TelemetryView,
 	ComponentType<TelemetrySectionProps>
 > = {
 	overview: OverviewSection,
-	'error-rates': ErrorsCrashesSection,
-	'build-errors': ErrorsCrashesSection,
-	'server-crashes': ErrorsCrashesSection,
-	'hmr-errors': ErrorsCrashesSection,
-	'build-duration': BuildPerformanceSection,
-	'build-empty': BuildPerformanceSection,
-	'missing-manifest': BuildPerformanceSection,
-	'hmr-reliability': HmrPerformanceSection,
-	'hmr-rebuilds': HmrPerformanceSection,
-	'hmr-rebuild-errors': HmrPerformanceSection,
-	'framework-popularity': UsageAdoptionSection,
-	'version-adoption': UsageAdoptionSection,
-	'platform-breakdown': UsageAdoptionSection,
-	'cli-commands': UsageAdoptionSection,
-	'dev-sessions': DevSessionsSection,
-	'dev-starts': DevSessionsSection
+	'errors-crashes': ErrorsCrashesSection,
+	'build-performance': BuildPerformanceSection,
+	'hmr-performance': HmrPerformanceSection,
+	'usage-adoption': UsageAdoptionSection,
+	'dev-sessions': DevSessionsSection
 };
 
 const errorStyle: CSSProperties = {
@@ -90,24 +74,14 @@ const contentStyle: CSSProperties = {
 };
 
 export const TelemetryDashboard = ({
+	initialView,
 	user,
 	theme
 }: TelemetryDashboardProps) => {
 	const [themeSprings, setTheme] = useTheme(theme);
-	const [view, navigateToView] = useTelemetryNavigation('overview');
+	const [view, navigateToView] = useTelemetryNavigation(initialView);
 	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('lg');
-
-	const [openSections, setOpenSections] = useState<Set<string>>(() => {
-		const initial = findSectionForTelemetryView('overview');
-		return initial ? new Set([initial]) : new Set();
-	});
-
-	const [sidebarSpring, sidebarSpringApi] = useSpring(() => ({
-		config: { friction: 40, tension: 275 },
-		overlayOpacity: 0,
-		transform: 'translateX(-100%)'
-	}));
+	const isCompact = isSizeOrLess('md');
 
 	const [data, setData] = useState<Record<string, Record<string, unknown>[]>>(
 		{}
@@ -167,33 +141,6 @@ export const TelemetryDashboard = ({
 		[fetchQuery]
 	);
 
-	const handleNavigate = (newView: TelemetryView) => {
-		navigateToView(newView);
-		const section = findSectionForTelemetryView(newView);
-		if (section) {
-			setOpenSections((current) => new Set([...current, section]));
-		}
-	};
-
-	const handleToggleSection = (label: string) => {
-		setOpenSections((current) => {
-			const next = new Set(current);
-			if (next.has(label)) {
-				next.delete(label);
-			} else {
-				next.add(label);
-			}
-			return next;
-		});
-	};
-
-	const toggleSidebar = () => {
-		void sidebarSpringApi.start({
-			overlayOpacity: 1,
-			transform: 'translateX(0%)'
-		});
-	};
-
 	const ActiveSection = viewToSection[view];
 
 	return (
@@ -219,32 +166,22 @@ export const TelemetryDashboard = ({
 							overflow: 'hidden'
 						}}
 					>
-						{isMobile ? (
-							<>
-								<MobileSidebarToggle
-									onToggle={toggleSidebar}
-									themeSprings={themeSprings}
-								/>
-								<TelemetryMobileSidebar
-									spring={sidebarSpring}
-									springApi={sidebarSpringApi}
-									view={view}
-									themeSprings={themeSprings}
-									navigateToView={handleNavigate}
-									openSections={openSections}
-									onToggleSection={handleToggleSection}
-								/>
-							</>
-						) : (
-							<TelemetrySidebar
-								view={view}
-								themeSprings={themeSprings}
-								navigateToView={handleNavigate}
-								openSections={openSections}
-								onToggleSection={handleToggleSection}
-							/>
-						)}
-						<div style={contentStyle}>
+						<TelemetrySidebar
+							view={view}
+							themeSprings={themeSprings}
+							navigateToView={navigateToView}
+							compact={isCompact}
+						/>
+						<animated.div
+							style={{
+								...contentStyle,
+								background: themeSprings.theme.to((t) =>
+									t.endsWith('dark')
+										? 'radial-gradient(ellipse at 20% 0%, rgba(160, 231, 229, 0.04) 0%, transparent 60%)'
+										: 'radial-gradient(ellipse at 20% 0%, rgba(160, 231, 229, 0.06) 0%, transparent 60%)'
+								)
+							}}
+						>
 							{error ? (
 								<div style={errorStyle}>{error}</div>
 							) : (
@@ -256,7 +193,7 @@ export const TelemetryDashboard = ({
 									onVersionChange={handleVersionChange}
 								/>
 							)}
-						</div>
+						</animated.div>
 					</div>
 				</main>
 			</animated.body>

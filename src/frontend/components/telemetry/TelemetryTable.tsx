@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { CSSProperties, useState } from 'react';
 import { ThemeSprings } from '../../../types/springTypes';
+import { primaryColor, secondaryColor } from '../../styles/colors';
 
 type TelemetryTableProps = {
 	queryKey: string;
@@ -14,15 +15,27 @@ type TelemetryTableProps = {
 };
 
 const sectionStyle = (themeSprings: ThemeSprings) => ({
-	backgroundColor: themeSprings.themeTertiary,
-	borderRadius: '0.5rem',
+	backdropFilter: 'blur(12px)',
+	backgroundColor: themeSprings.theme.to((t: string) =>
+		t.endsWith('dark')
+			? 'rgba(17, 17, 22, 0.7)'
+			: 'rgba(255, 255, 254, 0.7)'
+	),
+	border: themeSprings.theme.to((t: string) =>
+		t.endsWith('dark')
+			? '1px solid rgba(255, 255, 255, 0.05)'
+			: '1px solid rgba(0, 0, 0, 0.05)'
+	),
+	borderRadius: '0.75rem',
+	boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+	overflow: 'hidden',
 	padding: '1.5rem',
 	width: '100%'
 });
 
 const headerRowStyle: CSSProperties = {
-	display: 'flex',
 	alignItems: 'center',
+	display: 'flex',
 	justifyContent: 'space-between',
 	marginBottom: '1rem'
 };
@@ -33,15 +46,15 @@ const titleStyle: CSSProperties = {
 };
 
 const selectStyle = (themeSprings: ThemeSprings) => ({
-	padding: '0.3rem 0.6rem',
-	borderRadius: '0.375rem',
-	border: '1px solid rgba(128, 128, 128, 0.3)',
 	backgroundColor: themeSprings.themeSecondary,
+	border: '1px solid rgba(128, 128, 128, 0.3)',
+	borderRadius: '0.375rem',
 	color: themeSprings.contrastPrimary,
-	fontSize: '0.8rem',
-	fontFamily: 'inherit',
 	cursor: 'pointer',
-	minWidth: '8rem'
+	fontFamily: 'inherit',
+	fontSize: '0.8rem',
+	minWidth: '8rem',
+	padding: '0.3rem 0.6rem'
 });
 
 const optionStyle = (themeSprings: ThemeSprings) => ({
@@ -50,30 +63,31 @@ const optionStyle = (themeSprings: ThemeSprings) => ({
 });
 
 const tableStyle: CSSProperties = {
-	width: '100%',
 	borderCollapse: 'collapse',
-	fontSize: '0.875rem'
+	fontSize: '0.875rem',
+	width: '100%'
 };
 
 const thStyle: CSSProperties = {
-	textAlign: 'left',
-	padding: '0.5rem 1rem',
-	borderBottom: '1px solid rgba(128, 128, 128, 0.3)',
-	opacity: 0.7,
-	textTransform: 'uppercase',
+	borderBottom: `2px solid transparent`,
+	borderImage: `linear-gradient(to right, ${primaryColor}40, ${secondaryColor}40) 1`,
 	fontSize: '0.75rem',
-	letterSpacing: '0.05rem'
+	letterSpacing: '0.05rem',
+	opacity: 0.7,
+	padding: '0.5rem 1rem',
+	textAlign: 'left',
+	textTransform: 'uppercase'
 };
 
 const tdStyle: CSSProperties = {
-	padding: '0.5rem 1rem',
-	borderBottom: '1px solid rgba(128, 128, 128, 0.15)'
+	borderBottom: '1px solid rgba(128, 128, 128, 0.1)',
+	padding: '0.6rem 1rem'
 };
 
 const emptyStyle: CSSProperties = {
-	textAlign: 'center',
+	opacity: 0.5,
 	padding: '2rem',
-	opacity: 0.5
+	textAlign: 'center'
 };
 
 export const TelemetryTable = ({

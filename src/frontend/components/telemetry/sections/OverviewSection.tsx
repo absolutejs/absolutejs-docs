@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react';
 import { TelemetrySectionProps } from '../../../../types/telemetryTypes';
+import { primaryColor, secondaryColor } from '../../../styles/colors';
 import { TelemetryCard } from '../TelemetryCard';
 import { TelemetryTable } from '../TelemetryTable';
 import { BarChart } from '../charts/BarChart';
@@ -12,10 +13,14 @@ const kpiRowStyle: CSSProperties = {
 };
 
 const sectionTitleStyle: CSSProperties = {
+	background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
+	backgroundClip: 'text',
 	fontSize: '1.25rem',
 	fontWeight: 600,
 	marginBottom: '1rem',
-	marginTop: '1.5rem'
+	marginTop: '1.5rem',
+	WebkitBackgroundClip: 'text',
+	WebkitTextFillColor: 'transparent'
 };
 
 const buildDurationOrder = ['<1s', '1-5s', '5-15s', '>15s'];

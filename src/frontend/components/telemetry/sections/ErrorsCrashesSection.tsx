@@ -1,13 +1,18 @@
 import { CSSProperties } from 'react';
 import { TelemetrySectionProps } from '../../../../types/telemetryTypes';
+import { primaryColor, secondaryColor } from '../../../styles/colors';
 import { TelemetryTable } from '../TelemetryTable';
 import { LineChart } from '../charts/LineChart';
 
 const sectionTitleStyle: CSSProperties = {
+	background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
+	backgroundClip: 'text',
 	fontSize: '1.25rem',
 	fontWeight: 600,
 	marginBottom: '1rem',
-	marginTop: '1.5rem'
+	marginTop: '1.5rem',
+	WebkitBackgroundClip: 'text',
+	WebkitTextFillColor: 'transparent'
 };
 
 const gapStyle: CSSProperties = {

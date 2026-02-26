@@ -6,17 +6,35 @@ export const useTelemetryNavigation = (initialView: TelemetryView) => {
 	const [view, setView] = useState(initialView);
 
 	const navigateToView = (newView: TelemetryView) => {
-		const url = new URL(window.location.href);
-		url.searchParams.set('view', newView);
-		window.history.pushState({ view: newView }, '', url.toString());
+		const { pathname, search } = window.location;
+		const trimmed = pathname.replace(/\/+$/, '');
+		const parts = trimmed.split('/').filter(Boolean);
+
+		const last = parts.length > 0 ? parts[parts.length - 1] : undefined;
+
+		if (last && isValidTelemetryViewId(last)) {
+			parts[parts.length - 1] = newView;
+		} else {
+			parts.push(newView);
+		}
+
+		const nextPath = `/${parts.join('/')}`;
+		if (nextPath !== pathname) {
+			window.history.pushState(
+				{ view: newView },
+				'',
+				`${nextPath}${search}`
+			);
+		}
 		setView(newView);
 	};
 
 	useEffect(() => {
 		const onPop = () => {
-			const url = new URL(window.location.href);
-			const v = url.searchParams.get('view');
-			if (v && isValidTelemetryViewId(v)) setView(v);
+			const trimmed = window.location.pathname.replace(/\/+$/, '');
+			const parts = trimmed.split('/').filter(Boolean);
+			const last = parts.length > 0 ? parts[parts.length - 1] : undefined;
+			if (last && isValidTelemetryViewId(last)) setView(last);
 		};
 		window.addEventListener('popstate', onPop);
 

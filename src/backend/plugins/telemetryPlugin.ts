@@ -10,7 +10,10 @@ import { getEnv } from '@absolutejs/absolute';
 import { protectRoutePlugin } from '@absolutejs/auth';
 
 const MAX_BODY_BYTES = 10_240;
-const whitelistedAdmins = getEnv('ADMIN_SUBS')?.split(',').map(s => s.trim()) ?? [];
+const whitelistedAdmins =
+	getEnv('ADMIN_SUBS')
+		?.split(',')
+		.map((s) => s.trim()) ?? [];
 
 export const telemetryPlugin = (db: DatabaseType) =>
 	new Elysia()
@@ -104,8 +107,7 @@ export const telemetryPlugin = (db: DatabaseType) =>
 					const res = await fetch(
 						'https://registry.npmjs.org/@absolutejs/absolute'
 					);
-					if (!res.ok)
-						return status(502, 'Failed to fetch versions');
+					if (!res.ok) return status(502, 'Failed to fetch versions');
 					const json = await res.json();
 					const versions = Object.keys(
 						json.versions as Record<string, unknown>
@@ -113,7 +115,11 @@ export const telemetryPlugin = (db: DatabaseType) =>
 						.filter((v) => {
 							const parts = v.split('.').map(Number);
 							const [major, minor] = parts;
-							return major != null && minor != null && (major > 0 || (major === 0 && minor >= 17));
+							return (
+								major != null &&
+								minor != null &&
+								(major > 0 || (major === 0 && minor >= 17))
+							);
 						})
 						.reverse();
 					return versions;
@@ -133,8 +139,7 @@ export const telemetryPlugin = (db: DatabaseType) =>
 							telemetryQueryHandlers[
 								key as keyof typeof telemetryQueryHandlers
 							];
-						if (!handler)
-							return status(404, 'Unknown query');
+						if (!handler) return status(404, 'Unknown query');
 						return Response.json(await handler(db, query.version));
 					},
 					() => status(403, 'Access denied')

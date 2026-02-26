@@ -1,9 +1,7 @@
 import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
-import {
-	AnimatedCSSProperties,
-	ThemeSprings
-} from '../../../types/springTypes';
+import { ThemeSprings } from '../../../types/springTypes';
+import { primaryColor, secondaryColor } from '../../styles/colors';
 
 type TelemetryCardProps = {
 	title: string;
@@ -13,19 +11,41 @@ type TelemetryCardProps = {
 };
 
 const cardStyle = (themeSprings: ThemeSprings) => ({
-	backgroundColor: themeSprings.themeTertiary,
-	borderRadius: '0.5rem',
-	padding: '1.5rem',
+	backdropFilter: 'blur(16px)',
+	backgroundColor: themeSprings.theme.to((t: string) =>
+		t.endsWith('dark')
+			? 'rgba(17, 17, 22, 0.7)'
+			: 'rgba(255, 255, 254, 0.7)'
+	),
+	border: themeSprings.theme.to((t: string) =>
+		t.endsWith('dark')
+			? '1px solid rgba(255, 255, 255, 0.05)'
+			: '1px solid rgba(0, 0, 0, 0.05)'
+	),
+	borderRadius: '0.75rem',
+	boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+	flex: '1 1 200px',
 	minWidth: '200px',
-	flex: '1 1 200px'
+	overflow: 'hidden',
+	padding: '1.5rem',
+	position: 'relative' as const
 });
+
+const accentStripStyle: CSSProperties = {
+	background: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})`,
+	height: '3px',
+	left: 0,
+	position: 'absolute',
+	right: 0,
+	top: 0
+};
 
 const titleStyle: CSSProperties = {
 	fontSize: '0.875rem',
-	opacity: 0.7,
+	letterSpacing: '0.05rem',
 	marginBottom: '0.5rem',
-	textTransform: 'uppercase',
-	letterSpacing: '0.05rem'
+	opacity: 0.7,
+	textTransform: 'uppercase'
 };
 
 const valueStyle: CSSProperties = {
@@ -35,8 +55,8 @@ const valueStyle: CSSProperties = {
 
 const subtitleStyle: CSSProperties = {
 	fontSize: '0.75rem',
-	opacity: 0.5,
-	marginTop: '0.25rem'
+	marginTop: '0.25rem',
+	opacity: 0.5
 };
 
 export const TelemetryCard = ({
@@ -46,6 +66,7 @@ export const TelemetryCard = ({
 	themeSprings
 }: TelemetryCardProps) => (
 	<animated.div style={cardStyle(themeSprings)}>
+		<div style={accentStripStyle} />
 		<div style={titleStyle}>{title}</div>
 		<div style={valueStyle}>{value}</div>
 		{subtitle && <div style={subtitleStyle}>{subtitle}</div>}
