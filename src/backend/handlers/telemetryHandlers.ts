@@ -14,7 +14,7 @@ import {
 import { DatabaseType, NewTelemetryEvent, schema } from '../../../db/schema';
 
 const stripPaths = (msg: string) =>
-	msg.replace(/\/(?:[\w.-]+\/)+[\w.-]+/g, '<path>');
+	msg.replace(/(?<=^|\s)\/(?:[\w.-]+\/)+[\w.-]+/g, '<path>');
 
 const sanitizePayload = (payload: Record<string, unknown> | undefined) => {
 	if (!payload) return {};
