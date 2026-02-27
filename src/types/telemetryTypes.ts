@@ -3,7 +3,8 @@ import { ThemeSprings } from './springTypes';
 export type KpiSummary = {
 	totalEvents: number;
 	errorRate: number;
-	avgBuildMs: number | null;
+	avgDevBuildMs: number | null;
+	avgProdBuildMs: number | null;
 	topFramework: string | null;
 };
 

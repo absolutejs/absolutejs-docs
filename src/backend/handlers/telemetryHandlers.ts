@@ -445,40 +445,72 @@ export const getHMRRebuildErrors = async (db: DatabaseType, version?: string) =>
 		.orderBy(desc(count()));
 
 export const getKpiSummary = async (db: DatabaseType) => {
-	const [totalResult, errorResult, buildResult, frameworkResult] =
-		await Promise.all([
-			db.select({ count: count() }).from(schema.telemetryEvents),
-			db
-				.select({ count: count() })
-				.from(schema.telemetryEvents)
-				.where(sql`${schema.telemetryEvents.event} LIKE '%error%'`),
-			db
-				.select({
-					avg_ms: sql<number>`AVG((${schema.telemetryEvents.payload}->>'durationMs')::int)`
-				})
-				.from(schema.telemetryEvents)
-				.where(eq(schema.telemetryEvents.event, 'build:complete')),
-			db
-				.select({
-					framework: sql<string>`${schema.telemetryEvents.payload}->>'framework'`,
-					count: count()
-				})
-				.from(schema.telemetryEvents)
-				.where(eq(schema.telemetryEvents.event, 'build:start'))
-				.groupBy(sql`${schema.telemetryEvents.payload}->>'framework'`)
-				.orderBy(desc(count()))
-				.limit(1)
-		]);
+	const [
+		totalResult,
+		errorResult,
+		devBuildResult,
+		prodBuildResult,
+		frameworkResult
+	] = await Promise.all([
+		db.select({ count: count() }).from(schema.telemetryEvents),
+		db
+			.select({ count: count() })
+			.from(schema.telemetryEvents)
+			.where(sql`${schema.telemetryEvents.event} LIKE '%error%'`),
+		db
+			.select({
+				avg_ms: sql<number>`AVG((${schema.telemetryEvents.payload}->>'durationMs')::int)`
+			})
+			.from(schema.telemetryEvents)
+			.where(
+				combine(
+					eq(schema.telemetryEvents.event, 'build:complete'),
+					sql`${schema.telemetryEvents.payload}->>'mode' = 'development'`
+				)
+			),
+		db
+			.select({
+				avg_ms: sql<number>`AVG((${schema.telemetryEvents.payload}->>'durationMs')::int)`
+			})
+			.from(schema.telemetryEvents)
+			.where(
+				combine(
+					eq(schema.telemetryEvents.event, 'build:complete'),
+					sql`${schema.telemetryEvents.payload}->>'mode' = 'production'`
+				)
+			),
+		db
+			.select({
+				framework: sql<string>`${schema.telemetryEvents.payload}->>'framework'`,
+				count: count()
+			})
+			.from(schema.telemetryEvents)
+			.where(eq(schema.telemetryEvents.event, 'build:start'))
+			.groupBy(sql`${schema.telemetryEvents.payload}->>'framework'`)
+			.orderBy(desc(count()))
+			.limit(1)
+	]);
 
 	const total = totalResult[0]?.count ?? 0;
 	const errors = errorResult[0]?.count ?? 0;
-	const avgBuildMs = buildResult[0]?.avg_ms ?? null;
-	const topFramework = frameworkResult[0]?.framework ?? null;
+	const avgDevBuildMs = devBuildResult[0]?.avg_ms ?? null;
+	const avgProdBuildMs = prodBuildResult[0]?.avg_ms ?? null;
+	const frameworkNames: Record<string, string> = {
+		react: 'React',
+		html: 'HTML'
+	};
+	const rawFramework = frameworkResult[0]?.framework ?? null;
+	const topFramework = rawFramework
+		? (frameworkNames[rawFramework.toLowerCase()] ?? rawFramework)
+		: null;
 
 	return {
 		totalEvents: total,
 		errorRate: total > 0 ? Number(((errors / total) * 100).toFixed(1)) : 0,
-		avgBuildMs: avgBuildMs !== null ? Math.round(avgBuildMs) : null,
+		avgDevBuildMs:
+			avgDevBuildMs !== null ? Math.round(avgDevBuildMs) : null,
+		avgProdBuildMs:
+			avgProdBuildMs !== null ? Math.round(avgProdBuildMs) : null,
 		topFramework
 	};
 };
@@ -765,6 +797,8 @@ export const getBuildDurationByMode = async (
 	db
 		.select({
 			mode: sql<string>`${schema.telemetryEvents.payload}->>'mode'`,
+			frameworks: sql<string>`ARRAY_TO_STRING(ARRAY(SELECT jsonb_array_elements_text(${schema.telemetryEvents.payload}->'frameworks')), ', ')`,
+			version: schema.telemetryEvents.version,
 			duration_bucket: sql<string>`${buildDurationCase}`,
 			count: count()
 		})
@@ -777,6 +811,8 @@ export const getBuildDurationByMode = async (
 		)
 		.groupBy(
 			sql`${schema.telemetryEvents.payload}->>'mode'`,
+			sql`ARRAY_TO_STRING(ARRAY(SELECT jsonb_array_elements_text(${schema.telemetryEvents.payload}->'frameworks')), ', ')`,
+			schema.telemetryEvents.version,
 			buildDurationCase
 		);
 

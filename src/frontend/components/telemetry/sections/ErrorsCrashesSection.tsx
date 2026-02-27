@@ -124,6 +124,14 @@ export const ErrorsCrashesSection = ({
 				rows={data['hmr-errors'] ?? []}
 				themeSprings={themeSprings}
 			/>
+
+			<TelemetryTable
+				queryKey="missing-manifest"
+				title="Missing Manifest Entries"
+				columns={['asset_name', 'asset_type', 'html_file', 'count']}
+				rows={data['missing-manifest'] ?? []}
+				themeSprings={themeSprings}
+			/>
 		</div>
 	);
 };

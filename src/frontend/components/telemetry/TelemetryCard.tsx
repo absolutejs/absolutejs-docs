@@ -24,8 +24,7 @@ const cardStyle = (themeSprings: ThemeSprings) => ({
 	),
 	borderRadius: '0.75rem',
 	boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
-	flex: '1 1 200px',
-	minWidth: '200px',
+	minWidth: 0,
 	overflow: 'hidden',
 	padding: '1.5rem',
 	position: 'relative' as const

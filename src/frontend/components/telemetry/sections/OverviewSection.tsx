@@ -1,14 +1,8 @@
 import { CSSProperties } from 'react';
 import { TelemetrySectionProps } from '../../../../types/telemetryTypes';
+import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import { TelemetryCard } from '../TelemetryCard';
 import { TelemetryTable } from '../TelemetryTable';
-
-const kpiRowStyle: CSSProperties = {
-	display: 'flex',
-	flexWrap: 'wrap',
-	gap: '1rem',
-	marginBottom: '1.5rem'
-};
 
 export const OverviewSection = ({
 	data,
@@ -17,9 +11,20 @@ export const OverviewSection = ({
 	onVersionChange,
 	kpi
 }: TelemetrySectionProps) => {
+	const { isSizeOrLess } = useMediaQuery();
+
+	const columns = isSizeOrLess('sm') ? 1 : isSizeOrLess('md') ? 2 : 5;
+
+	const kpiGridStyle: CSSProperties = {
+		display: 'grid',
+		gap: '1rem',
+		gridTemplateColumns: `repeat(${columns}, 1fr)`,
+		marginBottom: '1.5rem'
+	};
+
 	return (
 		<div>
-			<div style={kpiRowStyle}>
+			<div style={kpiGridStyle}>
 				<TelemetryCard
 					title="Total Events"
 					value={kpi?.totalEvents?.toLocaleString() ?? '-'}
@@ -31,10 +36,19 @@ export const OverviewSection = ({
 					themeSprings={themeSprings}
 				/>
 				<TelemetryCard
-					title="Avg Build Time"
+					title="Avg Dev Build"
 					value={
-						kpi?.avgBuildMs != null
-							? `${(kpi.avgBuildMs / 1000).toFixed(1)}s`
+						kpi?.avgDevBuildMs != null
+							? `${(kpi.avgDevBuildMs / 1000).toFixed(1)}s`
+							: '-'
+					}
+					themeSprings={themeSprings}
+				/>
+				<TelemetryCard
+					title="Avg Prod Build"
+					value={
+						kpi?.avgProdBuildMs != null
+							? `${(kpi.avgProdBuildMs / 1000).toFixed(1)}s`
 							: '-'
 					}
 					themeSprings={themeSprings}
