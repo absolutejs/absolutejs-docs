@@ -1,9 +1,8 @@
-import { BuildConfig, getEnv, networking, prepare } from '@absolutejs/absolute';
+import { getEnv, networking, prepare } from '@absolutejs/absolute';
 import { absoluteAuth } from '@absolutejs/auth';
-import { staticPlugin } from '@elysiajs/static';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { Elysia, env, t } from 'elysia';
+import { Elysia } from 'elysia';
 import { schema, User } from '../../db/schema';
 import { providerPlugin } from './plugins/providerPlugin';
 import { telemetryPlugin } from './plugins/telemetryPlugin';
@@ -19,12 +18,6 @@ const { absolutejs, manifest } = await prepare();
 
 const server = new Elysia()
 	.use(absolutejs)
-	.use(
-		staticPlugin({
-			assets: './build',
-			prefix: ''
-		})
-	)
 	.use(providerPlugin(db))
 	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
 	.use(telemetryPlugin(db))
