@@ -81,6 +81,21 @@ export const ErrorsCrashesSection = ({
 				onVersionChange={onVersionChange}
 			/>
 
+			<TelemetryTable
+				queryKey="build-empty"
+				title="Empty Builds"
+				columns={[
+					'frameworks',
+					'mode',
+					'incremental',
+					'configured_dirs',
+					'scanned_entries',
+					'users'
+				]}
+				rows={data['build-empty'] ?? []}
+				themeSprings={themeSprings}
+			/>
+
 			{crashSeries.length > 0 && (
 				<>
 					<div style={sectionTitleStyle}>Server Crash Trend</div>

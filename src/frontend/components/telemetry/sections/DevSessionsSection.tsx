@@ -24,7 +24,9 @@ const sessionDurationOrder = ['<1m', '1-5m', '5-15m', '15-60m', '>60m'];
 
 export const DevSessionsSection = ({
 	data,
-	themeSprings
+	versions,
+	themeSprings,
+	onVersionChange
 }: TelemetrySectionProps) => {
 	// Aggregate session duration buckets
 	const sessionRows = data['dev-sessions'] ?? [];
@@ -70,6 +72,17 @@ export const DevSessionsSection = ({
 				columns={['entry', 'users']}
 				rows={data['dev-starts'] ?? []}
 				themeSprings={themeSprings}
+			/>
+
+			<TelemetryTable
+				queryKey="dev-restarts"
+				title="Dev Server Restarts"
+				columns={['entry', 'count']}
+				columnsWithVersion={['entry', 'version', 'count']}
+				rows={data['dev-restarts'] ?? []}
+				themeSprings={themeSprings}
+				versions={versions}
+				onVersionChange={onVersionChange}
 			/>
 		</div>
 	);

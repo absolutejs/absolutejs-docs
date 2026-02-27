@@ -13,7 +13,8 @@ import {
 } from 'drizzle-orm';
 import { DatabaseType, NewTelemetryEvent, schema } from '../../../db/schema';
 
-const stripPaths = (msg: string) => msg.replace(/(?:\/[\w.-]+)+/g, '<path>');
+const stripPaths = (msg: string) =>
+	msg.replace(/\/(?:[\w.-]+\/)+[\w.-]+/g, '<path>');
 
 const sanitizePayload = (payload: Record<string, unknown> | undefined) => {
 	if (!payload) return {};
@@ -322,6 +323,10 @@ export const getBuildEmpty = async (db: DatabaseType, version?: string) =>
 	db
 		.select({
 			frameworks: sql<string>`${schema.telemetryEvents.payload}->>'frameworks'`,
+			mode: sql<string>`${schema.telemetryEvents.payload}->>'mode'`,
+			incremental: sql<string>`${schema.telemetryEvents.payload}->>'incremental'`,
+			configured_dirs: sql<string>`${schema.telemetryEvents.payload}->>'configuredDirs'`,
+			scanned_entries: sql<string>`${schema.telemetryEvents.payload}->>'scannedEntries'`,
 			users: sql<number>`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`
 		})
 		.from(schema.telemetryEvents)
@@ -331,7 +336,13 @@ export const getBuildEmpty = async (db: DatabaseType, version?: string) =>
 				versionFilter(version)
 			)
 		)
-		.groupBy(sql`${schema.telemetryEvents.payload}->>'frameworks'`)
+		.groupBy(
+			sql`${schema.telemetryEvents.payload}->>'frameworks'`,
+			sql`${schema.telemetryEvents.payload}->>'mode'`,
+			sql`${schema.telemetryEvents.payload}->>'incremental'`,
+			sql`${schema.telemetryEvents.payload}->>'configuredDirs'`,
+			sql`${schema.telemetryEvents.payload}->>'scannedEntries'`
+		)
 		.orderBy(
 			desc(sql`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`)
 		);
@@ -710,10 +721,7 @@ export const getStartSessionDuration = async (
 			sql`${schema.telemetryEvents.payload}->>'entry'`
 		);
 
-export const getStartBundleStats = async (
-	db: DatabaseType,
-	version?: string
-) =>
+export const getStartBundleStats = async (db: DatabaseType, version?: string) =>
 	db
 		.select({
 			entry: sql<string>`${schema.telemetryEvents.payload}->>'entry'`,

@@ -22,36 +22,45 @@ const gapStyle: CSSProperties = {
 
 const buildDurationOrder = ['<1s', '1-5s', '5-15s', '>15s'];
 
+const aggregateBuckets = (rows: Record<string, unknown>[]) => {
+	const bucketCounts = new Map<string, number>();
+	for (const row of rows) {
+		const bucket = String(row['duration_bucket'] ?? '');
+		const count = Number(row['count'] ?? 0);
+		bucketCounts.set(bucket, (bucketCounts.get(bucket) ?? 0) + count);
+	}
+	return [...bucketCounts.entries()].map(([label, value]) => ({
+		label,
+		value
+	}));
+};
+
 export const BuildPerformanceSection = ({
 	data,
 	versions,
 	themeSprings,
 	onVersionChange
 }: TelemetrySectionProps) => {
-	// Aggregate build duration buckets
-	const durationRows = data['build-duration'] ?? [];
-	const bucketCounts = new Map<string, number>();
+	const byModeRows = data['build-duration-by-mode'] ?? [];
+	const devRows = byModeRows.filter(
+		(r) => String(r['mode']) === 'development'
+	);
+	const prodRows = byModeRows.filter(
+		(r) => String(r['mode']) === 'production'
+	);
 
-	for (const row of durationRows) {
-		const bucket = String(row['duration_bucket'] ?? '');
-		const count = Number(row['count'] ?? 0);
-		bucketCounts.set(bucket, (bucketCounts.get(bucket) ?? 0) + count);
-	}
-
-	const barData = [...bucketCounts.entries()].map(([label, value]) => ({
-		label,
-		value
-	}));
+	const devBarData = aggregateBuckets(devRows);
+	const prodBarData = aggregateBuckets(prodRows);
 
 	return (
 		<div style={gapStyle}>
-			{barData.length > 0 && (
+			{devBarData.length > 0 && (
 				<div>
 					<div style={sectionTitleStyle}>
-						Build Duration Distribution
+						Development Build Duration Distribution
 					</div>
 					<BarChart
-						data={barData}
+						data={devBarData}
 						themeSprings={themeSprings}
 						order={buildDurationOrder}
 					/>
@@ -59,21 +68,31 @@ export const BuildPerformanceSection = ({
 			)}
 
 			<TelemetryTable
-				queryKey="build-duration"
-				title="Build Duration Details"
+				queryKey="build-duration-by-mode"
+				title="Development Build Duration Details"
 				columns={['duration_bucket', 'count']}
-				columnsWithVersion={['duration_bucket', 'version', 'count']}
-				rows={durationRows}
+				rows={devRows}
 				themeSprings={themeSprings}
-				versions={versions}
-				onVersionChange={onVersionChange}
 			/>
 
+			{prodBarData.length > 0 && (
+				<div>
+					<div style={sectionTitleStyle}>
+						Production Build Duration Distribution
+					</div>
+					<BarChart
+						data={prodBarData}
+						themeSprings={themeSprings}
+						order={buildDurationOrder}
+					/>
+				</div>
+			)}
+
 			<TelemetryTable
-				queryKey="build-empty"
-				title="Empty Builds"
-				columns={['frameworks', 'users']}
-				rows={data['build-empty'] ?? []}
+				queryKey="build-duration-by-mode"
+				title="Production Build Duration Details"
+				columns={['duration_bucket', 'count']}
+				rows={prodRows}
 				themeSprings={themeSprings}
 			/>
 

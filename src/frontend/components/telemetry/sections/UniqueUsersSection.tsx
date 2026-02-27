@@ -234,7 +234,9 @@ const UserDrilldown = ({
 			return str.length > 50 ? str.slice(0, 50) + '...' : str;
 		}
 		if (col === 'client_timestamp' && value) {
-			return new Date(String(value)).toLocaleString();
+			const raw = String(value);
+			const utc = raw.endsWith('Z') ? raw : raw + 'Z';
+			return new Date(utc).toLocaleString();
 		}
 		return value == null ? '-' : String(value);
 	};
@@ -456,7 +458,9 @@ export const UniqueUsersSection = ({
 			return labels[row.anonymous_id] ?? '';
 		}
 		if (col === 'first_seen' || col === 'last_seen') {
-			return new Date(row[col]).toLocaleString();
+			const raw = row[col];
+			const utc = raw.endsWith('Z') ? raw : raw + 'Z';
+			return new Date(utc).toLocaleString();
 		}
 		if (col === 'versions') {
 			return (row.versions ?? []).filter(Boolean).join(', ') || '-';

@@ -37,7 +37,6 @@ const queryKeys = [
 	'build-errors',
 	'framework-popularity',
 	'hmr-reliability',
-	'build-duration',
 	'version-adoption',
 	'platform-breakdown',
 	'server-crashes',
@@ -48,7 +47,9 @@ const queryKeys = [
 	'missing-manifest',
 	'dev-starts',
 	'hmr-errors',
-	'hmr-rebuild-errors'
+	'hmr-rebuild-errors',
+	'dev-restarts',
+	'build-duration-by-mode'
 ];
 
 const viewToSection: Partial<

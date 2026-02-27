@@ -27,7 +27,7 @@ const whitelistedAdmins =
 		?.split(',')
 		.map((s) => s.trim()) ?? [];
 
-export const pagesPlugin = (result: Awaited<Result>) =>
+export const pagesPlugin = (manifest: Record<string, string>) =>
 	new Elysia()
 		.guard({
 			cookie: pageCookie
@@ -51,7 +51,7 @@ export const pagesPlugin = (result: Awaited<Result>) =>
 
 				return handleReactPageRequest(
 					Home,
-					asset(result, 'HomeIndex'),
+					asset(manifest, 'HomeIndex'),
 					{
 						theme: theme?.value,
 						user
@@ -60,7 +60,7 @@ export const pagesPlugin = (result: Awaited<Result>) =>
 			}
 		)
 		.get('/signup/:redirect?', ({ cookie: { theme } }) =>
-			handleReactPageRequest(Signup, asset(result, 'SignupIndex'), {
+			handleReactPageRequest(Signup, asset(manifest, 'SignupIndex'), {
 				theme: theme?.value
 			})
 		)
@@ -83,7 +83,7 @@ export const pagesPlugin = (result: Awaited<Result>) =>
 
 				return handleReactPageRequest(
 					Documentation,
-					asset(result, 'DocumentationIndex'),
+					asset(manifest, 'DocumentationIndex'),
 					{
 						initialView: view ?? 'overview',
 						theme: theme?.value,
@@ -114,7 +114,7 @@ export const pagesPlugin = (result: Awaited<Result>) =>
 
 				return handleReactPageRequest(
 					AuthTesting,
-					asset(result, 'AuthTestingIndex'),
+					asset(manifest, 'AuthTestingIndex'),
 					{
 						theme: theme?.value,
 						initialProvider:
@@ -141,7 +141,7 @@ export const pagesPlugin = (result: Awaited<Result>) =>
 
 						return handleReactPageRequest(
 							TelemetryDashboard,
-							asset(result, 'TelemetryDashboardIndex'),
+							asset(manifest, 'TelemetryDashboardIndex'),
 							{
 								initialView: view ?? 'overview',
 								theme: theme?.value,

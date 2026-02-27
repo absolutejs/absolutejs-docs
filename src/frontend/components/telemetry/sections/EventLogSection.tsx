@@ -539,7 +539,9 @@ export const EventLogSection = ({
 			return str.length > 60 ? str.slice(0, 60) + '...' : str;
 		}
 		if (col === 'client_timestamp' && value) {
-			return new Date(String(value)).toLocaleString();
+			const raw = String(value);
+			const utc = raw.endsWith('Z') ? raw : raw + 'Z';
+			return new Date(utc).toLocaleString();
 		}
 		return value == null ? '-' : String(value);
 	};
