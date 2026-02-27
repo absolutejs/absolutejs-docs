@@ -152,8 +152,7 @@ const TelemetryDashboardInner = ({
 		setVersionByKey((prev) => ({ ...prev, [queryKey]: version }));
 	};
 
-	const hasNoData =
-		kpiQuery.isPending && dataQueries.every((q) => !q.data);
+	const hasNoData = kpiQuery.isPending && dataQueries.every((q) => !q.data);
 	const accessDenied = dataQueries.some(
 		(q) => q.error && String(q.error).includes('403')
 	);

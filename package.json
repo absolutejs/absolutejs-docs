@@ -14,13 +14,14 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"format": "absolute prettier --write",
 		"dev": "absolute dev",
+		"start": "absolute start",
 		"lint": "absolute eslint",
 		"typecheck": "bun run tsc --noEmit",
 		"db:studio": "drizzle-kit studio",
 		"db:push": "drizzle-kit push"
 	},
 	"dependencies": {
-		"@absolutejs/absolute": "0.17.2",
+		"@absolutejs/absolute": "0.17.8",
 		"@absolutejs/auth": "0.22.4",
 		"@elysiajs/eden": "1.4.8",
 		"@elysiajs/static": "1.4.7",
