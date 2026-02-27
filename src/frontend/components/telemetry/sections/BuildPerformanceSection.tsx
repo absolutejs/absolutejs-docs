@@ -72,7 +72,7 @@ export const BuildPerformanceSection = ({
 			<TelemetryTable
 				queryKey="build-empty"
 				title="Empty Builds"
-				columns={['frameworks', 'count']}
+				columns={['frameworks', 'users']}
 				rows={data['build-empty'] ?? []}
 				themeSprings={themeSprings}
 			/>

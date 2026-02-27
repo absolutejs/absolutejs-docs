@@ -1,9 +1,17 @@
 import { Elysia, t } from 'elysia';
 import { DatabaseType, User } from '../../../db/schema';
 import {
+	deleteTelemetryEvent,
+	deleteUserLabel,
+	getAllEvents,
+	getBunVersions,
 	getKpiSummary,
+	getUniqueUsers,
+	getUserEvents,
+	getUserLabels,
 	insertTelemetryEvent,
-	telemetryQueryHandlers
+	telemetryQueryHandlers,
+	upsertUserLabel
 } from '../handlers/telemetryHandlers';
 import { isRateLimited } from '../utils/rateLimit';
 import { getEnv } from '@absolutejs/absolute';
@@ -128,6 +136,182 @@ export const telemetryPlugin = (db: DatabaseType) =>
 			)
 		)
 		.get(
+			'/api/v1/telemetry/bun-versions',
+			async ({ protectRoute, status }) =>
+				protectRoute(
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return status(403, 'Access denied');
+						}
+						return getBunVersions(db);
+					},
+					() => status(403, 'Access denied')
+				)
+		)
+		.get(
+			'/api/v1/telemetry/events',
+			({ query, protectRoute, status }) =>
+				protectRoute(
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return status(403, 'Access denied');
+						}
+						return getAllEvents(db, {
+							page: query.page ? Number(query.page) : undefined,
+							pageSize: query.pageSize
+								? Number(query.pageSize)
+								: undefined,
+							event: query.event,
+							version: query.version,
+							os: query.os,
+							bun_version: query.bun_version,
+							anonymous_id: query.anonymous_id,
+							search: query.search,
+							from: query.from,
+							to: query.to
+						});
+					},
+					() => status(403, 'Access denied')
+				),
+			{
+				query: t.Object({
+					page: t.Optional(t.String()),
+					pageSize: t.Optional(t.String()),
+					event: t.Optional(t.String()),
+					version: t.Optional(t.String()),
+					os: t.Optional(t.String()),
+					bun_version: t.Optional(t.String()),
+					anonymous_id: t.Optional(t.String()),
+					search: t.Optional(t.String()),
+					from: t.Optional(t.String()),
+					to: t.Optional(t.String())
+				})
+			}
+		)
+		.delete(
+			'/api/v1/telemetry/events/:eventId',
+			({ params: { eventId }, protectRoute, status }) =>
+				protectRoute(
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return status(403, 'Access denied');
+						}
+						const deleted = await deleteTelemetryEvent(db, eventId);
+						if (!deleted) return status(404, 'Event not found');
+						return { success: true };
+					},
+					() => status(403, 'Access denied')
+				),
+			{
+				params: t.Object({ eventId: t.String() })
+			}
+		)
+		.get(
+			'/api/v1/telemetry/users',
+			async ({ query, protectRoute, status }) =>
+				protectRoute(
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return status(403, 'Access denied');
+						}
+						return getUniqueUsers(db, query.search);
+					},
+					() => status(403, 'Access denied')
+				),
+			{
+				query: t.Object({
+					search: t.Optional(t.String())
+				})
+			}
+		)
+		.get(
+			'/api/v1/telemetry/users/:anonymousId/events',
+			({ params: { anonymousId }, query, protectRoute, status }) =>
+				protectRoute(
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return status(403, 'Access denied');
+						}
+						return getUserEvents(db, anonymousId, {
+							page: query.page ? Number(query.page) : undefined,
+							pageSize: query.pageSize
+								? Number(query.pageSize)
+								: undefined,
+							event: query.event,
+							version: query.version,
+							os: query.os,
+							search: query.search,
+							from: query.from,
+							to: query.to
+						});
+					},
+					() => status(403, 'Access denied')
+				),
+			{
+				params: t.Object({ anonymousId: t.String() }),
+				query: t.Object({
+					page: t.Optional(t.String()),
+					pageSize: t.Optional(t.String()),
+					event: t.Optional(t.String()),
+					version: t.Optional(t.String()),
+					os: t.Optional(t.String()),
+					search: t.Optional(t.String()),
+					from: t.Optional(t.String()),
+					to: t.Optional(t.String())
+				})
+			}
+		)
+		.get('/api/v1/telemetry/user-labels', ({ protectRoute, status }) =>
+			protectRoute(
+				async (user) => {
+					if (!whitelistedAdmins.includes(user.auth_sub)) {
+						return status(403, 'Access denied');
+					}
+					return getUserLabels(db);
+				},
+				() => status(403, 'Access denied')
+			)
+		)
+		.put(
+			'/api/v1/telemetry/user-labels/:anonymousId',
+			({ params: { anonymousId }, body, protectRoute, status }) =>
+				protectRoute(
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return status(403, 'Access denied');
+						}
+						return upsertUserLabel({
+							db,
+							anonymousId,
+							label: body.label
+						});
+					},
+					() => status(403, 'Access denied')
+				),
+			{
+				params: t.Object({ anonymousId: t.String() }),
+				body: t.Object({ label: t.String() })
+			}
+		)
+		.delete(
+			'/api/v1/telemetry/user-labels/:anonymousId',
+			({ params: { anonymousId }, protectRoute, status }) =>
+				protectRoute(
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return status(403, 'Access denied');
+						}
+						const deleted = await deleteUserLabel(db, anonymousId);
+						if (!deleted) return status(404, 'Label not found');
+						return { success: true };
+					},
+					() => status(403, 'Access denied')
+				),
+			{
+				params: t.Object({ anonymousId: t.String() })
+			}
+		)
+		.get(
 			'/api/v1/telemetry/:key',
 			({ params: { key }, query, protectRoute, status }) =>
 				protectRoute(
@@ -140,7 +324,7 @@ export const telemetryPlugin = (db: DatabaseType) =>
 								key as keyof typeof telemetryQueryHandlers
 							];
 						if (!handler) return status(404, 'Unknown query');
-						return Response.json(await handler(db, query.version));
+						return handler(db, query.version);
 					},
 					() => status(403, 'Access denied')
 				),

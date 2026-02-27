@@ -51,12 +51,20 @@ export const telemetryEvents = pgTable('telemetry_events', {
 	payload: jsonb().$type<Record<string, unknown>>().default({})
 });
 
+export const telemetryUserLabels = pgTable('telemetry_user_labels', {
+	anonymous_id: varchar({ length: 255 }).primaryKey(),
+	label: varchar({ length: 255 }).notNull(),
+	created_at: timestamp().notNull().defaultNow(),
+	updated_at: timestamp().notNull().defaultNow()
+});
+
 export const schema = {
 	users,
 	providers,
 	errorLogs,
 	unknownErrorLogs,
-	telemetryEvents
+	telemetryEvents,
+	telemetryUserLabels
 };
 
 export type SchemaType = typeof schema;
@@ -76,3 +84,6 @@ export type NewUnknownErrorLog = typeof unknownErrorLogs.$inferInsert;
 
 export type TelemetryEvent = typeof telemetryEvents.$inferSelect;
 export type NewTelemetryEvent = typeof telemetryEvents.$inferInsert;
+
+export type TelemetryUserLabel = typeof telemetryUserLabels.$inferSelect;
+export type NewTelemetryUserLabel = typeof telemetryUserLabels.$inferInsert;

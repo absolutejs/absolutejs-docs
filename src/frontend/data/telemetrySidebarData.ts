@@ -5,7 +5,9 @@ import {
 	FaHammer,
 	FaBolt,
 	FaUsers,
-	FaClock
+	FaClock,
+	FaList,
+	FaFingerprint
 } from 'react-icons/fa';
 import { IconType } from 'react-icons';
 
@@ -15,7 +17,9 @@ export const telemetryViewIds = [
 	'build-performance',
 	'hmr-performance',
 	'usage-adoption',
-	'dev-sessions'
+	'dev-sessions',
+	'event-log',
+	'unique-users'
 ] as const;
 
 export type TelemetryView = (typeof telemetryViewIds)[number];
@@ -26,6 +30,8 @@ const AnimatedHammer = animated(FaHammer);
 const AnimatedBolt = animated(FaBolt);
 const AnimatedUsers = animated(FaUsers);
 const AnimatedClock = animated(FaClock);
+const AnimatedList = animated(FaList);
+const AnimatedFingerprint = animated(FaFingerprint);
 
 export type TelemetrySidebarItem = {
 	id: TelemetryView;
@@ -51,5 +57,7 @@ export const telemetrySidebarData: TelemetrySidebarItem[] = [
 		icon: AnimatedBolt
 	},
 	{ id: 'usage-adoption', label: 'Usage & Adoption', icon: AnimatedUsers },
-	{ id: 'dev-sessions', label: 'Dev Sessions', icon: AnimatedClock }
+	{ id: 'dev-sessions', label: 'Dev Sessions', icon: AnimatedClock },
+	{ id: 'event-log', label: 'Event Log', icon: AnimatedList },
+	{ id: 'unique-users', label: 'Unique Users', icon: AnimatedFingerprint }
 ];

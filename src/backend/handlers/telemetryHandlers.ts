@@ -1,4 +1,15 @@
-import { and, count, desc, eq, SQL, sql } from 'drizzle-orm';
+import {
+	and,
+	count,
+	desc,
+	eq,
+	SQL,
+	sql,
+	gte,
+	lte,
+	ilike,
+	or
+} from 'drizzle-orm';
 import { DatabaseType, NewTelemetryEvent, schema } from '../../../db/schema';
 
 const stripPaths = (msg: string) => msg.replace(/(?:\/[\w.-]+)+/g, '<path>');
@@ -104,7 +115,7 @@ export const getFrameworkPopularity = async (
 		.select({
 			framework: sql<string>`${schema.telemetryEvents.payload}->>'framework'`,
 			tailwind: sql<string>`${schema.telemetryEvents.payload}->>'tailwind'`,
-			count: count()
+			users: sql<number>`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`
 		})
 		.from(schema.telemetryEvents)
 		.where(
@@ -117,7 +128,9 @@ export const getFrameworkPopularity = async (
 			sql`${schema.telemetryEvents.payload}->>'framework'`,
 			sql`${schema.telemetryEvents.payload}->>'tailwind'`
 		)
-		.orderBy(desc(count()));
+		.orderBy(
+			desc(sql`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`)
+		);
 
 export const getHMRReliability = async (db: DatabaseType, version?: string) =>
 	db
@@ -182,11 +195,13 @@ export const getVersionAdoption = async (db: DatabaseType) =>
 	db
 		.select({
 			version: schema.telemetryEvents.version,
-			count: count()
+			users: sql<number>`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`
 		})
 		.from(schema.telemetryEvents)
 		.groupBy(schema.telemetryEvents.version)
-		.orderBy(desc(count()));
+		.orderBy(
+			desc(sql`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`)
+		);
 
 export const getPlatformBreakdown = async (
 	db: DatabaseType,
@@ -196,12 +211,14 @@ export const getPlatformBreakdown = async (
 		.select({
 			os: schema.telemetryEvents.os,
 			arch: schema.telemetryEvents.arch,
-			count: count()
+			users: sql<number>`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`
 		})
 		.from(schema.telemetryEvents)
 		.where(versionFilter(version))
 		.groupBy(schema.telemetryEvents.os, schema.telemetryEvents.arch)
-		.orderBy(desc(count()));
+		.orderBy(
+			desc(sql`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`)
+		);
 
 export const getServerCrashFrequency = async (
 	db: DatabaseType,
@@ -232,7 +249,7 @@ export const getCliCommandUsage = async (db: DatabaseType, version?: string) =>
 	db
 		.select({
 			command: sql<string>`${schema.telemetryEvents.payload}->>'command'`,
-			count: count()
+			users: sql<number>`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`
 		})
 		.from(schema.telemetryEvents)
 		.where(
@@ -242,7 +259,9 @@ export const getCliCommandUsage = async (db: DatabaseType, version?: string) =>
 			)
 		)
 		.groupBy(sql`${schema.telemetryEvents.payload}->>'command'`)
-		.orderBy(desc(count()));
+		.orderBy(
+			desc(sql`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`)
+		);
 
 export const getHMRRebuildStats = async (db: DatabaseType, version?: string) =>
 	db
@@ -300,7 +319,7 @@ export const getBuildEmpty = async (db: DatabaseType, version?: string) =>
 	db
 		.select({
 			frameworks: sql<string>`${schema.telemetryEvents.payload}->>'frameworks'`,
-			count: count()
+			users: sql<number>`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`
 		})
 		.from(schema.telemetryEvents)
 		.where(
@@ -310,7 +329,9 @@ export const getBuildEmpty = async (db: DatabaseType, version?: string) =>
 			)
 		)
 		.groupBy(sql`${schema.telemetryEvents.payload}->>'frameworks'`)
-		.orderBy(desc(count()));
+		.orderBy(
+			desc(sql`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`)
+		);
 
 export const getMissingManifest = async (db: DatabaseType, version?: string) =>
 	db
@@ -341,7 +362,7 @@ export const getDevStarts = async (db: DatabaseType, version?: string) =>
 	db
 		.select({
 			entry: sql<string>`${schema.telemetryEvents.payload}->>'entry'`,
-			count: count()
+			users: sql<number>`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`
 		})
 		.from(schema.telemetryEvents)
 		.where(
@@ -351,7 +372,9 @@ export const getDevStarts = async (db: DatabaseType, version?: string) =>
 			)
 		)
 		.groupBy(sql`${schema.telemetryEvents.payload}->>'entry'`)
-		.orderBy(desc(count()));
+		.orderBy(
+			desc(sql`COUNT(DISTINCT ${schema.telemetryEvents.anonymous_id})`)
+		);
 
 export const getHMRErrors = async (db: DatabaseType, version?: string) =>
 	db
@@ -446,9 +469,177 @@ export const getKpiSummary = async (db: DatabaseType) => {
 	};
 };
 
+type EventFilters = {
+	page?: number;
+	pageSize?: number;
+	event?: string;
+	version?: string;
+	os?: string;
+	bun_version?: string;
+	anonymous_id?: string;
+	search?: string;
+	from?: string;
+	to?: string;
+};
+
+export const getAllEvents = async (db: DatabaseType, filters: EventFilters) => {
+	const page = filters.page ?? 1;
+	const pageSize = Math.min(filters.pageSize ?? 50, 200);
+	const offset = (page - 1) * pageSize;
+
+	const conditions: (SQL | undefined)[] = [];
+
+	if (filters.event)
+		conditions.push(eq(schema.telemetryEvents.event, filters.event));
+	if (filters.version)
+		conditions.push(eq(schema.telemetryEvents.version, filters.version));
+	if (filters.os) conditions.push(eq(schema.telemetryEvents.os, filters.os));
+	if (filters.bun_version)
+		conditions.push(
+			eq(schema.telemetryEvents.bun_version, filters.bun_version)
+		);
+	if (filters.anonymous_id)
+		conditions.push(
+			eq(schema.telemetryEvents.anonymous_id, filters.anonymous_id)
+		);
+	if (filters.from)
+		conditions.push(
+			gte(schema.telemetryEvents.server_timestamp, new Date(filters.from))
+		);
+	if (filters.to)
+		conditions.push(
+			lte(schema.telemetryEvents.server_timestamp, new Date(filters.to))
+		);
+	if (filters.search) {
+		const pattern = `%${filters.search}%`;
+		conditions.push(
+			or(
+				ilike(schema.telemetryEvents.id, pattern),
+				ilike(schema.telemetryEvents.event, pattern),
+				ilike(schema.telemetryEvents.anonymous_id, pattern),
+				ilike(schema.telemetryEvents.version, pattern),
+				ilike(schema.telemetryEvents.os, pattern),
+				sql`${schema.telemetryEvents.payload}::text ILIKE ${pattern}`
+			)
+		);
+	}
+
+	const where = combine(...conditions);
+
+	const [rows, totalResult] = await Promise.all([
+		db
+			.select()
+			.from(schema.telemetryEvents)
+			.where(where)
+			.orderBy(desc(schema.telemetryEvents.server_timestamp))
+			.limit(pageSize)
+			.offset(offset),
+		db.select({ count: count() }).from(schema.telemetryEvents).where(where)
+	]);
+
+	return {
+		rows,
+		total: totalResult[0]?.count ?? 0,
+		page,
+		pageSize
+	};
+};
+
+export const getBunVersions = async (db: DatabaseType) => {
+	const rows = await db
+		.select({
+			bun_version: schema.telemetryEvents.bun_version
+		})
+		.from(schema.telemetryEvents)
+		.groupBy(schema.telemetryEvents.bun_version)
+		.orderBy(desc(schema.telemetryEvents.bun_version));
+
+	return rows
+		.map((r) => r.bun_version)
+		.filter((v): v is string => v !== null);
+};
+
+export const getUniqueUsers = async (db: DatabaseType, search?: string) => {
+	const where = search
+		? ilike(schema.telemetryEvents.anonymous_id, `%${search}%`)
+		: undefined;
+
+	return db
+		.select({
+			anonymous_id: schema.telemetryEvents.anonymous_id,
+			total_events: count(),
+			first_seen: sql<string>`MIN(${schema.telemetryEvents.server_timestamp})`,
+			last_seen: sql<string>`MAX(${schema.telemetryEvents.server_timestamp})`,
+			versions: sql<
+				string[]
+			>`ARRAY_AGG(DISTINCT ${schema.telemetryEvents.version})`,
+			os_list: sql<
+				string[]
+			>`ARRAY_AGG(DISTINCT ${schema.telemetryEvents.os})`
+		})
+		.from(schema.telemetryEvents)
+		.where(where)
+		.groupBy(schema.telemetryEvents.anonymous_id)
+		.orderBy(desc(sql`MAX(${schema.telemetryEvents.server_timestamp})`));
+};
+
+export const getUserEvents = async (
+	db: DatabaseType,
+	anonymousId: string,
+	filters: Omit<EventFilters, 'anonymous_id'>
+) => getAllEvents(db, { ...filters, anonymous_id: anonymousId });
+
+export const deleteTelemetryEvent = async (db: DatabaseType, id: string) => {
+	const [deleted] = await db
+		.delete(schema.telemetryEvents)
+		.where(eq(schema.telemetryEvents.id, id))
+		.returning({ id: schema.telemetryEvents.id });
+	return deleted ?? null;
+};
+
+export const getUserLabels = async (db: DatabaseType) =>
+	db.select().from(schema.telemetryUserLabels);
+
+type UpsertUserLabelProps = {
+	db: DatabaseType;
+	anonymousId: string;
+	label: string;
+};
+
+export const upsertUserLabel = async ({
+	db,
+	anonymousId,
+	label
+}: UpsertUserLabelProps) => {
+	const [result] = await db
+		.insert(schema.telemetryUserLabels)
+		.values({
+			anonymous_id: anonymousId,
+			label,
+			updated_at: new Date()
+		})
+		.onConflictDoUpdate({
+			target: schema.telemetryUserLabels.anonymous_id,
+			set: { label, updated_at: new Date() }
+		})
+		.returning();
+	return result;
+};
+
+export const deleteUserLabel = async (
+	db: DatabaseType,
+	anonymousId: string
+) => {
+	const [deleted] = await db
+		.delete(schema.telemetryUserLabels)
+		.where(eq(schema.telemetryUserLabels.anonymous_id, anonymousId))
+		.returning();
+	return deleted ?? null;
+};
+
 export const telemetryQueryHandlers: Record<
 	string,
-	(db: DatabaseType, version?: string) => Promise<unknown[]>
+	(db: DatabaseType, version?: string) => Promise<Record<string, unknown>[]>
 > = {
 	'error-rates': getErrorRatesByEvent,
 	'build-errors': getBuildErrorsByPass,

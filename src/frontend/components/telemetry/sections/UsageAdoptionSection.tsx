@@ -38,20 +38,20 @@ export const UsageAdoptionSection = ({
 }: TelemetrySectionProps) => {
 	const frameworkData = (data['framework-popularity'] ?? []).map((row) => ({
 		label: String(row['framework'] ?? 'unknown'),
-		value: Number(row['count'] ?? 0)
+		value: Number(row['users'] ?? 0)
 	}));
 
 	const versionData = (data['version-adoption'] ?? []).map((row) => ({
 		label: String(row['version'] ?? 'unknown'),
-		value: Number(row['count'] ?? 0)
+		value: Number(row['users'] ?? 0)
 	}));
 
 	// Aggregate platform data by OS
 	const osCounts = new Map<string, number>();
 	for (const row of data['platform-breakdown'] ?? []) {
 		const os = String(row['os'] ?? 'unknown');
-		const count = Number(row['count'] ?? 0);
-		osCounts.set(os, (osCounts.get(os) ?? 0) + count);
+		const users = Number(row['users'] ?? 0);
+		osCounts.set(os, (osCounts.get(os) ?? 0) + users);
 	}
 	const platformData = [...osCounts.entries()].map(([label, value]) => ({
 		label,
@@ -96,7 +96,7 @@ export const UsageAdoptionSection = ({
 			<TelemetryTable
 				queryKey="platform-breakdown"
 				title="Platform Details"
-				columns={['os', 'arch', 'count']}
+				columns={['os', 'arch', 'users']}
 				rows={data['platform-breakdown'] ?? []}
 				themeSprings={themeSprings}
 			/>
@@ -104,7 +104,7 @@ export const UsageAdoptionSection = ({
 			<TelemetryTable
 				queryKey="cli-commands"
 				title="CLI Command Usage"
-				columns={['command', 'count']}
+				columns={['command', 'users']}
 				rows={data['cli-commands'] ?? []}
 				themeSprings={themeSprings}
 			/>

@@ -67,7 +67,7 @@ export const DevSessionsSection = ({
 			<TelemetryTable
 				queryKey="dev-starts"
 				title="Dev Server Starts"
-				columns={['entry', 'count']}
+				columns={['entry', 'users']}
 				rows={data['dev-starts'] ?? []}
 				themeSprings={themeSprings}
 			/>

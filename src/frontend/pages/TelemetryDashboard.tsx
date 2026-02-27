@@ -3,11 +3,18 @@ import {
 	CSSProperties,
 	ComponentType,
 	useCallback,
-	useEffect,
+	useMemo,
 	useState
 } from 'react';
+import {
+	QueryClient,
+	QueryClientProvider,
+	useQueries,
+	useQuery
+} from '@tanstack/react-query';
 import { User } from '../../../db/schema';
 import { KpiSummary, TelemetrySectionProps } from '../../types/telemetryTypes';
+import { server } from '../utils/edenTreaty';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
 import { TelemetrySidebar } from '../components/telemetry/TelemetrySidebar';
@@ -17,6 +24,8 @@ import { ErrorsCrashesSection } from '../components/telemetry/sections/ErrorsCra
 import { HmrPerformanceSection } from '../components/telemetry/sections/HmrPerformanceSection';
 import { OverviewSection } from '../components/telemetry/sections/OverviewSection';
 import { UsageAdoptionSection } from '../components/telemetry/sections/UsageAdoptionSection';
+import { EventLogSection } from '../components/telemetry/sections/EventLogSection';
+import { UniqueUsersSection } from '../components/telemetry/sections/UniqueUsersSection';
 import { TelemetryView } from '../data/telemetrySidebarData';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { useTelemetryNavigation } from '../hooks/useTelemetryNavigation';
@@ -48,9 +57,8 @@ const queryKeys = [
 	'hmr-rebuild-errors'
 ];
 
-const viewToSection: Record<
-	TelemetryView,
-	ComponentType<TelemetrySectionProps>
+const viewToSection: Partial<
+	Record<TelemetryView, ComponentType<TelemetrySectionProps>>
 > = {
 	overview: OverviewSection,
 	'errors-crashes': ErrorsCrashesSection,
@@ -73,7 +81,9 @@ const contentStyle: CSSProperties = {
 	padding: '2rem'
 };
 
-export const TelemetryDashboard = ({
+const queryClient = new QueryClient();
+
+const TelemetryDashboardInner = ({
 	initialView,
 	user,
 	theme
@@ -82,66 +92,127 @@ export const TelemetryDashboard = ({
 	const [view, navigateToView] = useTelemetryNavigation(initialView);
 	const { isSizeOrLess } = useMediaQuery();
 	const isCompact = isSizeOrLess('md');
-
-	const [data, setData] = useState<Record<string, Record<string, unknown>[]>>(
+	const [versionByKey, setVersionByKey] = useState<Record<string, string>>(
 		{}
 	);
-	const [kpi, setKpi] = useState<KpiSummary | null>(null);
-	const [error, setError] = useState<string>();
-	const [versions, setVersions] = useState<string[]>([]);
 
-	// Fetch KPI summary
-	useEffect(() => {
-		fetch('/api/v1/telemetry/kpi-summary')
-			.then((res) => (res.ok ? res.json() : null))
-			.then((json) => {
-				if (json) setKpi(json);
-			})
-			.catch(() => {});
-	}, []);
-
-	// Fetch versions
-	useEffect(() => {
-		fetch('/api/v1/telemetry/versions')
-			.then((res) => (res.ok ? res.json() : []))
-			.then((json) => setVersions(json))
-			.catch(() => {});
-	}, []);
-
-	const fetchQuery = useCallback(async (key: string, version?: string) => {
-		try {
-			const params = version
-				? `?version=${encodeURIComponent(version)}`
-				: '';
-			const res = await fetch(`/api/v1/telemetry/${key}${params}`);
-			if (res.status === 403) {
-				setError('Access denied. Admin privileges required.');
-				return;
-			}
-			if (res.ok) {
-				const json = await res.json();
-				setData((prev) => ({ ...prev, [key]: json }));
-			}
-		} catch {
-			// individual query failure is non-fatal
+	const kpiQuery = useQuery({
+		queryKey: ['telemetry', 'kpi-summary'],
+		queryFn: async () => {
+			const { data, error } =
+				await server.api.v1.telemetry['kpi-summary'].get();
+			if (error) throw new Error('Failed to fetch KPI summary');
+			if (!('totalEvents' in data))
+				throw new Error('Invalid KPI response');
+			return data;
 		}
-	}, []);
+	});
 
-	// Fetch all queries on mount
-	useEffect(() => {
-		for (const key of queryKeys) {
-			fetchQuery(key);
+	const versionsQuery = useQuery({
+		queryKey: ['telemetry', 'versions'],
+		queryFn: async () => {
+			const { data, error } =
+				await server.api.v1.telemetry.versions.get();
+			if (error) throw new Error('Failed to fetch versions');
+			if (!Array.isArray(data))
+				throw new Error('Invalid versions response');
+			return data;
 		}
-	}, [fetchQuery]);
+	});
+
+	const bunVersionsQuery = useQuery({
+		queryKey: ['telemetry', 'bun-versions'],
+		queryFn: async () => {
+			const { data, error } =
+				await server.api.v1.telemetry['bun-versions'].get();
+			if (error) throw new Error('Failed to fetch bun versions');
+			if (!Array.isArray(data))
+				throw new Error('Invalid bun versions response');
+			return data;
+		}
+	});
+
+	const dataQueries = useQueries({
+		queries: queryKeys.map((key) => ({
+			queryKey: ['telemetry', key, versionByKey[key] ?? ''],
+			queryFn: async () => {
+				const version = versionByKey[key] || undefined;
+				const { data, error } = await server.api.v1
+					.telemetry({ key })
+					.get({ query: { version } });
+				if (error) throw new Error(`Failed to fetch ${key}`);
+				if (!Array.isArray(data))
+					throw new Error(`Invalid response for ${key}`);
+				return data;
+			}
+		}))
+	});
+
+	const data = useMemo(() => {
+		const result: Record<string, Record<string, unknown>[]> = {};
+		queryKeys.forEach((key, i) => {
+			const qData = dataQueries[i]?.data;
+			if (qData) result[key] = qData;
+		});
+		return result;
+	}, [dataQueries]);
 
 	const handleVersionChange = useCallback(
 		(queryKey: string, version: string) => {
-			fetchQuery(queryKey, version || undefined);
+			setVersionByKey((prev) => ({ ...prev, [queryKey]: version }));
 		},
-		[fetchQuery]
+		[]
+	);
+
+	const isLoading =
+		kpiQuery.isPending || dataQueries.some((q) => q.isPending);
+	const accessDenied = dataQueries.some(
+		(q) => q.error && String(q.error).includes('403')
 	);
 
 	const ActiveSection = viewToSection[view];
+
+	const renderSection = () => {
+		if (accessDenied)
+			return (
+				<div style={errorStyle}>
+					Access denied. Admin privileges required.
+				</div>
+			);
+		if (view === 'event-log')
+			return (
+				<EventLogSection
+					themeSprings={themeSprings}
+					versions={versionsQuery.data ?? []}
+					bunVersions={bunVersionsQuery.data ?? []}
+				/>
+			);
+		if (view === 'unique-users')
+			return <UniqueUsersSection themeSprings={themeSprings} />;
+		if (isLoading)
+			return (
+				<div
+					style={{
+						opacity: 0.5,
+						padding: '2rem',
+						textAlign: 'center'
+					}}
+				>
+					Loading...
+				</div>
+			);
+		if (ActiveSection)
+			return (
+				<ActiveSection
+					data={data}
+					kpi={kpiQuery.data ?? null}
+					versions={versionsQuery.data ?? []}
+					themeSprings={themeSprings}
+					onVersionChange={handleVersionChange}
+				/>
+			);
+		return null;
+	};
 
 	return (
 		<html lang="en" style={htmlDefault}>
@@ -182,17 +253,7 @@ export const TelemetryDashboard = ({
 								)
 							}}
 						>
-							{error ? (
-								<div style={errorStyle}>{error}</div>
-							) : (
-								<ActiveSection
-									data={data}
-									kpi={kpi}
-									versions={versions}
-									themeSprings={themeSprings}
-									onVersionChange={handleVersionChange}
-								/>
-							)}
+							{renderSection()}
 						</animated.div>
 					</div>
 				</main>
@@ -200,3 +261,9 @@ export const TelemetryDashboard = ({
 		</html>
 	);
 };
+
+export const TelemetryDashboard = (props: TelemetryDashboardProps) => (
+	<QueryClientProvider client={queryClient}>
+		<TelemetryDashboardInner {...props} />
+	</QueryClientProvider>
+);

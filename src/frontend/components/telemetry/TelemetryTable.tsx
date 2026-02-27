@@ -2,6 +2,7 @@ import { animated } from '@react-spring/web';
 import { CSSProperties, useState } from 'react';
 import { ThemeSprings } from '../../../types/springTypes';
 import { primaryColor, secondaryColor } from '../../styles/colors';
+import { VersionSelect } from './VersionSelect';
 
 type TelemetryTableProps = {
 	queryKey: string;
@@ -44,23 +45,6 @@ const titleStyle: CSSProperties = {
 	fontSize: '1.125rem',
 	fontWeight: 600
 };
-
-const selectStyle = (themeSprings: ThemeSprings) => ({
-	backgroundColor: themeSprings.themeSecondary,
-	border: '1px solid rgba(128, 128, 128, 0.3)',
-	borderRadius: '0.375rem',
-	color: themeSprings.contrastPrimary,
-	cursor: 'pointer',
-	fontFamily: 'inherit',
-	fontSize: '0.8rem',
-	minWidth: '8rem',
-	padding: '0.3rem 0.6rem'
-});
-
-const optionStyle = (themeSprings: ThemeSprings) => ({
-	backgroundColor: themeSprings.themeSecondary,
-	color: themeSprings.contrastPrimary
-});
 
 const tableStyle: CSSProperties = {
 	borderCollapse: 'collapse',
@@ -115,29 +99,12 @@ export const TelemetryTable = ({
 			<div style={headerRowStyle}>
 				<div style={titleStyle}>{title}</div>
 				{versions && onVersionChange && (
-					<animated.select
-						style={selectStyle(themeSprings)}
+					<VersionSelect
+						versions={versions}
 						value={selectedVersion}
-						onChange={(evt) =>
-							handleVersionChange(evt.target.value)
-						}
-					>
-						<animated.option
-							value=""
-							style={optionStyle(themeSprings)}
-						>
-							All versions
-						</animated.option>
-						{versions.map((ver) => (
-							<animated.option
-								key={ver}
-								value={ver}
-								style={optionStyle(themeSprings)}
-							>
-								{ver}
-							</animated.option>
-						))}
-					</animated.select>
+						onChange={handleVersionChange}
+						themeSprings={themeSprings}
+					/>
 				)}
 			</div>
 			<table style={tableStyle}>
