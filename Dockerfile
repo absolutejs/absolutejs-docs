@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the app when the container launches
-CMD ["bun", "run", "src/backend/server.ts"]
+CMD ["bun", "run", "start"]
