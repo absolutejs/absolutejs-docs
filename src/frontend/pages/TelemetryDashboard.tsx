@@ -1,11 +1,5 @@
 import { animated } from '@react-spring/web';
-import {
-	CSSProperties,
-	ComponentType,
-	useCallback,
-	useMemo,
-	useState
-} from 'react';
+import { CSSProperties, ComponentType, useState } from 'react';
 import {
 	QueryClient,
 	QueryClientProvider,
@@ -13,7 +7,7 @@ import {
 	useQuery
 } from '@tanstack/react-query';
 import { User } from '../../../db/schema';
-import { KpiSummary, TelemetrySectionProps } from '../../types/telemetryTypes';
+import { TelemetrySectionProps } from '../../types/telemetryTypes';
 import { server } from '../utils/edenTreaty';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
@@ -148,24 +142,18 @@ const TelemetryDashboardInner = ({
 		}))
 	});
 
-	const data = useMemo(() => {
-		const result: Record<string, Record<string, unknown>[]> = {};
-		queryKeys.forEach((key, i) => {
-			const qData = dataQueries[i]?.data;
-			if (qData) result[key] = qData;
-		});
-		return result;
-	}, [dataQueries]);
+	const data: Record<string, Record<string, unknown>[]> = {};
+	queryKeys.forEach((key, i) => {
+		const qData = dataQueries[i]?.data;
+		if (qData) data[key] = qData;
+	});
 
-	const handleVersionChange = useCallback(
-		(queryKey: string, version: string) => {
-			setVersionByKey((prev) => ({ ...prev, [queryKey]: version }));
-		},
-		[]
-	);
+	const handleVersionChange = (queryKey: string, version: string) => {
+		setVersionByKey((prev) => ({ ...prev, [queryKey]: version }));
+	};
 
-	const isLoading =
-		kpiQuery.isPending || dataQueries.some((q) => q.isPending);
+	const hasNoData =
+		kpiQuery.isPending && dataQueries.every((q) => !q.data);
 	const accessDenied = dataQueries.some(
 		(q) => q.error && String(q.error).includes('403')
 	);
@@ -189,7 +177,7 @@ const TelemetryDashboardInner = ({
 			);
 		if (view === 'unique-users')
 			return <UniqueUsersSection themeSprings={themeSprings} />;
-		if (isLoading)
+		if (hasNoData)
 			return (
 				<div
 					style={{
