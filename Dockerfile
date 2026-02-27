@@ -1,8 +1,8 @@
 # Use the official Bun image
 FROM oven/bun:latest
 
-# Set the working directory in the container to /
-WORKDIR /
+# Set the working directory in the container
+WORKDIR /app
 
 # Copy package.json and bun.lock to the working directory
 COPY package.json bun.lock ./
