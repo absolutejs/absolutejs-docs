@@ -1,7 +1,10 @@
+import { count, eq } from 'drizzle-orm';
 import { Elysia, t } from 'elysia';
-import { DatabaseType, User } from '../../../db/schema';
+import { DatabaseType, schema, User } from '../../../db/schema';
 import {
 	deleteTelemetryEvent,
+	deleteTelemetryEvents,
+	deleteTelemetryEventsByFilter,
 	deleteUserLabel,
 	getAllEvents,
 	getBunVersions,
@@ -112,9 +115,17 @@ export const telemetryPlugin = (db: DatabaseType) =>
 					if (!whitelistedAdmins.includes(user.auth_sub)) {
 						return status(403, 'Access denied');
 					}
-					const res = await fetch(
-						'https://registry.npmjs.org/@absolutejs/absolute'
-					);
+					const [res, unknownCount] = await Promise.all([
+						fetch(
+							'https://registry.npmjs.org/@absolutejs/absolute'
+						),
+						db
+							.select({ count: count() })
+							.from(schema.telemetryEvents)
+							.where(
+								eq(schema.telemetryEvents.version, 'unknown')
+							)
+					]);
 					if (!res.ok) return status(502, 'Failed to fetch versions');
 					const json = await res.json();
 					const versions = Object.keys(
@@ -130,6 +141,9 @@ export const telemetryPlugin = (db: DatabaseType) =>
 							);
 						})
 						.reverse();
+					if ((unknownCount[0]?.count ?? 0) > 0) {
+						versions.push('unknown');
+					}
 					return versions;
 				},
 				() => status(403, 'Access denied')
@@ -204,6 +218,59 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				),
 			{
 				params: t.Object({ eventId: t.String() })
+			}
+		)
+		.delete(
+			'/api/v1/telemetry/events',
+			({ body, protectRoute, status }) =>
+				protectRoute(
+					async (user) => {
+						if (!whitelistedAdmins.includes(user.auth_sub)) {
+							return status(403, 'Access denied');
+						}
+						if (body.ids) {
+							if (body.ids.length === 0) {
+								return status(400, 'No event IDs provided');
+							}
+							const deleted = await deleteTelemetryEvents(
+								db,
+								body.ids
+							);
+							return {
+								success: true,
+								deletedCount: deleted.length
+							};
+						}
+						const deleted = await deleteTelemetryEventsByFilter(
+							db,
+							{
+								event: body.event,
+								version: body.version,
+								os: body.os,
+								bun_version: body.bun_version,
+								search: body.search,
+								from: body.from,
+								to: body.to
+							}
+						);
+						return {
+							success: true,
+							deletedCount: deleted.length
+						};
+					},
+					() => status(403, 'Access denied')
+				),
+			{
+				body: t.Object({
+					ids: t.Optional(t.Array(t.String())),
+					event: t.Optional(t.String()),
+					version: t.Optional(t.String()),
+					os: t.Optional(t.String()),
+					bun_version: t.Optional(t.String()),
+					search: t.Optional(t.String()),
+					from: t.Optional(t.String()),
+					to: t.Optional(t.String())
+				})
 			}
 		)
 		.get(

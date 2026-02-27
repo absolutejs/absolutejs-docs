@@ -283,6 +283,20 @@ const confirmDeleteButtonStyle: CSSProperties = {
 	padding: '0.45rem 1rem'
 };
 
+const checkboxStyle: CSSProperties = {
+	accentColor: primaryColor,
+	cursor: 'pointer',
+	height: '14px',
+	width: '14px'
+};
+
+const bulkDeleteBarStyle: CSSProperties = {
+	alignItems: 'center',
+	display: 'flex',
+	gap: '0.75rem',
+	marginTop: '0.75rem'
+};
+
 const columns = [
 	'event',
 	'anonymous_id',
@@ -331,6 +345,9 @@ export const EventLogSection = ({
 	const [deleteTarget, setDeleteTarget] = useState<TelemetryEventRow | null>(
 		null
 	);
+	const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+	const [allMatchingSelected, setAllMatchingSelected] = useState(false);
+	const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
 	const [confirmText, setConfirmText] = useState('');
 	const [copied, setCopied] = useState(false);
 	const [copiedCells, setCopiedCells] = useState<Set<string>>(new Set());
@@ -338,13 +355,16 @@ export const EventLogSection = ({
 
 	useEffect(() => {
 		setPage(1);
+		setSelectedIds(new Set());
+		setAllMatchingSelected(false);
 	}, [
 		eventFilter,
 		versionFilter,
 		osFilter,
 		bunVersionFilter,
 		fromDate,
-		toDate
+		toDate,
+		search
 	]);
 
 	const eventsQuery = useQuery({
@@ -395,6 +415,35 @@ export const EventLogSection = ({
 		}
 	});
 
+	const bulkDeleteMutation = useMutation({
+		mutationFn: async (
+			payload:
+				| { ids: string[] }
+				| {
+						event?: string;
+						version?: string;
+						os?: string;
+						bun_version?: string;
+						search?: string;
+						from?: string;
+						to?: string;
+				  }
+		) => {
+			const { error } =
+				await server.api.v1.telemetry.events.delete(payload);
+			if (error) throw new Error('Failed to delete events');
+		},
+		onSuccess: () => {
+			setBulkDeleteOpen(false);
+			setConfirmText('');
+			setSelectedIds(new Set());
+			setAllMatchingSelected(false);
+			queryClient.invalidateQueries({
+				queryKey: ['telemetry-events']
+			});
+		}
+	});
+
 	const handleCellCopy = (key: string, text: string) => {
 		navigator.clipboard.writeText(text).then(() => {
 			setCopiedCells((prev) => new Set(prev).add(key));
@@ -421,8 +470,67 @@ export const EventLogSection = ({
 		deleteMutation.mutate(deleteTarget.id);
 	};
 
+	const handleBulkDelete = () => {
+		if (confirmText !== bulkDeleteConfirmText) return;
+		if (allMatchingSelected) {
+			bulkDeleteMutation.mutate({
+				event: eventFilter || undefined,
+				version: versionFilter || undefined,
+				os: osFilter || undefined,
+				bun_version: bunVersionFilter || undefined,
+				search: search || undefined,
+				from: fromDate || undefined,
+				to: toDate || undefined
+			});
+		} else {
+			bulkDeleteMutation.mutate({ ids: [...selectedIds] });
+		}
+	};
+
+	const toggleSelected = (id: string) => {
+		if (allMatchingSelected) {
+			setAllMatchingSelected(false);
+			setSelectedIds(new Set());
+			return;
+		}
+		setSelectedIds((prev) => {
+			const next = new Set(prev);
+			if (next.has(id)) next.delete(id);
+			else next.add(id);
+			return next;
+		});
+	};
+
+	const toggleSelectAll = () => {
+		if (allMatchingSelected) {
+			setAllMatchingSelected(false);
+			setSelectedIds(new Set());
+			return;
+		}
+		if (!data) return;
+		const allOnPage = data.rows.map((r) => r.id);
+		const allSelected = allOnPage.every((id) => selectedIds.has(id));
+		if (allSelected) {
+			setSelectedIds((prev) => {
+				const next = new Set(prev);
+				for (const id of allOnPage) next.delete(id);
+				return next;
+			});
+		} else {
+			setSelectedIds((prev) => {
+				const next = new Set(prev);
+				for (const id of allOnPage) next.add(id);
+				return next;
+			});
+		}
+	};
+
 	const { data, isPending } = eventsQuery;
 	const totalPages = data ? Math.ceil(data.total / data.pageSize) : 0;
+	const selectedCount = allMatchingSelected
+		? (data?.total ?? 0)
+		: selectedIds.size;
+	const bulkDeleteConfirmText = `delete ${selectedCount}`;
 
 	const formatCell = (row: TelemetryEventRow, col: string) => {
 		const value = row[col as keyof TelemetryEventRow];
@@ -500,10 +608,61 @@ export const EventLogSection = ({
 					</label>
 				</div>
 
+				{(selectedIds.size > 0 || allMatchingSelected) && (
+					<div style={bulkDeleteBarStyle}>
+						<span style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+							{selectedCount} event
+							{selectedCount === 1 ? '' : 's'} selected
+						</span>
+						{!allMatchingSelected &&
+							data &&
+							data.total > data.rows.length &&
+							data.rows.length > 0 &&
+							data.rows.every((r) => selectedIds.has(r.id)) && (
+								<button
+									style={{
+										...buttonStyle,
+										fontSize: '0.75rem'
+									}}
+									onClick={() => {
+										setAllMatchingSelected(true);
+										setSelectedIds(new Set());
+									}}
+								>
+									Select all {data.total} matching events
+								</button>
+							)}
+						<button
+							style={deleteButtonStyle}
+							onClick={() => {
+								setConfirmText('');
+								setBulkDeleteOpen(true);
+							}}
+						>
+							Delete Selected
+						</button>
+					</div>
+				)}
+
 				<div style={{ overflowX: 'auto', marginTop: '1rem' }}>
 					<table style={tableStyle}>
 						<thead>
 							<tr>
+								<th style={{ ...thStyle, width: '32px' }}>
+									<input
+										type="checkbox"
+										style={checkboxStyle}
+										checked={
+											allMatchingSelected ||
+											(!!data &&
+												data.rows.length > 0 &&
+												data.rows.every((r) =>
+													selectedIds.has(r.id)
+												))
+										}
+										onChange={toggleSelectAll}
+									/>
+								</th>
 								{columns.map((col) => (
 									<th key={col} style={thStyle}>
 										{col}
@@ -512,11 +671,11 @@ export const EventLogSection = ({
 								<th style={thStyle} />
 							</tr>
 						</thead>
-						<tbody>
-							{isPending ? (
+						{isPending ? (
+							<tbody>
 								<tr>
 									<td
-										colSpan={columns.length + 1}
+										colSpan={columns.length + 2}
 										style={{
 											opacity: 0.5,
 											padding: '2rem',
@@ -526,10 +685,12 @@ export const EventLogSection = ({
 										Loading events...
 									</td>
 								</tr>
-							) : !data || data.rows.length === 0 ? (
+							</tbody>
+						) : !data || data.rows.length === 0 ? (
+							<tbody>
 								<tr>
 									<td
-										colSpan={columns.length + 1}
+										colSpan={columns.length + 2}
 										style={{
 											opacity: 0.5,
 											padding: '2rem',
@@ -539,127 +700,139 @@ export const EventLogSection = ({
 										No events found
 									</td>
 								</tr>
-							) : (
-								data.rows.map((row) => (
-									<>
-										<tr
-											key={row.id}
-											style={{ cursor: 'pointer' }}
-											onClick={() =>
-												setExpandedRow(
-													expandedRow === row.id
-														? null
-														: row.id
-												)
-											}
-										>
-											{columns.map((col) => {
-												const copyKey = `${row.id}-${col}`;
-												const isCopyable =
-													col === 'event' ||
-													col === 'anonymous_id';
-												return (
-													<td
-														key={col}
-														style={tdStyle}
-													>
-														{isCopyable ? (
-															<div
-																style={
-																	cellWithCopyStyle
-																}
+							</tbody>
+						) : (
+							data.rows.map((row) => (
+								<tbody key={row.id}>
+									<tr
+										style={{ cursor: 'pointer' }}
+										onClick={() =>
+											setExpandedRow(
+												expandedRow === row.id
+													? null
+													: row.id
+											)
+										}
+									>
+										<td style={tdStyle}>
+											<input
+												type="checkbox"
+												style={checkboxStyle}
+												checked={
+													allMatchingSelected ||
+													selectedIds.has(row.id)
+												}
+												onClick={(e) =>
+													e.stopPropagation()
+												}
+												onChange={() =>
+													toggleSelected(row.id)
+												}
+											/>
+										</td>
+										{columns.map((col) => {
+											const copyKey = `${row.id}-${col}`;
+											const isCopyable =
+												col === 'event' ||
+												col === 'anonymous_id';
+											return (
+												<td key={col} style={tdStyle}>
+													{isCopyable ? (
+														<div
+															style={
+																cellWithCopyStyle
+															}
+														>
+															<span
+																style={{
+																	overflow:
+																		'hidden',
+																	textOverflow:
+																		'ellipsis',
+																	whiteSpace:
+																		'nowrap'
+																}}
 															>
-																<span
-																	style={{
-																		overflow:
-																			'hidden',
-																		textOverflow:
-																			'ellipsis',
-																		whiteSpace:
-																			'nowrap'
-																	}}
-																>
-																	{formatCell(
-																		row,
-																		col
-																	)}
-																</span>
-																<button
-																	style={{
-																		...cellCopyButtonStyle,
-																		opacity:
-																			copiedCells.has(
-																				copyKey
-																			)
-																				? 1
-																				: 0.5
-																	}}
-																	title={`Copy ${col}`}
-																	onClick={(
-																		e
-																	) => {
-																		e.stopPropagation();
-																		handleCellCopy(
-																			copyKey,
-																			String(
-																				row[
-																					col as keyof TelemetryEventRow
-																				] ??
-																					''
-																			)
-																		);
-																	}}
-																>
-																	{copiedCells.has(
-																		copyKey
-																	) ? (
-																		<LuCopyCheck
-																			color={
-																				primaryColor
-																			}
-																		/>
-																	) : (
-																		<FiCopy />
-																	)}
-																</button>
-															</div>
-														) : (
-															formatCell(row, col)
-														)}
-													</td>
-												);
-											})}
-											<td style={tdStyle}>
-												<button
-													style={deleteButtonStyle}
-													onClick={(e) => {
-														e.stopPropagation();
-														setConfirmText('');
-														setDeleteTarget(row);
-													}}
-												>
-													Delete
-												</button>
-											</td>
-										</tr>
-										{expandedRow === row.id && (
-											<tr key={`${row.id}-expanded`}>
-												<td
-													colSpan={columns.length + 1}
-													style={expandedPayloadStyle}
-												>
-													{JSON.stringify(
-														row.payload,
-														null,
-														2
+																{formatCell(
+																	row,
+																	col
+																)}
+															</span>
+															<button
+																style={{
+																	...cellCopyButtonStyle,
+																	opacity:
+																		copiedCells.has(
+																			copyKey
+																		)
+																			? 1
+																			: 0.5
+																}}
+																title={`Copy ${col}`}
+																onClick={(
+																	e
+																) => {
+																	e.stopPropagation();
+																	handleCellCopy(
+																		copyKey,
+																		String(
+																			row[
+																				col as keyof TelemetryEventRow
+																			] ??
+																				''
+																		)
+																	);
+																}}
+															>
+																{copiedCells.has(
+																	copyKey
+																) ? (
+																	<LuCopyCheck
+																		color={
+																			primaryColor
+																		}
+																	/>
+																) : (
+																	<FiCopy />
+																)}
+															</button>
+														</div>
+													) : (
+														formatCell(row, col)
 													)}
 												</td>
-											</tr>
-										)}
-									</>
-								))
-							)}
-						</tbody>
+											);
+										})}
+										<td style={tdStyle}>
+											<button
+												style={deleteButtonStyle}
+												onClick={(e) => {
+													e.stopPropagation();
+													setConfirmText('');
+													setDeleteTarget(row);
+												}}
+											>
+												Delete
+											</button>
+										</td>
+									</tr>
+									{expandedRow === row.id && (
+										<tr key={`${row.id}-expanded`}>
+											<td
+												colSpan={columns.length + 2}
+												style={expandedPayloadStyle}
+											>
+												{JSON.stringify(
+													row.payload,
+													null,
+													2
+												)}
+											</td>
+										</tr>
+									)}
+								</tbody>
+							))
+						)}
 					</table>
 				</div>
 
@@ -796,6 +969,97 @@ export const EventLogSection = ({
 						{deleteMutation.isPending
 							? 'Deleting...'
 							: 'Delete Event'}
+					</button>
+				</div>
+			</Modal>
+
+			<Modal
+				isOpen={bulkDeleteOpen}
+				onClose={() => {
+					setBulkDeleteOpen(false);
+					setConfirmText('');
+					setCopied(false);
+				}}
+				style={modalStyle}
+			>
+				<div style={modalTitleStyle}>Delete Multiple Events</div>
+				<div style={modalDescStyle}>
+					You are about to permanently delete {selectedCount} event
+					{selectedCount === 1 ? '' : 's'}. This action cannot be
+					undone.
+				</div>
+				<div style={{ marginBottom: '1.25rem' }}>
+					<div style={confirmLabelStyle}>
+						Type{' '}
+						<span style={confirmHintWrapperStyle}>
+							<span style={confirmHintTextStyle}>
+								{bulkDeleteConfirmText}
+							</span>
+							<button
+								style={copyButtonStyle}
+								title="Copy to clipboard"
+								onClick={() => {
+									navigator.clipboard
+										.writeText(bulkDeleteConfirmText)
+										.then(() => {
+											setCopied(true);
+											setTimeout(
+												() => setCopied(false),
+												1500
+											);
+										});
+								}}
+							>
+								{copied ? (
+									<LuCopyCheck color={primaryColor} />
+								) : (
+									<FiCopy />
+								)}
+							</button>
+						</span>{' '}
+						to confirm
+					</div>
+					<input
+						type="text"
+						value={confirmText}
+						onChange={(e) => setConfirmText(e.target.value)}
+						placeholder={bulkDeleteConfirmText}
+						style={confirmInputStyle}
+						autoFocus
+					/>
+				</div>
+				<div style={modalButtonRowStyle}>
+					<button
+						style={cancelButtonStyle}
+						onClick={() => {
+							setBulkDeleteOpen(false);
+							setConfirmText('');
+						}}
+					>
+						Cancel
+					</button>
+					<button
+						style={{
+							...confirmDeleteButtonStyle,
+							opacity:
+								bulkDeleteMutation.isPending ||
+								confirmText !== bulkDeleteConfirmText
+									? 0.4
+									: 1,
+							cursor:
+								confirmText !== bulkDeleteConfirmText
+									? 'not-allowed'
+									: 'pointer'
+						}}
+						disabled={
+							bulkDeleteMutation.isPending ||
+							confirmText !== bulkDeleteConfirmText
+						}
+						onClick={handleBulkDelete}
+					>
+						{bulkDeleteMutation.isPending
+							? 'Deleting...'
+							: `Delete ${selectedCount} Event${selectedCount === 1 ? '' : 's'}`}
 					</button>
 				</div>
 			</Modal>
