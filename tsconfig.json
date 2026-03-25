@@ -1,4 +1,5 @@
 {
+	"exclude": ["node_modules", "build", "dist"],
 	"compilerOptions": {
 		"target": "ESNext",
 		"module": "ESNext",
