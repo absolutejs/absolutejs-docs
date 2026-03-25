@@ -10,7 +10,7 @@ COPY package.json bun.lock ./
 # Install any needed packages specified in package.json
 RUN bun install --production
 
-# Bundle the app source inside the Docker image 
+# Bundle the app source inside the Docker image
 COPY . .
 
 # Make port 3000 available to the world outside this container
