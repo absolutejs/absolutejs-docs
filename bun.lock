@@ -5,7 +5,7 @@
     "": {
       "name": "@absolutejs/docs",
       "dependencies": {
-        "@absolutejs/absolute": "0.17.12",
+        "@absolutejs/absolute": "0.19.0-beta.51",
         "@absolutejs/auth": "0.22.4",
         "@elysiajs/eden": "1.4.8",
         "@elysiajs/static": "1.4.7",
@@ -43,9 +43,21 @@
     },
   },
   "packages": {
-    "@absolutejs/absolute": ["@absolutejs/absolute@0.17.12", "", { "dependencies": { "@angular/compiler": "^21.0.0", "react-refresh": "^0.18.0" }, "peerDependencies": { "@angular/common": "^21.0.0", "@angular/compiler-cli": "^21.0.0", "@angular/core": "^21.0.0", "@angular/platform-browser": "^21.0.0", "@angular/platform-server": "^21.0.0", "@angular/ssr": "^21.0.0", "elysia": "^1.4.0", "react": "^19.2.0", "react-dom": "^19.2.0", "svelte": "^5.35.2", "vue": "^3.5.27", "zone.js": "^0.15.0" }, "optionalPeers": ["@angular/common", "@angular/compiler-cli", "@angular/core", "@angular/platform-browser", "@angular/platform-server", "@angular/ssr", "react", "react-dom", "svelte", "vue", "zone.js"], "bin": { "absolute": "dist/cli/index.js" } }, "sha512-dKz5gjCyI+Ro3sKI1CH6c5HblZCZIlt51T8DgEV+fmMA2r1MkQW20/kfZjspDkWnVtNOMnZU7qYnI6tdflhJjQ=="],
+    "@absolutejs/absolute": ["@absolutejs/absolute@0.19.0-beta.51", "", { "dependencies": { "@angular/compiler": "^21.0.0" }, "optionalDependencies": { "@absolutejs/native-darwin-arm64": "0.19.0-beta.51", "@absolutejs/native-darwin-x64": "0.19.0-beta.51", "@absolutejs/native-linux-arm64": "0.19.0-beta.51", "@absolutejs/native-linux-x64": "0.19.0-beta.51", "@absolutejs/native-windows-arm64": "0.19.0-beta.51", "@absolutejs/native-windows-x64": "0.19.0-beta.51" }, "peerDependencies": { "@angular/common": "^21.0.0", "@angular/compiler-cli": "^21.0.0", "@angular/core": "^21.0.0", "@angular/platform-browser": "^21.0.0", "@angular/platform-server": "^21.0.0", "@angular/ssr": "^21.0.0", "elysia": "^1.4.0", "react": "^19.2.0", "react-dom": "^19.2.0", "react-refresh": "^0.18.0", "svelte": "^5.35.2", "vue": "^3.5.27", "zone.js": "^0.15.0" }, "optionalPeers": ["@angular/common", "@angular/compiler-cli", "@angular/core", "@angular/platform-browser", "@angular/platform-server", "@angular/ssr", "react", "react-dom", "react-refresh", "svelte", "vue", "zone.js"], "bin": { "absolute": "dist/cli/index.js" } }, "sha512-/ckZFJKaPA/vSeZxnl4UJc1q5eo0wOCg4CQOVdsaWGqp8ilQylUxySrwlOifYHQIWL6JCrnPWba+2M5vwU3ouA=="],
 
     "@absolutejs/auth": ["@absolutejs/auth@0.22.4", "", { "dependencies": { "citra": "0.25.9" }, "peerDependencies": { "elysia": ">= 1.4.26" } }, "sha512-XJ+PT336yS+OfF5s4WLFPMLDrAuyEdlqkjy044CnioD3LmfGrGjVHc4VfEzsw64jaUNJXS7Qg+XEggicjyDotw=="],
+
+    "@absolutejs/native-darwin-arm64": ["@absolutejs/native-darwin-arm64@0.19.0-beta.51", "", { "os": "darwin", "cpu": "arm64" }, "sha512-qDESXGq4JCVyfBMO1KgADzNf6ZUBlwtSekwJBY8x0UG9Za9bw47Le6HgNTmMqQ6q7eQBWgdDlqM9/sIkjh0Y/A=="],
+
+    "@absolutejs/native-darwin-x64": ["@absolutejs/native-darwin-x64@0.19.0-beta.51", "", { "os": "darwin", "cpu": "x64" }, "sha512-VezNRahtswYMo3wBwVX9Du67f4a+8X1YKov2NguPziIP5bUlC1wqeOM+fepRQKN8RgyczwfVzXikawYKRXI7Ww=="],
+
+    "@absolutejs/native-linux-arm64": ["@absolutejs/native-linux-arm64@0.19.0-beta.51", "", { "os": "linux", "cpu": "arm64" }, "sha512-JzfCrVI4f5gjwAVlTic8pV5siNgyUUpfMLcF16X1rDS9+wUtZJ4967ja1BF8DC25WCA8vCmy0Nj17fj+i2FjqA=="],
+
+    "@absolutejs/native-linux-x64": ["@absolutejs/native-linux-x64@0.19.0-beta.51", "", { "os": "linux", "cpu": "x64" }, "sha512-vaVcJW0wSlexa1Pw8V24e1WWJRHks9Qwxbtk3G3mj7gSjejxktCou+ZPP+q+ibUD/d/84a4P77yexJunvU+h1g=="],
+
+    "@absolutejs/native-windows-arm64": ["@absolutejs/native-windows-arm64@0.19.0-beta.51", "", { "os": "win32", "cpu": "arm64" }, "sha512-3UdTVMuM3ccLa+8pzyy+72usGvxy3STX2tH5RBvhEZ/Nlqt9YjrayB0IBb4BAThwCNxAV01kO+HomCLaxVdBHA=="],
+
+    "@absolutejs/native-windows-x64": ["@absolutejs/native-windows-x64@0.19.0-beta.51", "", { "os": "win32", "cpu": "x64" }, "sha512-irAl4uisB6VPLzsLMn8unDYSKWUrfbn5CpJJCXDo8pDdxOjHST83w/KOw3+JqHZP6YlMKKq2w3E5+ZfxFB3Jig=="],
 
     "@angular/compiler": ["@angular/compiler@21.2.0", "", { "dependencies": { "tslib": "^2.3.0" } }, "sha512-0RPkma8UVNpse/VJcXT9w6SKzTMz4J/uMGj0l9enM1frg9xrx1fwi/lLmaVV9Nr9LfqPjQdxNFFlvaBB7g/2zg=="],
 
@@ -842,8 +854,6 @@
     "react-icons": ["react-icons@5.5.0", "", { "peerDependencies": { "react": "*" } }, "sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw=="],
 
     "react-is": ["react-is@16.13.1", "", {}, "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="],
-
-    "react-refresh": ["react-refresh@0.18.0", "", {}, "sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw=="],
 
     "react-syntax-highlighter": ["react-syntax-highlighter@15.6.1", "", { "dependencies": { "@babel/runtime": "^7.3.1", "highlight.js": "^10.4.1", "highlightjs-vue": "^1.0.0", "lowlight": "^1.17.0", "prismjs": "^1.27.0", "refractor": "^3.6.0" }, "peerDependencies": { "react": ">= 0.14.0" } }, "sha512-OqJ2/vL7lEeV5zTJyG7kmARppUjiB9h9udl4qHQjjgEos66z00Ia0OckwYfRxCSFrW8RJIBnsBwQsHZbVPspqg=="],
 

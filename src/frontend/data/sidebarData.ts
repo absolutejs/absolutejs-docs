@@ -111,7 +111,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'html', label: 'HTML' },
 			{ id: 'htmx', label: 'HTMX' },
 			{ id: 'vue', label: 'Vue' },
-			{ id: 'angular', label: 'Angular (Coming Soon)' }
+			{ id: 'angular', label: 'Angular' }
 		],
 		icon: animated(FaCubes),
 		label: 'Frontends'

@@ -1,12 +1,15 @@
 export const reactBuild = `\
-const manifest = await build({
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
   reactDirectory: 'src/frontend'
 });`;
 
 export const reactHandler = `\
 // backend/server.ts
-import { handleReactPageRequest, asset } from '@absolutejs/absolute';
-import { Home } from '../frontend/pages/Home';
+import { asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 
 new Elysia()
   .get('/', () =>
@@ -149,7 +152,10 @@ hydrateRoot(document, <Home {...window.__INITIAL_PROPS__} />);`;
 
 export const reactPreserveFiles = `\
 // To inspect generated index files, enable preserveIntermediateFiles
-const manifest = await build({
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
   reactDirectory: 'src/frontend',
   options: {
     preserveIntermediateFiles: true  // Index files won't be deleted

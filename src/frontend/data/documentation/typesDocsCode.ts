@@ -1,10 +1,10 @@
 export const manifestType = `\
-// The Manifest type returned by build()
+// The Manifest type returned by prepare()
 // Currently a simple Record - type-safe manifest keys are in development
 type Manifest = Record<string, string>;
 
 // Example usage
-const manifest = await build();
+const { absolutejs, manifest } = await prepare();
 
 // Access asset paths by entry name
 const homePath = manifest['HomePageIndex'];
@@ -14,14 +14,14 @@ const postPath = manifest['PostPageIndex'];
 // Returns: '/assets/PostPage-m3n4o5p6.js'`;
 
 export const buildOptionsType = `\
-// Configuration for the build() function
+// Configuration for absolute.config.ts
 type BuildConfig = {
   buildDirectory?: string;
   assetsDirectory?: string;
+  publicDirectory?: string;
   reactDirectory?: string;
   vueDirectory?: string;
   angularDirectory?: string;
-  astroDirectory?: string;
   svelteDirectory?: string;
   htmlDirectory?: string;
   htmxDirectory?: string;
@@ -30,10 +30,22 @@ type BuildConfig = {
     output: string;
   };
   options?: BuildOptions;
+  mode?: 'production' | 'development';
 };
 
-// Usage
-const manifest = await build({
+type BuildOptions = {
+  preserveIntermediateFiles?: boolean;
+  throwOnError?: boolean;
+  injectHMR?: boolean;
+  hmr?: {
+    debounceMs?: number;
+  };
+};
+
+// Usage in absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
   reactDirectory: 'src/frontend/pages',
   assetsDirectory: 'src/assets',
   tailwind: {
@@ -43,41 +55,44 @@ const manifest = await build({
 });`;
 
 export const pageHandlerTypes = `\
-// React page handler
-function handleReactPageRequest<TProps extends object>(
+// React page handler - import from '@absolutejs/absolute/react'
+function handleReactPageRequest<TProps extends Record<string, unknown>>(
   Component: React.ComponentType<TProps>,
   scriptPath: string,
-  props: TProps
-): Response;
+  ...props: keyof TProps extends never ? [] : [props: TProps]
+): Promise<Response>;
 
-// Svelte page handler
+// Svelte page handler - import from '@absolutejs/absolute/svelte'
 function handleSveltePageRequest<TProps extends Record<string, unknown>>(
   Component: SvelteComponent,
   pagePath: string,
   scriptPath: string,
-  props: TProps
-): Response;
+  props?: TProps
+): Promise<Response>;
 
-// Vue page handler
-function handleVuePageRequest<TProps extends object>(
+// Vue page handler - import from '@absolutejs/absolute/vue'
+function handleVuePageRequest<TProps extends Record<string, unknown>>(
   Component: VueComponent,
   pagePath: string,
   scriptPath: string,
-  headTag: string,
-  props: TProps
-): Response;
+  headTag?: string,
+  ...props: keyof TProps extends never ? [] : [props: TProps]
+): Promise<Response>;
 
-// HTML page handler
-function handleHtmlPageRequest(
+// Angular page handler - import from '@absolutejs/absolute/angular'
+function handleAngularPageRequest<TProps extends Record<string, unknown>>(
+  importer: () => Promise<{ factory: (props: TProps) => unknown }>,
   pagePath: string,
-  scriptPath: string
-): Response;
+  scriptPath: string,
+  headTag?: string,
+  ...props: keyof TProps extends never ? [] : [props: TProps]
+): Promise<Response>;
 
-// HTMX page handler
-function handleHtmxPageRequest(
-  pagePath: string,
-  scriptPath: string
-): Response;`;
+// HTML page handler - import from '@absolutejs/absolute'
+function handleHTMLPageRequest(pagePath: string): BunFile;
+
+// HTMX page handler - import from '@absolutejs/absolute'
+function handleHTMXPageRequest(pagePath: string): BunFile;`;
 
 export const elysiaIntegration = `\
 // AbsoluteJS integrates seamlessly with Elysia's type system

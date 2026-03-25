@@ -47,7 +47,8 @@ build/DashboardIndex.js   // Compiled index file for client hydration`;
 
 export const svelteHandler = `\
 // backend/server.ts
-import { handleSveltePageRequest, asset } from '@absolutejs/absolute';
+import { asset } from '@absolutejs/absolute';
+import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
 
 new Elysia()
   .get('/dashboard', async ({ cookie }) => {
@@ -106,8 +107,10 @@ new Elysia()
   })`;
 
 export const svelteBuild = `\
-// Configure Svelte in your build
-const manifest = await build({
-  svelteDirectory: 'src/svelte/pages',
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  svelteDirectory: 'src/svelte/pages'
   // Svelte components are compiled during build
 });`;

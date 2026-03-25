@@ -2,14 +2,17 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
-	addProps,
-	addSecondPage,
-	addSecondRoute,
+	configWithDb,
 	createCommand,
-	passProps,
+	dashboardComponent,
+	devCommand,
+	edenTreatySetup,
+	edenUsage,
+	envSetup,
+	homePageComponent,
 	runDev,
-	simplePageComponent,
-	simpleServer
+	schemaSetup,
+	serverWithAuth
 } from '../../../data/documentation/quickstartDocsCode';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
@@ -17,9 +20,11 @@ import {
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle
+	sectionStyle,
+	strongStyle
 } from '../../../styles/docsStyles';
 import {
+	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
@@ -30,11 +35,14 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { primaryColor } from '../../../styles/colors';
 
 const tocItems: TocItem[] = [
-	{ href: '#create-project', label: 'Create Project' },
-	{ href: '#project-files', label: 'Project Files' },
-	{ href: '#run-dev-server', label: 'Run Dev Server' },
-	{ href: '#add-pages', label: 'Add More Pages' },
-	{ href: '#passing-props', label: 'Passing Props' }
+	{ href: '#scaffold', label: '1. Scaffold' },
+	{ href: '#env', label: '2. Environment' },
+	{ href: '#schema', label: '3. Schema' },
+	{ href: '#config', label: '4. Config' },
+	{ href: '#pages', label: '5. Pages' },
+	{ href: '#server', label: '6. Server + Auth' },
+	{ href: '#eden', label: '7. Type-Safe Client' },
+	{ href: '#dev', label: '8. Run It' }
 ];
 
 export const QuickstartView = ({
@@ -66,23 +74,64 @@ export const QuickstartView = ({
 						Quickstart
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Build your first AbsoluteJS application in under 5
-						minutes.
+						Build a blog with Google OAuth, a database, typed
+						props, and a type-safe API client — all in one
+						codebase.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
+					<p style={paragraphSpacedStyle}>
+						This guide walks through building a real app. By the
+						end you&apos;ll have Google authentication, a users
+						table, server-rendered pages with typed props, a
+						protected dashboard, a validated JSON API, and a
+						client that&apos;s fully typed against your server.
+					</p>
+					<div
+						style={{
+							display: 'grid',
+							gap: '0.75rem',
+							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr',
+							marginTop: '1rem'
+						}}
+					>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>
+								<strong style={strongStyle}>Auth</strong>
+							</p>
+							<p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
+								Google OAuth with session management
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>
+								<strong style={strongStyle}>SSR + DB</strong>
+							</p>
+							<p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
+								Server-rendered pages with Drizzle types
+							</p>
+						</animated.div>
+						<animated.div style={featureCardStyle(themeSprings)}>
+							<p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>
+								<strong style={strongStyle}>API + Client</strong>
+							</p>
+							<p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
+								Validated endpoints with Eden Treaty
+							</p>
+						</animated.div>
+					</div>
+				</section>
+
+				<section style={sectionStyle}>
 					<AnchorHeading
 						level="h2"
-						id="create-project"
+						id="scaffold"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Create Your Project
+						1. Scaffold the Project
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Start by creating a new AbsoluteJS project:
-					</p>
 					<PrismPlus
 						codeString={createCommand}
 						language="bash"
@@ -90,8 +139,10 @@ export const QuickstartView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={{ ...paragraphSpacedStyle, marginTop: '1rem' }}>
-						The interactive CLI will guide you through setup
-						options.{' '}
+						This sets up a React project with PostgreSQL, Drizzle
+						ORM, Google OAuth, and Tailwind — dependencies
+						installed, ready to go. The <code>--skip</code> flag
+						uses defaults for everything else.{' '}
 						<animated.span
 							onClick={() => {
 								onNavigate('create-absolutejs');
@@ -104,38 +155,59 @@ export const QuickstartView = ({
 								textDecoration: 'underline'
 							}}
 						>
-							View all CLI options
-						</animated.span>{' '}
-						to customize your setup with command-line flags.
+							See all CLI options
+						</animated.span>
+						.
 					</p>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
 						level="h2"
-						id="project-files"
+						id="env"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Understanding the Project Files
+						2. Set Up Environment Variables
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Your page component is a full HTML document. In
-						AbsoluteJS, React components render the entire page
-						including the html, head, and body tags:
+						Add your database URL and Google OAuth credentials.
+						You can get Google credentials from the{' '}
+						<a
+							href="https://console.cloud.google.com/apis/credentials"
+							target="_blank"
+							rel="noopener noreferrer"
+							style={{ color: primaryColor, textDecoration: 'underline' }}
+						>
+							Google Cloud Console
+						</a>
+						:
 					</p>
 					<PrismPlus
-						codeString={simplePageComponent}
-						language="tsx"
-						showLineNumbers={true}
+						codeString={envSetup}
+						language="bash"
+						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
-						The server uses the build() function to bundle your
-						frontend code and handleReactPageRequest to render it:
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						level="h2"
+						id="schema"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						3. Define Your Schema
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Your database schema is the single source of truth for
+						types. Drizzle infers <code>User</code> and{' '}
+						<code>Post</code> directly from the table definitions
+						— no codegen, no drift:
 					</p>
 					<PrismPlus
-						codeString={simpleServer}
+						codeString={schemaSetup}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -145,82 +217,145 @@ export const QuickstartView = ({
 				<section style={sectionStyle}>
 					<AnchorHeading
 						level="h2"
-						id="run-dev-server"
+						id="config"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Run the Dev Server
+						4. Configure the Build
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Start the development server with hot reloading:
+						Tell AbsoluteJS where your frontend code lives:
 					</p>
+					<PrismPlus
+						codeString={configWithDb}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						level="h2"
+						id="pages"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						5. Build the Pages
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						A public home page that shows posts and a login link,
+						and a protected dashboard for authenticated users.
+						Props are typed against your schema — change a column
+						and TypeScript shows every page that needs updating:
+					</p>
+					<PrismPlus
+						codeString={homePageComponent}
+						language="tsx"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
+						The dashboard receives a <code>User</code> — guaranteed
+						by the <code>protectRoute</code> guard on the server:
+					</p>
+					<PrismPlus
+						codeString={dashboardComponent}
+						language="tsx"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						level="h2"
+						id="server"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						6. Wire Up the Server with Auth
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The server brings it all together. One{' '}
+						<code>.use(absoluteAuth())</code> call adds Google
+						OAuth with automatic user creation, session management,
+						and a <code>protectRoute</code> guard. The{' '}
+						<code>App</code> type export powers the type-safe
+						client:
+					</p>
+					<PrismPlus
+						codeString={serverWithAuth}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						level="h2"
+						id="eden"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						7. Type-Safe Client with Eden Treaty
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Eden Treaty takes the type of your server and gives
+						your client full autocomplete, compile-time route
+						checking, and typed responses — including the auth
+						status endpoint:
+					</p>
+					<PrismPlus
+						codeString={edenTreatySetup}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
+						Every API call is type-safe:
+					</p>
+					<PrismPlus
+						codeString={edenUsage}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						level="h2"
+						id="dev"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						8. Run It
+					</AnchorHeading>
 					<PrismPlus
 						codeString={runDev}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<p style={{ ...paragraphLargeStyle, marginTop: '1rem' }}>
-						Open http://localhost:3000 to see your app.
-					</p>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="add-pages"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Add More Pages
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Create another page component:
+					<p style={{ ...paragraphSpacedStyle, marginTop: '1rem' }}>
+						Or use the AbsoluteJS CLI directly:
 					</p>
 					<PrismPlus
-						codeString={addSecondPage}
-						language="tsx"
-						showLineNumbers={true}
+						codeString={devCommand}
+						language="bash"
+						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
-						Add a route for it in your server:
+					<p style={{ ...paragraphSpacedStyle, marginTop: '1rem' }}>
+						Open http://localhost:3000. Click &quot;Sign in with
+						Google&quot; to test the full OAuth flow — AbsoluteJS
+						handles the redirect, callback, token exchange, and
+						session creation automatically. Edit any component
+						and HMR updates it instantly with your form inputs
+						and scroll position preserved.
 					</p>
-					<PrismPlus
-						codeString={addSecondRoute}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="passing-props"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Passing Props
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Pass data from your server to your components via props:
-					</p>
-					<PrismPlus
-						codeString={addProps}
-						language="tsx"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
-						Pass the props from your route handler:
-					</p>
-					<PrismPlus
-						codeString={passProps}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
 				</section>
 
 				<DocsNavigation

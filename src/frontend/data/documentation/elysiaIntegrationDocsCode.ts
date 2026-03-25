@@ -3,24 +3,27 @@ export const elysiaServer = `\
 // Everything you know about Elysia works here
 
 import { Elysia } from 'elysia';
-import { build, handleReactPageRequest, asset, networking } from '@absolutejs/absolute';
+import { prepare, asset, networking } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 
-const manifest = await build({ reactDirectory: 'src/frontend' });
+const { absolutejs, manifest } = await prepare();
 
 new Elysia()
+  .use(absolutejs)
+
   // Use any Elysia plugin
   .use(cors())
   .use(swagger())
 
   // Page routes
   .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
-  
+
   // API routes - just regular Elysia
   .get('/api/users', () => getUsers())
   .post('/api/users', ({ body }) => createUser(body))
-  
+
   // AbsoluteJS networking plugin
-  .use(networking)`;
+  .use(networking);`;
 
 export const elysiaTypeSafety = `\
 // Elysia's type system is FULLY integrated with AbsoluteJS

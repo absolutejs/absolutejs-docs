@@ -2,6 +2,7 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
+	angularHandler,
 	reactHandler,
 	svelteHandler,
 	vueHandler,
@@ -34,6 +35,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 const tocItems: TocItem[] = [
 	{ href: '#handler-behavior', label: 'Handler Behavior' },
 	{ href: '#handlereactpagerequest', label: 'React Handler' },
+	{ href: '#handleangularpagerequest', label: 'Angular Handler' },
 	{ href: '#handlesveltepagerequest', label: 'Svelte Handler' },
 	{ href: '#handlevuepagerequest', label: 'Vue Handler' },
 	{ href: '#handlehtmlpagerequest', label: 'HTML Handler' },
@@ -56,6 +58,34 @@ const reactParams = [
 		type: 'Props',
 		description:
 			'Type-safe props matching the component requirements (optional)'
+	}
+];
+
+const angularParams = [
+	{
+		param: 'importer',
+		type: '() => Promise<{ factory: AngularPageFactory<Props> }>',
+		description: 'Async function that imports the Angular page factory'
+	},
+	{
+		param: 'pagePath',
+		type: 'string',
+		description: 'Path to compiled Angular page for SSR'
+	},
+	{
+		param: 'indexPath',
+		type: 'string',
+		description: 'Path to hydration script from asset(manifest, key)'
+	},
+	{
+		param: 'headTag',
+		type: '`<head>...</head>`',
+		description: 'Custom head element (use generateHeadElement helper)'
+	},
+	{
+		param: 'props',
+		type: 'Props',
+		description: 'Type-safe props (optional if component has no props)'
 	}
 ];
 
@@ -210,8 +240,8 @@ export const PageHandlersView = ({
 								Framework Handlers
 							</p>
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								React, Svelte, Vue handlers perform server-side
-								rendering and return hydrated HTML.
+								React, Angular, Svelte, Vue handlers perform
+								server-side rendering and return hydrated HTML.
 							</p>
 						</animated.div>
 						<animated.div style={featureCardStyle(themeSprings)}>
@@ -233,7 +263,8 @@ export const PageHandlersView = ({
 						All handlers work seamlessly with Elysia's routing
 						system and return properly formatted responses.
 						Framework handlers require the manifest from{' '}
-						<code style={tableCodeStyle}>build()</code>. Always use{' '}
+						<code style={tableCodeStyle}>prepare()</code>. Always
+						use{' '}
 						<code style={tableCodeStyle}>asset(manifest, key)</code>{' '}
 						to look up script paths—it will throw if the artifact
 						doesn't exist.
@@ -257,6 +288,29 @@ export const PageHandlersView = ({
 					{renderParamsTable(reactParams)}
 					<PrismPlus
 						codeString={reactHandler}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						level="h2"
+						id="handleangularpagerequest"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						handleAngularPageRequest
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Handles server-side rendering for Angular pages. Uses a
+						factory importer pattern for lazy loading Angular
+						components.
+					</p>
+					{renderParamsTable(angularParams)}
+					<PrismPlus
+						codeString={angularHandler}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

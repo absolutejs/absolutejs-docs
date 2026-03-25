@@ -5,8 +5,7 @@ import {
 	bunInstall,
 	createProject,
 	createProjectWithOptions,
-	manualInstall,
-	minimalServer
+	manualInstall
 } from '../../../data/documentation/installationDocsCode';
 import { ProjectStructureGraph } from './ProjectStructureGraph';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
@@ -169,15 +168,6 @@ export const InstallationView = ({
 						codeString={manualInstall}
 						language="bash"
 						showLineNumbers={false}
-						themeSprings={themeSprings}
-					/>
-					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
-						Then create your server entry point:
-					</p>
-					<PrismPlus
-						codeString={minimalServer}
-						language="typescript"
-						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
 				</section>

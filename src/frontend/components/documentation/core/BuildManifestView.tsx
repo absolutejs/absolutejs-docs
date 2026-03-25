@@ -4,10 +4,12 @@ import { DocsNavigation } from '../DocsNavigation';
 import {
 	assetFunction,
 	buildOptions,
-	buildSignature,
+	cliCommands,
+	configFile,
 	manifestStructure,
-	multiFrameworkBuild,
-	simpleReactBuild,
+	multiFrameworkConfig,
+	prepareFunction,
+	simpleReactConfig,
 	tailwindConfig
 } from '../../../data/documentation/buildManifestDocsCode';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
@@ -32,12 +34,14 @@ import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
-	{ href: '#build-function', label: 'The build() Function' },
-	{ href: '#configuration', label: 'Configuration' },
+	{ href: '#config-file', label: 'Configuration File' },
+	{ href: '#prepare', label: 'The prepare() Function' },
+	{ href: '#configuration', label: 'Configuration Examples' },
 	{ href: '#manifest', label: 'The Manifest' },
 	{ href: '#asset-lookup', label: 'Asset Lookup' },
 	{ href: '#tailwind', label: 'Tailwind CSS' },
-	{ href: '#build-options', label: 'Build Options' }
+	{ href: '#build-options', label: 'Build Options' },
+	{ href: '#cli', label: 'CLI Commands' }
 ];
 
 export const BuildManifestView = ({
@@ -80,21 +84,20 @@ export const BuildManifestView = ({
 				<section style={sectionStyle}>
 					<AnchorHeading
 						level="h2"
-						id="build-function"
+						id="config-file"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						The build() Function
+						Configuration File
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The build() function is the core of AbsoluteJS. It scans
-						your frontend directories, bundles all components, and
-						returns a manifest mapping entry points to their bundled
-						assets.
+						AbsoluteJS uses an <code>absolute.config.ts</code> file
+						at the root of your project to configure the build. Use{' '}
+						<code>defineConfig()</code> for type-safe configuration:
 					</p>
 					<BuildPipelineDiagram themeSprings={themeSprings} />
 					<PrismPlus
-						codeString={buildSignature}
+						codeString={configFile}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -104,18 +107,50 @@ export const BuildManifestView = ({
 				<section style={sectionStyle}>
 					<AnchorHeading
 						level="h2"
+						id="prepare"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						The prepare() Function
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The <code>prepare()</code> function loads your config,
+						builds the app, and returns an Elysia plugin with HMR
+						support plus the asset manifest:
+					</p>
+					<PrismPlus
+						codeString={prepareFunction}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+						<li style={listItemStyle}>
+							<strong style={strongStyle}>absolutejs</strong> — An
+							Elysia plugin that adds HMR routes in development
+						</li>
+						<li style={listItemStyle}>
+							<strong style={strongStyle}>manifest</strong> — Maps
+							entry point names to their bundled asset paths
+						</li>
+					</ul>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						level="h2"
 						id="configuration"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Configuration
+						Configuration Examples
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						For a simple React app, you only need to specify the
 						React directory:
 					</p>
 					<PrismPlus
-						codeString={simpleReactBuild}
+						codeString={simpleReactConfig}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -124,7 +159,7 @@ export const BuildManifestView = ({
 						For multi-framework apps, specify multiple directories:
 					</p>
 					<PrismPlus
-						codeString={multiFrameworkBuild}
+						codeString={multiFrameworkConfig}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -196,8 +231,8 @@ export const BuildManifestView = ({
 						Tailwind CSS Integration
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Enable Tailwind CSS by providing the config and CSS
-						paths:
+						Enable Tailwind CSS by providing the input and output
+						paths in your config:
 					</p>
 					<PrismPlus
 						codeString={tailwindConfig}
@@ -217,13 +252,32 @@ export const BuildManifestView = ({
 						Build Options
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Additional build options can be passed via the options
-						parameter:
+						Additional build options can be set in your config:
 					</p>
 					<PrismPlus
 						codeString={buildOptions}
 						language="typescript"
 						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						level="h2"
+						id="cli"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						CLI Commands
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						AbsoluteJS provides a CLI for development and production:
+					</p>
+					<PrismPlus
+						codeString={cliCommands}
+						language="bash"
+						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
 				</section>

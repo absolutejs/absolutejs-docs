@@ -41,7 +41,7 @@ const features: Feature[] = [
 	{
 		icon: <FaPalette />,
 		title: 'Multi-Framework UI',
-		description: 'Use React, Vue, Svelte, or HTML. Mix and match per route.'
+		description: 'Use React, Angular, Vue, Svelte, HTML, or HTMX. Mix and match per route.'
 	},
 	{
 		icon: <FaDatabase />,

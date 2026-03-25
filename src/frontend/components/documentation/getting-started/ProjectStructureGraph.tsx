@@ -53,6 +53,13 @@ const treeData: TreeNode[] = [
 		indent: 2,
 		name: 'types'
 	},
+	{
+		description: 'AbsoluteJS build configuration',
+		indent: 1,
+		isFile: true,
+		isSpecial: true,
+		name: 'absolute.config.ts'
+	},
 	{ indent: 1, isFile: true, isSpecial: true, name: 'package.json' },
 	{ indent: 1, isFile: true, isSpecial: true, name: 'tsconfig.json' },
 	{ indent: 1, isFile: true, isSpecial: true, name: '.env' }

@@ -23,6 +23,7 @@ my-app/
 │   │   └── styles/        # CSS and styling files
 │   └── types/             # TypeScript type definitions
 │
+├── absolute.config.ts     # AbsoluteJS build configuration
 ├── package.json
 ├── tsconfig.json
 └── .env`;
@@ -30,16 +31,25 @@ my-app/
 export const manualInstall = `\
 bun add @absolutejs/absolute elysia`;
 
+export const minimalConfig = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  reactDirectory: './src/frontend'
+});`;
+
 export const minimalServer = `\
-import { build, handleReactPageRequest, asset } from '@absolutejs/absolute';
+// src/backend/server.ts
+import { prepare, asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { Elysia } from 'elysia';
 import { Home } from '../frontend/pages/Home';
 
-const manifest = await build({
-  reactDirectory: './src/frontend',
-});
+const { absolutejs, manifest } = await prepare();
 
 new Elysia()
+  .use(absolutejs)
   .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
   .listen(3000);
 

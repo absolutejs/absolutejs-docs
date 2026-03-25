@@ -1,29 +1,60 @@
-export const buildSignature = `\
-const manifest = await build({
-  buildDirectory?: string,       // Default: 'build'
-  assetsDirectory?: string,      // Default: 'assets'
-  reactDirectory?: string,       // Path to React files
-  svelteDirectory?: string,      // Path to Svelte files
-  vueDirectory?: string,         // Path to Vue files
-  htmlDirectory?: string,        // Path to HTML files
-  htmxDirectory?: string,        // Path to HTMX files
-  angularDirectory?: string,     // Path to Angular files (coming soon)
-  tailwind?: TailwindConfig,     // Tailwind CSS configuration
-  options?: BuildOptions         // Additional build options
+export const configFile = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  buildDirectory: 'build',          // Default: 'build'
+  assetsDirectory: 'assets',        // Default: 'assets'
+  publicDirectory: 'public',        // Public static assets
+  reactDirectory: 'src/frontend',   // Path to React files
+  svelteDirectory: 'src/svelte',    // Path to Svelte files
+  vueDirectory: 'src/vue',          // Path to Vue files
+  htmlDirectory: 'src/html',        // Path to HTML files
+  htmxDirectory: 'src/htmx',        // Path to HTMX files
+  angularDirectory: 'src/angular',  // Path to Angular files
+  tailwind: {                       // Tailwind CSS configuration
+    input: './src/styles/globals.css',
+    output: './build/styles.css'
+  },
+  options: {                        // Additional build options
+    preserveIntermediateFiles: false,
+    throwOnError: false
+  }
 });`;
 
-export const simpleReactBuild = `\
-import { build } from '@absolutejs/absolute';
+export const prepareFunction = `\
+import { prepare, asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
+import { Elysia } from 'elysia';
+import { Home } from '../frontend/pages/Home';
 
-const manifest = await build({
+// prepare() loads absolute.config.ts and builds your app
+const { absolutejs, manifest } = await prepare();
+
+new Elysia()
+  .use(absolutejs)  // Adds HMR routes in development
+  .get('/', () =>
+    handleReactPageRequest(Home, asset(manifest, 'HomeIndex'))
+  )
+  .listen(3000);`;
+
+export const simpleReactConfig = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
   reactDirectory: './src/frontend'
 });`;
 
-export const multiFrameworkBuild = `\
-const manifest = await build({
+export const multiFrameworkConfig = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
   reactDirectory: './src/frontend/react',
   svelteDirectory: './src/frontend/svelte',
-  vueDirectory: './src/frontend/vue'
+  vueDirectory: './src/frontend/vue',
+  angularDirectory: './src/frontend/angular'
 });`;
 
 export const manifestStructure = `\
@@ -47,18 +78,43 @@ const indexPath = asset(manifest, 'HomeIndex');
 )`;
 
 export const tailwindConfig = `\
-const manifest = await build({
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
   reactDirectory: './src/frontend',
   tailwind: {
-    configPath: './tailwind.config.ts',
-    cssPath: './src/styles/globals.css'
+    input: './src/styles/globals.css',
+    output: './build/styles.css'
   }
 });`;
 
 export const buildOptions = `\
-const manifest = await build({
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
   reactDirectory: './src/frontend',
   options: {
     preserveIntermediateFiles: true  // Keep intermediate build artifacts
   }
 });`;
+
+export const cliCommands = `\
+# Development server with HMR
+absolute dev src/backend/server.ts
+
+# Production build and start
+absolute start src/backend/server.ts
+
+# With custom config path
+absolute dev src/backend/server.ts --config ./my-config.ts
+
+# Format code
+absolute prettier --write
+
+# Lint code
+absolute eslint
+
+# Show system info
+absolute info`;

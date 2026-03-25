@@ -1,16 +1,15 @@
 export const ssrFlow = `\
 // 1. Request comes in
-// 2. Server runs build() once at startup to create manifest
+// 2. Server runs prepare() once at startup to build and create manifest
 // 3. Route handler calls page handler (handleReactPageRequest, etc.)
 // 4. Page handler renders component to HTML stream
 // 5. HTML is sent to client with hydration scripts
 // 6. Client hydrates the page for interactivity`;
 
 export const buildOnce = `\
-// build() runs ONCE at server startup
-const manifest = await build({
-  reactDirectory: './src/frontend'
-});
+// prepare() runs ONCE at server startup
+// It loads absolute.config.ts and builds your app
+const { absolutejs, manifest } = await prepare();
 
 // manifest maps component names to their bundled assets
 // { "HomeIndex": "/build/HomeIndex-a3f2.js", ... }`;

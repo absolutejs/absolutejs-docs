@@ -46,12 +46,14 @@ export const networkingLogging = `\
 
 export const networkingFull = `\
 import { Elysia } from 'elysia';
-import { build, handleReactPageRequest, asset, networking } from '@absolutejs/absolute';
+import { prepare, asset, networking } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import Home from './pages/Home';
 
-const manifest = await build({ reactDirectory: 'src/frontend' });
+const { absolutejs, manifest } = await prepare();
 
 new Elysia()
+  .use(absolutejs)
   .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
   .get('/api/health', () => ({ status: 'ok' }))
   .use(networking);`;

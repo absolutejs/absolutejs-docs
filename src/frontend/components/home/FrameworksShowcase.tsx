@@ -51,8 +51,7 @@ const frameworks: Framework[] = [
 		name: 'Angular',
 		icon: <FaAngular />,
 		color: '#DD0031',
-		href: '/documentation/angular',
-		status: 'Soon'
+		href: '/documentation/angular'
 	}
 ];
 
@@ -64,7 +63,7 @@ export const FrameworksShowcase = ({ themeSprings }: ThemeProps) => (
 			One Server, Any Framework
 		</animated.h2>
 		<animated.p style={sectionSubtitleStyle(themeSprings)}>
-			Use React, Vue, Svelte, or plain HTML — mix and match per route
+			Use React, Angular, Vue, Svelte, HTML, or HTMX — mix and match per route
 			<br />
 			Zero build configuration required
 		</animated.p>

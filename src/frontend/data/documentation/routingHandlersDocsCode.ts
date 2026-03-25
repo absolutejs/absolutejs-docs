@@ -1,10 +1,12 @@
 export const basicRouting = `\
 import { Elysia } from 'elysia';
-import { build, handleReactPageRequest, asset } from '@absolutejs/absolute';
+import { prepare, asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 
-const manifest = await build({ reactDirectory: 'src/frontend' });
+const { absolutejs, manifest } = await prepare();
 
 new Elysia()
+  .use(absolutejs)
   .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
   .get('/about', () => handleReactPageRequest(About, asset(manifest, 'AboutIndex')))
   .get('/contact', () => handleReactPageRequest(Contact, asset(manifest, 'ContactIndex')))
@@ -67,8 +69,18 @@ new Elysia()
 
 export const pageHandlerPattern = `\
 // All page handlers follow this pattern:
+// import from '@absolutejs/absolute/react'
 handleReactPageRequest(Component, indexPath, props?)
+
+// import from '@absolutejs/absolute/svelte'
 handleSveltePageRequest(Component, pagePath, indexPath, props?)
+
+// import from '@absolutejs/absolute/vue'
 handleVuePageRequest(Component, pagePath, indexPath, headTag?, props?)
+
+// import from '@absolutejs/absolute/angular'
+handleAngularPageRequest(importer, pagePath, indexPath, headTag?, props?)
+
+// import from '@absolutejs/absolute'
 handleHTMLPageRequest(htmlPath)
 handleHTMXPageRequest(htmxPath)`;

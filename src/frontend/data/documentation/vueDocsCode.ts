@@ -1,11 +1,15 @@
 export const vueBuild = `\
-const manifest = await build({
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
   vueDirectory: 'frontend/vue'
 });`;
 
 export const vueHandler = `\
 // backend/server.ts
-import { handleVuePageRequest, generateHeadElement, asset } from '@absolutejs/absolute';
+import { asset, generateHeadElement } from '@absolutejs/absolute';
+import { handleVuePageRequest } from '@absolutejs/absolute/vue';
 
 new Elysia()
   .get('/products/:id', async ({ params }) => {
@@ -116,13 +120,11 @@ const isAdmin = computed(() => props.user.role === 'admin');
 </script>`;
 
 export const vueImports = `\
+import { asset, generateHeadElement } from '@absolutejs/absolute';
+import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
+import { handleVuePageRequest } from '@absolutejs/absolute/vue';
 import SvelteExample from './svelte/pages/SvelteExample.svelte';
 import { vueImports } from './vueImporter';
-
-const manifest = await build({
-  vueDirectory: 'frontend/vue',
-  svelteDirectory: 'frontend/svelte',
-});
 
 export const server = new Elysia()
   .get('/svelte', async () =>

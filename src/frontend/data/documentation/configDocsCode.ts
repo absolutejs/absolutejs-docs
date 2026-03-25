@@ -1,3 +1,62 @@
+// absolute.config.ts
+export const absoluteConfig = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  // Framework directories
+  reactDirectory: './src/frontend',
+  svelteDirectory: './src/svelte',
+  vueDirectory: './src/vue',
+  angularDirectory: './src/angular',
+  htmlDirectory: './src/html',
+  htmxDirectory: './src/htmx',
+
+  // Output directories
+  buildDirectory: './build',         // Default: './build'
+  assetsDirectory: './assets',       // Default: './assets'
+  publicDirectory: './public',       // Public static assets
+
+  // Tailwind CSS
+  tailwind: {
+    input: './src/styles/globals.css',
+    output: './build/styles.css'
+  },
+
+  // Build options
+  options: {
+    preserveIntermediateFiles: false, // Keep compiled/ folder
+    throwOnError: false               // Throw vs exit(1)
+  }
+});`;
+
+export const minimalConfig = `\
+// absolute.config.ts - minimal example
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  reactDirectory: './src/frontend'
+});`;
+
+export const prepareUsage = `\
+// src/backend/server.ts
+import { prepare, asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
+import { Elysia } from 'elysia';
+import { Home } from '../frontend/pages/Home';
+
+// prepare() loads absolute.config.ts and builds your app
+const { absolutejs, manifest } = await prepare();
+
+new Elysia()
+  .use(absolutejs)  // Adds HMR routes in development
+  .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
+  .listen(3000);`;
+
+export const customConfigPath = `\
+// Load from a custom config path
+const { absolutejs, manifest } = await prepare('./custom.config.ts');`;
+
 // Environment Variables
 export const envUsage = `\
 import { getEnv } from '@absolutejs/absolute';
@@ -43,13 +102,14 @@ const db = drizzle(config.database);`;
 
 // Tailwind CSS
 export const tailwindBuild = `\
-import { build } from '@absolutejs/absolute';
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
 
-const manifest = await build({
+export default defineConfig({
   reactDirectory: 'src/frontend',
   tailwind: {
-    configPath: './tailwind.config.ts',
-    cssPath: './src/styles/globals.css'
+    input: './src/styles/globals.css',
+    output: './build/styles.css'
   }
 });`;
 
@@ -172,7 +232,10 @@ export const headHtml = `\
 
 // Assets
 export const assetsDirectory = `\
-const manifest = await build({
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
   reactDirectory: 'src/frontend',
   assetsDirectory: 'src/assets'  // Static assets like images, fonts
 });`;

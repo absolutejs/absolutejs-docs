@@ -1,10 +1,10 @@
-export const reactHandler = `import { handleReactPageRequest, asset } from '@absolutejs/absolute';
+export const reactHandler = `import { asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { Elysia } from 'elysia';
 import { Home } from './pages/Home';
-import { manifest } from './build';
 
 const app = new Elysia()
-  .get('/', () => 
+  .get('/', () =>
     handleReactPageRequest(
       Home,
       asset(manifest, 'HomeIndex'),
@@ -13,10 +13,10 @@ const app = new Elysia()
   )
   .listen(3000);`;
 
-export const svelteHandler = `import { handleSveltePageRequest, asset } from '@absolutejs/absolute';
+export const svelteHandler = `import { asset } from '@absolutejs/absolute';
+import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
 import { Elysia } from 'elysia';
 import SvelteExample from './components/SvelteExample.svelte';
-import { manifest } from './build';
 
 const app = new Elysia()
   .get('/svelte', () =>
@@ -32,11 +32,10 @@ const app = new Elysia()
   )
   .listen(3000);`;
 
-export const vueHandler = `import { handleVuePageRequest, generateHeadElement, asset } from '@absolutejs/absolute';
+export const vueHandler = `import { asset, generateHeadElement } from '@absolutejs/absolute';
+import { handleVuePageRequest } from '@absolutejs/absolute/vue';
 import { Elysia } from 'elysia';
 import VueExample from './components/VueExample.vue';
-import { manifest } from './build';
-
 
 const app = new Elysia()
   .get('/vue', () =>
@@ -50,6 +49,25 @@ const app = new Elysia()
         description: 'A Vue.js example with AbsoluteJS'
       }),
       { initialCount: 0 }
+    )
+  )
+  .listen(3000);`;
+
+export const angularHandler = `import { asset, generateHeadElement } from '@absolutejs/absolute';
+import { handleAngularPageRequest } from '@absolutejs/absolute/angular';
+import { Elysia } from 'elysia';
+
+const app = new Elysia()
+  .get('/angular', () =>
+    handleAngularPageRequest(
+      () => import('./angular/Dashboard.server'),
+      asset(manifest, 'Dashboard'),
+      asset(manifest, 'DashboardIndex'),
+      generateHeadElement({
+        title: 'AbsoluteJS + Angular',
+        description: 'An Angular example with AbsoluteJS'
+      }),
+      { user: { name: 'Alex' } }
     )
   )
   .listen(3000);`;
@@ -80,22 +98,17 @@ const headElement = generateHeadElement({
   description: 'A modern web application built with AbsoluteJS'
 });`;
 
-export const multipleFrameworks = `import { 
-  handleReactPageRequest, 
-  handleSveltePageRequest, 
-  handleVuePageRequest,
-  handleHTMLPageRequest,
-  generateHeadElement,
-  asset 
-} from '@absolutejs/absolute';
+export const multipleFrameworks = `import { asset, generateHeadElement } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
+import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
+import { handleVuePageRequest } from '@absolutejs/absolute/vue';
+import { handleHTMLPageRequest } from '@absolutejs/absolute';
 import { Elysia } from 'elysia';
-import { manifest } from './build';
 
 // Import components
 import Home from './react/Home';
 import About from './svelte/About.svelte';
 import Contact from './vue/Contact.vue';
-
 
 const app = new Elysia()
   // React page
@@ -131,11 +144,10 @@ const app = new Elysia()
   )
   .listen(3000);`;
 
-export const propsExample = `import { handleReactPageRequest, asset } from '@absolutejs/absolute';
+export const propsExample = `import { asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { Elysia } from 'elysia';
 import { Dashboard } from './components/Dashboard';
-import { manifest } from './build';
-
 
 // Valid props - simple data types
 const validProps = {
@@ -162,18 +174,17 @@ const app = new Elysia()
 
 // Invalid props - will cause errors
 const invalidProps = {
-  callback: () => {},              // ❌ Function
-  date: new Date(),                // ❌ Date object
-  regex: /pattern/,                // ❌ RegExp
-  map: new Map(),                  // ❌ Map
-  set: new Set()                   // ❌ Set
+  callback: () => {},              // Function
+  date: new Date(),                // Date object
+  regex: /pattern/,                // RegExp
+  map: new Map(),                  // Map
+  set: new Set()                   // Set
 };`;
 
-export const elysiaIntegration = `import { handleReactPageRequest, asset } from '@absolutejs/absolute';
+export const elysiaIntegration = `import { asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { Elysia } from 'elysia';
 import { Profile, Dashboard, SearchResults } from './components';
-import { manifest } from './build';
-
 
 const app = new Elysia()
   // Using route params
@@ -197,7 +208,7 @@ const app = new Elysia()
     handleReactPageRequest(
       SearchResults,
       asset(manifest, 'SearchResultsIndex'),
-      { 
+      {
         searchQuery: q,
         currentPage: parseInt(page || '1')
       }

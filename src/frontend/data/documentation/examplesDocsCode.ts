@@ -96,17 +96,19 @@ export const fullStackReactApp = `\
 
 import { Elysia, t } from 'elysia';
 import { staticPlugin } from '@elysiajs/static';
-import { build, asset, handleReactPageRequest, networking } from '@absolutejs/absolute';
+import { prepare, asset, networking } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { eq } from 'drizzle-orm';
 import { db } from '../../db';
 import { posts, type PostWithAuthor, type Post, type User } from '../../db/schema';
 import { HomePage } from '../frontend/pages/HomePage';
 import { PostPage } from '../frontend/pages/PostPage';
 
-const manifest = await build();
+const { absolutejs, manifest } = await prepare();
 
 const app = new Elysia()
-  .use(networking())
+  .use(absolutejs)
+  .use(networking)
   .use(staticPlugin({ assets: 'dist', prefix: '/assets' }))
 
   // Home page - list all posts
@@ -115,7 +117,7 @@ const app = new Elysia()
       with: { author: true }
     });
 
-    return handleReactPageRequest<{ posts: PostWithAuthor[] }>(
+    return handleReactPageRequest(
       HomePage,
       asset(manifest, 'HomePageIndex'),
       { posts: allPosts }
@@ -133,7 +135,7 @@ const app = new Elysia()
       return status(404, 'Post not found');
     }
 
-    return handleReactPageRequest<{ post: Post; author: User }>(
+    return handleReactPageRequest(
       PostPage,
       asset(manifest, 'PostPageIndex'),
       { post, author: post.author }
@@ -148,7 +150,8 @@ export const authExample = `\
 // Authentication with @absolutejs/auth
 
 import { Elysia } from 'elysia';
-import { handleReactPageRequest, asset, getEnv } from '@absolutejs/absolute';
+import { asset, getEnv } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { absoluteAuth, instantiateUserSession } from '@absolutejs/auth';
 import { db } from '../../db';
 import { users, type User } from '../../db/schema';

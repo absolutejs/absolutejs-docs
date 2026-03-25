@@ -1,14 +1,16 @@
 export const productionBuild = `\
-# Build for production
-bun run build
+# Build for production using the CLI
+absolute start src/backend/server.ts
 
-# This runs the build() function which:
+# This runs the build from absolute.config.ts which:
 # 1. Bundles all frontend code
 # 2. Generates hashed asset filenames
-# 3. Creates the manifest for asset lookup`;
+# 3. Creates the manifest for asset lookup
+# 4. Starts the production server`;
 
 export const productionStart = `\
-# Start the production server
+# Or build and start separately
+bun run build
 bun run src/backend/server.ts
 
 # Or with PM2 for process management

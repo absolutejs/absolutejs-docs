@@ -17,27 +17,23 @@ export type NewUser = typeof users.$inferInsert;
 export type SchemaType = typeof schema;
 export type DatabaseType = NeonHttpDatabase<SchemaType>;`;
 
-export const backendCode = `import { build, getEnvVar, handleReactPageRequest, networkingPlugin } from '@absolutejs/absolute';
+export const backendCode = `import { prepare, asset, getEnv, networking } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { Home } from '../frontend/pages/Home';
-import { Elysia, env } from 'elysia';
+import { Elysia } from 'elysia';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { schema, User } from '../../db/schema';
 
-const manifest = await build({
-    reactDirectory: 'src/frontend'
-});
+const { absolutejs, manifest } = await prepare();
 
-if (manifest === null || manifest['HomeIndex'] === undefined) {
-	throw new Error('Failed to build manifest');
-}
-
-const sql = neon(getEnvVar('DATABASE_URL'))
+const sql = neon(getEnv('DATABASE_URL'))
 const db = drizzle(sql, { schema });
 
 const server = new Elysia()
-    .get('/', () => handleReactPageRequest(Home, manifest['HomeIndex']))
-    .get('/api/users/:subject', 
+    .use(absolutejs)
+    .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
+    .get('/api/users/:subject',
     async ({ status, params: { subject } }) => {
         try {
             const [user] = db.select().from(schema.users).where(schema.users.auth_sub.eq(subject))
@@ -45,7 +41,8 @@ const server = new Elysia()
         } catch ( error ) {
             return status(500, 'Internal Server Error while fetching user');
         }
-    }
+    })
+    .use(networking);
 
 export type Server = typeof server;`;
 
