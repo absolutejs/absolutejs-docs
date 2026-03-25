@@ -12,7 +12,7 @@ export const HomeHeader = ({ themeSprings }: ThemeProps) => (
 		}}
 	>
 		<animated.h1 style={heroTitleStyle(themeSprings)}>
-			Build Fullstack Appxx
+			Build Fullstack Apps
 			<br />
 			<span
 				style={{
