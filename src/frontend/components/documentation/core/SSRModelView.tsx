@@ -23,7 +23,7 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
-import { SSRLifecycleDiagram } from '../../diagrams/SSRLifecycleDiagram';
+
 
 const tocItems: TocItem[] = [
 	{ href: '#how-ssr-works', label: 'How SSR Works' },
@@ -77,14 +77,14 @@ export const SSRModelView = ({
 					<p style={paragraphSpacedStyle}>
 						AbsoluteJS provides a unified SSR model that works the
 						same way regardless of which frontend framework you use.
-					</p>
-					<SSRLifecycleDiagram themeSprings={themeSprings} />
-					<p style={paragraphSpacedStyle}>
-						The SSR lifecycle has two distinct phases: a one-time{' '}
-						<strong style={strongStyle}>startup phase</strong> when
-						your server boots, and a{' '}
-						<strong style={strongStyle}>request phase</strong> that
-						repeats for each incoming request.
+						The lifecycle has two phases: a one-time{' '}
+						<strong style={strongStyle}>startup phase</strong> where{' '}
+						<code>prepare()</code> loads your config and bundles
+						your code, and a{' '}
+						<strong style={strongStyle}>request phase</strong> where
+						each incoming request is routed to a page handler that
+						renders your component to a streamed HTML response,
+						then the client hydrates it for interactivity.
 					</p>
 				</section>
 
@@ -98,9 +98,9 @@ export const SSRModelView = ({
 						Build Once, Serve Many
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The build() function runs once when your server starts.
-						It scans your frontend directories, bundles all
-						components, and returns a manifest:
+						The prepare() function runs once when your server
+						starts. It loads your absolute.config.ts, bundles all
+						frontend code, and returns a manifest:
 					</p>
 					<PrismPlus
 						codeString={buildOnce}
