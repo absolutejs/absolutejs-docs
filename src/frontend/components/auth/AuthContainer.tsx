@@ -21,8 +21,8 @@ const SignupLink = ({ themeSprings }: SignupLinkProps) => {
 		<animated.p
 			style={{
 				color: themeSprings.contrastSecondary,
-				fontSize: '0.875rem',
-				marginTop: '8px',
+				fontSize: '0.8125rem',
+				marginTop: '12px',
 				textAlign: 'center'
 			}}
 		>
@@ -32,11 +32,11 @@ const SignupLink = ({ themeSprings }: SignupLinkProps) => {
 				onMouseEnter={() => hoverApi.start({ opacity: 1 })}
 				onMouseLeave={() => hoverApi.start({ opacity: 0 })}
 				style={{
-					color: themeSprings.contrastPrimary,
-					fontSize: '0.875rem',
+					color: '#6366F1',
+					fontSize: '0.8125rem',
 					fontWeight: 600,
-					opacity: hoverSpring.opacity.to((o) => 0.7 + o * 0.3),
-					textDecoration: 'underline'
+					opacity: hoverSpring.opacity.to((o) => 0.8 + o * 0.2),
+					textDecoration: 'none'
 				}}
 			>
 				Sign up
@@ -46,37 +46,30 @@ const SignupLink = ({ themeSprings }: SignupLinkProps) => {
 };
 
 export const AuthContainer = ({ themeSprings }: ThemeProps) => {
+	const [showMore, setShowMore] = useState(false);
 	const [currentProvider, setCurrentProvider] =
 		useState<Lowercase<ProviderOption>>();
 	const { isSizeOrLess } = useMediaQuery();
 	const isMobile = isSizeOrLess('sm');
+
+	const toggleMore = () => {
+		setShowMore((prev) => !prev);
+	};
 
 	return (
 		<div
 			style={{
 				display: 'flex',
 				flexDirection: 'column',
-				padding: isMobile ? '24px 20px' : '32px 36px',
-				width: isMobile ? '320px' : '420px'
+				padding: isMobile ? '16px 14px' : '20px 24px',
+				width: isMobile ? '280px' : '300px'
 			}}
 		>
-			<animated.h1
-				style={{
-					color: themeSprings.contrastPrimary,
-					fontSize: '1.5rem',
-					fontWeight: 600,
-					marginBottom: '24px',
-					textAlign: 'center'
-				}}
-			>
-				Welcome Back
-			</animated.h1>
-
 			<div
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
-					gap: '12px'
+					gap: '8px'
 				}}
 			>
 				<OAuthLink
@@ -91,26 +84,44 @@ export const AuthContainer = ({ themeSprings }: ThemeProps) => {
 				/>
 			</div>
 
-			<Divider text="or continue with" />
-
-			<div
+			<animated.button
+				onClick={toggleMore}
 				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					gap: '12px'
+					background: 'none',
+					border: 'none',
+					color: themeSprings.contrastSecondary,
+					cursor: 'pointer',
+					fontSize: '0.75rem',
+					marginTop: '12px',
+					opacity: 0.6,
+					padding: '4px',
+					textAlign: 'center'
 				}}
 			>
-				<ProviderDropdown
-					setCurrentProvider={setCurrentProvider}
-					themeSprings={themeSprings}
-				/>
+				{showMore ? 'Less options' : 'More providers'}
+			</animated.button>
 
-				<OAuthLink
-					mode="login"
-					provider={currentProvider}
-					themeSprings={themeSprings}
-				/>
-			</div>
+			{showMore && (
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: '8px',
+						marginTop: '8px'
+					}}
+				>
+					<Divider text="select provider" />
+					<ProviderDropdown
+						setCurrentProvider={setCurrentProvider}
+						themeSprings={themeSprings}
+					/>
+					<OAuthLink
+						mode="login"
+						provider={currentProvider}
+						themeSprings={themeSprings}
+					/>
+				</div>
+			)}
 
 			<SignupLink themeSprings={themeSprings} />
 		</div>

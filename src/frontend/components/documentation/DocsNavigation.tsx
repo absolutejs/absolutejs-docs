@@ -17,53 +17,49 @@ type DocsNavigationProps = {
 	themeSprings: ThemeSprings;
 };
 
-const containerStyle = (isMobileOrTablet?: boolean): CSSProperties => ({
-	borderTop: '1px solid rgba(160, 231, 229, 0.2)',
+const containerStyle: CSSProperties = {
+	borderTop: '1px solid rgba(99, 102, 241, 0.15)',
 	display: 'flex',
-	flexDirection: isMobileOrTablet ? 'column' : 'row',
+	flexDirection: 'row',
+	flexWrap: 'wrap',
 	gap: '1rem',
 	justifyContent: 'space-between',
 	marginTop: '3rem',
 	paddingBottom: '3rem',
 	paddingTop: '2rem'
-});
+};
 
 const navButtonStyle = (
 	themeSprings: ThemeSprings,
-	direction: 'prev' | 'next',
-	isMobileOrTablet?: boolean
+	direction: 'prev' | 'next'
 ) => ({
 	alignItems: direction === 'prev' ? 'flex-start' : 'flex-end',
 	background: themeSprings.theme.to((theme) =>
 		theme.endsWith('dark')
-			? 'rgba(160, 231, 229, 0.08)'
-			: 'rgba(160, 231, 229, 0.12)'
+			? 'rgba(99, 102, 241, 0.08)'
+			: 'rgba(99, 102, 241, 0.06)'
 	),
 	border: themeSprings.theme.to((theme) =>
 		theme.endsWith('dark')
-			? '1px solid rgba(160, 231, 229, 0.2)'
-			: '1px solid rgba(160, 231, 229, 0.3)'
+			? '1px solid rgba(99, 102, 241, 0.2)'
+			: '1px solid rgba(99, 102, 241, 0.15)'
 	),
 	borderRadius: '0.75rem',
 	cursor: 'pointer',
 	display: 'flex',
-	flex: 1,
+	flex: '1 1 40%',
 	flexDirection: 'column' as const,
 	gap: '0.5rem',
-	maxWidth: isMobileOrTablet ? '100%' : 'calc(50% - 0.5rem)',
+	minWidth: '160px',
 	padding: '1rem 1.25rem',
 	textAlign: direction as 'left' | 'right',
 	textDecoration: 'none',
 	transition: 'all 0.2s ease'
 });
 
-const directionLabelStyle = (themeSprings: ThemeSprings) => ({
+const directionLabelStyle = () => ({
 	alignItems: 'center',
-	color: themeSprings.theme.to((theme) =>
-		theme.endsWith('dark')
-			? 'rgba(160, 231, 229, 0.8)'
-			: 'rgba(0, 90, 90, 0.8)'
-	),
+	color: '#6366F1',
 	display: 'flex',
 	fontSize: '0.8rem',
 	fontWeight: 500,
@@ -79,7 +75,6 @@ const pageLabelStyle = (themeSprings: ThemeSprings) => ({
 
 export const DocsNavigation = ({
 	currentPageId,
-	isMobileOrTablet,
 	onNavigate,
 	themeSprings
 }: DocsNavigationProps) => {
@@ -114,17 +109,13 @@ export const DocsNavigation = ({
 	};
 
 	return (
-		<div style={containerStyle(isMobileOrTablet)}>
+		<div style={containerStyle}>
 			{prevPage ? (
 				<animated.button
 					onClick={() => handleClick(prevPage.id)}
-					style={navButtonStyle(
-						themeSprings,
-						'prev',
-						isMobileOrTablet
-					)}
+					style={navButtonStyle(themeSprings, 'prev')}
 				>
-					<animated.span style={directionLabelStyle(themeSprings)}>
+					<animated.span style={directionLabelStyle()}>
 						<FaArrowLeft size={12} />
 						Previous
 					</animated.span>
@@ -133,28 +124,17 @@ export const DocsNavigation = ({
 					</animated.span>
 				</animated.button>
 			) : (
-				<div
-					style={{
-						flex: 1,
-						maxWidth: isMobileOrTablet
-							? '100%'
-							: 'calc(50% - 0.5rem)'
-					}}
-				/>
+				<div style={{ flex: '1 1 40%', minWidth: '160px' }} />
 			)}
 
 			{nextPage ? (
 				<animated.button
 					onClick={() => handleClick(nextPage.id)}
-					style={navButtonStyle(
-						themeSprings,
-						'next',
-						isMobileOrTablet
-					)}
+					style={navButtonStyle(themeSprings, 'next')}
 				>
 					<animated.span
 						style={{
-							...directionLabelStyle(themeSprings),
+							...directionLabelStyle(),
 							justifyContent: 'flex-end'
 						}}
 					>
@@ -166,14 +146,7 @@ export const DocsNavigation = ({
 					</animated.span>
 				</animated.button>
 			) : (
-				<div
-					style={{
-						flex: 1,
-						maxWidth: isMobileOrTablet
-							? '100%'
-							: 'calc(50% - 0.5rem)'
-					}}
-				/>
+				<div style={{ flex: '1 1 40%', minWidth: '160px' }} />
 			)}
 		</div>
 	);

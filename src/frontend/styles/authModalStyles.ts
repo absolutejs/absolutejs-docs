@@ -70,9 +70,8 @@ export const buttonContainerStyle: CSSProperties = {
 export const oauthButtonContentStyle: CSSProperties = {
 	alignItems: 'center',
 	display: 'flex',
+	gap: '8px',
 	justifyContent: 'center',
-	paddingLeft: '12px',
-	paddingRight: '12px',
 	width: '100%'
 };
 
@@ -87,21 +86,22 @@ export const oauthButtonStyle = ({
 	themeSprings
 }: OAuthButtonStyleProps): AnimatedCSSProperties => ({
 	alignItems: 'center',
-	backgroundColor: themeSprings.themeTertiary,
-	border: '1px solid rgba(128, 128, 128, 0.12)',
-	borderRadius: '12px',
-	boxShadow:
-		'0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06)',
+	backgroundColor: themeSprings.theme.to((t) =>
+		t.endsWith('dark') ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.03)'
+	),
+	border: '1px solid rgba(128, 128, 128, 0.1)',
+	borderRadius: '8px',
 	color: themeSprings.contrastPrimary,
 	cursor: isProviderSelected ? 'pointer' : 'not-allowed',
 	display: 'flex',
-	fontSize: '0.9rem',
+	fontSize: '0.8125rem',
 	fontWeight: 500,
 	justifyContent: 'center',
 	opacity: isProviderSelected ? 1 : HALF,
-	padding: '16px 20px',
+	padding: '10px 16px',
 	textDecoration: 'none',
 	textWrap: 'nowrap',
+	transition: 'background-color 0.15s ease',
 	width: '100%'
 });
 
@@ -156,10 +156,9 @@ export const DARK_LOGO_PROVIDERS = new Set([
 ]);
 
 export const oauthIconStyle = (): CSSProperties => ({
-	height: '24px',
-	marginRight: '10px',
+	height: '18px',
 	objectFit: 'contain',
-	width: '24px'
+	width: '18px'
 });
 export const headingStyle: CSSProperties = {
 	fontSize: '1.25rem',

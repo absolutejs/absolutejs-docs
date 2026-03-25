@@ -21,8 +21,8 @@ const outerR = 100;
 const innerR = 60;
 
 const sliceColors = [
-	'#A0E7E5',
-	'#B4F8C8',
+	'#818CF8',
+	'#A5B4FC',
 	'#FFD93D',
 	'#FF6B6B',
 	'#87CEEB',
@@ -112,7 +112,7 @@ export const DonutChart = ({ data, themeSprings }: DonutChartProps) => {
 			datum: d,
 			startAngle: currentAngle,
 			endAngle: currentAngle + sweep,
-			color: sliceColors[i % sliceColors.length] ?? '#A0E7E5',
+			color: sliceColors[i % sliceColors.length] ?? '#818CF8',
 			pct
 		});
 		currentAngle += sweep;

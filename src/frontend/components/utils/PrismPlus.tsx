@@ -90,7 +90,6 @@ export const PrismPlus = ({
 				style={codeStyle.get()}
 				customStyle={{
 					margin: 0,
-					marginBottom: '1.5rem',
 					padding: '1rem',
 					overflowX: 'auto'
 				}}

@@ -31,10 +31,14 @@ export const EdenSection = ({ themeSprings }: ThemeProps) => (
 		<animated.div
 			style={{
 				alignItems: 'center',
-				background: themeSprings.themeTertiary,
-				border: '1px solid rgba(128, 128, 128, 0.12)',
+				backdropFilter: 'blur(12px)',
+				background: themeSprings.theme.to((t) =>
+					t.endsWith('dark')
+						? 'rgba(255, 255, 255, 0.04)'
+						: 'rgba(255, 255, 255, 0.6)'
+				),
+				border: '1px solid rgba(99, 102, 241, 0.1)',
 				borderRadius: '24px',
-				boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
 				display: 'flex',
 				flexDirection: 'column',
 				maxWidth: '1200px',

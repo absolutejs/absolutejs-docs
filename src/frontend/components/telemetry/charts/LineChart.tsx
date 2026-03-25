@@ -20,10 +20,10 @@ const chartWidth = viewWidth - chartPadding.left - chartPadding.right;
 const chartHeight = viewHeight - chartPadding.top - chartPadding.bottom;
 
 const seriesColors = [
-	'#A0E7E5',
+	'#818CF8',
 	'#FFD93D',
 	'#FF6B6B',
-	'#B4F8C8',
+	'#A5B4FC',
 	'#87CEEB',
 	'#DDA0DD'
 ];

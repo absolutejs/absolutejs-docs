@@ -9,13 +9,23 @@ export const styleReset = `
         padding: 0;
         box-sizing: border-box;
         font: inherit;
-		letter-spacing: 0.1rem;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
     }
 
 	button {
 		cursor: pointer;
 		background: none;
 		border: none;
+	}
+
+	@keyframes aurora {
+		0% { background-position: 0% 50%, 100% 50%, 50% 0%; }
+		25% { background-position: 100% 0%, 0% 100%, 50% 50%; }
+		50% { background-position: 50% 100%, 50% 0%, 0% 50%; }
+		75% { background-position: 0% 0%, 100% 100%, 100% 50%; }
+		100% { background-position: 0% 50%, 100% 50%, 50% 0%; }
 	}
 `;
 
@@ -27,7 +37,7 @@ export const bodyDefault = (
 	display: 'flex',
 	flexDirection: 'column',
 	height: '100%',
-	lineHeight: '1.4',
+	lineHeight: '1.6',
 	margin: 0
 });
 
@@ -43,7 +53,8 @@ export const mainDefault = (
 
 export const htmlDefault: CSSProperties = {
 	colorScheme: 'light dark',
-	fontFamily: 'Poppins, sans-serif',
+	fontFamily:
+		'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
 	height: '100%',
 	overflowX: 'hidden'
 };
@@ -68,12 +79,12 @@ export const buttonStyle = <
 	alignItems: 'center',
 	backgroundColor,
 	border: 'none',
-	borderRadius: '0.3125rem',
+	borderRadius: '8px',
 	color,
 	cursor: 'pointer',
 	display: 'flex',
-	fontSize: '1rem',
-	fontWeight: 500,
+	fontSize: '0.875rem',
+	fontWeight: 600,
 	justifyContent: 'center',
 	margin: '0.3125rem',
 	padding: '0.625rem 1rem',

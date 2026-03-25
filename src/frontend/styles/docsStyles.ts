@@ -7,30 +7,32 @@ export const mainContentStyle = (
 	display: 'flex',
 	flex: 1,
 	flexDirection: 'column',
-	lineHeight: '1.7',
+	lineHeight: '1.75',
 	margin: '0 auto',
-	maxWidth: isMobileOrTablet ? '100%' : '75%',
+	maxWidth: isMobileOrTablet ? '100%' : '800px',
 	minWidth: 0,
-	overflow: 'hidden',
 	padding: isMobileOrTablet ? '1.5rem 1.25rem' : '2rem 0',
-	paddingRight: isMobileOrTablet ? '1.25rem' : '4rem'
+	paddingRight: isMobileOrTablet ? '1.25rem' : '3rem'
 });
 
 export const sectionStyle: CSSProperties = {
-	marginBottom: '2rem'
+	backdropFilter: 'blur(12px)',
+	background: 'rgba(128, 128, 128, 0.04)',
+	borderRadius: '12px',
+	marginBottom: '1.5rem',
+	padding: '1.25rem 1.5rem'
 };
 
 export const headingStyle = (
 	themeSprings: ThemeSprings,
 	subheading: boolean = false
 ): AnimatedCSSProperties => ({
-	borderTop: subheading
-		? 'none'
-		: themeSprings.themeTertiary.to((color) => `2px solid ${color}`),
+	color: themeSprings.contrastPrimary,
 	fontSize: subheading ? '1.5rem' : '1.875rem',
-	fontWeight: '600',
-	marginBottom: '1rem',
-	paddingTop: '1rem'
+	fontWeight: subheading ? '600' : '700',
+	letterSpacing: '-0.025em',
+	marginBottom: '1.25rem',
+	paddingTop: subheading ? '1.5rem' : '2rem'
 });
 
 export const paragraphStyle: CSSProperties = {
@@ -65,6 +67,7 @@ export const listItemStyle: CSSProperties = {
 
 export const h1Style = (isMobileOrTablet?: boolean): CSSProperties => ({
 	fontSize: isMobileOrTablet ? '2rem' : '3rem',
+	letterSpacing: '-0.03em',
 	marginBottom: '1rem'
 });
 
@@ -72,11 +75,10 @@ export const h1Style = (isMobileOrTablet?: boolean): CSSProperties => ({
 export const tocNavStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
-	borderLeft: '1px solid',
-	borderLeftColor: themeSprings.contrastSecondary.to((color) => color),
+	borderLeft: '1px solid rgba(128, 128, 128, 0.15)',
 	height: 'fit-content',
 	maxHeight: 'calc(100vh - 4rem)',
-	minWidth: '200px',
+	minWidth: '220px',
 	overflowY: 'auto',
 	padding: '0 1.5rem',
 	position: 'sticky',
@@ -88,11 +90,12 @@ export const tocNavStyle = (
 export const tocTitleStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
-	color: themeSprings.contrastPrimary,
-	fontSize: '1rem',
+	color: themeSprings.contrastSecondary,
+	fontSize: '0.6875rem',
 	fontWeight: '600',
-	letterSpacing: '0.05em',
+	letterSpacing: '0.08em',
 	marginBottom: '1rem',
+	opacity: 0.5,
 	textTransform: 'uppercase'
 });
 
@@ -108,8 +111,8 @@ export const tocListStyle: CSSProperties = {
 export const tocLinkStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
-	color: themeSprings.contrastPrimary,
-	fontSize: '1rem',
+	color: themeSprings.contrastSecondary,
+	fontSize: '0.8125rem',
 	textDecoration: 'none',
 	wordBreak: 'break-word'
 });
@@ -141,14 +144,14 @@ export const tableHeaderStyle = (
 ): AnimatedCSSProperties => ({
 	background: themeSprings.theme.to((theme) =>
 		theme.endsWith('dark')
-			? 'rgba(160,231,229,0.1)'
-			: 'rgba(160,231,229,0.15)'
+			? 'rgba(128, 128, 128, 0.08)'
+			: 'rgba(128, 128, 128, 0.06)'
 	),
 	borderBottom: themeSprings.themeTertiary.to(
 		(color) => `2px solid ${color}`
 	),
 	color: themeSprings.contrastPrimary,
-	fontSize: '0.875rem',
+	fontSize: '0.8125rem',
 	fontWeight: '600',
 	letterSpacing: '0.025em',
 	padding: '0.875rem 1rem',
@@ -167,10 +170,10 @@ export const tableCellStyle = (
 });
 
 export const tableCodeStyle: CSSProperties = {
-	background: 'rgba(160,231,229,0.1)',
+	background: 'rgba(99, 102, 241, 0.08)',
 	borderRadius: '0.25rem',
-	fontFamily: 'monospace',
-	fontSize: '0.875rem',
+	fontFamily: 'JetBrains Mono, monospace',
+	fontSize: '0.8125rem',
 	padding: '0.2rem 0.5rem'
 };
 
@@ -179,11 +182,11 @@ export const githubButtonStyle = (
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	background: themeSprings.themeTertiary,
-	border: '1px solid rgba(128, 128, 128, 0.2)',
+	border: '1px solid rgba(128, 128, 128, 0.15)',
 	borderRadius: '8px',
 	color: themeSprings.contrastPrimary,
 	display: 'inline-flex',
-	fontSize: '0.9rem',
+	fontSize: '0.875rem',
 	fontWeight: 500,
 	gap: '0.5rem',
 	marginTop: '1rem',

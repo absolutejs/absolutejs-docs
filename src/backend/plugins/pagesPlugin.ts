@@ -14,6 +14,7 @@ import {
 import { AuthTesting } from '../../frontend/pages/AuthTesting';
 import { Documentation } from '../../frontend/pages/Documentation';
 import { Home } from '../../frontend/pages/Home';
+import { Profile } from '../../frontend/pages/Profile';
 import { Signup } from '../../frontend/pages/Signup';
 import { TelemetryDashboard } from '../../frontend/pages/TelemetryDashboard';
 import {
@@ -63,6 +64,20 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 			handleReactPageRequest(Signup, asset(manifest, 'SignupIndex'), {
 				theme: theme?.value
 			})
+		)
+		.get('/profile', ({ cookie: { theme }, protectRoute, redirect }) =>
+			protectRoute(
+				(user) =>
+					handleReactPageRequest(
+						Profile,
+						asset(manifest, 'ProfileIndex'),
+						{
+							theme: theme?.value,
+							user
+						}
+					),
+				async () => redirect('/signup/profile')
+			)
 		)
 		.get(
 			'/documentation/:view?',

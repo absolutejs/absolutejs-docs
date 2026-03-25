@@ -55,8 +55,9 @@ export const Navbar = ({ user, themeSprings, setTheme }: NavbarProps) => {
 				href="/"
 				style={{
 					color: themeSprings.contrastPrimary,
-					fontSize: '1.5rem',
-					fontWeight: 'bold',
+					fontSize: '1.25rem',
+					fontWeight: 700,
+					letterSpacing: '-0.025em',
 					textDecoration: 'none'
 				}}
 			>
@@ -66,7 +67,8 @@ export const Navbar = ({ user, themeSprings, setTheme }: NavbarProps) => {
 			<div
 				style={{
 					alignItems: 'center',
-					display: 'flex'
+					display: 'flex',
+					gap: '0.25rem'
 				}}
 			>
 				{!isMobile && (

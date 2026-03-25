@@ -22,8 +22,7 @@ export const AnchorHeading = ({
 	children,
 	id,
 	level,
-	style,
-	themeSprings
+	style
 }: AnchorHeadingProps) => {
 	const [isHovered, setIsHovered] = useState(false);
 
@@ -54,16 +53,20 @@ export const AnchorHeading = ({
 			onMouseLeave={handleMouseLeave}
 			style={anchorHeadingContainerStyle}
 		>
-			<animated.span
-				style={
-					isHovered
-						? anchorIconVisibleStyle(themeSprings)
-						: anchorIconStyle(themeSprings)
-				}
+			<AnimatedHeading
+				id={id}
+				style={{
+					...style,
+					alignItems: 'center',
+					display: 'flex',
+					gap: '0.5rem'
+				}}
 			>
-				#
-			</animated.span>
-			<AnimatedHeading id={id} style={style}>
+				<span
+					style={isHovered ? anchorIconVisibleStyle : anchorIconStyle}
+				>
+					#
+				</span>
 				{children}
 			</AnimatedHeading>
 		</a>

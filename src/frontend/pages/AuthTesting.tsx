@@ -3,6 +3,7 @@ import { animated } from '@react-spring/web';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
+import { AuroraBackground } from '../components/utils/AuroraBackground';
 import { AuthGrid } from '../components/testing/AuthGrid';
 import { Legend } from '../components/testing/Legend';
 import { useCleanPath } from '../hooks/useCleanPath';
@@ -29,13 +30,22 @@ export const AuthTesting = ({
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head />
-			<animated.body style={bodyDefault(themeSprings)}>
+			<animated.body
+				style={{ ...bodyDefault(themeSprings), position: 'relative' }}
+			>
+				<AuroraBackground themeSprings={themeSprings} />
 				<Navbar
 					setTheme={setTheme}
 					user={user}
 					themeSprings={themeSprings}
 				/>
-				<main style={mainDefault()}>
+				<main
+					style={{
+						...mainDefault(),
+						position: 'relative',
+						zIndex: 1
+					}}
+				>
 					<QueryClientProvider client={queryClient}>
 						<header
 							style={{

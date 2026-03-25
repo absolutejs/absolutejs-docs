@@ -45,7 +45,7 @@ export const HamburgerUserButtons = ({
 					marginTop: '1rem'
 				}}
 			>
-				<animated.a href="/portal">
+				<animated.a href="/profile">
 					<AnimatedProfilePicture
 						themeSprings={themeSprings}
 						userImage={
@@ -53,11 +53,6 @@ export const HamburgerUserButtons = ({
 								? user.metadata.profile_picture
 								: undefined
 						}
-						backupImage={themeSprings.theme.to((mode) =>
-							mode === 'dark'
-								? '/assets/svg/default-profile-icon-light.svg'
-								: '/assets/svg/default-profile-icon.svg'
-						)}
 						width="4rem"
 						height="4rem"
 					/>

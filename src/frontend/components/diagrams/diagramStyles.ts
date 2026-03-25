@@ -33,30 +33,30 @@ export const svgContainerStyle: CSSProperties = {
 // Color palettes for diagrams
 export const diagramColors = {
 	dark: {
-		accent: '#A0E7E5',
-		accentSecondary: '#B4F8C8',
+		accent: '#818CF8',
+		accentSecondary: '#A5B4FC',
 		accentTertiary: '#FFD93D',
-		arrow: 'rgba(160,231,229,0.6)',
+		arrow: 'rgba(99,102,241,0.6)',
 		background: 'rgba(30,30,46,0.95)',
 		backgroundAlt: 'rgba(45,45,65,0.95)',
-		border: 'rgba(160,231,229,0.4)',
-		borderAccent: 'rgba(160,231,229,0.6)',
-		highlight: 'rgba(160,231,229,0.15)',
+		border: 'rgba(99,102,241,0.4)',
+		borderAccent: 'rgba(99,102,241,0.6)',
+		highlight: 'rgba(99,102,241,0.15)',
 		pillBg: 'rgba(35,35,55,0.95)',
 		text: '#E8E8EC',
 		textMuted: 'rgba(232,232,236,0.6)'
 	},
 	light: {
-		accent: '#0D9488',
-		accentSecondary: '#059669',
+		accent: '#6366F1',
+		accentSecondary: '#4F46E5',
 		accentTertiary: '#D97706',
-		arrow: 'rgba(13,148,136,0.6)',
+		arrow: 'rgba(99,102,241,0.6)',
 		background: 'rgba(255,255,255,0.95)',
 		backgroundAlt: 'rgba(248,250,252,0.95)',
-		border: 'rgba(13,148,136,0.3)',
-		borderAccent: 'rgba(13,148,136,0.5)',
-		highlight: 'rgba(13,148,136,0.1)',
-		pillBg: 'rgba(240,253,250,0.95)',
+		border: 'rgba(99,102,241,0.3)',
+		borderAccent: 'rgba(99,102,241,0.5)',
+		highlight: 'rgba(99,102,241,0.1)',
+		pillBg: 'rgba(238,242,255,0.95)',
 		text: '#1E293B',
 		textMuted: '#64748B'
 	}

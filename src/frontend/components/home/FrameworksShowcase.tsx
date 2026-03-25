@@ -71,11 +71,10 @@ export const FrameworksShowcase = ({ themeSprings }: ThemeProps) => (
 
 		<div
 			style={{
-				display: 'flex',
-				flexWrap: 'wrap',
+				display: 'grid',
 				gap: '1.25rem',
+				gridTemplateColumns: 'repeat(3, 130px)',
 				justifyContent: 'center',
-				maxWidth: '1200px',
 				padding: '1rem',
 				width: '100%'
 			}}
@@ -86,13 +85,17 @@ export const FrameworksShowcase = ({ themeSprings }: ThemeProps) => (
 					href={framework.href}
 					style={{
 						alignItems: 'center',
-						background: themeSprings.themeTertiary,
-						border: '1px solid rgba(128, 128, 128, 0.12)',
+						backdropFilter: 'blur(12px)',
+						background: themeSprings.theme.to((t) =>
+							t.endsWith('dark')
+								? 'rgba(255, 255, 255, 0.04)'
+								: 'rgba(255, 255, 255, 0.6)'
+						),
+						border: '1px solid rgba(99, 102, 241, 0.1)',
 						borderRadius: '16px',
-						boxShadow: '0 4px 24px rgba(0, 0, 0, 0.06)',
 						display: 'flex',
 						flexDirection: 'column',
-						gap: '0.75rem',
+						gap: '0.25rem',
 						height: CARD_SIZE,
 						justifyContent: 'center',
 						position: 'relative',

@@ -26,13 +26,13 @@ export const svgStyle: CSSProperties = {
 };
 
 export const folderIconColor = {
-	dark: '#A0E7E5',
-	light: '#0A8A87'
+	dark: '#818CF8',
+	light: '#6366F1'
 };
 
 export const fileIconColor = {
-	dark: '#B4F8C8',
-	light: '#2E7D32'
+	dark: '#A5B4FC',
+	light: '#4F46E5'
 };
 
 export const specialFileColor = {
@@ -41,8 +41,8 @@ export const specialFileColor = {
 };
 
 export const lineColor = {
-	dark: 'rgba(160,231,229,0.3)',
-	light: 'rgba(10,138,135,0.25)'
+	dark: 'rgba(99,102,241,0.3)',
+	light: 'rgba(99,102,241,0.25)'
 };
 
 export const textColor = {
@@ -56,6 +56,6 @@ export const descriptionColor = {
 };
 
 export const hoverBgColor = {
-	dark: 'rgba(160,231,229,0.1)',
-	light: 'rgba(160,231,229,0.15)'
+	dark: 'rgba(99,102,241,0.1)',
+	light: 'rgba(99,102,241,0.1)'
 };

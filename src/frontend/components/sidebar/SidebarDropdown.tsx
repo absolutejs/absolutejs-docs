@@ -81,8 +81,8 @@ export const SidebarDropdown = <V extends string>({
 						display: 'flex',
 						fontSize: '0.75rem',
 						fontWeight: 600,
-						letterSpacing: '0.03em',
-						opacity: 0.6,
+						letterSpacing: '0.05em',
+						opacity: 0.5,
 						textTransform: 'uppercase'
 					}}
 				>
@@ -99,7 +99,7 @@ export const SidebarDropdown = <V extends string>({
 				<AnimatedFaChevronDown
 					style={{
 						fontSize: '0.5rem',
-						opacity: 0.4,
+						opacity: 0.3,
 						transform: dropdownSprings.transform,
 						transformOrigin: 'center'
 					}}

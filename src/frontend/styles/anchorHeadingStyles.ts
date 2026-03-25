@@ -1,34 +1,24 @@
 import { CSSProperties } from 'react';
-import { ThemeSprings, AnimatedCSSProperties } from '../../types/springTypes';
 
 export const anchorHeadingContainerStyle: CSSProperties = {
-	alignItems: 'center',
 	color: 'inherit',
 	cursor: 'pointer',
-	display: 'flex',
-	position: 'relative',
+	display: 'inline-flex',
+	gap: '0.5rem',
 	textDecoration: 'none'
 };
 
-export const anchorIconStyle = (
-	themeSprings: ThemeSprings
-): AnimatedCSSProperties => ({
-	alignItems: 'center',
-	color: themeSprings.contrastPrimary,
-	display: 'flex',
-	fontSize: '1.25em',
-	fontWeight: 400,
-	height: '100%',
-	left: '-1.75rem',
+export const anchorIconStyle: CSSProperties = {
+	color: '#6366F1',
+	flexShrink: 0,
+	fontSize: 'inherit',
+	fontWeight: 700,
 	opacity: 0,
-	position: 'absolute',
-	top: 0,
-	transition: 'opacity 0.15s ease'
-});
+	transition: 'opacity 0.15s ease',
+	userSelect: 'none'
+};
 
-export const anchorIconVisibleStyle = (
-	themeSprings: ThemeSprings
-): AnimatedCSSProperties => ({
-	...anchorIconStyle(themeSprings),
-	opacity: 0.5
-});
+export const anchorIconVisibleStyle: CSSProperties = {
+	...anchorIconStyle,
+	opacity: 0.8
+};

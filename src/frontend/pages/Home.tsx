@@ -9,6 +9,7 @@ import { PerformanceArticle } from '../components/home/PerformanceArticle';
 import { TypeSafeArticle } from '../components/home/TypeSafeArticle';
 import { Navbar } from '../components/navbar/Navbar';
 import { Head } from '../components/page/Head';
+import { AuroraBackground } from '../components/utils/AuroraBackground';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 import { User } from '../../../db/schema';
@@ -24,13 +25,22 @@ export const Home = ({ user, theme }: HomeProps) => {
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head />
-			<animated.body style={bodyDefault(themeSprings)}>
+			<animated.body
+				style={{ ...bodyDefault(themeSprings), position: 'relative' }}
+			>
+				<AuroraBackground themeSprings={themeSprings} />
 				<Navbar
 					themeSprings={themeSprings}
 					user={user}
 					setTheme={setTheme}
 				/>
-				<main style={mainDefault()}>
+				<main
+					style={{
+						...mainDefault(),
+						position: 'relative',
+						zIndex: 1
+					}}
+				>
 					<CommandSection themeSprings={themeSprings} />
 					<FeaturesGrid themeSprings={themeSprings} />
 					<FrameworksShowcase themeSprings={themeSprings} />

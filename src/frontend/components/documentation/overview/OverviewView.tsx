@@ -57,7 +57,7 @@ export const Overview = ({
 				flex: 1,
 				minHeight: 0,
 				overflowX: 'hidden',
-				overflowY: 'scroll',
+				overflowY: 'auto',
 				position: 'relative'
 			}}
 		>

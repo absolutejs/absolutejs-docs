@@ -56,11 +56,11 @@ export const SidebarLink = <V extends string>({
 				alignItems: 'center',
 				backgroundColor: 'transparent',
 				border: 'none',
-				borderRadius: '4px',
+				borderRadius: '6px',
 				color: themeSprings.contrastSecondary,
 				cursor: 'pointer',
 				display: 'flex',
-				padding: '0 0.5rem',
+				padding: '0.375rem 0.5rem 0.375rem 0.75rem',
 				position: 'relative',
 				width: '100%'
 			}}
@@ -120,7 +120,7 @@ export const SidebarLink = <V extends string>({
 							? 'rgba(255, 255, 255, 0.06)'
 							: 'rgba(0, 0, 0, 0.04)'
 					),
-					borderRadius: '4px',
+					borderRadius: '6px',
 					inset: 0,
 					opacity: isOverview
 						? springStyles.opacity
@@ -140,7 +140,7 @@ export const SidebarLink = <V extends string>({
 					left: 0,
 					position: 'absolute',
 					top: 0,
-					width: '3px'
+					width: '2px'
 				}}
 			/>
 			{Icon && (
@@ -162,6 +162,7 @@ export const SidebarLink = <V extends string>({
 					color: themeSprings.contrastSecondary,
 					fontSize: '0.875rem',
 					fontWeight: isOverview ? 500 : 400,
+					letterSpacing: '-0.01em',
 					marginLeft: icon ? '0.5rem' : '0.75rem',
 					padding: '0.4rem 0',
 					textDecoration: 'none'

@@ -30,17 +30,27 @@ export const navbarContainerStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
-	background: themeSprings.themePrimary,
-	boxShadow: `0px 4px 14px rgba(0, 0, 0, 0.1)`,
+	background: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? 'rgba(9, 9, 11, 0.8)'
+			: 'rgba(255, 255, 255, 0.8)'
+	),
+	backdropFilter: 'blur(12px)',
+	WebkitBackdropFilter: 'blur(12px)',
+	borderBottom: '1px solid',
+	borderImage:
+		'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent) 1',
+	boxShadow:
+		'0 1px 3px rgba(99, 102, 241, 0.06), 0 1px 0 rgba(0, 0, 0, 0.03)',
 	color: themeSprings.contrastPrimary,
 	display: 'flex',
 	justifyContent: 'space-between',
 	left: 0,
-	maxHeight: '100px',
-	padding: '1.1rem',
-	position: 'relative',
+	padding: '0.75rem 1.5rem',
+	position: 'sticky',
 	top: 0,
-	width: '100%'
+	width: '100%',
+	zIndex: 100
 });
 
 export const navbarDrowdownLinkStyle = (
@@ -51,7 +61,7 @@ export const navbarDrowdownLinkStyle = (
 	border: 'none',
 	color: themeSprings.contrastSecondary,
 	display: 'flex',
-	fontSize: '1.2rem',
+	fontSize: '0.9375rem',
 	textDecoration: 'none'
 });
 
@@ -71,7 +81,7 @@ export const dropdownItemStyle = (
 	borderRadius: '8px',
 	color: themeSprings.contrastPrimary,
 	display: 'flex',
-	fontSize: '0.95rem',
+	fontSize: '0.875rem',
 	fontWeight: 500,
 	gap: '8px',
 	padding: '10px 14px',
@@ -85,10 +95,15 @@ export const getNavbarDropdownListStyle = (
 	},
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
-	backgroundColor: themeSprings.themePrimary,
-	border: '1px solid rgba(128, 128, 128, 0.15)',
+	backgroundColor: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? 'rgba(9, 9, 11, 0.95)'
+			: 'rgba(255, 255, 255, 0.95)'
+	),
+	backdropFilter: 'blur(12px)',
+	border: '1px solid rgba(128, 128, 128, 0.12)',
 	borderRadius: '12px',
-	boxShadow: `0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1)`,
+	boxShadow: `0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)`,
 	display: 'flex',
 	flexDirection: 'column',
 	gap: '4px',
@@ -111,13 +126,12 @@ export const getNavbarDropdownListStyle = (
 export const profileButtonStyle: CSSProperties = {
 	alignItems: 'center',
 	border: 'none',
-	borderRadius: '5px',
+	borderRadius: '50%',
 	cursor: 'pointer',
 	display: 'flex',
-	height: 'clamp(3.6rem, 3.7vw, 4rem)',
+	height: '2.25rem',
 	justifyContent: 'center',
-	margin: '0 clamp(0.4rem, 0.6vw, 0.6rem)',
 	overflow: 'hidden',
 	padding: '0',
-	width: 'clamp(3.6rem, 3.7vw, 4rem)'
+	width: '2.25rem'
 };

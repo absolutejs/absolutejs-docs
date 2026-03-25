@@ -2,6 +2,7 @@ import { animated, useSpring } from '@react-spring/web';
 import { useState } from 'react';
 import { DocsView, isMenuDropdown } from '../../types/types';
 import { Navbar } from '../components/navbar/Navbar';
+import { AuroraBackground } from '../components/utils/AuroraBackground';
 import { Head } from '../components/page/Head';
 import { MobileSidebar } from '../components/sidebar/MobileSidebar';
 import { MobileSidebarToggle } from '../components/sidebar/MobileSidebarToggle';
@@ -91,21 +92,29 @@ export const Documentation = ({
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head />
-			<animated.body style={bodyDefault(themeSprings)}>
+			<animated.body
+				style={{
+					...bodyDefault(themeSprings),
+					position: 'relative'
+				}}
+			>
+				<AuroraBackground themeSprings={themeSprings} />
 				<Navbar
 					setTheme={setTheme}
 					themeSprings={themeSprings}
 					user={user}
 				/>
 				<main
-					style={{ ...mainDefault('hidden'), alignItems: 'stretch' }}
+					style={{
+						...mainDefault('hidden'),
+						alignItems: 'stretch'
+					}}
 				>
 					<div
 						style={{
 							display: 'flex',
 							flex: 1,
-							minHeight: 0,
-							overflow: 'hidden'
+							minHeight: 0
 						}}
 					>
 						{isMobile ? (

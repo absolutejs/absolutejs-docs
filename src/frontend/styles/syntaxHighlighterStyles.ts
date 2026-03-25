@@ -2,7 +2,9 @@ import { CSSProperties } from 'react';
 import { AnimatedCSSProperties, ThemeSprings } from '../../types/springTypes';
 
 export const highlighterContainerStyle: CSSProperties = {
-	borderRadius: '5px',
+	border: '1px solid rgba(128, 128, 128, 0.1)',
+	borderRadius: '8px',
+	marginBottom: '1.5rem',
 	overflow: 'hidden',
 	position: 'relative',
 	width: '100%'
@@ -13,9 +15,11 @@ export const highlighterHeaderStyle = (
 ): AnimatedCSSProperties => ({
 	alignItems: 'center',
 	backgroundColor: themeSprings.themeSecondary,
+	borderBottom: '1px solid rgba(128, 128, 128, 0.1)',
 	display: 'flex',
+	fontSize: '0.8125rem',
 	justifyContent: 'space-between',
-	padding: '5px 10px'
+	padding: '8px 16px'
 });
 
 export const highlighterSelectContainerStyle: CSSProperties = {

@@ -33,7 +33,7 @@ export const Sidebar = ({
 				height: '100%',
 				maxHeight: '100%',
 				overflowY: 'auto',
-				padding: '0.75rem 0.5rem'
+				padding: '1rem 0.75rem'
 			}}
 		>
 			{sidebarData.map((element, index) => {
