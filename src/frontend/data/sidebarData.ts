@@ -24,6 +24,7 @@ import { TelemetryView } from '../components/documentation/cli/TelemetryView';
 import { AssetsView } from '../components/documentation/config/AssetsView';
 import { EnvironmentVariablesView } from '../components/documentation/config/EnvironmentVariablesView';
 import { HeadMetaTagsView } from '../components/documentation/config/HeadMetaTagsView';
+import { SitemapView } from '../components/documentation/config/SitemapView';
 import { TailwindCSSView } from '../components/documentation/config/TailwindCSSView';
 import { BuildManifestView } from '../components/documentation/core/BuildManifestView';
 import { RoutingHandlersView } from '../components/documentation/core/RoutingHandlersView';
@@ -88,6 +89,7 @@ export const docsViews = definePortalViews({
 	'routing-and-handlers': RoutingHandlersView,
 	'scoped-state': ScopedStateView,
 	'server-state': ServerStateView,
+	sitemap: SitemapView,
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
@@ -178,6 +180,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'environment-variables', label: 'Environment Variables' },
 			{ id: 'tailwind-css', label: 'Tailwind CSS' },
 			{ id: 'head-meta-tags', label: 'Head & Meta Tags' },
+			{ id: 'sitemap', label: 'Sitemap' },
 			{ id: 'assets', label: 'Assets' },
 			{ id: 'static-generation', label: 'Static Generation' }
 		],
