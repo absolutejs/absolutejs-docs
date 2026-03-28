@@ -24,7 +24,6 @@ import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
-
 const tocItems: TocItem[] = [
 	{ href: '#how-ssr-works', label: 'How SSR Works' },
 	{ href: '#build-once', label: 'Build Once, Serve Many' },
@@ -83,8 +82,8 @@ export const SSRModelView = ({
 						your code, and a{' '}
 						<strong style={strongStyle}>request phase</strong> where
 						each incoming request is routed to a page handler that
-						renders your component to a streamed HTML response,
-						then the client hydrates it for interactivity.
+						renders your component to a streamed HTML response, then
+						the client hydrates it for interactivity.
 					</p>
 				</section>
 

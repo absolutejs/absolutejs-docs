@@ -82,8 +82,8 @@ export const Overview = ({
 					</h1>
 					<p style={paragraphLargeStyle}>
 						The full-stack TypeScript framework that server-side
-						renders React, Angular, Svelte, Vue, HTML, and HTMX
-						from a single Elysia server — with universal HMR, end-to-end
+						renders React, Angular, Svelte, Vue, HTML, and HTMX from
+						a single Elysia server — with universal HMR, end-to-end
 						type safety, and a visual studio for no-code editing.
 					</p>
 					<div style={{ marginTop: '1.5rem' }}>
@@ -109,24 +109,24 @@ export const Overview = ({
 						Most meta-frameworks lock you into one UI library.
 						AbsoluteJS doesn&apos;t. It&apos;s a platform built on
 						Bun and Elysia that gives every frontend framework the
-						same first-class SSR, hydration, and HMR — so you
-						can pick the right tool for each page and serve them
-						all from one server.
+						same first-class SSR, hydration, and HMR — so you can
+						pick the right tool for each page and serve them all
+						from one server.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Your landing page can be React, your admin panel
-						Angular, your interactive widgets HTMX, and your
-						docs plain HTML. One build, one deploy, one codebase.
-						Types flow from your database schema through your
-						server handlers into your components with zero code
-						generation — TypeScript does all the work.
+						Angular, your interactive widgets HTMX, and your docs
+						plain HTML. One build, one deploy, one codebase. Types
+						flow from your database schema through your server
+						handlers into your components with zero code generation
+						— TypeScript does all the work.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						AbsoluteJS isn&apos;t just a renderer. It ships with
 						OAuth authentication for 66+ providers, a visual page
 						builder, scoped per-user server state, an opinionated
-						ESLint config, and a project CLI. Everything you need
-						to go from idea to production.
+						ESLint config, and a project CLI. Everything you need to
+						go from idea to production.
 					</p>
 				</section>
 
@@ -179,9 +179,8 @@ export const Overview = ({
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
 								Fast hot module replacement across all
 								frameworks. DOM state preservation, CSS-only
-								updates, and framework-aware reloads — your
-								form inputs and scroll position survive every
-								edit.
+								updates, and framework-aware reloads — your form
+								inputs and scroll position survive every edit.
 							</p>
 						</animated.div>
 						<animated.div style={featureCardStyle(themeSprings)}>
@@ -214,9 +213,9 @@ export const Overview = ({
 								</strong>
 							</p>
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								A visual page builder with drag-and-drop
-								blocks, live preview, and asset management
-								— no code required.
+								A visual page builder with drag-and-drop blocks,
+								live preview, and asset management — no code
+								required.
 							</p>
 						</animated.div>
 					</div>
@@ -271,15 +270,13 @@ export const Overview = ({
 							},
 							{
 								color: '#42B883',
-								description:
-									'SSR with template-aware HMR',
+								description: 'SSR with template-aware HMR',
 								icon: FaVuejs,
 								name: 'Vue'
 							},
 							{
 								color: '#E34F26',
-								description:
-									'Static pages with asset hashing',
+								description: 'Static pages with asset hashing',
 								icon: FaHtml5,
 								name: 'HTML'
 							},
@@ -359,8 +356,8 @@ export const Overview = ({
 					<p style={paragraphSpacedStyle}>
 						Use different frameworks on different routes. Your
 						config declares which directories contain which
-						frameworks, and AbsoluteJS builds them all in a
-						single pass:
+						frameworks, and AbsoluteJS builds them all in a single
+						pass:
 					</p>
 					<PrismPlus
 						codeString={multiFrameworkExample}
@@ -386,11 +383,10 @@ export const Overview = ({
 						Type Safety Without Codegen
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Define your schema once. Drizzle infers the types,
-						your server handler passes them as props, and your
-						component receives them — all checked at compile
-						time. No generated files, no build step for types,
-						no drift.
+						Define your schema once. Drizzle infers the types, your
+						server handler passes them as props, and your component
+						receives them — all checked at compile time. No
+						generated files, no build step for types, no drift.
 					</p>
 					<PrismPlus
 						codeString={typeSafetyFlow}
@@ -410,9 +406,9 @@ export const Overview = ({
 						Universal HMR
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Every framework gets fast hot module replacement with
-						no configuration. AbsoluteJS detects what changed and
-						picks the minimal update strategy — CSS-only swaps,
+						Every framework gets fast hot module replacement with no
+						configuration. AbsoluteJS detects what changed and picks
+						the minimal update strategy — CSS-only swaps,
 						template-only patches, or full component reloads. Form
 						inputs, scroll positions, and open menus are preserved
 						across edits.
@@ -439,9 +435,9 @@ export const Overview = ({
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
 								Component-level updates without losing state.
 								Edit a component and only that component
-								re-renders — useState, useRef, and context
-								all survive. Powered by React&apos;s official
-								Fast Refresh protocol.
+								re-renders — useState, useRef, and context all
+								survive. Powered by React&apos;s official Fast
+								Refresh protocol.
 							</p>
 						</animated.div>
 						<animated.div style={featureCardStyle(themeSprings)}>
@@ -456,11 +452,11 @@ export const Overview = ({
 								</strong>
 							</p>
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								CSS-only edits hot-swap instantly. For
-								template and logic changes, the View
-								Transitions API captures a screenshot while
-								the app re-bootstraps with the new module
-								behind it — component state is restored via{' '}
+								CSS-only edits hot-swap instantly. For template
+								and logic changes, the View Transitions API
+								captures a screenshot while the app
+								re-bootstraps with the new module behind it —
+								component state is restored via{' '}
 								<code>ng.getComponent</code> and the browser
 								crossfades. Zero flicker.
 							</p>
@@ -496,8 +492,8 @@ export const Overview = ({
 								</strong>
 							</p>
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								HMR metadata tracks what changed in each
-								Single File Component — style-only, template-only,
+								HMR metadata tracks what changed in each Single
+								File Component — style-only, template-only,
 								script, or full. Vue&apos;s HMR API applies the
 								minimal update, keeping reactive state and
 								computed properties intact.
@@ -578,12 +574,11 @@ export const Overview = ({
 							</p>
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
 								Drop-in OAuth authentication supporting 66+
-								providers including Google, GitHub, Discord,
-								and Apple. Handles PKCE, OpenID Connect, token
-								refresh, and session management. Integrates
-								with Elysia as a plugin — one{' '}
-								<code>.use()</code> call to protect your
-								routes.
+								providers including Google, GitHub, Discord, and
+								Apple. Handles PKCE, OpenID Connect, token
+								refresh, and session management. Integrates with
+								Elysia as a plugin — one <code>.use()</code>{' '}
+								call to protect your routes.
 							</p>
 						</animated.div>
 						<animated.div style={featureCardStyle(themeSprings)}>
@@ -619,11 +614,11 @@ export const Overview = ({
 							</p>
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
 								Per-user server state that&apos;s isolated
-								between visitors. Each user gets their own
-								store keyed to their session — perfect for
-								HTMX apps where the server manages UI state.
-								Supports a preserve option to survive page
-								navigations and a reset to clear state.
+								between visitors. Each user gets their own store
+								keyed to their session — perfect for HTMX apps
+								where the server manages UI state. Supports a
+								preserve option to survive page navigations and
+								a reset to clear state.
 							</p>
 						</animated.div>
 						<animated.div style={featureCardStyle(themeSprings)}>
@@ -641,9 +636,8 @@ export const Overview = ({
 								20+ custom lint rules designed for AbsoluteJS
 								projects. Catches common SSR mistakes like
 								inline prop types, unnecessary divs, deeply
-								nested JSX, and short variable names. Ships
-								with Prettier and Biome support out of the
-								box.
+								nested JSX, and short variable names. Ships with
+								Prettier and Biome support out of the box.
 							</p>
 						</animated.div>
 						<animated.div style={featureCardStyle(themeSprings)}>
@@ -660,9 +654,9 @@ export const Overview = ({
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
 								Project scaffolding CLI that sets up your
 								directory structure, installs dependencies,
-								configures TypeScript, and wires up your
-								chosen frontend framework and database. One
-								command to go from nothing to a running app.
+								configures TypeScript, and wires up your chosen
+								frontend framework and database. One command to
+								go from nothing to a running app.
 							</p>
 						</animated.div>
 						<animated.div style={featureCardStyle(themeSprings)}>
@@ -680,9 +674,9 @@ export const Overview = ({
 								Development and production commands built in.{' '}
 								<code>absolute dev</code> starts an HMR server
 								with an interactive terminal.{' '}
-								<code>absolute start</code> builds and runs
-								for production. Includes formatting, linting,
-								and system info commands.
+								<code>absolute start</code> builds and runs for
+								production. Includes formatting, linting, and
+								system info commands.
 							</p>
 						</animated.div>
 					</div>
@@ -727,8 +721,8 @@ export const Overview = ({
 					<ul style={listStyle}>
 						<li style={listItemStyle}>
 							<strong style={strongStyle}>Quickstart</strong> —
-							Build a real app with a database, typed props,
-							and an API in 5 minutes
+							Build a real app with a database, typed props, and
+							an API in 5 minutes
 						</li>
 						<li style={listItemStyle}>
 							<strong style={strongStyle}>Core Concepts</strong> —

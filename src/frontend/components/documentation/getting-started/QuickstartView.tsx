@@ -74,30 +74,36 @@ export const QuickstartView = ({
 						Quickstart
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Build a blog with Google OAuth, a database, typed
-						props, and a type-safe API client — all in one
-						codebase.
+						Build a blog with Google OAuth, a database, typed props,
+						and a type-safe API client — all in one codebase.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
 					<p style={paragraphSpacedStyle}>
-						This guide walks through building a real app. By the
-						end you&apos;ll have Google authentication, a users
-						table, server-rendered pages with typed props, a
-						protected dashboard, a validated JSON API, and a
-						client that&apos;s fully typed against your server.
+						This guide walks through building a real app. By the end
+						you&apos;ll have Google authentication, a users table,
+						server-rendered pages with typed props, a protected
+						dashboard, a validated JSON API, and a client
+						that&apos;s fully typed against your server.
 					</p>
 					<div
 						style={{
 							display: 'grid',
 							gap: '0.75rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr',
+							gridTemplateColumns: isMobile
+								? '1fr'
+								: '1fr 1fr 1fr',
 							marginTop: '1rem'
 						}}
 					>
 						<animated.div style={featureCardStyle(themeSprings)}>
-							<p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>
+							<p
+								style={{
+									fontWeight: 600,
+									marginBottom: '0.25rem'
+								}}
+							>
 								<strong style={strongStyle}>Auth</strong>
 							</p>
 							<p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
@@ -105,7 +111,12 @@ export const QuickstartView = ({
 							</p>
 						</animated.div>
 						<animated.div style={featureCardStyle(themeSprings)}>
-							<p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>
+							<p
+								style={{
+									fontWeight: 600,
+									marginBottom: '0.25rem'
+								}}
+							>
 								<strong style={strongStyle}>SSR + DB</strong>
 							</p>
 							<p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
@@ -113,8 +124,15 @@ export const QuickstartView = ({
 							</p>
 						</animated.div>
 						<animated.div style={featureCardStyle(themeSprings)}>
-							<p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>
-								<strong style={strongStyle}>API + Client</strong>
+							<p
+								style={{
+									fontWeight: 600,
+									marginBottom: '0.25rem'
+								}}
+							>
+								<strong style={strongStyle}>
+									API + Client
+								</strong>
 							</p>
 							<p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
 								Validated endpoints with Eden Treaty
@@ -171,13 +189,16 @@ export const QuickstartView = ({
 						2. Set Up Environment Variables
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Add your database URL and Google OAuth credentials.
-						You can get Google credentials from the{' '}
+						Add your database URL and Google OAuth credentials. You
+						can get Google credentials from the{' '}
 						<a
 							href="https://console.cloud.google.com/apis/credentials"
 							target="_blank"
 							rel="noopener noreferrer"
-							style={{ color: primaryColor, textDecoration: 'underline' }}
+							style={{
+								color: primaryColor,
+								textDecoration: 'underline'
+							}}
 						>
 							Google Cloud Console
 						</a>
@@ -203,8 +224,8 @@ export const QuickstartView = ({
 					<p style={paragraphSpacedStyle}>
 						Your database schema is the single source of truth for
 						types. Drizzle infers <code>User</code> and{' '}
-						<code>Post</code> directly from the table definitions
-						— no codegen, no drift:
+						<code>Post</code> directly from the table definitions —
+						no codegen, no drift:
 					</p>
 					<PrismPlus
 						codeString={schemaSetup}
@@ -245,9 +266,9 @@ export const QuickstartView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						A public home page that shows posts and a login link,
-						and a protected dashboard for authenticated users.
-						Props are typed against your schema — change a column
-						and TypeScript shows every page that needs updating:
+						and a protected dashboard for authenticated users. Props
+						are typed against your schema — change a column and
+						TypeScript shows every page that needs updating:
 					</p>
 					<PrismPlus
 						codeString={homePageComponent}
@@ -278,11 +299,10 @@ export const QuickstartView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The server brings it all together. One{' '}
-						<code>.use(absoluteAuth())</code> call adds Google
-						OAuth with automatic user creation, session management,
-						and a <code>protectRoute</code> guard. The{' '}
-						<code>App</code> type export powers the type-safe
-						client:
+						<code>.use(absoluteAuth())</code> call adds Google OAuth
+						with automatic user creation, session management, and a{' '}
+						<code>protectRoute</code> guard. The <code>App</code>{' '}
+						type export powers the type-safe client:
 					</p>
 					<PrismPlus
 						codeString={serverWithAuth}
@@ -302,10 +322,10 @@ export const QuickstartView = ({
 						7. Type-Safe Client with Eden Treaty
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Eden Treaty takes the type of your server and gives
-						your client full autocomplete, compile-time route
-						checking, and typed responses — including the auth
-						status endpoint:
+						Eden Treaty takes the type of your server and gives your
+						client full autocomplete, compile-time route checking,
+						and typed responses — including the auth status
+						endpoint:
 					</p>
 					<PrismPlus
 						codeString={edenTreatySetup}
@@ -352,9 +372,9 @@ export const QuickstartView = ({
 						Open http://localhost:3000. Click &quot;Sign in with
 						Google&quot; to test the full OAuth flow — AbsoluteJS
 						handles the redirect, callback, token exchange, and
-						session creation automatically. Edit any component
-						and HMR updates it instantly with your form inputs
-						and scroll position preserved.
+						session creation automatically. Edit any component and
+						HMR updates it instantly with your form inputs and
+						scroll position preserved.
 					</p>
 				</section>
 

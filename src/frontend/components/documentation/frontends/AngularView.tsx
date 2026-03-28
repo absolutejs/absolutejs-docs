@@ -72,8 +72,8 @@ export const AngularView = ({
 						Angular
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Build server-rendered Angular applications with full type
-						safety, zoneless change detection, and automatic
+						Build server-rendered Angular applications with full
+						type safety, zoneless change detection, and automatic
 						hydration.
 					</p>
 				</animated.div>
@@ -135,8 +135,8 @@ export const AngularView = ({
 					<p style={paragraphLargeStyle}>
 						Angular components in AbsoluteJS use standalone
 						components with <code>@Input()</code> decorators for
-						props. Each page exports a factory function that the page
-						handler uses for rendering.
+						props. Each page exports a factory function that the
+						page handler uses for rendering.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Props passed from your server are available via{' '}
@@ -160,9 +160,9 @@ export const AngularView = ({
 						End-to-End Type Safety
 					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
-						AbsoluteJS provides complete type safety from your server
-						handlers through to your Angular components. TypeScript
-						catches mismatched props at compile time.
+						AbsoluteJS provides complete type safety from your
+						server handlers through to your Angular components.
+						TypeScript catches mismatched props at compile time.
 					</p>
 					<div
 						style={{
@@ -201,7 +201,8 @@ export const AngularView = ({
 								</strong>
 							</p>
 							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Uses <code>provideZonelessChangeDetection()</code>{' '}
+								Uses{' '}
+								<code>provideZonelessChangeDetection()</code>{' '}
 								for optimal performance without Zone.js.
 							</p>
 						</animated.div>
@@ -225,8 +226,8 @@ export const AngularView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						AbsoluteJS automatically handles Angular SSR and
-						hydration. AOT compilation is used for production builds,
-						while JIT compilation enables fast HMR during
+						hydration. AOT compilation is used for production
+						builds, while JIT compilation enables fast HMR during
 						development:
 					</p>
 					<PrismPlus
@@ -250,10 +251,10 @@ export const AngularView = ({
 						CSS-only changes are hot-swapped instantly without
 						touching the app. For template and logic changes,
 						AbsoluteJS uses the browser&apos;s native View
-						Transitions API. Instead of the page going blank
-						while the app re-bootstraps with the new module,
-						the browser holds a screenshot and crossfades to
-						the new content once it&apos;s ready:
+						Transitions API. Instead of the page going blank while
+						the app re-bootstraps with the new module, the browser
+						holds a screenshot and crossfades to the new content
+						once it&apos;s ready:
 					</p>
 					<PrismPlus
 						codeString={angularViewTransitions}
@@ -335,10 +336,7 @@ export const AngularView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
-				/>
+				<TableOfContents themeSprings={themeSprings} items={tocItems} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents

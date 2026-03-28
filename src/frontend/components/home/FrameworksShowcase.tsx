@@ -63,7 +63,8 @@ export const FrameworksShowcase = ({ themeSprings }: ThemeProps) => (
 			One Server, Any Framework
 		</animated.h2>
 		<animated.p style={sectionSubtitleStyle(themeSprings)}>
-			Use React, Angular, Vue, Svelte, HTML, or HTMX — mix and match per route
+			Use React, Angular, Vue, Svelte, HTML, or HTMX — mix and match per
+			route
 			<br />
 			Zero build configuration required
 		</animated.p>

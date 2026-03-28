@@ -272,7 +272,8 @@ export const BuildManifestView = ({
 						CLI Commands
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						AbsoluteJS provides a CLI for development and production:
+						AbsoluteJS provides a CLI for development and
+						production:
 					</p>
 					<PrismPlus
 						codeString={cliCommands}

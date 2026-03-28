@@ -10,9 +10,17 @@ import {
 	FaCode,
 	FaPuzzlePiece,
 	FaCog,
-	FaLightbulb
+	FaLightbulb,
+	FaTerminal
 } from 'react-icons/fa';
 import { MenuItem } from '../../types/types';
+import { CompileView } from '../components/documentation/cli/CompileView';
+import { DevView } from '../components/documentation/cli/DevView';
+import { EslintPrettierView } from '../components/documentation/cli/EslintPrettierView';
+import { InfoView } from '../components/documentation/cli/InfoView';
+import { MkcertView } from '../components/documentation/cli/MkcertView';
+import { StartView } from '../components/documentation/cli/StartView';
+import { TelemetryView } from '../components/documentation/cli/TelemetryView';
 import { AssetsView } from '../components/documentation/config/AssetsView';
 import { EnvironmentVariablesView } from '../components/documentation/config/EnvironmentVariablesView';
 import { HeadMetaTagsView } from '../components/documentation/config/HeadMetaTagsView';
@@ -25,6 +33,7 @@ import { ServerStateView } from '../components/documentation/data/ServerStateVie
 import { DockerView } from '../components/documentation/deployment/DockerView';
 import { HostingView } from '../components/documentation/deployment/HostingView';
 import { ProductionBuildView } from '../components/documentation/deployment/ProductionBuildView';
+import { StaticGenerationView } from '../components/documentation/deployment/StaticGenerationView';
 import { ExamplesRecipesView } from '../components/documentation/examples/ExamplesRecipesView';
 import { AngularView } from '../components/documentation/frontends/AngularView';
 import { HTMLView } from '../components/documentation/frontends/HTMLView';
@@ -53,9 +62,12 @@ export const docsViews = definePortalViews({
 	assets: AssetsView,
 	'build-and-manifest': BuildManifestView,
 	citra: CitraView,
+	compile: CompileView,
 	'create-absolutejs': CreateAbsoluteJSView,
 	'data-fetching': DataFetchingView,
+	dev: DevView,
 	docker: DockerView,
+	'eslint-prettier': EslintPrettierView,
 	'elysia-integration': ElysiaIntegrationView,
 	'environment-variables': EnvironmentVariablesView,
 	eslint: EslintView,
@@ -64,7 +76,9 @@ export const docsViews = definePortalViews({
 	hosting: HostingView,
 	html: HTMLView,
 	htmx: HTMXView,
+	info: InfoView,
 	installation: InstallationView,
+	mkcert: MkcertView,
 	'networking-plugin': NetworkingPluginView,
 	overview: Overview,
 	'page-handlers': PageHandlersView,
@@ -75,6 +89,9 @@ export const docsViews = definePortalViews({
 	'scoped-state': ScopedStateView,
 	'server-state': ServerStateView,
 	'ssr-model': SSRModelView,
+	start: StartView,
+	'static-generation': StaticGenerationView,
+	telemetry: TelemetryView,
 	svelte: SvelteView,
 	'tailwind-css': TailwindCSSView,
 	types: TypesView,
@@ -103,6 +120,19 @@ export const sidebarData: MenuItem[] = [
 		],
 		icon: animated(FaLayerGroup),
 		label: 'Core Concepts'
+	},
+	{
+		buttons: [
+			{ id: 'dev', label: 'Dev' },
+			{ id: 'start', label: 'Start' },
+			{ id: 'compile', label: 'Compile' },
+			{ id: 'eslint-prettier', label: 'ESLint & Prettier' },
+			{ id: 'mkcert', label: 'Mkcert' },
+			{ id: 'telemetry', label: 'Telemetry' },
+			{ id: 'info', label: 'Info' }
+		],
+		icon: animated(FaTerminal),
+		label: 'CLI'
 	},
 	{
 		buttons: [
@@ -148,7 +178,8 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'environment-variables', label: 'Environment Variables' },
 			{ id: 'tailwind-css', label: 'Tailwind CSS' },
 			{ id: 'head-meta-tags', label: 'Head & Meta Tags' },
-			{ id: 'assets', label: 'Assets' }
+			{ id: 'assets', label: 'Assets' },
+			{ id: 'static-generation', label: 'Static Generation' }
 		],
 		icon: animated(FaCog),
 		label: 'Configuration'

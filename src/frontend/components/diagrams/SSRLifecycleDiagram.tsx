@@ -31,8 +31,7 @@ export const SSRLifecycleDiagram = ({
 	const arrowLen = gap;
 	const startX = 20;
 	const y = 30;
-	const totalW =
-		startX * 2 + steps.length * boxW + (steps.length - 1) * gap;
+	const totalW = startX * 2 + steps.length * boxW + (steps.length - 1) * gap;
 	const svgHeight = y + boxH + 30;
 
 	return (
