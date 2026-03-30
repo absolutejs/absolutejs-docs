@@ -37,7 +37,7 @@ const tocItems: TocItem[] = [
 	{ href: '#scoped-state', label: 'Per-User State' }
 ];
 
-export const HTMXView = ({
+export const HTMXOverviewView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,

@@ -9,11 +9,8 @@ import {
 	reactIndexFile,
 	reactPageComponent,
 	reactPreserveFiles,
-	reactStreaming,
-	reactTypeSafetyServer,
-	reactTypeSafetyTypes
+	reactStreaming
 } from '../../../data/documentation/reactDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -25,7 +22,6 @@ import {
 	strongStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
@@ -37,13 +33,12 @@ const tocItems: TocItem[] = [
 	{ href: '#build-config', label: 'Build Configuration' },
 	{ href: '#page-handler', label: 'Page Handler' },
 	{ href: '#page-components', label: 'Page Components' },
-	{ href: '#type-safety', label: 'Type Safety' },
 	{ href: '#hydration', label: 'Hydration' },
 	{ href: '#index-files', label: 'Index Files' },
 	{ href: '#streaming', label: 'Streaming SSR' }
 ];
 
-export const ReactView = ({
+export const ReactOverviewView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,
@@ -51,8 +46,6 @@ export const ReactView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -146,105 +139,6 @@ export const ReactView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="type-safety"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						End-to-End Type Safety
-					</AnchorHeading>
-					<p style={paragraphLargeStyle}>
-						AbsoluteJS provides complete type safety from your
-						database queries through your server handlers to your
-						React components. TypeScript catches errors at compile
-						time, not runtime.
-					</p>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Compile-Time Errors
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Missing or incorrectly typed props are caught by
-								TypeScript before your code runs.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Refactoring Safety
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Rename a field in your database schema and
-								TypeScript shows every place that needs
-								updating.
-							</p>
-						</animated.div>
-					</div>
-					<p style={paragraphSpacedStyle}>
-						Define your database schema and infer types directly
-						from your table definitions using Drizzle:
-					</p>
-					<PrismPlus
-						codeString={reactTypeSafetyTypes}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
-						Use those types in your server handlers to ensure props
-						match your components:
-					</p>
-					<PrismPlus
-						codeString={reactTypeSafetyServer}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Schema → Types</strong>:
-							Drizzle infers types directly from your table
-							definitions
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Types → Server</strong>:
-							Your inferred types flow into route handlers and
-							props
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Props → Component
-							</strong>
-							: React receives correctly typed props on both
-							server and client
-						</li>
-					</ul>
 				</section>
 
 				<section style={sectionStyle}>

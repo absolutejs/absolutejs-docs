@@ -24,11 +24,13 @@ import { TelemetryView } from '../components/documentation/cli/TelemetryView';
 import { AssetsView } from '../components/documentation/config/AssetsView';
 import { EnvironmentVariablesView } from '../components/documentation/config/EnvironmentVariablesView';
 import { HeadMetaTagsView } from '../components/documentation/config/HeadMetaTagsView';
+import { ImageOptimizationView } from '../components/documentation/config/ImageOptimizationView';
 import { SitemapView } from '../components/documentation/config/SitemapView';
 import { TailwindCSSView } from '../components/documentation/config/TailwindCSSView';
 import { BuildManifestView } from '../components/documentation/core/BuildManifestView';
 import { RoutingHandlersView } from '../components/documentation/core/RoutingHandlersView';
 import { SSRModelView } from '../components/documentation/core/SSRModelView';
+import { TypeSafetyView } from '../components/documentation/core/TypeSafetyView';
 import { DataFetchingView } from '../components/documentation/data/DataFetchingView';
 import { ServerStateView } from '../components/documentation/data/ServerStateView';
 import { DockerView } from '../components/documentation/deployment/DockerView';
@@ -36,12 +38,6 @@ import { HostingView } from '../components/documentation/deployment/HostingView'
 import { ProductionBuildView } from '../components/documentation/deployment/ProductionBuildView';
 import { StaticGenerationView } from '../components/documentation/deployment/StaticGenerationView';
 import { ExamplesRecipesView } from '../components/documentation/examples/ExamplesRecipesView';
-import { AngularView } from '../components/documentation/frontends/AngularView';
-import { HTMLView } from '../components/documentation/frontends/HTMLView';
-import { HTMXView } from '../components/documentation/frontends/HTMXView';
-import { ReactView } from '../components/documentation/frontends/ReactView';
-import { SvelteView } from '../components/documentation/frontends/SvelteView';
-import { VueView } from '../components/documentation/frontends/VueView';
 import { InstallationView } from '../components/documentation/getting-started/InstallationView';
 import { QuickstartView } from '../components/documentation/getting-started/QuickstartView';
 import { Overview } from '../components/documentation/overview/OverviewView';
@@ -54,12 +50,25 @@ import { PageHandlersView } from '../components/documentation/reference/PageHand
 import { TypesView } from '../components/documentation/reference/TypesView';
 import { ElysiaIntegrationView } from '../components/documentation/server/ElysiaIntegrationView';
 import { NetworkingPluginView } from '../components/documentation/server/NetworkingPluginView';
+import { AngularOverviewView } from '../components/documentation/angular/AngularOverviewView';
+import { AngularComponentsView } from '../components/documentation/angular/AngularComponentsView';
+import { HTMLOverviewView } from '../components/documentation/html/HTMLOverviewView';
+import { HTMLImageOptView } from '../components/documentation/html/HTMLImageOptView';
+import { HTMXOverviewView } from '../components/documentation/htmx/HTMXOverviewView';
+import { ReactOverviewView } from '../components/documentation/react/ReactOverviewView';
+import { ReactComponentsView } from '../components/documentation/react/ReactComponentsView';
+import { ReactHooksView } from '../components/documentation/react/ReactHooksView';
+import { SvelteOverviewView } from '../components/documentation/svelte/SvelteOverviewView';
+import { SvelteComponentsView } from '../components/documentation/svelte/SvelteComponentsView';
+import { VueOverviewView } from '../components/documentation/vue/VueOverviewView';
+import { VueComponentsView } from '../components/documentation/vue/VueComponentsView';
 
 const definePortalViews = <T>(views: T) => views;
 
 export const docsViews = definePortalViews({
 	'absolute-auth': AbsoluteAuthView,
-	angular: AngularView,
+	'angular-components': AngularComponentsView,
+	'angular-overview': AngularOverviewView,
 	assets: AssetsView,
 	'build-and-manifest': BuildManifestView,
 	citra: CitraView,
@@ -75,8 +84,10 @@ export const docsViews = definePortalViews({
 	'examples-recipes': ExamplesRecipesView,
 	'head-meta-tags': HeadMetaTagsView,
 	hosting: HostingView,
-	html: HTMLView,
-	htmx: HTMXView,
+	'html-image-optimization': HTMLImageOptView,
+	'html-overview': HTMLOverviewView,
+	'htmx-overview': HTMXOverviewView,
+	'image-optimization': ImageOptimizationView,
 	info: InfoView,
 	installation: InstallationView,
 	mkcert: MkcertView,
@@ -85,7 +96,9 @@ export const docsViews = definePortalViews({
 	'page-handlers': PageHandlersView,
 	'production-build': ProductionBuildView,
 	quickstart: QuickstartView,
-	react: ReactView,
+	'react-components': ReactComponentsView,
+	'react-hooks': ReactHooksView,
+	'react-overview': ReactOverviewView,
 	'routing-and-handlers': RoutingHandlersView,
 	'scoped-state': ScopedStateView,
 	'server-state': ServerStateView,
@@ -93,11 +106,14 @@ export const docsViews = definePortalViews({
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
-	telemetry: TelemetryView,
-	svelte: SvelteView,
+	'svelte-components': SvelteComponentsView,
+	'svelte-overview': SvelteOverviewView,
 	'tailwind-css': TailwindCSSView,
+	telemetry: TelemetryView,
+	'type-safety': TypeSafetyView,
 	types: TypesView,
-	vue: VueView
+	'vue-components': VueComponentsView,
+	'vue-overview': VueOverviewView
 });
 
 export const sidebarData: MenuItem[] = [
@@ -118,7 +134,8 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'ssr-model', label: 'SSR Model' },
 			{ id: 'build-and-manifest', label: 'Build & Manifest' },
-			{ id: 'routing-and-handlers', label: 'Routing & Handlers' }
+			{ id: 'routing-and-handlers', label: 'Routing & Handlers' },
+			{ id: 'type-safety', label: 'Type Safety' }
 		],
 		icon: animated(FaLayerGroup),
 		label: 'Core Concepts'
@@ -138,15 +155,49 @@ export const sidebarData: MenuItem[] = [
 	},
 	{
 		buttons: [
-			{ id: 'react', label: 'React' },
-			{ id: 'svelte', label: 'Svelte' },
-			{ id: 'html', label: 'HTML' },
-			{ id: 'htmx', label: 'HTMX' },
-			{ id: 'vue', label: 'Vue' },
-			{ id: 'angular', label: 'Angular' }
+			{ id: 'react-overview', label: 'Overview' },
+			{ id: 'react-components', label: 'Components' },
+			{ id: 'react-hooks', label: 'Hooks' }
 		],
 		icon: animated(FaCubes),
-		label: 'Frontends'
+		label: 'React'
+	},
+	{
+		buttons: [
+			{ id: 'svelte-overview', label: 'Overview' },
+			{ id: 'svelte-components', label: 'Components' }
+		],
+		icon: animated(FaCubes),
+		label: 'Svelte'
+	},
+	{
+		buttons: [
+			{ id: 'vue-overview', label: 'Overview' },
+			{ id: 'vue-components', label: 'Components' }
+		],
+		icon: animated(FaCubes),
+		label: 'Vue'
+	},
+	{
+		buttons: [
+			{ id: 'angular-overview', label: 'Overview' },
+			{ id: 'angular-components', label: 'Components' }
+		],
+		icon: animated(FaCubes),
+		label: 'Angular'
+	},
+	{
+		buttons: [
+			{ id: 'html-overview', label: 'Overview' },
+			{ id: 'html-image-optimization', label: 'Image Optimization' }
+		],
+		icon: animated(FaCubes),
+		label: 'HTML'
+	},
+	{
+		buttons: [{ id: 'htmx-overview', label: 'Overview' }],
+		icon: animated(FaCubes),
+		label: 'HTMX'
 	},
 	{
 		buttons: [
@@ -180,6 +231,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'environment-variables', label: 'Environment Variables' },
 			{ id: 'tailwind-css', label: 'Tailwind CSS' },
 			{ id: 'head-meta-tags', label: 'Head & Meta Tags' },
+			{ id: 'image-optimization', label: 'Image Optimization' },
 			{ id: 'sitemap', label: 'Sitemap' },
 			{ id: 'assets', label: 'Assets' },
 			{ id: 'static-generation', label: 'Static Generation' }

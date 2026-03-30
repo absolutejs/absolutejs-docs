@@ -36,7 +36,7 @@ const tocItems: TocItem[] = [
 	{ href: '#asset-detection', label: 'Asset Detection' }
 ];
 
-export const HTMLView = ({
+export const HTMLOverviewView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,
