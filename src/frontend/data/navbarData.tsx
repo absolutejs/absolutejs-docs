@@ -40,5 +40,9 @@ export const navbarData: NavbarElement[] = [
 				label: 'Authentication'
 			}
 		]
+	},
+	{
+		href: '/blog',
+		label: 'Blog'
 	}
 ];

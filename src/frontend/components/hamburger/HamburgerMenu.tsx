@@ -1,5 +1,6 @@
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { useState } from 'react';
+import { FaDiscord, FaGithub } from 'react-icons/fa';
 import { User } from '../../../../db/schema';
 import { ThemeSprings } from '../../../types/springTypes';
 import { isNavbarDropdown } from '../../../types/types';
@@ -81,6 +82,36 @@ export const HamburgerMenu = ({
 						/>
 					);
 				})}
+				<div
+					style={{
+						display: 'flex',
+						gap: '1rem',
+						padding: '12px 16px'
+					}}
+				>
+					<animated.a
+						href="https://github.com/absolutejs/absolutejs"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="GitHub"
+						style={{
+							color: themeSprings.contrastPrimary
+						}}
+					>
+						<FaGithub size={22} />
+					</animated.a>
+					<animated.a
+						href="https://discord.gg/UBMw87Kj5r"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="Discord"
+						style={{
+							color: themeSprings.contrastPrimary
+						}}
+					>
+						<FaDiscord size={22} />
+					</animated.a>
+				</div>
 				<hr
 					style={{
 						border: '1px solid #ddd',

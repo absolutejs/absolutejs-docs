@@ -10,6 +10,7 @@ import { AuthContainer } from '../auth/AuthContainer';
 import { ProfilePicture } from '../utils/ProfilePicture';
 import { Modal } from '../utils/Modal';
 import { DropdownContainer } from './DropdownContainer';
+import { NavbarIconLinks } from './NavbarIconLinks';
 import { ThemeButton } from './ThemeButton';
 import { handleSignOut } from '../../utils/authFunctions';
 
@@ -161,6 +162,7 @@ export const NavbarUserButtons = ({
 				</animated.button>
 			)}
 
+			<NavbarIconLinks themeSprings={themeSprings} />
 			<ThemeButton themeSprings={themeSprings} setTheme={setTheme} />
 
 			{isDropdownOpen && !isMobile && (

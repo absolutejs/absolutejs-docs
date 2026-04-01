@@ -136,6 +136,7 @@ export const ThemeButton = ({ themeSprings, setTheme }: ThemeButtonProps) => {
 			<animated.button
 				ref={buttonRef}
 				onClick={toggleDropdown}
+				aria-label="Toggle theme"
 				style={{
 					alignItems: 'center',
 					backgroundColor: themeSprings.themeTertiary,

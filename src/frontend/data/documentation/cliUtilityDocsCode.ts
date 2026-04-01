@@ -46,3 +46,30 @@ $ absolute info
   Bun v1.3.11
   Platform: linux x64
   Node: v22.0.0`;
+
+export const typecheckCommand = `\
+# Run type checkers for all frameworks
+absolute typecheck
+
+# With a custom config
+absolute typecheck --config ./my-config.ts`;
+
+export const typecheckOutput = `\
+$ absolute typecheck
+✓ Typecheck passed`;
+
+export const typecheckConfig = `\
+// absolute.config.ts — typecheck reads your framework directories
+export default defineConfig({
+  reactDirectory: "./src/frontend/react",
+  svelteDirectory: "./src/frontend/svelte",
+  vueDirectory: "./src/frontend/vue",
+  angularDirectory: "./src/frontend/angular",
+});
+
+// package.json
+{
+  "scripts": {
+    "typecheck": "absolute typecheck"
+  }
+}`;

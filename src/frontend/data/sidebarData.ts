@@ -21,6 +21,7 @@ import { InfoView } from '../components/documentation/cli/InfoView';
 import { MkcertView } from '../components/documentation/cli/MkcertView';
 import { StartView } from '../components/documentation/cli/StartView';
 import { TelemetryView } from '../components/documentation/cli/TelemetryView';
+import { TypecheckView } from '../components/documentation/cli/TypecheckView';
 import { AssetsView } from '../components/documentation/config/AssetsView';
 import { EnvironmentVariablesView } from '../components/documentation/config/EnvironmentVariablesView';
 import { HeadMetaTagsView } from '../components/documentation/config/HeadMetaTagsView';
@@ -28,6 +29,8 @@ import { ImageOptimizationView } from '../components/documentation/config/ImageO
 import { SitemapView } from '../components/documentation/config/SitemapView';
 import { TailwindCSSView } from '../components/documentation/config/TailwindCSSView';
 import { BuildManifestView } from '../components/documentation/core/BuildManifestView';
+import { ErrorBoundariesView } from '../components/documentation/core/ErrorBoundariesView';
+import { LoadingStatesView } from '../components/documentation/core/LoadingStatesView';
 import { RoutingHandlersView } from '../components/documentation/core/RoutingHandlersView';
 import { SSRModelView } from '../components/documentation/core/SSRModelView';
 import { TypeSafetyView } from '../components/documentation/core/TypeSafetyView';
@@ -49,6 +52,7 @@ import { EslintView } from '../components/documentation/packages/eslint/EslintVi
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
 import { TypesView } from '../components/documentation/reference/TypesView';
 import { ElysiaIntegrationView } from '../components/documentation/server/ElysiaIntegrationView';
+import { MiddlewareView } from '../components/documentation/server/MiddlewareView';
 import { NetworkingPluginView } from '../components/documentation/server/NetworkingPluginView';
 import { AngularOverviewView } from '../components/documentation/angular/AngularOverviewView';
 import { AngularComponentsView } from '../components/documentation/angular/AngularComponentsView';
@@ -78,6 +82,7 @@ export const docsViews = definePortalViews({
 	dev: DevView,
 	docker: DockerView,
 	'eslint-prettier': EslintPrettierView,
+	'error-boundaries': ErrorBoundariesView,
 	'elysia-integration': ElysiaIntegrationView,
 	'environment-variables': EnvironmentVariablesView,
 	eslint: EslintView,
@@ -90,6 +95,8 @@ export const docsViews = definePortalViews({
 	'image-optimization': ImageOptimizationView,
 	info: InfoView,
 	installation: InstallationView,
+	'loading-states': LoadingStatesView,
+	middleware: MiddlewareView,
 	mkcert: MkcertView,
 	'networking-plugin': NetworkingPluginView,
 	overview: Overview,
@@ -110,6 +117,7 @@ export const docsViews = definePortalViews({
 	'svelte-overview': SvelteOverviewView,
 	'tailwind-css': TailwindCSSView,
 	telemetry: TelemetryView,
+	typecheck: TypecheckView,
 	'type-safety': TypeSafetyView,
 	types: TypesView,
 	'vue-components': VueComponentsView,
@@ -135,7 +143,9 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'ssr-model', label: 'SSR Model' },
 			{ id: 'build-and-manifest', label: 'Build & Manifest' },
 			{ id: 'routing-and-handlers', label: 'Routing & Handlers' },
-			{ id: 'type-safety', label: 'Type Safety' }
+			{ id: 'type-safety', label: 'Type Safety' },
+			{ id: 'error-boundaries', label: 'Error Boundaries' },
+			{ id: 'loading-states', label: 'Loading States' }
 		],
 		icon: animated(FaLayerGroup),
 		label: 'Core Concepts'
@@ -146,6 +156,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'start', label: 'Start' },
 			{ id: 'compile', label: 'Compile' },
 			{ id: 'eslint-prettier', label: 'ESLint & Prettier' },
+			{ id: 'typecheck', label: 'Typecheck' },
 			{ id: 'mkcert', label: 'Mkcert' },
 			{ id: 'telemetry', label: 'Telemetry' },
 			{ id: 'info', label: 'Info' }
@@ -202,6 +213,7 @@ export const sidebarData: MenuItem[] = [
 	{
 		buttons: [
 			{ id: 'elysia-integration', label: 'Elysia Integration' },
+			{ id: 'middleware', label: 'Middleware' },
 			{ id: 'networking-plugin', label: 'Networking Plugin' }
 		],
 		icon: animated(FaServer),

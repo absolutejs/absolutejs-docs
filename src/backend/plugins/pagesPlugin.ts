@@ -12,6 +12,7 @@ import {
 	protectRoutePlugin
 } from '@absolutejs/auth';
 import { AuthTesting } from '../../frontend/pages/AuthTesting';
+import { Blog } from '../../frontend/pages/Blog';
 import { Documentation } from '../../frontend/pages/Documentation';
 import { Home } from '../../frontend/pages/Home';
 import { Profile } from '../../frontend/pages/Profile';
@@ -64,6 +65,32 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 			handleReactPageRequest(Signup, asset(manifest, 'SignupIndex'), {
 				theme: theme?.value
 			})
+		)
+		.get(
+			'/blog',
+			async ({
+				cookie: { theme, user_session_id },
+				store: { session },
+				status
+			}) => {
+				const { user, error } = await getStatus<User>(
+					session,
+					user_session_id
+				);
+
+				if (error) {
+					return status(error.code, error.message);
+				}
+
+				return handleReactPageRequest(
+					Blog,
+					asset(manifest, 'BlogIndex'),
+					{
+						theme: theme?.value,
+						user
+					}
+				);
+			}
 		)
 		.get('/profile', ({ cookie: { theme }, protectRoute, redirect }) =>
 			protectRoute(
