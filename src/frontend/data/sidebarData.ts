@@ -11,7 +11,8 @@ import {
 	FaPuzzlePiece,
 	FaCog,
 	FaLightbulb,
-	FaTerminal
+	FaTerminal,
+	FaRobot
 } from 'react-icons/fa';
 import { MenuItem } from '../../types/types';
 import { CompileView } from '../components/documentation/cli/CompileView';
@@ -58,7 +59,9 @@ import { AngularOverviewView } from '../components/documentation/angular/Angular
 import { AngularComponentsView } from '../components/documentation/angular/AngularComponentsView';
 import { HTMLOverviewView } from '../components/documentation/html/HTMLOverviewView';
 import { HTMLImageOptView } from '../components/documentation/html/HTMLImageOptView';
+import { HTMLAIView } from '../components/documentation/html/HTMLAIView';
 import { HTMXOverviewView } from '../components/documentation/htmx/HTMXOverviewView';
+import { HTMXAIView } from '../components/documentation/htmx/HTMXAIView';
 import { ReactOverviewView } from '../components/documentation/react/ReactOverviewView';
 import { ReactComponentsView } from '../components/documentation/react/ReactComponentsView';
 import { ReactHooksView } from '../components/documentation/react/ReactHooksView';
@@ -66,11 +69,26 @@ import { SvelteOverviewView } from '../components/documentation/svelte/SvelteOve
 import { SvelteComponentsView } from '../components/documentation/svelte/SvelteComponentsView';
 import { VueOverviewView } from '../components/documentation/vue/VueOverviewView';
 import { VueComponentsView } from '../components/documentation/vue/VueComponentsView';
+import { VueAIView } from '../components/documentation/vue/VueAIView';
+import { AIOverviewView } from '../components/documentation/ai/AIOverviewView';
+import { AIProvidersView } from '../components/documentation/ai/AIProvidersView';
+import { AIPluginView } from '../components/documentation/ai/AIPluginView';
+import { AIToolsView } from '../components/documentation/ai/AIToolsView';
+import { AIStreamingView } from '../components/documentation/ai/AIStreamingView';
+import { ReactAIView } from '../components/documentation/react/ReactAIView';
+import { SvelteAIView } from '../components/documentation/svelte/SvelteAIView';
+import { AngularAIView } from '../components/documentation/angular/AngularAIView';
 
 const definePortalViews = <T>(views: T) => views;
 
 export const docsViews = definePortalViews({
 	'absolute-auth': AbsoluteAuthView,
+	'ai-overview': AIOverviewView,
+	'ai-providers': AIProvidersView,
+	'ai-plugin': AIPluginView,
+	'ai-tools': AIToolsView,
+	'ai-streaming': AIStreamingView,
+	'angular-ai': AngularAIView,
 	'angular-components': AngularComponentsView,
 	'angular-overview': AngularOverviewView,
 	assets: AssetsView,
@@ -89,8 +107,10 @@ export const docsViews = definePortalViews({
 	'examples-recipes': ExamplesRecipesView,
 	'head-meta-tags': HeadMetaTagsView,
 	hosting: HostingView,
+	'html-ai': HTMLAIView,
 	'html-image-optimization': HTMLImageOptView,
 	'html-overview': HTMLOverviewView,
+	'htmx-ai': HTMXAIView,
 	'htmx-overview': HTMXOverviewView,
 	'image-optimization': ImageOptimizationView,
 	info: InfoView,
@@ -103,6 +123,7 @@ export const docsViews = definePortalViews({
 	'page-handlers': PageHandlersView,
 	'production-build': ProductionBuildView,
 	quickstart: QuickstartView,
+	'react-ai': ReactAIView,
 	'react-components': ReactComponentsView,
 	'react-hooks': ReactHooksView,
 	'react-overview': ReactOverviewView,
@@ -113,6 +134,7 @@ export const docsViews = definePortalViews({
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
+	'svelte-ai': SvelteAIView,
 	'svelte-components': SvelteComponentsView,
 	'svelte-overview': SvelteOverviewView,
 	'tailwind-css': TailwindCSSView,
@@ -120,6 +142,7 @@ export const docsViews = definePortalViews({
 	typecheck: TypecheckView,
 	'type-safety': TypeSafetyView,
 	types: TypesView,
+	'vue-ai': VueAIView,
 	'vue-components': VueComponentsView,
 	'vue-overview': VueOverviewView
 });
@@ -168,7 +191,8 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'react-overview', label: 'Overview' },
 			{ id: 'react-components', label: 'Components' },
-			{ id: 'react-hooks', label: 'Hooks' }
+			{ id: 'react-hooks', label: 'Hooks' },
+			{ id: 'react-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
 		label: 'React'
@@ -176,7 +200,8 @@ export const sidebarData: MenuItem[] = [
 	{
 		buttons: [
 			{ id: 'svelte-overview', label: 'Overview' },
-			{ id: 'svelte-components', label: 'Components' }
+			{ id: 'svelte-components', label: 'Components' },
+			{ id: 'svelte-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
 		label: 'Svelte'
@@ -184,7 +209,8 @@ export const sidebarData: MenuItem[] = [
 	{
 		buttons: [
 			{ id: 'vue-overview', label: 'Overview' },
-			{ id: 'vue-components', label: 'Components' }
+			{ id: 'vue-components', label: 'Components' },
+			{ id: 'vue-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
 		label: 'Vue'
@@ -192,7 +218,8 @@ export const sidebarData: MenuItem[] = [
 	{
 		buttons: [
 			{ id: 'angular-overview', label: 'Overview' },
-			{ id: 'angular-components', label: 'Components' }
+			{ id: 'angular-components', label: 'Components' },
+			{ id: 'angular-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
 		label: 'Angular'
@@ -200,13 +227,17 @@ export const sidebarData: MenuItem[] = [
 	{
 		buttons: [
 			{ id: 'html-overview', label: 'Overview' },
-			{ id: 'html-image-optimization', label: 'Image Optimization' }
+			{ id: 'html-image-optimization', label: 'Image Optimization' },
+			{ id: 'html-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
 		label: 'HTML'
 	},
 	{
-		buttons: [{ id: 'htmx-overview', label: 'Overview' }],
+		buttons: [
+			{ id: 'htmx-overview', label: 'Overview' },
+			{ id: 'htmx-ai', label: 'AI' }
+		],
 		icon: animated(FaCubes),
 		label: 'HTMX'
 	},
@@ -218,6 +249,17 @@ export const sidebarData: MenuItem[] = [
 		],
 		icon: animated(FaServer),
 		label: 'Server'
+	},
+	{
+		buttons: [
+			{ id: 'ai-overview', label: 'Overview' },
+			{ id: 'ai-providers', label: 'Providers' },
+			{ id: 'ai-plugin', label: 'Plugin' },
+			{ id: 'ai-tools', label: 'Tools' },
+			{ id: 'ai-streaming', label: 'Streaming & Protocol' }
+		],
+		icon: animated(FaRobot),
+		label: 'AI'
 	},
 	{
 		buttons: [
