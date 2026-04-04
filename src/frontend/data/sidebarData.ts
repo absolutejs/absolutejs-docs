@@ -31,6 +31,7 @@ import { SitemapView } from '../components/documentation/config/SitemapView';
 import { TailwindCSSView } from '../components/documentation/config/TailwindCSSView';
 import { BuildManifestView } from '../components/documentation/core/BuildManifestView';
 import { ErrorBoundariesView } from '../components/documentation/core/ErrorBoundariesView';
+import { IslandsView } from '../components/documentation/core/IslandsView';
 import { LoadingStatesView } from '../components/documentation/core/LoadingStatesView';
 import { RoutingHandlersView } from '../components/documentation/core/RoutingHandlersView';
 import { SSRModelView } from '../components/documentation/core/SSRModelView';
@@ -77,6 +78,12 @@ import { AIToolsView } from '../components/documentation/ai/AIToolsView';
 import { AIStreamingView } from '../components/documentation/ai/AIStreamingView';
 import { ReactAIView } from '../components/documentation/react/ReactAIView';
 import { SvelteAIView } from '../components/documentation/svelte/SvelteAIView';
+import { AngularIslandsView } from '../components/documentation/angular/AngularIslandsView';
+import { HTMLIslandsView } from '../components/documentation/html/HTMLIslandsView';
+import { HTMXIslandsView } from '../components/documentation/htmx/HTMXIslandsView';
+import { ReactIslandsView } from '../components/documentation/react/ReactIslandsView';
+import { SvelteIslandsView } from '../components/documentation/svelte/SvelteIslandsView';
+import { VueIslandsView } from '../components/documentation/vue/VueIslandsView';
 import { AngularAIView } from '../components/documentation/angular/AngularAIView';
 
 const definePortalViews = <T>(views: T) => views;
@@ -89,6 +96,7 @@ export const docsViews = definePortalViews({
 	'ai-tools': AIToolsView,
 	'ai-streaming': AIStreamingView,
 	'angular-ai': AngularAIView,
+	'angular-islands': AngularIslandsView,
 	'angular-components': AngularComponentsView,
 	'angular-overview': AngularOverviewView,
 	assets: AssetsView,
@@ -101,6 +109,7 @@ export const docsViews = definePortalViews({
 	docker: DockerView,
 	'eslint-prettier': EslintPrettierView,
 	'error-boundaries': ErrorBoundariesView,
+	islands: IslandsView,
 	'elysia-integration': ElysiaIntegrationView,
 	'environment-variables': EnvironmentVariablesView,
 	eslint: EslintView,
@@ -108,9 +117,11 @@ export const docsViews = definePortalViews({
 	'head-meta-tags': HeadMetaTagsView,
 	hosting: HostingView,
 	'html-ai': HTMLAIView,
+	'html-islands': HTMLIslandsView,
 	'html-image-optimization': HTMLImageOptView,
 	'html-overview': HTMLOverviewView,
 	'htmx-ai': HTMXAIView,
+	'htmx-islands': HTMXIslandsView,
 	'htmx-overview': HTMXOverviewView,
 	'image-optimization': ImageOptimizationView,
 	info: InfoView,
@@ -124,6 +135,7 @@ export const docsViews = definePortalViews({
 	'production-build': ProductionBuildView,
 	quickstart: QuickstartView,
 	'react-ai': ReactAIView,
+	'react-islands': ReactIslandsView,
 	'react-components': ReactComponentsView,
 	'react-hooks': ReactHooksView,
 	'react-overview': ReactOverviewView,
@@ -135,6 +147,7 @@ export const docsViews = definePortalViews({
 	start: StartView,
 	'static-generation': StaticGenerationView,
 	'svelte-ai': SvelteAIView,
+	'svelte-islands': SvelteIslandsView,
 	'svelte-components': SvelteComponentsView,
 	'svelte-overview': SvelteOverviewView,
 	'tailwind-css': TailwindCSSView,
@@ -143,6 +156,7 @@ export const docsViews = definePortalViews({
 	'type-safety': TypeSafetyView,
 	types: TypesView,
 	'vue-ai': VueAIView,
+	'vue-islands': VueIslandsView,
 	'vue-components': VueComponentsView,
 	'vue-overview': VueOverviewView
 });
@@ -167,6 +181,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'build-and-manifest', label: 'Build & Manifest' },
 			{ id: 'routing-and-handlers', label: 'Routing & Handlers' },
 			{ id: 'type-safety', label: 'Type Safety' },
+			{ id: 'islands', label: 'Islands' },
 			{ id: 'error-boundaries', label: 'Error Boundaries' },
 			{ id: 'loading-states', label: 'Loading States' }
 		],
@@ -192,6 +207,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'react-overview', label: 'Overview' },
 			{ id: 'react-components', label: 'Components' },
 			{ id: 'react-hooks', label: 'Hooks' },
+			{ id: 'react-islands', label: 'Islands' },
 			{ id: 'react-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
@@ -201,6 +217,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'svelte-overview', label: 'Overview' },
 			{ id: 'svelte-components', label: 'Components' },
+			{ id: 'svelte-islands', label: 'Islands' },
 			{ id: 'svelte-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
@@ -210,6 +227,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'vue-overview', label: 'Overview' },
 			{ id: 'vue-components', label: 'Components' },
+			{ id: 'vue-islands', label: 'Islands' },
 			{ id: 'vue-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
@@ -219,6 +237,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'angular-overview', label: 'Overview' },
 			{ id: 'angular-components', label: 'Components' },
+			{ id: 'angular-islands', label: 'Islands' },
 			{ id: 'angular-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
@@ -228,6 +247,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'html-overview', label: 'Overview' },
 			{ id: 'html-image-optimization', label: 'Image Optimization' },
+			{ id: 'html-islands', label: 'Islands' },
 			{ id: 'html-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
@@ -236,6 +256,7 @@ export const sidebarData: MenuItem[] = [
 	{
 		buttons: [
 			{ id: 'htmx-overview', label: 'Overview' },
+			{ id: 'htmx-islands', label: 'Islands' },
 			{ id: 'htmx-ai', label: 'AI' }
 		],
 		icon: animated(FaCubes),
