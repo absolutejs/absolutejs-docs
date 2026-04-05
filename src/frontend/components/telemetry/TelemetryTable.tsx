@@ -1,3 +1,4 @@
+import { HALF, TELEMETRY_TABLE_LAYOUT } from '../../../constants';
 import { animated } from '@react-spring/web';
 import { CSSProperties, useState } from 'react';
 import { ThemeSprings } from '../../../types/springTypes';
@@ -69,7 +70,7 @@ const tdStyle: CSSProperties = {
 };
 
 const emptyStyle: CSSProperties = {
-	opacity: 0.5,
+	opacity: HALF,
 	padding: '2rem',
 	textAlign: 'center'
 };
@@ -86,11 +87,6 @@ export const TelemetryTable = ({
 }: TelemetryTableProps) => {
 	const [selectedVersion, setSelectedVersion] = useState('');
 
-	const handleVersionChange = (version: string) => {
-		setSelectedVersion(version);
-		onVersionChange?.(queryKey, version);
-	};
-
 	const activeColumns =
 		selectedVersion || !columnsWithVersion ? columns : columnsWithVersion;
 
@@ -100,10 +96,13 @@ export const TelemetryTable = ({
 				<div style={titleStyle}>{title}</div>
 				{versions && onVersionChange && (
 					<VersionSelect
-						versions={versions}
-						value={selectedVersion}
-						onChange={handleVersionChange}
+						onChange={(version) => {
+							setSelectedVersion(version);
+							onVersionChange?.(queryKey, version);
+						}}
 						themeSprings={themeSprings}
+						value={selectedVersion}
+						versions={versions}
 					/>
 				)}
 			</div>
@@ -121,29 +120,42 @@ export const TelemetryTable = ({
 					{rows.length === 0 ? (
 						<tr>
 							<td
-								style={emptyStyle}
 								colSpan={activeColumns.length}
+								style={emptyStyle}
 							>
 								No data yet
 							</td>
 						</tr>
 					) : (
-						rows.map((row, i) => (
-							<tr key={i}>
+						rows.map((row, rowIndex) => (
+							<tr key={rowIndex}>
 								{activeColumns.map((col) => {
 									const val = row[col];
 									const num = Number(val);
 									const isNumeric =
-										val != null &&
+										val !== null &&
+										val !== undefined &&
 										val !== '' &&
 										!isNaN(num);
-									const display =
-										val == null
-											? '-'
-											: isNumeric &&
-												  String(val).includes('.')
-												? num.toFixed(3)
-												: String(val);
+									let display = '-';
+									if (val === null || val === undefined) {
+										return (
+											<td key={col} style={tdStyle}>
+												{display}
+											</td>
+										);
+									}
+
+									display = String(val);
+									if (
+										isNumeric &&
+										String(val).includes('.')
+									) {
+										display = num.toFixed(
+											TELEMETRY_TABLE_LAYOUT.numericPrecisionDigits
+										);
+									}
+
 									return (
 										<td key={col} style={tdStyle}>
 											{display}

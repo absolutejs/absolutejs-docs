@@ -1,3 +1,4 @@
+import { SSR_LIFECYCLE_DIAGRAM_LAYOUT } from '../../../constants';
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../types/springTypes';
 import {
@@ -10,7 +11,12 @@ type SSRLifecycleDiagramProps = {
 	themeSprings: ThemeSprings;
 };
 
-const steps = [
+type SSRStep = {
+	label: string;
+	sub: string;
+};
+
+const steps: SSRStep[] = [
 	{ label: 'prepare()', sub: 'Load config, bundle' },
 	{ label: 'Request', sub: 'GET /page' },
 	{ label: 'Fetch Data', sub: 'DB query, auth' },
@@ -22,17 +28,18 @@ const steps = [
 export const SSRLifecycleDiagram = ({
 	themeSprings
 }: SSRLifecycleDiagramProps) => {
-	const dark = diagramColors.dark;
-	const light = diagramColors.light;
+	const { dark } = diagramColors;
+	const { light } = diagramColors;
 
 	const boxW = 120;
 	const boxH = 60;
 	const gap = 24;
 	const arrowLen = gap;
 	const startX = 20;
-	const y = 30;
+	const rowY = 30;
 	const totalW = startX * 2 + steps.length * boxW + (steps.length - 1) * gap;
-	const svgHeight = y + boxH + 30;
+	const svgHeight =
+		rowY + boxH + SSR_LIFECYCLE_DIAGRAM_LAYOUT.svgBottomPadding;
 
 	return (
 		<animated.div style={diagramContainerStyle(themeSprings)}>
@@ -82,7 +89,7 @@ export const SSRLifecycleDiagram = ({
 					fontWeight={700}
 					textAnchor="middle"
 					x={startX + boxW / 2}
-					y={y - 8}
+					y={rowY - SSR_LIFECYCLE_DIAGRAM_LAYOUT.phaseLabelOffsetY}
 				>
 					ONCE
 				</animated.text>
@@ -97,19 +104,24 @@ export const SSRLifecycleDiagram = ({
 					)}
 					fontSize={10}
 					fontWeight={700}
-					x={startX + boxW + gap + 2}
-					y={y - 8}
+					x={
+						startX +
+						boxW +
+						gap +
+						SSR_LIFECYCLE_DIAGRAM_LAYOUT.labelOffsetX
+					}
+					y={rowY - SSR_LIFECYCLE_DIAGRAM_LAYOUT.phaseLabelOffsetY}
 				>
 					EACH REQUEST
 				</animated.text>
 
-				{steps.map((step, i) => {
-					const x = startX + i * (boxW + gap);
-					const isFirst = i === 0;
-					const isLast = i === steps.length - 1;
+				{steps.map((step, stepIndex) => {
+					const stepX = startX + stepIndex * (boxW + gap);
+					const isFirst = stepIndex === 0;
+					const isLast = stepIndex === steps.length - 1;
 
 					return (
-						<g key={i}>
+						<g key={stepIndex}>
 							{/* Box */}
 							<animated.rect
 								fill={themeSprings.theme.to((t) =>
@@ -128,14 +140,15 @@ export const SSRLifecycleDiagram = ({
 										return t.endsWith('dark')
 											? dark.accent
 											: light.accent;
+
 									return t.endsWith('dark')
 										? dark.accentSecondary
 										: light.accentSecondary;
 								})}
 								strokeWidth={2}
 								width={boxW}
-								x={x}
-								y={y}
+								x={stepX}
+								y={rowY}
 							/>
 
 							{/* Label */}
@@ -150,6 +163,7 @@ export const SSRLifecycleDiagram = ({
 										return t.endsWith('dark')
 											? dark.accent
 											: light.accent;
+
 									return t.endsWith('dark')
 										? dark.accentSecondary
 										: light.accentSecondary;
@@ -157,8 +171,11 @@ export const SSRLifecycleDiagram = ({
 								fontSize={13}
 								fontWeight={700}
 								textAnchor="middle"
-								x={x + boxW / 2}
-								y={y + 22}
+								x={stepX + boxW / 2}
+								y={
+									rowY +
+									SSR_LIFECYCLE_DIAGRAM_LAYOUT.boxTitleBaselineY
+								}
 							>
 								{step.label}
 							</animated.text>
@@ -173,14 +190,17 @@ export const SSRLifecycleDiagram = ({
 								)}
 								fontSize={10}
 								textAnchor="middle"
-								x={x + boxW / 2}
-								y={y + 44}
+								x={stepX + boxW / 2}
+								y={
+									rowY +
+									SSR_LIFECYCLE_DIAGRAM_LAYOUT.boxSubtitleBaselineY
+								}
 							>
 								{step.sub}
 							</animated.text>
 
 							{/* Arrow to next */}
-							{i < steps.length - 1 && (
+							{stepIndex < steps.length - 1 && (
 								<animated.line
 									markerEnd={themeSprings.theme.to((t) =>
 										t.endsWith('dark')
@@ -193,10 +213,19 @@ export const SSRLifecycleDiagram = ({
 											: light.accentSecondary
 									)}
 									strokeWidth={2}
-									x1={x + boxW + 2}
-									x2={x + boxW + arrowLen - 8}
-									y1={y + boxH / 2}
-									y2={y + boxH / 2}
+									x1={
+										stepX +
+										boxW +
+										SSR_LIFECYCLE_DIAGRAM_LAYOUT.labelOffsetX
+									}
+									x2={
+										stepX +
+										boxW +
+										arrowLen -
+										SSR_LIFECYCLE_DIAGRAM_LAYOUT.markerSize
+									}
+									y1={rowY + boxH / 2}
+									y2={rowY + boxH / 2}
 								/>
 							)}
 						</g>

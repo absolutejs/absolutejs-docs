@@ -4,34 +4,27 @@ import {
 	ThemeSprings
 } from '../../../types/springTypes';
 
-export const diagramContainerStyle = (
-	themeSprings: ThemeSprings
-): AnimatedCSSProperties => ({
-	background: themeSprings.theme.to((theme) =>
-		theme.endsWith('dark') ? 'rgba(20,20,30,0.6)' : 'rgba(250,250,248,0.9)'
-	),
-	border: themeSprings.themeTertiary.to((color) => `1px solid ${color}`),
-	borderRadius: '0.75rem',
-	marginBottom: '1.5rem',
-	marginTop: '1rem',
-	overflowX: 'auto',
-	overflowY: 'hidden',
-	padding: '1.5rem'
-});
-
-export const diagramSvgWrapperStyle: CSSProperties = {
-	minWidth: '600px'
+type DiagramColorSet = {
+	accent: string;
+	accentSecondary: string;
+	accentTertiary: string;
+	arrow: string;
+	background: string;
+	backgroundAlt: string;
+	border: string;
+	borderAccent: string;
+	highlight: string;
+	pillBg: string;
+	text: string;
+	textMuted: string;
 };
 
-export const svgContainerStyle: CSSProperties = {
-	display: 'block',
-	height: 'auto',
-	maxWidth: '100%',
-	width: '100%'
+type DiagramColors = {
+	dark: DiagramColorSet;
+	light: DiagramColorSet;
 };
 
-// Color palettes for diagrams
-export const diagramColors = {
+export const diagramColors: DiagramColors = {
 	dark: {
 		accent: '#818CF8',
 		accentSecondary: '#A5B4FC',
@@ -61,6 +54,28 @@ export const diagramColors = {
 		textMuted: '#64748B'
 	}
 };
-
+export const diagramSvgWrapperStyle: CSSProperties = {
+	minWidth: '600px'
+};
+export const svgContainerStyle: CSSProperties = {
+	display: 'block',
+	height: 'auto',
+	maxWidth: '100%',
+	width: '100%'
+};
+export const diagramContainerStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	background: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark') ? 'rgba(20,20,30,0.6)' : 'rgba(250,250,248,0.9)'
+	),
+	border: themeSprings.themeTertiary.to((color) => `1px solid ${color}`),
+	borderRadius: '0.75rem',
+	marginBottom: '1.5rem',
+	marginTop: '1rem',
+	overflowX: 'auto',
+	overflowY: 'hidden',
+	padding: '1.5rem'
+});
 export const getColors = (isDark: boolean) =>
 	isDark ? diagramColors.dark : diagramColors.light;

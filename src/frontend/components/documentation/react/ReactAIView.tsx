@@ -53,7 +53,7 @@ export const ReactAIView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="react-ai">
+					<h1 id="react-ai" style={h1Style(isMobileOrTablet)}>
 						React AI
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -66,8 +66,8 @@ export const ReactAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="use-ai-stream"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -88,8 +88,8 @@ export const ReactAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="return-type"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -105,8 +105,8 @@ export const ReactAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="ai-stream-provider"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -129,8 +129,8 @@ export const ReactAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="attachments"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -158,14 +158,14 @@ export const ReactAIView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

@@ -6,7 +6,6 @@ import {
 	startOutput,
 	startWithSSG
 } from '../../../data/documentation/cliDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -32,6 +31,23 @@ const tocItems: TocItem[] = [
 	{ href: '#with-ssg', label: 'With Static Generation' }
 ];
 
+const StartOptionsList = () => (
+	<ul style={listStyle}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>[entry]</strong> : Server entry file
+			(defaults to <code>src/backend/server.ts</code>)
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>--outdir</strong> : Build output
+			directory (defaults to <code>dist</code>)
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>--config</strong>: Path to{' '}
+			<code>absolute.config.ts</code>
+		</li>
+	</ul>
+);
+
 export const StartView = ({
 	currentPageId,
 	onNavigate,
@@ -55,7 +71,7 @@ export const StartView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="start">
+					<h1 id="start" style={h1Style(isMobileOrTablet)}>
 						absolute start
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -66,8 +82,8 @@ export const StartView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="usage"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -89,35 +105,20 @@ export const StartView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="options"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Options
 					</AnchorHeading>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>[entry]</strong> —
-							Server entry file (defaults to{' '}
-							<code>src/backend/server.ts</code>)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--outdir</strong> —
-							Build output directory (defaults to{' '}
-							<code>dist</code>)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--config</strong> — Path
-							to <code>absolute.config.ts</code>
-						</li>
-					</ul>
+					<StartOptionsList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="with-ssg"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -138,8 +139,8 @@ export const StartView = ({
 						See the{' '}
 						<a
 							href="#"
-							onClick={(e) => {
-								e.preventDefault();
+							onClick={(event) => {
+								event.preventDefault();
 								onNavigate('static-generation');
 							}}
 							style={{
@@ -162,14 +163,14 @@ export const StartView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

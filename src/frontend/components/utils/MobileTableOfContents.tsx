@@ -18,20 +18,16 @@ export const MobileTableOfContents = ({
 	onToggle,
 	title = 'On This Page'
 }: MobileTableOfContentsProps) => {
-	const handleItemClick = () => {
-		onToggle();
-	};
-
 	const [hoverSpring, hoverApi] = useSpring(() => ({
-		config: { tension: 400, friction: 26 },
+		config: { friction: 26, tension: 400 },
 		opacity: 0.85
 	}));
 
 	const panelTransition = useTransition(isOpen, {
-		from: { opacity: 0, y: -8 },
+		config: { friction: 22, tension: 300 },
 		enter: { opacity: 1, y: 0 },
-		leave: { opacity: 0, y: -8 },
-		config: { tension: 300, friction: 22 }
+		from: { opacity: 0, y: -8 },
+		leave: { opacity: 0, y: -8 }
 	});
 
 	return (
@@ -97,7 +93,9 @@ export const MobileTableOfContents = ({
 							position: 'fixed',
 							right: '1.5rem',
 							top: '8.5rem',
-							transform: style.y.to((y) => `translateY(${y}px)`),
+							transform: style.y.to(
+								(offsetY) => `translateY(${offsetY}px)`
+							),
 							width: 'calc(100vw - 3rem)',
 							zIndex: 91
 						}}
@@ -128,10 +126,10 @@ export const MobileTableOfContents = ({
 						>
 							{items.map((item) => (
 								<TocLink
-									key={item.href}
 									item={item}
+									key={item.href}
+									onClick={onToggle}
 									themeSprings={themeSprings}
-									onClick={handleItemClick}
 								/>
 							))}
 						</nav>
@@ -150,17 +148,17 @@ type TocLinkProps = {
 
 const TocLink = ({ item, themeSprings, onClick }: TocLinkProps) => {
 	const [hoverSpring, hoverApi] = useSpring(() => ({
-		config: { tension: 400, friction: 26 },
-		x: 0,
-		opacity: 0.7
+		config: { friction: 26, tension: 400 },
+		opacity: 0.7,
+		x: 0
 	}));
 
 	return (
 		<animated.a
 			href={item.href}
 			onClick={onClick}
-			onMouseEnter={() => hoverApi.start({ x: 3, opacity: 1 })}
-			onMouseLeave={() => hoverApi.start({ x: 0, opacity: 0.7 })}
+			onMouseEnter={() => hoverApi.start({ opacity: 1, x: 3 })}
+			onMouseLeave={() => hoverApi.start({ opacity: 0.7, x: 0 })}
 			style={{
 				borderRadius: '0.25rem',
 				color: themeSprings.contrastPrimary,
@@ -169,7 +167,9 @@ const TocLink = ({ item, themeSprings, onClick }: TocLinkProps) => {
 				opacity: hoverSpring.opacity,
 				padding: '0.4rem 0.5rem',
 				textDecoration: 'none',
-				transform: hoverSpring.x.to((x) => `translateX(${x}px)`),
+				transform: hoverSpring.x.to(
+					(offsetX) => `translateX(${offsetX}px)`
+				),
 				wordBreak: 'break-word'
 			}}
 		>

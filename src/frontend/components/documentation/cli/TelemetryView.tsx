@@ -27,6 +27,23 @@ const tocItems: TocItem[] = [
 	{ href: '#opting-out', label: 'Opting Out' }
 ];
 
+const TelemetryCollectedList = () => (
+	<ul style={listStyle}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>CLI commands used</strong> : which
+			commands are run (dev, start, compile)
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Build metrics</strong> : build duration
+			and which frameworks are used
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Error types</strong> : what kind of
+			errors occur (not the error content)
+		</li>
+	</ul>
+);
+
 export const TelemetryView = ({
 	currentPageId,
 	onNavigate,
@@ -50,7 +67,7 @@ export const TelemetryView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="telemetry">
+					<h1 id="telemetry" style={h1Style(isMobileOrTablet)}>
 						absolute telemetry
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -60,8 +77,8 @@ export const TelemetryView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="usage"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -77,8 +94,8 @@ export const TelemetryView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="what-is-collected"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -89,28 +106,13 @@ export const TelemetryView = ({
 						the framework. No personal data, source code, or project
 						details are ever collected.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								CLI commands used
-							</strong>{' '}
-							— which commands are run (dev, start, compile)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Build metrics</strong> —
-							build duration and which frameworks are used
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Error types</strong> —
-							what kind of errors occur (not the error content)
-						</li>
-					</ul>
+					<TelemetryCollectedList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="opting-out"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -141,14 +143,14 @@ export const TelemetryView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

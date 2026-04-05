@@ -1,16 +1,3 @@
-export const createCommand = `\
-bun create absolutejs my-blog --react --db postgresql --orm drizzle --auth abs --abs-provider google --tailwind --install --skip
-cd my-blog`;
-
-export const runDev = `\
-bun run dev`;
-
-export const envSetup = `\
-# .env
-DATABASE_URL=postgresql://user:pass@localhost:5432/myapp
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret`;
-
 export const configWithDb = `\
 // absolute.config.ts
 import { defineConfig } from '@absolutejs/absolute';
@@ -22,7 +9,101 @@ export default defineConfig({
     output: './build/styles.css'
   }
 });`;
+export const createCommand = `\
+bun create absolutejs my-blog --react --db postgresql --orm drizzle --auth abs --abs-provider google --tailwind --install --skip
+cd my-blog`;
+export const dashboardComponent = `\
+// src/frontend/pages/Dashboard.tsx
+import type { User } from '../../../db/schema';
 
+type DashboardProps = {
+  user: User;
+};
+
+export const Dashboard = ({ user }: DashboardProps) => (
+  <html lang="en">
+    <head>
+      <title>Dashboard | {user.name}</title>
+      <link rel="stylesheet" href="/styles.css" />
+    </head>
+    <body>
+      <h1>Dashboard</h1>
+      <p>Signed in as {user.email}</p>
+      <p>Member since {user.createdAt}</p>
+      <a href="/">← Home</a>
+    </body>
+  </html>
+);`;
+export const devCommand = `\
+absolute dev src/backend/server.ts`;
+export const edenTreatySetup = `\
+// src/frontend/eden/treaty.ts
+import { treaty } from '@elysiajs/eden';
+import type { App } from '../../backend/server';
+
+const url = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+export const api = treaty<App>(url);`;
+export const edenUsage = `\
+// Use the treaty anywhere on the client : fully typed
+import { api } from '../eden/treaty';
+
+// POST /api/posts : body is type-checked at compile time
+const { data: newPost } = await api.api.posts.post({
+  title: 'Hello World',
+  content: 'My first post',
+  authorId: 1
+});
+
+// Check auth status : returns your User type or error
+const { data: authStatus, error } = await api.oauth2.status.get();
+if (!error) {
+  console.log('Logged in as:', authStatus.user.name);
+}`;
+export const envSetup = `\
+# .env
+DATABASE_URL=postgresql://user:pass@localhost:5432/myapp
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret`;
+export const homePageComponent = `\
+// src/frontend/pages/Home.tsx
+import type { Post, User } from '../../../db/schema';
+
+type HomeProps = {
+  posts: Post[];
+  user: User | null;
+};
+
+export const Home = ({ posts, user }: HomeProps) => (
+  <html lang="en">
+    <head>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>My Blog</title>
+      <link rel="stylesheet" href="/styles.css" />
+    </head>
+    <body>
+      <nav>
+        {user ? (
+          <>
+            <span>Welcome, {user.name}</span>
+            <a href="/dashboard">Dashboard</a>
+          </>
+        ) : (
+          <a href="/oauth2/google/authorization">Sign in with Google</a>
+        )}
+      </nav>
+      <h1>Posts</h1>
+      {posts.map(post => (
+        <article key={post.id}>
+          <h2>{post.title}</h2>
+          <p>{post.content.slice(0, 150)}...</p>
+        </article>
+      ))}
+    </body>
+  </html>
+);`;
+export const runDev = `\
+bun run dev`;
 export const schemaSetup = `\
 // db/schema.ts
 import { pgTable, serial, varchar, text, timestamp } from 'drizzle-orm/pg-core';
@@ -43,12 +124,11 @@ export const posts = pgTable('posts', {
   createdAt: timestamp('created_at').defaultNow()
 });
 
-// Types are inferred directly from the table — no codegen
+// Types are inferred directly from the table : no codegen
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Post = typeof posts.$inferSelect;
 export type NewPost = typeof posts.$inferInsert;`;
-
 export const serverWithAuth = `\
 // src/backend/server.ts
 import { prepare, asset, getEnv, networking } from '@absolutejs/absolute';
@@ -68,7 +148,7 @@ const app = new Elysia()
   .use(absolutejs)
   .use(staticPlugin({ assets: './build', prefix: '' }))
 
-  // Auth — one .use() call for Google OAuth with user management
+  // Auth : one .use() call for Google OAuth with user management
   .use(absoluteAuth<User>({
     providersConfiguration: {
       google: {
@@ -111,7 +191,7 @@ const app = new Elysia()
     });
   })
 
-  // Protected dashboard — user is typed as User from your schema
+  // Protected dashboard : user is typed as User from your schema
   .get('/dashboard', ({ status, protectRoute }) =>
     protectRoute(
       (user) => handleReactPageRequest(
@@ -136,93 +216,3 @@ const app = new Elysia()
   .use(networking);
 
 export type App = typeof app;`;
-
-export const homePageComponent = `\
-// src/frontend/pages/Home.tsx
-import type { Post, User } from '../../../db/schema';
-
-type HomeProps = {
-  posts: Post[];
-  user: User | null;
-};
-
-export const Home = ({ posts, user }: HomeProps) => (
-  <html lang="en">
-    <head>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>My Blog</title>
-      <link rel="stylesheet" href="/styles.css" />
-    </head>
-    <body>
-      <nav>
-        {user ? (
-          <>
-            <span>Welcome, {user.name}</span>
-            <a href="/dashboard">Dashboard</a>
-          </>
-        ) : (
-          <a href="/oauth2/google/authorization">Sign in with Google</a>
-        )}
-      </nav>
-      <h1>Posts</h1>
-      {posts.map(post => (
-        <article key={post.id}>
-          <h2>{post.title}</h2>
-          <p>{post.content.slice(0, 150)}...</p>
-        </article>
-      ))}
-    </body>
-  </html>
-);`;
-
-export const dashboardComponent = `\
-// src/frontend/pages/Dashboard.tsx
-import type { User } from '../../../db/schema';
-
-type DashboardProps = {
-  user: User;
-};
-
-export const Dashboard = ({ user }: DashboardProps) => (
-  <html lang="en">
-    <head>
-      <title>Dashboard | {user.name}</title>
-      <link rel="stylesheet" href="/styles.css" />
-    </head>
-    <body>
-      <h1>Dashboard</h1>
-      <p>Signed in as {user.email}</p>
-      <p>Member since {user.createdAt}</p>
-      <a href="/">← Home</a>
-    </body>
-  </html>
-);`;
-
-export const edenTreatySetup = `\
-// src/frontend/eden/treaty.ts
-import { treaty } from '@elysiajs/eden';
-import type { App } from '../../backend/server';
-
-const url = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-export const api = treaty<App>(url);`;
-
-export const edenUsage = `\
-// Use the treaty anywhere on the client — fully typed
-import { api } from '../eden/treaty';
-
-// POST /api/posts — body is type-checked at compile time
-const { data: newPost } = await api.api.posts.post({
-  title: 'Hello World',
-  content: 'My first post',
-  authorId: 1
-});
-
-// Check auth status — returns your User type or error
-const { data: authStatus, error } = await api.oauth2.status.get();
-if (!error) {
-  console.log('Logged in as:', authStatus.user.name);
-}`;
-
-export const devCommand = `\
-absolute dev src/backend/server.ts`;

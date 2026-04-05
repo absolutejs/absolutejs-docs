@@ -26,7 +26,7 @@ export const HomeHeader = ({ themeSprings }: ThemeProps) => (
 		</animated.h1>
 		<animated.p style={heroSubtitleStyle(themeSprings)}>
 			The complete TypeScript framework for modern web development. UI,
-			database, auth, and tooling — all in one.
+			database, auth, and tooling: all in one.
 		</animated.p>
 	</section>
 );

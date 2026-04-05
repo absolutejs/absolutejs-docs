@@ -3,21 +3,14 @@ import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	imageConfigBasic,
-	imageConfigFull,
-	imageEndpointDirect,
-	imageRemotePatterns,
 	imageConfigReference
 } from '../../../data/documentation/imageOptDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -27,6 +20,12 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { AllOptionsSection } from './AllOptionsSection';
+import { AvifSupportSection } from './AvifSupportSection';
+import { CachingSection } from './CachingSection';
+import { HowItWorksSection } from './HowItWorksSection';
+import { OptimizationEndpointSection } from './OptimizationEndpointSection';
+import { RemoteImagesSection } from './RemoteImagesSection';
 
 const tocItems: TocItem[] = [
 	{ href: '#how-it-works', label: 'How It Works' },
@@ -49,8 +48,6 @@ export const ImageOptimizationView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -67,8 +64,8 @@ export const ImageOptimizationView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						style={h1Style(isMobileOrTablet)}
 						id="image-optimization"
+						style={h1Style(isMobileOrTablet)}
 					>
 						Image Optimization
 					</h1>
@@ -77,67 +74,17 @@ export const ImageOptimizationView = ({
 						by Sharp. Images are automatically converted to WebP or
 						AVIF, resized to the requested width, cached to disk,
 						and served with proper cache headers. Each framework has
-						its own <code>{'<Image>'}</code> component — see the
+						its own <code>{'<Image>'}</code> component: see the
 						framework-specific Components page for usage.
 					</p>
 				</animated.div>
 
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="how-it-works"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						How It Works
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						AbsoluteJS registers a <code>/_absolute/image</code>{' '}
-						endpoint automatically when your server starts. When a
-						browser requests an optimized image:
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Content negotiation
-							</strong>{' '}
-							— checks the browser's <code>Accept</code> header to
-							determine the best output format (AVIF, WebP, or
-							JPEG)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Cache lookup</strong> —
-							checks the disk cache for a previously optimized
-							version with matching URL, width, quality, and
-							format
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Sharp optimization
-							</strong>{' '}
-							— if not cached, loads the source image,
-							auto-rotates based on EXIF, resizes to the requested
-							width (never upscales), and converts to the
-							negotiated format
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Cache write</strong> —
-							stores the optimized image to disk with metadata
-							(ETag, TTL, content type)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Response</strong> —
-							serves the image with <code>Cache-Control</code>,{' '}
-							<code>ETag</code>, and <code>Vary: Accept</code>{' '}
-							headers
-						</li>
-					</ul>
-				</section>
+				<HowItWorksSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="configuration"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -146,7 +93,7 @@ export const ImageOptimizationView = ({
 					<p style={paragraphSpacedStyle}>
 						Add an <code>images</code> object to your{' '}
 						<code>absolute.config.ts</code>. All fields are optional
-						— the defaults work well for most apps.
+						: the defaults work well for most apps.
 					</p>
 					<PrismPlus
 						codeString={imageConfigBasic}
@@ -156,106 +103,14 @@ export const ImageOptimizationView = ({
 					/>
 				</section>
 
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="all-options"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						All Options
-					</AnchorHeading>
-					<PrismPlus
-						codeString={imageConfigFull}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>deviceSizes</strong> —
-							breakpoints for device-width responsive images.
-							Default:{' '}
-							<code>
-								[640, 750, 828, 1080, 1200, 1920, 2048, 3840]
-							</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>imageSizes</strong> —
-							breakpoints for fixed-width images. Default:{' '}
-							<code>[16, 32, 48, 64, 96, 128, 256, 384]</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>formats</strong> —
-							output formats in preference order. Default:{' '}
-							<code>["webp"]</code>. Add <code>"avif"</code> for
-							smaller files at slower encode speed.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>minimumCacheTTL</strong>{' '}
-							— cache duration in seconds. Default:{' '}
-							<code>60</code>.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>quality</strong> —
-							default quality 1-100. Default: <code>75</code>.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>remotePatterns</strong>{' '}
-							— allowed remote image origins for security.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>path</strong> — custom
-							endpoint path. Default:{' '}
-							<code>"/_absolute/image"</code>.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>unoptimized</strong> —
-							globally disable optimization. Images served as-is.
-						</li>
-					</ul>
-				</section>
+				<AllOptionsSection themeSprings={themeSprings} />
+
+				<OptimizationEndpointSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
-						id="endpoint"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Optimization Endpoint
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						The endpoint accepts three query parameters:
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>url</strong> (required)
-							— the source image path or a full remote URL
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>w</strong> (required) —
-							target width in pixels. Must be one of the
-							configured <code>deviceSizes</code> or{' '}
-							<code>imageSizes</code> values.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>q</strong> (optional) —
-							quality 1-100. Defaults to the configured quality.
-						</li>
-					</ul>
-					<PrismPlus
-						codeString={imageEndpointDirect}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
 						id="content-negotiation"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -271,116 +126,16 @@ export const ImageOptimizationView = ({
 					</p>
 				</section>
 
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="caching"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Caching
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Optimized images are cached to disk at{' '}
-						<code>{'{buildDir}/.cache/images/'}</code>. Each entry
-						is keyed by a SHA-256 hash of the URL, width, quality,
-						and format. Cache files persist across server restarts.
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>ETag</strong> — each
-							cached image gets a unique ETag. Browsers send{' '}
-							<code>If-None-Match</code> on subsequent requests
-							and get 304 Not Modified.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>TTL</strong> — set via{' '}
-							<code>minimumCacheTTL</code> (seconds). After
-							expiry, the next request regenerates the image.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Cache-Control</strong> —
-							responses include{' '}
-							<code>
-								public, max-age={'<TTL>'}, must-revalidate
-							</code>
-							.
-						</li>
-					</ul>
-				</section>
+				<CachingSection themeSprings={themeSprings} />
+
+				<RemoteImagesSection themeSprings={themeSprings} />
+
+				<AvifSupportSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
-						id="remote-images"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Remote Images
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						By default, only local images are allowed. To optimize
-						remote images, configure <code>remotePatterns</code>{' '}
-						with the allowed origins. This prevents the endpoint
-						from being used as an open proxy.
-					</p>
-					<PrismPlus
-						codeString={imageRemotePatterns}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>hostname</strong> —
-							supports wildcards: <code>"*.example.com"</code>{' '}
-							matches <code>cdn.example.com</code>, etc.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>pathname</strong> —
-							supports glob prefixes: <code>"/photos/**"</code>{' '}
-							matches any path starting with <code>/photos/</code>
-							.
-						</li>
-					</ul>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="avif"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						AVIF Support
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						AVIF delivers ~20-30% smaller files than WebP but
-						encoding is ~50x slower. AbsoluteJS handles this with
-						async pre-generation:
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Add <code>"avif"</code> to your <code>formats</code>{' '}
-							array before <code>"webp"</code>
-						</li>
-						<li style={listItemStyle}>
-							First request: browser gets WebP immediately
-						</li>
-						<li style={listItemStyle}>
-							Background: AVIF variant is generated and cached
-						</li>
-						<li style={listItemStyle}>
-							Next request from an AVIF-capable browser: served
-							from cache instantly
-						</li>
-					</ul>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
 						id="sharp"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -407,8 +162,8 @@ export const ImageOptimizationView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="type-reference"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -431,14 +186,14 @@ export const ImageOptimizationView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

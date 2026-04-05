@@ -7,7 +7,6 @@ import {
 	stateMutationGotcha,
 	stateVsDecorate
 } from '../../../data/documentation/dataDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -34,6 +33,19 @@ const tocItems: TocItem[] = [
 	{ href: '#state-vs-decorate', label: 'State vs Decorate' }
 ];
 
+const StateVsDecorateList = () => (
+	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>.state()</strong>: Mutable primitives
+			like counters, flags, and configuration values
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>.decorate()</strong>: Non-primitive
+			objects like database connections, loggers, and service classes
+		</li>
+	</ul>
+);
+
 export const ServerStateView = ({
 	currentPageId,
 	onNavigate,
@@ -42,8 +54,6 @@ export const ServerStateView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -59,7 +69,7 @@ export const ServerStateView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="server-state">
+					<h1 id="server-state" style={h1Style(isMobileOrTablet)}>
 						State
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -72,8 +82,8 @@ export const ServerStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="basic-usage"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -93,8 +103,8 @@ export const ServerStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="type-safety"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -114,8 +124,8 @@ export const ServerStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="mutation-gotcha"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -136,8 +146,8 @@ export const ServerStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="state-vs-decorate"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -153,18 +163,7 @@ export const ServerStateView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>.state()</strong>:
-							Mutable primitives like counters, flags, and
-							configuration values
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>.decorate()</strong>:
-							Non-primitive objects like database connections,
-							loggers, and service classes
-						</li>
-					</ul>
+					<StateVsDecorateList />
 				</section>
 
 				<DocsNavigation
@@ -176,14 +175,14 @@ export const ServerStateView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

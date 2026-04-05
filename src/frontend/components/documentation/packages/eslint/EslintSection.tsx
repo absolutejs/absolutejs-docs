@@ -24,8 +24,8 @@ export const EslintSection = ({
 	return (
 		<section style={sectionStyle}>
 			<AnchorHeading
-				level="h2"
 				id={section.href.replace('#', '')}
+				level="h2"
 				style={gradientHeadingStyle(themeSprings)}
 				themeSprings={themeSprings}
 			>

@@ -3,6 +3,13 @@ import { CSSProperties } from 'react';
 import { HALF } from '../../constants';
 import { AnimatedCSSProperties, ThemeSprings } from '../../types/springTypes';
 
+export const htmlDefault: CSSProperties = {
+	colorScheme: 'light dark',
+	fontFamily:
+		'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+	height: '100%',
+	overflowX: 'hidden'
+};
 export const styleReset = `
     * {
         margin: 0;
@@ -28,7 +35,6 @@ export const styleReset = `
 		100% { background-position: 0% 50%, 100% 50%, 50% 0%; }
 	}
 `;
-
 export const bodyDefault = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
@@ -40,7 +46,6 @@ export const bodyDefault = (
 	lineHeight: '1.6',
 	margin: 0
 });
-
 export const mainDefault = (
 	overflow?: CSSProperties['overflow']
 ): CSSProperties => ({
@@ -51,14 +56,6 @@ export const mainDefault = (
 	overflow
 });
 
-export const htmlDefault: CSSProperties = {
-	colorScheme: 'light dark',
-	fontFamily:
-		'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-	height: '100%',
-	overflowX: 'hidden'
-};
-
 type ButtonStyleProps<
 	BG extends string = string,
 	FG extends string = string
@@ -68,6 +65,26 @@ type ButtonStyleProps<
 	width?: string;
 };
 
+export const contentStyle: CSSProperties = {
+	alignItems: 'center',
+	display: 'flex',
+	flexDirection: 'column',
+	height: '100%',
+	justifyContent: 'center'
+};
+export const formStyle: CSSProperties = {
+	display: 'flex',
+	flexDirection: 'column',
+	gap: '8px',
+	padding: '16px',
+	width: '300px'
+};
+export const linkStyle: CSSProperties = {
+	color: '#fff',
+	fontSize: '1.2rem',
+	fontWeight: 'bold',
+	textDecoration: 'none'
+};
 export const buttonStyle = <
 	BG extends string = string,
 	FG extends string = string
@@ -92,15 +109,6 @@ export const buttonStyle = <
 	textWrap: 'nowrap',
 	width
 });
-
-export const formStyle: CSSProperties = {
-	display: 'flex',
-	flexDirection: 'column',
-	gap: '8px',
-	padding: '16px',
-	width: '300px'
-};
-
 export const formButtonStyle = (isFullOpacity?: boolean): CSSProperties => ({
 	backgroundColor: '#007bff',
 	border: 'none',
@@ -111,7 +119,6 @@ export const formButtonStyle = (isFullOpacity?: boolean): CSSProperties => ({
 	opacity: isFullOpacity ? 1 : HALF,
 	padding: '8px 16px'
 });
-
 export const headingStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
@@ -120,7 +127,6 @@ export const headingStyle = (
 	marginBottom: '20px',
 	textAlign: 'center'
 });
-
 export const paragraphStyle = (
 	themeSprings: ThemeSprings
 ): AnimatedCSSProperties => ({
@@ -131,18 +137,3 @@ export const paragraphStyle = (
 	maxWidth: '1200px',
 	textAlign: 'center'
 });
-
-export const linkStyle: CSSProperties = {
-	color: '#fff',
-	fontSize: '1.2rem',
-	fontWeight: 'bold',
-	textDecoration: 'none'
-};
-
-export const contentStyle: CSSProperties = {
-	alignItems: 'center',
-	display: 'flex',
-	flexDirection: 'column',
-	height: '100%',
-	justifyContent: 'center'
-};

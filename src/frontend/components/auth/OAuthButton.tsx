@@ -37,11 +37,6 @@ export const OAuthButton = ({
 
 	return (
 		<animated.button
-			style={oauthButtonStyle({
-				isProviderSelected: true,
-				providerPrimaryColor: primaryColor,
-				themeSprings: themeSprings
-			})}
 			onClick={() => {
 				const params = new URLSearchParams(window.location.search);
 				params.set('provider', provider);
@@ -58,14 +53,19 @@ export const OAuthButton = ({
 					providerOption: provider
 				});
 			}}
+			style={oauthButtonStyle({
+				isProviderSelected: true,
+				providerPrimaryColor: primaryColor,
+				themeSprings: themeSprings
+			})}
 		>
 			<div style={oauthButtonContentStyle}>
 				{provider ? (
 					<animated.img
-						src={logoUrl}
 						alt={`${name} logo`}
+						src={logoUrl}
 						style={{
-							...oauthIconStyle(),
+							...oauthIconStyle,
 							filter: DARK_LOGO_PROVIDERS.has(provider)
 								? themeSprings.theme.to((t) =>
 										t.endsWith('dark')
@@ -76,7 +76,7 @@ export const OAuthButton = ({
 						}}
 					/>
 				) : (
-					<FiUser style={oauthIconStyle()} />
+					<FiUser style={oauthIconStyle} />
 				)}
 				<span style={oauthButtonTextStyle}>{name}</span>
 			</div>

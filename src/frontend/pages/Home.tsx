@@ -30,9 +30,9 @@ export const Home = ({ user, theme }: HomeProps) => {
 			>
 				<AuroraBackground themeSprings={themeSprings} />
 				<Navbar
+					setTheme={setTheme}
 					themeSprings={themeSprings}
 					user={user}
-					setTheme={setTheme}
 				/>
 				<main
 					style={{
@@ -48,7 +48,7 @@ export const Home = ({ user, theme }: HomeProps) => {
 					<BenchmarkChart themeSprings={themeSprings} />
 					<TypeSafeArticle themeSprings={themeSprings} />
 					<PerformanceArticle themeSprings={themeSprings} />
-					<CTASection themeSprings={themeSprings} />
+					<CTASection />
 				</main>
 			</animated.body>
 		</html>

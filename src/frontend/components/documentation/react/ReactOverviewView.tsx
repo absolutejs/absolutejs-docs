@@ -13,13 +13,10 @@ import {
 } from '../../../data/documentation/reactDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -61,7 +58,7 @@ export const ReactOverviewView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="react">
+					<h1 id="react" style={h1Style(isMobileOrTablet)}>
 						React
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -73,8 +70,8 @@ export const ReactOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="build-config"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -94,8 +91,8 @@ export const ReactOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="page-handler"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -116,8 +113,8 @@ export const ReactOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="page-components"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -143,8 +140,8 @@ export const ReactOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="hydration"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -166,8 +163,8 @@ export const ReactOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="index-files"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -176,7 +173,7 @@ export const ReactOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						AbsoluteJS automatically generates index files for
 						client-side hydration. You never need to write these
-						yourself — the build system creates them based on your
+						yourself: the build system creates them based on your
 						page components.
 					</p>
 					<p style={paragraphSpacedStyle}>
@@ -203,8 +200,8 @@ export const ReactOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="streaming"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -231,14 +228,14 @@ export const ReactOverviewView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

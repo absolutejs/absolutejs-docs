@@ -35,6 +35,22 @@ const tocItems: TocItem[] = [
 	{ href: '#vue-imports', label: 'Vue Imports' }
 ];
 
+const VueHeadOptionsList = () => (
+	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>title</strong>: Sets the page title
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>meta</strong>: Array of meta tags with
+			name/property and content
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>link</strong>: Array of link elements
+			for canonical URLs, icons, etc.
+		</li>
+	</ul>
+);
+
 export const VueOverviewView = ({
 	currentPageId,
 	onNavigate,
@@ -58,7 +74,7 @@ export const VueOverviewView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="vue">
+					<h1 id="vue" style={h1Style(isMobileOrTablet)}>
 						Vue
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -69,8 +85,8 @@ export const VueOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="build-config"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -90,8 +106,8 @@ export const VueOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="page-handler"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -114,8 +130,8 @@ export const VueOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="generate-head"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -133,26 +149,13 @@ export const VueOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>title</strong>: Sets the
-							page title
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>meta</strong>: Array of
-							meta tags with name/property and content
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>link</strong>: Array of
-							link elements for canonical URLs, icons, etc.
-						</li>
-					</ul>
+					<VueHeadOptionsList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="vue-components"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -172,8 +175,8 @@ export const VueOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="vue-imports"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -208,14 +211,14 @@ export const VueOverviewView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

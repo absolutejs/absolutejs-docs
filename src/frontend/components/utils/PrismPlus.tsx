@@ -70,9 +70,9 @@ export const PrismPlus = ({
 				{options && options.length > 0 && (
 					<div style={highlighterSelectContainerStyle}>
 						<select
+							onChange={handleOptionChange}
 							style={highlighterSelectStyle}
 							value={selectedOptionIndex}
-							onChange={handleOptionChange}
 						>
 							{optionsArray.map((option, index) => (
 								<option key={index} value={index}>
@@ -86,14 +86,14 @@ export const PrismPlus = ({
 				<CopyButton text={displayedCodeString} />
 			</animated.div>
 			<Prism
-				language={language}
-				style={codeStyle.get()}
 				customStyle={{
 					margin: 0,
-					padding: '1rem',
-					overflowX: 'auto'
+					overflowX: 'auto',
+					padding: '1rem'
 				}}
+				language={language}
 				showLineNumbers={showLineNumbers}
+				style={codeStyle.get()}
 				wrapLongLines={wrapLongLines}
 			>
 				{displayedCodeString}

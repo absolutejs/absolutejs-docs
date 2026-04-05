@@ -1,4 +1,3 @@
-import { CSSProperties } from 'react';
 import { animated } from '@react-spring/web';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { DocsViewProps } from '../../../../types/springTypes';
@@ -34,13 +33,35 @@ const tocItems: TocItem[] = [
 	{ href: '#attachments', label: 'File Attachments' }
 ];
 
-const vsLabelStyle: CSSProperties = {
-	fontSize: '0.8rem',
-	fontWeight: 600,
-	letterSpacing: '0.05em',
-	opacity: 0.5,
-	textTransform: 'uppercase'
-};
+type ClientNoteProps = Pick<DocsViewProps, 'themeSprings'>;
+
+const ClientNote = ({ themeSprings }: ClientNoteProps) => (
+	<animated.div
+		style={{
+			...featureCardStyle(themeSprings),
+			alignItems: 'center',
+			display: 'flex',
+			gap: '1rem',
+			marginBottom: '1.5rem',
+			padding: '1rem 1.25rem'
+		}}
+	>
+		<FaExchangeAlt
+			style={{
+				flexShrink: 0,
+				opacity: 0.6
+			}}
+		/>
+		<div style={{ fontSize: '0.95rem', lineHeight: 1.5 }}>
+			The framework hooks (<code style={tableCodeStyle}>useAIStream</code>
+			, <code style={tableCodeStyle}>createAIStream</code>,{' '}
+			<code style={tableCodeStyle}>AIStreamService</code>) are thin
+			wrappers around this same client. The only addition here is a{' '}
+			<code style={tableCodeStyle}>subscribe</code> callback so you can
+			react to state changes without framework reactivity.
+		</div>
+	</animated.div>
+);
 
 export const HTMLAIView = ({
 	currentPageId,
@@ -65,51 +86,24 @@ export const HTMLAIView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="html-ai">
+					<h1 id="html-ai" style={h1Style(isMobileOrTablet)}>
 						HTML / Vanilla AI
 					</h1>
 					<p style={paragraphLargeStyle}>
 						The <code>createAIStream</code> function from{' '}
 						<code>@absolutejs/absolute/ai/client</code> is the
 						framework-agnostic AI client. It works with plain HTML,
-						HTMX, or any environment without a framework — same API
+						HTMX, or any environment without a framework: same API
 						surface as the React, Vue, Svelte, and Angular bindings.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
-					<animated.div
-						style={{
-							...featureCardStyle(themeSprings),
-							alignItems: 'center',
-							display: 'flex',
-							gap: '1rem',
-							marginBottom: '1.5rem',
-							padding: '1rem 1.25rem'
-						}}
-					>
-						<FaExchangeAlt
-							style={{
-								flexShrink: 0,
-								opacity: 0.6
-							}}
-						/>
-						<div style={{ fontSize: '0.95rem', lineHeight: 1.5 }}>
-							The framework hooks (
-							<code style={tableCodeStyle}>useAIStream</code>,{' '}
-							<code style={tableCodeStyle}>createAIStream</code>,{' '}
-							<code style={tableCodeStyle}>AIStreamService</code>)
-							are thin wrappers around this same client. The only
-							addition here is a{' '}
-							<code style={tableCodeStyle}>subscribe</code>{' '}
-							callback so you can react to state changes without
-							framework reactivity.
-						</div>
-					</animated.div>
+					<ClientNote themeSprings={themeSprings} />
 
 					<AnchorHeading
-						level="h2"
 						id="create-ai-stream"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -132,8 +126,8 @@ export const HTMLAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="return-type"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -149,8 +143,8 @@ export const HTMLAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="rendering"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -172,8 +166,8 @@ export const HTMLAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="attachments"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -201,14 +195,14 @@ export const HTMLAIView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

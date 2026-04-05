@@ -1,3 +1,4 @@
+import { HALF, SIDEBAR_LINK_LAYOUT } from '../../../constants';
 import { animated, AnimatedComponent, useSpring } from '@react-spring/web';
 import { useEffect } from 'react';
 import { IconType } from 'react-icons';
@@ -37,8 +38,8 @@ export const SidebarLink = <V extends string>({
 
 	const [springStyles, springApi] = useSpring(() => ({
 		backgroundColor: isActive ? primaryColor : 'transparent',
-		opacity: isActive ? 1 : 0,
-		config: { tension: 300, friction: 26 }
+		config: { friction: 26, tension: 300 },
+		opacity: isActive ? 1 : 0
 	}));
 
 	useEffect(() => {
@@ -52,42 +53,6 @@ export const SidebarLink = <V extends string>({
 
 	return (
 		<animated.button
-			style={{
-				alignItems: 'center',
-				backgroundColor: 'transparent',
-				border: 'none',
-				borderRadius: '6px',
-				color: themeSprings.contrastSecondary,
-				cursor: 'pointer',
-				display: 'flex',
-				padding: '0.375rem 0.5rem 0.375rem 0.75rem',
-				position: 'relative',
-				width: '100%'
-			}}
-			onMouseEnter={() => {
-				if (!isActive) {
-					if (isOverview) {
-						void springApi.start({ opacity: 1 });
-					} else {
-						linksApi?.start((i) => {
-							if (i !== index || view === id) return undefined;
-							return { opacity: 1 };
-						});
-					}
-				}
-			}}
-			onMouseLeave={() => {
-				if (!isActive) {
-					if (isOverview) {
-						void springApi.start({ opacity: 0 });
-					} else {
-						linksApi?.start((i) => {
-							if (i !== index || view === id) return undefined;
-							return { opacity: 0 };
-						});
-					}
-				}
-			}}
 			onClick={() => {
 				navigateToView(id);
 				if (isOverview) {
@@ -104,6 +69,7 @@ export const SidebarLink = <V extends string>({
 								opacity: 1
 							};
 						}
+
 						return {
 							backgroundColor: 'transparent',
 							borderColor: 'transparent',
@@ -111,6 +77,46 @@ export const SidebarLink = <V extends string>({
 						};
 					});
 				}
+			}}
+			onMouseEnter={() => {
+				if (isActive) return;
+				if (isOverview) {
+					void springApi.start({ opacity: 1 });
+
+					return;
+				}
+
+				linksApi?.start((itemIndex) => {
+					if (itemIndex !== index || view === id) return undefined;
+
+					return { opacity: 1 };
+				});
+			}}
+			onMouseLeave={() => {
+				if (isActive) return;
+				if (isOverview) {
+					void springApi.start({ opacity: 0 });
+
+					return;
+				}
+
+				linksApi?.start((itemIndex) => {
+					if (itemIndex !== index || view === id) return undefined;
+
+					return { opacity: 0 };
+				});
+			}}
+			style={{
+				alignItems: 'center',
+				backgroundColor: 'transparent',
+				border: 'none',
+				borderRadius: '6px',
+				color: themeSprings.contrastSecondary,
+				cursor: 'pointer',
+				display: 'flex',
+				padding: '0.375rem 0.5rem 0.375rem 0.75rem',
+				position: 'relative',
+				width: '100%'
 			}}
 		>
 			<animated.div
@@ -151,7 +157,7 @@ export const SidebarLink = <V extends string>({
 						display: 'flex',
 						fontSize: '0.875rem',
 						marginLeft: '0.5rem',
-						opacity: 0.5
+						opacity: HALF
 					}}
 				>
 					<Icon />
@@ -161,7 +167,9 @@ export const SidebarLink = <V extends string>({
 				style={{
 					color: themeSprings.contrastSecondary,
 					fontSize: '0.875rem',
-					fontWeight: isOverview ? 500 : 400,
+					fontWeight: isOverview
+						? SIDEBAR_LINK_LAYOUT.activeFontWeight
+						: SIDEBAR_LINK_LAYOUT.inactiveFontWeight,
 					letterSpacing: '-0.01em',
 					marginLeft: icon ? '0.5rem' : '0.75rem',
 					padding: '0.4rem 0',

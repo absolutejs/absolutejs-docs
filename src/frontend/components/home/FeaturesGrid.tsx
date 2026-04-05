@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web';
+import { ReactNode } from 'react';
 import {
 	FaBolt,
 	FaCode,
@@ -20,47 +21,47 @@ import {
 } from '../../styles/homeStyles';
 
 type Feature = {
-	icon: React.ReactNode;
+	icon: ReactNode;
 	title: string;
 	description: string;
 };
 
 const features: Feature[] = [
 	{
+		description:
+			'TypeScript from database to frontend. Schemas generate types automatically.',
 		icon: <FaCode />,
-		title: 'End-to-End Type Safety',
-		description:
-			'TypeScript from database to frontend. Schemas generate types automatically.'
+		title: 'End-to-End Type Safety'
 	},
 	{
+		description:
+			'Built on Bun and Elysia for ultra-fast SSR and minimal overhead.',
 		icon: <FaBolt />,
-		title: 'Blazing Performance',
-		description:
-			'Built on Bun and Elysia for ultra-fast SSR and minimal overhead.'
+		title: 'Blazing Performance'
 	},
 	{
+		description:
+			'Use React, Angular, Vue, Svelte, HTML, or HTMX. Mix and match per route.',
 		icon: <FaPalette />,
-		title: 'Multi-Framework UI',
-		description:
-			'Use React, Angular, Vue, Svelte, HTML, or HTMX. Mix and match per route.'
+		title: 'Multi-Framework UI'
 	},
 	{
+		description:
+			'PostgreSQL, MySQL, SQLite with Drizzle or Prisma adapters.',
 		icon: <FaDatabase />,
-		title: 'Flexible Database',
-		description:
-			'PostgreSQL, MySQL, SQLite with Drizzle or Prisma adapters.'
+		title: 'Flexible Database'
 	},
 	{
+		description:
+			'66+ OAuth providers with PKCE, OpenID, and session management.',
 		icon: <FaLock />,
-		title: 'Built-in Auth',
-		description:
-			'66+ OAuth providers with PKCE, OpenID, and session management.'
+		title: 'Built-in Auth'
 	},
 	{
-		icon: <FaShieldAlt />,
-		title: 'Code Quality',
 		description:
-			'ESLint + Prettier or Biome with opinionated defaults included.'
+			'ESLint + Prettier or Biome with opinionated defaults included.',
+		icon: <FaShieldAlt />,
+		title: 'Code Quality'
 	}
 ];
 

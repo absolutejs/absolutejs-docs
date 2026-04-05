@@ -1,3 +1,7 @@
+import {
+	PERCENT_SCALE,
+	TELEMETRY_DONUT_CHART_LAYOUT
+} from '../../../../constants';
 import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { ThemeSprings } from '../../../../types/springTypes';
@@ -15,9 +19,9 @@ type DonutChartProps = {
 
 const viewWidth = 420;
 const viewHeight = 260;
-const cx = 130;
-const cy = 130;
-const outerR = 100;
+const centerX = 130;
+const centerY = 130;
+const outerR = PERCENT_SCALE;
 const innerR = 60;
 
 const sliceColors = [
@@ -31,21 +35,36 @@ const sliceColors = [
 	'#98D8C8'
 ];
 
-const toRad = (deg: number) => (deg * Math.PI) / 180;
+const toRad = (deg: number) =>
+	(deg * Math.PI) / TELEMETRY_DONUT_CHART_LAYOUT.halfCircleDegrees;
 
 const polarToCart = (
-	centerX: number,
-	centerY: number,
-	r: number,
+	chartCenterX: number,
+	chartCenterY: number,
+	radius: number,
 	angleDeg: number
 ) => ({
-	x: centerX + r * Math.cos(toRad(angleDeg - 90)),
-	y: centerY + r * Math.sin(toRad(angleDeg - 90))
+	x:
+		chartCenterX +
+		radius *
+			Math.cos(
+				toRad(
+					angleDeg - TELEMETRY_DONUT_CHART_LAYOUT.quarterTurnDegrees
+				)
+			),
+	y:
+		chartCenterY +
+		radius *
+			Math.sin(
+				toRad(
+					angleDeg - TELEMETRY_DONUT_CHART_LAYOUT.quarterTurnDegrees
+				)
+			)
 });
 
 const arcPath = (
-	centerX: number,
-	centerY: number,
+	chartCenterX: number,
+	chartCenterY: number,
 	outer: number,
 	inner: number,
 	startAngle: number,
@@ -54,28 +73,61 @@ const arcPath = (
 	const sweep = endAngle - startAngle;
 
 	// Full circle case
-	if (sweep >= 359.99) {
-		const midAngle = startAngle + 180;
-		const os = polarToCart(centerX, centerY, outer, startAngle);
-		const om = polarToCart(centerX, centerY, outer, midAngle);
-		const is2 = polarToCart(centerX, centerY, inner, startAngle);
-		const im = polarToCart(centerX, centerY, inner, midAngle);
+	if (sweep >= TELEMETRY_DONUT_CHART_LAYOUT.fullCircleSweepThreshold) {
+		const midAngle =
+			startAngle + TELEMETRY_DONUT_CHART_LAYOUT.halfCircleDegrees;
+		const outerStart = polarToCart(
+			chartCenterX,
+			chartCenterY,
+			outer,
+			startAngle
+		);
+		const outerMidpoint = polarToCart(
+			chartCenterX,
+			chartCenterY,
+			outer,
+			midAngle
+		);
+		const innerStart = polarToCart(
+			chartCenterX,
+			chartCenterY,
+			inner,
+			startAngle
+		);
+		const innerMidpoint = polarToCart(
+			chartCenterX,
+			chartCenterY,
+			inner,
+			midAngle
+		);
+
 		return [
-			`M ${os.x} ${os.y}`,
-			`A ${outer} ${outer} 0 0 1 ${om.x} ${om.y}`,
-			`A ${outer} ${outer} 0 0 1 ${os.x} ${os.y}`,
-			`M ${is2.x} ${is2.y}`,
-			`A ${inner} ${inner} 0 0 0 ${im.x} ${im.y}`,
-			`A ${inner} ${inner} 0 0 0 ${is2.x} ${is2.y}`,
+			`M ${outerStart.x} ${outerStart.y}`,
+			`A ${outer} ${outer} 0 0 1 ${outerMidpoint.x} ${outerMidpoint.y}`,
+			`A ${outer} ${outer} 0 0 1 ${outerStart.x} ${outerStart.y}`,
+			`M ${innerStart.x} ${innerStart.y}`,
+			`A ${inner} ${inner} 0 0 0 ${innerMidpoint.x} ${innerMidpoint.y}`,
+			`A ${inner} ${inner} 0 0 0 ${innerStart.x} ${innerStart.y}`,
 			'Z'
 		].join(' ');
 	}
 
-	const large = sweep > 180 ? 1 : 0;
-	const outerStart = polarToCart(centerX, centerY, outer, startAngle);
-	const outerEnd = polarToCart(centerX, centerY, outer, endAngle);
-	const innerEnd = polarToCart(centerX, centerY, inner, endAngle);
-	const innerStart = polarToCart(centerX, centerY, inner, startAngle);
+	const large =
+		sweep > TELEMETRY_DONUT_CHART_LAYOUT.halfCircleDegrees ? 1 : 0;
+	const outerStart = polarToCart(
+		chartCenterX,
+		chartCenterY,
+		outer,
+		startAngle
+	);
+	const outerEnd = polarToCart(chartCenterX, chartCenterY, outer, endAngle);
+	const innerEnd = polarToCart(chartCenterX, chartCenterY, inner, endAngle);
+	const innerStart = polarToCart(
+		chartCenterX,
+		chartCenterY,
+		inner,
+		startAngle
+	);
 
 	return [
 		`M ${outerStart.x} ${outerStart.y}`,
@@ -103,112 +155,144 @@ export const DonutChart = ({ data, themeSprings }: DonutChartProps) => {
 	}[] = [];
 	let currentAngle = 0;
 
-	for (let i = 0; i < data.length; i++) {
-		const d = data[i];
-		if (!d) continue;
-		const pct = d.value / total;
-		const sweep = pct * 360;
+	for (let datumIndex = 0; datumIndex < data.length; datumIndex++) {
+		const datum = data[datumIndex];
+		if (!datum) continue;
+		const pct = datum.value / total;
+		const sweep = pct * TELEMETRY_DONUT_CHART_LAYOUT.fullCircleDegrees;
 		slices.push({
-			datum: d,
-			startAngle: currentAngle,
+			color: sliceColors[datumIndex % sliceColors.length] ?? '#818CF8',
+			datum,
 			endAngle: currentAngle + sweep,
-			color: sliceColors[i % sliceColors.length] ?? '#818CF8',
-			pct
+			pct,
+			startAngle: currentAngle
 		});
 		currentAngle += sweep;
 	}
 
-	const legendX = cx + outerR + 40;
-	const legendStartY = 30;
-	const legendRowHeight = 24;
+	const legendX =
+		centerX + outerR + TELEMETRY_DONUT_CHART_LAYOUT.legendOffsetX;
+	const { legendStartY } = TELEMETRY_DONUT_CHART_LAYOUT;
+	const { legendRowHeight } = TELEMETRY_DONUT_CHART_LAYOUT;
 
 	return (
 		<animated.div style={containerStyle}>
 			<svg
-				viewBox={`0 0 ${viewWidth} ${viewHeight}`}
 				preserveAspectRatio="xMidYMid meet"
 				style={svgContainerStyle}
+				viewBox={`0 0 ${viewWidth} ${viewHeight}`}
 			>
 				{/* Slices */}
 				{slices.map((slice) => (
 					<path
-						key={slice.datum.label}
 						d={arcPath(
-							cx,
-							cy,
+							centerX,
+							centerY,
 							outerR,
 							innerR,
 							slice.startAngle,
 							slice.endAngle
 						)}
 						fill={slice.color}
+						key={slice.datum.label}
 						opacity={0.85}
 					/>
 				))}
 
 				{/* Center total */}
 				<animated.text
-					x={cx}
-					y={cy - 6}
-					textAnchor="middle"
-					fontSize={11}
 					fill={themeSprings.theme.to((t) => {
-						const c = getColors(t.endsWith('dark'));
-						return c.textMuted;
+						const colors = getColors(t.endsWith('dark'));
+
+						return colors.textMuted;
 					})}
+					fontSize={11}
+					textAnchor="middle"
+					x={centerX}
+					y={
+						centerY -
+						TELEMETRY_DONUT_CHART_LAYOUT.centerLabelOffsetY
+					}
 				>
 					Total
 				</animated.text>
 				<animated.text
-					x={cx}
-					y={cy + 14}
-					textAnchor="middle"
+					fill={themeSprings.theme.to((t) => {
+						const colors = getColors(t.endsWith('dark'));
+
+						return colors.text;
+					})}
 					fontSize={18}
 					fontWeight={600}
-					fill={themeSprings.theme.to((t) => {
-						const c = getColors(t.endsWith('dark'));
-						return c.text;
-					})}
+					textAnchor="middle"
+					x={centerX}
+					y={
+						centerY +
+						TELEMETRY_DONUT_CHART_LAYOUT.centerValueOffsetY
+					}
 				>
 					{total.toLocaleString()}
 				</animated.text>
 
 				{/* Legend */}
-				{slices.map((slice, i) => {
-					const y = legendStartY + i * legendRowHeight;
+				{slices.map((slice, sliceIndex) => {
+					const legendY = legendStartY + sliceIndex * legendRowHeight;
+
 					return (
 						<g key={slice.datum.label}>
 							<rect
-								x={legendX}
-								y={y}
-								width={12}
-								height={12}
-								rx={2}
 								fill={slice.color}
+								height={
+									TELEMETRY_DONUT_CHART_LAYOUT.legendSwatchSize
+								}
+								rx={2}
+								width={
+									TELEMETRY_DONUT_CHART_LAYOUT.legendSwatchSize
+								}
+								x={legendX}
+								y={legendY}
 							/>
 							<animated.text
-								x={legendX + 18}
-								y={y + 10}
-								fontSize={11}
 								fill={themeSprings.theme.to((t) => {
-									const c = getColors(t.endsWith('dark'));
-									return c.text;
+									const colors = getColors(
+										t.endsWith('dark')
+									);
+
+									return colors.text;
 								})}
+								fontSize={11}
+								x={
+									legendX +
+									TELEMETRY_DONUT_CHART_LAYOUT.legendTextOffsetX
+								}
+								y={
+									legendY +
+									TELEMETRY_DONUT_CHART_LAYOUT.legendTextOffsetY
+								}
 							>
 								{slice.datum.label ?? 'unknown'}
 							</animated.text>
 							<animated.text
-								x={legendX + 18}
-								y={y + 10}
+								dx={TELEMETRY_DONUT_CHART_LAYOUT.legendValueDx}
+								fill={themeSprings.theme.to((t) => {
+									const colors = getColors(
+										t.endsWith('dark')
+									);
+
+									return colors.textMuted;
+								})}
 								fontSize={10}
 								textAnchor="end"
-								dx={140}
-								fill={themeSprings.theme.to((t) => {
-									const c = getColors(t.endsWith('dark'));
-									return c.textMuted;
-								})}
+								x={
+									legendX +
+									TELEMETRY_DONUT_CHART_LAYOUT.legendTextOffsetX
+								}
+								y={
+									legendY +
+									TELEMETRY_DONUT_CHART_LAYOUT.legendTextOffsetY
+								}
 							>
-								{(slice.pct * 100).toFixed(1)}%
+								{(slice.pct * PERCENT_SCALE).toFixed(1)}%
 							</animated.text>
 						</g>
 					);

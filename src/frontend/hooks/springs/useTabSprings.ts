@@ -1,6 +1,6 @@
 import { useSpring } from '@react-spring/web';
 import { useState } from 'react';
-import { ONE_HUNDRED_PERCENT } from '../../../constants';
+import { PERCENT_SCALE } from '../../../constants';
 
 export const useTabSprings = (numTabs: number) => {
 	const [currentTab, setCurrentTab] = useState(0);
@@ -8,12 +8,12 @@ export const useTabSprings = (numTabs: number) => {
 		config: {
 			duration: 200
 		},
-		left: `${(ONE_HUNDRED_PERCENT / numTabs) * currentTab}%`
+		left: `${(PERCENT_SCALE / numTabs) * currentTab}%`
 	}));
 
 	const handleTabClick = (index: number) => {
 		sliderApi.start({
-			left: `${(ONE_HUNDRED_PERCENT / numTabs) * index}%`
+			left: `${(PERCENT_SCALE / numTabs) * index}%`
 		});
 		setCurrentTab(index);
 	};

@@ -1,3 +1,4 @@
+import { HALF, TELEMETRY_LINE_CHART_LAYOUT } from '../../../../constants';
 import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { ThemeSprings } from '../../../../types/springTypes';
@@ -13,7 +14,14 @@ type LineChartProps = {
 	themeSprings: ThemeSprings;
 };
 
-const chartPadding = { top: 20, right: 20, bottom: 50, left: 60 };
+type ChartPadding = {
+	bottom: number;
+	left: number;
+	right: number;
+	top: number;
+};
+
+const chartPadding: ChartPadding = { bottom: 50, left: 60, right: 20, top: 20 };
 const viewWidth = 600;
 const viewHeight = 260;
 const chartWidth = viewWidth - chartPadding.left - chartPadding.right;
@@ -35,13 +43,19 @@ const containerStyle: CSSProperties = {
 export const LineChart = ({ series, themeSprings }: LineChartProps) => {
 	// Build unified date axis from all series
 	const allDates = [
-		...new Set(series.flatMap((s) => s.data.map((d) => d.date)))
+		...new Set(
+			series.flatMap((lineSeries) =>
+				lineSeries.data.map((datum) => datum.date)
+			)
+		)
 	].sort();
 
 	if (allDates.length === 0) return null;
 
 	const maxValue = Math.max(
-		...series.flatMap((s) => s.data.map((d) => d.value)),
+		...series.flatMap((lineSeries) =>
+			lineSeries.data.map((datum) => datum.value)
+		),
 		1
 	);
 
@@ -54,45 +68,59 @@ export const LineChart = ({ series, themeSprings }: LineChartProps) => {
 	const yScale = (value: number) =>
 		chartPadding.top + chartHeight - (value / maxValue) * chartHeight;
 
-	const yTicks = [0, 0.25, 0.5, 0.75, 1].map((pct) => ({
+	const yTicks = [
+		0,
+		TELEMETRY_LINE_CHART_LAYOUT.quarterTick,
+		HALF,
+		TELEMETRY_LINE_CHART_LAYOUT.threeQuarterTick,
+		1
+	].map((pct) => ({
 		value: Math.round(maxValue * pct),
 		y: chartPadding.top + chartHeight * (1 - pct)
 	}));
 
 	// Show a subset of date labels to avoid overlap
-	const maxLabels = 8;
+	const maxLabels = TELEMETRY_LINE_CHART_LAYOUT.maxDateLabels;
 	const labelStep = Math.max(1, Math.ceil(allDates.length / maxLabels));
 
 	return (
 		<animated.div style={containerStyle}>
 			<svg
-				viewBox={`0 0 ${viewWidth} ${viewHeight}`}
 				preserveAspectRatio="xMidYMid meet"
 				style={svgContainerStyle}
+				viewBox={`0 0 ${viewWidth} ${viewHeight}`}
 			>
 				{/* Grid lines */}
 				{yTicks.map((tick) => (
 					<g key={tick.value}>
 						<animated.line
-							x1={chartPadding.left}
-							y1={tick.y}
-							x2={viewWidth - chartPadding.right}
-							y2={tick.y}
 							stroke={themeSprings.theme.to((t) => {
-								const c = getColors(t.endsWith('dark'));
-								return c.border;
+								const colors = getColors(t.endsWith('dark'));
+
+								return colors.border;
 							})}
-							strokeWidth={0.5}
+							strokeWidth={HALF}
+							x1={chartPadding.left}
+							x2={viewWidth - chartPadding.right}
+							y1={tick.y}
+							y2={tick.y}
 						/>
 						<animated.text
-							x={chartPadding.left - 8}
-							y={tick.y + 4}
-							textAnchor="end"
-							fontSize={10}
 							fill={themeSprings.theme.to((t) => {
-								const c = getColors(t.endsWith('dark'));
-								return c.textMuted;
+								const colors = getColors(t.endsWith('dark'));
+
+								return colors.textMuted;
 							})}
+							fontSize={10}
+							textAnchor="end"
+							x={
+								chartPadding.left -
+								TELEMETRY_LINE_CHART_LAYOUT.axisLabelOffsetX
+							}
+							y={
+								tick.y +
+								TELEMETRY_LINE_CHART_LAYOUT.axisLabelOffsetY
+							}
 						>
 							{tick.value}
 						</animated.text>
@@ -100,53 +128,58 @@ export const LineChart = ({ series, themeSprings }: LineChartProps) => {
 				))}
 
 				{/* Series lines and area fills */}
-				{series.map((s, si) => {
-					const color = seriesColors[si % seriesColors.length];
+				{series.map((lineSeries, seriesIndex) => {
+					const color =
+						seriesColors[seriesIndex % seriesColors.length];
 					const dateValueMap = new Map(
-						s.data.map((d) => [d.date, d.value])
+						lineSeries.data.map((datum) => [
+							datum.date,
+							datum.value
+						])
 					);
 
-					const points = allDates.map((date, i) => ({
-						x: xScale(i),
+					const points = allDates.map((date, dateIndex) => ({
+						x: xScale(dateIndex),
 						y: yScale(dateValueMap.get(date) ?? 0)
 					}));
 
 					const linePoints = points
-						.map((p) => `${p.x},${p.y}`)
+						.map((point) => `${point.x},${point.y}`)
 						.join(' ');
 
-					const firstPoint = points[0];
-					const lastPoint = points[points.length - 1];
+					const [firstPoint] = points;
+					const lastPointIndex = points.length - 1;
+					const lastPoint = points[lastPointIndex];
 					if (!firstPoint || !lastPoint) return null;
 
 					const areaPoints = [
 						`${firstPoint.x},${chartPadding.top + chartHeight}`,
-						...points.map((p) => `${p.x},${p.y}`),
+						...points.map((point) => `${point.x},${point.y}`),
 						`${lastPoint.x},${chartPadding.top + chartHeight}`
 					].join(' ');
 
 					return (
-						<g key={s.label}>
+						<g key={lineSeries.label}>
 							<polygon
-								points={areaPoints}
 								fill={color}
 								opacity={0.12}
+								points={areaPoints}
 							/>
 							<polyline
-								points={linePoints}
 								fill="none"
+								points={linePoints}
 								stroke={color}
-								strokeWidth={2}
 								strokeLinejoin="round"
+								strokeWidth={2}
 							/>
 							{/* Data points */}
-							{points.map((p, i) => (
+							{points.map((point, pointIndex) => (
 								<circle
-									key={i}
-									cx={p.x}
-									cy={p.y}
-									r={3}
+									cx={point.x}
+									cy={point.y}
 									fill={color}
+									key={pointIndex}
+									r={TELEMETRY_LINE_CHART_LAYOUT.pointRadius}
 								/>
 							))}
 						</g>
@@ -154,21 +187,29 @@ export const LineChart = ({ series, themeSprings }: LineChartProps) => {
 				})}
 
 				{/* X-axis date labels */}
-				{allDates.map((date, i) => {
-					if (i % labelStep !== 0) return null;
-					const shortDate = date.slice(5); // MM-DD
+				{allDates.map((date, dateIndex) => {
+					if (dateIndex % labelStep !== 0) return null;
+					const shortDate = date.slice(
+						TELEMETRY_LINE_CHART_LAYOUT.dateLabelSliceStartIndex
+					); // MM-DD
+
 					return (
 						<animated.text
-							key={date}
-							x={xScale(i)}
-							y={chartPadding.top + chartHeight + 20}
-							textAnchor="middle"
-							fontSize={9}
 							fill={themeSprings.theme.to((t) => {
-								const c = getColors(t.endsWith('dark'));
-								return c.textMuted;
+								const colors = getColors(t.endsWith('dark'));
+
+								return colors.textMuted;
 							})}
-							transform={`rotate(-30, ${xScale(i)}, ${chartPadding.top + chartHeight + 20})`}
+							fontSize={9}
+							key={date}
+							textAnchor="middle"
+							transform={`rotate(-${TELEMETRY_LINE_CHART_LAYOUT.xAxisLabelRotationDegrees}, ${xScale(dateIndex)}, ${chartPadding.top + chartHeight + TELEMETRY_LINE_CHART_LAYOUT.xAxisLabelOffsetY})`}
+							x={xScale(dateIndex)}
+							y={
+								chartPadding.top +
+								chartHeight +
+								TELEMETRY_LINE_CHART_LAYOUT.xAxisLabelOffsetY
+							}
 						>
 							{shortDate}
 						</animated.text>
@@ -177,39 +218,66 @@ export const LineChart = ({ series, themeSprings }: LineChartProps) => {
 
 				{/* Y-axis line */}
 				<animated.line
-					x1={chartPadding.left}
-					y1={chartPadding.top}
-					x2={chartPadding.left}
-					y2={chartPadding.top + chartHeight}
 					stroke={themeSprings.theme.to((t) => {
-						const c = getColors(t.endsWith('dark'));
-						return c.border;
+						const colors = getColors(t.endsWith('dark'));
+
+						return colors.border;
 					})}
 					strokeWidth={1}
+					x1={chartPadding.left}
+					x2={chartPadding.left}
+					y1={chartPadding.top}
+					y2={chartPadding.top + chartHeight}
 				/>
 
 				{/* Legend (only if multiple series) */}
 				{series.length > 1 &&
-					series.map((s, i) => (
-						<g key={s.label}>
+					series.map((lineSeries, legendIndex) => (
+						<g key={lineSeries.label}>
 							<rect
-								x={chartPadding.left + i * 100}
-								y={viewHeight - 12}
-								width={10}
-								height={10}
+								fill={
+									seriesColors[
+										legendIndex % seriesColors.length
+									]
+								}
+								height={
+									TELEMETRY_LINE_CHART_LAYOUT.legendSwatchSize
+								}
 								rx={2}
-								fill={seriesColors[i % seriesColors.length]}
+								width={
+									TELEMETRY_LINE_CHART_LAYOUT.legendSwatchSize
+								}
+								x={
+									chartPadding.left +
+									legendIndex *
+										TELEMETRY_LINE_CHART_LAYOUT.legendStepX
+								}
+								y={
+									viewHeight -
+									TELEMETRY_LINE_CHART_LAYOUT.legendBottomOffsetY
+								}
 							/>
 							<animated.text
-								x={chartPadding.left + i * 100 + 14}
-								y={viewHeight - 3}
-								fontSize={10}
 								fill={themeSprings.theme.to((t) => {
-									const c = getColors(t.endsWith('dark'));
-									return c.text;
+									const colors = getColors(
+										t.endsWith('dark')
+									);
+
+									return colors.text;
 								})}
+								fontSize={10}
+								x={
+									chartPadding.left +
+									legendIndex *
+										TELEMETRY_LINE_CHART_LAYOUT.legendStepX +
+									TELEMETRY_LINE_CHART_LAYOUT.legendLabelOffsetX
+								}
+								y={
+									viewHeight -
+									TELEMETRY_LINE_CHART_LAYOUT.legendBaselineOffsetY
+								}
 							>
-								{s.label}
+								{lineSeries.label}
 							</animated.text>
 						</g>
 					))}

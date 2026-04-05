@@ -8,36 +8,32 @@ const gapStyle: CSSProperties = {
 	gap: '1.5rem'
 };
 
-export const BuildPerformanceSection = ({
-	data,
-	versions,
-	themeSprings,
-	onVersionChange
-}: TelemetrySectionProps) => {
+export const BuildPerformanceSection = (props: TelemetrySectionProps) => {
+	const { data, themeSprings } = props;
 	const byModeRows = data['build-duration-by-mode'] ?? [];
 	const devRows = byModeRows.filter(
-		(r) => String(r['mode']) === 'development'
+		(row) => String(row['mode']) === 'development'
 	);
 	const prodRows = byModeRows.filter(
-		(r) => String(r['mode']) === 'production'
+		(row) => String(row['mode']) === 'production'
 	);
 
 	return (
 		<div style={gapStyle}>
 			<TelemetryTable
-				queryKey="build-duration-by-mode"
-				title="Development Build Duration Details"
 				columns={['frameworks', 'version', 'duration_bucket', 'count']}
+				queryKey="build-duration-by-mode"
 				rows={devRows}
 				themeSprings={themeSprings}
+				title="Development Build Duration Details"
 			/>
 
 			<TelemetryTable
-				queryKey="build-duration-by-mode"
-				title="Production Build Duration Details"
 				columns={['frameworks', 'version', 'duration_bucket', 'count']}
+				queryKey="build-duration-by-mode"
 				rows={prodRows}
 				themeSprings={themeSprings}
+				title="Production Build Duration Details"
 			/>
 		</div>
 	);

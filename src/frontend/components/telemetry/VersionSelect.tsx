@@ -34,18 +34,18 @@ export const VersionSelect = ({
 	allLabel = 'All versions'
 }: VersionSelectProps) => (
 	<animated.select
+		onChange={(evt) => onChange(evt.target.value)}
 		style={selectStyle(themeSprings)}
 		value={value}
-		onChange={(evt) => onChange(evt.target.value)}
 	>
-		<animated.option value="" style={optionStyle(themeSprings)}>
+		<animated.option style={optionStyle(themeSprings)} value="">
 			{allLabel}
 		</animated.option>
 		{versions.map((ver) => (
 			<animated.option
 				key={ver}
-				value={ver}
 				style={optionStyle(themeSprings)}
+				value={ver}
 			>
 				{ver}
 			</animated.option>

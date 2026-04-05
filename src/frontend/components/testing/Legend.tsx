@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { PROVIDER_STATUSES } from '../../../constants';
-import { ThemeProps } from '../../../types/springTypes';
 import { legendData } from '../../data/legendData';
 import { renderBadge } from '../utils/renderBadge';
 
@@ -67,11 +66,11 @@ const LegendPill = ({ status, message }: LegendPillProps) => {
 
 	return (
 		<div
+			onMouseEnter={() => setShowTooltip(true)}
+			onMouseLeave={() => setShowTooltip(false)}
 			style={{
 				position: 'relative'
 			}}
-			onMouseEnter={() => setShowTooltip(true)}
-			onMouseLeave={() => setShowTooltip(false)}
 		>
 			<div
 				style={{
@@ -138,7 +137,7 @@ const LegendPill = ({ status, message }: LegendPillProps) => {
 	);
 };
 
-export const Legend = ({ themeSprings }: ThemeProps) => (
+export const Legend = () => (
 	<nav
 		style={{
 			alignItems: 'center',
@@ -152,7 +151,7 @@ export const Legend = ({ themeSprings }: ThemeProps) => (
 		}}
 	>
 		{legendData.map(({ status, message }) => (
-			<LegendPill key={status} status={status} message={message} />
+			<LegendPill key={status} message={message} status={status} />
 		))}
 	</nav>
 );

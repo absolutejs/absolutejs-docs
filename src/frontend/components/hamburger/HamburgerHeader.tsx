@@ -38,11 +38,11 @@ export const HamburgerHeader = ({
 			AbsoluteJS
 		</a>
 		<FaTimes
+			onClick={onClose}
 			style={{
 				cursor: 'pointer',
 				fontSize: '34px'
 			}}
-			onClick={onClose}
 		/>
 	</animated.div>
 );

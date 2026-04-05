@@ -13,7 +13,7 @@ $ absolute dev
 
   ABSOLUTEJS v0.19.0  ready in 1.23s
 
-  ➜  Local:   http://localhost:3000/
+  ➜  Local: http://localhost:3000/
   ➜  Network: http://192.168.1.42:3000/`;
 
 export const startCommand = `\
@@ -34,7 +34,7 @@ $ absolute start
 
   ABSOLUTEJS v0.19.0  ready in 3.69s
 
-  ➜  Local:   http://localhost:3000/`;
+  ➜  Local: http://localhost:3000/`;
 
 export const startWithSSG = `\
 $ absolute start
@@ -45,4 +45,4 @@ $ absolute start
 
   ABSOLUTEJS v0.19.0  ready in 4.19s
 
-  ➜  Local:   http://localhost:3000/`;
+  ➜  Local: http://localhost:3000/`;

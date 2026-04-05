@@ -1,3 +1,9 @@
+import {
+	DROPDOWN_CLOSE_DELAY_MS,
+	DROPDOWN_CLOSE_Y_OFFSET,
+	DROPDOWN_HIDDEN_SCALE,
+	NAVBAR_DROPDOWN_Z_INDEX
+} from '../../../constants';
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { ReactNode, RefObject, useEffect, useRef } from 'react';
 import { ThemeSprings } from '../../../types/springTypes';
@@ -42,10 +48,10 @@ export const DropdownContainer = ({
 				void springApi.start({
 					config: { friction: 26, tension: 350 },
 					opacity: 0,
-					scale: 0.95,
-					y: -10
+					scale: DROPDOWN_HIDDEN_SCALE,
+					y: DROPDOWN_CLOSE_Y_OFFSET
 				});
-				setTimeout(() => onClose?.(), 150);
+				setTimeout(() => onClose?.(), DROPDOWN_CLOSE_DELAY_MS);
 			}
 		};
 
@@ -70,9 +76,9 @@ export const DropdownContainer = ({
 				right: 0,
 				scale: spring.scale,
 				top: 'calc(100% + 12px)',
-				transform: spring.y.to((y) => `translateY(${y}px)`),
+				transform: spring.y.to((offsetY) => `translateY(${offsetY}px)`),
 				transformOrigin: 'top right',
-				zIndex: 999
+				zIndex: NAVBAR_DROPDOWN_Z_INDEX
 			}}
 		>
 			{children}

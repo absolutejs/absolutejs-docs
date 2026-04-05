@@ -40,24 +40,24 @@ export type TelemetrySidebarItem = {
 };
 
 export const telemetrySidebarData: TelemetrySidebarItem[] = [
-	{ id: 'overview', label: 'Overview', icon: AnimatedChartBar },
+	{ icon: AnimatedChartBar, id: 'overview', label: 'Overview' },
 	{
+		icon: AnimatedExclamation,
 		id: 'errors-crashes',
-		label: 'Errors & Crashes',
-		icon: AnimatedExclamation
+		label: 'Errors & Crashes'
 	},
 	{
+		icon: AnimatedHammer,
 		id: 'build-performance',
-		label: 'Build Performance',
-		icon: AnimatedHammer
+		label: 'Build Performance'
 	},
 	{
+		icon: AnimatedBolt,
 		id: 'hmr-performance',
-		label: 'HMR Performance',
-		icon: AnimatedBolt
+		label: 'HMR Performance'
 	},
-	{ id: 'usage-adoption', label: 'Usage & Adoption', icon: AnimatedUsers },
-	{ id: 'dev-sessions', label: 'Dev Sessions', icon: AnimatedClock },
-	{ id: 'event-log', label: 'Event Log', icon: AnimatedList },
-	{ id: 'unique-users', label: 'Unique Users', icon: AnimatedFingerprint }
+	{ icon: AnimatedUsers, id: 'usage-adoption', label: 'Usage & Adoption' },
+	{ icon: AnimatedClock, id: 'dev-sessions', label: 'Dev Sessions' },
+	{ icon: AnimatedList, id: 'event-log', label: 'Event Log' },
+	{ icon: AnimatedFingerprint, id: 'unique-users', label: 'Unique Users' }
 ];

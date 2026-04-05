@@ -12,7 +12,6 @@ import {
 	aiHtmxBasic,
 	aiHtmxCustomRenderers
 } from '../../../data/documentation/aiDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	mainContentStyle,
@@ -74,6 +73,182 @@ const methodBadgeStyle = (color: string): CSSProperties => ({
 	fontWeight: 700
 });
 
+type AIPluginSectionBlockProps = {
+	section: 'options' | 'endpoints';
+	themeSprings: DocsViewProps['themeSprings'];
+};
+
+const configOptions: Array<{
+	desc: string;
+	name: string;
+	required?: boolean;
+	type: string;
+}> = [
+	{
+		desc: 'Factory function that receives a provider name and returns a provider config. This is the only required option.',
+		name: 'provider',
+		required: true,
+		type: '(name) => AIProviderConfig'
+	},
+	{
+		desc: 'Static model name or function to select model per provider. If omitted, the client must specify the model.',
+		name: 'model',
+		type: 'string | (name) => string'
+	},
+	{
+		desc: 'Static tool map or function returning tools per provider/model. Return undefined to disable tools for a model.',
+		name: 'tools',
+		type: 'AIToolMap | (name, model) => AIToolMap'
+	},
+	{
+		desc: 'Enable extended thinking globally, with a token budget, or dynamically per provider/model.',
+		name: 'thinking',
+		type: 'boolean | { budgetTokens } | fn'
+	},
+	{
+		desc: 'Custom parser to extract provider, model, and content from the raw message string sent by the client.',
+		name: 'parseProvider',
+		type: '(content) => { content, model, providerName }'
+	},
+	{
+		desc: 'Callback fired when a response finishes streaming. Useful for logging token usage or saving to a database.',
+		name: 'onComplete',
+		type: '(conversationId, response, usage) => void'
+	},
+	{
+		desc: "WebSocket and REST endpoint path. Defaults to '/chat'.",
+		name: 'path',
+		type: 'string'
+	},
+	{
+		desc: 'Maximum tool-use rounds before the plugin stops the loop. Defaults to 10.',
+		name: 'maxTurns',
+		type: 'number'
+	}
+];
+
+const endpointRows: Array<[string, string, string, string]> = [
+	[
+		'WS',
+		'#8B5CF6',
+		'/chat',
+		'Main streaming endpoint. Handles messages, cancellation, and branching.'
+	],
+	[
+		'GET',
+		'#10B981',
+		'/chat/conversations',
+		'List all conversations sorted by most recent.'
+	],
+	[
+		'GET',
+		'#10B981',
+		'/chat/conversations/:id',
+		'Get a single conversation with its full message history.'
+	],
+	[
+		'DELETE',
+		'#EF4444',
+		'/chat/conversations/:id',
+		'Delete a conversation and all its messages.'
+	]
+];
+
+const renderEndpointRows = (themeSprings: DocsViewProps['themeSprings']) => (
+	<tbody>
+		{endpointRows.map(([method, color, path, description]) => (
+			<tr key={`${method}-${path}`}>
+				<animated.td style={tableCellStyle(themeSprings)}>
+					<span style={methodBadgeStyle(color)}>{method}</span>
+				</animated.td>
+				<animated.td style={tableCellStyle(themeSprings)}>
+					<code style={tableCodeStyle}>{path}</code>
+				</animated.td>
+				<animated.td style={tableCellStyle(themeSprings)}>
+					{description}
+				</animated.td>
+			</tr>
+		))}
+	</tbody>
+);
+
+const AIPluginSectionBlock = ({
+	section,
+	themeSprings
+}: AIPluginSectionBlockProps) => {
+	if (section === 'options') {
+		return (
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '0.75rem',
+					marginTop: '0.5rem'
+				}}
+			>
+				{configOptions.map((opt) => (
+					<animated.div
+						key={opt.name}
+						style={{
+							...featureCardStyle(themeSprings),
+							padding: '1rem 1.25rem'
+						}}
+					>
+						<div
+							style={{
+								alignItems: 'center',
+								display: 'flex',
+								flexWrap: 'wrap'
+							}}
+						>
+							<span style={optionNameStyle}>{opt.name}</span>
+							{opt.required && (
+								<span
+									style={{
+										background: 'rgba(239, 68, 68, 0.15)',
+										borderRadius: '4px',
+										color: '#EF4444',
+										fontSize: '0.7rem',
+										fontWeight: 600,
+										marginLeft: '0.5rem',
+										padding: '0.1rem 0.4rem',
+										textTransform: 'uppercase'
+									}}
+								>
+									required
+								</span>
+							)}
+							<span style={optionTypeStyle}>{opt.type}</span>
+						</div>
+						<div style={optionDescStyle}>{opt.desc}</div>
+					</animated.div>
+				))}
+			</div>
+		);
+	}
+
+	return (
+		<div style={tableContainerStyle}>
+			<animated.table style={tableStyle(themeSprings)}>
+				<thead>
+					<tr>
+						<animated.th style={tableHeaderStyle(themeSprings)}>
+							Method
+						</animated.th>
+						<animated.th style={tableHeaderStyle(themeSprings)}>
+							Path
+						</animated.th>
+						<animated.th style={tableHeaderStyle(themeSprings)}>
+							Description
+						</animated.th>
+					</tr>
+				</thead>
+				{renderEndpointRows(themeSprings)}
+			</animated.table>
+		</div>
+	);
+};
+
 export const AIPluginView = ({
 	currentPageId,
 	onNavigate,
@@ -82,8 +257,6 @@ export const AIPluginView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -99,7 +272,7 @@ export const AIPluginView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="ai-plugin">
+					<h1 id="ai-plugin" style={h1Style(isMobileOrTablet)}>
 						AI Plugin
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -112,8 +285,8 @@ export const AIPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="basic-setup"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -133,8 +306,8 @@ export const AIPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="full-configuration"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -155,112 +328,23 @@ export const AIPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="config-options"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Config Options
 					</AnchorHeading>
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							gap: '0.75rem',
-							marginTop: '0.5rem'
-						}}
-					>
-						{[
-							{
-								name: 'provider',
-								required: true,
-								type: '(name) => AIProviderConfig',
-								desc: 'Factory function that receives a provider name and returns a provider config. This is the only required option.'
-							},
-							{
-								name: 'model',
-								type: 'string | (name) => string',
-								desc: 'Static model name or function to select model per provider. If omitted, the client must specify the model.'
-							},
-							{
-								name: 'tools',
-								type: 'AIToolMap | (name, model) => AIToolMap',
-								desc: 'Static tool map or function returning tools per provider/model. Return undefined to disable tools for a model.'
-							},
-							{
-								name: 'thinking',
-								type: 'boolean | { budgetTokens } | fn',
-								desc: 'Enable extended thinking globally, with a token budget, or dynamically per provider/model.'
-							},
-							{
-								name: 'parseProvider',
-								type: '(content) => { content, model, providerName }',
-								desc: 'Custom parser to extract provider, model, and content from the raw message string sent by the client.'
-							},
-							{
-								name: 'onComplete',
-								type: '(conversationId, response, usage) => void',
-								desc: 'Callback fired when a response finishes streaming. Useful for logging token usage or saving to a database.'
-							},
-							{
-								name: 'path',
-								type: 'string',
-								desc: "WebSocket and REST endpoint path. Defaults to '/chat'."
-							},
-							{
-								name: 'maxTurns',
-								type: 'number',
-								desc: 'Maximum tool-use rounds before the plugin stops the loop. Defaults to 10.'
-							}
-						].map((opt) => (
-							<animated.div
-								key={opt.name}
-								style={{
-									...featureCardStyle(themeSprings),
-									padding: '1rem 1.25rem'
-								}}
-							>
-								<div
-									style={{
-										alignItems: 'center',
-										display: 'flex',
-										flexWrap: 'wrap'
-									}}
-								>
-									<span style={optionNameStyle}>
-										{opt.name}
-									</span>
-									{opt.required && (
-										<span
-											style={{
-												background:
-													'rgba(239, 68, 68, 0.15)',
-												borderRadius: '4px',
-												color: '#EF4444',
-												fontSize: '0.7rem',
-												fontWeight: 600,
-												marginLeft: '0.5rem',
-												padding: '0.1rem 0.4rem',
-												textTransform: 'uppercase'
-											}}
-										>
-											required
-										</span>
-									)}
-									<span style={optionTypeStyle}>
-										{opt.type}
-									</span>
-								</div>
-								<div style={optionDescStyle}>{opt.desc}</div>
-							</animated.div>
-						))}
-					</div>
+					<AIPluginSectionBlock
+						section="options"
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="config-type"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -276,8 +360,8 @@ export const AIPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="endpoints"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -287,133 +371,16 @@ export const AIPluginView = ({
 						The plugin automatically creates these endpoints under
 						the configured path (default <code>/chat</code>):
 					</p>
-					<div style={tableContainerStyle}>
-						<animated.table style={tableStyle(themeSprings)}>
-							<thead>
-								<tr>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Method
-									</animated.th>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Path
-									</animated.th>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Description
-									</animated.th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<span
-											style={methodBadgeStyle('#8B5CF6')}
-										>
-											WS
-										</span>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<code style={tableCodeStyle}>
-											/chat
-										</code>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										Main streaming endpoint. Handles
-										messages, cancellation, and branching.
-									</animated.td>
-								</tr>
-								<tr>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<span
-											style={methodBadgeStyle('#10B981')}
-										>
-											GET
-										</span>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<code style={tableCodeStyle}>
-											/chat/conversations
-										</code>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										List all conversations sorted by most
-										recent.
-									</animated.td>
-								</tr>
-								<tr>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<span
-											style={methodBadgeStyle('#10B981')}
-										>
-											GET
-										</span>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<code style={tableCodeStyle}>
-											/chat/conversations/:id
-										</code>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										Get a single conversation with its full
-										message history.
-									</animated.td>
-								</tr>
-								<tr>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<span
-											style={methodBadgeStyle('#EF4444')}
-										>
-											DELETE
-										</span>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<code style={tableCodeStyle}>
-											/chat/conversations/:id
-										</code>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										Delete a conversation and all its
-										messages.
-									</animated.td>
-								</tr>
-							</tbody>
-						</animated.table>
-					</div>
+					<AIPluginSectionBlock
+						section="endpoints"
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="conversation-store"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -464,8 +431,8 @@ export const AIPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="htmx"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -474,7 +441,7 @@ export const AIPluginView = ({
 					<p style={paragraphSpacedStyle}>
 						Enable <code>htmx: true</code> to add SSE-based
 						endpoints alongside the WebSocket ones. HTMX clients can
-						stream AI responses with zero JavaScript — just{' '}
+						stream AI responses with zero JavaScript. Just use{' '}
 						<code>hx-post</code> and <code>sse-connect</code>.
 					</p>
 					<PrismPlus
@@ -508,14 +475,14 @@ export const AIPluginView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

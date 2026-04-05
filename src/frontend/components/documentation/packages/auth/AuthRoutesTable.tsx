@@ -8,43 +8,101 @@ import {
 	tableCodeStyle
 } from '../../../../styles/docsStyles';
 
-const routes = [
+type AuthRoute = {
+	description: string;
+	method: string;
+	route: string;
+};
+
+const routes: AuthRoute[] = [
 	{
-		route: '/oauth2/:provider/authorization',
+		description: 'Initiate OAuth flow with specified provider',
 		method: 'GET',
-		description: 'Initiate OAuth flow with specified provider'
+		route: '/oauth2/:provider/authorization'
 	},
 	{
-		route: '/oauth2/callback',
+		description: 'Handle OAuth callback and token exchange',
 		method: 'GET',
-		description: 'Handle OAuth callback and token exchange'
+		route: '/oauth2/callback'
 	},
 	{
-		route: '/oauth2/status',
+		description: 'Check current user authentication status',
 		method: 'GET',
-		description: 'Check current user authentication status'
+		route: '/oauth2/status'
 	},
 	{
-		route: '/oauth2/profile',
+		description: 'Fetch user profile from OAuth provider',
 		method: 'GET',
-		description: 'Fetch user profile from OAuth provider'
+		route: '/oauth2/profile'
 	},
 	{
-		route: '/oauth2/tokens',
+		description: 'Refresh access token using refresh token',
 		method: 'POST',
-		description: 'Refresh access token using refresh token'
+		route: '/oauth2/tokens'
 	},
 	{
-		route: '/oauth2/revocation',
+		description: 'Revoke access or refresh token',
 		method: 'POST',
-		description: 'Revoke access or refresh token'
+		route: '/oauth2/revocation'
 	},
 	{
-		route: '/oauth2/signout',
+		description: 'Sign out user and clear session',
 		method: 'DELETE',
-		description: 'Sign out user and clear session'
+		route: '/oauth2/signout'
 	}
 ];
+
+const getMethodBadgeColors = (method: string) => {
+	if (method === 'GET') {
+		return {
+			background: 'rgba(76, 175, 80, 0.2)',
+			color: '#4CAF50'
+		};
+	}
+
+	if (method === 'POST') {
+		return {
+			background: 'rgba(33, 150, 243, 0.2)',
+			color: '#2196F3'
+		};
+	}
+
+	return {
+		background: 'rgba(244, 67, 54, 0.2)',
+		color: '#F44336'
+	};
+};
+
+const renderAuthRouteRows = (themeSprings: ThemeProps['themeSprings']) =>
+	routes.map((route) => {
+		const badgeColors = getMethodBadgeColors(route.method);
+
+		return (
+			<tr key={route.route}>
+				<animated.td style={tableCellStyle(themeSprings)}>
+					<code style={tableCodeStyle}>{route.route}</code>
+				</animated.td>
+				<animated.td style={tableCellStyle(themeSprings)}>
+					<span
+						style={{
+							background: badgeColors.background,
+							borderRadius: '0.25rem',
+							color: badgeColors.color,
+							fontFamily: 'monospace',
+							fontSize: '0.8rem',
+							fontWeight: 600,
+							padding: '0.2rem 0.5rem'
+						}}
+					>
+						{route.method}
+					</span>
+				</animated.td>
+				<animated.td style={tableCellStyle(themeSprings)}>
+					{route.description}
+				</animated.td>
+			</tr>
+		);
+	});
 
 export const AuthRoutesTable = ({ themeSprings }: ThemeProps) => (
 	<div style={tableContainerStyle}>
@@ -62,43 +120,7 @@ export const AuthRoutesTable = ({ themeSprings }: ThemeProps) => (
 					</animated.th>
 				</tr>
 			</thead>
-			<tbody>
-				{routes.map((route, index) => (
-					<tr key={index}>
-						<animated.td style={tableCellStyle(themeSprings)}>
-							<code style={tableCodeStyle}>{route.route}</code>
-						</animated.td>
-						<animated.td style={tableCellStyle(themeSprings)}>
-							<span
-								style={{
-									background:
-										route.method === 'GET'
-											? 'rgba(76, 175, 80, 0.2)'
-											: route.method === 'POST'
-												? 'rgba(33, 150, 243, 0.2)'
-												: 'rgba(244, 67, 54, 0.2)',
-									borderRadius: '0.25rem',
-									color:
-										route.method === 'GET'
-											? '#4CAF50'
-											: route.method === 'POST'
-												? '#2196F3'
-												: '#F44336',
-									fontFamily: 'monospace',
-									fontSize: '0.8rem',
-									fontWeight: 600,
-									padding: '0.2rem 0.5rem'
-								}}
-							>
-								{route.method}
-							</span>
-						</animated.td>
-						<animated.td style={tableCellStyle(themeSprings)}>
-							{route.description}
-						</animated.td>
-					</tr>
-				))}
-			</tbody>
+			<tbody>{renderAuthRouteRows(themeSprings)}</tbody>
 		</animated.table>
 	</div>
 );

@@ -8,16 +8,12 @@ import {
 	hooksSsrUsage,
 	hooksApiReference
 } from '../../../data/documentation/reactHooksDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -27,6 +23,8 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { BreakpointsSection } from './BreakpointsSection';
+import { UseMediaQuerySection } from './UseMediaQuerySection';
 
 const tocItems: TocItem[] = [
 	{ href: '#use-media-query', label: 'useMediaQuery' },
@@ -44,8 +42,6 @@ export const ReactHooksView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -61,7 +57,7 @@ export const ReactHooksView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="react-hooks">
+					<h1 id="react-hooks" style={h1Style(isMobileOrTablet)}>
 						React Hooks
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -72,51 +68,15 @@ export const ReactHooksView = ({
 					</p>
 				</animated.div>
 
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="use-media-query"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						useMediaQuery
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						The <code>useMediaQuery</code> hook provides
-						viewport-based responsive breakpoints. It returns the
-						current breakpoint name and two helper functions for
-						checking size ranges.
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>breakpoint</strong> —
-							the current breakpoint name (<code>xs</code>,{' '}
-							<code>sm</code>, <code>md</code>, <code>lg</code>,{' '}
-							<code>xl</code>, <code>2xl</code>)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>isSizeOrGreater</strong>{' '}
-							— returns <code>true</code> if the viewport is at or
-							above the given breakpoint
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>isSizeOrLess</strong> —
-							returns <code>true</code> if the viewport is at or
-							below the given breakpoint
-						</li>
-					</ul>
-					<PrismPlus
-						codeString={hooksBasicUsage}
-						language="tsx"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-				</section>
+				<UseMediaQuerySection
+					codeString={hooksBasicUsage}
+					themeSprings={themeSprings}
+				/>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="user-agent-provider"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -139,53 +99,15 @@ export const ReactHooksView = ({
 					/>
 				</section>
 
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="breakpoints"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Breakpoints
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						The default breakpoints match Tailwind CSS values. The
-						hook checks viewport width against these thresholds and
-						returns the largest breakpoint that the current width
-						satisfies.
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>xs</strong> — 0px
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>sm</strong> — 640px
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>md</strong> — 768px
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>lg</strong> — 1024px
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>xl</strong> — 1280px
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>2xl</strong> — 1536px
-						</li>
-					</ul>
-					<PrismPlus
-						codeString={hooksBreakpoints}
-						language="tsx"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-				</section>
+				<BreakpointsSection
+					codeString={hooksBreakpoints}
+					themeSprings={themeSprings}
+				/>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="ssr-usage"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -212,8 +134,8 @@ export const ReactHooksView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="api-reference"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -236,14 +158,14 @@ export const ReactHooksView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

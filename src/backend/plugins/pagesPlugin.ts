@@ -1,11 +1,6 @@
 import { Elysia, t } from 'elysia';
-import { DatabaseType, User } from '../../../db/schema';
-import {
-	handleReactPageRequest,
-	asset,
-	Result,
-	getEnv
-} from '@absolutejs/absolute';
+import { User } from '../../../db/schema';
+import { handleReactPageRequest, asset, getEnv } from '@absolutejs/absolute';
 import {
 	getStatus,
 	isValidProviderOption,
@@ -27,7 +22,7 @@ import {
 const whitelistedAdmins =
 	getEnv('ADMIN_SUBS')
 		?.split(',')
-		.map((s) => s.trim()) ?? [];
+		.map((adminSub) => adminSub.trim()) ?? [];
 
 export const pagesPlugin = (manifest: Record<string, string>) =>
 	new Elysia()
@@ -158,12 +153,12 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 					AuthTesting,
 					asset(manifest, 'AuthTestingIndex'),
 					{
-						theme: theme?.value,
 						initialProvider:
 							query.provider &&
 							isValidProviderOption(query.provider)
 								? query.provider
 								: undefined,
+						theme: theme?.value,
 						user
 					}
 				);

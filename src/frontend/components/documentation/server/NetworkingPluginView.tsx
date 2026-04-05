@@ -9,17 +9,14 @@ import {
 	networkingHost,
 	networkingLogging
 } from '../../../data/documentation/networkingPluginDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
+import { NetworkingHowItWorksList } from './NetworkingHowItWorksList';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
@@ -46,8 +43,6 @@ export const NetworkingPluginView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -64,8 +59,8 @@ export const NetworkingPluginView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						style={h1Style(isMobileOrTablet)}
 						id="networking-plugin"
+						style={h1Style(isMobileOrTablet)}
 					>
 						Networking Plugin
 					</h1>
@@ -77,8 +72,8 @@ export const NetworkingPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="usage"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -103,8 +98,8 @@ export const NetworkingPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="how-it-works"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -120,35 +115,13 @@ export const NetworkingPluginView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Reads environment
-							</strong>
-							: Gets HOST and PORT from your .env file
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Checks --host flag
-							</strong>
-							: Binds to 0.0.0.0 if --host is passed
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Starts server</strong>:
-							Calls .listen() internally with the correct
-							configuration
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Logs info</strong>:
-							Outputs the server URL and network address
-						</li>
-					</ul>
+					<NetworkingHowItWorksList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="environment"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -167,8 +140,8 @@ export const NetworkingPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="host-flag"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -188,8 +161,8 @@ export const NetworkingPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="logging"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -209,8 +182,8 @@ export const NetworkingPluginView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="full-example"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -236,14 +209,14 @@ export const NetworkingPluginView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

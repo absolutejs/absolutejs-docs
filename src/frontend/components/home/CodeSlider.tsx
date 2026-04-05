@@ -1,5 +1,5 @@
 import { animated, SpringValue } from '@react-spring/web';
-import { ONE_HUNDRED_PERCENT } from '../../../constants';
+import { PERCENT_SCALE } from '../../../constants';
 import { ThemeSprings } from '../../../types/springTypes';
 
 type CodeSliderProps = {
@@ -28,6 +28,7 @@ export const CodeSlider = ({
 		{tabs.map((tab, index) => (
 			<animated.button
 				key={index}
+				onClick={() => handleTabClick(index)}
 				style={{
 					backgroundColor: 'transparent',
 					border: 'none',
@@ -36,9 +37,8 @@ export const CodeSlider = ({
 					cursor: 'pointer',
 					fontSize: '1rem',
 					padding: '0.5rem',
-					width: `${ONE_HUNDRED_PERCENT / tabs.length}%`
+					width: `${PERCENT_SCALE / tabs.length}%`
 				}}
-				onClick={() => handleTabClick(index)}
 			>
 				{tab}
 			</animated.button>
@@ -52,7 +52,7 @@ export const CodeSlider = ({
 				height: '4px',
 				left: sliderSprings.left,
 				position: 'absolute',
-				width: `${ONE_HUNDRED_PERCENT / tabs.length}%`
+				width: `${PERCENT_SCALE / tabs.length}%`
 			}}
 		/>
 	</div>

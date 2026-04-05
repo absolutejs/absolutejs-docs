@@ -39,6 +39,23 @@ const tocItems: TocItem[] = [
 	{ href: '#multi-framework', label: 'Multi-Framework' }
 ];
 
+const AngularMultiFrameworkList = () => (
+	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>AOT in Production</strong>: Angular
+			Linker plugin removes the compiler from browser bundles
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>JIT in Dev</strong>: Faster rebuilds
+			during development with HMR support
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>DOM State Preservation</strong>: Form
+			inputs and scroll positions are preserved during HMR
+		</li>
+	</ul>
+);
+
 export const AngularOverviewView = ({
 	currentPageId,
 	isMobileOrTablet,
@@ -62,7 +79,7 @@ export const AngularOverviewView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="angular">
+					<h1 id="angular" style={h1Style(isMobileOrTablet)}>
 						Angular
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -74,8 +91,8 @@ export const AngularOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="build-config"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -96,8 +113,8 @@ export const AngularOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="page-handler"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -119,8 +136,8 @@ export const AngularOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="components"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -146,8 +163,8 @@ export const AngularOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="hydration"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -169,8 +186,8 @@ export const AngularOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="view-transitions"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -195,8 +212,8 @@ export const AngularOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="client-scripts"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -216,8 +233,8 @@ export const AngularOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="multi-framework"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -234,26 +251,7 @@ export const AngularOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								AOT in Production
-							</strong>
-							: Angular Linker plugin removes the compiler from
-							browser bundles
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>JIT in Dev</strong>:
-							Faster rebuilds during development with HMR support
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								DOM State Preservation
-							</strong>
-							: Form inputs and scroll positions are preserved
-							during HMR
-						</li>
-					</ul>
+					<AngularMultiFrameworkList />
 				</section>
 
 				<DocsNavigation
@@ -265,14 +263,14 @@ export const AngularOverviewView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

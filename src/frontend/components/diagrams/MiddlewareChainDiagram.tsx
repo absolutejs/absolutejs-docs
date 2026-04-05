@@ -1,3 +1,4 @@
+import { MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT } from '../../../constants';
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../types/springTypes';
 import {
@@ -10,6 +11,13 @@ type MiddlewareChainDiagramProps = {
 	themeSprings: ThemeSprings;
 };
 
+type MiddlewareLayer = {
+	color: string;
+	description: string;
+	example: string;
+	title: string;
+};
+
 export const MiddlewareChainDiagram = ({
 	themeSprings
 }: MiddlewareChainDiagramProps) => {
@@ -20,7 +28,7 @@ export const MiddlewareChainDiagram = ({
 	const svgWidth = 750;
 	const svgHeight = 440;
 
-	const layers = [
+	const layers: MiddlewareLayer[] = [
 		{
 			color: colors.textMuted,
 			description: 'HTTP request arrives at your Elysia server',
@@ -30,21 +38,21 @@ export const MiddlewareChainDiagram = ({
 		{
 			color: colors.accent,
 			description:
-				'cors(), static(), swagger() — extend server capabilities',
+				'cors(), static(), swagger() : extend server capabilities',
 			example: '.use(cors()).use(staticPlugin())',
 			title: 'Plugins'
 		},
 		{
 			color: colors.accentSecondary,
 			description:
-				'Authentication, rate limiting, validation — protect routes',
+				'Authentication, rate limiting, validation : protect routes',
 			example: '.guard({ beforeHandle: checkAuth })',
 			title: 'Guards'
 		},
 		{
 			color: colors.accentTertiary,
 			description:
-				'Inject user, db connection, utilities — available in handlers',
+				'Inject user, db connection, utilities : available in handlers',
 			example: '.derive(() => ({ user: getUser() }))',
 			title: 'Derive'
 		},
@@ -95,28 +103,42 @@ export const MiddlewareChainDiagram = ({
 				</text>
 
 				{/* Layers */}
-				{layers.map((layer, i) => {
-					const y = startY + i * layerHeight;
-					const indent = i * 25;
+				{layers.map((layer, layerIndex) => {
+					const layerY = startY + layerIndex * layerHeight;
+					const indent =
+						layerIndex *
+						MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.layerIndentStep;
 
 					return (
-						<g key={i}>
+						<g key={layerIndex}>
 							{/* Layer box */}
 							<rect
 								fill={colors.background}
-								height={layerHeight - 10}
+								height={
+									layerHeight -
+									MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.layerBottomPadding
+								}
 								rx={10}
 								stroke={layer.color}
 								strokeWidth={2}
 								width={layerWidth - indent * 2}
 								x={startX + indent}
-								y={y}
+								y={layerY}
 							/>
 
 							{/* Step number */}
 							<circle
-								cx={startX + indent + 28}
-								cy={y + (layerHeight - 10) / 2}
+								cx={
+									startX +
+									indent +
+									MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.stepBadgeOffsetX
+								}
+								cy={
+									layerY +
+									(layerHeight -
+										MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.layerBottomPadding) /
+										2
+								}
 								fill={layer.color}
 								r={16}
 							/>
@@ -126,10 +148,20 @@ export const MiddlewareChainDiagram = ({
 								fontSize={13}
 								fontWeight={700}
 								textAnchor="middle"
-								x={startX + indent + 28}
-								y={y + (layerHeight - 10) / 2 + 1}
+								x={
+									startX +
+									indent +
+									MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.stepBadgeOffsetX
+								}
+								y={
+									layerY +
+									(layerHeight -
+										MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.layerBottomPadding) /
+										2 +
+									1
+								}
 							>
-								{i + 1}
+								{layerIndex + 1}
 							</text>
 
 							{/* Title */}
@@ -137,8 +169,15 @@ export const MiddlewareChainDiagram = ({
 								fill={colors.text}
 								fontSize={14}
 								fontWeight={600}
-								x={startX + indent + 55}
-								y={y + 22}
+								x={
+									startX +
+									indent +
+									MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.titleOffsetX
+								}
+								y={
+									layerY +
+									MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.titleBaselineY
+								}
 							>
 								{layer.title}
 							</text>
@@ -147,8 +186,15 @@ export const MiddlewareChainDiagram = ({
 							<text
 								fill={colors.textMuted}
 								fontSize={11}
-								x={startX + indent + 55}
-								y={y + 40}
+								x={
+									startX +
+									indent +
+									MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.titleOffsetX
+								}
+								y={
+									layerY +
+									MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.descriptionBaselineY
+								}
 							>
 								{layer.description}
 							</text>
@@ -158,22 +204,33 @@ export const MiddlewareChainDiagram = ({
 								fill={layer.color}
 								fontFamily="monospace"
 								fontSize={10}
-								x={startX + indent + 55}
-								y={y + 55}
+								x={
+									startX +
+									indent +
+									MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.titleOffsetX
+								}
+								y={
+									layerY +
+									MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.exampleBaselineY
+								}
 							>
 								{layer.example}
 							</text>
 
 							{/* Arrow to next layer */}
-							{i < layers.length - 1 && (
+							{layerIndex < layers.length - 1 && (
 								<line
 									markerEnd="url(#middleware-arrow)"
 									stroke={colors.arrow}
 									strokeWidth={2}
 									x1={startX + layerWidth / 2}
 									x2={startX + layerWidth / 2}
-									y1={y + layerHeight - 10}
-									y2={y + layerHeight + 2}
+									y1={
+										layerY +
+										layerHeight -
+										MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.layerBottomPadding
+									}
+									y2={layerY + layerHeight + 2}
 								/>
 							)}
 						</g>
@@ -182,42 +239,46 @@ export const MiddlewareChainDiagram = ({
 
 				{/* Right side: Type propagation note */}
 				<g
-					transform={`translate(${startX + layerWidth + 30}, ${startY + 50})`}
+					transform={`translate(${startX + layerWidth + MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteOffsetX}, ${startY + MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteOffsetY})`}
 				>
 					<rect
 						fill={colors.highlight}
-						height={200}
+						height={
+							MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteBoxHeight
+						}
 						rx={10}
-						width={110}
+						width={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteBoxWidth}
 					/>
 					<text
 						fill={colors.text}
 						fontSize={11}
 						fontWeight={600}
 						textAnchor="middle"
-						x={55}
-						y={25}
+						x={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX}
+						y={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteLabelY}
 					>
 						Types Flow
 					</text>
 					<line
 						stroke={colors.arrow}
 						strokeWidth={2}
-						x1={55}
-						x2={55}
-						y1={40}
-						y2={170}
+						x1={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX}
+						x2={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX}
+						y1={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteLineStartY}
+						y2={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteLineEndY}
 					/>
 					<polygon
 						fill={colors.arrow}
-						points="55,180 48,165 62,165"
+						points={`${MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX},${MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteArrowTipY} ${MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteArrowLeftX},${MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteLineEndY - MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteArrowShoulderOffsetY} ${MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteArrowRightX},${MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteLineEndY - MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteArrowShoulderOffsetY}`}
 					/>
 					<text
 						fill={colors.textMuted}
 						fontSize={9}
 						textAnchor="middle"
-						x={55}
-						y={70}
+						x={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX}
+						y={
+							MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNotePluginsLabelY
+						}
 					>
 						Plugins add
 					</text>
@@ -225,8 +286,10 @@ export const MiddlewareChainDiagram = ({
 						fill={colors.textMuted}
 						fontSize={9}
 						textAnchor="middle"
-						x={55}
-						y={82}
+						x={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX}
+						y={
+							MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNotePluginsValueY
+						}
 					>
 						methods
 					</text>
@@ -234,8 +297,8 @@ export const MiddlewareChainDiagram = ({
 						fill={colors.textMuted}
 						fontSize={9}
 						textAnchor="middle"
-						x={55}
-						y={110}
+						x={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX}
+						y={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteGuardsLabelY}
 					>
 						Guards add
 					</text>
@@ -243,8 +306,8 @@ export const MiddlewareChainDiagram = ({
 						fill={colors.textMuted}
 						fontSize={9}
 						textAnchor="middle"
-						x={55}
-						y={122}
+						x={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX}
+						y={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteGuardsValueY}
 					>
 						context
 					</text>
@@ -252,8 +315,8 @@ export const MiddlewareChainDiagram = ({
 						fill={colors.textMuted}
 						fontSize={9}
 						textAnchor="middle"
-						x={55}
-						y={150}
+						x={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX}
+						y={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteDeriveLabelY}
 					>
 						Derive adds
 					</text>
@@ -261,8 +324,8 @@ export const MiddlewareChainDiagram = ({
 						fill={colors.textMuted}
 						fontSize={9}
 						textAnchor="middle"
-						x={55}
-						y={162}
+						x={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteCenterX}
+						y={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.typeNoteDeriveValueY}
 					>
 						properties
 					</text>
@@ -270,15 +333,24 @@ export const MiddlewareChainDiagram = ({
 
 				{/* Bottom note */}
 				<g
-					transform={`translate(${svgWidth / 2 - 180}, ${svgHeight - 35})`}
+					transform={`translate(${svgWidth / 2 - MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.bottomNoteOffsetX}, ${svgHeight - MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.bottomNoteY})`}
 				>
-					<rect fill={colors.accent} height={6} rx={3} width={360} />
+					<rect
+						fill={colors.accent}
+						height={
+							MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.bottomNoteBarHeight
+						}
+						rx={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.bottomNoteBarRadius}
+						width={
+							MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.bottomNoteBarWidth
+						}
+					/>
 					<text
 						fill={colors.text}
 						fontSize={11}
 						textAnchor="middle"
-						x={180}
-						y={22}
+						x={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.bottomNoteTextX}
+						y={MIDDLEWARE_CHAIN_DIAGRAM_LAYOUT.bottomNoteTextY}
 					>
 						All derived values are fully typed in your handlers
 					</text>

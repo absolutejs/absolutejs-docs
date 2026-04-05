@@ -40,35 +40,77 @@ export const AnchorHeading = ({
 	const handleMouseEnter = useCallback(() => setIsHovered(true), []);
 	const handleMouseLeave = useCallback(() => setIsHovered(false), []);
 
-	const AnimatedHeading = animated[level];
-
 	return (
 		<a
 			href={`#${id}`}
-			onClick={(e) => {
-				e.preventDefault();
+			onClick={(event) => {
+				event.preventDefault();
 				handleClick();
 			}}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			style={anchorHeadingContainerStyle}
 		>
-			<AnimatedHeading
+			<AnchorHeadingContent
 				id={id}
-				style={{
-					...style,
-					alignItems: 'center',
-					display: 'flex',
-					gap: '0.5rem'
-				}}
+				isHovered={isHovered}
+				level={level}
+				style={style}
 			>
-				<span
-					style={isHovered ? anchorIconVisibleStyle : anchorIconStyle}
-				>
-					#
-				</span>
 				{children}
-			</AnimatedHeading>
+			</AnchorHeadingContent>
 		</a>
+	);
+};
+
+type AnchorHeadingContentProps = {
+	children: ReactNode;
+	id: string;
+	isHovered: boolean;
+	level: 'h1' | 'h2' | 'h3';
+	style?: AnimatedCSSProperties;
+};
+
+const AnchorHeadingContent = ({
+	children,
+	id,
+	isHovered,
+	level,
+	style
+}: AnchorHeadingContentProps) => {
+	const headingContent = (
+		<>
+			<span style={isHovered ? anchorIconVisibleStyle : anchorIconStyle}>
+				#
+			</span>
+			{children}
+		</>
+	);
+	const headingStyle: AnimatedCSSProperties = {
+		...style,
+		alignItems: 'center',
+		display: 'flex',
+		gap: '0.5rem'
+	};
+
+	if (level === 'h1') {
+		return (
+			<animated.h1 id={id} style={headingStyle}>
+				{headingContent}
+			</animated.h1>
+		);
+	}
+	if (level === 'h2') {
+		return (
+			<animated.h2 id={id} style={headingStyle}>
+				{headingContent}
+			</animated.h2>
+		);
+	}
+
+	return (
+		<animated.h3 id={id} style={headingStyle}>
+			{headingContent}
+		</animated.h3>
 	);
 };

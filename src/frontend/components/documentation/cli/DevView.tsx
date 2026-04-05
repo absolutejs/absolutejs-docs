@@ -2,16 +2,11 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { devCommand, devOutput } from '../../../data/documentation/cliDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
-	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -21,6 +16,8 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { DevCliOptions } from './DevCliOptions';
+import { DevFeaturesList } from './DevFeaturesList';
 
 const tocItems: TocItem[] = [
 	{ href: '#usage', label: 'Usage' },
@@ -51,7 +48,7 @@ export const DevView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="dev">
+					<h1 id="dev" style={h1Style(isMobileOrTablet)}>
 						absolute dev
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -62,8 +59,8 @@ export const DevView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="usage"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -85,59 +82,26 @@ export const DevView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="options"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Options
 					</AnchorHeading>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>[entry]</strong> —
-							Server entry file (defaults to{' '}
-							<code>src/backend/server.ts</code>)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--config</strong> — Path
-							to <code>absolute.config.ts</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--host</strong> — Bind
-							to <code>0.0.0.0</code> and show network address
-						</li>
-					</ul>
+					<DevCliOptions />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="features"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Features
 					</AnchorHeading>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>HMR</strong> — Hot
-							module replacement for React, Svelte, Vue, Angular,
-							HTML, and HTMX
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Module server</strong> —
-							Unbundled source serving for fast refresh
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Error overlay</strong> —
-							Compilation and runtime errors displayed in the
-							browser
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>File watching</strong> —
-							Automatic rebuild on file changes
-						</li>
-					</ul>
+					<DevFeaturesList />
 				</section>
 
 				<DocsNavigation
@@ -149,14 +113,14 @@ export const DevView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

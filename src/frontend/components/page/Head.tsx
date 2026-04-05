@@ -12,9 +12,9 @@ export const Head = ({
 	<head>
 		<meta charSet="utf-8" />
 		<title>{title}</title>
-		<meta name="description" content="AbsoluteJS Documentation" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="icon" href={icon} />
+		<meta content="AbsoluteJS Documentation" name="description" />
+		<meta content="width=device-width, initial-scale=1" name="viewport" />
+		<link href={icon} rel="icon" />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
 			rel="stylesheet"

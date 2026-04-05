@@ -52,37 +52,37 @@ export const DevSessionsSection = ({
 					</div>
 					<BarChart
 						data={barData}
-						themeSprings={themeSprings}
 						order={sessionDurationOrder}
+						themeSprings={themeSprings}
 					/>
 				</div>
 			)}
 
 			<TelemetryTable
-				queryKey="dev-sessions"
-				title="Dev Session Duration"
 				columns={['duration_bucket', 'entry', 'count']}
+				queryKey="dev-sessions"
 				rows={sessionRows}
 				themeSprings={themeSprings}
+				title="Dev Session Duration"
 			/>
 
 			<TelemetryTable
-				queryKey="dev-starts"
-				title="Dev Server Starts"
 				columns={['entry', 'users']}
+				queryKey="dev-starts"
 				rows={data['dev-starts'] ?? []}
 				themeSprings={themeSprings}
+				title="Dev Server Starts"
 			/>
 
 			<TelemetryTable
-				queryKey="dev-restarts"
-				title="Dev Server Restarts"
 				columns={['entry', 'count']}
 				columnsWithVersion={['entry', 'version', 'count']}
+				onVersionChange={onVersionChange}
+				queryKey="dev-restarts"
 				rows={data['dev-restarts'] ?? []}
 				themeSprings={themeSprings}
+				title="Dev Server Restarts"
 				versions={versions}
-				onVersionChange={onVersionChange}
 			/>
 		</div>
 	);

@@ -3,21 +3,21 @@ export const middlewareComparison = `\
 // └── middleware.ts (single file, runs before every request)
 
 // AbsoluteJS / Elysia equivalent:
-// └── Lifecycle hooks — more granular, more powerful
+// └── Lifecycle hooks : more granular, more powerful
 
 new Elysia()
-  // onRequest — runs on EVERY request (like Next.js middleware)
+  // onRequest : runs on EVERY request (like Next.js middleware)
   .onRequest(({ set }) => {
     set.headers['X-Powered-By'] = 'AbsoluteJS';
   })
 
-  // onBeforeHandle — runs after validation, before handler
+  // onBeforeHandle : runs after validation, before handler
   // This is where auth checks, redirects, and access control go
   .onBeforeHandle(({ cookie, status }) => {
     if (!cookie.session.value) return status(401);
   })
 
-  // guard — scope hooks to specific route groups
+  // guard : scope hooks to specific route groups
   .guard(
     { beforeHandle: requireAuth },
     (app) => app
@@ -32,29 +32,29 @@ export const lifecycleOverview = `\
 // Elysia Request Lifecycle (in order)
 // ═══════════════════════════════════
 
-// 1. onRequest       — Earliest hook. Minimal context. Always global.
+// 1. onRequest       : Earliest hook. Minimal context. Always global.
 //                       Best for: rate limiting, analytics, custom headers
 
-// 2. onParse         — Body parsing (JSON, form data, etc.)
+// 2. onParse         : Body parsing (JSON, form data, etc.)
 
-// 3. onTransform     — Mutate context before validation
-//    └── derive()    — Create per-request context values (pre-validation)
+// 3. onTransform     : Mutate context before validation
+//    └── derive()    : Create per-request context values (pre-validation)
 
-// ── Validation ──   — Schema validation runs here
+// ── Validation ──   : Schema validation runs here
 
-// 4. onBeforeHandle  — After validation, before handler
-//    └── resolve()   — Like derive() but type-safe (post-validation)
+// 4. onBeforeHandle  : After validation, before handler
+//    └── resolve()   : Like derive() but type-safe (post-validation)
 //                       Best for: auth checks, access control, redirects
 
-// 5. Route Handler   — Your actual route logic
+// 5. Route Handler   : Your actual route logic
 
-// 6. onAfterHandle   — Transform or inspect the response
+// 6. onAfterHandle   : Transform or inspect the response
 
-// 7. mapResponse     — Convert to Web Standard Response (compression, etc.)
+// 7. mapResponse     : Convert to Web Standard Response (compression, etc.)
 
-// 8. onError         — Catches thrown errors from any phase
+// 8. onError         : Catches thrown errors from any phase
 
-// 9. onAfterResponse — After response sent. Best for: cleanup, logging`;
+// 9. onAfterResponse : After response sent. Best for: cleanup, logging`;
 
 export const registrationOrder = `\
 // IMPORTANT: Hooks only apply to routes registered AFTER them
@@ -71,7 +71,7 @@ new Elysia()
   .listen(3000);`;
 
 export const authGuardProtectRoute = `\
-// Using @absolutejs/auth — the built-in solution
+// Using @absolutejs/auth : the built-in solution
 import { absoluteAuth } from '@absolutejs/auth';
 
 new Elysia()
@@ -80,9 +80,9 @@ new Elysia()
   // protectRoute is available on all routes after .use(absoluteAuth)
   .get('/dashboard', ({ protectRoute }) =>
     protectRoute(
-      // Authenticated — render the page
+      // Authenticated : render the page
       () => handleReactPageRequest(Dashboard, asset(manifest, 'DashboardIndex')),
-      // Not authenticated — render fallback
+      // Not authenticated : render fallback
       () => handleReactPageRequest(SignIn, asset(manifest, 'SignInIndex'))
     )
   )`;
@@ -132,7 +132,7 @@ new Elysia()
     set.redirect = '/new-page';
   })
 
-  // Auth redirect — send unauthenticated users to login
+  // Auth redirect : send unauthenticated users to login
   .get('/dashboard', ({ cookie, set }) => {
     if (!cookie.session.value) {
       set.redirect = '/login';
@@ -209,9 +209,9 @@ export const scopingMiddleware = `\
 // Elysia hooks are ISOLATED by default (local scope)
 // Three scope levels control where hooks apply:
 
-// local (default) — only the current plugin instance
-// scoped          — current instance + one parent level
-// global          — all instances everywhere
+// local (default) : only the current plugin instance
+// scoped          : current instance + one parent level
+// global          : all instances everywhere
 
 // ── Inline scope ──
 new Elysia()

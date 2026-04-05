@@ -17,6 +17,13 @@ type LoginLinkProps = {
 	themeSprings: ThemeSprings;
 };
 
+type SignupOptionsProps = {
+	themeSprings: ThemeSprings;
+};
+
+const LOGIN_LINK_BASE_OPACITY = 0.7;
+const LOGIN_LINK_HOVER_OPACITY_RANGE = 0.3;
+
 const LoginLink = ({ themeSprings }: LoginLinkProps) => {
 	const [hoverSpring, hoverApi] = useSpring(() => ({
 		config: { friction: 20, tension: 300 },
@@ -41,7 +48,11 @@ const LoginLink = ({ themeSprings }: LoginLinkProps) => {
 					color: themeSprings.contrastPrimary,
 					fontSize: '0.875rem',
 					fontWeight: 600,
-					opacity: hoverSpring.opacity.to((o) => 0.7 + o * 0.3),
+					opacity: hoverSpring.opacity.to(
+						(opacityValue) =>
+							LOGIN_LINK_BASE_OPACITY +
+							opacityValue * LOGIN_LINK_HOVER_OPACITY_RANGE
+					),
 					textDecoration: 'underline'
 				}}
 			>
@@ -51,14 +62,61 @@ const LoginLink = ({ themeSprings }: LoginLinkProps) => {
 	);
 };
 
-export const Signup = ({ theme }: SignupProps) => {
-	const [themeSprings] = useTheme(theme);
+const SignupOptions = ({ themeSprings }: SignupOptionsProps) => {
 	const [currentProvider, setCurrentProvider] =
 		useState<Lowercase<ProviderOption>>();
 
 	return (
+		<>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '12px'
+				}}
+			>
+				<OAuthLink
+					mode="signup"
+					provider="google"
+					themeSprings={themeSprings}
+				/>
+				<OAuthLink
+					mode="signup"
+					provider="github"
+					themeSprings={themeSprings}
+				/>
+			</div>
+
+			<Divider text="or continue with" />
+
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '12px'
+				}}
+			>
+				<ProviderDropdown
+					setCurrentProvider={setCurrentProvider}
+					themeSprings={themeSprings}
+				/>
+
+				<OAuthLink
+					mode="signup"
+					provider={currentProvider}
+					themeSprings={themeSprings}
+				/>
+			</div>
+		</>
+	);
+};
+
+export const Signup = ({ theme }: SignupProps) => {
+	const [themeSprings] = useTheme(theme);
+
+	return (
 		<html lang="en" style={htmlDefault}>
-			<Head title="Sign Up - AbsoluteJS" />
+			<Head title="Sign Up | AbsoluteJS" />
 			<animated.body
 				style={{
 					...bodyDefault(themeSprings),
@@ -129,45 +187,7 @@ export const Signup = ({ theme }: SignupProps) => {
 							Get started with AbsoluteJS today
 						</animated.p>
 
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: '12px'
-							}}
-						>
-							<OAuthLink
-								mode="signup"
-								provider="google"
-								themeSprings={themeSprings}
-							/>
-							<OAuthLink
-								mode="signup"
-								provider="github"
-								themeSprings={themeSprings}
-							/>
-						</div>
-
-						<Divider text="or continue with" />
-
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: '12px'
-							}}
-						>
-							<ProviderDropdown
-								setCurrentProvider={setCurrentProvider}
-								themeSprings={themeSprings}
-							/>
-
-							<OAuthLink
-								mode="signup"
-								provider={currentProvider}
-								themeSprings={themeSprings}
-							/>
-						</div>
+						<SignupOptions themeSprings={themeSprings} />
 
 						<LoginLink themeSprings={themeSprings} />
 					</animated.div>

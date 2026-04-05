@@ -1,18 +1,3 @@
-export const manifestType = `\
-// The Manifest type returned by prepare()
-// Currently a simple Record - type-safe manifest keys are in development
-type Manifest = Record<string, string>;
-
-// Example usage
-const { absolutejs, manifest } = await prepare();
-
-// Access asset paths by entry name
-const homePath = manifest['HomePageIndex'];
-// Returns: '/assets/HomePage-a1b2c3d4.js'
-
-const postPath = manifest['PostPageIndex'];
-// Returns: '/assets/PostPage-m3n4o5p6.js'`;
-
 export const buildOptionsType = `\
 // Configuration for absolute.config.ts
 type BuildConfig = {
@@ -53,47 +38,6 @@ export default defineConfig({
     output: './dist/styles.css'
   }
 });`;
-
-export const pageHandlerTypes = `\
-// React page handler - import from '@absolutejs/absolute/react'
-function handleReactPageRequest<TProps extends Record<string, unknown>>(
-  Component: React.ComponentType<TProps>,
-  scriptPath: string,
-  ...props: keyof TProps extends never ? [] : [props: TProps]
-): Promise<Response>;
-
-// Svelte page handler - import from '@absolutejs/absolute/svelte'
-function handleSveltePageRequest<TProps extends Record<string, unknown>>(
-  Component: SvelteComponent,
-  pagePath: string,
-  scriptPath: string,
-  props?: TProps
-): Promise<Response>;
-
-// Vue page handler - import from '@absolutejs/absolute/vue'
-function handleVuePageRequest<TProps extends Record<string, unknown>>(
-  Component: VueComponent,
-  pagePath: string,
-  scriptPath: string,
-  headTag?: string,
-  ...props: keyof TProps extends never ? [] : [props: TProps]
-): Promise<Response>;
-
-// Angular page handler - import from '@absolutejs/absolute/angular'
-function handleAngularPageRequest<TProps extends Record<string, unknown>>(
-  importer: () => Promise<{ factory: (props: TProps) => unknown }>,
-  pagePath: string,
-  scriptPath: string,
-  headTag?: string,
-  ...props: keyof TProps extends never ? [] : [props: TProps]
-): Promise<Response>;
-
-// HTML page handler - import from '@absolutejs/absolute'
-function handleHTMLPageRequest(pagePath: string): BunFile;
-
-// HTMX page handler - import from '@absolutejs/absolute'
-function handleHTMXPageRequest(pagePath: string): BunFile;`;
-
 export const elysiaIntegration = `\
 // AbsoluteJS integrates seamlessly with Elysia's type system
 
@@ -143,3 +87,56 @@ type Context = {
 
   return post;
 });`;
+export const manifestType = `\
+// The Manifest type returned by prepare()
+// Currently a simple Record: type-safe manifest keys are in development
+type Manifest = Record<string, string>;
+
+// Example usage
+const { absolutejs, manifest } = await prepare();
+
+// Access asset paths by entry name
+const homePath = manifest['HomePageIndex'];
+// Returns: '/assets/HomePage-a1b2c3d4.js'
+
+const postPath = manifest['PostPageIndex'];
+// Returns: '/assets/PostPage-m3n4o5p6.js'`;
+export const pageHandlerTypes = `\
+// React page handler: import from '@absolutejs/absolute/react'
+function handleReactPageRequest<TProps extends Record<string, unknown>>(
+  Component: React.ComponentType<TProps>,
+  scriptPath: string,
+  ...props: keyof TProps extends never ? [] : [props: TProps]
+): Promise<Response>;
+
+// Svelte page handler: import from '@absolutejs/absolute/svelte'
+function handleSveltePageRequest<TProps extends Record<string, unknown>>(
+  Component: SvelteComponent,
+  pagePath: string,
+  scriptPath: string,
+  props?: TProps
+): Promise<Response>;
+
+// Vue page handler: import from '@absolutejs/absolute/vue'
+function handleVuePageRequest<TProps extends Record<string, unknown>>(
+  Component: VueComponent,
+  pagePath: string,
+  scriptPath: string,
+  headTag?: string,
+  ...props: keyof TProps extends never ? [] : [props: TProps]
+): Promise<Response>;
+
+// Angular page handler: import from '@absolutejs/absolute/angular'
+function handleAngularPageRequest<TProps extends Record<string, unknown>>(
+  importer: () => Promise<{ factory: (props: TProps) => unknown }>,
+  pagePath: string,
+  scriptPath: string,
+  headTag?: string,
+  ...props: keyof TProps extends never ? [] : [props: TProps]
+): Promise<Response>;
+
+// HTML page handler: import from '@absolutejs/absolute'
+function handleHTMLPageRequest(pagePath: string): BunFile;
+
+// HTMX page handler: import from '@absolutejs/absolute'
+function handleHTMXPageRequest(pagePath: string): BunFile;`;

@@ -19,6 +19,12 @@ export const useAuthModalData = ({
 	const { addToast, registerHost } = useToast();
 	const [profile, setProfile] = useState<Record<string, unknown>>();
 	const queryClient = useQueryClient();
+	const getErrorMessage = (error: unknown) =>
+		error instanceof Error ? error.message : 'Unexpected error';
+	const invalidateProviderStatuses = () =>
+		queryClient.invalidateQueries({
+			queryKey: ['providerStatuses', modalContent?.providerOption]
+		});
 
 	const providerStatuses = useQuery({
 		queryKey: ['providerStatuses', modalContent?.providerOption],
@@ -73,22 +79,12 @@ export const useAuthModalData = ({
 			const response = await fetch('/oauth2/tokens', { method: 'POST' });
 
 			if (!response.ok) throw new Error(await response.text());
-
-			if (refreshStatus !== 'tested') {
-				queryClient.invalidateQueries({
-					queryKey: ['providerStatuses', modalContent?.providerOption]
-				});
-			}
+			if (refreshStatus !== 'tested') invalidateProviderStatuses();
 
 			showToast('Token refreshed successfully!', 'success');
-		} catch (error: any) {
-			if (refreshStatus !== 'failed') {
-				queryClient.invalidateQueries({
-					queryKey: ['providerStatuses', modalContent?.providerOption]
-				});
-			}
-
-			showToast(error.message, 'error');
+		} catch (error: unknown) {
+			if (refreshStatus !== 'failed') invalidateProviderStatuses();
+			showToast(getErrorMessage(error), 'error');
 		}
 	};
 
@@ -102,24 +98,14 @@ export const useAuthModalData = ({
 			});
 
 			if (!response.ok) throw new Error(await response.text());
-
-			if (revokeStatus !== 'tested') {
-				queryClient.invalidateQueries({
-					queryKey: ['providerStatuses', modalContent?.providerOption]
-				});
-			}
+			if (revokeStatus !== 'tested') invalidateProviderStatuses();
 
 			showToast('Token revoked successfully!', 'success');
 			handleSignOut();
 			setProfile(undefined);
-		} catch (error: any) {
-			if (revokeStatus !== 'failed') {
-				queryClient.invalidateQueries({
-					queryKey: ['providerStatuses', modalContent?.providerOption]
-				});
-			}
-
-			showToast(error.message, 'error');
+		} catch (error: unknown) {
+			if (revokeStatus !== 'failed') invalidateProviderStatuses();
+			showToast(getErrorMessage(error), 'error');
 		}
 	};
 
@@ -134,23 +120,13 @@ export const useAuthModalData = ({
 			const data = await response.json();
 
 			if (data.error !== undefined) throw new Error(data.error);
-
-			if (profileStatus !== 'tested') {
-				queryClient.invalidateQueries({
-					queryKey: ['providerStatuses', modalContent?.providerOption]
-				});
-			}
+			if (profileStatus !== 'tested') invalidateProviderStatuses();
 
 			setProfile(data);
 			showToast('Profile fetched successfully!', 'success');
-		} catch (error: any) {
-			if (profileStatus !== 'failed') {
-				queryClient.invalidateQueries({
-					queryKey: ['providerStatuses', modalContent?.providerOption]
-				});
-			}
-
-			showToast(error.message, 'error');
+		} catch (error: unknown) {
+			if (profileStatus !== 'failed') invalidateProviderStatuses();
+			showToast(getErrorMessage(error), 'error');
 		}
 	};
 

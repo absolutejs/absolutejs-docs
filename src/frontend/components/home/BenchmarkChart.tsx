@@ -1,3 +1,12 @@
+import {
+	BENCHMARK_DISPLAY,
+	BENCHMARK_RPS_ELYSIA_BUN,
+	BENCHMARK_RPS_EXPRESS_NODE,
+	BENCHMARK_RPS_FASTIFY_NODE,
+	BENCHMARK_RPS_GIN_GO,
+	BENCHMARK_RPS_SPRING_JAVA,
+	PERCENT_SCALE
+} from '../../../constants';
 import { animated } from '@react-spring/web';
 import { ThemeProps } from '../../../types/springTypes';
 import {
@@ -13,14 +22,28 @@ type BenchmarkData = {
 };
 
 const httpBenchmarks: BenchmarkData[] = [
-	{ name: 'Elysia (Bun)', value: 2454631, color: '#8b5cf6' },
-	{ name: 'Gin (Go)', value: 676019, color: '#64748b' },
-	{ name: 'Spring (Java)', value: 506087, color: '#64748b' },
-	{ name: 'Fastify (Node)', value: 415600, color: '#64748b' },
-	{ name: 'Express (Node)', value: 113117, color: '#64748b' }
+	{ color: '#8b5cf6', name: 'Elysia (Bun)', value: BENCHMARK_RPS_ELYSIA_BUN },
+	{ color: '#64748b', name: 'Gin (Go)', value: BENCHMARK_RPS_GIN_GO },
+	{
+		color: '#64748b',
+		name: 'Spring (Java)',
+		value: BENCHMARK_RPS_SPRING_JAVA
+	},
+	{
+		color: '#64748b',
+		name: 'Fastify (Node)',
+		value: BENCHMARK_RPS_FASTIFY_NODE
+	},
+	{
+		color: '#64748b',
+		name: 'Express (Node)',
+		value: BENCHMARK_RPS_EXPRESS_NODE
+	}
 ];
 
-const maxValue = Math.max(...httpBenchmarks.map((b) => b.value));
+const maxValue = Math.max(
+	...httpBenchmarks.map((benchmark) => benchmark.value)
+);
 
 type BarProps = {
 	data: BenchmarkData;
@@ -29,11 +52,11 @@ type BarProps = {
 };
 
 const Bar = ({ data, maxVal, themeSprings }: BarProps) => {
-	const percentage = (data.value / maxVal) * 100;
+	const percentage = (data.value / maxVal) * PERCENT_SCALE;
 	const formattedValue =
-		data.value >= 1000000
-			? `${(data.value / 1000000).toFixed(1)}M`
-			: `${(data.value / 1000).toFixed(0)}K`;
+		data.value >= BENCHMARK_DISPLAY.millionDivisor
+			? `${(data.value / BENCHMARK_DISPLAY.millionDivisor).toFixed(1)}M`
+			: `${(data.value / BENCHMARK_DISPLAY.kiloDivisor).toFixed(0)}K`;
 
 	return (
 		<div
@@ -136,13 +159,13 @@ export const BenchmarkChart = ({ themeSprings }: ThemeProps) => (
 					textAlign: 'center'
 				}}
 			>
-				TechEmpower Benchmark Round 22 - Plaintext
+				TechEmpower Benchmark Round 22: Plaintext
 			</animated.p>
 
 			{httpBenchmarks.map((benchmark, index) => (
 				<Bar
-					key={index}
 					data={benchmark}
+					key={index}
 					maxVal={maxValue}
 					themeSprings={themeSprings}
 				/>

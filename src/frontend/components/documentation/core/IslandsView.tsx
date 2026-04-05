@@ -14,19 +14,19 @@ import {
 } from '../../../data/documentation/islandsDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { IslandsHydrationModesList } from './IslandsHydrationModesList';
+import { IslandsLooseVsTypedList } from './IslandsLooseVsTypedList';
+import { IslandsOverviewList } from './IslandsOverviewList';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -63,7 +63,7 @@ export const IslandsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="islands">
+					<h1 id="islands" style={h1Style(isMobileOrTablet)}>
 						Islands
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -78,8 +78,8 @@ export const IslandsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="overview"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -92,44 +92,13 @@ export const IslandsView = ({
 						while selectively embedding islands from other
 						frameworks.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Host pages stay simple
-							</strong>
-							: render normal SSR pages and drop islands in where
-							you need client behavior.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Cross-framework is normal
-							</strong>
-							: a React host can render Vue, Svelte, or Angular
-							islands.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								State is store-first
-							</strong>
-							: islands do not take state keys in their props.
-							Shared state comes from importing the same island
-							store across components.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Zustand powers the store layer
-							</strong>
-							: AbsoluteJS uses <code>zustand/vanilla</code>{' '}
-							underneath and exposes framework-specific selectors
-							on top.
-						</li>
-					</ul>
+					<IslandsOverviewList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="registry"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -156,8 +125,8 @@ export const IslandsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="loose-vs-typed"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -192,26 +161,13 @@ export const IslandsView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Loose Island</strong>:
-							runtime-safe, flexible, and useful when the
-							framework/component pairing is chosen dynamically.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Typed island wrappers
-							</strong>
-							: exact component names and prop shapes inferred
-							from the registry for that framework.
-						</li>
-					</ul>
+					<IslandsLooseVsTypedList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="island-stores"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -247,8 +203,8 @@ export const IslandsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="hydration"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -263,30 +219,13 @@ export const IslandsView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>load</strong>: hydrate
-							immediately after bootstrap.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>idle</strong>: wait for
-							browser idle time.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>visible</strong>: wait
-							until the island enters the viewport.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>none</strong>: render
-							SSR HTML only with no client hydration.
-						</li>
-					</ul>
+					<IslandsHydrationModesList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="html-htmx"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -322,14 +261,14 @@ export const IslandsView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

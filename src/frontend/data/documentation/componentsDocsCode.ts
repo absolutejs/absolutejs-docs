@@ -1,3 +1,50 @@
+export const headPropsReference = `\
+type Metadata = {
+  title?: string;
+  description?: string;
+  icon?: string;
+  font?: string;
+  cssPath?: string | string[];
+  canonical?: string;
+  openGraph?: {
+    title?: string;
+    description?: string;
+    url?: string;
+    image?: string;
+    imageAlt?: string;
+    imageWidth?: number;
+    imageHeight?: number;
+    type?: string;
+    siteName?: string;
+    locale?: string;
+  };
+  twitter?: {
+    card?: string;
+    title?: string;
+    description?: string;
+    image?: string;
+    imageAlt?: string;
+    site?: string;
+    creator?: string;
+  };
+  robots?: {
+    index?: boolean;
+    follow?: boolean;
+    noarchive?: boolean;
+    nosnippet?: boolean;
+    noimageindex?: boolean;
+    maxSnippet?: number;
+    maxImagePreview?: string;
+    maxVideoPreview?: number;
+  };
+  meta?: MetaTag[];
+};
+
+type MetaTag = {
+  name?: string;
+  property?: string;
+  content: string;
+};`;
 export const headReactBasic = `\
 import { Head } from '@absolutejs/absolute/react/components';
 
@@ -13,7 +60,6 @@ export const HomePage = () => (
     </body>
   </html>
 );`;
-
 export const headReactFull = `\
 import { Head } from '@absolutejs/absolute/react/components';
 
@@ -69,7 +115,6 @@ export const BlogPost = ({ title, excerpt, slug, coverImage }) => (
     </body>
   </html>
 );`;
-
 export const headSvelteBasic = `\
 <script>
   import Head from '@absolutejs/absolute/svelte/components/Head.svelte';
@@ -85,7 +130,6 @@ export const headSvelteBasic = `\
     <h1>Welcome</h1>
   </body>
 </html>`;
-
 export const jsonLdReactBasic = `\
 import { JsonLd } from '@absolutejs/absolute/react/components';
 
@@ -113,7 +157,6 @@ export const BlogPost = ({ title, author, datePublished, image }) => (
     </body>
   </html>
 );`;
-
 export const jsonLdReactMultiple = `\
 import { JsonLd } from '@absolutejs/absolute/react/components';
 
@@ -151,85 +194,6 @@ export const HomePage = () => (
     </body>
   </html>
 );`;
-
-export const jsonLdSvelteBasic = `\
-<script>
-  import JsonLd from '@absolutejs/absolute/svelte/components/JsonLd.svelte';
-
-  const { title, author, datePublished, image } = $props();
-</script>
-
-<html>
-  <head>
-    <title>{title}</title>
-    <JsonLd
-      schema={{
-        '@type': 'Article',
-        headline: title,
-        author: {
-          '@type': 'Person',
-          name: author
-        },
-        datePublished,
-        image
-      }}
-    />
-  </head>
-  <body>
-    <article>
-      <h1>{title}</h1>
-    </article>
-  </body>
-</html>`;
-
-export const headPropsReference = `\
-type Metadata = {
-  title?: string;
-  description?: string;
-  icon?: string;
-  font?: string;
-  cssPath?: string | string[];
-  canonical?: string;
-  openGraph?: {
-    title?: string;
-    description?: string;
-    url?: string;
-    image?: string;
-    imageAlt?: string;
-    imageWidth?: number;
-    imageHeight?: number;
-    type?: string;
-    siteName?: string;
-    locale?: string;
-  };
-  twitter?: {
-    card?: string;
-    title?: string;
-    description?: string;
-    image?: string;
-    imageAlt?: string;
-    site?: string;
-    creator?: string;
-  };
-  robots?: {
-    index?: boolean;
-    follow?: boolean;
-    noarchive?: boolean;
-    nosnippet?: boolean;
-    noimageindex?: boolean;
-    maxSnippet?: number;
-    maxImagePreview?: string;
-    maxVideoPreview?: number;
-  };
-  meta?: MetaTag[];
-};
-
-type MetaTag = {
-  name?: string;
-  property?: string;
-  content: string;
-};`;
-
 export const jsonLdSchemaTypes = `\
 type JsonLdSchema =
   | PersonSchema
@@ -276,3 +240,32 @@ type WebSiteSchema = {
   url: string;
   potentialAction?: Record<string, unknown>;
 };`;
+export const jsonLdSvelteBasic = `\
+<script>
+  import JsonLd from '@absolutejs/absolute/svelte/components/JsonLd.svelte';
+
+  const { title, author, datePublished, image } = $props();
+</script>
+
+<html>
+  <head>
+    <title>{title}</title>
+    <JsonLd
+      schema={{
+        '@type': 'Article',
+        headline: title,
+        author: {
+          '@type': 'Person',
+          name: author
+        },
+        datePublished,
+        image
+      }}
+    />
+  </head>
+  <body>
+    <article>
+      <h1>{title}</h1>
+    </article>
+  </body>
+</html>`;

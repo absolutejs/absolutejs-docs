@@ -149,7 +149,7 @@ import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { Elysia } from 'elysia';
 import { Dashboard } from './components/Dashboard';
 
-// Valid props - simple data types
+// Valid props: simple data types
 const validProps = {
   username: 'john_doe',           // string
   age: 25,                        // number
@@ -172,7 +172,7 @@ const app = new Elysia()
   )
   .listen(3000);
 
-// Invalid props - will cause errors
+// Invalid props: will cause errors
 const invalidProps = {
   callback: () => {},              // Function
   date: new Date(),                // Date object

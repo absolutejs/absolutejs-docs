@@ -17,19 +17,17 @@ export const HmrPerformanceSection = ({
 }: TelemetrySectionProps) => (
 	<div style={gapStyle}>
 		<TelemetryTable
-			queryKey="hmr-reliability"
-			title="HMR Reliability"
 			columns={['event', 'count']}
 			columnsWithVersion={['event', 'version', 'count']}
+			onVersionChange={onVersionChange}
+			queryKey="hmr-reliability"
 			rows={data['hmr-reliability'] ?? []}
 			themeSprings={themeSprings}
+			title="HMR Reliability"
 			versions={versions}
-			onVersionChange={onVersionChange}
 		/>
 
 		<TelemetryTable
-			queryKey="hmr-rebuilds"
-			title="HMR Rebuild Stats"
 			columns={[
 				'framework',
 				'avg_duration_ms',
@@ -43,15 +41,15 @@ export const HmrPerformanceSection = ({
 				'avg_file_count',
 				'count'
 			]}
+			onVersionChange={onVersionChange}
+			queryKey="hmr-rebuilds"
 			rows={data['hmr-rebuilds'] ?? []}
 			themeSprings={themeSprings}
+			title="HMR Rebuild Stats"
 			versions={versions}
-			onVersionChange={onVersionChange}
 		/>
 
 		<TelemetryTable
-			queryKey="hmr-rebuild-errors"
-			title="HMR Rebuild Errors"
 			columns={[
 				'framework',
 				'frameworks',
@@ -67,10 +65,12 @@ export const HmrPerformanceSection = ({
 				'avg_file_count',
 				'count'
 			]}
+			onVersionChange={onVersionChange}
+			queryKey="hmr-rebuild-errors"
 			rows={data['hmr-rebuild-errors'] ?? []}
 			themeSprings={themeSprings}
+			title="HMR Rebuild Errors"
 			versions={versions}
-			onVersionChange={onVersionChange}
 		/>
 	</div>
 );

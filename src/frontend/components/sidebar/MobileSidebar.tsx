@@ -1,3 +1,4 @@
+import { MOBILE_SIDEBAR_LAYOUT } from '../../../constants';
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { FaTimes } from 'react-icons/fa';
 import { ThemeSprings } from '../../../types/springTypes';
@@ -54,7 +55,10 @@ export const MobileSidebar = ({
 					left: 0,
 					opacity: spring.overlayOpacity,
 					pointerEvents: spring.overlayOpacity.to((opacity) =>
-						opacity > 0.1 ? 'auto' : 'none'
+						opacity >
+						MOBILE_SIDEBAR_LAYOUT.overlayInteractionThreshold
+							? 'auto'
+							: 'none'
 					),
 					position: 'fixed',
 					top: 0,
@@ -123,20 +127,20 @@ export const MobileSidebar = ({
 						if (isMenuDropdown(element)) {
 							return (
 								<SidebarDropdown
-									view={view}
-									linksSprings={linksSprings}
-									linksApi={linksApi}
-									startIndex={startIndexForDropdown(index)}
-									navigateToView={handleNavigate}
-									key={element.label}
-									label={element.label}
 									buttons={element.buttons}
 									icon={element.icon}
-									themeSprings={themeSprings}
 									isOpen={openSections.has(element.label)}
+									key={element.label}
+									label={element.label}
+									linksApi={linksApi}
+									linksSprings={linksSprings}
+									navigateToView={handleNavigate}
 									onToggle={() =>
 										onToggleSection(element.label)
 									}
+									startIndex={startIndexForDropdown(index)}
+									themeSprings={themeSprings}
+									view={view}
 								/>
 							);
 						}
@@ -150,15 +154,15 @@ export const MobileSidebar = ({
 
 						return (
 							<SidebarLink
-								view={view}
-								index={-1}
 								icon={element.icon}
-								linksApi={linksApi}
 								id={element.id}
+								index={-1}
 								key={element.label}
-								navigateToView={handleNavigate}
 								label={element.label}
+								linksApi={linksApi}
+								navigateToView={handleNavigate}
 								themeSprings={themeSprings}
+								view={view}
 							/>
 						);
 					})}

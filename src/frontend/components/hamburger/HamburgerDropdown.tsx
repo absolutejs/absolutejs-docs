@@ -81,11 +81,11 @@ export const HamburgerDropdown = ({
 			>
 				{links.map((link, index) => (
 					<NavbarLink
-						themeSprings={themeSprings}
-						key={index}
-						icon={link.icon}
 						href={link.href}
+						icon={link.icon}
+						key={index}
 						label={link.label}
+						themeSprings={themeSprings}
 					/>
 				))}
 			</animated.nav>

@@ -55,12 +55,12 @@ const queryKeys = [
 const viewToSection: Partial<
 	Record<TelemetryView, ComponentType<TelemetrySectionProps>>
 > = {
-	overview: OverviewSection,
-	'errors-crashes': ErrorsCrashesSection,
 	'build-performance': BuildPerformanceSection,
+	'dev-sessions': DevSessionsSection,
+	'errors-crashes': ErrorsCrashesSection,
 	'hmr-performance': HmrPerformanceSection,
-	'usage-adoption': UsageAdoptionSection,
-	'dev-sessions': DevSessionsSection
+	overview: OverviewSection,
+	'usage-adoption': UsageAdoptionSection
 };
 
 const errorStyle: CSSProperties = {
@@ -86,7 +86,6 @@ const TelemetryDashboardInner = ({
 	const [themeSprings, setTheme] = useTheme(theme);
 	const [view, navigateToView] = useTelemetryNavigation(initialView);
 	const { isSizeOrLess } = useMediaQuery();
-	const isCompact = isSizeOrLess('md');
 	const [versionByKey, setVersionByKey] = useState<Record<string, string>>(
 		{}
 	);
@@ -99,6 +98,7 @@ const TelemetryDashboardInner = ({
 			if (error) throw new Error('Failed to fetch KPI summary');
 			if (!('totalEvents' in data))
 				throw new Error('Invalid KPI response');
+
 			return data;
 		}
 	});
@@ -111,18 +111,7 @@ const TelemetryDashboardInner = ({
 			if (error) throw new Error('Failed to fetch versions');
 			if (!Array.isArray(data))
 				throw new Error('Invalid versions response');
-			return data;
-		}
-	});
 
-	const bunVersionsQuery = useQuery({
-		queryKey: ['telemetry', 'bun-versions'],
-		queryFn: async () => {
-			const { data, error } =
-				await server.api.v1.telemetry['bun-versions'].get();
-			if (error) throw new Error('Failed to fetch bun versions');
-			if (!Array.isArray(data))
-				throw new Error('Invalid bun versions response');
 			return data;
 		}
 	});
@@ -138,6 +127,7 @@ const TelemetryDashboardInner = ({
 				if (error) throw new Error(`Failed to fetch ${key}`);
 				if (!Array.isArray(data))
 					throw new Error(`Invalid response for ${key}`);
+
 				return data;
 			}
 		}))
@@ -149,13 +139,12 @@ const TelemetryDashboardInner = ({
 		if (qData) data[key] = qData;
 	});
 
-	const handleVersionChange = (queryKey: string, version: string) => {
-		setVersionByKey((prev) => ({ ...prev, [queryKey]: version }));
-	};
-
-	const hasNoData = kpiQuery.isPending && dataQueries.every((q) => !q.data);
+	const hasNoData =
+		kpiQuery.isPending &&
+		dataQueries.every((queryResult) => !queryResult.data);
 	const accessDenied = dataQueries.some(
-		(q) => q.error && String(q.error).includes('403')
+		(queryResult) =>
+			queryResult.error && String(queryResult.error).includes('403')
 	);
 
 	const ActiveSection = viewToSection[view];
@@ -172,7 +161,6 @@ const TelemetryDashboardInner = ({
 				<EventLogSection
 					themeSprings={themeSprings}
 					versions={versionsQuery.data ?? []}
-					bunVersions={bunVersionsQuery.data ?? []}
 				/>
 			);
 		if (view === 'unique-users')
@@ -194,22 +182,28 @@ const TelemetryDashboardInner = ({
 				<ActiveSection
 					data={data}
 					kpi={kpiQuery.data ?? null}
-					versions={versionsQuery.data ?? []}
+					onVersionChange={(queryKey, version) => {
+						setVersionByKey((prev) => ({
+							...prev,
+							[queryKey]: version
+						}));
+					}}
 					themeSprings={themeSprings}
-					onVersionChange={handleVersionChange}
+					versions={versionsQuery.data ?? []}
 				/>
 			);
+
 		return null;
 	};
 
 	return (
 		<html lang="en" style={htmlDefault}>
-			<Head title="Telemetry Dashboard - AbsoluteJS" />
+			<Head title="Telemetry Dashboard | AbsoluteJS" />
 			<animated.body style={bodyDefault(themeSprings)}>
 				<Navbar
+					setTheme={setTheme}
 					themeSprings={themeSprings}
 					user={user}
-					setTheme={setTheme}
 				/>
 				<main
 					style={{
@@ -226,10 +220,10 @@ const TelemetryDashboardInner = ({
 						}}
 					>
 						<TelemetrySidebar
-							view={view}
-							themeSprings={themeSprings}
+							compact={isSizeOrLess('md')}
 							navigateToView={navigateToView}
-							compact={isCompact}
+							themeSprings={themeSprings}
+							view={view}
 						/>
 						<animated.div
 							style={{

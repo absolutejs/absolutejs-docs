@@ -63,7 +63,7 @@ export const AIProvidersView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="ai-providers">
+					<h1 id="ai-providers" style={h1Style(isMobileOrTablet)}>
 						AI Providers
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -75,8 +75,8 @@ export const AIProvidersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="provider-interface"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -86,8 +86,8 @@ export const AIProvidersView = ({
 						Every provider returns an object with a single{' '}
 						<code>stream</code> method that yields an{' '}
 						<code>AsyncIterable&lt;AIChunk&gt;</code>. The plugin
-						handles everything else — parsing, tool execution, and
-						message routing.
+						handles everything else, including parsing, tool
+						execution, and message routing.
 					</p>
 					<PrismPlus
 						codeString={providerInterface}
@@ -99,8 +99,8 @@ export const AIProvidersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="anthropic"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -121,8 +121,8 @@ export const AIProvidersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="openai"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -142,8 +142,8 @@ export const AIProvidersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="openai-responses"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -164,8 +164,8 @@ export const AIProvidersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="gemini"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -185,8 +185,8 @@ export const AIProvidersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="ollama"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -207,8 +207,8 @@ export const AIProvidersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="openai-compatible"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -229,8 +229,8 @@ export const AIProvidersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="custom-provider"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -251,8 +251,8 @@ export const AIProvidersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="multi-provider"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -281,14 +281,14 @@ export const AIProvidersView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

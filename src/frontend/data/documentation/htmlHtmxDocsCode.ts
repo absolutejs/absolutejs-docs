@@ -1,19 +1,23 @@
-export const htmlSourceExample = `\
-<!-- src/html/pages/home.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>My App</title>
-  <link rel="stylesheet" href="./styles/main.css">
-</head>
-<body>
-  <h1>Welcome</h1>
-  <div id="app"></div>
+export const htmlAssetDetection = `\
+// The build system automatically detects and processes:
 
-  <script src="./scripts/app.ts"></script>
-</body>
-</html>`;
+// JavaScript files
+<script src="./scripts/app.js"></script>
 
+// TypeScript files (compiled to JS)
+<script src="./scripts/app.ts"></script>
+
+// CSS files
+<link rel="stylesheet" href="./styles/main.css">
+
+// All paths are updated to point to the bundled, hashed files`;
+export const htmlBuild = `\
+const manifest = await build({
+  htmlDirectory: 'src/frontend'
+});
+
+// The manifest maps page names to their built HTML files
+// { "home": "/build/pages/home.html", "about": "/build/pages/about.html" }`;
 export const htmlBuiltExample = `\
 <!-- After build, paths are automatically updated -->
 <!DOCTYPE html>
@@ -29,21 +33,6 @@ export const htmlBuiltExample = `\
   <script src="/build/app-b7d4e9.js"></script>
 </body>
 </html>`;
-
-export const htmlAssetDetection = `\
-// The build system automatically detects and processes:
-
-// JavaScript files
-<script src="./scripts/app.js"></script>
-
-// TypeScript files (compiled to JS)
-<script src="./scripts/app.ts"></script>
-
-// CSS files
-<link rel="stylesheet" href="./styles/main.css">
-
-// All paths are updated to point to the bundled, hashed files`;
-
 export const htmlHandler = `\
 // backend/server.ts
 import { handleHTMLPageRequest } from '@absolutejs/absolute';
@@ -55,28 +44,37 @@ new Elysia()
   .get('/about', () =>
     handleHTMLPageRequest('./build/pages/about.html')
   )`;
+export const htmlSourceExample = `\
+<!-- src/html/pages/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>My App</title>
+  <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+  <h1>Welcome</h1>
+  <div id="app"></div>
 
-export const htmlBuild = `\
-const manifest = await build({
-  htmlDirectory: 'src/frontend'
-});
+  <script src="./scripts/app.ts"></script>
+</body>
+</html>`;
+export const htmxApiEndpoint = `\
+// HTMX requests return HTML fragments
+new Elysia()
+  .get('/api/data', () => {
+    const items = getItems();
 
-// The manifest maps page names to their built HTML files
-// { "home": "/build/pages/home.html", "about": "/build/pages/about.html" }`;
+    return \`
+      <ul>
+        \${items.map(item => \`<li>\${item.name}</li>\`).join('')}
+      </ul>
+    \`;
+  })`;
 export const htmxBuild = `\
 const manifest = await build({
   htmxDirectory: 'src/htmx/pages'
 });`;
-
-export const htmxHandler = `\
-// backend/server.ts
-import { handleHTMXPageRequest } from '@absolutejs/absolute';
-
-new Elysia()
-  .get('/app', () =>
-    handleHTMXPageRequest('./build/pages/app.html')
-  )`;
-
 export const htmxExample = `\
 <!-- src/htmx/pages/app.html -->
 <!DOCTYPE html>
@@ -98,20 +96,27 @@ export const htmxExample = `\
   <script src="./scripts/htmx-helpers.ts"></script>
 </body>
 </html>`;
+export const htmxHandler = `\
+// backend/server.ts
+import { handleHTMXPageRequest } from '@absolutejs/absolute';
 
-export const htmxApiEndpoint = `\
-// HTMX requests return HTML fragments
 new Elysia()
-  .get('/api/data', () => {
-    const items = getItems();
+  .get('/app', () =>
+    handleHTMXPageRequest('./build/pages/app.html')
+  )`;
+export const htmxScopedStateHtml = `\
+<!-- Each user's button clicks only affect their own count -->
+<div>
+  Count: <span id="count" hx-get="/api/count" hx-trigger="load">0</span>
+</div>
 
-    return \`
-      <ul>
-        \${items.map(item => \`<li>\${item.name}</li>\`).join('')}
-      </ul>
-    \`;
-  })`;
+<button hx-post="/api/increment" hx-target="#count" hx-swap="innerHTML">
+  +1
+</button>
 
+<!-- User A clicks 5 times → sees 5 -->
+<!-- User B visits the page → sees 0 (their own fresh state) -->
+<!-- User B clicks 2 times → sees 2 (independent from User A) -->`;
 export const htmxScopedStateSetup = `\
 import Elysia from 'elysia';
 import { scopedState } from 'elysia-scoped-state';
@@ -134,17 +139,3 @@ new Elysia()
     return \`<span>\${++scopedStore.count}</span>\`;
   })
   .listen(3000);`;
-
-export const htmxScopedStateHtml = `\
-<!-- Each user's button clicks only affect their own count -->
-<div>
-  Count: <span id="count" hx-get="/api/count" hx-trigger="load">0</span>
-</div>
-
-<button hx-post="/api/increment" hx-target="#count" hx-swap="innerHTML">
-  +1
-</button>
-
-<!-- User A clicks 5 times → sees 5 -->
-<!-- User B visits the page → sees 0 (their own fresh state) -->
-<!-- User B clicks 2 times → sees 2 (independent from User A) -->`;

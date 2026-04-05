@@ -1,5 +1,10 @@
+import {
+	BUILD_PIPELINE_DIAGRAM_LAYOUT,
+	PERCENT_SCALE
+} from '../../../constants';
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../types/springTypes';
+import { BuildPipelineRouteExample } from './BuildPipelineRouteExample';
 import {
 	diagramColors,
 	diagramContainerStyle,
@@ -86,8 +91,11 @@ export const BuildPipelineDiagram = ({
 					>
 						Frontend Directories
 					</animated.text>
-					{['pages/', 'styles/'].map((label, i) => (
-						<g key={i} transform={`translate(18, ${78 + i * 50})`}>
+					{['pages/', 'styles/'].map((label, directoryIndex) => (
+						<g
+							key={directoryIndex}
+							transform={`translate(18, ${BUILD_PIPELINE_DIAGRAM_LAYOUT.inputDirectoryStartY + directoryIndex * BUILD_PIPELINE_DIAGRAM_LAYOUT.inputDirectoryYStep})`}
+						>
 							<animated.rect
 								fill={color('accent')}
 								height={38}
@@ -306,7 +314,7 @@ export const BuildPipelineDiagram = ({
 					<g transform="translate(24, 42)">
 						<animated.rect
 							fill={color('accentSecondary')}
-							height={100}
+							height={PERCENT_SCALE}
 							opacity={0.1}
 							rx={8}
 							stroke={color('accentSecondary')}
@@ -352,79 +360,12 @@ export const BuildPipelineDiagram = ({
 					/>
 
 					{/* Route handler example */}
-					<g transform="translate(400, 42)">
-						<animated.rect
-							fill={color('background')}
-							height={100}
-							rx={8}
-							stroke={color('border')}
-							strokeWidth={1.5}
-							width={615}
-						/>
-						<animated.text
-							fill={color('text')}
-							fontFamily="monospace"
-							fontSize={14}
-							x={20}
-							y={18}
-						>
-							.get(&apos;/&apos;, () =&gt; handleReactPageRequest(
-						</animated.text>
-						<animated.text
-							fill={color('text')}
-							fontFamily="monospace"
-							fontSize={14}
-							x={44}
-							y={36}
-						>
-							Home,
-						</animated.text>
-						<animated.text
-							fill={color('accentSecondary')}
-							fontFamily="monospace"
-							fontSize={14}
-							fontWeight={600}
-							x={44}
-							y={54}
-						>
-							asset(manifest, &apos;HomeIndex&apos;)
-							<animated.tspan
-								fill={color('text')}
-								fontWeight={400}
-							>
-								,
-							</animated.tspan>
-						</animated.text>
-						<animated.text
-							fill={color('text')}
-							fontFamily="monospace"
-							fontSize={14}
-							x={44}
-							y={72}
-						>
-							{'{ '}
-							<animated.tspan fill={color('accent')}>
-								cssPath
-							</animated.tspan>
-							{': '}
-							<animated.tspan
-								fill={color('accentSecondary')}
-								fontWeight={600}
-							>
-								asset(manifest, &apos;HomeCSS&apos;)
-							</animated.tspan>
-							{' }'}
-						</animated.text>
-						<animated.text
-							fill={color('text')}
-							fontFamily="monospace"
-							fontSize={14}
-							x={20}
-							y={90}
-						>
-							))
-						</animated.text>
-					</g>
+					<BuildPipelineRouteExample
+						accentColor={color('accent')}
+						accentSecondaryColor={color('accentSecondary')}
+						borderColor={color('border')}
+						textColor={color('text')}
+					/>
 				</g>
 			</svg>
 		</animated.div>

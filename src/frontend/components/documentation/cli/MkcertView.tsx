@@ -7,24 +7,21 @@ import {
 } from '../../../data/documentation/cliUtilityDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { PrerequisitesList } from './PrerequisitesList';
+import { WhyHttpsCards } from './WhyHttpsCards';
 
 const tocItems: TocItem[] = [
 	{ href: '#usage', label: 'Usage' },
@@ -41,8 +38,6 @@ export const MkcertView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -58,7 +53,7 @@ export const MkcertView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="mkcert">
+					<h1 id="mkcert" style={h1Style(isMobileOrTablet)}>
 						absolute mkcert
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -68,8 +63,8 @@ export const MkcertView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="usage"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -89,94 +84,20 @@ export const MkcertView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="why-https"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Why HTTPS in Dev
 					</AnchorHeading>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile
-								? '1fr'
-								: '1fr 1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									HTTP/2 Multiplexing
-								</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								Faster HMR on pages with many imports — HTTP/2
-								sends all modules over a single connection.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Secure Context APIs
-								</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								Test APIs that require HTTPS like service
-								workers, Web Crypto, and geolocation.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Production Parity
-								</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								Catch mixed-content issues and CORS problems
-								before they hit production.
-							</p>
-						</animated.div>
-					</div>
+					<WhyHttpsCards themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="prerequisites"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -186,27 +107,13 @@ export const MkcertView = ({
 						Install mkcert on your system before running the
 						command:
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>macOS</strong>:{' '}
-							<code>brew install mkcert</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Linux</strong>:{' '}
-							<code>sudo apt install mkcert</code> or{' '}
-							<code>yay -S mkcert</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Windows</strong>:{' '}
-							<code>choco install mkcert</code>
-						</li>
-					</ul>
+					<PrerequisitesList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="enabling-https"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -237,14 +144,14 @@ export const MkcertView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

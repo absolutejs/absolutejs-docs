@@ -2,16 +2,12 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { imageVueUsage } from '../../../data/documentation/imageOptDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -19,6 +15,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { VueImagePropsSection } from './VueImagePropsSection';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -36,8 +33,6 @@ export const VueComponentsView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -53,7 +48,7 @@ export const VueComponentsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="vue-components">
+					<h1 id="vue-components" style={h1Style(isMobileOrTablet)}>
 						Vue Components
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -64,8 +59,8 @@ export const VueComponentsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="image-component"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -87,93 +82,12 @@ export const VueComponentsView = ({
 					/>
 				</section>
 
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="image-props"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Image Props
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						The Vue Image component accepts the same props as the
-						React Image component:
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>src</strong> — path to
-							the source image (required)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>alt</strong> —
-							alternative text for accessibility (required)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>width</strong> —
-							intrinsic width in pixels. Required unless{' '}
-							<code>fill</code> is set.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>height</strong> —
-							intrinsic height in pixels. Required unless{' '}
-							<code>fill</code> is set.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>fill</strong> — when
-							true, the image fills its parent container
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>quality</strong> —
-							output quality from 1 to 100
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>sizes</strong> —
-							responsive sizes attribute
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>priority</strong> —
-							preload the image and disable lazy loading
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>placeholder</strong> —
-							placeholder strategy while loading
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>blurDataURL</strong> —
-							base64 data URL for blur placeholder
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>loading</strong> —{' '}
-							<code>"lazy"</code> or <code>"eager"</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>unoptimized</strong> —
-							skip optimization and serve the original
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>style</strong> — inline
-							styles
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>className</strong> — CSS
-							class name
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>onLoad</strong> —
-							callback when the image finishes loading
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>onError</strong> —
-							callback when the image fails to load
-						</li>
-					</ul>
-				</section>
+				<VueImagePropsSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="fill-mode"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -188,7 +102,7 @@ export const VueComponentsView = ({
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Note that Vue's <code>Teleport</code> component has
-						limitations with SSR — it cannot teleport to elements
+						limitations with SSR: it cannot teleport to elements
 						that don't exist in the server-rendered HTML. The Image
 						component handles preload link injection without
 						Teleport, so priority images work correctly during SSR.
@@ -204,14 +118,14 @@ export const VueComponentsView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

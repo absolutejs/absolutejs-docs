@@ -1,3 +1,12 @@
+import {
+	HTTP_STATUS_BAD_GATEWAY,
+	HTTP_STATUS_BAD_REQUEST,
+	HTTP_STATUS_FORBIDDEN,
+	HTTP_STATUS_NOT_FOUND,
+	HTTP_STATUS_PAYLOAD_TOO_LARGE,
+	HTTP_STATUS_TOO_MANY_REQUESTS,
+	MIN_SUPPORTED_ABSOLUTE_MINOR_VERSION
+} from '../../constants';
 import { count, eq } from 'drizzle-orm';
 import { Elysia, t } from 'elysia';
 import { DatabaseType, schema, User } from '../../../db/schema';
@@ -19,12 +28,13 @@ import {
 import { isRateLimited } from '../utils/rateLimit';
 import { getEnv } from '@absolutejs/absolute';
 import { protectRoutePlugin } from '@absolutejs/auth';
+import { isObject } from '../../types/typeGuards';
 
-const MAX_BODY_BYTES = 10_240;
+const MAX_BODY_BYTES = 10240;
 const whitelistedAdmins =
 	getEnv('ADMIN_SUBS')
 		?.split(',')
-		.map((s) => s.trim()) ?? [];
+		.map((adminSub) => adminSub.trim()) ?? [];
 
 export const telemetryPlugin = (db: DatabaseType) =>
 	new Elysia()
@@ -36,23 +46,29 @@ export const telemetryPlugin = (db: DatabaseType) =>
 					request.headers.get('content-length') ?? 0
 				);
 				if (contentLength > MAX_BODY_BYTES) {
-					return status(413, 'Payload too large');
+					return status(
+						HTTP_STATUS_PAYLOAD_TOO_LARGE,
+						'Payload too large'
+					);
 				}
 
-				const ip =
+				const ipAddress =
 					request.headers
 						.get('x-forwarded-for')
 						?.split(',')[0]
 						?.trim() ?? 'unknown';
-				if (isRateLimited(ip)) {
-					return status(429, 'Too many requests');
+				if (isRateLimited(ipAddress)) {
+					return status(
+						HTTP_STATUS_TOO_MANY_REQUESTS,
+						'Too many requests'
+					);
 				}
 
 				const {
 					event,
 					anonymousId,
 					version,
-					os,
+					os: operatingSystem,
 					arch,
 					bunVersion,
 					timestamp,
@@ -61,7 +77,7 @@ export const telemetryPlugin = (db: DatabaseType) =>
 
 				if (!event || !anonymousId) {
 					return status(
-						400,
+						HTTP_STATUS_BAD_REQUEST,
 						'Missing required fields: event, anonymousId'
 					);
 				}
@@ -69,14 +85,14 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				await insertTelemetryEvent({
 					db,
 					event: {
-						event,
 						anonymous_id: anonymousId,
-						version: version ?? null,
-						os: os ?? null,
 						arch: arch ?? null,
 						bun_version: bunVersion ?? null,
 						client_timestamp: new Date(timestamp),
-						payload: payload ?? {}
+						event,
+						os: operatingSystem ?? null,
+						payload: payload ?? {},
+						version: version ?? null
 					}
 				});
 
@@ -84,14 +100,14 @@ export const telemetryPlugin = (db: DatabaseType) =>
 			},
 			{
 				body: t.Object({
-					event: t.String(),
 					anonymousId: t.String(),
-					version: t.Optional(t.String()),
-					os: t.Optional(t.String()),
 					arch: t.Optional(t.String()),
 					bunVersion: t.Optional(t.String()),
+					event: t.String(),
+					os: t.Optional(t.String()),
+					payload: t.Optional(t.Record(t.String(), t.Unknown())),
 					timestamp: t.String(),
-					payload: t.Optional(t.Record(t.String(), t.Unknown()))
+					version: t.Optional(t.String())
 				})
 			}
 		)
@@ -99,21 +115,21 @@ export const telemetryPlugin = (db: DatabaseType) =>
 			protectRoute(
 				async (user) => {
 					if (!whitelistedAdmins.includes(user.auth_sub)) {
-						return status(403, 'Access denied');
+						return status(HTTP_STATUS_FORBIDDEN, 'Access denied');
 					}
 
 					const kpiSummary = await getKpiSummary(db);
 
 					return kpiSummary;
 				},
-				() => status(403, 'Access denied')
+				() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 			)
 		)
 		.get('/api/v1/telemetry/versions', async ({ protectRoute, status }) =>
 			protectRoute(
 				async (user) => {
 					if (!whitelistedAdmins.includes(user.auth_sub)) {
-						return status(403, 'Access denied');
+						return status(HTTP_STATUS_FORBIDDEN, 'Access denied');
 					}
 					const [res, unknownCount] = await Promise.all([
 						fetch(
@@ -126,27 +142,42 @@ export const telemetryPlugin = (db: DatabaseType) =>
 								eq(schema.telemetryEvents.version, 'unknown')
 							)
 					]);
-					if (!res.ok) return status(502, 'Failed to fetch versions');
+					if (!res.ok)
+						return status(
+							HTTP_STATUS_BAD_GATEWAY,
+							'Failed to fetch versions'
+						);
 					const json = await res.json();
-					const versions = Object.keys(
-						json.versions as Record<string, unknown>
-					)
-						.filter((v) => {
-							const parts = v.split('.').map(Number);
+					if (!isObject(json) || !isObject(json.versions)) {
+						return status(
+							HTTP_STATUS_BAD_GATEWAY,
+							'Invalid versions response'
+						);
+					}
+					const versions = Object.keys(json.versions)
+						.filter((version) => {
+							const parts = version.split('.').map(Number);
 							const [major, minor] = parts;
+
 							return (
-								major != null &&
-								minor != null &&
-								(major > 0 || (major === 0 && minor >= 17))
+								major !== null &&
+								major !== undefined &&
+								minor !== null &&
+								minor !== undefined &&
+								(major > 0 ||
+									(major === 0 &&
+										minor >=
+											MIN_SUPPORTED_ABSOLUTE_MINOR_VERSION))
 							);
 						})
 						.reverse();
 					if ((unknownCount[0]?.count ?? 0) > 0) {
 						versions.push('unknown');
 					}
+
 					return versions;
 				},
-				() => status(403, 'Access denied')
+				() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 			)
 		)
 		.get(
@@ -155,11 +186,15 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				protectRoute(
 					async (user) => {
 						if (!whitelistedAdmins.includes(user.auth_sub)) {
-							return status(403, 'Access denied');
+							return status(
+								HTTP_STATUS_FORBIDDEN,
+								'Access denied'
+							);
 						}
+
 						return getBunVersions(db);
 					},
-					() => status(403, 'Access denied')
+					() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 				)
 		)
 		.get(
@@ -168,37 +203,41 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				protectRoute(
 					async (user) => {
 						if (!whitelistedAdmins.includes(user.auth_sub)) {
-							return status(403, 'Access denied');
+							return status(
+								HTTP_STATUS_FORBIDDEN,
+								'Access denied'
+							);
 						}
+
 						return getAllEvents(db, {
+							anonymous_id: query.anonymous_id,
+							bun_version: query.bun_version,
+							event: query.event,
+							from: query.from,
+							os: query.os,
 							page: query.page ? Number(query.page) : undefined,
 							pageSize: query.pageSize
 								? Number(query.pageSize)
 								: undefined,
-							event: query.event,
-							version: query.version,
-							os: query.os,
-							bun_version: query.bun_version,
-							anonymous_id: query.anonymous_id,
 							search: query.search,
-							from: query.from,
-							to: query.to
+							to: query.to,
+							version: query.version
 						});
 					},
-					() => status(403, 'Access denied')
+					() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 				),
 			{
 				query: t.Object({
+					anonymous_id: t.Optional(t.String()),
+					bun_version: t.Optional(t.String()),
+					event: t.Optional(t.String()),
+					from: t.Optional(t.String()),
+					os: t.Optional(t.String()),
 					page: t.Optional(t.String()),
 					pageSize: t.Optional(t.String()),
-					event: t.Optional(t.String()),
-					version: t.Optional(t.String()),
-					os: t.Optional(t.String()),
-					bun_version: t.Optional(t.String()),
-					anonymous_id: t.Optional(t.String()),
 					search: t.Optional(t.String()),
-					from: t.Optional(t.String()),
-					to: t.Optional(t.String())
+					to: t.Optional(t.String()),
+					version: t.Optional(t.String())
 				})
 			}
 		)
@@ -208,13 +247,21 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				protectRoute(
 					async (user) => {
 						if (!whitelistedAdmins.includes(user.auth_sub)) {
-							return status(403, 'Access denied');
+							return status(
+								HTTP_STATUS_FORBIDDEN,
+								'Access denied'
+							);
 						}
 						const deleted = await deleteTelemetryEvent(db, eventId);
-						if (!deleted) return status(404, 'Event not found');
+						if (!deleted)
+							return status(
+								HTTP_STATUS_NOT_FOUND,
+								'Event not found'
+							);
+
 						return { success: true };
 					},
-					() => status(403, 'Access denied')
+					() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 				),
 			{
 				params: t.Object({ eventId: t.String() })
@@ -226,50 +273,58 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				protectRoute(
 					async (user) => {
 						if (!whitelistedAdmins.includes(user.auth_sub)) {
-							return status(403, 'Access denied');
+							return status(
+								HTTP_STATUS_FORBIDDEN,
+								'Access denied'
+							);
 						}
 						if (body.ids) {
 							if (body.ids.length === 0) {
-								return status(400, 'No event IDs provided');
+								return status(
+									HTTP_STATUS_BAD_REQUEST,
+									'No event IDs provided'
+								);
 							}
 							const deleted = await deleteTelemetryEvents(
 								db,
 								body.ids
 							);
+
 							return {
-								success: true,
-								deletedCount: deleted.length
+								deletedCount: deleted.length,
+								success: true
 							};
 						}
 						const deleted = await deleteTelemetryEventsByFilter(
 							db,
 							{
-								event: body.event,
-								version: body.version,
-								os: body.os,
 								bun_version: body.bun_version,
-								search: body.search,
+								event: body.event,
 								from: body.from,
-								to: body.to
+								os: body.os,
+								search: body.search,
+								to: body.to,
+								version: body.version
 							}
 						);
+
 						return {
-							success: true,
-							deletedCount: deleted.length
+							deletedCount: deleted.length,
+							success: true
 						};
 					},
-					() => status(403, 'Access denied')
+					() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 				),
 			{
 				body: t.Object({
-					ids: t.Optional(t.Array(t.String())),
-					event: t.Optional(t.String()),
-					version: t.Optional(t.String()),
-					os: t.Optional(t.String()),
 					bun_version: t.Optional(t.String()),
-					search: t.Optional(t.String()),
+					event: t.Optional(t.String()),
 					from: t.Optional(t.String()),
-					to: t.Optional(t.String())
+					ids: t.Optional(t.Array(t.String())),
+					os: t.Optional(t.String()),
+					search: t.Optional(t.String()),
+					to: t.Optional(t.String()),
+					version: t.Optional(t.String())
 				})
 			}
 		)
@@ -279,11 +334,15 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				protectRoute(
 					async (user) => {
 						if (!whitelistedAdmins.includes(user.auth_sub)) {
-							return status(403, 'Access denied');
+							return status(
+								HTTP_STATUS_FORBIDDEN,
+								'Access denied'
+							);
 						}
+
 						return getUniqueUsers(db, query.search);
 					},
-					() => status(403, 'Access denied')
+					() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 				),
 			{
 				query: t.Object({
@@ -297,34 +356,38 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				protectRoute(
 					async (user) => {
 						if (!whitelistedAdmins.includes(user.auth_sub)) {
-							return status(403, 'Access denied');
+							return status(
+								HTTP_STATUS_FORBIDDEN,
+								'Access denied'
+							);
 						}
+
 						return getUserEvents(db, anonymousId, {
+							event: query.event,
+							from: query.from,
+							os: query.os,
 							page: query.page ? Number(query.page) : undefined,
 							pageSize: query.pageSize
 								? Number(query.pageSize)
 								: undefined,
-							event: query.event,
-							version: query.version,
-							os: query.os,
 							search: query.search,
-							from: query.from,
-							to: query.to
+							to: query.to,
+							version: query.version
 						});
 					},
-					() => status(403, 'Access denied')
+					() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 				),
 			{
 				params: t.Object({ anonymousId: t.String() }),
 				query: t.Object({
+					event: t.Optional(t.String()),
+					from: t.Optional(t.String()),
+					os: t.Optional(t.String()),
 					page: t.Optional(t.String()),
 					pageSize: t.Optional(t.String()),
-					event: t.Optional(t.String()),
-					version: t.Optional(t.String()),
-					os: t.Optional(t.String()),
 					search: t.Optional(t.String()),
-					from: t.Optional(t.String()),
-					to: t.Optional(t.String())
+					to: t.Optional(t.String()),
+					version: t.Optional(t.String())
 				})
 			}
 		)
@@ -332,11 +395,12 @@ export const telemetryPlugin = (db: DatabaseType) =>
 			protectRoute(
 				async (user) => {
 					if (!whitelistedAdmins.includes(user.auth_sub)) {
-						return status(403, 'Access denied');
+						return status(HTTP_STATUS_FORBIDDEN, 'Access denied');
 					}
+
 					return getUserLabels(db);
 				},
-				() => status(403, 'Access denied')
+				() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 			)
 		)
 		.put(
@@ -345,19 +409,23 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				protectRoute(
 					async (user) => {
 						if (!whitelistedAdmins.includes(user.auth_sub)) {
-							return status(403, 'Access denied');
+							return status(
+								HTTP_STATUS_FORBIDDEN,
+								'Access denied'
+							);
 						}
+
 						return upsertUserLabel({
-							db,
 							anonymousId,
+							db,
 							label: body.label
 						});
 					},
-					() => status(403, 'Access denied')
+					() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 				),
 			{
-				params: t.Object({ anonymousId: t.String() }),
-				body: t.Object({ label: t.String() })
+				body: t.Object({ label: t.String() }),
+				params: t.Object({ anonymousId: t.String() })
 			}
 		)
 		.delete(
@@ -366,13 +434,21 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				protectRoute(
 					async (user) => {
 						if (!whitelistedAdmins.includes(user.auth_sub)) {
-							return status(403, 'Access denied');
+							return status(
+								HTTP_STATUS_FORBIDDEN,
+								'Access denied'
+							);
 						}
 						const deleted = await deleteUserLabel(db, anonymousId);
-						if (!deleted) return status(404, 'Label not found');
+						if (!deleted)
+							return status(
+								HTTP_STATUS_NOT_FOUND,
+								'Label not found'
+							);
+
 						return { success: true };
 					},
-					() => status(403, 'Access denied')
+					() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 				),
 			{
 				params: t.Object({ anonymousId: t.String() })
@@ -384,16 +460,21 @@ export const telemetryPlugin = (db: DatabaseType) =>
 				protectRoute(
 					async (user) => {
 						if (!whitelistedAdmins.includes(user.auth_sub)) {
-							return status(403, 'Access denied');
+							return status(
+								HTTP_STATUS_FORBIDDEN,
+								'Access denied'
+							);
 						}
-						const handler =
-							telemetryQueryHandlers[
-								key as keyof typeof telemetryQueryHandlers
-							];
-						if (!handler) return status(404, 'Unknown query');
+						const handler = telemetryQueryHandlers[key];
+						if (!handler)
+							return status(
+								HTTP_STATUS_NOT_FOUND,
+								'Unknown query'
+							);
+
 						return handler(db, query.version);
 					},
-					() => status(403, 'Access denied')
+					() => status(HTTP_STATUS_FORBIDDEN, 'Access denied')
 				),
 			{
 				params: t.Object({ key: t.String() }),

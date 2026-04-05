@@ -26,7 +26,7 @@ export const OAuthLink = ({ mode, provider, themeSprings }: OAuthLinkProps) => {
 		primaryColor: 'lightgray'
 	};
 
-	const { logoUrl, name, primaryColor } =
+	const { logoUrl, name } =
 		provider && providerData[provider]
 			? providerData[provider]
 			: defaultData;
@@ -47,10 +47,10 @@ export const OAuthLink = ({ mode, provider, themeSprings }: OAuthLinkProps) => {
 			<div style={oauthButtonContentStyle}>
 				{provider ? (
 					<animated.img
-						src={logoUrl}
 						alt={`${name} logo`}
+						src={logoUrl}
 						style={{
-							...oauthIconStyle(),
+							...oauthIconStyle,
 							filter: DARK_LOGO_PROVIDERS.has(provider)
 								? themeSprings.theme.to((t) =>
 										t.endsWith('dark')
@@ -61,7 +61,7 @@ export const OAuthLink = ({ mode, provider, themeSprings }: OAuthLinkProps) => {
 						}}
 					/>
 				) : (
-					<FiUser style={oauthIconStyle()} />
+					<FiUser style={oauthIconStyle} />
 				)}
 				<span style={oauthButtonTextStyle}>{buttonText}</span>
 			</div>

@@ -17,8 +17,8 @@ import { PrismPlus } from '../../../utils/PrismPlus';
 export const SessionManagementSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
 		<AnchorHeading
-			level="h2"
 			id="session-management"
+			level="h2"
 			style={gradientHeadingStyle(themeSprings)}
 			themeSprings={themeSprings}
 		>
@@ -80,7 +80,7 @@ export const SessionManagementSection = ({ themeSprings }: ThemeProps) => (
 			themeSprings={themeSprings}
 		/>
 		<p style={paragraphSpacedStyle}>
-			The derived function follows Elysia's plugin pattern - it captures
+			The derived function follows Elysia's plugin pattern: it captures
 			the session configuration from when absoluteAuth was initialized and
 			provides a simple async function you can call from any route.
 		</p>

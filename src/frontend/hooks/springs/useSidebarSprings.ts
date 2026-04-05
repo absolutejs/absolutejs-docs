@@ -1,3 +1,4 @@
+import { JSON_VIEWER_LAYOUT } from '../../../constants';
 import { useSprings } from '@react-spring/web';
 import { DocsView, isMenuDropdown } from '../../../types/types';
 import { sidebarData } from '../../data/sidebarData';
@@ -22,7 +23,8 @@ export const useSidebarSprings = (view: DocsView) => {
 				const idx = item.buttons.findIndex(
 					(button) => button.id === view
 				);
-				if (idx !== -1) acc.selectedIndex = acc.offset + idx;
+				if (idx !== JSON_VIEWER_LAYOUT.contentEndIndexOffset)
+					acc.selectedIndex = acc.offset + idx;
 				acc.counts.push(count);
 				acc.offset += count;
 				acc.totalButtons += count;
@@ -36,7 +38,12 @@ export const useSidebarSprings = (view: DocsView) => {
 
 			return acc;
 		},
-		{ counts: [], offset: 0, selectedIndex: -1, totalButtons: 0 }
+		{
+			counts: [],
+			offset: 0,
+			selectedIndex: JSON_VIEWER_LAYOUT.contentEndIndexOffset,
+			totalButtons: 0
+		}
 	);
 
 	const [linksSprings, linksApi] = useSprings(
@@ -45,8 +52,8 @@ export const useSidebarSprings = (view: DocsView) => {
 			backgroundColor:
 				index === selectedIndex ? primaryColor : 'transparent',
 			borderColor: index === selectedIndex ? primaryColor : 'transparent',
-			opacity: index === selectedIndex ? 1 : 0,
-			config: { tension: 300, friction: 26 }
+			config: { friction: 26, tension: 300 },
+			opacity: index === selectedIndex ? 1 : 0
 		}),
 		[selectedIndex]
 	);

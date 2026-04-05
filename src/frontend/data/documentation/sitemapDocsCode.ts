@@ -1,36 +1,5 @@
-export const sitemapZeroConfig = `\
-// absolute.config.ts — sitemap is automatic
-import { defineConfig } from '@absolutejs/absolute';
-
-export default defineConfig({
-  reactDirectory: './src/frontend'
-  // That's it. Sitemap generation is built in.
-  // On server start, AbsoluteJS discovers your page routes
-  // and writes sitemap.xml to the build directory.
-});`;
-
-export const sitemapOutput = `\
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://mysite.com/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mysite.com/about</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mysite.com/blog</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-</urlset>`;
-
 export const sitemapCustomConfig = `\
-// absolute.config.ts — with sitemap options
+// absolute.config.ts : with sitemap options
 import { defineConfig } from '@absolutejs/absolute';
 
 export default defineConfig({
@@ -59,9 +28,8 @@ export default defineConfig({
     }
   }
 });`;
-
 export const sitemapDynamicRoutes = `\
-// absolute.config.ts — with dynamic routes
+// absolute.config.ts : with dynamic routes
 import { defineConfig } from '@absolutejs/absolute';
 
 export default defineConfig({
@@ -78,7 +46,25 @@ export default defineConfig({
     }
   }
 });`;
-
+export const sitemapOutput = `\
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://mysite.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mysite.com/about</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mysite.com/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>`;
 export const sitemapTypeReference = `\
 type SitemapConfig = {
   baseUrl?: string;
@@ -98,3 +84,13 @@ type SitemapRouteOverride = {
   priority?: number;
   lastmod?: string;
 };`;
+export const sitemapZeroConfig = `\
+// absolute.config.ts : sitemap is automatic
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  reactDirectory: './src/frontend'
+  // That's it. Sitemap generation is built in.
+  // On server start, AbsoluteJS discovers your page routes
+  // and writes sitemap.xml to the build directory.
+});`;

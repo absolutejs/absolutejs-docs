@@ -1,22 +1,3 @@
-export const databaseCode = `import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
-import { pgTable, varchar, timestamp, jsonb } from 'drizzle-orm/pg-core';
-
-export const users = pgTable('users', {
-    auth_sub: varchar('auth_sub', { length: 255 }).primaryKey(),
-    created_at: timestamp('created_at').notNull().defaultNow(),
-    metadata: jsonb('metadata').$type<Record<string, unknown>>().default({})
-});
-
-export const schema = {
-	users,
-};
-
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
-
-export type SchemaType = typeof schema;
-export type DatabaseType = NeonHttpDatabase<SchemaType>;`;
-
 export const backendCode = `import { prepare, asset, getEnv, networking } from '@absolutejs/absolute';
 import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { Home } from '../frontend/pages/Home';
@@ -45,17 +26,24 @@ const server = new Elysia()
     .use(networking);
 
 export type Server = typeof server;`;
+export const databaseCode = `import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
+import { pgTable, varchar, timestamp, jsonb } from 'drizzle-orm/pg-core';
 
-export const treatyCode = `import { treaty } from '@elysiajs/eden';
-import type { Server } from '../../backend/server';
+export const users = pgTable('users', {
+    auth_sub: varchar('auth_sub', { length: 255 }).primaryKey(),
+    created_at: timestamp('created_at').notNull().defaultNow(),
+    metadata: jsonb('metadata').$type<Record<string, unknown>>().default({})
+});
 
-const serverUrl =
-	typeof window !== 'undefined'
-		? window.location.origin
-		: 'http://localhost:3000';
+export const schema = {
+	users,
+};
 
-export const server = treaty<Server>(serverUrl);`;
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 
+export type SchemaType = typeof schema;
+export type DatabaseType = NeonHttpDatabase<SchemaType>;`;
 export const frontendCode = `import { server } from '../eden/treaty';
 import { Head } from '../components/page/Head';
 import { bodyDefault, htmlDefault, mainDefault } from '../styles';
@@ -77,3 +65,12 @@ export const Home = () => {
         </html>
     );
 };`;
+export const treatyCode = `import { treaty } from '@elysiajs/eden';
+import type { Server } from '../../backend/server';
+
+const serverUrl =
+	typeof window !== 'undefined'
+		? window.location.origin
+		: 'http://localhost:3000';
+
+export const server = treaty<Server>(serverUrl);`;

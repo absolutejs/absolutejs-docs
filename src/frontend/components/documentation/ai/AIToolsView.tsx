@@ -1,6 +1,6 @@
-import { CSSProperties } from 'react';
+import { ReactNode } from 'react';
 import { animated } from '@react-spring/web';
-import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
+import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	aiToolsDefinition,
@@ -8,7 +8,6 @@ import {
 	aiToolsUsage,
 	aiToolsDynamic
 } from '../../../data/documentation/aiDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	mainContentStyle,
@@ -18,7 +17,6 @@ import {
 	tableCodeStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
@@ -26,6 +24,7 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { ExecutionFlowStep } from './ExecutionFlowStep';
 
 const tocItems: TocItem[] = [
 	{ href: '#defining-tools', label: 'Defining Tools' },
@@ -34,32 +33,6 @@ const tocItems: TocItem[] = [
 	{ href: '#dynamic-tools', label: 'Dynamic Tools' },
 	{ href: '#execution-flow', label: 'Execution Flow' }
 ];
-
-const stepCircleStyle: CSSProperties = {
-	alignItems: 'center',
-	background: 'linear-gradient(135deg, #6366F1 0%, #818CF8 100%)',
-	borderRadius: '50%',
-	color: '#fff',
-	display: 'flex',
-	flexShrink: 0,
-	fontSize: '0.75rem',
-	fontWeight: 700,
-	height: '1.75rem',
-	justifyContent: 'center',
-	width: '1.75rem'
-};
-
-const stepTextStyle: CSSProperties = {
-	fontSize: '0.95rem',
-	lineHeight: 1.5
-};
-
-const connectorStyle = (themeSprings: ThemeSprings) => ({
-	borderLeft: themeSprings.themeTertiary.to((c: string) => `2px dashed ${c}`),
-	height: '1rem',
-	marginLeft: '0.85rem',
-	width: '0'
-});
 
 export const AIToolsView = ({
 	currentPageId,
@@ -71,7 +44,7 @@ export const AIToolsView = ({
 }: DocsViewProps) => {
 	const showDesktopToc = !isMobileOrTablet;
 
-	const steps = [
+	const steps: Array<{ num: string; text: ReactNode }> = [
 		{
 			num: '1',
 			text: (
@@ -133,21 +106,21 @@ export const AIToolsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="ai-tools">
+					<h1 id="ai-tools" style={h1Style(isMobileOrTablet)}>
 						AI Tools
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Give AI models the ability to call functions in your
 						application. Define tools with a description, JSON
-						Schema input, and a handler function — the plugin
-						manages multi-turn tool execution automatically.
+						schema and a handler function. The plugin manages
+						multi-turn tool execution automatically.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="defining-tools"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -169,8 +142,8 @@ export const AIToolsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="tool-types"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -186,8 +159,8 @@ export const AIToolsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="using-tools"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -208,8 +181,8 @@ export const AIToolsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="dynamic-tools"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -230,8 +203,8 @@ export const AIToolsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="execution-flow"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -249,27 +222,13 @@ export const AIToolsView = ({
 						}}
 					>
 						{steps.map((step, i) => (
-							<div key={step.num}>
-								<animated.div
-									style={{
-										...featureCardStyle(themeSprings),
-										alignItems: 'center',
-										display: 'flex',
-										gap: '0.75rem',
-										padding: '0.75rem 1rem'
-									}}
-								>
-									<div style={stepCircleStyle}>
-										{step.num}
-									</div>
-									<div style={stepTextStyle}>{step.text}</div>
-								</animated.div>
-								{i < steps.length - 1 && (
-									<animated.div
-										style={connectorStyle(themeSprings)}
-									/>
-								)}
-							</div>
+							<ExecutionFlowStep
+								key={step.num}
+								num={step.num}
+								showConnector={i < steps.length - 1}
+								text={step.text}
+								themeSprings={themeSprings}
+							/>
 						))}
 					</div>
 					<p
@@ -293,14 +252,14 @@ export const AIToolsView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

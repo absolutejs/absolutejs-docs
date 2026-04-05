@@ -1,12 +1,11 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useState } from 'react';
 import { DocsView, isMenuDropdown } from '../../types/types';
+import { isValidViewId } from '../../types/typeGuards';
 import { Navbar } from '../components/navbar/Navbar';
 import { AuroraBackground } from '../components/utils/AuroraBackground';
 import { Head } from '../components/page/Head';
-import { MobileSidebar } from '../components/sidebar/MobileSidebar';
-import { MobileSidebarToggle } from '../components/sidebar/MobileSidebarToggle';
-import { Sidebar } from '../components/sidebar/Sidebar';
+import { SidebarSection } from '../components/sidebar/SidebarSection';
 import { docsViews, sidebarData } from '../data/sidebarData';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
 import { useMediaQuery } from '../hooks/useMediaQuery';
@@ -20,14 +19,13 @@ type DocumentationProps = {
 	initialView: DocsView;
 };
 
-const findSectionForView = (view: DocsView): string | null => {
+const findSectionForView = (view: DocsView) => {
 	for (const section of sidebarData) {
-		if (isMenuDropdown(section)) {
-			if (section.buttons.some((btn) => btn.id === view)) {
-				return section.label;
-			}
-		}
+		if (!isMenuDropdown(section)) continue;
+		if (section.buttons.some((btn) => btn.id === view))
+			return section.label;
 	}
+
 	return null;
 };
 
@@ -45,6 +43,7 @@ export const Documentation = ({
 
 	const [openSections, setOpenSections] = useState<Set<string>>(() => {
 		const initial = findSectionForView(initialView);
+
 		return initial ? new Set([initial]) : new Set();
 	});
 
@@ -59,9 +58,9 @@ export const Documentation = ({
 	const handleNavigate = (newView: DocsView) => {
 		navigateToView(newView);
 		const section = findSectionForView(newView);
-		if (section) {
-			setOpenSections((current) => new Set([...current, section]));
-		}
+		if (!section) return;
+
+		setOpenSections((current) => new Set([...current, section]));
 	};
 
 	const handleToggleSection = (label: string) => {
@@ -72,6 +71,7 @@ export const Documentation = ({
 			} else {
 				next.add(label);
 			}
+
 			return next;
 		});
 	};
@@ -117,40 +117,28 @@ export const Documentation = ({
 							minHeight: 0
 						}}
 					>
-						{isMobile ? (
-							<>
-								<MobileSidebarToggle
-									onToggle={toggleSidebar}
-									themeSprings={themeSprings}
-								/>
-								<MobileSidebar
-									spring={sidebarSpring}
-									springApi={sidebarSpringApi}
-									view={view}
-									themeSprings={themeSprings}
-									navigateToView={handleNavigate}
-									openSections={openSections}
-									onToggleSection={handleToggleSection}
-								/>
-							</>
-						) : (
-							<Sidebar
-								view={view}
-								themeSprings={themeSprings}
-								navigateToView={handleNavigate}
-								openSections={openSections}
-								onToggleSection={handleToggleSection}
-							/>
-						)}
-						<ActiveView
+						<SidebarSection
+							isMobile={isMobile}
+							navigateToView={handleNavigate}
+							onToggleSection={handleToggleSection}
+							openSections={openSections}
+							spring={sidebarSpring}
+							springApi={sidebarSpringApi}
 							themeSprings={themeSprings}
+							toggleSidebar={toggleSidebar}
+							view={view}
+						/>
+						<ActiveView
 							currentPageId={view}
-							onNavigate={(pageId) =>
-								handleNavigate(pageId as DocsView)
-							}
-							tocOpen={tocOpen}
-							onTocToggle={toggleToc}
 							isMobileOrTablet={isMobileOrTablet}
+							onNavigate={(pageId) => {
+								if (isValidViewId(pageId)) {
+									handleNavigate(pageId);
+								}
+							}}
+							onTocToggle={toggleToc}
+							themeSprings={themeSprings}
+							tocOpen={tocOpen}
 						/>
 					</div>
 				</main>

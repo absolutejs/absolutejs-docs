@@ -8,7 +8,6 @@ import {
 	manualInstall
 } from '../../../data/documentation/installationDocsCode';
 import { ProjectStructureGraph } from './ProjectStructureGraph';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -35,6 +34,23 @@ const tocItems: TocItem[] = [
 	{ href: '#manual-installation', label: 'Manual Installation' }
 ];
 
+const CreateAbsoluteOptionsList = () => (
+	<ul style={listStyle}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>--frontend</strong> : react, svelte,
+			vue, html, htmx
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>--database</strong> : drizzle, prisma,
+			none
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>--auth</strong> : Include
+			@absolutejs/auth setup
+		</li>
+	</ul>
+);
+
 export const InstallationView = ({
 	currentPageId,
 	onNavigate,
@@ -43,8 +59,6 @@ export const InstallationView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -60,7 +74,7 @@ export const InstallationView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="installation">
+					<h1 id="installation" style={h1Style(isMobileOrTablet)}>
 						Installation
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -71,8 +85,8 @@ export const InstallationView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="prerequisites"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -92,8 +106,8 @@ export const InstallationView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="create-absolutejs"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -121,26 +135,13 @@ export const InstallationView = ({
 					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
 						Available options include:
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--frontend</strong> —
-							react, svelte, vue, html, htmx
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--database</strong> —
-							drizzle, prisma, none
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--auth</strong> —
-							Include @absolutejs/auth setup
-						</li>
-					</ul>
+					<CreateAbsoluteOptionsList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="project-structure"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -154,8 +155,8 @@ export const InstallationView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="manual-installation"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -181,15 +182,15 @@ export const InstallationView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

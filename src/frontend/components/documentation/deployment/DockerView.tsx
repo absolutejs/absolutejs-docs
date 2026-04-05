@@ -5,17 +5,14 @@ import {
 	dockerCompose,
 	dockerFile
 } from '../../../data/documentation/deploymentDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
+import { DockerBestPracticesList } from './DockerBestPracticesList';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
@@ -39,8 +36,6 @@ export const DockerView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -56,7 +51,7 @@ export const DockerView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="docker">
+					<h1 id="docker" style={h1Style(isMobileOrTablet)}>
 						Docker
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -67,8 +62,8 @@ export const DockerView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="dockerfile"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -89,8 +84,8 @@ export const DockerView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="docker-compose"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -110,47 +105,14 @@ export const DockerView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="best-practices"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Best Practices
 					</AnchorHeading>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Use --frozen-lockfile
-							</strong>
-							: Ensures reproducible builds by using exact
-							versions from bun.lockb
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Multi-stage builds
-							</strong>
-							: Separate build and runtime stages to reduce final
-							image size
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Don&apos;t run as root
-							</strong>
-							: Add a non-root user for better security
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Use .dockerignore
-							</strong>
-							: Exclude node_modules, .git, and other unnecessary
-							files
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Health checks</strong>:
-							Add HEALTHCHECK instruction for container
-							orchestration
-						</li>
-					</ul>
+					<DockerBestPracticesList />
 				</section>
 
 				<DocsNavigation
@@ -162,14 +124,14 @@ export const DockerView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

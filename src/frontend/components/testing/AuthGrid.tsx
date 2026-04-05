@@ -23,6 +23,7 @@ export const AuthGrid = ({
 	>(() => {
 		if (!initialProvider) return null;
 		const data = providerData[initialProvider];
+
 		return {
 			createNewCredentialsUrl: data.createNewCredentialsUrl,
 			logoUrl: data.logoUrl,
@@ -48,19 +49,19 @@ export const AuthGrid = ({
 			>
 				{providerOptions.map((provider) => (
 					<OAuthButton
-						themeSprings={themeSprings}
 						key={provider}
 						provider={provider}
 						setModalContent={setModalContent}
+						themeSprings={themeSprings}
 					/>
 				))}
 			</div>
 
 			<AuthModal
-				themeSprings={themeSprings}
-				user={user}
 				modalContent={modalContent}
 				setModalContent={setModalContent}
+				themeSprings={themeSprings}
+				user={user}
 			/>
 		</ToastProvider>
 	);

@@ -1,11 +1,14 @@
-export const errorConventionBasic = `\
-src/frontend/react/pages/
-  Home.tsx
-  Home.error.tsx     # page-specific error boundary for Home
-  About.tsx
-  error.tsx          # default error page for all React pages
-  not-found.tsx      # 404 page`;
-
+export const errorComponentAngular = `\
+// src/frontend/angular/pages/error.ts
+export const renderError = (error: { message: string; stack?: string }) => {
+  return \`
+    <div style="padding: 2rem; font-family: system-ui;">
+      <h1>Something went wrong</h1>
+      <p>\${error.message}</p>
+      \${error.stack ? \`<pre style="white-space: pre-wrap; opacity: 0.7;">\${error.stack}</pre>\` : ''}
+    </div>
+  \`;
+};`;
 export const errorComponentReact = `\
 // src/frontend/react/pages/error.tsx
 export const ErrorPage = ({ error }: { error: { message: string; stack?: string } }) => {
@@ -21,7 +24,6 @@ export const ErrorPage = ({ error }: { error: { message: string; stack?: string 
     </div>
   );
 };`;
-
 export const errorComponentSvelte = `\
 <!-- src/frontend/svelte/pages/error.svelte -->
 <script lang="ts">
@@ -35,7 +37,6 @@ export const errorComponentSvelte = `\
     <pre style="white-space: pre-wrap; opacity: 0.7;">{error.stack}</pre>
   {/if}
 </div>`;
-
 export const errorComponentVue = `\
 <!-- src/frontend/vue/pages/error.vue -->
 <script setup lang="ts">
@@ -53,19 +54,19 @@ const props = defineProps<{
     </pre>
   </div>
 </template>`;
+export const errorConventionBasic = `\
+src/frontend/react/pages/
+  Home.tsx
+  Home.error.tsx     # page-specific error boundary for Home
+  About.tsx
+  error.tsx          # default error page for all React pages
+  not-found.tsx      # 404 page`;
+export const errorFallbackChain = `\
+Error Fallback Chain (highest to lowest priority):
 
-export const errorComponentAngular = `\
-// src/frontend/angular/pages/error.ts
-export const renderError = (error: { message: string; stack?: string }) => {
-  return \`
-    <div style="padding: 2rem; font-family: system-ui;">
-      <h1>Something went wrong</h1>
-      <p>\${error.message}</p>
-      \${error.stack ? \`<pre style="white-space: pre-wrap; opacity: 0.7;">\${error.stack}</pre>\` : ''}
-    </div>
-  \`;
-};`;
-
+1. Page-specific error file   →  Home.error.tsx  (only for Home page)
+2. Framework default error    →  error.tsx       (for all pages in that framework)
+3. Generic SSR error page     →  ssrErrorPage()  (built-in fallback)`;
 export const notFoundReact = `\
 // src/frontend/react/pages/not-found.tsx
 export const NotFound = () => {
@@ -77,14 +78,6 @@ export const NotFound = () => {
     </div>
   );
 };`;
-
-export const errorFallbackChain = `\
-Error Fallback Chain (highest to lowest priority):
-
-1. Page-specific error file   →  Home.error.tsx  (only for Home page)
-2. Framework default error    →  error.tsx       (for all pages in that framework)
-3. Generic SSR error page     →  ssrErrorPage()  (built-in fallback)`;
-
 export const pageSpecificExample = `\
 src/frontend/react/pages/
   Home.tsx              # the page component

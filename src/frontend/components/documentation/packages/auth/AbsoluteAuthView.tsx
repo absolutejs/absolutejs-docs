@@ -2,7 +2,6 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import { DocsNavigation } from '../../DocsNavigation';
 import { basicSetup, protectRoute } from '../../../../data/authDocsCode';
-import { useMediaQuery } from '../../../../hooks/useMediaQuery';
 import {
 	mainContentStyle,
 	h1Style,
@@ -45,8 +44,6 @@ export const AbsoluteAuthView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -62,7 +59,7 @@ export const AbsoluteAuthView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="absolute-auth">
+					<h1 id="absolute-auth" style={h1Style(isMobileOrTablet)}>
 						Absolute Auth
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -73,9 +70,9 @@ export const AbsoluteAuthView = ({
 					</p>
 					<animated.a
 						href="https://github.com/absolutejs/absolute-auth"
-						target="_blank"
 						rel="noopener noreferrer"
 						style={githubButtonStyle(themeSprings)}
+						target="_blank"
 					>
 						View on GitHub
 					</animated.a>
@@ -83,8 +80,8 @@ export const AbsoluteAuthView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="key-features"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -96,8 +93,8 @@ export const AbsoluteAuthView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="installation"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -113,8 +110,8 @@ export const AbsoluteAuthView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="basic-setup"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -130,8 +127,8 @@ export const AbsoluteAuthView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="protect-route"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -140,7 +137,7 @@ export const AbsoluteAuthView = ({
 					<p style={paragraphSpacedStyle}>
 						The protectRoute helper function protects routes that
 						require authentication. It accepts two callbacks with
-						fully typed parameters - the user object matches your
+						fully typed parameters: the user object matches your
 						exact user shape, and the error object is one of the
 						specific authentication errors, giving you complete type
 						safety for both success and failure paths.
@@ -157,8 +154,8 @@ export const AbsoluteAuthView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="authentication-routes"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -183,14 +180,14 @@ export const AbsoluteAuthView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

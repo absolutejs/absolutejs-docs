@@ -1,3 +1,4 @@
+import { TELEMETRY_OVERVIEW_LAYOUT } from '../../../../constants';
 import { CSSProperties } from 'react';
 import { TelemetrySectionProps } from '../../../../types/telemetryTypes';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
@@ -13,7 +14,12 @@ export const OverviewSection = ({
 }: TelemetrySectionProps) => {
 	const { isSizeOrLess } = useMediaQuery();
 
-	const columns = isSizeOrLess('sm') ? 1 : isSizeOrLess('md') ? 2 : 5;
+	let columns: number = TELEMETRY_OVERVIEW_LAYOUT.largeScreenColumns;
+	if (isSizeOrLess('sm')) {
+		columns = TELEMETRY_OVERVIEW_LAYOUT.smallScreenColumns;
+	} else if (isSizeOrLess('md')) {
+		columns = TELEMETRY_OVERVIEW_LAYOUT.mediumScreenColumns;
+	}
 
 	const kpiGridStyle: CSSProperties = {
 		display: 'grid',
@@ -26,49 +32,58 @@ export const OverviewSection = ({
 		<div>
 			<div style={kpiGridStyle}>
 				<TelemetryCard
+					themeSprings={themeSprings}
 					title="Total Events"
 					value={kpi?.totalEvents?.toLocaleString() ?? '-'}
-					themeSprings={themeSprings}
 				/>
 				<TelemetryCard
+					themeSprings={themeSprings}
 					title="Error Rate"
-					value={kpi?.errorRate != null ? `${kpi.errorRate}%` : '-'}
-					themeSprings={themeSprings}
+					value={
+						kpi?.errorRate !== null && kpi?.errorRate !== undefined
+							? `${kpi.errorRate}%`
+							: '-'
+					}
 				/>
 				<TelemetryCard
+					themeSprings={themeSprings}
 					title="Avg Dev Build"
 					value={
-						kpi?.avgDevBuildMs != null
-							? `${(kpi.avgDevBuildMs / 1000).toFixed(1)}s`
+						kpi?.avgDevBuildMs !== null &&
+						kpi?.avgDevBuildMs !== undefined
+							? `${(kpi.avgDevBuildMs / TELEMETRY_OVERVIEW_LAYOUT.millisecondsPerSecond).toFixed(1)}s`
 							: '-'
 					}
-					themeSprings={themeSprings}
 				/>
 				<TelemetryCard
+					themeSprings={themeSprings}
 					title="Avg Prod Build"
 					value={
-						kpi?.avgProdBuildMs != null
-							? `${(kpi.avgProdBuildMs / 1000).toFixed(1)}s`
+						kpi?.avgProdBuildMs !== null &&
+						kpi?.avgProdBuildMs !== undefined
+							? `${(kpi.avgProdBuildMs / TELEMETRY_OVERVIEW_LAYOUT.millisecondsPerSecond).toFixed(1)}s`
 							: '-'
 					}
-					themeSprings={themeSprings}
 				/>
 				<TelemetryCard
+					themeSprings={themeSprings}
 					title="Top Framework"
 					value={kpi?.topFramework ?? '-'}
-					themeSprings={themeSprings}
 				/>
 			</div>
 
 			<TelemetryTable
-				queryKey="error-rates"
-				title="Error Rates by Event"
 				columns={['event', 'count']}
 				columnsWithVersion={['event', 'version', 'count']}
-				rows={(data['error-rates'] ?? []).slice(0, 5)}
-				themeSprings={themeSprings}
-				versions={versions}
 				onVersionChange={onVersionChange}
+				queryKey="error-rates"
+				rows={(data['error-rates'] ?? []).slice(
+					0,
+					TELEMETRY_OVERVIEW_LAYOUT.errorRatePreviewLimit
+				)}
+				themeSprings={themeSprings}
+				title="Error Rates by Event"
+				versions={versions}
 			/>
 		</div>
 	);

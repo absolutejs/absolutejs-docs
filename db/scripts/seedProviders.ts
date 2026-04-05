@@ -1,7 +1,7 @@
 import { providerOptions } from '@absolutejs/auth';
 import { createProvider } from '../../src/backend/handlers/providerHandlers';
 import { schema } from '../schema';
-import { env } from 'process';
+import { env, exit, stderr, stdout } from 'node:process';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 
@@ -21,8 +21,8 @@ const providersToCreate = providerOptions.filter(
 );
 
 if (providersToCreate.length === 0) {
-	console.log('All providers are already created. Nothing to do.');
-	process.exit(0);
+	stdout.write('All providers are already created. Nothing to do.\n');
+	exit(0);
 }
 
 const creationPromises = providersToCreate.map((name) =>
@@ -33,11 +33,10 @@ const creationResults = await Promise.allSettled(creationPromises);
 for (const [index, result] of creationResults.entries()) {
 	const providerName = providersToCreate[index];
 	if (result.status === 'fulfilled') {
-		console.log(`✅ Provider added: ${providerName}`);
+		stdout.write(`Provider added: ${providerName}\n`);
 	} else {
-		console.error(
-			`🚫 Could not add provider ${providerName}:`,
-			result.reason
+		stderr.write(
+			`Could not add provider ${providerName}: ${String(result.reason)}\n`
 		);
 	}
 }

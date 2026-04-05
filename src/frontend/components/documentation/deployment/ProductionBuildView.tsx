@@ -5,22 +5,19 @@ import {
 	productionBuild,
 	productionStart
 } from '../../../data/documentation/deploymentDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { ProductionBuildFeatureCards } from './ProductionBuildFeatureCards';
+import { ProductionBuildOptimizationTips } from './ProductionBuildOptimizationTips';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -40,8 +37,6 @@ export const ProductionBuildView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -57,7 +52,7 @@ export const ProductionBuildView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="production-build">
+					<h1 id="production-build" style={h1Style(isMobileOrTablet)}>
 						Production Build
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -68,8 +63,8 @@ export const ProductionBuildView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="building"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -86,54 +81,13 @@ export const ProductionBuildView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1.5rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Bundled Assets
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								All frontend code is bundled and minified for
-								optimal load times.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Cache Busting
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Hashed filenames ensure browsers always get the
-								latest version.
-							</p>
-						</animated.div>
-					</div>
+					<ProductionBuildFeatureCards themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="running"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -154,36 +108,14 @@ export const ProductionBuildView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="optimization"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Optimization Tips
 					</AnchorHeading>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Environment variables
-							</strong>
-							: Set NODE_ENV=production to enable optimizations
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Process manager</strong>
-							: Use PM2 or systemd for automatic restarts and
-							logging
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Reverse proxy</strong>:
-							Put nginx or Caddy in front for SSL termination and
-							caching
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Health checks</strong>:
-							Add a /health endpoint for load balancer health
-							checks
-						</li>
-					</ul>
+					<ProductionBuildOptimizationTips />
 				</section>
 
 				<DocsNavigation
@@ -195,14 +127,14 @@ export const ProductionBuildView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

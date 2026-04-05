@@ -15,22 +15,20 @@ import { angularTypeSafety } from '../../../data/documentation/angularDocsCode';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { TypeSafetyFeatureCard } from './TypeSafetyFeatureCard';
+import { TypeSafetyFlowList } from './TypeSafetyFlowList';
 
 const tocItems: TocItem[] = [
 	{ href: '#how-it-works', label: 'How It Works' },
@@ -67,20 +65,20 @@ export const TypeSafetyView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="type-safety">
+					<h1 id="type-safety" style={h1Style(isMobileOrTablet)}>
 						End-to-End Type Safety
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Types flow from your database schema through server
-						handlers to frontend components across all frameworks —
+						handlers to frontend components across all frameworks :
 						React, Svelte, Vue, and Angular.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="how-it-works"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -101,47 +99,29 @@ export const TypeSafetyView = ({
 							marginTop: '1rem'
 						}}
 					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Compile-Time Errors
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Missing or incorrectly typed props are caught by
-								TypeScript before your code runs. No runtime
-								surprises.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Refactoring Safety
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Rename a field in your database schema and
-								TypeScript shows every place that needs updating
-								across your entire application.
-							</p>
-						</animated.div>
+						<TypeSafetyFeatureCard
+							themeSprings={themeSprings}
+							title="Compile-Time Errors"
+						>
+							Missing or incorrectly typed props are caught by
+							TypeScript before your code runs. No runtime
+							surprises.
+						</TypeSafetyFeatureCard>
+						<TypeSafetyFeatureCard
+							themeSprings={themeSprings}
+							title="Refactoring Safety"
+						>
+							Rename a field in your database schema and
+							TypeScript shows every place that needs updating
+							across your entire application.
+						</TypeSafetyFeatureCard>
 					</div>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="schema-to-types"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -159,23 +139,27 @@ export const TypeSafetyView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>$inferSelect</strong> —
-							the type you get back when querying rows
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>$inferInsert</strong> —
-							the type required when inserting new rows (optional
-							fields with defaults are made optional)
-						</li>
-					</ul>
+					<TypeSafetyFlowList
+						items={[
+							{
+								description:
+									' : the type you get back when querying rows',
+								label: '$inferSelect'
+							},
+							{
+								description:
+									' : the type required when inserting new rows (optional fields with defaults are made optional)',
+								label: '$inferInsert'
+							}
+						]}
+						style={{ marginTop: '1.5rem' }}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="react"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -193,31 +177,32 @@ export const TypeSafetyView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Schema → Types</strong>:
-							Drizzle infers types directly from your table
-							definitions
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Types → Server</strong>:
-							Your inferred types flow into route handlers and
-							props
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Props → Component
-							</strong>
-							: React receives correctly typed props on both
-							server and client
-						</li>
-					</ul>
+					<TypeSafetyFlowList
+						items={[
+							{
+								description:
+									': Drizzle infers types directly from your table definitions',
+								label: 'Schema → Types'
+							},
+							{
+								description:
+									': Your inferred types flow into route handlers and props',
+								label: 'Types → Server'
+							},
+							{
+								description:
+									': React receives correctly typed props on both server and client',
+								label: 'Props → Component'
+							}
+						]}
+						style={{ marginTop: '1.5rem' }}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="svelte"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -244,31 +229,32 @@ export const TypeSafetyView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Schema → Types</strong>:
-							Drizzle infers types directly from your table
-							definitions
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Types → Server</strong>:
-							Your inferred types flow into route handlers and
-							props
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Props → Component
-							</strong>
-							: Svelte receives correctly typed props on both
-							server and client
-						</li>
-					</ul>
+					<TypeSafetyFlowList
+						items={[
+							{
+								description:
+									': Drizzle infers types directly from your table definitions',
+								label: 'Schema → Types'
+							},
+							{
+								description:
+									': Your inferred types flow into route handlers and props',
+								label: 'Types → Server'
+							},
+							{
+								description:
+									': Svelte receives correctly typed props on both server and client',
+								label: 'Props → Component'
+							}
+						]}
+						style={{ marginTop: '1.5rem' }}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="vue"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -287,32 +273,32 @@ export const TypeSafetyView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Server to client
-							</strong>
-							: Props types are validated end-to-end
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Computed properties
-							</strong>
-							: Derived values maintain type safety
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Template type checking
-							</strong>
-							: Vue Language Server validates template bindings
-						</li>
-					</ul>
+					<TypeSafetyFlowList
+						items={[
+							{
+								description:
+									': Props types are validated end-to-end',
+								label: 'Server to client'
+							},
+							{
+								description:
+									': Derived values maintain type safety',
+								label: 'Computed properties'
+							},
+							{
+								description:
+									': Vue Language Server validates template bindings',
+								label: 'Template type checking'
+							}
+						]}
+						style={{ marginTop: '1.5rem' }}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="angular"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -335,8 +321,8 @@ export const TypeSafetyView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="propsof-utilities"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -348,31 +334,25 @@ export const TypeSafetyView = ({
 						reference a component's props without importing the type
 						definition directly.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								ReactPropsOf{'<C>'}
-							</strong>{' '}
-							— extracts props from a React component type. Works
-							with function components and class components.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								SveltePropsOf{'<C>'}
-							</strong>{' '}
-							— extracts props from a compiled Svelte component.
-							Infers the exported prop types from the component
-							module.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								VuePropsOf{'<C>'}
-							</strong>{' '}
-							— extracts props from a Vue component defined with{' '}
-							<code>defineProps</code>. Works with both runtime
-							and type-only prop declarations.
-						</li>
-					</ul>
+					<TypeSafetyFlowList
+						items={[
+							{
+								description:
+									' extracts props from a React component type. Works with function components and class components.',
+								label: <>ReactPropsOf{'<C>'}</>
+							},
+							{
+								description:
+									' extracts props from a compiled Svelte component. Infers the exported prop types from the component module.',
+								label: <>SveltePropsOf{'<C>'}</>
+							},
+							{
+								description:
+									' extracts props from a Vue component defined with defineProps. Works with both runtime and type-only prop declarations.',
+								label: <>VuePropsOf{'<C>'}</>
+							}
+						]}
+					/>
 					<p style={paragraphSpacedStyle}>
 						These utility types are especially useful when building
 						shared layouts or higher-order components that need to
@@ -390,14 +370,14 @@ export const TypeSafetyView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

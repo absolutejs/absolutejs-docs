@@ -49,7 +49,7 @@ export const AngularAIView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="angular-ai">
+					<h1 id="angular-ai" style={h1Style(isMobileOrTablet)}>
 						Angular AI
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -62,8 +62,8 @@ export const AngularAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="ai-stream-service"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -74,7 +74,7 @@ export const AngularAIView = ({
 						<code>connect()</code> with the WebSocket path. It
 						returns an object with Angular computed signals for
 						messages, streaming state, and errors. The service is
-						provided in root and manages connection lifecycle —
+						provided in root and manages connection lifecycle :
 						calling <code>connect()</code> with the same path reuses
 						the existing connection.
 					</p>
@@ -88,8 +88,8 @@ export const AngularAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="return-type"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -112,14 +112,14 @@ export const AngularAIView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

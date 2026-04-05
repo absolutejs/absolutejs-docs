@@ -6,6 +6,7 @@ import {
 	getColors,
 	svgContainerStyle
 } from './diagramStyles';
+import { PropsHoverableProp } from './PropsHoverableProp';
 
 type PropsFlowDiagramProps = {
 	themeSprings: ThemeSprings;
@@ -98,53 +99,19 @@ export const PropsFlowDiagram = ({ themeSprings }: PropsFlowDiagramProps) => {
 					>
 						{'{ '}
 					</text>
-					<g
+					<PropsHoverableProp
+						accentSecondaryColor={colors.accentSecondary}
+						backgroundColor={colors.background}
+						isHovered={hoveredProp === 'user'}
+						label="user"
 						onMouseEnter={() => setHoveredProp('user')}
 						onMouseLeave={() => setHoveredProp(null)}
-						style={{ cursor: 'pointer' }}
-					>
-						<rect
-							fill="transparent"
-							height={20}
-							width={34}
-							x={42}
-							y={100}
-						/>
-						<text
-							fill={colors.accentSecondary}
-							fontFamily="monospace"
-							fontSize={13}
-							fontWeight={600}
-							x={42}
-							y={115}
-						>
-							user
-						</text>
-						{hoveredProp === 'user' && (
-							<g transform="translate(42, 60)">
-								<rect
-									fill={colors.background}
-									height={34}
-									rx={5}
-									stroke={colors.accentSecondary}
-									strokeWidth={1.5}
-									width={100}
-									x={-8}
-									y={0}
-								/>
-								<text
-									fill={colors.accentSecondary}
-									fontFamily="monospace"
-									fontSize={14}
-									fontWeight={500}
-									x={5}
-									y={22}
-								>
-									user: User
-								</text>
-							</g>
-						)}
-					</g>
+						textX={42}
+						textY={115}
+						tooltipLabel="user: User"
+						tooltipTransform="translate(42, 60)"
+						tooltipWidth={100}
+					/>
 					<text
 						fill={colors.text}
 						fontFamily="monospace"
@@ -154,53 +121,19 @@ export const PropsFlowDiagram = ({ themeSprings }: PropsFlowDiagramProps) => {
 					>
 						,
 					</text>
-					<g
+					<PropsHoverableProp
+						accentSecondaryColor={colors.accentSecondary}
+						backgroundColor={colors.background}
+						isHovered={hoveredProp === 'posts'}
+						label="posts"
 						onMouseEnter={() => setHoveredProp('posts')}
 						onMouseLeave={() => setHoveredProp(null)}
-						style={{ cursor: 'pointer' }}
-					>
-						<rect
-							fill="transparent"
-							height={20}
-							width={42}
-							x={90}
-							y={100}
-						/>
-						<text
-							fill={colors.accentSecondary}
-							fontFamily="monospace"
-							fontSize={13}
-							fontWeight={600}
-							x={90}
-							y={115}
-						>
-							posts
-						</text>
-						{hoveredProp === 'posts' && (
-							<g transform="translate(90, 60)">
-								<rect
-									fill={colors.background}
-									height={34}
-									rx={5}
-									stroke={colors.accentSecondary}
-									strokeWidth={1.5}
-									width={120}
-									x={-8}
-									y={0}
-								/>
-								<text
-									fill={colors.accentSecondary}
-									fontFamily="monospace"
-									fontSize={14}
-									fontWeight={500}
-									x={5}
-									y={22}
-								>
-									posts: Post[]
-								</text>
-							</g>
-						)}
-					</g>
+						textX={90}
+						textY={115}
+						tooltipLabel="posts: Post[]"
+						tooltipTransform="translate(90, 60)"
+						tooltipWidth={120}
+					/>
 					<text
 						fill={colors.text}
 						fontFamily="monospace"

@@ -53,7 +53,11 @@ import { AbsoluteAuthView } from '../components/documentation/packages/auth/Abso
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
 import { TypesView } from '../components/documentation/reference/TypesView';
+import { CronJobsView } from '../components/documentation/server/CronJobsView';
+import { ElysiaCorsView } from '../components/documentation/server/ElysiaCorsView';
 import { ElysiaIntegrationView } from '../components/documentation/server/ElysiaIntegrationView';
+import { ElysiaPluginCompositionView } from '../components/documentation/server/ElysiaPluginCompositionView';
+import { ElysiaValidationView } from '../components/documentation/server/ElysiaValidationView';
 import { MiddlewareView } from '../components/documentation/server/MiddlewareView';
 import { NetworkingPluginView } from '../components/documentation/server/NetworkingPluginView';
 import { AngularOverviewView } from '../components/documentation/angular/AngularOverviewView';
@@ -91,34 +95,37 @@ const definePortalViews = <T>(views: T) => views;
 export const docsViews = definePortalViews({
 	'absolute-auth': AbsoluteAuthView,
 	'ai-overview': AIOverviewView,
-	'ai-providers': AIProvidersView,
 	'ai-plugin': AIPluginView,
-	'ai-tools': AIToolsView,
+	'ai-providers': AIProvidersView,
 	'ai-streaming': AIStreamingView,
+	'ai-tools': AIToolsView,
 	'angular-ai': AngularAIView,
-	'angular-islands': AngularIslandsView,
 	'angular-components': AngularComponentsView,
+	'angular-islands': AngularIslandsView,
 	'angular-overview': AngularOverviewView,
 	assets: AssetsView,
 	'build-and-manifest': BuildManifestView,
 	citra: CitraView,
 	compile: CompileView,
 	'create-absolutejs': CreateAbsoluteJSView,
+	'cron-jobs': CronJobsView,
 	'data-fetching': DataFetchingView,
 	dev: DevView,
 	docker: DockerView,
-	'eslint-prettier': EslintPrettierView,
-	'error-boundaries': ErrorBoundariesView,
-	islands: IslandsView,
+	'elysia-cors': ElysiaCorsView,
 	'elysia-integration': ElysiaIntegrationView,
+	'elysia-plugin-composition': ElysiaPluginCompositionView,
+	'elysia-validation': ElysiaValidationView,
 	'environment-variables': EnvironmentVariablesView,
+	'error-boundaries': ErrorBoundariesView,
 	eslint: EslintView,
+	'eslint-prettier': EslintPrettierView,
 	'examples-recipes': ExamplesRecipesView,
 	'head-meta-tags': HeadMetaTagsView,
 	hosting: HostingView,
 	'html-ai': HTMLAIView,
-	'html-islands': HTMLIslandsView,
 	'html-image-optimization': HTMLImageOptView,
+	'html-islands': HTMLIslandsView,
 	'html-overview': HTMLOverviewView,
 	'htmx-ai': HTMXAIView,
 	'htmx-islands': HTMXIslandsView,
@@ -126,6 +133,7 @@ export const docsViews = definePortalViews({
 	'image-optimization': ImageOptimizationView,
 	info: InfoView,
 	installation: InstallationView,
+	islands: IslandsView,
 	'loading-states': LoadingStatesView,
 	middleware: MiddlewareView,
 	mkcert: MkcertView,
@@ -135,9 +143,9 @@ export const docsViews = definePortalViews({
 	'production-build': ProductionBuildView,
 	quickstart: QuickstartView,
 	'react-ai': ReactAIView,
-	'react-islands': ReactIslandsView,
 	'react-components': ReactComponentsView,
 	'react-hooks': ReactHooksView,
+	'react-islands': ReactIslandsView,
 	'react-overview': ReactOverviewView,
 	'routing-and-handlers': RoutingHandlersView,
 	'scoped-state': ScopedStateView,
@@ -147,17 +155,17 @@ export const docsViews = definePortalViews({
 	start: StartView,
 	'static-generation': StaticGenerationView,
 	'svelte-ai': SvelteAIView,
-	'svelte-islands': SvelteIslandsView,
 	'svelte-components': SvelteComponentsView,
+	'svelte-islands': SvelteIslandsView,
 	'svelte-overview': SvelteOverviewView,
 	'tailwind-css': TailwindCSSView,
 	telemetry: TelemetryView,
-	typecheck: TypecheckView,
 	'type-safety': TypeSafetyView,
+	typecheck: TypecheckView,
 	types: TypesView,
 	'vue-ai': VueAIView,
-	'vue-islands': VueIslandsView,
 	'vue-components': VueComponentsView,
+	'vue-islands': VueIslandsView,
 	'vue-overview': VueOverviewView
 });
 
@@ -264,12 +272,16 @@ export const sidebarData: MenuItem[] = [
 	},
 	{
 		buttons: [
-			{ id: 'elysia-integration', label: 'Elysia Integration' },
+			{ id: 'elysia-integration', label: 'Overview' },
+			{ id: 'elysia-plugin-composition', label: 'Plugin Composition' },
+			{ id: 'elysia-validation', label: 'Validation' },
+			{ id: 'elysia-cors', label: 'CORS' },
+			{ id: 'cron-jobs', label: 'Cron Jobs' },
 			{ id: 'middleware', label: 'Middleware' },
 			{ id: 'networking-plugin', label: 'Networking Plugin' }
 		],
 		icon: animated(FaServer),
-		label: 'Server'
+		label: 'Elysia Integration'
 	},
 	{
 		buttons: [

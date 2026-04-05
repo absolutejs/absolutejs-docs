@@ -8,23 +8,18 @@ import {
 	sectionStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	strongStyle,
-	tableContainerStyle,
-	tableStyle,
-	tableHeaderStyle,
-	tableCellStyle,
-	tableCodeStyle,
 	githubButtonStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
-	heroGradientStyle,
-	featureCardStyle
+	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { CreateAbsoluteJSFeatureCard } from './CreateAbsoluteJSFeatureCard';
+import { CreateAbsoluteJSDataTable } from './CreateAbsoluteJSDataTable';
 
 const tocItems: TocItem[] = [
 	{ href: '#quick-start', label: 'Quick Start' },
@@ -33,150 +28,161 @@ const tocItems: TocItem[] = [
 	{ href: '#configuration', label: 'Configuration' }
 ];
 
-const scripts = [
+type ScriptItem = {
+	description: string;
+	script: string;
+};
+
+const scripts: ScriptItem[] = [
 	{
-		script: 'bun dev',
-		description: 'Start the development server with hot reload'
+		description: 'Start the development server with hot reload',
+		script: 'bun dev'
 	},
-	{ script: 'bun build', description: 'Build the project for production' },
-	{ script: 'bun lint', description: 'Run code quality checks' },
+	{ description: 'Build the project for production', script: 'bun build' },
+	{ description: 'Run code quality checks', script: 'bun lint' },
 	{
-		script: 'bun format',
-		description: 'Format code with configured formatter'
+		description: 'Format code with configured formatter',
+		script: 'bun format'
 	},
-	{ script: 'bun typecheck', description: 'Run TypeScript type checking' },
+	{ description: 'Run TypeScript type checking', script: 'bun typecheck' },
 	{
-		script: 'bun db:studio',
-		description: 'Open database studio (if ORM configured)'
-	},
-	{
-		script: 'bun db:push',
-		description: 'Push schema changes to database (if ORM configured)'
+		description: 'Open database studio (if ORM configured)',
+		script: 'bun db:studio'
 	},
 	{
-		script: 'bun db:<engine>',
+		description: 'Push schema changes to database (if ORM configured)',
+		script: 'bun db:push'
+	},
+	{
 		description:
-			'Start local database container (if using local database without a host)'
+			'Start local database container (if using local database without a host)',
+		script: 'bun db:<engine>'
 	}
 ];
 
-const cliOptions = [
+type CliOption = {
+	description: string;
+	flag: string;
+};
+
+const cliOptions: CliOption[] = [
 	// General options
-	{ flag: '--help, -h', description: 'Show help message and exit' },
+	{ description: 'Show help message and exit', flag: '--help, -h' },
 	{
-		flag: '--debug, -d',
-		description: 'Display a summary of project configuration after creation'
-	},
-	{
-		flag: '--skip',
 		description:
-			'Skip non-required prompts; uses defaults and "absolutejs-project" if no name provided'
+			'Display a summary of project configuration after creation',
+		flag: '--debug, -d'
 	},
 	{
-		flag: '--install',
-		description: 'Use the same package manager to install dependencies'
+		description:
+			'Skip non-required prompts; uses defaults and "absolutejs-project" if no name provided',
+		flag: '--skip'
 	},
-	{ flag: '--git', description: 'Initialize a Git repository' },
-	{ flag: '--lts', description: 'Use LTS versions of required packages' },
 	{
-		flag: '--directory <mode>',
-		description: 'Directory-naming strategy: "default" or "custom"'
+		description: 'Use the same package manager to install dependencies',
+		flag: '--install'
+	},
+	{ description: 'Initialize a Git repository', flag: '--git' },
+	{ description: 'Use LTS versions of required packages', flag: '--lts' },
+	{
+		description: 'Directory-naming strategy: "default" or "custom"',
+		flag: '--directory <mode>'
 	},
 	// Frontend options
-	{ flag: '--react', description: 'Include a React frontend' },
+	{ description: 'Include a React frontend', flag: '--react' },
 	{
-		flag: '--react-dir <directory>',
-		description: 'Specify the directory for and use the React frontend'
+		description: 'Specify the directory for and use the React frontend',
+		flag: '--react-dir <directory>'
 	},
-	{ flag: '--svelte', description: 'Include a Svelte frontend' },
+	{ description: 'Include a Svelte frontend', flag: '--svelte' },
 	{
-		flag: '--svelte-dir <directory>',
-		description: 'Specify the directory for and use the Svelte frontend'
+		description: 'Specify the directory for and use the Svelte frontend',
+		flag: '--svelte-dir <directory>'
 	},
-	{ flag: '--vue', description: 'Include a Vue frontend' },
+	{ description: 'Include a Vue frontend', flag: '--vue' },
 	{
-		flag: '--vue-dir <directory>',
-		description: 'Specify the directory for and use the Vue frontend'
+		description: 'Specify the directory for and use the Vue frontend',
+		flag: '--vue-dir <directory>'
 	},
-	{ flag: '--angular', description: 'Include an Angular frontend' },
+	{ description: 'Include an Angular frontend', flag: '--angular' },
 	{
-		flag: '--angular-dir <directory>',
-		description: 'Specify the directory for and use the Angular frontend'
+		description: 'Specify the directory for and use the Angular frontend',
+		flag: '--angular-dir <directory>'
 	},
-	{ flag: '--htmx', description: 'Include an HTMX frontend' },
+	{ description: 'Include an HTMX frontend', flag: '--htmx' },
 	{
-		flag: '--htmx-dir <directory>',
-		description: 'Specify the directory for and use the HTMX frontend'
+		description: 'Specify the directory for and use the HTMX frontend',
+		flag: '--htmx-dir <directory>'
 	},
-	{ flag: '--html', description: 'Include a plain HTML frontend' },
+	{ description: 'Include a plain HTML frontend', flag: '--html' },
 	{
-		flag: '--html-dir <directory>',
-		description: 'Specify the directory for and use the HTML frontend'
+		description: 'Specify the directory for and use the HTML frontend',
+		flag: '--html-dir <directory>'
 	},
 	{
-		flag: '--html-scripts',
-		description: 'Enable HTML scripting with TypeScript'
+		description: 'Enable HTML scripting with TypeScript',
+		flag: '--html-scripts'
 	},
 	// Database options
 	{
-		flag: '--db <engine>',
 		description:
-			'Database engine: postgresql, mysql, sqlite, mongodb, mariadb, gel, singlestore, cockroachdb, mssql, or none'
+			'Database engine: postgresql, mysql, sqlite, mongodb, mariadb, gel, singlestore, cockroachdb, mssql, or none',
+		flag: '--db <engine>'
 	},
 	{
-		flag: '--db-dir <directory>',
-		description: 'Directory name for your database files'
+		description: 'Directory name for your database files',
+		flag: '--db-dir <directory>'
 	},
 	{
-		flag: '--db-host <host>',
-		description: 'Database host provider: neon, planetscale, or none'
+		description: 'Database host provider: neon, planetscale, or none',
+		flag: '--db-host <host>'
 	},
 	{
-		flag: '--orm <orm>',
-		description: 'ORM to configure: drizzle, prisma, or none'
+		description: 'ORM to configure: drizzle, prisma, or none',
+		flag: '--orm <orm>'
 	},
 	// Auth options
 	{
-		flag: '--auth <plugin>',
-		description: 'Pre-configured auth plugin: "abs" or none'
+		description: 'Pre-configured auth plugin: "abs" or none',
+		flag: '--auth <plugin>'
 	},
 	{
-		flag: '--abs-provider',
 		description:
-			'A provider for Absolute-Auth (e.g., google, github, discord)'
+			'A provider for Absolute-Auth (e.g., google, github, discord)',
+		flag: '--abs-provider'
 	},
 	// Build options
 	{
-		flag: '--assets <directory>',
-		description: 'Directory name for your static assets'
+		description: 'Directory name for your static assets',
+		flag: '--assets <directory>'
 	},
 	{
-		flag: '--build <directory>',
-		description: 'Output directory for build artifacts'
+		description: 'Output directory for build artifacts',
+		flag: '--build <directory>'
 	},
 	// Elysia plugins
 	{
-		flag: '--plugin <plugin>',
 		description:
-			'Elysia plugin(s) to include (repeatable); "none" skips plugin setup'
+			'Elysia plugin(s) to include (repeatable); "none" skips plugin setup',
+		flag: '--plugin <plugin>'
 	},
 	// Tooling options
-	{ flag: '--tailwind', description: 'Include Tailwind CSS setup' },
+	{ description: 'Include Tailwind CSS setup', flag: '--tailwind' },
 	{
-		flag: '--tailwind-input <file>',
-		description: 'Path to your Tailwind CSS entry file'
+		description: 'Path to your Tailwind CSS entry file',
+		flag: '--tailwind-input <file>'
 	},
 	{
-		flag: '--tailwind-output <file>',
-		description: 'Path for the generated Tailwind CSS bundle'
+		description: 'Path for the generated Tailwind CSS bundle',
+		flag: '--tailwind-output <file>'
 	},
 	{
-		flag: '--biome',
-		description: 'Use Biome for code quality and formatting'
+		description: 'Use Biome for code quality and formatting',
+		flag: '--biome'
 	},
 	{
-		flag: '--eslint+prettier',
-		description: 'Use ESLint + Prettier for code quality and formatting'
+		description: 'Use ESLint + Prettier for code quality and formatting',
+		flag: '--eslint+prettier'
 	}
 ];
 
@@ -206,8 +212,8 @@ export const CreateAbsoluteJSView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						style={h1Style(isMobileOrTablet)}
 						id="create-absolutejs"
+						style={h1Style(isMobileOrTablet)}
 					>
 						Create AbsoluteJS
 					</h1>
@@ -218,9 +224,9 @@ export const CreateAbsoluteJSView = ({
 					</p>
 					<animated.a
 						href="https://github.com/absolutejs/create-absolutejs"
-						target="_blank"
 						rel="noopener noreferrer"
 						style={githubButtonStyle(themeSprings)}
+						target="_blank"
 					>
 						View on GitHub
 					</animated.a>
@@ -228,8 +234,8 @@ export const CreateAbsoluteJSView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="quick-start"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -239,10 +245,10 @@ export const CreateAbsoluteJSView = ({
 						Create a new AbsoluteJS project in seconds:
 					</p>
 					<PrismPlus
-						language="bash"
 						codeString={'bun create absolutejs my-app'}
-						themeSprings={themeSprings}
+						language="bash"
 						showLineNumbers={false}
+						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
 						The CLI guides you through an interactive setup for:
@@ -258,52 +264,31 @@ export const CreateAbsoluteJSView = ({
 							marginTop: '1rem'
 						}}
 					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>Frontends</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								React, Svelte, Vue, HTMX, HTML
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>Databases</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								PostgreSQL, MySQL, SQLite, MongoDB
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>Tooling</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Drizzle/Prisma, Tailwind, ESLint
-							</p>
-						</animated.div>
+						<CreateAbsoluteJSFeatureCard
+							themeSprings={themeSprings}
+							title="Frontends"
+						>
+							React, Svelte, Vue, HTMX, HTML
+						</CreateAbsoluteJSFeatureCard>
+						<CreateAbsoluteJSFeatureCard
+							themeSprings={themeSprings}
+							title="Databases"
+						>
+							PostgreSQL, MySQL, SQLite, MongoDB
+						</CreateAbsoluteJSFeatureCard>
+						<CreateAbsoluteJSFeatureCard
+							themeSprings={themeSprings}
+							title="Tooling"
+						>
+							Drizzle/Prisma, Tailwind, ESLint
+						</CreateAbsoluteJSFeatureCard>
 					</div>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="project-overview"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -320,55 +305,27 @@ export const CreateAbsoluteJSView = ({
 					>
 						Available Scripts
 					</animated.h3>
-					<div style={tableContainerStyle}>
-						<animated.table style={tableStyle(themeSprings)}>
-							<thead>
-								<tr>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Script
-									</animated.th>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Description
-									</animated.th>
-								</tr>
-							</thead>
-							<tbody>
-								{scripts.map((s, i) => (
-									<tr key={i}>
-										<animated.td
-											style={tableCellStyle(themeSprings)}
-										>
-											<code style={tableCodeStyle}>
-												{s.script}
-											</code>
-										</animated.td>
-										<animated.td
-											style={tableCellStyle(themeSprings)}
-										>
-											{s.description}
-										</animated.td>
-									</tr>
-								))}
-							</tbody>
-						</animated.table>
-					</div>
+					<CreateAbsoluteJSDataTable
+						codeHeader="Script"
+						rows={scripts.map((s) => ({
+							code: s.script,
+							description: s.description
+						}))}
+						themeSprings={themeSprings}
+					/>
 					<p style={paragraphSpacedStyle}>Start developing:</p>
 					<PrismPlus
-						language="bash"
 						codeString={'cd my-app\nbun run dev'}
-						themeSprings={themeSprings}
+						language="bash"
 						showLineNumbers={false}
+						themeSprings={themeSprings}
 					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="cli-options"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -378,48 +335,20 @@ export const CreateAbsoluteJSView = ({
 						Customize your setup with command-line flags to skip
 						prompts or pre-configure options:
 					</p>
-					<div style={tableContainerStyle}>
-						<animated.table style={tableStyle(themeSprings)}>
-							<thead>
-								<tr>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Flag
-									</animated.th>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Description
-									</animated.th>
-								</tr>
-							</thead>
-							<tbody>
-								{cliOptions.map((opt, i) => (
-									<tr key={i}>
-										<animated.td
-											style={tableCellStyle(themeSprings)}
-										>
-											<code style={tableCodeStyle}>
-												{opt.flag}
-											</code>
-										</animated.td>
-										<animated.td
-											style={tableCellStyle(themeSprings)}
-										>
-											{opt.description}
-										</animated.td>
-									</tr>
-								))}
-							</tbody>
-						</animated.table>
-					</div>
+					<CreateAbsoluteJSDataTable
+						codeHeader="Flag"
+						rows={cliOptions.map((opt) => ({
+							code: opt.flag,
+							description: opt.description
+						}))}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="configuration"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -440,39 +369,20 @@ export const CreateAbsoluteJSView = ({
 							marginTop: '1rem'
 						}}
 					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Local Development
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Automatic Docker Compose setup with
-								pre-configured containers, environment
-								variables, and scripts.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Hosted Providers
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								First-class support for Neon (PostgreSQL),
-								PlanetScale (MySQL), and Turso (SQLite).
-							</p>
-						</animated.div>
+						<CreateAbsoluteJSFeatureCard
+							themeSprings={themeSprings}
+							title="Local Development"
+						>
+							Automatic Docker Compose setup with pre-configured
+							containers, environment variables, and scripts.
+						</CreateAbsoluteJSFeatureCard>
+						<CreateAbsoluteJSFeatureCard
+							themeSprings={themeSprings}
+							title="Hosted Providers"
+						>
+							First-class support for Neon (PostgreSQL),
+							PlanetScale (MySQL), and Turso (SQLite).
+						</CreateAbsoluteJSFeatureCard>
 					</div>
 
 					<animated.h3
@@ -491,68 +401,32 @@ export const CreateAbsoluteJSView = ({
 							marginTop: '1rem'
 						}}
 					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Code Quality Tools
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Choose between ESLint + Prettier or Biome, both
-								fully configured with sensible default rules out
-								of the box.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Tailwind CSS
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Optional utility-first CSS framework setup
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Absolute Auth
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Pre-configured OAuth 2.0 authentication
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									ORM Integration
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Drizzle or Prisma with type-safe queries
-							</p>
-						</animated.div>
+						<CreateAbsoluteJSFeatureCard
+							themeSprings={themeSprings}
+							title="Code Quality Tools"
+						>
+							Choose between ESLint + Prettier or Biome, both
+							fully configured with sensible default rules out of
+							the box.
+						</CreateAbsoluteJSFeatureCard>
+						<CreateAbsoluteJSFeatureCard
+							themeSprings={themeSprings}
+							title="Tailwind CSS"
+						>
+							Optional utility-first CSS framework setup
+						</CreateAbsoluteJSFeatureCard>
+						<CreateAbsoluteJSFeatureCard
+							themeSprings={themeSprings}
+							title="Absolute Auth"
+						>
+							Pre-configured OAuth 2.0 authentication
+						</CreateAbsoluteJSFeatureCard>
+						<CreateAbsoluteJSFeatureCard
+							themeSprings={themeSprings}
+							title="ORM Integration"
+						>
+							Drizzle or Prisma with type-safe queries
+						</CreateAbsoluteJSFeatureCard>
 					</div>
 				</section>
 
@@ -568,10 +442,10 @@ export const CreateAbsoluteJSView = ({
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

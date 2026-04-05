@@ -32,7 +32,6 @@ export const Modal = ({
 				}}
 			/>
 			<animated.dialog
-				open
 				onCancel={(event) => {
 					event.preventDefault();
 					onClose?.();
@@ -40,6 +39,7 @@ export const Modal = ({
 				onClick={(event: MouseEvent<HTMLDialogElement>) => {
 					if (event.target === event.currentTarget) onClose?.();
 				}}
+				open
 				style={{
 					alignItems: 'center',
 					background: 'transparent',
@@ -56,8 +56,8 @@ export const Modal = ({
 				}}
 			>
 				<animated.div
-					ref={contentRef}
 					onClick={(event) => event.stopPropagation()}
+					ref={contentRef}
 					style={Object.assign(
 						{},
 						{
@@ -69,8 +69,8 @@ export const Modal = ({
 					)}
 				>
 					<button
-						onClick={() => onClose?.()}
 						aria-label="Close modal"
+						onClick={() => onClose?.()}
 						style={{
 							background: 'transparent',
 							border: 'none',

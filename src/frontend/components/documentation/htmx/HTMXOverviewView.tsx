@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
@@ -10,7 +11,6 @@ import {
 	htmxScopedStateHtml,
 	htmxScopedStateSetup
 } from '../../../data/documentation/htmlHtmxDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -37,6 +37,23 @@ const tocItems: TocItem[] = [
 	{ href: '#scoped-state', label: 'Per-User State' }
 ];
 
+type HtmxFeatureListProps = {
+	items: Array<{
+		label: ReactNode;
+		text: string;
+	}>;
+};
+
+const HtmxFeatureList = ({ items }: HtmxFeatureListProps) => (
+	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+		{items.map((item, index) => (
+			<li key={index} style={listItemStyle}>
+				{item.label}: {item.text}
+			</li>
+		))}
+	</ul>
+);
+
 export const HTMXOverviewView = ({
 	currentPageId,
 	onNavigate,
@@ -45,8 +62,6 @@ export const HTMXOverviewView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -62,7 +77,7 @@ export const HTMXOverviewView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="htmx">
+					<h1 id="htmx" style={h1Style(isMobileOrTablet)}>
 						HTMX
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -73,8 +88,8 @@ export const HTMXOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="build-config"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -94,8 +109,8 @@ export const HTMXOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="page-handler"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -115,8 +130,8 @@ export const HTMXOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="example"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -136,8 +151,8 @@ export const HTMXOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="api-endpoints"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -153,30 +168,40 @@ export const HTMXOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Return HTML</strong>:
-							Endpoints return HTML strings that HTMX injects into
-							the page
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Type-safe data</strong>:
-							Your data fetching is still fully typed even though
-							the response is HTML
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								No JSON serialization
-							</strong>
-							: Skip the JSON/parse cycle for simpler data flow
-						</li>
-					</ul>
+					<HtmxFeatureList
+						items={[
+							{
+								label: (
+									<strong style={strongStyle}>
+										Return HTML
+									</strong>
+								),
+								text: 'Endpoints return HTML strings that HTMX injects into the page'
+							},
+							{
+								label: (
+									<strong style={strongStyle}>
+										Type-safe data
+									</strong>
+								),
+								text: 'Your data fetching is still fully typed even though the response is HTML'
+							},
+							{
+								label: (
+									<strong style={strongStyle}>
+										No JSON serialization
+									</strong>
+								),
+								text: 'Skip the JSON/parse cycle for simpler data flow'
+							}
+						]}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="scoped-state"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -216,27 +241,34 @@ export const HTMXOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Automatic sessions
-							</strong>
-							: A secure <code>user_session_id</code> cookie is
-							created on first visit
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>User isolation</strong>:
-							Each user&apos;s <code>scopedStore</code> is
-							completely independent
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								No client-side state
-							</strong>
-							: All state lives on the server, perfect for
-							HTMX&apos;s HTML-over-the-wire approach
-						</li>
-					</ul>
+					<HtmxFeatureList
+						items={[
+							{
+								label: (
+									<strong style={strongStyle}>
+										Automatic sessions
+									</strong>
+								),
+								text: 'A secure user_session_id cookie is created on first visit'
+							},
+							{
+								label: (
+									<strong style={strongStyle}>
+										User isolation
+									</strong>
+								),
+								text: "Each user's scopedStore is completely independent"
+							},
+							{
+								label: (
+									<strong style={strongStyle}>
+										No client-side state
+									</strong>
+								),
+								text: "All state lives on the server, perfect for HTMX's HTML-over-the-wire approach"
+							}
+						]}
+					/>
 					<p
 						style={{
 							...paragraphSpacedStyle,
@@ -246,8 +278,8 @@ export const HTMXOverviewView = ({
 						See the{' '}
 						<a
 							href="#"
-							onClick={(e) => {
-								e.preventDefault();
+							onClick={(event) => {
+								event.preventDefault();
 								onNavigate('scoped-state');
 							}}
 							style={{
@@ -271,14 +303,14 @@ export const HTMXOverviewView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

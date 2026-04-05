@@ -4,17 +4,13 @@ import { DocsNavigation } from '../DocsNavigation';
 import {
 	isrConfig,
 	isrFlow,
-	noStaticConfig,
 	ssgConfigAll,
 	ssgConfigRoutes,
 	ssgOutput,
 	staticConfigType
 } from '../../../data/documentation/staticDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
@@ -22,10 +18,11 @@ import {
 	strongStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { StaticGenerationFeatureCards } from './StaticGenerationFeatureCards';
+import { StaticGenerationIsrList } from './StaticGenerationIsrList';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -47,8 +44,6 @@ export const StaticGenerationView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -65,8 +60,8 @@ export const StaticGenerationView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						style={h1Style(isMobileOrTablet)}
 						id="static-generation"
+						style={h1Style(isMobileOrTablet)}
 					>
 						Static Generation
 					</h1>
@@ -79,8 +74,8 @@ export const StaticGenerationView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="ssg"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -91,7 +86,7 @@ export const StaticGenerationView = ({
 						request using streaming SSR. With the{' '}
 						<strong style={strongStyle}>static</strong> config,
 						pages are pre-rendered at build time and served as
-						cached HTML — no SSR overhead per request.
+						cached HTML: no SSR overhead per request.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Set <code>routes: "all"</code> to automatically crawl
@@ -115,88 +110,13 @@ export const StaticGenerationView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile
-								? '1fr'
-								: '1fr 1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1.5rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Instant Loads
-								</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								Pre-rendered HTML is served directly from disk —
-								no SSR computation on each request.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Client Hydration
-								</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								Pages still hydrate on the client — same
-								interactive experience, just faster initial
-								load.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									SSR Fallback
-								</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								Routes not in the static config still use SSR on
-								demand — mix static and dynamic pages freely.
-							</p>
-						</animated.div>
-					</div>
+					<StaticGenerationFeatureCards themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="routes"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -228,8 +148,8 @@ export const StaticGenerationView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="isr"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -248,26 +168,13 @@ export const StaticGenerationView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Without revalidate
-							</strong>
-							: pure SSG — pages are rendered once at build time
-							and never change
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>With revalidate</strong>
-							: ISR — stale pages are served immediately while a
-							fresh version renders in the background
-						</li>
-					</ul>
+					<StaticGenerationIsrList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="how-isr-works"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -281,7 +188,7 @@ export const StaticGenerationView = ({
 					/>
 					<p style={paragraphSpacedStyle}>
 						The user never waits for a re-render. Stale pages are
-						served instantly — the fresh version is ready for the
+						served instantly: the fresh version is ready for the
 						next visitor. This gives you the performance of static
 						pages with the freshness of SSR.
 					</p>
@@ -289,8 +196,8 @@ export const StaticGenerationView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="type-reference"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -313,14 +220,14 @@ export const StaticGenerationView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

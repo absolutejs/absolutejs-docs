@@ -5,7 +5,6 @@ import { defineConfig } from '@absolutejs/absolute';
 export default defineConfig({
   reactDirectory: 'src/frontend'
 });`;
-
 export const reactHandler = `\
 // backend/server.ts
 import { asset } from '@absolutejs/absolute';
@@ -18,7 +17,42 @@ new Elysia()
   .get('/about', () =>
     handleReactPageRequest(About, asset(manifest, 'AboutIndex'))
   )`;
+export const reactHydration = `\
+// Client-side hydration happens automatically
+// Your component receives the same props on both server and client
 
+// 1. Server renders HTML with props
+// 2. Props are serialized to window.__INITIAL_PROPS__
+// 3. Client hydrates and receives identical props
+// 4. React attaches event handlers and makes page interactive
+
+export const Counter = ({ initialCount }: { initialCount: number }) => {
+  // useState works: hydration preserves server-rendered HTML
+  const [count, setCount] = useState(initialCount);
+
+  return (
+    <button onClick={() => setCount(c => c + 1)}>
+      Count: {count}
+    </button>
+  );
+};`;
+export const reactIndexFile = `\
+// Auto-generated index file (you don't write this!)
+// Generated at: src/frontend/indexes/HomeIndex.tsx
+
+import { hydrateRoot } from 'react-dom/client';
+import type { ComponentType } from 'react';
+import { Home } from '../pages/Home';
+
+type PropsOf<C> = C extends ComponentType<infer P> ? P : never;
+
+declare global {
+  interface Window {
+    __INITIAL_PROPS__: PropsOf<typeof Home>;
+  }
+}
+
+hydrateRoot(document, <Home {...window.__INITIAL_PROPS__} />);`;
 export const reactPageComponent = `type HomeProps = {
   user: User | null;
   posts: Post[];
@@ -57,33 +91,39 @@ export const Home = ({ user, posts }: HomeProps) => (
     </body>
   </html>
 );`;
+export const reactPreserveFiles = `\
+// To inspect generated index files, enable preserveIntermediateFiles
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
 
-export const reactTypeSafetyTypes = `\
-// db/schema.ts
-import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+export default defineConfig({
+  reactDirectory: 'src/frontend',
+  options: {
+    preserveIntermediateFiles: true  // Index files won't be deleted
+  }
+});`;
+export const reactStreaming = `\
+// AbsoluteJS uses React's streaming SSR for optimal performance
+// Content is sent to the browser progressively
 
-export const users = pgTable('users', {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').notNull().unique()
-});
+// Benefits:
+// - First byte arrives faster (Time to First Byte)
+// - Content appears progressively (First Contentful Paint)
+// - Suspense boundaries stream independently
 
-export const notifications = pgTable('notifications', {
-  id: text('id').primaryKey(),
-  userId: text('user_id').notNull().references(() => users.id),
-  message: text('message').notNull(),
-  read: boolean('read').notNull().default(false),
-  createdAt: timestamp('created_at').notNull().defaultNow()
-});
+export const Page = ({ data }: Props) => (
+  <html>
+    <body>
+      {/* This renders immediately */}
+      <Header />
 
-// types/databaseTypes.ts
-// Infer types directly from your table definitions
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
-
-export type Notification = typeof notifications.$inferSelect;
-export type NewNotification = typeof notifications.$inferInsert;`;
-
+      {/* This streams when ready */}
+      <Suspense fallback={<Loading />}>
+        <AsyncContent data={data} />
+      </Suspense>
+    </body>
+  </html>
+);`;
 export const reactTypeSafetyServer = `\
 // backend/server.ts
 import { User, Notification } from '../types/databaseTypes';
@@ -111,76 +151,28 @@ new Elysia()
       }
     );
   })`;
+export const reactTypeSafetyTypes = `\
+// db/schema.ts
+import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 
-export const reactHydration = `\
-// Client-side hydration happens automatically
-// Your component receives the same props on both server and client
+export const users = pgTable('users', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique()
+});
 
-// 1. Server renders HTML with props
-// 2. Props are serialized to window.__INITIAL_PROPS__
-// 3. Client hydrates and receives identical props
-// 4. React attaches event handlers and makes page interactive
+export const notifications = pgTable('notifications', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => users.id),
+  message: text('message').notNull(),
+  read: boolean('read').notNull().default(false),
+  createdAt: timestamp('created_at').notNull().defaultNow()
+});
 
-export const Counter = ({ initialCount }: { initialCount: number }) => {
-  // useState works - hydration preserves server-rendered HTML
-  const [count, setCount] = useState(initialCount);
+// types/databaseTypes.ts
+// Infer types directly from your table definitions
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 
-  return (
-    <button onClick={() => setCount(c => c + 1)}>
-      Count: {count}
-    </button>
-  );
-};`;
-
-export const reactIndexFile = `\
-// Auto-generated index file (you don't write this!)
-// Generated at: src/frontend/indexes/HomeIndex.tsx
-
-import { hydrateRoot } from 'react-dom/client';
-import type { ComponentType } from 'react';
-import { Home } from '../pages/Home';
-
-type PropsOf<C> = C extends ComponentType<infer P> ? P : never;
-
-declare global {
-  interface Window {
-    __INITIAL_PROPS__: PropsOf<typeof Home>;
-  }
-}
-
-hydrateRoot(document, <Home {...window.__INITIAL_PROPS__} />);`;
-
-export const reactPreserveFiles = `\
-// To inspect generated index files, enable preserveIntermediateFiles
-// absolute.config.ts
-import { defineConfig } from '@absolutejs/absolute';
-
-export default defineConfig({
-  reactDirectory: 'src/frontend',
-  options: {
-    preserveIntermediateFiles: true  // Index files won't be deleted
-  }
-});`;
-
-export const reactStreaming = `\
-// AbsoluteJS uses React's streaming SSR for optimal performance
-// Content is sent to the browser progressively
-
-// Benefits:
-// - First byte arrives faster (Time to First Byte)
-// - Content appears progressively (First Contentful Paint)
-// - Suspense boundaries stream independently
-
-export const Page = ({ data }: Props) => (
-  <html>
-    <body>
-      {/* This renders immediately */}
-      <Header />
-
-      {/* This streams when ready */}
-      <Suspense fallback={<Loading />}>
-        <AsyncContent data={data} />
-      </Suspense>
-    </body>
-  </html>
-);`;
+export type Notification = typeof notifications.$inferSelect;
+export type NewNotification = typeof notifications.$inferInsert;`;

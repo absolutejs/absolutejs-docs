@@ -1,19 +1,3 @@
-export const scopedStateInstallation = `\
-bun add elysia-scoped-state`;
-
-export const scopedStateSetup = `\
-import Elysia from 'elysia';
-import { scopedState } from 'elysia-scoped-state';
-
-const app = new Elysia()
-  .use(
-    scopedState({
-      count: { value: 0 },
-      username: { value: '', preserve: true }
-    })
-  )
-  .listen(3000);`;
-
 export const scopedStateAccess = `\
 // Access and modify scoped state in route handlers
 new Elysia()
@@ -29,36 +13,6 @@ new Elysia()
   .post('/api/decrement', ({ scopedStore }) => {
     return --scopedStore.count;
   });`;
-
-export const scopedStatePreserve = `\
-// The preserve option keeps state across page refreshes and navigation
-scopedState({
-  // This resets when the user refreshes or navigates away
-  count: { value: 0 },
-
-  // This persists across page refreshes and switches
-  theme: { value: 'light', preserve: true },
-  username: { value: '', preserve: true }
-})`;
-
-export const scopedStateReset = `\
-// Programmatically reset the user's scoped store
-new Elysia()
-  .use(scopedState({
-    count: { value: 0 },
-    theme: { value: 'light', preserve: true }
-  }))
-  .post('/api/reset', ({ resetScopedStore }) => {
-    // Resets count to 0, but keeps theme (respects preserve)
-    resetScopedStore();
-    return 'State reset!';
-  })
-  .post('/api/full-reset', ({ resetScopedStore }) => {
-    // Ignores preserve flags, resets everything including theme
-    resetScopedStore(true);
-    return 'Full state reset!';
-  });`;
-
 export const scopedStateHtmxExample = `\
 // Complete HTMX counter example with scoped state
 import Elysia from 'elysia';
@@ -82,7 +36,6 @@ new Elysia()
     return \`<span id="count">\${--scopedStore.count}</span>\`;
   })
   .listen(3000);`;
-
 export const scopedStateHtmxHtml = `\
 <!-- counter.html -->
 <!DOCTYPE html>
@@ -107,3 +60,44 @@ export const scopedStateHtmxHtml = `\
   </button>
 </body>
 </html>`;
+export const scopedStateInstallation = `\
+bun add elysia-scoped-state`;
+export const scopedStatePreserve = `\
+// The preserve option keeps state across page refreshes and navigation
+scopedState({
+  // This resets when the user refreshes or navigates away
+  count: { value: 0 },
+
+  // This persists across page refreshes and switches
+  theme: { value: 'light', preserve: true },
+  username: { value: '', preserve: true }
+})`;
+export const scopedStateReset = `\
+// Programmatically reset the user's scoped store
+new Elysia()
+  .use(scopedState({
+    count: { value: 0 },
+    theme: { value: 'light', preserve: true }
+  }))
+  .post('/api/reset', ({ resetScopedStore }) => {
+    // Resets count to 0, but keeps theme (respects preserve)
+    resetScopedStore();
+    return 'State reset!';
+  })
+  .post('/api/full-reset', ({ resetScopedStore }) => {
+    // Ignores preserve flags, resets everything including theme
+    resetScopedStore(true);
+    return 'Full state reset!';
+  });`;
+export const scopedStateSetup = `\
+import Elysia from 'elysia';
+import { scopedState } from 'elysia-scoped-state';
+
+const app = new Elysia()
+  .use(
+    scopedState({
+      count: { value: 0 },
+      username: { value: '', preserve: true }
+    })
+  )
+  .listen(3000);`;

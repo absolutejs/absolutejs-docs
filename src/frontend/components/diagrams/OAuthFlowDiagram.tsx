@@ -1,3 +1,4 @@
+import { OAUTH_FLOW_DIAGRAM_LAYOUT, PERCENT_SCALE } from '../../../constants';
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../types/springTypes';
 import {
@@ -6,9 +7,16 @@ import {
 	getColors,
 	svgContainerStyle
 } from './diagramStyles';
+import { OAuthFlowMarkers } from './OAuthFlowMarkers';
 
 type OAuthFlowDiagramProps = {
 	themeSprings: ThemeSprings;
+};
+
+type OAuthEntity = {
+	label: string;
+	width: number;
+	x: number;
 };
 
 export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
@@ -28,16 +36,27 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 	// Vertical layout
 	const headerY = 15;
 	const headerHeight = 36;
-	const lifelineStart = headerY + headerHeight + 8;
-	const lifelineEnd = svgHeight - 50;
-	const stepStart = lifelineStart + 30;
-	const stepGap = 58;
+	const lifelineStart =
+		headerY + headerHeight + OAUTH_FLOW_DIAGRAM_LAYOUT.lifelineStartOffsetY;
+	const lifelineEnd =
+		svgHeight - OAUTH_FLOW_DIAGRAM_LAYOUT.lifelineBottomPadding;
+	const stepStart =
+		lifelineStart + OAUTH_FLOW_DIAGRAM_LAYOUT.stepStartOffsetY;
+	const stepGap = OAUTH_FLOW_DIAGRAM_LAYOUT.stepGapY;
 
-	const entities = [
-		{ label: 'User', x: userX, width: 100 },
-		{ label: 'Your App', x: appX, width: 100 },
-		{ label: 'AbsoluteAuth', x: authX, width: 160 },
-		{ label: 'Provider', x: providerX, width: 120 }
+	const entities: OAuthEntity[] = [
+		{ label: 'User', width: PERCENT_SCALE, x: userX },
+		{ label: 'Your App', width: PERCENT_SCALE, x: appX },
+		{
+			label: 'AbsoluteAuth',
+			width: OAUTH_FLOW_DIAGRAM_LAYOUT.accentEntityWidth,
+			x: authX
+		},
+		{
+			label: 'Provider',
+			width: OAUTH_FLOW_DIAGRAM_LAYOUT.providerEntityWidth,
+			x: providerX
+		}
 	];
 
 	return (
@@ -48,58 +67,43 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 					style={svgContainerStyle}
 					viewBox={`0 0 ${svgWidth} ${svgHeight}`}
 				>
-					<defs>
-						<marker
-							fill={colors.arrow}
-							id="oauth-arrow"
-							markerHeight={6}
-							markerWidth={6}
-							orient="auto"
-							refX={5}
-							refY={3}
-						>
-							<polygon points="0 0, 6 3, 0 6" />
-						</marker>
-						<marker
-							fill={colors.accent}
-							id="oauth-arrow-accent"
-							markerHeight={6}
-							markerWidth={6}
-							orient="auto"
-							refX={5}
-							refY={3}
-						>
-							<polygon points="0 0, 6 3, 0 6" />
-						</marker>
-						<marker
-							fill={colors.accentSecondary}
-							id="oauth-arrow-success"
-							markerHeight={6}
-							markerWidth={6}
-							orient="auto"
-							refX={5}
-							refY={3}
-						>
-							<polygon points="0 0, 6 3, 0 6" />
-						</marker>
-					</defs>
+					<OAuthFlowMarkers
+						accentColor={colors.accent}
+						accentSecondaryColor={colors.accentSecondary}
+						arrowColor={colors.arrow}
+					/>
 
 					{/* Entity headers */}
-					{entities.map((entity, i) => (
-						<g key={i}>
+					{entities.map((entity, entityIndex) => (
+						<g key={entity.label}>
 							<rect
 								fill={colors.background}
 								height={headerHeight}
 								rx={6}
-								stroke={i === 2 ? colors.accent : colors.border}
-								strokeWidth={i === 2 ? 2 : 1}
+								stroke={
+									entityIndex ===
+									OAUTH_FLOW_DIAGRAM_LAYOUT.accentEntityIndex
+										? colors.accent
+										: colors.border
+								}
+								strokeWidth={
+									entityIndex ===
+									OAUTH_FLOW_DIAGRAM_LAYOUT.accentEntityIndex
+										? 2
+										: 1
+								}
 								width={entity.width}
 								x={entity.x - entity.width / 2}
 								y={headerY}
 							/>
 							<text
 								dominantBaseline="middle"
-								fill={i === 2 ? colors.accent : colors.text}
+								fill={
+									entityIndex ===
+									OAUTH_FLOW_DIAGRAM_LAYOUT.accentEntityIndex
+										? colors.accent
+										: colors.text
+								}
 								fontSize={12}
 								fontWeight={600}
 								textAnchor="middle"
@@ -127,20 +131,28 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							markerEnd="url(#oauth-arrow)"
 							stroke={colors.arrow}
 							strokeWidth={1.5}
-							x1={userX + 8}
-							x2={appX - 8}
+							x1={
+								userX + OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							x2={appX - OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset}
 							y1={stepStart}
 							y2={stepStart}
 						/>
 						<rect
 							fill={colors.pillBg}
-							height={22}
-							rx={4}
+							height={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillHeight}
+							rx={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillRadius}
 							stroke={colors.border}
 							strokeWidth={1}
 							width={152}
-							x={(userX + appX) / 2 - 76}
-							y={stepStart - 30}
+							x={
+								(userX + appX) / 2 -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.loginClickPillHalfWidth
+							}
+							y={
+								stepStart -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillOffsetY
+							}
 						/>
 						<text
 							dominantBaseline="middle"
@@ -149,7 +161,10 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							fontWeight={500}
 							textAnchor="middle"
 							x={(userX + appX) / 2}
-							y={stepStart - 19}
+							y={
+								stepStart -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillLabelOffsetY
+							}
 						>
 							1. Login click
 						</text>
@@ -161,20 +176,29 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							markerEnd="url(#oauth-arrow-accent)"
 							stroke={colors.accent}
 							strokeWidth={1.5}
-							x1={appX + 8}
-							x2={authX - 8}
+							x1={appX + OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset}
+							x2={
+								authX - OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
 							y1={stepStart + stepGap}
 							y2={stepStart + stepGap}
 						/>
 						<rect
 							fill={colors.pillBg}
-							height={22}
-							rx={4}
+							height={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillHeight}
+							rx={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillRadius}
 							stroke={colors.borderAccent}
 							strokeWidth={1}
 							width={270}
-							x={(appX + authX) / 2 - 135}
-							y={stepStart + stepGap - 30}
+							x={
+								(appX + authX) / 2 -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.authRoutePillHalfWidth
+							}
+							y={
+								stepStart +
+								stepGap -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillOffsetY
+							}
 						/>
 						<text
 							dominantBaseline="middle"
@@ -183,7 +207,11 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							fontWeight={500}
 							textAnchor="middle"
 							x={(appX + authX) / 2}
-							y={stepStart + stepGap - 19}
+							y={
+								stepStart +
+								stepGap -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillLabelOffsetY
+							}
 						>
 							2. /oauth2/auth/:provider
 						</text>
@@ -193,14 +221,21 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 					<g>
 						<rect
 							fill={colors.pillBg}
-							height={46}
-							rx={4}
+							height={OAUTH_FLOW_DIAGRAM_LAYOUT.stateBoxHeight}
+							rx={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillRadius}
 							stroke={colors.borderAccent}
-							strokeDasharray="3,2"
+							strokeDasharray={`${OAUTH_FLOW_DIAGRAM_LAYOUT.pkceDashFirst},${OAUTH_FLOW_DIAGRAM_LAYOUT.pkceDashSecond}`}
 							strokeWidth={1}
-							width={160}
-							x={authX - 80}
-							y={stepStart + stepGap * 2 - 23}
+							width={OAUTH_FLOW_DIAGRAM_LAYOUT.stateBoxWidth}
+							x={
+								authX -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stateBoxWidth / 2
+							}
+							y={
+								stepStart +
+								stepGap * 2 -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stateBoxOffsetY
+							}
 						/>
 						<text
 							dominantBaseline="middle"
@@ -209,7 +244,11 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							fontWeight={600}
 							textAnchor="middle"
 							x={authX}
-							y={stepStart + stepGap * 2 - 6}
+							y={
+								stepStart +
+								stepGap * 2 -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stateTitleOffsetY
+							}
 						>
 							3. State + PKCE
 						</text>
@@ -220,7 +259,11 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							opacity={0.8}
 							textAnchor="middle"
 							x={authX}
-							y={stepStart + stepGap * 2 + 10}
+							y={
+								stepStart +
+								stepGap * 2 +
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stateSubtitleOffsetY
+							}
 						>
 							generate
 						</text>
@@ -232,20 +275,41 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							markerEnd="url(#oauth-arrow-accent)"
 							stroke={colors.accent}
 							strokeWidth={1.5}
-							x1={authX + 8}
-							x2={providerX - 8}
-							y1={stepStart + stepGap * 3}
-							y2={stepStart + stepGap * 3}
+							x1={
+								authX + OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							x2={
+								providerX -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							y1={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.providerRedirectStepIndex
+							}
+							y2={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.providerRedirectStepIndex
+							}
 						/>
 						<rect
 							fill={colors.pillBg}
-							height={22}
-							rx={4}
+							height={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillHeight}
+							rx={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillRadius}
 							stroke={colors.borderAccent}
 							strokeWidth={1}
-							width={135}
-							x={(authX + providerX) / 2 - 67}
-							y={stepStart + stepGap * 3 - 30}
+							width={OAUTH_FLOW_DIAGRAM_LAYOUT.redirectPillWidth}
+							x={
+								(authX + providerX) / 2 -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.redirectPillHalfWidth
+							}
+							y={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.providerRedirectStepIndex -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillOffsetY
+							}
 						/>
 						<text
 							dominantBaseline="middle"
@@ -254,7 +318,12 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							fontWeight={500}
 							textAnchor="middle"
 							x={(authX + providerX) / 2}
-							y={stepStart + stepGap * 3 - 19}
+							y={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.providerRedirectStepIndex -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.redirectLabelOffsetY
+							}
 						>
 							4. Redirect
 						</text>
@@ -264,14 +333,26 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 					<g>
 						<rect
 							fill={colors.pillBg}
-							height={52}
-							rx={4}
+							height={
+								OAUTH_FLOW_DIAGRAM_LAYOUT.providerLoginBoxHeight
+							}
+							rx={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillRadius}
 							stroke={colors.accentTertiary}
-							strokeDasharray="3,2"
+							strokeDasharray={`${OAUTH_FLOW_DIAGRAM_LAYOUT.pkceDashFirst},${OAUTH_FLOW_DIAGRAM_LAYOUT.pkceDashSecond}`}
 							strokeWidth={1}
-							width={145}
-							x={providerX - 72}
-							y={stepStart + stepGap * 3.6 - 26}
+							width={
+								OAUTH_FLOW_DIAGRAM_LAYOUT.providerLoginBoxWidth
+							}
+							x={
+								providerX -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.providerLoginHalfWidth
+							}
+							y={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.callbackLoopDx -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.providerLoginOffsetY
+							}
 						/>
 						<text
 							dominantBaseline="middle"
@@ -280,7 +361,12 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							fontWeight={600}
 							textAnchor="middle"
 							x={providerX}
-							y={stepStart + stepGap * 3.6 - 6}
+							y={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.callbackLoopDx -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.providerLoginTitleOffsetY
+							}
 						>
 							5. User login
 						</text>
@@ -290,7 +376,12 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							fontSize={9}
 							textAnchor="middle"
 							x={providerX}
-							y={stepStart + stepGap * 3.6 + 12}
+							y={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.callbackLoopDx +
+								OAUTH_FLOW_DIAGRAM_LAYOUT.sessionSelfActionHeight
+							}
 						>
 							(external)
 						</text>
@@ -302,20 +393,43 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							markerEnd="url(#oauth-arrow-accent)"
 							stroke={colors.accent}
 							strokeWidth={1.5}
-							x1={providerX - 8}
-							x2={authX + 8}
-							y1={stepStart + stepGap * 4.6}
-							y2={stepStart + stepGap * 4.6}
+							x1={
+								providerX -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							x2={
+								authX + OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							y1={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.tokenExchangeLoopDx
+							}
+							y2={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.tokenExchangeLoopDx
+							}
 						/>
 						<rect
 							fill={colors.pillBg}
-							height={22}
-							rx={4}
+							height={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillHeight}
+							rx={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillRadius}
 							stroke={colors.borderAccent}
 							strokeWidth={1}
-							width={180}
-							x={(authX + providerX) / 2 - 90}
-							y={stepStart + stepGap * 4.6 - 30}
+							width={
+								OAUTH_FLOW_DIAGRAM_LAYOUT.callbackCodePillWidth
+							}
+							x={
+								(authX + providerX) / 2 -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.callbackHalfWidth
+							}
+							y={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.tokenExchangeLoopDx -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillOffsetY
+							}
 						/>
 						<text
 							dominantBaseline="middle"
@@ -324,7 +438,12 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							fontWeight={500}
 							textAnchor="middle"
 							x={(authX + providerX) / 2}
-							y={stepStart + stepGap * 4.6 - 19}
+							y={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.tokenExchangeLoopDx -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.callbackCodeLabelY
+							}
 						>
 							6. Callback + code
 						</text>
@@ -336,30 +455,68 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							markerEnd="url(#oauth-arrow-accent)"
 							stroke={colors.accent}
 							strokeWidth={1.5}
-							x1={authX + 8}
-							x2={providerX - 8}
-							y1={stepStart + stepGap * 5.5}
-							y2={stepStart + stepGap * 5.5}
+							x1={
+								authX + OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							x2={
+								providerX -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							y1={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.sessionLoopDx
+							}
+							y2={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.sessionLoopDx
+							}
 						/>
 						<line
 							markerEnd="url(#oauth-arrow-accent)"
 							stroke={colors.accent}
-							strokeDasharray="4,3"
+							strokeDasharray={`${OAUTH_FLOW_DIAGRAM_LAYOUT.pkceDashFirst + 1},${OAUTH_FLOW_DIAGRAM_LAYOUT.pkceDashFirst}`}
 							strokeWidth={1.5}
-							x1={providerX - 8}
-							x2={authX + 8}
-							y1={stepStart + stepGap * 5.5 + 12}
-							y2={stepStart + stepGap * 5.5 + 12}
+							x1={
+								providerX -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							x2={
+								authX + OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							y1={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.sessionLoopDx +
+								OAUTH_FLOW_DIAGRAM_LAYOUT.sessionSelfActionHeight
+							}
+							y2={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.sessionLoopDx +
+								OAUTH_FLOW_DIAGRAM_LAYOUT.sessionSelfActionHeight
+							}
 						/>
 						<rect
 							fill={colors.pillBg}
-							height={22}
-							rx={4}
+							height={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillHeight}
+							rx={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillRadius}
 							stroke={colors.borderAccent}
 							strokeWidth={1}
-							width={280}
-							x={(authX + providerX) / 2 - 140}
-							y={stepStart + stepGap * 5.5 - 30}
+							width={
+								OAUTH_FLOW_DIAGRAM_LAYOUT.tokenExchangePillWidth
+							}
+							x={
+								(authX + providerX) / 2 -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.tokenExchangeHalfWidth
+							}
+							y={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.sessionLoopDx -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillOffsetY
+							}
 						/>
 						<text
 							dominantBaseline="middle"
@@ -368,7 +525,12 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							fontWeight={500}
 							textAnchor="middle"
 							x={(authX + providerX) / 2}
-							y={stepStart + stepGap * 5.5 - 19}
+							y={
+								stepStart +
+								stepGap *
+									OAUTH_FLOW_DIAGRAM_LAYOUT.sessionLoopDx -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillLabelOffsetY
+							}
 						>
 							7. Exchange code for token
 						</text>
@@ -380,20 +542,39 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							markerEnd="url(#oauth-arrow-success)"
 							stroke={colors.accentSecondary}
 							strokeWidth={1.5}
-							x1={authX - 8}
-							x2={userX + 8}
-							y1={stepStart + stepGap * 6.4}
-							y2={stepStart + stepGap * 6.4}
+							x1={
+								authX - OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							x2={
+								userX + OAUTH_FLOW_DIAGRAM_LAYOUT.stepArrowInset
+							}
+							y1={
+								stepStart +
+								stepGap * OAUTH_FLOW_DIAGRAM_LAYOUT.doneLoopDx
+							}
+							y2={
+								stepStart +
+								stepGap * OAUTH_FLOW_DIAGRAM_LAYOUT.doneLoopDx
+							}
 						/>
 						<rect
 							fill={colors.pillBg}
-							height={22}
-							rx={4}
+							height={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillHeight}
+							rx={OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillRadius}
 							stroke={colors.accentSecondary}
 							strokeWidth={1}
-							width={180}
-							x={(userX + authX) / 2 - 90}
-							y={stepStart + stepGap * 6.4 - 30}
+							width={
+								OAUTH_FLOW_DIAGRAM_LAYOUT.sessionCreatedPillWidth
+							}
+							x={
+								(userX + authX) / 2 -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.sessionCreatedHalfWidth
+							}
+							y={
+								stepStart +
+								stepGap * OAUTH_FLOW_DIAGRAM_LAYOUT.doneLoopDx -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.stepPillOffsetY
+							}
 						/>
 						<text
 							dominantBaseline="middle"
@@ -402,24 +583,30 @@ export const OAuthFlowDiagram = ({ themeSprings }: OAuthFlowDiagramProps) => {
 							fontWeight={500}
 							textAnchor="middle"
 							x={(userX + authX) / 2}
-							y={stepStart + stepGap * 6.4 - 19}
+							y={
+								stepStart +
+								stepGap * OAUTH_FLOW_DIAGRAM_LAYOUT.doneLoopDx -
+								OAUTH_FLOW_DIAGRAM_LAYOUT.sessionCreatedLabelY
+							}
 						>
 							8. Session created
 						</text>
 					</g>
 
 					{/* Legend */}
-					<g transform={`translate(15, ${svgHeight - 25})`}>
+					<g
+						transform={`translate(${OAUTH_FLOW_DIAGRAM_LAYOUT.legendOffsetX}, ${svgHeight - OAUTH_FLOW_DIAGRAM_LAYOUT.legendOffsetY})`}
+					>
 						<rect
 							fill={colors.accent}
-							height={8}
+							height={OAUTH_FLOW_DIAGRAM_LAYOUT.legendSwatchSize}
 							rx={2}
-							width={8}
+							width={OAUTH_FLOW_DIAGRAM_LAYOUT.legendSwatchSize}
 						/>
 						<text
 							fill={colors.textMuted}
 							fontSize={10}
-							x={14}
+							x={OAUTH_FLOW_DIAGRAM_LAYOUT.legendTextOffsetX}
 							y={7}
 						>
 							AbsoluteAuth handles steps 2-8 automatically

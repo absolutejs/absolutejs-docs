@@ -6,7 +6,6 @@ import {
 	envTypeSafe,
 	envUsage
 } from '../../../data/documentation/configDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -32,6 +31,27 @@ const tocItems: TocItem[] = [
 	{ href: '#type-safety', label: 'Fail-Fast Validation' }
 ];
 
+const RequiredEnvList = () => (
+	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>DATABASE_URL</strong>: Connection string
+			for your database
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>HOST</strong>: Server host (default:
+			localhost)
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>PORT</strong>: Server port (default:
+			3000)
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>OAUTH2_CALLBACK_URI</strong>: Callback
+			URL for OAuth providers (e.g., http://localhost:3000/auth/callback)
+		</li>
+	</ul>
+);
+
 export const EnvironmentVariablesView = ({
 	currentPageId,
 	onNavigate,
@@ -40,8 +60,6 @@ export const EnvironmentVariablesView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -58,8 +76,8 @@ export const EnvironmentVariablesView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						style={h1Style(isMobileOrTablet)}
 						id="environment-variables"
+						style={h1Style(isMobileOrTablet)}
 					>
 						Environment Variables
 					</h1>
@@ -71,8 +89,8 @@ export const EnvironmentVariablesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="accessing-env"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -93,8 +111,8 @@ export const EnvironmentVariablesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="required-vars"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -110,33 +128,13 @@ export const EnvironmentVariablesView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>DATABASE_URL</strong>:
-							Connection string for your database
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>HOST</strong>: Server
-							host (default: localhost)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>PORT</strong>: Server
-							port (default: 3000)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								OAUTH2_CALLBACK_URI
-							</strong>
-							: Callback URL for OAuth providers (e.g.,
-							http://localhost:3000/auth/callback)
-						</li>
-					</ul>
+					<RequiredEnvList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="type-safety"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -165,14 +163,14 @@ export const EnvironmentVariablesView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

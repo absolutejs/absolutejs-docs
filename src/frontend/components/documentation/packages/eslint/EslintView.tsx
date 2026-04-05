@@ -2,7 +2,6 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import { DocsNavigation } from '../../DocsNavigation';
 import { eslintDocsData } from '../../../../data/documentation/eslintDocsData';
-import { useMediaQuery } from '../../../../hooks/useMediaQuery';
 import {
 	mainContentStyle,
 	h1Style,
@@ -27,8 +26,6 @@ export const EslintView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -44,7 +41,7 @@ export const EslintView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="eslint">
+					<h1 id="eslint" style={h1Style(isMobileOrTablet)}>
 						ESLint
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -54,9 +51,9 @@ export const EslintView = ({
 					</p>
 					<animated.a
 						href="https://github.com/absolutejs/eslint-plugin-absolute"
-						target="_blank"
 						rel="noopener noreferrer"
 						style={githubButtonStyle(themeSprings)}
+						target="_blank"
 					>
 						View on GitHub
 					</animated.a>
@@ -83,10 +80,10 @@ export const EslintView = ({
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

@@ -13,17 +13,13 @@ import {
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
 	sectionStyle,
-	strongStyle,
 	githubButtonStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
@@ -31,6 +27,11 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { ScopedStateFeatureCards } from './ScopedStateFeatureCards';
+import { ScopedStateUserCards } from './ScopedStateUserCards';
+import { ScopedStateHtmxList } from './ScopedStateHtmxList';
+import { ScopedStateHowItWorksSteps } from './ScopedStateHowItWorksSteps';
+import { ScopedStateHowItWorksList } from './ScopedStateHowItWorksList';
 
 const tocItems: TocItem[] = [
 	{ href: '#why-scoped-state', label: 'Why Scoped State?' },
@@ -68,7 +69,7 @@ export const ScopedStateView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="scoped-state">
+					<h1 id="scoped-state" style={h1Style(isMobileOrTablet)}>
 						Elysia Scoped State
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -78,9 +79,9 @@ export const ScopedStateView = ({
 					</p>
 					<animated.a
 						href="https://github.com/alexkahndev/elysia-scoped-state"
-						target="_blank"
 						rel="noopener noreferrer"
 						style={githubButtonStyle(themeSprings)}
+						target="_blank"
 					>
 						View on GitHub
 					</animated.a>
@@ -88,95 +89,23 @@ export const ScopedStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="why-scoped-state"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Why Scoped State?
 					</AnchorHeading>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Per-User Isolation
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Each user gets their own state slice. Button
-								clicks and interactions only affect that
-								user&apos;s data.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Automatic Sessions
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								A secure session cookie is automatically created
-								on first visit. No manual session management
-								required.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									HTMX Perfect
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Ideal for HTMX apps where server endpoints need
-								to maintain user-specific state across partial
-								page updates.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>Type Safe</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Full TypeScript support with typed state access
-								through the <code>scopedStore</code> context
-								property.
-							</p>
-						</animated.div>
-					</div>
+					<ScopedStateFeatureCards
+						isMobile={isMobile}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="installation"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -192,8 +121,8 @@ export const ScopedStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="getting-started"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -213,8 +142,8 @@ export const ScopedStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="accessing-state"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -235,8 +164,8 @@ export const ScopedStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="preserve-option"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -259,8 +188,8 @@ export const ScopedStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="resetting-state"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -283,8 +212,8 @@ export const ScopedStateView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="htmx-integration"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -315,27 +244,13 @@ export const ScopedStateView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>User A</strong> clicks
-							increment 3 times → sees count of 3
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>User B</strong> visits
-							the same page → sees count of 0 (their own state)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>User B</strong> clicks
-							increment → sees count of 1 (independent from User
-							A)
-						</li>
-					</ul>
+					<ScopedStateHtmxList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="how-it-works"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -345,85 +260,12 @@ export const ScopedStateView = ({
 						The plugin uses a secure session cookie to identify
 						users and maintain their state server-side:
 					</p>
-					<ol style={{ ...listStyle, marginTop: '1rem' }}>
-						<li style={listItemStyle}>
-							On first request, a secure{' '}
-							<code>user_session_id</code> cookie is created
-						</li>
-						<li style={listItemStyle}>
-							Each subsequent request uses this cookie to retrieve
-							the user&apos;s state
-						</li>
-						<li style={listItemStyle}>
-							State is stored server-side, keyed by session ID
-						</li>
-					</ol>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1.5rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>User A</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Visits <code>/api/count</code> → sees 0
-								<br />
-								Calls <code>/api/increment</code> → sees 1
-								<br />
-								Calls <code>/api/increment</code> → sees 2
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>User B</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Visits <code>/api/count</code> → sees 0 (own
-								state)
-								<br />
-								Calls <code>/api/increment</code> → sees 1
-								<br />
-								Independent from User A
-							</p>
-						</animated.div>
-					</div>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Automatic Session ID
-							</strong>
-							: A <code>user_session_id</code> cookie is created
-							on first request
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Server-Side Storage
-							</strong>
-							: State is stored in memory on the server, keyed by
-							session ID
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Isolation</strong>: Each
-							session ID maps to a completely separate state
-							object
-						</li>
-					</ul>
+					<ScopedStateHowItWorksSteps />
+					<ScopedStateUserCards
+						isMobile={isMobile}
+						themeSprings={themeSprings}
+					/>
+					<ScopedStateHowItWorksList />
 				</section>
 
 				<DocsNavigation
@@ -435,14 +277,14 @@ export const ScopedStateView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

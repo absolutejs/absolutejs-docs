@@ -8,22 +8,19 @@ import {
 	jsonLdReactMultiple
 } from '../../../data/documentation/componentsDocsCode';
 import { imageReactUsage } from '../../../data/documentation/imageOptDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { ImagePropsSection } from './ImagePropsSection';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -45,8 +42,6 @@ export const ReactComponentsView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -62,7 +57,7 @@ export const ReactComponentsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="react-components">
+					<h1 id="react-components" style={h1Style(isMobileOrTablet)}>
 						React Components
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -74,8 +69,8 @@ export const ReactComponentsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="head-component"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -108,8 +103,8 @@ export const ReactComponentsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="jsonld-component"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -120,7 +115,7 @@ export const ReactComponentsView = ({
 						data as a{' '}
 						<code>&lt;script type="application/ld+json"&gt;</code>{' '}
 						tag. The <code>@context</code> is automatically added by
-						the component — you only need to provide the schema
+						the component: you only need to provide the schema
 						fields.
 					</p>
 					<PrismPlus
@@ -143,8 +138,8 @@ export const ReactComponentsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="image-component"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -164,117 +159,12 @@ export const ReactComponentsView = ({
 					/>
 				</section>
 
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="image-props"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Image Props
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						All available props for the <code>Image</code>{' '}
-						component:
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>src</strong> — path to
-							the source image (required)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>alt</strong> —
-							alternative text for accessibility (required)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>width</strong> —
-							intrinsic width in pixels. Required unless{' '}
-							<code>fill</code> is set.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>height</strong> —
-							intrinsic height in pixels. Required unless{' '}
-							<code>fill</code> is set.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>fill</strong> — when
-							true, the image fills its parent container using
-							absolute positioning
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>quality</strong> —
-							output quality from 1 to 100
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>sizes</strong> —
-							responsive sizes attribute for the browser
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>priority</strong> —
-							preload the image and disable lazy loading
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>placeholder</strong> —
-							placeholder strategy while loading
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>blurDataURL</strong> —
-							base64 data URL for blur placeholder
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>loading</strong> —{' '}
-							<code>"lazy"</code> or <code>"eager"</code>.
-							Defaults to <code>"lazy"</code>.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>unoptimized</strong> —
-							skip optimization and serve the original image
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>loader</strong> — custom
-							function to generate the image URL
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>overrideSrc</strong> —
-							override the resolved <code>src</code> on the
-							rendered <code>&lt;img&gt;</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>fetchPriority</strong> —{' '}
-							<code>"high"</code>, <code>"low"</code>, or{' '}
-							<code>"auto"</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>crossOrigin</strong> —
-							CORS setting for the image request
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>referrerPolicy</strong>{' '}
-							— referrer policy for the image request
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>className</strong> — CSS
-							class name
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>style</strong> — inline
-							styles
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>onLoad</strong> —
-							callback when the image finishes loading
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>onError</strong> —
-							callback when the image fails to load
-						</li>
-					</ul>
-				</section>
+				<ImagePropsSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="priority-preloading"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -291,14 +181,14 @@ export const ReactComponentsView = ({
 					<p style={paragraphSpacedStyle}>
 						Use this for above-the-fold images like hero banners and
 						LCP elements. Avoid setting priority on images below the
-						fold — it wastes bandwidth and can hurt performance.
+						fold: it wastes bandwidth and can hurt performance.
 					</p>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="fill-mode"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -333,14 +223,14 @@ export const ReactComponentsView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

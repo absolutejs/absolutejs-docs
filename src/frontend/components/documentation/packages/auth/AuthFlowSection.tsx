@@ -18,8 +18,8 @@ import { PrismPlus } from '../../../utils/PrismPlus';
 export const AuthFlowSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
 		<AnchorHeading
-			level="h2"
 			id="handle-auth-flow"
+			level="h2"
 			style={gradientHeadingStyle(themeSprings)}
 			themeSprings={themeSprings}
 		>

@@ -45,10 +45,10 @@ export const HamburgerMenu = ({
 			}}
 		>
 			<HamburgerHeader
-				themeSprings={themeSprings}
 				onClose={() =>
 					void springApi.start({ transform: 'translateX(100%)' })
 				}
+				themeSprings={themeSprings}
 			/>
 
 			<nav
@@ -63,22 +63,22 @@ export const HamburgerMenu = ({
 					if (isNavbarDropdown(element)) {
 						return (
 							<HamburgerDropdown
-								themeSprings={themeSprings}
+								href={element.href}
 								key={element.label}
 								label={element.label}
-								href={element.href}
 								links={element.links}
+								themeSprings={themeSprings}
 							/>
 						);
 					}
 
 					return (
 						<NavbarLink
-							themeSprings={themeSprings}
-							key={element.label}
-							icon={element.icon}
 							href={element.href}
+							icon={element.icon}
+							key={element.label}
 							label={element.label}
+							themeSprings={themeSprings}
 						/>
 					);
 				})}
@@ -90,24 +90,24 @@ export const HamburgerMenu = ({
 					}}
 				>
 					<animated.a
-						href="https://github.com/absolutejs/absolutejs"
-						target="_blank"
-						rel="noopener noreferrer"
 						aria-label="GitHub"
+						href="https://github.com/absolutejs/absolutejs"
+						rel="noopener noreferrer"
 						style={{
 							color: themeSprings.contrastPrimary
 						}}
+						target="_blank"
 					>
 						<FaGithub size={22} />
 					</animated.a>
 					<animated.a
-						href="https://discord.gg/UBMw87Kj5r"
-						target="_blank"
-						rel="noopener noreferrer"
 						aria-label="Discord"
+						href="https://discord.gg/UBMw87Kj5r"
+						rel="noopener noreferrer"
 						style={{
 							color: themeSprings.contrastPrimary
 						}}
+						target="_blank"
 					>
 						<FaDiscord size={22} />
 					</animated.a>
@@ -121,21 +121,21 @@ export const HamburgerMenu = ({
 				/>
 
 				<HamburgerUserButtons
-					themeSprings={themeSprings}
-					user={user}
 					openModal={() => {
 						setIsModalOpen(true);
 					}}
+					themeSprings={themeSprings}
+					user={user}
 				/>
 			</nav>
 			<Modal
-				style={{
-					backgroundColor: themeSprings.themeSecondary,
-					borderRadius: '0.5rem'
-				}}
 				isOpen={isModalOpen}
 				onClose={() => {
 					setIsModalOpen(false);
+				}}
+				style={{
+					backgroundColor: themeSprings.themeSecondary,
+					borderRadius: '0.5rem'
 				}}
 			>
 				<AuthContainer themeSprings={themeSprings} />

@@ -12,11 +12,8 @@ import {
 	registrationOrder,
 	scopingMiddleware
 } from '../../../data/documentation/middlewareDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
@@ -24,7 +21,6 @@ import {
 	strongStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
@@ -32,6 +28,9 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { LifecycleHooksList } from './LifecycleHooksList';
+import { MiddlewareComparisonGrid } from './MiddlewareComparisonGrid';
+import { ScopingLevelsList } from './ScopingLevelsList';
 
 const tocItems: TocItem[] = [
 	{ href: '#middleware-in-absolutejs', label: 'Middleware in AbsoluteJS' },
@@ -51,8 +50,6 @@ export const MiddlewareView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -68,20 +65,20 @@ export const MiddlewareView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="middleware">
+					<h1 id="middleware" style={h1Style(isMobileOrTablet)}>
 						Middleware
 					</h1>
 					<p style={paragraphLargeStyle}>
 						There&apos;s no <code>middleware.ts</code> file.
-						Instead, Elysia gives you lifecycle hooks&mdash;and
+						Instead, Elysia gives you lifecycle hooks: and
 						they&apos;re more powerful than traditional middleware.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="middleware-in-absolutejs"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -90,57 +87,13 @@ export const MiddlewareView = ({
 					<p style={paragraphSpacedStyle}>
 						If you&apos;re coming from Next.js or Express, you might
 						be looking for a middleware layer. In AbsoluteJS, your
-						server is an Elysia server&mdash;and Elysia uses{' '}
+						server is an Elysia server: and Elysia uses{' '}
 						<strong style={strongStyle}>lifecycle hooks</strong>{' '}
 						instead of middleware. They run at specific phases of
 						the request, giving you more control over when your code
 						executes.
 					</p>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Next.js middleware.ts
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Single file, runs before every request on the
-								edge. Can redirect, rewrite, set headers, check
-								auth.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Elysia Lifecycle Hooks
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Multiple hooks at specific phases.{' '}
-								<code>onRequest</code>,{' '}
-								<code>onBeforeHandle</code>, <code>guard</code>,
-								and more. Runs on Bun, not edge.
-							</p>
-						</animated.div>
-					</div>
+					<MiddlewareComparisonGrid themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={middlewareComparison}
 						language="typescript"
@@ -151,8 +104,8 @@ export const MiddlewareView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="request-lifecycle"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -169,50 +122,22 @@ export const MiddlewareView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>onRequest</strong>: Runs
-							first on every request. Minimal context. Best for
-							rate limiting, analytics, and custom headers.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>onBeforeHandle</strong>:
-							Runs after validation. Return a value to skip the
-							handler. This is your primary auth/access control
-							hook.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>resolve</strong>: Like{' '}
-							<code>derive</code> but runs after validation, so
-							types are guaranteed. Preferred for type-safe
-							context values.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>onAfterHandle</strong>:
-							Inspect or transform the response after the handler
-							runs.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>onAfterResponse</strong>
-							: Runs after the response is sent. Use for cleanup
-							and logging.
-						</li>
-					</ul>
+					<LifecycleHooksList />
 					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
 						See the full lifecycle details in the{' '}
 						<a
 							href="https://elysiajs.com/essential/life-cycle"
-							target="_blank"
 							rel="noopener noreferrer"
 							style={{ color: '#a78bfa' }}
+							target="_blank"
 						>
 							Elysia lifecycle documentation
 						</a>
 						.
 					</p>
 					<AnchorHeading
-						level="h3"
 						id="registration-order"
+						level="h3"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -234,8 +159,8 @@ export const MiddlewareView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="auth-guard"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -249,8 +174,8 @@ export const MiddlewareView = ({
 						<code>resolve</code>.
 					</p>
 					<AnchorHeading
-						level="h3"
 						id="auth-absolutejs-auth"
+						level="h3"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -268,8 +193,8 @@ export const MiddlewareView = ({
 						themeSprings={themeSprings}
 					/>
 					<AnchorHeading
-						level="h3"
 						id="auth-manual"
+						level="h3"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -293,8 +218,8 @@ export const MiddlewareView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="redirects"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -315,8 +240,8 @@ export const MiddlewareView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="cors"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -325,9 +250,9 @@ export const MiddlewareView = ({
 					<p style={paragraphSpacedStyle}>
 						For CORS, the <code>@elysiajs/cors</code> plugin is the
 						simplest option. For custom header logic, use{' '}
-						<code>onRequest</code>&mdash;it runs earliest and is
-						always global, making it ideal for headers that should
-						apply to every response.
+						<code>onRequest</code>: it runs earliest and is always
+						global, making it ideal for headers that should apply to
+						every response.
 					</p>
 					<PrismPlus
 						codeString={corsHeaders}
@@ -339,8 +264,8 @@ export const MiddlewareView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="rate-limiting"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -372,8 +297,8 @@ export const MiddlewareView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="scoping"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -387,21 +312,7 @@ export const MiddlewareView = ({
 						application. You can control this with three scope
 						levels:
 					</p>
-					<ul style={{ ...listStyle, marginBottom: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>local</strong>{' '}
-							(default): Hooks stay in the current plugin instance
-							and its descendants.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>scoped</strong>: Hooks
-							propagate one level up to the parent instance.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>global</strong>: Hooks
-							apply to all instances everywhere.
-						</li>
-					</ul>
+					<ScopingLevelsList />
 					<PrismPlus
 						codeString={scopingMiddleware}
 						language="typescript"
@@ -417,9 +328,9 @@ export const MiddlewareView = ({
 						See the full scoping details in the{' '}
 						<a
 							href="https://elysiajs.com/essential/plugin#scope"
-							target="_blank"
 							rel="noopener noreferrer"
 							style={{ color: '#a78bfa' }}
+							target="_blank"
 						>
 							Elysia plugin scope documentation
 						</a>
@@ -436,14 +347,14 @@ export const MiddlewareView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

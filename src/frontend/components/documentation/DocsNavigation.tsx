@@ -8,6 +8,7 @@ import { sidebarData } from '../../data/sidebarData';
 type NavItem = {
 	id: string;
 	label: string;
+	sectionLabel?: string;
 };
 
 type DocsNavigationProps = {
@@ -32,32 +33,36 @@ const containerStyle: CSSProperties = {
 const navButtonStyle = (
 	themeSprings: ThemeSprings,
 	direction: 'prev' | 'next'
-) => ({
-	alignItems: direction === 'prev' ? 'flex-start' : 'flex-end',
-	background: themeSprings.theme.to((theme) =>
-		theme.endsWith('dark')
-			? 'rgba(99, 102, 241, 0.08)'
-			: 'rgba(99, 102, 241, 0.06)'
-	),
-	border: themeSprings.theme.to((theme) =>
-		theme.endsWith('dark')
-			? '1px solid rgba(99, 102, 241, 0.2)'
-			: '1px solid rgba(99, 102, 241, 0.15)'
-	),
-	borderRadius: '0.75rem',
-	cursor: 'pointer',
-	display: 'flex',
-	flex: '1 1 40%',
-	flexDirection: 'column' as const,
-	gap: '0.5rem',
-	minWidth: '160px',
-	padding: '1rem 1.25rem',
-	textAlign: direction as 'left' | 'right',
-	textDecoration: 'none',
-	transition: 'all 0.2s ease'
-});
+) => {
+	const textAlign: 'left' | 'right' = direction === 'prev' ? 'left' : 'right';
 
-const directionLabelStyle = () => ({
+	return {
+		alignItems: direction === 'prev' ? 'flex-start' : 'flex-end',
+		background: themeSprings.theme.to((theme) =>
+			theme.endsWith('dark')
+				? 'rgba(99, 102, 241, 0.08)'
+				: 'rgba(99, 102, 241, 0.06)'
+		),
+		border: themeSprings.theme.to((theme) =>
+			theme.endsWith('dark')
+				? '1px solid rgba(99, 102, 241, 0.2)'
+				: '1px solid rgba(99, 102, 241, 0.15)'
+		),
+		borderRadius: '0.75rem',
+		cursor: 'pointer',
+		display: 'flex',
+		flex: '1 1 40%',
+		flexDirection: 'column' as const,
+		gap: '0.5rem',
+		minWidth: '160px',
+		padding: '1rem 1.25rem',
+		textAlign,
+		textDecoration: 'none',
+		transition: 'all 0.2s ease'
+	};
+};
+
+const directionLabelStyle: CSSProperties = {
 	alignItems: 'center',
 	color: '#6366F1',
 	display: 'flex',
@@ -65,7 +70,7 @@ const directionLabelStyle = () => ({
 	fontWeight: 500,
 	gap: '0.5rem',
 	textTransform: 'uppercase' as const
-});
+};
 
 const pageLabelStyle = (themeSprings: ThemeSprings) => ({
 	color: themeSprings.contrastPrimary,
@@ -78,25 +83,26 @@ export const DocsNavigation = ({
 	onNavigate,
 	themeSprings
 }: DocsNavigationProps) => {
-	const flattenedPages = useMemo(() => {
-		const pages: NavItem[] = [];
-
-		for (const section of sidebarData) {
-			if (isMenuDropdown(section)) {
-				for (const button of section.buttons) {
-					pages.push({ id: button.id, label: button.label });
-				}
-			} else {
-				pages.push({ id: section.id, label: section.label });
-			}
-		}
-
-		return pages;
-	}, []);
+	const flattenedPages = useMemo<NavItem[]>(
+		() =>
+			sidebarData.flatMap((section) =>
+				isMenuDropdown(section)
+					? section.buttons.map(
+							(button): NavItem => ({
+								id: button.id,
+								label: button.label,
+								sectionLabel: section.label
+							})
+						)
+					: [{ id: section.id, label: section.label }]
+			),
+		[]
+	);
 
 	const currentIndex = flattenedPages.findIndex(
 		(page) => page.id === currentPageId
 	);
+	const currentSectionLabel = flattenedPages[currentIndex]?.sectionLabel;
 	const prevPage = currentIndex > 0 ? flattenedPages[currentIndex - 1] : null;
 	const nextPage =
 		currentIndex < flattenedPages.length - 1
@@ -108,6 +114,18 @@ export const DocsNavigation = ({
 		window.scrollTo({ behavior: 'smooth', top: 0 });
 	};
 
+	const formatLabel = (targetPage: NavItem | null) => {
+		if (!targetPage) return '';
+		if (
+			targetPage.sectionLabel &&
+			targetPage.sectionLabel !== currentSectionLabel
+		) {
+			return `${targetPage.sectionLabel} · ${targetPage.label}`;
+		}
+
+		return targetPage.label;
+	};
+
 	return (
 		<div style={containerStyle}>
 			{prevPage ? (
@@ -115,12 +133,12 @@ export const DocsNavigation = ({
 					onClick={() => handleClick(prevPage.id)}
 					style={navButtonStyle(themeSprings, 'prev')}
 				>
-					<animated.span style={directionLabelStyle()}>
+					<animated.span style={directionLabelStyle}>
 						<FaArrowLeft size={12} />
 						Previous
 					</animated.span>
 					<animated.span style={pageLabelStyle(themeSprings)}>
-						{prevPage.label}
+						{formatLabel(prevPage)}
 					</animated.span>
 				</animated.button>
 			) : (
@@ -134,7 +152,7 @@ export const DocsNavigation = ({
 				>
 					<animated.span
 						style={{
-							...directionLabelStyle(),
+							...directionLabelStyle,
 							justifyContent: 'flex-end'
 						}}
 					>
@@ -142,7 +160,7 @@ export const DocsNavigation = ({
 						<FaArrowRight size={12} />
 					</animated.span>
 					<animated.span style={pageLabelStyle(themeSprings)}>
-						{nextPage.label}
+						{formatLabel(nextPage)}
 					</animated.span>
 				</animated.button>
 			) : (

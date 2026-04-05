@@ -15,12 +15,12 @@ export const Blog = ({ user, theme }: BlogProps) => {
 
 	return (
 		<html lang="en" style={htmlDefault}>
-			<Head title="Blog - AbsoluteJS" />
+			<Head title="Blog | AbsoluteJS" />
 			<animated.body style={bodyDefault(themeSprings)}>
 				<Navbar
+					setTheme={setTheme}
 					themeSprings={themeSprings}
 					user={user}
-					setTheme={setTheme}
 				/>
 				<main style={mainDefault()}>
 					<animated.div

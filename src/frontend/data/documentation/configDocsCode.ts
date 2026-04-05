@@ -31,7 +31,7 @@ export default defineConfig({
 });`;
 
 export const minimalConfig = `\
-// absolute.config.ts - minimal example
+// absolute.config.ts: minimal example
 import { defineConfig } from '@absolutejs/absolute';
 
 export default defineConfig({

@@ -61,7 +61,7 @@ export const eslintDocsData: EslintDocsSection[] = [
 		afterCode: eslintDocsCode.noExplicitReturnType.afterCode,
 		beforeCode: eslintDocsCode.noExplicitReturnType.beforeCode,
 		description:
-			"This rule disallows adding explicit return type annotations to functions when TypeScript can already infer the type automatically. TypeScript's type inference system is highly accurate and adapts as your code changes — meaning that explicitly declaring return types in these cases can make your code more rigid and harder to maintain.",
+			"This rule disallows adding explicit return type annotations to functions when TypeScript can already infer the type automatically. TypeScript's type inference system is highly accurate and adapts as your code changes : meaning that explicitly declaring return types in these cases can make your code more rigid and harder to maintain.",
 		href: '#no-explicit-return-type',
 		title: 'absolute/no-explicit-return-type'
 	},

@@ -7,39 +7,44 @@ import {
 } from '../../../../styles/docsStyles';
 import { featureCardStyle } from '../../../../styles/gradientStyles';
 
-const features = [
+type AuthFeature = {
+	description: string;
+	title: string;
+};
+
+const features: AuthFeature[] = [
 	{
-		title: 'Multi-Provider Support',
-		description: `${Object.keys(providers).length} OAuth 2.0 providers with OpenID Connect support`
+		description: `${Object.keys(providers).length} OAuth 2.0 providers with OpenID Connect support`,
+		title: 'Multi-Provider Support'
 	},
 	{
-		title: 'Type-Safe',
 		description:
-			'Full TypeScript support with comprehensive type definitions'
+			'Full TypeScript support with comprehensive type definitions',
+		title: 'Type-Safe'
 	},
 	{
-		title: 'Session Management',
-		description: 'Built-in session handling with automatic expiration'
+		description: 'Built-in session handling with automatic expiration',
+		title: 'Session Management'
 	},
 	{
-		title: 'Token Management',
-		description: 'Automatic token refresh and revocation support'
+		description: 'Automatic token refresh and revocation support',
+		title: 'Token Management'
 	},
 	{
-		title: 'Route Protection',
-		description: 'Easy-to-use route protection with typed callbacks'
+		description: 'Easy-to-use route protection with typed callbacks',
+		title: 'Route Protection'
 	},
 	{
-		title: 'Event Hooks',
-		description: 'Customizable handlers for all authentication flows'
+		description: 'Customizable handlers for all authentication flows',
+		title: 'Event Hooks'
 	},
 	{
-		title: 'PKCE Support',
-		description: 'Automatic PKCE implementation for supported providers'
+		description: 'Automatic PKCE implementation for supported providers',
+		title: 'PKCE Support'
 	},
 	{
-		title: 'Security',
-		description: 'Secure cookie handling and CSRF protection built-in'
+		description: 'Secure cookie handling and CSRF protection built-in',
+		title: 'Security'
 	}
 ];
 

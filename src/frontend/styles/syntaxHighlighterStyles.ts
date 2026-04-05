@@ -9,25 +9,11 @@ export const highlighterContainerStyle: CSSProperties = {
 	position: 'relative',
 	width: '100%'
 };
-
-export const highlighterHeaderStyle = (
-	themeSprings: ThemeSprings
-): AnimatedCSSProperties => ({
-	alignItems: 'center',
-	backgroundColor: themeSprings.themeSecondary,
-	borderBottom: '1px solid rgba(128, 128, 128, 0.1)',
-	display: 'flex',
-	fontSize: '0.8125rem',
-	justifyContent: 'space-between',
-	padding: '8px 16px'
-});
-
 export const highlighterSelectContainerStyle: CSSProperties = {
 	display: 'inline-block',
 	marginLeft: '10px',
 	position: 'relative'
 };
-
 export const highlighterSelectStyle: CSSProperties = {
 	appearance: 'none',
 	background: 'transparent',
@@ -41,7 +27,6 @@ export const highlighterSelectStyle: CSSProperties = {
 	paddingRight: '20px',
 	WebkitAppearance: 'none'
 };
-
 export const selectArrowStyle: CSSProperties = {
 	pointerEvents: 'none',
 	position: 'absolute',
@@ -49,3 +34,14 @@ export const selectArrowStyle: CSSProperties = {
 	top: '50%',
 	transform: 'translateY(-50%)'
 };
+export const highlighterHeaderStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	alignItems: 'center',
+	backgroundColor: themeSprings.themeSecondary,
+	borderBottom: '1px solid rgba(128, 128, 128, 0.1)',
+	display: 'flex',
+	fontSize: '0.8125rem',
+	justifyContent: 'space-between',
+	padding: '8px 16px'
+});

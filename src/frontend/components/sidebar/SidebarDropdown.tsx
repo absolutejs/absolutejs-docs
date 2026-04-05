@@ -47,7 +47,7 @@ export const SidebarDropdown = <V extends string>({
 	// Only animate when we have a measured height, otherwise use auto
 	const hasHeight = scrollHeight > 0;
 	const dropdownSprings = useSpring({
-		config: { tension: 300, friction: 26 },
+		config: { friction: 26, tension: 300 },
 		height: isOpen ? scrollHeight : 0,
 		opacity: isOpen ? 1 : 0,
 		transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)'
@@ -115,16 +115,16 @@ export const SidebarDropdown = <V extends string>({
 			>
 				{buttons.map((button, index) => (
 					<SidebarLink
-						view={view}
-						linkSprings={linksSprings[startIndex + index]}
-						index={startIndex + index}
-						linksApi={linksApi}
-						navigateToView={navigateToView}
-						themeSprings={themeSprings}
-						key={index}
 						icon={button.icon}
 						id={button.id}
+						index={startIndex + index}
+						key={index}
 						label={button.label}
+						linksApi={linksApi}
+						linkSprings={linksSprings[startIndex + index]}
+						navigateToView={navigateToView}
+						themeSprings={themeSprings}
+						view={view}
 					/>
 				))}
 			</animated.nav>

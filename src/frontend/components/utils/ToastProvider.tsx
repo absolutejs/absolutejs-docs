@@ -83,11 +83,11 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
 					>
 						{toasts.map((toast) => (
 							<Toast
+								action={toast.action}
 								key={toast.id}
 								message={toast.message}
-								action={toast.action}
-								style={toast.style}
 								removeToast={() => removeToast(toast.id)}
+								style={toast.style}
 							/>
 						))}
 					</div>,

@@ -11,29 +11,6 @@ new Elysia()
   .get('/about', () => handleReactPageRequest(About, asset(manifest, 'AboutIndex')))
   .get('/contact', () => handleReactPageRequest(Contact, asset(manifest, 'ContactIndex')))
   .listen(3000);`;
-
-export const routeParams = `\
-// Dynamic route parameters
-.get('/users/:id', ({ params: { id } }) =>
-  handleReactPageRequest(UserProfile, asset(manifest, 'UserProfileIndex'), { userId: id })
-)
-
-// Multiple parameters
-.get('/posts/:category/:slug', ({ params: { category, slug } }) =>
-  handleReactPageRequest(Post, asset(manifest, 'PostIndex'), { category, slug })
-)`;
-
-export const queryParams = `\
-// Query string parameters
-.get('/search', ({ query: { q, page } }) =>
-  handleReactPageRequest(Search, asset(manifest, 'SearchIndex'), {
-    searchTerm: q,
-    currentPage: Number(page) || 1
-  })
-)
-
-// URL: /search?q=hello&page=2`;
-
 export const cookiesAndHeaders = `\
 // Access cookies and headers
 .get('/dashboard', async ({ cookie, headers }) => {
@@ -48,9 +25,8 @@ export const cookiesAndHeaders = `\
     { user }
   );
 })`;
-
 export const elysiaRouting = `\
-// AbsoluteJS uses Elysia routing - all Elysia patterns work
+// AbsoluteJS uses Elysia routing: all Elysia patterns work
 new Elysia()
   // Route groups
   .group('/api', (app) =>
@@ -66,7 +42,6 @@ new Elysia()
   .get('/users/:id', ({ params }) => getUser(params.id), {
     params: t.Object({ id: t.String() })
   })`;
-
 export const pageHandlerPattern = `\
 // All page handlers follow this pattern:
 // import from '@absolutejs/absolute/react'
@@ -84,3 +59,23 @@ handleAngularPageRequest(importer, pagePath, indexPath, headTag?, props?)
 // import from '@absolutejs/absolute'
 handleHTMLPageRequest(htmlPath)
 handleHTMXPageRequest(htmxPath)`;
+export const queryParams = `\
+// Query string parameters
+.get('/search', ({ query: { q, page } }) =>
+  handleReactPageRequest(Search, asset(manifest, 'SearchIndex'), {
+    searchTerm: q,
+    currentPage: Number(page) || 1
+  })
+)
+
+// URL: /search?q=hello&page=2`;
+export const routeParams = `\
+// Dynamic route parameters
+.get('/users/:id', ({ params: { id } }) =>
+  handleReactPageRequest(UserProfile, asset(manifest, 'UserProfileIndex'), { userId: id })
+)
+
+// Multiple parameters
+.get('/posts/:category/:slug', ({ params: { category, slug } }) =>
+  handleReactPageRequest(Post, asset(manifest, 'PostIndex'), { category, slug })
+)`;

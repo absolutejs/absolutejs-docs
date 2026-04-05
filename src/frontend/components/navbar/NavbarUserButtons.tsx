@@ -1,8 +1,13 @@
+import {
+	DROPDOWN_CLOSE_DELAY_MS,
+	DROPDOWN_CLOSE_Y_OFFSET,
+	DROPDOWN_HIDDEN_SCALE
+} from '../../../constants';
 import { animated, useSpring } from '@react-spring/web';
 import { useRef, useState } from 'react';
 import { User } from '../../../../db/schema';
 import { ThemeSprings, SetTheme } from '../../../types/springTypes';
-import { providerData } from '../../data/providerData';
+import { isProviderKey, providerData } from '../../data/providerData';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { DARK_LOGO_PROVIDERS } from '../../styles/authModalStyles';
 import { buttonStyle } from '../../styles/styles';
@@ -20,40 +25,61 @@ type NavbarUserButtonsProps = {
 	setTheme: SetTheme;
 };
 
-const deriveInitials = (user: User | null): string => {
+const getNameParts = (name: string) =>
+	name
+		.trim()
+		.split(/\s+/)
+		.filter((part) => part.length > 0);
+
+const getAuthProviderKey = (authSub: string) => {
+	const [providerKey] = authSub.split('|');
+	if (!providerKey || !authSub.includes('|')) return undefined;
+
+	return providerKey.toLowerCase();
+};
+
+const getMetadataDisplayName = (user: User) => {
+	if (typeof user.metadata?.name === 'string') return user.metadata.name;
+	if (typeof user.metadata?.display_name === 'string')
+		return user.metadata.display_name;
+	if (typeof user.metadata?.given_name === 'string')
+		return user.metadata.given_name;
+
+	return undefined;
+};
+
+const deriveInitials = (user: User | null) => {
 	if (!user) return '?';
 
-	const name =
-		typeof user.metadata?.name === 'string'
-			? user.metadata.name
-			: typeof user.metadata?.display_name === 'string'
-				? user.metadata.display_name
-				: typeof user.metadata?.given_name === 'string'
-					? user.metadata.given_name
-					: undefined;
+	const name = getMetadataDisplayName(user);
 
 	if (name) {
-		const parts = name.trim().split(/\s+/);
-		if (parts.length >= 2) {
-			return `${parts[0]![0]}${parts[parts.length - 1]![0]}`.toUpperCase();
+		const parts = getNameParts(name);
+		const firstInitial = parts[0]?.[0];
+		const lastPartIndex = parts.length - 1;
+		const lastInitial = parts[lastPartIndex]?.[0];
+		const hasTwoParts = parts.length >= 2;
+		if (hasTwoParts && firstInitial && lastInitial) {
+			return `${firstInitial}${lastInitial}`.toUpperCase();
 		}
+
 		return name.slice(0, 2).toUpperCase();
 	}
 
-	const sub = user.auth_sub;
-	if (sub.includes('|')) {
-		const provider = sub.split('|')[0]!.toLowerCase();
+	const provider = getAuthProviderKey(user.auth_sub);
+	if (provider) {
 		const providerInitials: Record<string, string> = {
-			google: 'G',
-			github: 'GH',
-			discord: 'D',
-			twitter: 'X',
-			facebook: 'FB',
 			apple: 'A',
-			microsoft: 'MS',
+			discord: 'D',
+			facebook: 'FB',
+			github: 'GH',
+			google: 'G',
 			linkedin: 'LI',
-			spotify: 'SP'
+			microsoft: 'MS',
+			spotify: 'SP',
+			twitter: 'X'
 		};
+
 		return providerInitials[provider] ?? provider.slice(0, 2).toUpperCase();
 	}
 
@@ -72,8 +98,8 @@ export const NavbarUserButtons = ({
 	const [dropdownSpring, dropdownApi] = useSpring(() => ({
 		config: { friction: 22, tension: 280 },
 		opacity: 0,
-		scale: 0.95,
-		y: -10
+		scale: DROPDOWN_HIDDEN_SCALE,
+		y: DROPDOWN_CLOSE_Y_OFFSET
 	}));
 
 	const openDropdown = () => {
@@ -85,10 +111,10 @@ export const NavbarUserButtons = ({
 		void dropdownApi.start({
 			config: { friction: 26, tension: 350 },
 			opacity: 0,
-			scale: 0.95,
-			y: -10
+			scale: DROPDOWN_HIDDEN_SCALE,
+			y: DROPDOWN_CLOSE_Y_OFFSET
 		});
-		setTimeout(() => setIsDropdownOpen(false), 150);
+		setTimeout(() => setIsDropdownOpen(false), DROPDOWN_CLOSE_DELAY_MS);
 	};
 
 	const handleToggleDropdown = () => {
@@ -114,8 +140,8 @@ export const NavbarUserButtons = ({
 		>
 			{user ? (
 				<button
-					ref={triggerRef}
 					onClick={handleToggleDropdown}
+					ref={triggerRef}
 					style={{
 						alignItems: 'center',
 						background: 'none',
@@ -131,21 +157,21 @@ export const NavbarUserButtons = ({
 					}}
 				>
 					<ProfilePicture
+						height="2.25rem"
+						initials={initials}
 						themeSprings={themeSprings}
 						userImage={
 							typeof user.metadata?.profile_picture === 'string'
 								? user.metadata.profile_picture
 								: undefined
 						}
-						initials={initials}
 						width="2.25rem"
-						height="2.25rem"
 					/>
 				</button>
 			) : (
 				<animated.button
-					ref={triggerRef}
 					onClick={handleToggleDropdown}
+					ref={triggerRef}
 					style={{
 						...buttonStyle({
 							backgroundColor: themeSprings.themeTertiary,
@@ -163,21 +189,21 @@ export const NavbarUserButtons = ({
 			)}
 
 			<NavbarIconLinks themeSprings={themeSprings} />
-			<ThemeButton themeSprings={themeSprings} setTheme={setTheme} />
+			<ThemeButton setTheme={setTheme} themeSprings={themeSprings} />
 
 			{isDropdownOpen && !isMobile && (
 				<DropdownContainer
-					themeSprings={themeSprings}
+					ignoredElements={[triggerRef]}
+					onClose={closeDropdown}
 					spring={dropdownSpring}
 					springApi={dropdownApi}
-					onClose={closeDropdown}
-					ignoredElements={[triggerRef]}
+					themeSprings={themeSprings}
 				>
 					{user ? (
 						<ProfileDropdown
-							user={user}
 							initials={initials}
 							themeSprings={themeSprings}
+							user={user}
 						/>
 					) : (
 						<AuthContainer themeSprings={themeSprings} />
@@ -187,18 +213,18 @@ export const NavbarUserButtons = ({
 
 			{isDropdownOpen && isMobile && (
 				<Modal
+					isOpen={isDropdownOpen}
+					onClose={() => setIsDropdownOpen(false)}
 					style={{
 						backgroundColor: themeSprings.themeSecondary,
 						borderRadius: '0.75rem'
 					}}
-					isOpen={isDropdownOpen}
-					onClose={() => setIsDropdownOpen(false)}
 				>
 					{user ? (
 						<ProfileDropdown
-							user={user}
 							initials={initials}
 							themeSprings={themeSprings}
+							user={user}
 						/>
 					) : (
 						<AuthContainer themeSprings={themeSprings} />
@@ -220,26 +246,18 @@ const ProfileDropdown = ({
 	initials,
 	themeSprings
 }: ProfileDropdownProps) => {
-	const displayName =
-		typeof user.metadata?.name === 'string'
-			? user.metadata.name
-			: typeof user.metadata?.display_name === 'string'
-				? user.metadata.display_name
-				: typeof user.metadata?.given_name === 'string'
-					? user.metadata.given_name
-					: undefined;
+	const displayName = getMetadataDisplayName(user);
 
 	const email =
 		typeof user.metadata?.email === 'string'
 			? user.metadata.email
 			: undefined;
 
-	const providerKey = user.auth_sub.includes('|')
-		? user.auth_sub.split('|')[0]!.toLowerCase()
-		: undefined;
-	const provider = providerKey
-		? providerData[providerKey as keyof typeof providerData]
-		: undefined;
+	const providerKey = getAuthProviderKey(user.auth_sub);
+	let provider;
+	if (providerKey && isProviderKey(providerKey)) {
+		provider = providerData[providerKey];
+	}
 	const providerDisplay = providerKey
 		? providerKey.charAt(0).toUpperCase() + providerKey.slice(1)
 		: undefined;
@@ -266,15 +284,15 @@ const ProfileDropdown = ({
 				}}
 			>
 				<ProfilePicture
+					height="2.5rem"
+					initials={initials}
 					themeSprings={themeSprings}
 					userImage={
 						typeof user.metadata?.profile_picture === 'string'
 							? user.metadata.profile_picture
 							: undefined
 					}
-					initials={initials}
 					width="2.5rem"
-					height="2.5rem"
 				/>
 				<div
 					style={{
@@ -332,8 +350,8 @@ const ProfileDropdown = ({
 					}}
 				>
 					<animated.img
-						src={provider.logoUrl}
 						alt={`${providerDisplay} logo`}
+						src={provider.logoUrl}
 						style={{
 							filter: isDarkLogo
 								? themeSprings.theme.to((t) =>
@@ -371,6 +389,13 @@ const ProfileDropdown = ({
 			>
 				<animated.a
 					href="/profile"
+					onMouseEnter={(e) => {
+						e.currentTarget.style.backgroundColor =
+							'rgba(128, 128, 128, 0.08)';
+					}}
+					onMouseLeave={(e) => {
+						e.currentTarget.style.backgroundColor = 'transparent';
+					}}
 					style={{
 						alignItems: 'center',
 						borderRadius: '6px',
@@ -383,6 +408,11 @@ const ProfileDropdown = ({
 						textDecoration: 'none',
 						transition: 'background-color 0.15s ease'
 					}}
+				>
+					Profile
+				</animated.a>
+				<animated.button
+					onClick={() => handleSignOut()}
 					onMouseEnter={(e) => {
 						e.currentTarget.style.backgroundColor =
 							'rgba(128, 128, 128, 0.08)';
@@ -390,11 +420,6 @@ const ProfileDropdown = ({
 					onMouseLeave={(e) => {
 						e.currentTarget.style.backgroundColor = 'transparent';
 					}}
-				>
-					Profile
-				</animated.a>
-				<animated.button
-					onClick={() => handleSignOut()}
 					style={{
 						alignItems: 'center',
 						background: 'none',
@@ -410,13 +435,6 @@ const ProfileDropdown = ({
 						textAlign: 'left',
 						transition: 'background-color 0.15s ease',
 						width: '100%'
-					}}
-					onMouseEnter={(e) => {
-						e.currentTarget.style.backgroundColor =
-							'rgba(128, 128, 128, 0.08)';
-					}}
-					onMouseLeave={(e) => {
-						e.currentTarget.style.backgroundColor = 'transparent';
 					}}
 				>
 					Sign out

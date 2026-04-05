@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
@@ -12,7 +13,6 @@ import {
 	simpleReactConfig,
 	tailwindConfig
 } from '../../../data/documentation/buildManifestDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -44,6 +44,23 @@ const tocItems: TocItem[] = [
 	{ href: '#cli', label: 'CLI Commands' }
 ];
 
+type BuildManifestListProps = {
+	items: Array<{
+		label: ReactNode;
+		text: string;
+	}>;
+};
+
+const BuildManifestList = ({ items }: BuildManifestListProps) => (
+	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+		{items.map((item, index) => (
+			<li key={index} style={listItemStyle}>
+				{item.label}: {item.text}
+			</li>
+		))}
+	</ul>
+);
+
 export const BuildManifestView = ({
 	currentPageId,
 	onNavigate,
@@ -52,8 +69,6 @@ export const BuildManifestView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -70,8 +85,8 @@ export const BuildManifestView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						style={h1Style(isMobileOrTablet)}
 						id="build-and-manifest"
+						style={h1Style(isMobileOrTablet)}
 					>
 						Build &amp; Manifest
 					</h1>
@@ -83,8 +98,8 @@ export const BuildManifestView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="config-file"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -106,8 +121,8 @@ export const BuildManifestView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="prepare"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -124,22 +139,32 @@ export const BuildManifestView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>absolutejs</strong> — An
-							Elysia plugin that adds HMR routes in development
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>manifest</strong> — Maps
-							entry point names to their bundled asset paths
-						</li>
-					</ul>
+					<BuildManifestList
+						items={[
+							{
+								label: (
+									<strong style={strongStyle}>
+										absolutejs
+									</strong>
+								),
+								text: 'An Elysia plugin that adds HMR routes in development'
+							},
+							{
+								label: (
+									<strong style={strongStyle}>
+										manifest
+									</strong>
+								),
+								text: 'Maps entry point names to their bundled asset paths'
+							}
+						]}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="configuration"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -168,8 +193,8 @@ export const BuildManifestView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="manifest"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -185,25 +210,32 @@ export const BuildManifestView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Entry point names
-							</strong>{' '}
-							— Derived from your component file names (e.g.,
-							Home.tsx → HomeIndex)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Hashed paths</strong> —
-							Include content hashes for cache busting
-						</li>
-					</ul>
+					<BuildManifestList
+						items={[
+							{
+								label: (
+									<strong style={strongStyle}>
+										Entry point names
+									</strong>
+								),
+								text: 'Derived from your component file names (e.g., Home.tsx -> HomeIndex)'
+							},
+							{
+								label: (
+									<strong style={strongStyle}>
+										Hashed paths
+									</strong>
+								),
+								text: 'Include content hashes for cache busting'
+							}
+						]}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="asset-lookup"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -223,8 +255,8 @@ export const BuildManifestView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="tailwind"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -244,8 +276,8 @@ export const BuildManifestView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="build-options"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -264,8 +296,8 @@ export const BuildManifestView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="cli"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -292,14 +324,14 @@ export const BuildManifestView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

@@ -97,19 +97,6 @@ export const AuthModal = ({
 
 	return (
 		<Modal
-			style={{
-				alignItems: 'stretch',
-				backgroundColor: themeSprings.themeTertiary,
-				border: '1px solid rgba(128, 128, 128, 0.2)',
-				borderRadius: '16px',
-				boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-				display: 'flex',
-				flexDirection: 'column',
-				gap: '28px',
-				maxWidth: '95vw',
-				padding: isMobile ? '24px' : '40px',
-				width: '680px'
-			}}
 			contentRef={registerHost}
 			isOpen={modalContent !== null}
 			onClose={() => {
@@ -124,6 +111,19 @@ export const AuthModal = ({
 				window.history.replaceState(null, '', newUrl);
 
 				setModalContent(null);
+			}}
+			style={{
+				alignItems: 'stretch',
+				backgroundColor: themeSprings.themeTertiary,
+				border: '1px solid rgba(128, 128, 128, 0.2)',
+				borderRadius: '16px',
+				boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+				display: 'flex',
+				flexDirection: 'column',
+				gap: '28px',
+				maxWidth: '95vw',
+				padding: isMobile ? '24px' : '40px',
+				width: '680px'
 			}}
 		>
 			<header
@@ -146,8 +146,8 @@ export const AuthModal = ({
 					}}
 				>
 					<animated.img
-						src={modalContent?.logoUrl}
 						alt={`${modalContent?.name} logo`}
+						src={modalContent?.logoUrl}
 						style={{
 							filter: DARK_LOGO_PROVIDERS.has(
 								modalContent.providerOption
@@ -185,7 +185,6 @@ export const AuthModal = ({
 			>
 				<animated.a
 					href={modalContent?.manageCredentialsUrl}
-					target="_blank"
 					rel="noopener noreferrer"
 					style={{
 						alignItems: 'center',
@@ -201,13 +200,13 @@ export const AuthModal = ({
 						padding: '12px 16px',
 						textDecoration: 'none'
 					}}
+					target="_blank"
 				>
 					Manage Credentials
 					<FiExternalLink size={14} />
 				</animated.a>
 				<animated.a
 					href={modalContent?.createNewCredentialsUrl}
-					target="_blank"
 					rel="noopener noreferrer"
 					style={{
 						alignItems: 'center',
@@ -223,6 +222,7 @@ export const AuthModal = ({
 						padding: '12px 16px',
 						textDecoration: 'none'
 					}}
+					target="_blank"
 				>
 					Create Credentials
 					<FiExternalLink size={14} />
@@ -260,9 +260,9 @@ export const AuthModal = ({
 
 				{isAuthorized && profile && (
 					<HighlightedJson
-						themeSprings={themeSprings}
 						data={profile}
 						primaryColor={primaryColor}
+						themeSprings={themeSprings}
 					/>
 				)}
 			</section>
@@ -289,19 +289,19 @@ export const AuthModal = ({
 				>
 					{actions.map((action) => (
 						<ProviderAction
-							key={action.keyName}
-							providerStatuses={providerStatuses}
-							keyName={action.keyName}
-							type={action.href ? 'link' : 'button'}
-							href={action.href}
+							color={primaryColor}
 							disabled={action.disabled}
+							href={action.href}
+							key={action.keyName}
+							keyName={action.keyName}
 							label={
 								isMobile
 									? (action.label.split(' ')[0] ?? '')
 									: (action.label ?? '')
 							}
 							onClick={action.onClick}
-							color={primaryColor}
+							providerStatuses={providerStatuses}
+							type={action.href ? 'link' : 'button'}
 						/>
 					))}
 				</nav>

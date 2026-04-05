@@ -49,9 +49,12 @@ export const UsageAdoptionSection = ({
 	// Aggregate platform data by OS
 	const osCounts = new Map<string, number>();
 	for (const row of data['platform-breakdown'] ?? []) {
-		const os = String(row['os'] ?? 'unknown');
+		const operatingSystem = String(row['os'] ?? 'unknown');
 		const users = Number(row['users'] ?? 0);
-		osCounts.set(os, (osCounts.get(os) ?? 0) + users);
+		osCounts.set(
+			operatingSystem,
+			(osCounts.get(operatingSystem) ?? 0) + users
+		);
 	}
 	const platformData = [...osCounts.entries()].map(([label, value]) => ({
 		label,
@@ -94,19 +97,19 @@ export const UsageAdoptionSection = ({
 			)}
 
 			<TelemetryTable
-				queryKey="platform-breakdown"
-				title="Platform Details"
 				columns={['os', 'arch', 'users']}
+				queryKey="platform-breakdown"
 				rows={data['platform-breakdown'] ?? []}
 				themeSprings={themeSprings}
+				title="Platform Details"
 			/>
 
 			<TelemetryTable
-				queryKey="cli-commands"
-				title="CLI Command Usage"
 				columns={['command', 'users']}
+				queryKey="cli-commands"
 				rows={data['cli-commands'] ?? []}
 				themeSprings={themeSprings}
+				title="CLI Command Usage"
 			/>
 		</div>
 	);

@@ -11,6 +11,9 @@ type SignupLinkProps = {
 	themeSprings: ThemeSprings;
 };
 
+const SIGNUP_LINK_BASE_OPACITY = 0.8;
+const SIGNUP_LINK_HOVER_OPACITY_RANGE = 0.2;
+
 const SignupLink = ({ themeSprings }: SignupLinkProps) => {
 	const [hoverSpring, hoverApi] = useSpring(() => ({
 		config: { friction: 20, tension: 300 },
@@ -35,7 +38,11 @@ const SignupLink = ({ themeSprings }: SignupLinkProps) => {
 					color: '#6366F1',
 					fontSize: '0.8125rem',
 					fontWeight: 600,
-					opacity: hoverSpring.opacity.to((o) => 0.8 + o * 0.2),
+					opacity: hoverSpring.opacity.to(
+						(opacityValue) =>
+							SIGNUP_LINK_BASE_OPACITY +
+							opacityValue * SIGNUP_LINK_HOVER_OPACITY_RANGE
+					),
 					textDecoration: 'none'
 				}}
 			>

@@ -1,18 +1,3 @@
-export const providerInterface = `\
-// Every provider implements the same interface
-type AIProviderConfig = {
-  stream: (params: AIProviderStreamParams) => AsyncIterable<AIChunk>;
-};
-
-type AIProviderStreamParams = {
-  model: string;
-  messages: AIProviderMessage[];
-  tools?: AIProviderToolDefinition[];
-  systemPrompt?: string;
-  thinking?: { type: string; budget_tokens: number };
-  signal?: AbortSignal;
-};`;
-
 export const providerAnthropic = `\
 import { anthropic } from '@absolutejs/absolute/ai/anthropic';
 
@@ -24,52 +9,6 @@ const provider = anthropic({
 // Models: claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5,
 //         claude-3-5-sonnet-20241022
 // Supports: tool calling, vision, PDF, extended thinking`;
-
-export const providerOpenAI = `\
-import { openai } from '@absolutejs/absolute/ai/openai';
-
-const provider = openai({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseUrl: 'https://api.openai.com', // optional
-});
-
-// Models: gpt-4o, gpt-4o-mini, gpt-5.4, gpt-5.3
-// Supports: tool calling, vision`;
-
-export const providerOpenAIResponses = `\
-import { openaiResponses } from '@absolutejs/absolute/ai/openai-responses';
-
-const provider = openaiResponses({
-  apiKey: process.env.OPENAI_API_KEY,
-  // Specify which models support image generation
-  imageModels: ['gpt-image-1.5', 'gpt-image-1'],
-});
-
-// Models: gpt-4o, o3, o4-mini, gpt-image-1.5
-// Supports: tool calling, vision, image generation, reasoning`;
-
-export const providerGemini = `\
-import { gemini } from '@absolutejs/absolute/ai/gemini';
-
-const provider = gemini({
-  apiKey: process.env.GOOGLE_API_KEY,
-  // Specify which models support image generation
-  imageModels: ['gemini-3-pro-image-preview', 'gemini-2.5-flash-image'],
-});
-
-// Models: gemini-3-pro, gemini-3-flash, gemini-2.5-pro, gemini-2.5-flash
-// Supports: tool calling, vision, PDF, image generation, reasoning`;
-
-export const providerOllama = `\
-import { ollama } from '@absolutejs/absolute/ai/ollama';
-
-const provider = ollama({
-  baseUrl: process.env.OLLAMA_URL, // defaults to http://localhost:11434
-});
-
-// Models: any model pulled locally (llama3.2, qwen3, mistral, etc.)
-// Supports: tool calling (model-dependent), free local inference`;
-
 export const providerCompatible = `\
 // OpenAI-compatible providers use the same API format
 // Each has a convenience wrapper with the correct base URL
@@ -107,7 +46,6 @@ const alibabaProvider = alibaba({ apiKey: process.env.ALIBABA_API_KEY });
 // Moonshot (Kimi)
 const moonshotProvider = moonshot({ apiKey: process.env.MOONSHOT_API_KEY });
 // Models: kimi-k2`;
-
 export const providerCustom = `\
 // Use openaiCompatible() for any provider with an OpenAI-compatible API
 import { openaiCompatible } from '@absolutejs/absolute/ai/providers';
@@ -116,7 +54,31 @@ const myProvider = openaiCompatible({
   apiKey: process.env.MY_API_KEY,
   baseUrl: 'https://api.my-provider.com/v1',
 });`;
+export const providerGemini = `\
+import { gemini } from '@absolutejs/absolute/ai/gemini';
 
+const provider = gemini({
+  apiKey: process.env.GOOGLE_API_KEY,
+  // Specify which models support image generation
+  imageModels: ['gemini-3-pro-image-preview', 'gemini-2.5-flash-image'],
+});
+
+// Models: gemini-3-pro, gemini-3-flash, gemini-2.5-pro, gemini-2.5-flash
+// Supports: tool calling, vision, PDF, image generation, reasoning`;
+export const providerInterface = `\
+// Every provider implements the same interface
+type AIProviderConfig = {
+  stream: (params: AIProviderStreamParams) => AsyncIterable<AIChunk>;
+};
+
+type AIProviderStreamParams = {
+  model: string;
+  messages: AIProviderMessage[];
+  tools?: AIProviderToolDefinition[];
+  systemPrompt?: string;
+  thinking?: { type: string; budget_tokens: number };
+  signal?: AbortSignal;
+};`;
 export const providerMulti = `\
 // Multi-provider setup with dynamic routing
 import { anthropic } from '@absolutejs/absolute/ai/anthropic';
@@ -170,3 +132,33 @@ new Elysia().use(
     },
   })
 );`;
+export const providerOllama = `\
+import { ollama } from '@absolutejs/absolute/ai/ollama';
+
+const provider = ollama({
+  baseUrl: process.env.OLLAMA_URL, // defaults to http://localhost:11434
+});
+
+// Models: any model pulled locally (llama3.2, qwen3, mistral, etc.)
+// Supports: tool calling (model-dependent), free local inference`;
+export const providerOpenAI = `\
+import { openai } from '@absolutejs/absolute/ai/openai';
+
+const provider = openai({
+  apiKey: process.env.OPENAI_API_KEY,
+  baseUrl: 'https://api.openai.com', // optional
+});
+
+// Models: gpt-4o, gpt-4o-mini, gpt-5.4, gpt-5.3
+// Supports: tool calling, vision`;
+export const providerOpenAIResponses = `\
+import { openaiResponses } from '@absolutejs/absolute/ai/openai-responses';
+
+const provider = openaiResponses({
+  apiKey: process.env.OPENAI_API_KEY,
+  // Specify which models support image generation
+  imageModels: ['gpt-image-1.5', 'gpt-image-1'],
+});
+
+// Models: gpt-4o, o3, o4-mini, gpt-image-1.5
+// Supports: tool calling, vision, image generation, reasoning`;

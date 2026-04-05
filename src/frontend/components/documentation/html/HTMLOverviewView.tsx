@@ -9,25 +9,22 @@ import {
 	htmlHandler,
 	htmlSourceExample
 } from '../../../data/documentation/htmlHtmxDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { AssetTypeCards } from './AssetTypeCards';
+import { AssetFeatureList } from './AssetFeatureList';
 
 const tocItems: TocItem[] = [
 	{ href: '#build-config', label: 'Build Configuration' },
@@ -44,8 +41,6 @@ export const HTMLOverviewView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -61,7 +56,7 @@ export const HTMLOverviewView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="html">
+					<h1 id="html" style={h1Style(isMobileOrTablet)}>
 						HTML
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -73,8 +68,8 @@ export const HTMLOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="build-config"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -94,8 +89,8 @@ export const HTMLOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="page-handler"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -115,8 +110,8 @@ export const HTMLOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="how-it-works"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -147,8 +142,8 @@ export const HTMLOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="asset-detection"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -158,82 +153,14 @@ export const HTMLOverviewView = ({
 						The build system automatically detects and processes
 						assets referenced in your HTML:
 					</p>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile
-								? '1fr'
-								: 'repeat(3, 1fr)',
-							marginBottom: '1.5rem',
-							marginTop: '1rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>JavaScript</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								<code>.js</code> files are bundled and minified
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>TypeScript</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								<code>.ts</code> files are compiled to JS and
-								bundled
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>CSS</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								<code>.css</code> files are bundled and minified
-							</p>
-						</animated.div>
-					</div>
+					<AssetTypeCards themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={htmlAssetDetection}
 						language="html"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Hashed filenames
-							</strong>
-							: Built files include content hashes for cache
-							busting
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Path rewriting</strong>:
-							All asset paths are automatically updated to the
-							build output
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Bundling</strong>:
-							Assets are optimized and minified for production
-						</li>
-					</ul>
+					<AssetFeatureList />
 				</section>
 
 				<DocsNavigation
@@ -245,14 +172,14 @@ export const HTMLOverviewView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

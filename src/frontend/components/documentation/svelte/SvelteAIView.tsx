@@ -49,7 +49,7 @@ export const SvelteAIView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="svelte-ai">
+					<h1 id="svelte-ai" style={h1Style(isMobileOrTablet)}>
 						Svelte AI
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -62,8 +62,8 @@ export const SvelteAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="create-ai-stream"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -73,7 +73,7 @@ export const SvelteAIView = ({
 						Call <code>createAIStream</code> with the WebSocket path
 						and an optional conversation ID. It returns an object
 						with getter properties that work with Svelte&apos;s
-						reactivity system — access <code>ai.messages</code>,{' '}
+						reactivity system: access <code>ai.messages</code>,{' '}
 						<code>ai.isStreaming</code>, and <code>ai.error</code>{' '}
 						directly in your template.
 					</p>
@@ -87,8 +87,8 @@ export const SvelteAIView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="return-type"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -111,14 +111,14 @@ export const SvelteAIView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

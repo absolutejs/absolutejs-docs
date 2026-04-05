@@ -1,3 +1,7 @@
+import {
+	PERCENT_SCALE,
+	TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT
+} from '../../../constants';
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../types/springTypes';
 import {
@@ -10,11 +14,20 @@ type TypeSafetyFlowDiagramProps = {
 	themeSprings: ThemeSprings;
 };
 
+type StageColorKey = 'accent' | 'accentSecondary' | 'accentTertiary';
+
+type TypeSafetyStage = {
+	colorKey: StageColorKey;
+	description: string;
+	example: string;
+	title: string;
+};
+
 export const TypeSafetyFlowDiagram = ({
 	themeSprings
 }: TypeSafetyFlowDiagramProps) => {
-	const dark = diagramColors.dark;
-	const light = diagramColors.light;
+	const { dark } = diagramColors;
+	const { light } = diagramColors;
 
 	const svgWidth = 1200;
 	const svgHeight = 340;
@@ -22,7 +35,7 @@ export const TypeSafetyFlowDiagram = ({
 	// Dark color for numbers on bright circle backgrounds
 	const numberColor = '#1a1a2e';
 
-	const row1 = [
+	const row1: TypeSafetyStage[] = [
 		{
 			colorKey: 'accentTertiary' as const,
 			description: 'Define your tables',
@@ -43,7 +56,7 @@ export const TypeSafetyFlowDiagram = ({
 		}
 	];
 
-	const row2 = [
+	const row2: TypeSafetyStage[] = [
 		{
 			colorKey: 'accent' as const,
 			description: 'Type-safe API calls',
@@ -59,10 +72,14 @@ export const TypeSafetyFlowDiagram = ({
 	];
 
 	const boxWidth = 380;
-	const boxHeight = 100;
+	const boxHeight = PERCENT_SCALE;
 	const gapX = 30;
 	const gapY = 30;
-	const row1StartX = (svgWidth - (3 * boxWidth + 2 * gapX)) / 2;
+	const row1StartX =
+		(svgWidth -
+			(TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.rowStageCount * boxWidth +
+				(TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.rowStageCount - 1) * gapX)) /
+		2;
 	const row2StartX = (svgWidth - (2 * boxWidth + gapX)) / 2;
 	const row1Y = 55;
 	const row2Y = row1Y + boxHeight + gapY;
@@ -167,17 +184,20 @@ export const TypeSafetyFlowDiagram = ({
 					fontWeight={600}
 					textAnchor="middle"
 					x={serverCenterX}
-					y={row1Y - 10}
+					y={
+						row1Y -
+						TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.serverLabelOffsetY
+					}
 				>
 					SERVER
 				</animated.text>
 
-				{/* Row 1 - Server side */}
-				{row1.map((stage, i) => {
-					const x = row1StartX + i * (boxWidth + gapX);
+				{/* Row 1: Server side */}
+				{row1.map((stage, stageIndex) => {
+					const stageX = row1StartX + stageIndex * (boxWidth + gapX);
 
 					return (
-						<g key={`row1-${i}`}>
+						<g key={`row1-${stageIndex}`}>
 							{/* Box */}
 							<animated.rect
 								fill={themeSprings.theme.to((t) =>
@@ -194,20 +214,28 @@ export const TypeSafetyFlowDiagram = ({
 								)}
 								strokeWidth={2}
 								width={boxWidth}
-								x={x}
+								x={stageX}
 								y={row1Y}
 							/>
 
 							{/* Step number */}
 							<animated.circle
-								cx={x + 24}
-								cy={row1Y + 24}
+								cx={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepBadgeX
+								}
+								cy={
+									row1Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepBadgeY
+								}
 								fill={themeSprings.theme.to((t) =>
 									t.endsWith('dark')
 										? dark[stage.colorKey]
 										: light[stage.colorKey]
 								)}
-								r={12}
+								r={
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepBadgeRadius
+								}
 							/>
 							<text
 								dominantBaseline="middle"
@@ -215,10 +243,16 @@ export const TypeSafetyFlowDiagram = ({
 								fontSize={11}
 								fontWeight={700}
 								textAnchor="middle"
-								x={x + 24}
-								y={row1Y + 25}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepBadgeX
+								}
+								y={
+									row1Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepLabelOffsetY
+								}
 							>
-								{i + 1}
+								{stageIndex + 1}
 							</text>
 
 							{/* Title */}
@@ -228,8 +262,14 @@ export const TypeSafetyFlowDiagram = ({
 								)}
 								fontSize={13}
 								fontWeight={600}
-								x={x + 44}
-								y={row1Y + 22}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.textColumnOffsetX
+								}
+								y={
+									row1Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.titleBaselineY
+								}
 							>
 								{stage.title}
 							</animated.text>
@@ -242,8 +282,14 @@ export const TypeSafetyFlowDiagram = ({
 										: light.textMuted
 								)}
 								fontSize={10}
-								x={x + 44}
-								y={row1Y + 38}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.textColumnOffsetX
+								}
+								y={
+									row1Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.descriptionBaselineY
+								}
 							>
 								{stage.description}
 							</animated.text>
@@ -258,9 +304,18 @@ export const TypeSafetyFlowDiagram = ({
 								height={30}
 								opacity={0.12}
 								rx={6}
-								width={boxWidth - 24}
-								x={x + 12}
-								y={row1Y + 56}
+								width={
+									boxWidth -
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.codeBoxWidthInset
+								}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.codeBoxXOffset
+								}
+								y={
+									row1Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.codeBoxOffsetY
+								}
 							/>
 							<animated.text
 								fill={themeSprings.theme.to((t) =>
@@ -270,14 +325,20 @@ export const TypeSafetyFlowDiagram = ({
 								)}
 								fontFamily="monospace"
 								fontSize={10}
-								x={x + 22}
-								y={row1Y + 76}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.exampleCodeXOffset
+								}
+								y={
+									row1Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.exampleBaselineY
+								}
 							>
 								{stage.example}
 							</animated.text>
 
 							{/* Arrow to next card */}
-							{i < row1.length - 1 && (
+							{stageIndex < row1.length - 1 && (
 								<animated.line
 									markerEnd={themeSprings.theme.to((t) =>
 										t.endsWith('dark')
@@ -290,8 +351,17 @@ export const TypeSafetyFlowDiagram = ({
 											: light.arrow
 									)}
 									strokeWidth={2}
-									x1={x + boxWidth + 8}
-									x2={x + boxWidth + gapX - 8}
+									x1={
+										stageX +
+										boxWidth +
+										TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.rowArrowInset
+									}
+									x2={
+										stageX +
+										boxWidth +
+										gapX -
+										TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.rowArrowInset
+									}
 									y1={row1Y + boxHeight / 2}
 									y2={row1Y + boxHeight / 2}
 								/>
@@ -313,8 +383,12 @@ export const TypeSafetyFlowDiagram = ({
 					strokeWidth={2}
 					x1={row1StartX + 2 * boxWidth + 2 * gapX + boxWidth / 2}
 					x2={row2StartX + boxWidth / 2}
-					y1={row1Y + boxHeight + 8}
-					y2={row2Y - 8}
+					y1={
+						row1Y +
+						boxHeight +
+						TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.rowArrowInset
+					}
+					y2={row2Y - TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.rowArrowInset}
 				/>
 
 				{/* Boundary line */}
@@ -324,8 +398,11 @@ export const TypeSafetyFlowDiagram = ({
 					)}
 					strokeDasharray="6,4"
 					strokeWidth={1.5}
-					x1={50}
-					x2={svgWidth - 50}
+					x1={TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.boundaryInsetX}
+					x2={
+						svgWidth -
+						TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.boundaryInsetX
+					}
 					y1={boundaryY}
 					y2={boundaryY}
 				/>
@@ -339,17 +416,20 @@ export const TypeSafetyFlowDiagram = ({
 					fontWeight={600}
 					textAnchor="middle"
 					x={clientCenterX}
-					y={row2Y - 10}
+					y={
+						row2Y -
+						TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.serverLabelOffsetY
+					}
 				>
 					CLIENT
 				</animated.text>
 
-				{/* Row 2 - Client side */}
-				{row2.map((stage, i) => {
-					const x = row2StartX + i * (boxWidth + gapX);
+				{/* Row 2: Client side */}
+				{row2.map((stage, stageIndex) => {
+					const stageX = row2StartX + stageIndex * (boxWidth + gapX);
 
 					return (
-						<g key={`row2-${i}`}>
+						<g key={`row2-${stageIndex}`}>
 							{/* Box */}
 							<animated.rect
 								fill={themeSprings.theme.to((t) =>
@@ -366,20 +446,28 @@ export const TypeSafetyFlowDiagram = ({
 								)}
 								strokeWidth={2}
 								width={boxWidth}
-								x={x}
+								x={stageX}
 								y={row2Y}
 							/>
 
 							{/* Step number */}
 							<animated.circle
-								cx={x + 24}
-								cy={row2Y + 24}
+								cx={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepBadgeX
+								}
+								cy={
+									row2Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepBadgeY
+								}
 								fill={themeSprings.theme.to((t) =>
 									t.endsWith('dark')
 										? dark[stage.colorKey]
 										: light[stage.colorKey]
 								)}
-								r={12}
+								r={
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepBadgeRadius
+								}
 							/>
 							<text
 								dominantBaseline="middle"
@@ -387,10 +475,17 @@ export const TypeSafetyFlowDiagram = ({
 								fontSize={11}
 								fontWeight={700}
 								textAnchor="middle"
-								x={x + 24}
-								y={row2Y + 25}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepBadgeX
+								}
+								y={
+									row2Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.stepLabelOffsetY
+								}
 							>
-								{i + 4}
+								{stageIndex +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.clientStepNumberStart}
 							</text>
 
 							{/* Title */}
@@ -400,8 +495,14 @@ export const TypeSafetyFlowDiagram = ({
 								)}
 								fontSize={13}
 								fontWeight={600}
-								x={x + 44}
-								y={row2Y + 22}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.textColumnOffsetX
+								}
+								y={
+									row2Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.titleBaselineY
+								}
 							>
 								{stage.title}
 							</animated.text>
@@ -414,8 +515,14 @@ export const TypeSafetyFlowDiagram = ({
 										: light.textMuted
 								)}
 								fontSize={10}
-								x={x + 44}
-								y={row2Y + 38}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.textColumnOffsetX
+								}
+								y={
+									row2Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.descriptionBaselineY
+								}
 							>
 								{stage.description}
 							</animated.text>
@@ -430,9 +537,18 @@ export const TypeSafetyFlowDiagram = ({
 								height={30}
 								opacity={0.12}
 								rx={6}
-								width={boxWidth - 24}
-								x={x + 12}
-								y={row2Y + 56}
+								width={
+									boxWidth -
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.codeBoxWidthInset
+								}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.codeBoxXOffset
+								}
+								y={
+									row2Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.codeBoxOffsetY
+								}
 							/>
 							<animated.text
 								fill={themeSprings.theme.to((t) =>
@@ -442,14 +558,20 @@ export const TypeSafetyFlowDiagram = ({
 								)}
 								fontFamily="monospace"
 								fontSize={10}
-								x={x + 22}
-								y={row2Y + 76}
+								x={
+									stageX +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.exampleCodeXOffset
+								}
+								y={
+									row2Y +
+									TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.exampleBaselineY
+								}
 							>
 								{stage.example}
 							</animated.text>
 
 							{/* Arrow to next card */}
-							{i < row2.length - 1 && (
+							{stageIndex < row2.length - 1 && (
 								<animated.line
 									markerEnd={themeSprings.theme.to((t) =>
 										t.endsWith('dark')
@@ -462,8 +584,17 @@ export const TypeSafetyFlowDiagram = ({
 											: light.arrow
 									)}
 									strokeWidth={2}
-									x1={x + boxWidth + 8}
-									x2={x + boxWidth + gapX - 8}
+									x1={
+										stageX +
+										boxWidth +
+										TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.rowArrowInset
+									}
+									x2={
+										stageX +
+										boxWidth +
+										gapX -
+										TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.rowArrowInset
+									}
 									y1={row2Y + boxHeight / 2}
 									y2={row2Y + boxHeight / 2}
 								/>
@@ -473,16 +604,23 @@ export const TypeSafetyFlowDiagram = ({
 				})}
 
 				{/* Type safety indicator bar */}
-				<g transform={`translate(50, ${row2Y + boxHeight + 25})`}>
+				<g
+					transform={`translate(${TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.boundaryInsetX}, ${row2Y + boxHeight + TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.progressBarOffsetY})`}
+				>
 					<animated.rect
 						fill={themeSprings.theme.to((t) =>
 							t.endsWith('dark')
 								? 'url(#type-gradient-dark)'
 								: 'url(#type-gradient-light)'
 						)}
-						height={5}
-						rx={2.5}
-						width={svgWidth - 100}
+						height={
+							TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.progressBarHeight
+						}
+						rx={TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.progressBarRadius}
+						width={
+							svgWidth -
+							TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.progressBarWidthInset
+						}
 					/>
 					<animated.text
 						fill={themeSprings.theme.to((t) =>
@@ -491,10 +629,14 @@ export const TypeSafetyFlowDiagram = ({
 						fontSize={11}
 						fontWeight={500}
 						textAnchor="middle"
-						x={(svgWidth - 100) / 2}
-						y={22}
+						x={
+							(svgWidth -
+								TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.progressBarWidthInset) /
+							2
+						}
+						y={TYPE_SAFETY_FLOW_DIAGRAM_LAYOUT.progressBarLabelY}
 					>
-						TypeScript validates at every step — errors caught at
+						TypeScript validates at every step: errors caught at
 						compile time, not runtime
 					</animated.text>
 				</g>

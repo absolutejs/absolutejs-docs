@@ -33,6 +33,19 @@ const tocItems: TocItem[] = [
 	{ href: '#compilation', label: 'Compilation' }
 ];
 
+const SvelteCompilationList = () => (
+	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Page file</strong>: The compiled
+			component used for server-side rendering
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Index file</strong>: The compiled
+			hydration script that makes the page interactive on the client
+		</li>
+	</ul>
+);
+
 export const SvelteOverviewView = ({
 	currentPageId,
 	onNavigate,
@@ -56,7 +69,7 @@ export const SvelteOverviewView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="svelte">
+					<h1 id="svelte" style={h1Style(isMobileOrTablet)}>
 						Svelte
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -67,8 +80,8 @@ export const SvelteOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="build-config"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -88,8 +101,8 @@ export const SvelteOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="page-handler"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -110,8 +123,8 @@ export const SvelteOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="svelte-components"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -131,8 +144,8 @@ export const SvelteOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="compilation"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -148,17 +161,7 @@ export const SvelteOverviewView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Page file</strong>: The
-							compiled component used for server-side rendering
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Index file</strong>: The
-							compiled hydration script that makes the page
-							interactive on the client
-						</li>
-					</ul>
+					<SvelteCompilationList />
 				</section>
 
 				<DocsNavigation
@@ -170,14 +173,14 @@ export const SvelteOverviewView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

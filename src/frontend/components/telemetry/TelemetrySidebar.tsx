@@ -1,3 +1,4 @@
+import { HALF, TELEMETRY_SIDEBAR_LAYOUT } from '../../../constants';
 import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { ThemeSprings } from '../../../types/springTypes';
@@ -79,55 +80,74 @@ export const TelemetrySidebar = ({
 		}}
 	>
 		<nav style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-			{telemetrySidebarData.map((item) => {
-				const isActive = view === item.id;
-				const Icon = item.icon;
-
-				return (
-					<animated.button
-						key={item.id}
-						onClick={() => navigateToView(item.id)}
-						title={compact ? item.label : undefined}
-						style={{
-							...(compact ? linkCompactStyle : linkBaseStyle),
-							background: isActive
-								? `linear-gradient(135deg, ${primaryColor}22, ${secondaryColor}18)`
-								: 'transparent',
-							boxShadow: isActive
-								? `inset 0 0 12px ${primaryColor}15, 0 0 8px ${primaryColor}10`
-								: 'none',
-							color: themeSprings.contrastSecondary,
-							fontWeight: isActive ? 500 : 400
-						}}
-					>
-						<animated.div
-							style={{
-								...iconStyle,
-								color: isActive
-									? primaryColor
-									: themeSprings.contrastSecondary,
-								opacity: isActive ? 1 : 0.5
-							}}
-						>
-							<Icon />
-						</animated.div>
-						{!compact && <span>{item.label}</span>}
-						{isActive && (
-							<div
-								style={{
-									background: `linear-gradient(to bottom, ${primaryColor}, ${secondaryColor})`,
-									borderRadius: '2px',
-									height: '100%',
-									left: 0,
-									position: 'absolute',
-									top: 0,
-									width: '3px'
-								}}
-							/>
-						)}
-					</animated.button>
-				);
-			})}
+			{telemetrySidebarData.map((item) => (
+				<TelemetrySidebarButton
+					compact={compact}
+					isActive={view === item.id}
+					item={item}
+					key={item.id}
+					navigateToView={navigateToView}
+					themeSprings={themeSprings}
+				/>
+			))}
 		</nav>
 	</animated.aside>
+);
+
+type TelemetrySidebarButtonProps = {
+	compact: boolean;
+	isActive: boolean;
+	item: (typeof telemetrySidebarData)[number];
+	navigateToView: (newView: TelemetryView) => void;
+	themeSprings: ThemeSprings;
+};
+
+const TelemetrySidebarButton = ({
+	compact,
+	isActive,
+	item,
+	navigateToView,
+	themeSprings
+}: TelemetrySidebarButtonProps) => (
+	<animated.button
+		onClick={() => navigateToView(item.id)}
+		style={{
+			...(compact ? linkCompactStyle : linkBaseStyle),
+			background: isActive
+				? `linear-gradient(135deg, ${primaryColor}22, ${secondaryColor}18)`
+				: 'transparent',
+			boxShadow: isActive
+				? `inset 0 0 12px ${primaryColor}15, 0 0 8px ${primaryColor}10`
+				: 'none',
+			color: themeSprings.contrastSecondary,
+			fontWeight: isActive
+				? TELEMETRY_SIDEBAR_LAYOUT.activeFontWeight
+				: TELEMETRY_SIDEBAR_LAYOUT.inactiveFontWeight
+		}}
+		title={compact ? item.label : undefined}
+	>
+		<animated.div
+			style={{
+				...iconStyle,
+				color: isActive ? primaryColor : themeSprings.contrastSecondary,
+				opacity: isActive ? 1 : HALF
+			}}
+		>
+			<item.icon />
+		</animated.div>
+		{!compact && <span>{item.label}</span>}
+		{isActive && (
+			<div
+				style={{
+					background: `linear-gradient(to bottom, ${primaryColor}, ${secondaryColor})`,
+					borderRadius: '2px',
+					height: '100%',
+					left: 0,
+					position: 'absolute',
+					top: 0,
+					width: '3px'
+				}}
+			/>
+		)}
+	</animated.button>
 );

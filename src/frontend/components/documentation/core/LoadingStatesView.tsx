@@ -1,7 +1,6 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -25,6 +24,27 @@ const tocItems: TocItem[] = [
 	{ href: '#framework-support', label: 'Framework Support' }
 ];
 
+const FrameworkSupportList = () => (
+	<ul style={listStyle}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>React</strong> : <code>Suspense</code>{' '}
+			boundaries with streaming SSR
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Vue</strong> : <code>Suspense</code>{' '}
+			component with async setup
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Svelte</strong> :{' '}
+			<code>{'#await'}</code> blocks for async data
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Angular</strong> : <code>@defer</code>{' '}
+			blocks with placeholder and loading states
+		</li>
+	</ul>
+);
+
 export const LoadingStatesView = ({
 	currentPageId,
 	onNavigate,
@@ -33,8 +53,6 @@ export const LoadingStatesView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -50,7 +68,7 @@ export const LoadingStatesView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="loading-states">
+					<h1 id="loading-states" style={h1Style(isMobileOrTablet)}>
 						Loading States{' '}
 						<span
 							style={{
@@ -80,8 +98,8 @@ export const LoadingStatesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="whats-coming"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -106,8 +124,8 @@ export const LoadingStatesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="framework-support"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -117,25 +135,7 @@ export const LoadingStatesView = ({
 						Each framework has its own async primitives that loading
 						states will integrate with:
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>React</strong> —{' '}
-							<code>Suspense</code> boundaries with streaming SSR
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Vue</strong> —{' '}
-							<code>Suspense</code> component with async setup
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Svelte</strong> —{' '}
-							<code>{'#await'}</code> blocks for async data
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Angular</strong> —{' '}
-							<code>@defer</code> blocks with placeholder and
-							loading states
-						</li>
-					</ul>
+					<FrameworkSupportList />
 				</section>
 
 				<DocsNavigation
@@ -147,14 +147,14 @@ export const LoadingStatesView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

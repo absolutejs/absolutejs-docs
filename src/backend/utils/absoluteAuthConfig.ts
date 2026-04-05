@@ -42,9 +42,18 @@ export const absoluteAuthConfig = (db: DatabaseType) =>
 				authProvider,
 				providerInstance,
 				session,
-				unregisteredSession,
 				tokenResponse,
+				unregisteredSession,
 				user_session_id: cookie.user_session_id,
+				getUser: async (userIdentity) => {
+					const user = await getUser({
+						authProvider,
+						db,
+						userIdentity
+					});
+
+					return user;
+				},
 				onNewUser: async (userIdentity) => {
 					const user = await createUser({
 						authProvider,
@@ -55,15 +64,6 @@ export const absoluteAuthConfig = (db: DatabaseType) =>
 						throw new Error('Failed to create user');
 
 					return user;
-				},
-				getUser: async (userIdentity) => {
-					const user = await getUser({
-						authProvider,
-						db,
-						userIdentity
-					});
-
-					return user;
 				}
 			});
 
@@ -72,6 +72,8 @@ export const absoluteAuthConfig = (db: DatabaseType) =>
 			if (signupRedirectMatch) {
 				return redirect(`/${signupRedirectMatch[1]}`);
 			}
+
+			return undefined;
 		},
 		onProfileError: async ({ error, authProvider }) => {
 			await handleStatusUpdate({

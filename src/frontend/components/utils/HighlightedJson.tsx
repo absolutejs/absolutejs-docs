@@ -1,3 +1,17 @@
+import {
+	COLOR_CHANNEL_PARSE_RADIX,
+	HEX_COLOR_BLUE_END_INDEX,
+	HEX_COLOR_BLUE_START_INDEX,
+	HEX_COLOR_GREEN_END_INDEX,
+	HEX_COLOR_GREEN_START_INDEX,
+	HEX_COLOR_RED_END_INDEX,
+	JSON_VIEWER_LAYOUT,
+	MINIMUM_READABLE_BRIGHTNESS,
+	YIQ_BLUE_WEIGHT,
+	YIQ_GREEN_WEIGHT,
+	YIQ_RED_WEIGHT,
+	YIQ_SCALE_DIVISOR
+} from '../../../constants';
 import { ThemeSprings } from '../../../types/springTypes';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { JsonLine } from './JsonLine';
@@ -8,12 +22,27 @@ type HighlightedJsonProps = {
 	themeSprings: ThemeSprings;
 };
 
-/* eslint-disable no-magic-numbers */
-const ensureMinimumBrightness = (hex: string, minBrightness = 80): string => {
-	const r = parseInt(hex.slice(1, 3), 16);
-	const g = parseInt(hex.slice(3, 5), 16);
-	const b = parseInt(hex.slice(5, 7), 16);
-	const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+const ensureMinimumBrightness = (
+	hex: string,
+	minBrightness = MINIMUM_READABLE_BRIGHTNESS
+) => {
+	const red = parseInt(
+		hex.slice(1, HEX_COLOR_RED_END_INDEX),
+		COLOR_CHANNEL_PARSE_RADIX
+	);
+	const green = parseInt(
+		hex.slice(HEX_COLOR_GREEN_START_INDEX, HEX_COLOR_GREEN_END_INDEX),
+		COLOR_CHANNEL_PARSE_RADIX
+	);
+	const blue = parseInt(
+		hex.slice(HEX_COLOR_BLUE_START_INDEX, HEX_COLOR_BLUE_END_INDEX),
+		COLOR_CHANNEL_PARSE_RADIX
+	);
+	const brightness =
+		(red * YIQ_RED_WEIGHT +
+			green * YIQ_GREEN_WEIGHT +
+			blue * YIQ_BLUE_WEIGHT) /
+		YIQ_SCALE_DIVISOR;
 
 	if (brightness < minBrightness) {
 		return '#808080';
@@ -21,7 +50,6 @@ const ensureMinimumBrightness = (hex: string, minBrightness = 80): string => {
 
 	return hex;
 };
-/* eslint-enable no-magic-numbers */
 
 export const HighlightedJson = ({
 	data,
@@ -31,7 +59,7 @@ export const HighlightedJson = ({
 	const jsonString = JSON.stringify(data ?? {}, null, 2);
 	const jsonLines = jsonString
 		.split('\n')
-		.slice(1, -1)
+		.slice(1, JSON_VIEWER_LAYOUT.contentEndIndexOffset)
 		.map((line) => line.replace(/^ {2}/, ''));
 
 	const { isSizeOrLess } = useMediaQuery();
@@ -58,10 +86,10 @@ export const HighlightedJson = ({
 			<code>
 				{jsonLines.map((line, lineIndex) => (
 					<JsonLine
-						themeSprings={themeSprings}
 						key={lineIndex}
 						line={line}
 						needsNewline={lineIndex < jsonLines.length - 1}
+						themeSprings={themeSprings}
 					/>
 				))}
 			</code>

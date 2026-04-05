@@ -1,3 +1,4 @@
+import { PROJECT_STRUCTURE_GRAPH_LAYOUT } from '../../../../constants';
 import { animated, useSpring } from '@react-spring/web';
 import { useState } from 'react';
 import { ThemeSprings } from '../../../../types/springTypes';
@@ -100,16 +101,26 @@ const FileIcon = ({ color }: { color: string }) => (
 	</g>
 );
 
+const getIconColor = (node: TreeNode, isDark: boolean) => {
+	if (node.isFile) {
+		if (node.isSpecial) {
+			return isDark ? specialFileColor.dark : specialFileColor.light;
+		}
+
+		return isDark ? fileIconColor.dark : fileIconColor.light;
+	}
+
+	return isDark ? folderIconColor.dark : folderIconColor.light;
+};
+
 const TreeRow = ({
 	index,
 	isDark,
-	node,
-	totalNodes
+	node
 }: {
 	index: number;
 	isDark: boolean;
 	node: TreeNode;
-	totalNodes: number;
 }) => {
 	const [isHovered, setIsHovered] = useState(false);
 
@@ -119,21 +130,12 @@ const TreeRow = ({
 	});
 
 	const rowHeight = 36;
-	const y = index * rowHeight;
-	const x = 24 + node.indent * 28;
-	const iconSize = 18;
-
-	const iconColor = node.isFile
-		? node.isSpecial
-			? isDark
-				? specialFileColor.dark
-				: specialFileColor.light
-			: isDark
-				? fileIconColor.dark
-				: fileIconColor.light
-		: isDark
-			? folderIconColor.dark
-			: folderIconColor.light;
+	const nodeY = index * rowHeight;
+	const nodeX =
+		PROJECT_STRUCTURE_GRAPH_LAYOUT.treeNodeX +
+		node.indent * PROJECT_STRUCTURE_GRAPH_LAYOUT.treeIndentX;
+	const { iconSize } = PROJECT_STRUCTURE_GRAPH_LAYOUT;
+	const iconColor = getIconColor(node, isDark);
 
 	const currentTextColor = isDark ? textColor.dark : textColor.light;
 	const currentDescColor = isDark
@@ -153,35 +155,45 @@ const TreeRow = ({
 				height={rowHeight}
 				opacity={hoverSpring.opacity}
 				rx={4}
-				width="calc(100% - 16px)"
-				x={8}
-				y={y}
+				width={`calc(100% - ${PROJECT_STRUCTURE_GRAPH_LAYOUT.hoverPanelWidthInset}px)`}
+				x={PROJECT_STRUCTURE_GRAPH_LAYOUT.hoverPanelInsetX}
+				y={nodeY}
 			/>
 
 			{node.indent > 0 &&
-				Array.from({ length: node.indent }).map((_, i) => (
+				Array.from({ length: node.indent }).map((_, levelIndex) => (
 					<line
-						key={i}
+						key={levelIndex}
 						stroke={currentLineColor}
 						strokeDasharray="2,2"
 						strokeWidth={1}
-						x1={38 + i * 28}
-						x2={38 + i * 28}
-						y1={y}
-						y2={y + rowHeight}
+						x1={
+							PROJECT_STRUCTURE_GRAPH_LAYOUT.branchGuideX +
+							levelIndex *
+								PROJECT_STRUCTURE_GRAPH_LAYOUT.treeIndentX
+						}
+						x2={
+							PROJECT_STRUCTURE_GRAPH_LAYOUT.branchGuideX +
+							levelIndex *
+								PROJECT_STRUCTURE_GRAPH_LAYOUT.treeIndentX
+						}
+						y1={nodeY}
+						y2={nodeY + rowHeight}
 					/>
 				))}
 
 			{node.indent > 0 && (
 				<path
-					d={`M ${10 + node.indent * 28} ${y + rowHeight / 2} L ${x - 4} ${y + rowHeight / 2}`}
+					d={`M ${PROJECT_STRUCTURE_GRAPH_LAYOUT.branchConnectorStartX + node.indent * PROJECT_STRUCTURE_GRAPH_LAYOUT.treeIndentX} ${nodeY + rowHeight / 2} L ${nodeX - PROJECT_STRUCTURE_GRAPH_LAYOUT.branchConnectorEndOffsetX} ${nodeY + rowHeight / 2}`}
 					fill="none"
 					stroke={currentLineColor}
 					strokeWidth={1}
 				/>
 			)}
 
-			<g transform={`translate(${x}, ${y + (rowHeight - iconSize) / 2})`}>
+			<g
+				transform={`translate(${nodeX}, ${nodeY + (rowHeight - iconSize) / 2})`}
+			>
 				<svg height={iconSize} viewBox="0 0 18 18" width={iconSize}>
 					{node.isFile ? (
 						<FileIcon color={iconColor} />
@@ -196,9 +208,17 @@ const TreeRow = ({
 				fill={currentTextColor}
 				fontFamily="'SF Mono', 'Fira Code', 'Monaco', monospace"
 				fontSize={14}
-				fontWeight={node.indent === 0 ? 600 : 400}
-				x={x + iconSize + 8}
-				y={y + rowHeight / 2}
+				fontWeight={
+					node.indent === 0
+						? PROJECT_STRUCTURE_GRAPH_LAYOUT.rootNodeFontWeight
+						: PROJECT_STRUCTURE_GRAPH_LAYOUT.nestedNodeFontWeight
+				}
+				x={
+					nodeX +
+					iconSize +
+					PROJECT_STRUCTURE_GRAPH_LAYOUT.panelPaddingX
+				}
+				y={nodeY + rowHeight / 2}
 			>
 				{node.name}
 				{!node.isFile && '/'}
@@ -210,8 +230,8 @@ const TreeRow = ({
 					fill={currentDescColor}
 					fontFamily="'Inter', -apple-system, sans-serif"
 					fontSize={12}
-					x={340}
-					y={y + rowHeight / 2}
+					x={PROJECT_STRUCTURE_GRAPH_LAYOUT.descriptionColumnX}
+					y={nodeY + rowHeight / 2}
 				>
 					{node.description}
 				</text>
@@ -224,7 +244,9 @@ export const ProjectStructureGraph = ({
 	themeSprings
 }: ProjectStructureGraphProps) => {
 	const rowHeight = 36;
-	const svgHeight = treeData.length * rowHeight + 16;
+	const svgHeight =
+		treeData.length * rowHeight +
+		PROJECT_STRUCTURE_GRAPH_LAYOUT.svgBottomPadding;
 
 	return (
 		<animated.div style={containerStyle(themeSprings)}>
@@ -244,7 +266,6 @@ export const ProjectStructureGraph = ({
 						}
 						key={`${node.name}-${index}`}
 						node={node}
-						totalNodes={treeData.length}
 					/>
 				))}
 			</svg>

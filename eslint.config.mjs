@@ -4,21 +4,30 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 import pluginJs from '@eslint/js';
-import stylisticTs from '@stylistic/eslint-plugin-ts';
+import stylistic from '@stylistic/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import { defineConfig } from 'eslint/config';
 import absolutePlugin from 'eslint-plugin-absolute';
-import importPlugin from 'eslint-plugin-import';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import promisePlugin from 'eslint-plugin-promise';
-import reactPlugin from 'eslint-plugin-react';
 import reactCompilerPlugin from 'eslint-plugin-react-compiler';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import securityPlugin from 'eslint-plugin-security';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-export default [
+export default defineConfig([
 	{
+		ignores: [
+			'node_modules/**',
+			'dist/**',
+			'build/**',
+			'.absolutejs/**',
+			'.cache/**'
+		]
+	},
+	{
+		files: ['**/*.{ts,tsx}'],
 		languageOptions: {
 			globals: globals.browser,
 			parser: tsParser,
@@ -34,49 +43,52 @@ export default [
 	...tseslint.configs.recommended,
 
 	{
-		files: ['**/*.{ts,tsx}']
-	},
-
-	{
 		files: ['**/*.{ts,tsx}'],
-		plugins: { '@stylistic/ts': stylisticTs },
+		plugins: { '@stylistic': stylistic },
 		rules: {
-			'@stylistic/ts/padding-line-between-statements': [
+			'@stylistic/padding-line-between-statements': [
 				'error',
 				{ blankLine: 'always', next: 'return', prev: '*' }
+			],
+			'@typescript-eslint/consistent-type-assertions': [
+				'error',
+				{ assertionStyle: 'never' }
+			],
+			'@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+			'@typescript-eslint/no-non-null-assertion': 'error',
+			'@typescript-eslint/no-unnecessary-type-assertion': 'error',
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{ argsIgnorePattern: '^_', varsIgnorePattern: '^_' }
 			]
+		}
+	},
+	{
+		files: ['**/*.d.ts'],
+		rules: {
+			'@typescript-eslint/consistent-type-definitions': 'off'
 		}
 	},
 
 	{
 		files: ['**/*.{js,mjs,cjs,ts,tsx,jsx}'],
+		ignores: ['node_modules/**'],
 		plugins: {
 			absolute: absolutePlugin,
-			import: importPlugin,
 			promise: promisePlugin,
 			security: securityPlugin
 		},
 		rules: {
-			'@typescript-eslint/no-unnecessary-type-assertion': 'error',
 			'absolute/explicit-object-types': 'error',
 			'absolute/localize-react-props': 'error',
 			'absolute/max-depth-extended': ['error', 1],
 			'absolute/max-jsxnesting': ['error', 5],
 			'absolute/min-var-length': [
 				'error',
-				{ allowedVars: ['_', 'id', 'db', 'OK'], minLength: 3 }
+				{ allowedVars: ['_', 'id', 'db', 'OK', 'ws'], minLength: 3 }
 			],
-			'absolute/no-button-navigation': 'error',
 			'absolute/no-explicit-return-type': 'error',
-			'absolute/no-inline-prop-types': 'error',
-			'absolute/no-multi-style-objects': 'error',
-			'absolute/no-nested-jsx-return': 'error',
-			'absolute/no-or-none-component': 'error',
-			'absolute/no-transition-cssproperties': 'error',
-			'absolute/no-unnecessary-div': 'error',
-			'absolute/no-unnecessary-key': 'error',
 			'absolute/no-useless-function': 'error',
-			'absolute/seperate-style-files': 'error',
 			'absolute/sort-exports': [
 				'error',
 				{
@@ -103,18 +115,13 @@ export default [
 				'expression',
 				{ allowArrowFunctions: true }
 			],
-			'import/no-cycle': 'error',
-			'import/no-default-export': 'error',
-			'import/no-relative-packages': 'error',
-			'import/no-unused-modules': ['error', { missingExports: true }],
-			'import/order': ['error', { alphabetize: { order: 'asc' } }],
 			'no-await-in-loop': 'error',
 			'no-console': ['error', { allow: ['warn', 'error'] }],
 			'no-debugger': 'error',
 			'no-duplicate-case': 'error',
 			'no-duplicate-imports': 'error',
 			'no-else-return': 'error',
-			'no-empty-function': 'error',
+			'no-empty-function': ['error', { allow: ['methods'] }],
 			'no-empty-pattern': 'error',
 			'no-empty-static-block': 'error',
 			'no-fallthrough': 'error',
@@ -128,7 +135,7 @@ export default [
 				{
 					detectObjects: false,
 					enforceConst: true,
-					ignore: [0, -1, 1, 2]
+					ignore: [0, 1, 2]
 				}
 			],
 			'no-misleading-character-class': 'error',
@@ -136,6 +143,10 @@ export default [
 			'no-new-native-nonconstructor': 'error',
 			'no-new-wrappers': 'error',
 			'no-param-reassign': 'error',
+			'no-restricted-exports': [
+				'error',
+				{ restrictDefaultExports: { direct: true } }
+			],
 			'no-restricted-imports': [
 				'error',
 				{
@@ -152,6 +163,20 @@ export default [
 							name: 'bun'
 						}
 					]
+				}
+			],
+			'no-restricted-syntax': [
+				'error',
+				{
+					message:
+						'Do not use IIFEs. Extract to a named function instead.',
+					selector:
+						'CallExpression[callee.type="ArrowFunctionExpression"]'
+				},
+				{
+					message:
+						'Do not use IIFEs. Extract to a named function instead.',
+					selector: 'CallExpression[callee.type="FunctionExpression"]'
 				}
 			],
 			'no-return-await': 'error',
@@ -182,10 +207,12 @@ export default [
 		}
 	},
 	{
-		files: ['src/**/*.{ts,tsx}'],
+		// `eslint-plugin-react` is temporarily disabled here because it crashes under
+		// ESLint 10. Bring these rules back once upstream adds ESLint 10 support, or
+		// migrate the high-value checks into `eslint-plugin-absolute`.
+		files: ['src/**/*.{jsx,tsx}'],
 		plugins: {
 			'jsx-a11y': jsxA11yPlugin,
-			react: reactPlugin,
 			'react-compiler': reactCompilerPlugin,
 			'react-hooks': reactHooksPlugin
 		},
@@ -193,21 +220,7 @@ export default [
 			'jsx-a11y/prefer-tag-over-role': 'error',
 			'react-compiler/react-compiler': 'error',
 			'react-hooks/exhaustive-deps': 'warn',
-			'react-hooks/rules-of-hooks': 'error',
-			'react/checked-requires-onchange-or-readonly': 'error',
-			'react/destructuring-assignment': ['error', 'always'],
-			'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
-			'react/jsx-no-leaked-render': 'error',
-			'react/jsx-no-target-blank': 'error',
-			'react/jsx-no-useless-fragment': 'error',
-			'react/jsx-pascal-case': ['error', { allowAllCaps: true }],
-			'react/no-multi-comp': 'error',
-			'react/no-unknown-property': 'off',
-			'react/react-in-jsx-scope': 'off',
-			'react/self-closing-comp': 'error'
-		},
-		settings: {
-			react: { version: 'detect' }
+			'react-hooks/rules-of-hooks': 'error'
 		}
 	},
 	{
@@ -240,13 +253,8 @@ export default [
 	{
 		files: ['eslint.config.mjs'],
 		rules: {
-			'no-magic-numbers': 'off'
-		}
-	},
-	{
-		files: ['eslint.config.mjs'],
-		rules: {
-			'import/no-default-export': 'off'
+			'no-magic-numbers': 'off',
+			'no-restricted-exports': 'off'
 		}
 	},
 	{
@@ -255,4 +263,4 @@ export default [
 			'absolute/explicit-object-types': 'off'
 		}
 	}
-];
+]);

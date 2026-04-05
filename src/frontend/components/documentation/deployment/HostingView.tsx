@@ -32,6 +32,30 @@ const tocItems: TocItem[] = [
 	{ href: '#render', label: 'Render' }
 ];
 
+type HostingCardProps = {
+	themeSprings: DocsViewProps['themeSprings'];
+	title: string;
+	description: string;
+};
+
+const HostingCard = ({
+	themeSprings,
+	title,
+	description
+}: HostingCardProps) => (
+	<animated.div style={featureCardStyle(themeSprings)}>
+		<p
+			style={{
+				...paragraphSpacedStyle,
+				marginBottom: '0.5rem'
+			}}
+		>
+			<strong style={strongStyle}>{title}</strong>
+		</p>
+		<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{description}</p>
+	</animated.div>
+);
+
 export const HostingView = ({
 	currentPageId,
 	onNavigate,
@@ -57,7 +81,7 @@ export const HostingView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="hosting">
+					<h1 id="hosting" style={h1Style(isMobileOrTablet)}>
 						Hosting
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -74,51 +98,27 @@ export const HostingView = ({
 						marginBottom: '2rem'
 					}}
 				>
-					<animated.div style={featureCardStyle(themeSprings)}>
-						<p
-							style={{
-								...paragraphSpacedStyle,
-								marginBottom: '0.5rem'
-							}}
-						>
-							<strong style={strongStyle}>Fly.io</strong>
-						</p>
-						<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-							Global edge deployment with easy scaling
-						</p>
-					</animated.div>
-					<animated.div style={featureCardStyle(themeSprings)}>
-						<p
-							style={{
-								...paragraphSpacedStyle,
-								marginBottom: '0.5rem'
-							}}
-						>
-							<strong style={strongStyle}>Railway</strong>
-						</p>
-						<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-							Auto-detected Bun projects with zero config
-						</p>
-					</animated.div>
-					<animated.div style={featureCardStyle(themeSprings)}>
-						<p
-							style={{
-								...paragraphSpacedStyle,
-								marginBottom: '0.5rem'
-							}}
-						>
-							<strong style={strongStyle}>Render</strong>
-						</p>
-						<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-							Simple YAML-based deployment configuration
-						</p>
-					</animated.div>
+					<HostingCard
+						description="Global edge deployment with easy scaling"
+						themeSprings={themeSprings}
+						title="Fly.io"
+					/>
+					<HostingCard
+						description="Auto-detected Bun projects with zero config"
+						themeSprings={themeSprings}
+						title="Railway"
+					/>
+					<HostingCard
+						description="Simple YAML-based deployment configuration"
+						themeSprings={themeSprings}
+						title="Render"
+					/>
 				</div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="fly-io"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -147,8 +147,8 @@ export const HostingView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="railway"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -169,8 +169,8 @@ export const HostingView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="render"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -197,14 +197,14 @@ export const HostingView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

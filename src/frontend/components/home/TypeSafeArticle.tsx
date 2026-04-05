@@ -33,7 +33,7 @@ export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 				Type Safe All Around
 			</animated.h2>
 			<animated.p style={sectionSubtitleStyle(themeSprings)}>
-				From database to frontend — your data stays typed
+				From database to frontend: your data stays typed
 			</animated.p>
 			<animated.div style={showcaseCardStyle(themeSprings)}>
 				<CodeSlider
@@ -43,9 +43,9 @@ export const TypeSafeArticle = ({ themeSprings }: ThemeProps) => {
 					themeSprings={themeSprings}
 				/>
 				<PrismPlus
-					themeSprings={themeSprings}
 					codeString={codeString}
 					language={language}
+					themeSprings={themeSprings}
 				/>
 				<animated.p
 					style={{

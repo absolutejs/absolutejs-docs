@@ -18,10 +18,6 @@ import {
 	paragraphLargeStyle,
 	strongStyle,
 	paragraphSpacedStyle,
-	tableContainerStyle,
-	tableStyle,
-	tableHeaderStyle,
-	tableCellStyle,
 	githubButtonStyle
 } from '../../../styles/docsStyles';
 import {
@@ -45,6 +41,84 @@ const tocItems: TocItem[] = [
 	{ href: '#refreshing-revoking-tokens', label: 'Token Management' },
 	{ href: '#supported-providers', label: 'Supported Providers' }
 ];
+
+type CitraCardProps = {
+	themeSprings: DocsViewProps['themeSprings'];
+	title?: string;
+	description?: string;
+	providerName?: string;
+	logoUrl?: string;
+	needsInvert?: boolean;
+};
+
+const CitraCard = ({
+	themeSprings,
+	title,
+	description,
+	providerName,
+	logoUrl,
+	needsInvert
+}: CitraCardProps) => {
+	if (providerName && logoUrl) {
+		return (
+			<animated.div
+				style={{
+					...featureCardStyle(themeSprings),
+					alignItems: 'center',
+					display: 'flex',
+					gap: '0.75rem',
+					padding: '0.75rem 1rem'
+				}}
+			>
+				<animated.img
+					alt={`${providerName} logo`}
+					src={logoUrl}
+					style={{
+						borderRadius: '4px',
+						filter: needsInvert
+							? themeSprings.theme.to((t) =>
+									t.endsWith('dark')
+										? 'brightness(0) invert(1)'
+										: 'none'
+								)
+							: 'none',
+						flexShrink: 0,
+						height: '24px',
+						objectFit: 'contain',
+						width: '24px'
+					}}
+				/>
+				<span
+					style={{
+						fontSize: '0.9rem',
+						fontWeight: 500,
+						overflow: 'hidden',
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap'
+					}}
+				>
+					{providerName}
+				</span>
+			</animated.div>
+		);
+	}
+
+	return (
+		<animated.div style={featureCardStyle(themeSprings)}>
+			<p
+				style={{
+					...paragraphSpacedStyle,
+					marginBottom: '0.5rem'
+				}}
+			>
+				<strong style={strongStyle}>{title}</strong>
+			</p>
+			<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
+				{description}
+			</p>
+		</animated.div>
+	);
+};
 
 export const CitraView = ({
 	currentPageId,
@@ -74,7 +148,7 @@ export const CitraView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="citra">
+					<h1 id="citra" style={h1Style(isMobileOrTablet)}>
 						Citra
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -85,9 +159,9 @@ export const CitraView = ({
 					</p>
 					<animated.a
 						href="https://github.com/absolutejs/citra"
-						target="_blank"
 						rel="noopener noreferrer"
 						style={githubButtonStyle(themeSprings)}
+						target="_blank"
 					>
 						View on GitHub
 					</animated.a>
@@ -95,8 +169,8 @@ export const CitraView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="why-citra"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -111,36 +185,16 @@ export const CitraView = ({
 							marginTop: '1rem'
 						}}
 					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Interchangeability
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								All OAuth 2.0 providers follow the same flow.
-								Citra abstracts this into a unified interface.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>Type Safety</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								TypeScript generics and type guards catch
-								configuration mistakes at compile time.
-							</p>
-						</animated.div>
+						<CitraCard
+							description="All OAuth 2.0 providers follow the same flow. Citra abstracts this into a unified interface."
+							themeSprings={themeSprings}
+							title="Interchangeability"
+						/>
+						<CitraCard
+							description="TypeScript generics and type guards catch configuration mistakes at compile time."
+							themeSprings={themeSprings}
+							title="Type Safety"
+						/>
 					</div>
 					<p style={paragraphSpacedStyle}>
 						Inspired by Arctic, Citra reduces boilerplate and
@@ -151,8 +205,8 @@ export const CitraView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="installation"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -168,8 +222,8 @@ export const CitraView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="getting-started"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -191,8 +245,8 @@ export const CitraView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="building-auth-url"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -215,8 +269,8 @@ export const CitraView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="handling-callback"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -236,8 +290,8 @@ export const CitraView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="fetching-user-profile"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -256,8 +310,8 @@ export const CitraView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="refreshing-revoking-tokens"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -283,8 +337,8 @@ export const CitraView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="supported-providers"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -303,60 +357,30 @@ export const CitraView = ({
 							marginTop: '1rem'
 						}}
 					>
-						{providers.map((provider) => {
-							const providerKey = Object.keys(providerData).find(
-								(key) =>
-									providerData[
-										key as keyof typeof providerData
-									].name === provider.name
-							);
-							const needsInvert =
-								providerKey &&
-								DARK_LOGO_PROVIDERS.has(providerKey);
-
-							return (
-								<animated.div
-									key={provider.name}
-									style={{
-										...featureCardStyle(themeSprings),
-										alignItems: 'center',
-										display: 'flex',
-										gap: '0.75rem',
-										padding: '0.75rem 1rem'
-									}}
-								>
-									<animated.img
-										src={provider.logoUrl}
-										alt={`${provider.name} logo`}
-										style={{
-											borderRadius: '4px',
-											filter: needsInvert
-												? themeSprings.theme.to((t) =>
-														t.endsWith('dark')
-															? 'brightness(0) invert(1)'
-															: 'none'
-													)
-												: 'none',
-											flexShrink: 0,
-											height: '24px',
-											objectFit: 'contain',
-											width: '24px'
-										}}
-									/>
-									<span
-										style={{
-											fontSize: '0.9rem',
-											fontWeight: 500,
-											overflow: 'hidden',
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap'
-										}}
-									>
-										{provider.name}
-									</span>
-								</animated.div>
-							);
-						})}
+						{providers.map((provider) => (
+							<CitraCard
+								key={provider.name}
+								logoUrl={provider.logoUrl}
+								needsInvert={
+									Object.entries(providerData).find(
+										([, info]) =>
+											info.name === provider.name
+									)?.[0]
+										? DARK_LOGO_PROVIDERS.has(
+												Object.entries(
+													providerData
+												).find(
+													([, info]) =>
+														info.name ===
+														provider.name
+												)?.[0] ?? ''
+											)
+										: false
+								}
+								providerName={provider.name}
+								themeSprings={themeSprings}
+							/>
+						))}
 					</div>
 				</section>
 
@@ -369,14 +393,14 @@ export const CitraView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

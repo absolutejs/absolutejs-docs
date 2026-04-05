@@ -38,35 +38,31 @@ export const ErrorsCrashesSection = ({
 		const exitCode = String(row['exit_code'] ?? 'unknown');
 		const date = String(row['date'] ?? '');
 		const count = Number(row['count'] ?? 0);
-		if (!crashByExitCode.has(exitCode)) {
-			crashByExitCode.set(exitCode, []);
-		}
+		if (!crashByExitCode.has(exitCode)) crashByExitCode.set(exitCode, []);
 		crashByExitCode.get(exitCode)?.push({ date, value: count });
 	}
 
 	const crashSeries = [...crashByExitCode.entries()].map(
 		([label, seriesData]) => ({
-			label: `Exit ${label}`,
-			data: seriesData
+			data: seriesData,
+			label: `Exit ${label}`
 		})
 	);
 
 	return (
 		<div style={gapStyle}>
 			<TelemetryTable
-				queryKey="error-rates"
-				title="Error Rates by Event"
 				columns={['event', 'count']}
 				columnsWithVersion={['event', 'version', 'count']}
+				onVersionChange={onVersionChange}
+				queryKey="error-rates"
 				rows={data['error-rates'] ?? []}
 				themeSprings={themeSprings}
+				title="Error Rates by Event"
 				versions={versions}
-				onVersionChange={onVersionChange}
 			/>
 
 			<TelemetryTable
-				queryKey="build-errors"
-				title="Build Errors by Pass"
 				columns={['pass', 'incremental', 'message', 'count']}
 				columnsWithVersion={[
 					'pass',
@@ -75,15 +71,15 @@ export const ErrorsCrashesSection = ({
 					'version',
 					'count'
 				]}
+				onVersionChange={onVersionChange}
+				queryKey="build-errors"
 				rows={data['build-errors'] ?? []}
 				themeSprings={themeSprings}
+				title="Build Errors by Pass"
 				versions={versions}
-				onVersionChange={onVersionChange}
 			/>
 
 			<TelemetryTable
-				queryKey="build-empty"
-				title="Empty Builds"
 				columns={[
 					'frameworks',
 					'mode',
@@ -92,8 +88,10 @@ export const ErrorsCrashesSection = ({
 					'scanned_entries',
 					'users'
 				]}
+				queryKey="build-empty"
 				rows={data['build-empty'] ?? []}
 				themeSprings={themeSprings}
+				title="Empty Builds"
 			/>
 
 			{crashSeries.length > 0 && (
@@ -107,30 +105,30 @@ export const ErrorsCrashesSection = ({
 			)}
 
 			<TelemetryTable
-				queryKey="server-crashes"
-				title="Server Crash Frequency"
 				columns={['date', 'exit_code', 'count']}
 				columnsWithVersion={['date', 'exit_code', 'version', 'count']}
+				onVersionChange={onVersionChange}
+				queryKey="server-crashes"
 				rows={data['server-crashes'] ?? []}
 				themeSprings={themeSprings}
+				title="Server Crash Frequency"
 				versions={versions}
-				onVersionChange={onVersionChange}
 			/>
 
 			<TelemetryTable
-				queryKey="hmr-errors"
-				title="HMR Errors"
 				columns={['event', 'framework_or_operation', 'count']}
+				queryKey="hmr-errors"
 				rows={data['hmr-errors'] ?? []}
 				themeSprings={themeSprings}
+				title="HMR Errors"
 			/>
 
 			<TelemetryTable
-				queryKey="missing-manifest"
-				title="Missing Manifest Entries"
 				columns={['asset_name', 'asset_type', 'html_file', 'count']}
+				queryKey="missing-manifest"
 				rows={data['missing-manifest'] ?? []}
 				themeSprings={themeSprings}
+				title="Missing Manifest Entries"
 			/>
 		</div>
 	);

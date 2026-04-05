@@ -1,12 +1,33 @@
 export const bunInstall = `\
 curl -fsSL https://bun.sh/install | bash`;
-
 export const createProject = `\
 bun create absolutejs my-app`;
-
 export const createProjectWithOptions = `\
 bun create absolutejs my-app --frontend react --database drizzle`;
+export const manualInstall = `\
+bun add @absolutejs/absolute elysia`;
+export const minimalConfig = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
 
+export default defineConfig({
+  reactDirectory: './src/frontend'
+});`;
+export const minimalServer = `\
+// src/backend/server.ts
+import { prepare, asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
+import { Elysia } from 'elysia';
+import { Home } from '../frontend/pages/Home';
+
+const { absolutejs, manifest } = await prepare();
+
+new Elysia()
+  .use(absolutejs)
+  .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
+  .listen(3000);
+
+console.log('Server running at http://localhost:3000');`;
 export const projectStructure = `\
 my-app/
 ├── build/                 # Build output and compiled assets
@@ -27,30 +48,3 @@ my-app/
 ├── package.json
 ├── tsconfig.json
 └── .env`;
-
-export const manualInstall = `\
-bun add @absolutejs/absolute elysia`;
-
-export const minimalConfig = `\
-// absolute.config.ts
-import { defineConfig } from '@absolutejs/absolute';
-
-export default defineConfig({
-  reactDirectory: './src/frontend'
-});`;
-
-export const minimalServer = `\
-// src/backend/server.ts
-import { prepare, asset } from '@absolutejs/absolute';
-import { handleReactPageRequest } from '@absolutejs/absolute/react';
-import { Elysia } from 'elysia';
-import { Home } from '../frontend/pages/Home';
-
-const { absolutejs, manifest } = await prepare();
-
-new Elysia()
-  .use(absolutejs)
-  .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
-  .listen(3000);
-
-console.log('Server running at http://localhost:3000');`;

@@ -1,14 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
-import {
-	elysiaDerive,
-	elysiaGroups,
-	elysiaPlugins,
-	elysiaServer,
-	elysiaTypeSafety
-} from '../../../data/documentation/elysiaIntegrationDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
+import { elysiaServer } from '../../../data/documentation/elysiaIntegrationDocsCode';
 import {
 	h1Style,
 	listItemStyle,
@@ -16,11 +9,11 @@ import {
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
+import { ElysiaOverviewList } from './ElysiaOverviewList';
+import { ElysiaPageGuideList } from './ElysiaPageGuideList';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
@@ -30,11 +23,10 @@ import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
-	{ href: '#elysia-foundation', label: 'Elysia Foundation' },
-	{ href: '#type-safety', label: 'End-to-End Type Safety' },
-	{ href: '#plugins', label: 'Using Plugins' },
-	{ href: '#derive', label: 'Derive & Dependency Injection' },
-	{ href: '#groups', label: 'Route Groups' }
+	{ href: '#overview', label: 'Overview' },
+	{ href: '#elysia-foundation', label: 'Foundation' },
+	{ href: '#page-guide', label: 'Page Guide' },
+	{ href: '#baseline', label: 'Integration Baseline' }
 ];
 
 export const ElysiaIntegrationView = ({
@@ -45,8 +37,6 @@ export const ElysiaIntegrationView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -63,31 +53,49 @@ export const ElysiaIntegrationView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						style={h1Style(isMobileOrTablet)}
 						id="elysia-integration"
+						style={h1Style(isMobileOrTablet)}
 					>
 						Elysia Integration
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Your AbsoluteJS server IS an Elysia server. Everything
-						you know about Elysia works here—plugins, middleware,
-						type derivation, and route groups.
+						you know about Elysia works here.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
+						id="overview"
 						level="h2"
-						id="elysia-foundation"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Built on Elysia
+						Overview
 					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
-						AbsoluteJS doesn&apos;t wrap or abstract Elysia—it
+						AbsoluteJS runs on top of Elysia without hiding Elysia.
+						Your app architecture is still standard Elysia: compose
+						plugins, define routes, validate data, and use lifecycle
+						hooks for cross-cutting behavior.
+					</p>
+					<ElysiaOverviewList />
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="elysia-foundation"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Foundation
+					</AnchorHeading>
+					<p style={paragraphLargeStyle}>
+						AbsoluteJS doesn&apos;t wrap or abstract Elysia: it
 						enhances it. You write standard Elysia code with
-						AbsoluteJS page handlers mixed in:
+						AbsoluteJS-specific rendering and build utilities mixed
+						in:
 					</p>
 					<PrismPlus
 						codeString={elysiaServer}
@@ -99,147 +107,52 @@ export const ElysiaIntegrationView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
+						id="page-guide"
 						level="h2"
-						id="type-safety"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						End-to-End Type Safety
+						Page Guide
 					</AnchorHeading>
-					<p style={paragraphLargeStyle}>
-						Elysia&apos;s revolutionary type system integrates
-						seamlessly with AbsoluteJS. Schema validation, error
-						handling, and data flow are all fully typed.
-					</p>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Schema Validation
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Request bodies, params, and queries are
-								validated AND typed automatically.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Typed Errors
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Error responses have proper types—no more
-								unknown error shapes.
-							</p>
-						</animated.div>
-					</div>
-					<PrismPlus
-						codeString={elysiaTypeSafety}
-						language="typescript"
-						showLineNumbers={true}
+					<ElysiaPageGuideList />
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="baseline"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
-					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
+					>
+						Integration Baseline
+					</AnchorHeading>
+					<ul style={listStyle}>
 						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Database → Handler
-							</strong>
-							: Query results maintain their types
+							Start from Elysia defaults, then add only required
+							plugins.
 						</li>
 						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Handler → Response
-							</strong>
-							: Return types are inferred and validated
+							Keep route-level validation next to handlers.
 						</li>
 						<li style={listItemStyle}>
-							<strong style={strongStyle}>Error → Client</strong>:
-							Error shapes are typed, not unknown
+							Use plugin/group scope boundaries to avoid
+							cross-cutting side effects.
+						</li>
+						<li style={listItemStyle}>
+							Keep recurring jobs in the cron page and request
+							lifecycle concerns in middleware.
 						</li>
 					</ul>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="plugins"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Using Plugins
-					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Use any Elysia plugin alongside AbsoluteJS:
+						Reference:{' '}
+						<a
+							href="https://elysiajs.com"
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							Elysia docs
+						</a>
 					</p>
-					<PrismPlus
-						codeString={elysiaPlugins}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="derive"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Derive &amp; Dependency Injection
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Use Elysia&apos;s derive for dependency injection.
-						Derived values are available in all subsequent handlers
-						with full type inference:
-					</p>
-					<PrismPlus
-						codeString={elysiaDerive}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="groups"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Route Groups
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Organize routes with groups. Each group can have its own
-						middleware:
-					</p>
-					<PrismPlus
-						codeString={elysiaGroups}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
 				</section>
 
 				<DocsNavigation
@@ -251,14 +164,14 @@ export const ElysiaIntegrationView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

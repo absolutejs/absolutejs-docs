@@ -23,13 +23,13 @@ export const TableOfContents = ({
 	items,
 	title = 'On This Page'
 }: TableOfContentsProps) => (
-	<animated.nav style={tocNavStyle(themeSprings)}>
+	<animated.nav style={tocNavStyle}>
 		<animated.h3 style={tocTitleStyle(themeSprings)}>{title}</animated.h3>
 		<ul style={tocListStyle}>
 			{items.map((item) => (
 				<TocListItem
-					key={item.href}
 					item={item}
+					key={item.href}
 					themeSprings={themeSprings}
 				/>
 			))}

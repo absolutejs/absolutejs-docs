@@ -2,22 +2,19 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { imageAngularUsage } from '../../../data/documentation/imageOptDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { ImageInputsList } from './ImageInputsList';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -36,8 +33,6 @@ export const AngularComponentsView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -54,8 +49,8 @@ export const AngularComponentsView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						style={h1Style(isMobileOrTablet)}
 						id="angular-components"
+						style={h1Style(isMobileOrTablet)}
 					>
 						Angular Components
 					</h1>
@@ -68,8 +63,8 @@ export const AngularComponentsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="image-component"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -93,8 +88,8 @@ export const AngularComponentsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="image-inputs"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -104,64 +99,13 @@ export const AngularComponentsView = ({
 						The Angular Image component uses <code>input()</code>{' '}
 						signals for each prop. All available inputs:
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>src</strong> — path to
-							the source image (required)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>alt</strong> —
-							alternative text for accessibility (required)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>width</strong> —
-							intrinsic width in pixels. Required unless{' '}
-							<code>fill</code> is set.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>height</strong> —
-							intrinsic height in pixels. Required unless{' '}
-							<code>fill</code> is set.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>fill</strong> — when
-							true, the image fills its parent container
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>quality</strong> —
-							output quality from 1 to 100
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>sizes</strong> —
-							responsive sizes attribute
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>priority</strong> —
-							preload the image and disable lazy loading
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>loading</strong> —{' '}
-							<code>"lazy"</code> or <code>"eager"</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>unoptimized</strong> —
-							skip optimization and serve the original
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>style</strong> — inline
-							styles
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>className</strong> — CSS
-							class name
-						</li>
-					</ul>
+					<ImageInputsList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="template-usage"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -196,14 +140,14 @@ export const AngularComponentsView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

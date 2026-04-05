@@ -1,5 +1,10 @@
-import { animated, Interpolation, to, useSpring } from '@react-spring/web';
-import { useEffect, useRef, useState } from 'react';
+import {
+	DROPDOWN_CLOSE_DELAY_MS,
+	OVERLAY_Z_INDEX,
+	THEME_BUTTON_LAYOUT
+} from '../../../constants';
+import { animated, to, useSpring } from '@react-spring/web';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SetTheme, ThemeSprings } from '../../../types/springTypes';
 import { AnimatedMoon, AnimatedSun } from '../utils/AnimatedComponents';
 
@@ -10,28 +15,30 @@ type ThemeButtonProps = {
 
 type ThemeOptionProps = {
 	option: 'system' | 'light' | 'dark';
-	selected: Interpolation<string, string>;
 	themeSprings: ThemeSprings;
 	onClick: () => void;
 };
 
-const ThemeOption = ({
-	option,
-	selected,
-	themeSprings,
-	onClick
-}: ThemeOptionProps) => {
+const THEME_MENU_CLOSED_Y_OFFSET = -8;
+
+const ThemeOption = ({ option, themeSprings, onClick }: ThemeOptionProps) => {
 	const [hoverSpring, hoverApi] = useSpring(() => ({
 		config: { friction: 20, tension: 300 },
 		opacity: 0
 	}));
 
+	const selected = themeSprings.theme.to((theme) => {
+		const currentTheme = theme.startsWith('system') ? 'system' : theme;
+
+		return currentTheme;
+	});
+
 	const background = to(
 		[selected, themeSprings.themeTertiary, hoverSpring.opacity],
-		(sel, bg, hoverOpacity) => {
-			if (sel === option) return bg;
+		(selectedOption, backgroundColor, hoverOpacity) => {
+			if (selectedOption === option) return backgroundColor;
 
-			return `rgba(128, 128, 128, ${Number(hoverOpacity) * 0.15})`;
+			return `rgba(128, 128, 128, ${Number(hoverOpacity) * THEME_BUTTON_LAYOUT.hoverOverlayOpacity})`;
 		}
 	);
 
@@ -72,7 +79,7 @@ export const ThemeButton = ({ themeSprings, setTheme }: ThemeButtonProps) => {
 		config: { friction: 24, tension: 300 },
 		opacity: 0,
 		scale: 0.9,
-		y: -8
+		y: THEME_MENU_CLOSED_Y_OFFSET
 	}));
 
 	const openDropdown = () => {
@@ -80,15 +87,15 @@ export const ThemeButton = ({ themeSprings, setTheme }: ThemeButtonProps) => {
 		void dropdownApi.start({ opacity: 1, scale: 1, y: 0 });
 	};
 
-	const closeDropdown = () => {
+	const closeDropdown = useCallback(() => {
 		void dropdownApi.start({
 			config: { friction: 26, tension: 350 },
 			opacity: 0,
 			scale: 0.9,
-			y: -8
+			y: THEME_MENU_CLOSED_Y_OFFSET
 		});
-		setTimeout(() => setIsOpen(false), 150);
-	};
+		setTimeout(() => setIsOpen(false), DROPDOWN_CLOSE_DELAY_MS);
+	}, [dropdownApi]);
 
 	const toggleDropdown = () => {
 		if (isOpen) {
@@ -111,18 +118,12 @@ export const ThemeButton = ({ themeSprings, setTheme }: ThemeButtonProps) => {
 		document.addEventListener('mousedown', onClickOutside);
 
 		return () => document.removeEventListener('mousedown', onClickOutside);
-	}, [isOpen]);
+	}, [isOpen, closeDropdown]);
 
 	const selectTheme = (option: 'system' | 'light' | 'dark') => {
 		setTheme(option);
 		closeDropdown();
 	};
-
-	const selected = themeSprings.theme.to((t) => {
-		const sel = t.startsWith('system') ? 'system' : t;
-
-		return sel;
-	});
 
 	return (
 		<div
@@ -134,9 +135,9 @@ export const ThemeButton = ({ themeSprings, setTheme }: ThemeButtonProps) => {
 			}}
 		>
 			<animated.button
-				ref={buttonRef}
-				onClick={toggleDropdown}
 				aria-label="Toggle theme"
+				onClick={toggleDropdown}
+				ref={buttonRef}
 				style={{
 					alignItems: 'center',
 					backgroundColor: themeSprings.themeTertiary,
@@ -195,19 +196,18 @@ export const ThemeButton = ({ themeSprings, setTheme }: ThemeButtonProps) => {
 						scale: dropdownSpring.scale,
 						top: 'calc(100% + 8px)',
 						transform: dropdownSpring.y.to(
-							(y) => `translateY(${y}px)`
+							(offsetY) => `translateY(${offsetY}px)`
 						),
 						transformOrigin: 'top right',
-						zIndex: 1000
+						zIndex: OVERLAY_Z_INDEX
 					}}
 				>
 					{(['system', 'light', 'dark'] as const).map((opt) => (
 						<ThemeOption
 							key={opt}
-							option={opt}
-							selected={selected}
-							themeSprings={themeSprings}
 							onClick={() => selectTheme(opt)}
+							option={opt}
+							themeSprings={themeSprings}
 						/>
 					))}
 				</animated.ul>

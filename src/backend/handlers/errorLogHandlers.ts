@@ -17,29 +17,6 @@ type HandleErrorLoggingProps = {
 	authProvider: string;
 };
 
-export const logError = async ({ db, message, stack }: LogErrorProps) => {
-	const [errorLog] = await db
-		.insert(schema.errorLogs)
-		.values({
-			message,
-			stack
-		})
-		.returning();
-
-	return errorLog;
-};
-
-export const logUnknownError = async ({ db, raw }: LogUnknownErrorProps) => {
-	const [unknownErrorLog] = await db
-		.insert(schema.unknownErrorLogs)
-		.values({
-			raw
-		})
-		.returning();
-
-	return unknownErrorLog;
-};
-
 export const handleErrorLogging = async ({
 	error,
 	db,
@@ -81,4 +58,25 @@ export const handleErrorLogging = async ({
 				);
 			});
 	}
+};
+export const logError = async ({ db, message, stack }: LogErrorProps) => {
+	const [errorLog] = await db
+		.insert(schema.errorLogs)
+		.values({
+			message,
+			stack
+		})
+		.returning();
+
+	return errorLog;
+};
+export const logUnknownError = async ({ db, raw }: LogUnknownErrorProps) => {
+	const [unknownErrorLog] = await db
+		.insert(schema.unknownErrorLogs)
+		.values({
+			raw
+		})
+		.returning();
+
+	return unknownErrorLog;
 };

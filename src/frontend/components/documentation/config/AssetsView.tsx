@@ -5,7 +5,6 @@ import {
 	assetsDirectory,
 	assetsStatic
 } from '../../../data/documentation/configDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -31,6 +30,23 @@ const tocItems: TocItem[] = [
 	{ href: '#asset-types', label: 'Asset Types' }
 ];
 
+const AssetTypesList = () => (
+	<ul style={listStyle}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Images</strong>: PNG, JPG, SVG, WebP
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Fonts</strong>: WOFF, WOFF2, TTF, OTF
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Documents</strong>: PDF, TXT, JSON
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Media</strong>: MP4, WebM, MP3, WAV
+		</li>
+	</ul>
+);
+
 export const AssetsView = ({
 	currentPageId,
 	onNavigate,
@@ -39,8 +55,6 @@ export const AssetsView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -56,7 +70,7 @@ export const AssetsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="assets">
+					<h1 id="assets" style={h1Style(isMobileOrTablet)}>
 						Assets
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -66,8 +80,8 @@ export const AssetsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="assets-directory"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -87,8 +101,8 @@ export const AssetsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="static-plugin"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -108,31 +122,14 @@ export const AssetsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="asset-types"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Asset Types
 					</AnchorHeading>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Images</strong>: PNG,
-							JPG, SVG, WebP
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Fonts</strong>: WOFF,
-							WOFF2, TTF, OTF
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Documents</strong>: PDF,
-							TXT, JSON
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Media</strong>: MP4,
-							WebM, MP3, WAV
-						</li>
-					</ul>
+					<AssetTypesList />
 				</section>
 
 				<DocsNavigation
@@ -144,14 +141,14 @@ export const AssetsView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

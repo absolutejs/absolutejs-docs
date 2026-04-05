@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web';
+import { ReactNode } from 'react';
 import { FaAngular, FaHtml5, FaReact, FaVuejs } from 'react-icons/fa';
 import { SiHtmx, SiSvelte } from 'react-icons/si';
 import { ThemeProps } from '../../../types/springTypes';
@@ -10,7 +11,7 @@ import {
 
 type Framework = {
 	name: string;
-	icon: React.ReactNode;
+	icon: ReactNode;
 	color: string;
 	href: string;
 	status?: string;
@@ -18,40 +19,40 @@ type Framework = {
 
 const frameworks: Framework[] = [
 	{
-		name: 'React',
-		icon: <FaReact />,
 		color: '#61DAFB',
-		href: '/documentation/react'
+		href: '/documentation/react',
+		icon: <FaReact />,
+		name: 'React'
 	},
 	{
-		name: 'Vue',
-		icon: <FaVuejs />,
 		color: '#4FC08D',
-		href: '/documentation/vue'
+		href: '/documentation/vue',
+		icon: <FaVuejs />,
+		name: 'Vue'
 	},
 	{
-		name: 'Svelte',
-		icon: <SiSvelte />,
 		color: '#FF3E00',
-		href: '/documentation/svelte'
+		href: '/documentation/svelte',
+		icon: <SiSvelte />,
+		name: 'Svelte'
 	},
 	{
-		name: 'HTML',
-		icon: <FaHtml5 />,
 		color: '#E34F26',
-		href: '/documentation/html'
+		href: '/documentation/html',
+		icon: <FaHtml5 />,
+		name: 'HTML'
 	},
 	{
-		name: 'HTMX',
-		icon: <SiHtmx />,
 		color: '#3D72D7',
-		href: '/documentation/htmx'
+		href: '/documentation/htmx',
+		icon: <SiHtmx />,
+		name: 'HTMX'
 	},
 	{
-		name: 'Angular',
-		icon: <FaAngular />,
 		color: '#DD0031',
-		href: '/documentation/angular'
+		href: '/documentation/angular',
+		icon: <FaAngular />,
+		name: 'Angular'
 	}
 ];
 
@@ -63,7 +64,7 @@ export const FrameworksShowcase = ({ themeSprings }: ThemeProps) => (
 			One Server, Any Framework
 		</animated.h2>
 		<animated.p style={sectionSubtitleStyle(themeSprings)}>
-			Use React, Angular, Vue, Svelte, HTML, or HTMX — mix and match per
+			Use React, Angular, Vue, Svelte, HTML, or HTMX: mix and match per
 			route
 			<br />
 			Zero build configuration required
@@ -81,8 +82,8 @@ export const FrameworksShowcase = ({ themeSprings }: ThemeProps) => (
 		>
 			{frameworks.map((framework, index) => (
 				<animated.a
-					key={index}
 					href={framework.href}
+					key={index}
 					style={{
 						alignItems: 'center',
 						backdropFilter: 'blur(12px)',
@@ -152,7 +153,7 @@ export const FrameworksShowcase = ({ themeSprings }: ThemeProps) => (
 			}}
 		>
 			Build your landing page with React, your dashboard with Vue, and
-			your admin panel with HTMX — all served from the same Elysia server.
+			your admin panel with HTMX: all served from the same Elysia server.
 		</animated.p>
 	</section>
 );

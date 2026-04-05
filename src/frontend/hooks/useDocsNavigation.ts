@@ -6,7 +6,7 @@ export const useDocsNavigation = (initialView: DocsView) => {
 	const [view, setView] = useState(initialView);
 
 	const navigateToView = (newView: DocsView) => {
-		const { pathname, search, hash } = window.location;
+		const { pathname, search } = window.location;
 		const trimmed = pathname.replace(/\/+$/, '');
 		const parts = trimmed.split('/').filter(Boolean);
 

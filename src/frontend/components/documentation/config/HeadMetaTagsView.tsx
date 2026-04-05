@@ -8,7 +8,6 @@ import {
 	headHtmx,
 	headHtml
 } from '../../../data/documentation/configDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	listItemStyle,
@@ -37,6 +36,27 @@ const tocItems: TocItem[] = [
 	{ href: '#seo', label: 'SEO Considerations' }
 ];
 
+const SeoChecklist = () => (
+	<ul style={listStyle}>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Title tags</strong>: Unique, descriptive
+			titles for each page
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Meta descriptions</strong>: Summarize
+			page content for search results
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Open Graph tags</strong>: Control social
+			media previews
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>Canonical URLs</strong>: Prevent
+			duplicate content issues
+		</li>
+	</ul>
+);
+
 export const HeadMetaTagsView = ({
 	currentPageId,
 	onNavigate,
@@ -45,8 +65,6 @@ export const HeadMetaTagsView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -62,7 +80,7 @@ export const HeadMetaTagsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="head-meta-tags">
+					<h1 id="head-meta-tags" style={h1Style(isMobileOrTablet)}>
 						Head &amp; Meta Tags
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -73,8 +91,8 @@ export const HeadMetaTagsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="react-head"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -94,8 +112,8 @@ export const HeadMetaTagsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="vue-head"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -114,8 +132,8 @@ export const HeadMetaTagsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="svelte-head"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -135,8 +153,8 @@ export const HeadMetaTagsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="htmx-head"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -156,8 +174,8 @@ export const HeadMetaTagsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="html-head"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -177,8 +195,8 @@ export const HeadMetaTagsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="seo"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -186,29 +204,10 @@ export const HeadMetaTagsView = ({
 					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						Since AbsoluteJS uses server-side rendering, all meta
-						tags are present in the initial HTML response—perfect
+						tags are present in the initial HTML response: perfect
 						for SEO.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Title tags</strong>:
-							Unique, descriptive titles for each page
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Meta descriptions
-							</strong>
-							: Summarize page content for search results
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Open Graph tags</strong>
-							: Control social media previews
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Canonical URLs</strong>:
-							Prevent duplicate content issues
-						</li>
-					</ul>
+					<SeoChecklist />
 				</section>
 
 				<DocsNavigation
@@ -220,14 +219,14 @@ export const HeadMetaTagsView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

@@ -1,44 +1,3 @@
-export const productionBuild = `\
-# Build for production using the CLI
-absolute start src/backend/server.ts
-
-# This runs the build from absolute.config.ts which:
-# 1. Bundles all frontend code
-# 2. Generates hashed asset filenames
-# 3. Creates the manifest for asset lookup
-# 4. Starts the production server`;
-
-export const productionStart = `\
-# Or build and start separately
-bun run build
-bun run src/backend/server.ts
-
-# Or with PM2 for process management
-pm2 start bun --name "my-app" -- run src/backend/server.ts`;
-
-export const dockerFile = `\
-FROM oven/bun:1.2
-
-WORKDIR /app
-
-# Copy package files
-COPY package.json bun.lockb ./
-
-# Install dependencies
-RUN bun install --frozen-lockfile
-
-# Copy source code
-COPY . .
-
-# Build the application
-RUN bun run build
-
-# Expose port
-EXPOSE 3000
-
-# Start the server with --host for Docker networking
-CMD ["bun", "run", "src/backend/server.ts", "--host"]`;
-
 export const dockerCompose = `\
 version: '3.8'
 
@@ -64,7 +23,28 @@ services:
 
 volumes:
   postgres_data:`;
+export const dockerFile = `\
+FROM oven/bun:1.2
 
+WORKDIR /app
+
+# Copy package files
+COPY package.json bun.lockb ./
+
+# Install dependencies
+RUN bun install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN bun run build
+
+# Expose port
+EXPOSE 3000
+
+# Start the server with --host for Docker networking
+CMD ["bun", "run", "src/backend/server.ts", "--host"]`;
 export const flyConfig = `\
 # fly.toml
 app = "my-absolutejs-app"
@@ -81,7 +61,6 @@ primary_region = "iad"
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true`;
-
 export const flyDeploy = `\
 # Install flyctl
 curl -L https://fly.io/install.sh | sh
@@ -95,14 +74,29 @@ fly deploy
 
 # Set secrets
 fly secrets set DATABASE_URL="postgresql://..."`;
+export const productionBuild = `\
+# Build for production using the CLI
+absolute start src/backend/server.ts
 
+# This runs the build from absolute.config.ts which:
+# 1. Bundles all frontend code
+# 2. Generates hashed asset filenames
+# 3. Creates the manifest for asset lookup
+# 4. Starts the production server`;
+export const productionStart = `\
+# Or build and start separately
+bun run build
+bun run src/backend/server.ts
+
+# Or with PM2 for process management
+pm2 start bun --name "my-app" -- run src/backend/server.ts`;
 export const railwayDeploy = `\
 # Railway auto-detects Bun projects
 # Just connect your GitHub repo and Railway handles the rest
 
 # railway.json (optional)
 {
-  "\$schema": "https://railway.app/railway.schema.json",
+  "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS"
   },
@@ -111,7 +105,6 @@ export const railwayDeploy = `\
     "healthcheckPath": "/health"
   }
 }`;
-
 export const renderDeploy = `\
 # render.yaml
 services:

@@ -1,1 +1,1 @@
-export const loadingPlaceholder = `// Loading states — coming soon`;
+export const loadingPlaceholder = `// Loading states : coming soon`;

@@ -7,19 +7,14 @@ import {
 	compilePackageJson,
 	compileRun
 } from '../../../data/documentation/staticDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
@@ -27,6 +22,8 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { CompileCliOptions } from './CompileCliOptions';
+import { CompileEmbeddedGrid } from './CompileEmbeddedGrid';
 
 const tocItems: TocItem[] = [
 	{ href: '#compiling', label: 'Compiling Your App' },
@@ -44,8 +41,6 @@ export const CompileView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -61,20 +56,20 @@ export const CompileView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="compile">
+					<h1 id="compile" style={h1Style(isMobileOrTablet)}>
 						Compile
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Compile your entire app into a single standalone
-						executable — no runtime, no node_modules, no external
+						executable: no runtime, no node_modules, no external
 						files needed.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="compiling"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -102,8 +97,8 @@ export const CompileView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="running"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -111,7 +106,7 @@ export const CompileView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The compiled binary is fully self-contained. Copy it to
-						any machine and run it — no Bun, no Node.js, no
+						any machine and run it: no Bun, no Node.js, no
 						dependencies:
 					</p>
 					<PrismPlus
@@ -124,8 +119,8 @@ export const CompileView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="whats-embedded"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -135,139 +130,25 @@ export const CompileView = ({
 						The compiled binary includes everything your app needs
 						to run:
 					</p>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1.5rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Pre-rendered Pages
-								</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								All pages are pre-rendered at compile time and
-								embedded as static HTML that hydrates on the
-								client.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Client Bundles
-								</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								JavaScript bundles for React, Svelte, Vue,
-								Angular, and HTML — all framework client code.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>Web Workers</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								Worker scripts are embedded and served from
-								Bun's virtual filesystem. Workers load and
-								execute normally.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Static Assets
-								</strong>
-							</p>
-							<p
-								style={{
-									fontSize: '0.95rem',
-									lineHeight: 1.6
-								}}
-							>
-								CSS, images, SVGs, fonts, favicons — every asset
-								is embedded with correct MIME types and cache
-								headers.
-							</p>
-						</animated.div>
-					</div>
+					<CompileEmbeddedGrid themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="cli-options"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						CLI Options
 					</AnchorHeading>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>[entry]</strong> —
-							Server entry file (defaults to{' '}
-							<code>src/backend/server.ts</code>)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--outdir</strong> —
-							Build output directory (defaults to{' '}
-							<code>dist</code>)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--outfile</strong> —
-							Compiled binary path (defaults to{' '}
-							<code>compiled-server</code>)
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>--config</strong> — Path
-							to <code>absolute.config.ts</code>
-						</li>
-					</ul>
+					<CompileCliOptions />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="package-scripts"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -294,14 +175,14 @@ export const CompileView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

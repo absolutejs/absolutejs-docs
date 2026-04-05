@@ -1,3 +1,18 @@
+export const svelteBuild = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  svelteDirectory: 'src/svelte/pages'
+  // Svelte components are compiled during build
+});`;
+export const svelteCompilation = `\
+// Your raw Svelte file:
+src/svelte/pages/Dashboard.svelte
+
+// Gets compiled into two files:
+build/DashboardPage.js    // Compiled page component for SSR
+build/DashboardIndex.js   // Compiled index file for client hydration`;
 export const svelteComponent = `\
 <!-- src/svelte/pages/Dashboard.svelte -->
 <script lang="ts">
@@ -36,15 +51,6 @@ export const svelteComponent = `\
     gap: 1rem;
   }
 </style>`;
-
-export const svelteCompilation = `\
-// Your raw Svelte file:
-src/svelte/pages/Dashboard.svelte
-
-// Gets compiled into two files:
-build/DashboardPage.js    // Compiled page component for SSR
-build/DashboardIndex.js   // Compiled index file for client hydration`;
-
 export const svelteHandler = `\
 // backend/server.ts
 import { asset } from '@absolutejs/absolute';
@@ -62,28 +68,6 @@ new Elysia()
       { user, stats }
     );
   })`;
-
-export const svelteTypeSafetyTypes = `\
-// db/schema.ts
-import { pgTable, text, integer } from 'drizzle-orm/pg-core';
-
-export const users = pgTable('users', {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-  avatar: text('avatar')
-});
-
-export const stats = pgTable('stats', {
-  id: text('id').primaryKey(),
-  userId: text('user_id').notNull().references(() => users.id),
-  views: integer('views').notNull().default(0),
-  revenue: integer('revenue').notNull().default(0)
-});
-
-// types/databaseTypes.ts
-export type User = typeof users.$inferSelect;
-export type Stats = typeof stats.$inferSelect;`;
-
 export const svelteTypeSafetyServer = `\
 // backend/server.ts
 import { User, Stats } from '../types/databaseTypes';
@@ -105,12 +89,23 @@ new Elysia()
       { user, stats }
     );
   })`;
+export const svelteTypeSafetyTypes = `\
+// db/schema.ts
+import { pgTable, text, integer } from 'drizzle-orm/pg-core';
 
-export const svelteBuild = `\
-// absolute.config.ts
-import { defineConfig } from '@absolutejs/absolute';
+export const users = pgTable('users', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  avatar: text('avatar')
+});
 
-export default defineConfig({
-  svelteDirectory: 'src/svelte/pages'
-  // Svelte components are compiled during build
-});`;
+export const stats = pgTable('stats', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => users.id),
+  views: integer('views').notNull().default(0),
+  revenue: integer('revenue').notNull().default(0)
+});
+
+// types/databaseTypes.ts
+export type User = typeof users.$inferSelect;
+export type Stats = typeof stats.$inferSelect;`;

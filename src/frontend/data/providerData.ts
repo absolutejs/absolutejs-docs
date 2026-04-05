@@ -10,6 +10,8 @@ export type ProviderInfo = {
 
 type ProviderData = Record<Lowercase<ProviderOption>, ProviderInfo>;
 
+export type ProviderKey = keyof ProviderData;
+
 export const providerData: ProviderData = {
 	'42': {
 		createNewCredentialsUrl:
@@ -511,3 +513,6 @@ export const providerData: ProviderData = {
 		primaryColor: '#0B5CFF'
 	}
 };
+
+export const isProviderKey = (value: string): value is ProviderKey =>
+	value in providerData;

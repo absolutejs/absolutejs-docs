@@ -40,18 +40,18 @@ export const Sidebar = ({
 				if (isMenuDropdown(element)) {
 					return (
 						<SidebarDropdown
-							view={view}
-							linksSprings={linksSprings}
-							linksApi={linksApi}
-							startIndex={startIndexForDropdown(index)}
-							navigateToView={navigateToView}
-							key={element.label}
-							label={element.label}
 							buttons={element.buttons}
 							icon={element.icon}
-							themeSprings={themeSprings}
 							isOpen={openSections.has(element.label)}
+							key={element.label}
+							label={element.label}
+							linksApi={linksApi}
+							linksSprings={linksSprings}
+							navigateToView={navigateToView}
 							onToggle={() => onToggleSection(element.label)}
+							startIndex={startIndexForDropdown(index)}
+							themeSprings={themeSprings}
+							view={view}
 						/>
 					);
 				}
@@ -65,15 +65,15 @@ export const Sidebar = ({
 
 				return (
 					<SidebarLink
-						view={view}
-						index={-1}
 						icon={element.icon}
-						linksApi={linksApi}
 						id={element.id}
+						index={-1}
 						key={element.label}
-						navigateToView={navigateToView}
 						label={element.label}
+						linksApi={linksApi}
+						navigateToView={navigateToView}
 						themeSprings={themeSprings}
+						view={view}
 					/>
 				);
 			})}

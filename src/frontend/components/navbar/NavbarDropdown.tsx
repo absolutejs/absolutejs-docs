@@ -87,9 +87,9 @@ export const NavbarDropdown = ({
 
 	return (
 		<div
-			style={dropdownStyle}
 			onMouseEnter={openDropdown}
 			onMouseLeave={closeDropdown}
+			style={dropdownStyle}
 		>
 			<animated.a
 				href={href}
@@ -120,9 +120,9 @@ export const NavbarDropdown = ({
 			>
 				{links.map((link, index) => (
 					<DropdownItem
-						key={index}
 						href={link.href}
 						icon={link.icon}
+						key={index}
 						label={link.label}
 						themeSprings={themeSprings}
 					/>

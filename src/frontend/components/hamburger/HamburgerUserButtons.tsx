@@ -47,6 +47,7 @@ export const HamburgerUserButtons = ({
 			>
 				<animated.a href="/profile">
 					<AnimatedProfilePicture
+						height="4rem"
 						themeSprings={themeSprings}
 						userImage={
 							typeof user?.metadata?.profile_picture === 'string'
@@ -54,7 +55,6 @@ export const HamburgerUserButtons = ({
 								: undefined
 						}
 						width="4rem"
-						height="4rem"
 					/>
 				</animated.a>
 				<animated.span

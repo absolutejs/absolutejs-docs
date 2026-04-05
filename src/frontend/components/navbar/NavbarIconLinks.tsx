@@ -20,10 +20,9 @@ export const NavbarIconLinks = ({ themeSprings }: NavbarIconLinksProps) => (
 		}}
 	>
 		<animated.a
-			href="https://github.com/absolutejs/absolutejs"
-			target="_blank"
-			rel="noopener noreferrer"
 			aria-label="GitHub"
+			href="https://github.com/absolutejs/absolutejs"
+			rel="noopener noreferrer"
 			style={{
 				alignItems: 'center',
 				borderRadius: '7px',
@@ -33,14 +32,14 @@ export const NavbarIconLinks = ({ themeSprings }: NavbarIconLinksProps) => (
 				justifyContent: 'center',
 				width: '2rem'
 			}}
+			target="_blank"
 		>
 			<FaGithub size={18} />
 		</animated.a>
 		<animated.a
-			href="https://discord.gg/UBMw87Kj5r"
-			target="_blank"
-			rel="noopener noreferrer"
 			aria-label="Discord"
+			href="https://discord.gg/UBMw87Kj5r"
+			rel="noopener noreferrer"
 			style={{
 				alignItems: 'center',
 				borderRadius: '7px',
@@ -50,6 +49,7 @@ export const NavbarIconLinks = ({ themeSprings }: NavbarIconLinksProps) => (
 				justifyContent: 'center',
 				width: '2rem'
 			}}
+			target="_blank"
 		>
 			<FaDiscord size={18} />
 		</animated.a>

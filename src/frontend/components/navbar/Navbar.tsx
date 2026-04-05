@@ -79,15 +79,15 @@ export const Navbar = ({ user, themeSprings, setTheme }: NavbarProps) => {
 				)}
 
 				<NavbarUserButtons
-					user={user}
-					themeSprings={themeSprings}
 					setTheme={setTheme}
+					themeSprings={themeSprings}
+					user={user}
 				/>
 
 				{isMobile === true && (
 					<button
-						style={hamburgerButtonStyle}
 						onClick={toggleHamburgerMenu}
+						style={hamburgerButtonStyle}
 					>
 						<RxHamburgerMenu size={36} />
 					</button>
@@ -95,9 +95,9 @@ export const Navbar = ({ user, themeSprings, setTheme }: NavbarProps) => {
 			</div>
 
 			<HamburgerMenu
-				themeSprings={themeSprings}
 				spring={hamburgerMenuSpring}
 				springApi={hamburgerMenuApi}
+				themeSprings={themeSprings}
 				user={user}
 			/>
 		</animated.header>

@@ -4,20 +4,15 @@ import { DocsNavigation } from '../DocsNavigation';
 import {
 	sitemapZeroConfig,
 	sitemapOutput,
-	sitemapCustomConfig,
 	sitemapDynamicRoutes,
 	sitemapTypeReference
 } from '../../../data/documentation/sitemapDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -27,6 +22,9 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { SitemapConfigurationSection } from './SitemapConfigurationSection';
+import { SitemapExcludeRoutesSection } from './SitemapExcludeRoutesSection';
+import { SitemapHowItWorksSection } from './SitemapHowItWorksSection';
 
 const tocItems: TocItem[] = [
 	{ href: '#how-it-works', label: 'How It Works' },
@@ -46,8 +44,6 @@ export const SitemapView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -63,69 +59,22 @@ export const SitemapView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="sitemap">
+					<h1 id="sitemap" style={h1Style(isMobileOrTablet)}>
 						Sitemap
 					</h1>
 					<p style={paragraphLargeStyle}>
 						AbsoluteJS automatically generates a sitemap.xml for
-						your site. No plugin, no manual route list — it
-						discovers your pages on server start.
+						your site. No plugin, no manual route list: it discovers
+						your pages on server start.
 					</p>
 				</animated.div>
 
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="how-it-works"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						How It Works
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						When your server starts, AbsoluteJS automatically:
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Discovers all GET routes
-							</strong>{' '}
-							— reads every route registered on your Elysia app
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Identifies pages
-							</strong>{' '}
-							— sends a HEAD request to each route and checks if
-							it returns <code>text/html</code>
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Filters non-pages
-							</strong>{' '}
-							— API endpoints, static assets, wildcard routes, and
-							parameterized routes are excluded automatically
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Writes sitemap.xml
-							</strong>{' '}
-							— generates the XML and writes it to the build
-							directory where the static file server picks it up
-						</li>
-					</ul>
-					<p style={paragraphSpacedStyle}>
-						This runs in the background and does not block server
-						startup. The sitemap is available at{' '}
-						<code>/sitemap.xml</code> as soon as generation
-						completes.
-					</p>
-				</section>
+				<SitemapHowItWorksSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="zero-config"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -146,8 +95,8 @@ export const SitemapView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="example-output"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -166,90 +115,14 @@ export const SitemapView = ({
 					/>
 				</section>
 
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
-						id="configuration"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Configuration
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Add a <code>sitemap</code> object to your{' '}
-						<code>absolute.config.ts</code> to customize the output.
-						All fields are optional.
-					</p>
-					<PrismPlus
-						codeString={sitemapCustomConfig}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>baseUrl</strong> —
-							overrides the auto-detected origin. Use this in
-							production when behind a reverse proxy or load
-							balancer where the internal URL differs from the
-							public one.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								defaultChangefreq
-							</strong>{' '}
-							— how often pages typically change. Defaults to{' '}
-							<code>"weekly"</code>.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>defaultPriority</strong>{' '}
-							— relative importance of pages on your site (0.0 to
-							1.0). Defaults to <code>0.8</code>.
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>overrides</strong> —
-							per-route settings for changefreq, priority, and
-							lastmod.
-						</li>
-					</ul>
-				</section>
+				<SitemapConfigurationSection themeSprings={themeSprings} />
+
+				<SitemapExcludeRoutesSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
-						id="exclude-routes"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Excluding Routes
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Use the <code>exclude</code> array to keep specific
-						routes out of the sitemap. Supports exact string matches
-						and regular expressions.
-					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Exact strings</strong> —{' '}
-							<code>"/admin"</code> excludes only that path
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Regex patterns</strong>{' '}
-							— <code>{'/^\\/internal/'}</code> excludes all
-							routes starting with <code>/internal</code>
-						</li>
-					</ul>
-					<p style={paragraphSpacedStyle}>
-						API endpoints, wildcard routes, and parameterized routes
-						(containing <code>*</code> or <code>:</code>) are always
-						excluded automatically.
-					</p>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						level="h2"
 						id="dynamic-routes"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -278,8 +151,8 @@ export const SitemapView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="type-reference"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -302,14 +175,14 @@ export const SitemapView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

@@ -74,7 +74,6 @@ export const PerformanceArticle = ({ themeSprings }: ThemeProps) => (
 			>
 				<a
 					href="https://bun.sh"
-					target="_blank"
 					rel="noopener noreferrer"
 					style={{
 						alignItems: 'center',
@@ -90,10 +89,11 @@ export const PerformanceArticle = ({ themeSprings }: ThemeProps) => (
 						textDecoration: 'none',
 						transition: 'transform 0.2s ease, box-shadow 0.2s ease'
 					}}
+					target="_blank"
 				>
 					<img
-						src="/assets/svg/bun-logo.svg"
 						alt="Bun Logo"
+						src="/assets/svg/bun-logo.svg"
 						style={{ height: '2.5rem', width: '2.5rem' }}
 					/>
 					<span>Bun Runtime</span>
@@ -104,7 +104,6 @@ export const PerformanceArticle = ({ themeSprings }: ThemeProps) => (
 
 				<a
 					href="https://elysiajs.com"
-					target="_blank"
 					rel="noopener noreferrer"
 					style={{
 						alignItems: 'center',
@@ -120,10 +119,11 @@ export const PerformanceArticle = ({ themeSprings }: ThemeProps) => (
 						textDecoration: 'none',
 						transition: 'transform 0.2s ease, box-shadow 0.2s ease'
 					}}
+					target="_blank"
 				>
 					<img
-						src="/assets/svg/elysia.svg"
 						alt="Elysia Logo"
+						src="/assets/svg/elysia.svg"
 						style={{ height: '2.5rem', width: '2.5rem' }}
 					/>
 					<span>Elysia Framework</span>

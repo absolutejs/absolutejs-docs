@@ -24,11 +24,11 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 
 ### Frontend (`src/frontend/`)
 
-- **pages/**: Top-level page components (Home, Documentation, AuthTesting) - these are full HTML documents rendered server-side
+- **pages/**: Top-level page components (Home, Documentation, AuthTesting): these are full HTML documents rendered server-side
 - **components/**: React components organized by feature (navbar, sidebar, home, documentation, testing, auth, utils)
 - **hooks/**: Custom hooks including `useAuthStatus` for auth state, `useTheme` for theming with react-spring
 - **eden/treaty.ts**: Type-safe API client using Eden treaty with the server type
-- **styles/**: Style objects (not CSS files) - styles are colocated as TypeScript objects
+- **styles/**: Style objects (not CSS files): styles are colocated as TypeScript objects
 - **data/**: Static content data for documentation pages
 
 ### Database (`db/`)
@@ -44,7 +44,7 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 
 ## Rules
 
-- **No type assertions.** Never use `as any`, `as unknown`, or other TypeScript type assertions (`as X`). They break type inference chains — especially in Elysia plugin composition where eden treaty relies on full type flow through `.use()`. If TypeScript can't infer a type, fix the underlying type issue instead of casting.
+- **No type assertions.** Never use `as any`, `as unknown`, or other TypeScript type assertions (`as X`). They break type inference chains :  especially in Elysia plugin composition where eden treaty relies on full type flow through `.use()`. If TypeScript can't infer a type, fix the underlying type issue instead of casting.
 
 ## Key Patterns
 

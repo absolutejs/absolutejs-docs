@@ -38,6 +38,26 @@ const tocItems: TocItem[] = [
 	{ href: '#form-handling', label: 'Form Handling' }
 ];
 
+type RecipeCardProps = {
+	themeSprings: DocsViewProps['themeSprings'];
+	title: string;
+	description: string;
+};
+
+const RecipeCard = ({ themeSprings, title, description }: RecipeCardProps) => (
+	<animated.div style={featureCardStyle(themeSprings)}>
+		<p
+			style={{
+				...paragraphSpacedStyle,
+				marginBottom: '0.5rem'
+			}}
+		>
+			<strong style={strongStyle}>{title}</strong>
+		</p>
+		<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{description}</p>
+	</animated.div>
+);
+
 export const ExamplesRecipesView = ({
 	currentPageId,
 	onNavigate,
@@ -63,7 +83,7 @@ export const ExamplesRecipesView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="examples-recipes">
+					<h1 id="examples-recipes" style={h1Style(isMobileOrTablet)}>
 						Examples & Recipes
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -80,42 +100,22 @@ export const ExamplesRecipesView = ({
 						marginBottom: '2rem'
 					}}
 				>
-					<animated.div style={featureCardStyle(themeSprings)}>
-						<p
-							style={{
-								...paragraphSpacedStyle,
-								marginBottom: '0.5rem'
-							}}
-						>
-							<strong style={strongStyle}>
-								Full-Stack Patterns
-							</strong>
-						</p>
-						<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-							Complete examples showing database to UI type flow
-						</p>
-					</animated.div>
-					<animated.div style={featureCardStyle(themeSprings)}>
-						<p
-							style={{
-								...paragraphSpacedStyle,
-								marginBottom: '0.5rem'
-							}}
-						>
-							<strong style={strongStyle}>
-								Copy & Paste Ready
-							</strong>
-						</p>
-						<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-							Working code you can adapt for your projects
-						</p>
-					</animated.div>
+					<RecipeCard
+						description="Complete examples showing database to UI type flow"
+						themeSprings={themeSprings}
+						title="Full-Stack Patterns"
+					/>
+					<RecipeCard
+						description="Working code you can adapt for your projects"
+						themeSprings={themeSprings}
+						title="Copy & Paste Ready"
+					/>
 				</div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="database-schema"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -136,8 +136,8 @@ export const ExamplesRecipesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="react-components"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -145,7 +145,7 @@ export const ExamplesRecipesView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Import types from the schema file. Components use the
-						same types as your database—no redefinition needed:
+						same types as your database: no redefinition needed:
 					</p>
 					<PrismPlus
 						codeString={fullStackReactComponents}
@@ -163,8 +163,8 @@ export const ExamplesRecipesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="server"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -185,8 +185,8 @@ export const ExamplesRecipesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="authentication"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -207,8 +207,8 @@ export const ExamplesRecipesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="api-endpoints"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -229,8 +229,8 @@ export const ExamplesRecipesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="form-handling"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -258,14 +258,14 @@ export const ExamplesRecipesView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

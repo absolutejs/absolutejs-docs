@@ -1,3 +1,4 @@
+import { PROFILE_PICTURE_LAYOUT } from '../../../constants';
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../types/springTypes';
 
@@ -11,7 +12,8 @@ type ProfilePictureProps = {
 
 const getInitialsFontSize = (size: string) => {
 	const numericSize = parseFloat(size);
-	return `${numericSize / 2.2}rem`;
+
+	return `${numericSize / PROFILE_PICTURE_LAYOUT.initialsFontSizeDivisor}rem`;
 };
 
 export const ProfilePicture = ({
@@ -24,8 +26,8 @@ export const ProfilePicture = ({
 	if (userImage) {
 		return (
 			<animated.img
-				src={userImage}
 				alt="Profile"
+				src={userImage}
 				style={{
 					backgroundColor: themeSprings.themeTertiary,
 					borderRadius: '50%',

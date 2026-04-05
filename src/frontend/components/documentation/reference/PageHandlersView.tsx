@@ -9,28 +9,24 @@ import {
 	htmlHandler,
 	htmxHandler
 } from '../../../data/documentation/pageHandlersDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	mainContentStyle,
 	h1Style,
 	sectionStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	tableContainerStyle,
-	tableStyle,
-	tableHeaderStyle,
-	tableCellStyle,
 	tableCodeStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
-	heroGradientStyle,
-	featureCardStyle
+	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { HandlerBehaviorCards } from './HandlerBehaviorCards';
+import { ParamsTable } from './ParamsTable';
 
 const tocItems: TocItem[] = [
 	{ href: '#handler-behavior', label: 'Handler Behavior' },
@@ -42,101 +38,123 @@ const tocItems: TocItem[] = [
 	{ href: '#handlehtmxpagerequest', label: 'HTMX Handler' }
 ];
 
-const reactParams = [
+type HandlerParam = {
+	description: string;
+	param: string;
+	type: string;
+};
+
+const reactParams: HandlerParam[] = [
 	{
+		description: 'Your React page component from the pages directory',
 		param: 'pageComponent',
-		type: 'React.ComponentType<Props>',
-		description: 'Your React page component from the pages directory'
+		type: 'React.ComponentType<Props>'
 	},
 	{
+		description: 'Path to the hydration script from asset(manifest, key)',
 		param: 'index',
-		type: 'string',
-		description: 'Path to the hydration script from asset(manifest, key)'
+		type: 'string'
 	},
 	{
-		param: 'props',
-		type: 'Props',
 		description:
-			'Type-safe props matching the component requirements (optional)'
+			'Type-safe props matching the component requirements (optional)',
+		param: 'props',
+		type: 'Props'
 	}
 ];
 
-const angularParams = [
+const angularParams: HandlerParam[] = [
 	{
+		description: 'Async function that imports the Angular page factory',
 		param: 'importer',
-		type: '() => Promise<{ factory: AngularPageFactory<Props> }>',
-		description: 'Async function that imports the Angular page factory'
+		type: '() => Promise<{ factory: AngularPageFactory<Props> }>'
 	},
 	{
+		description: 'Path to compiled Angular page for SSR',
 		param: 'pagePath',
-		type: 'string',
-		description: 'Path to compiled Angular page for SSR'
+		type: 'string'
 	},
 	{
+		description: 'Path to hydration script from asset(manifest, key)',
 		param: 'indexPath',
-		type: 'string',
-		description: 'Path to hydration script from asset(manifest, key)'
+		type: 'string'
 	},
 	{
+		description: 'Custom head element (use generateHeadElement helper)',
 		param: 'headTag',
-		type: '`<head>...</head>`',
-		description: 'Custom head element (use generateHeadElement helper)'
+		type: '`<head>...</head>`'
 	},
 	{
+		description: 'Type-safe props (optional if component has no props)',
 		param: 'props',
-		type: 'Props',
-		description: 'Type-safe props (optional if component has no props)'
+		type: 'Props'
 	}
 ];
 
-const svelteParams = [
+const svelteParams: HandlerParam[] = [
 	{
+		description: 'Raw Svelte component (used only for type inference)',
 		param: 'PageComponent',
-		type: 'SvelteComponent<Props>',
-		description: 'Raw Svelte component (used only for type inference)'
+		type: 'SvelteComponent<Props>'
 	},
 	{
+		description: 'Path to compiled Svelte page for SSR',
 		param: 'pagePath',
-		type: 'string',
-		description: 'Path to compiled Svelte page for SSR'
+		type: 'string'
 	},
 	{
+		description: 'Path to hydration script from asset(manifest, key)',
 		param: 'indexPath',
-		type: 'string',
-		description: 'Path to hydration script from asset(manifest, key)'
+		type: 'string'
 	},
 	{
+		description: 'Type-safe props (optional if component has no props)',
 		param: 'props',
-		type: 'Props',
-		description: 'Type-safe props (optional if component has no props)'
+		type: 'Props'
 	}
 ];
 
-const vueParams = [
+const vueParams: HandlerParam[] = [
 	{
+		description: 'Raw Vue component (used only for type inference)',
 		param: '_PageComponent',
-		type: 'VueComponent<Props>',
-		description: 'Raw Vue component (used only for type inference)'
+		type: 'VueComponent<Props>'
 	},
 	{
+		description: 'Path to compiled Vue page for SSR',
 		param: 'pagePath',
-		type: 'string',
-		description: 'Path to compiled Vue page for SSR'
+		type: 'string'
 	},
 	{
+		description: 'Path to hydration script from asset(manifest, key)',
 		param: 'indexPath',
-		type: 'string',
-		description: 'Path to hydration script from asset(manifest, key)'
+		type: 'string'
 	},
 	{
+		description: 'Custom head element (use generateHeadElement helper)',
 		param: 'headTag',
-		type: '`<head>...</head>`',
-		description: 'Custom head element (use generateHeadElement helper)'
+		type: '`<head>...</head>`'
 	},
 	{
+		description: 'Type-safe props (optional if component has no props)',
 		param: 'props',
-		type: 'Props',
-		description: 'Type-safe props (optional if component has no props)'
+		type: 'Props'
+	}
+];
+
+const htmlParams: HandlerParam[] = [
+	{
+		description: 'Path to the HTML file',
+		param: 'html',
+		type: 'string'
+	}
+];
+
+const htmxParams: HandlerParam[] = [
+	{
+		description: 'Path to the HTMX template file',
+		param: 'htmx',
+		type: 'string'
 	}
 ];
 
@@ -148,46 +166,7 @@ export const PageHandlersView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
-
-	const renderParamsTable = (
-		params: { param: string; type: string; description: string }[]
-	) => (
-		<div style={tableContainerStyle}>
-			<animated.table style={tableStyle(themeSprings)}>
-				<thead>
-					<tr>
-						<animated.th style={tableHeaderStyle(themeSprings)}>
-							Parameter
-						</animated.th>
-						<animated.th style={tableHeaderStyle(themeSprings)}>
-							Type
-						</animated.th>
-						<animated.th style={tableHeaderStyle(themeSprings)}>
-							Description
-						</animated.th>
-					</tr>
-				</thead>
-				<tbody>
-					{params.map((p, i) => (
-						<tr key={i}>
-							<animated.td style={tableCellStyle(themeSprings)}>
-								<code style={tableCodeStyle}>{p.param}</code>
-							</animated.td>
-							<animated.td style={tableCellStyle(themeSprings)}>
-								<code style={tableCodeStyle}>{p.type}</code>
-							</animated.td>
-							<animated.td style={tableCellStyle(themeSprings)}>
-								{p.description}
-							</animated.td>
-						</tr>
-					))}
-				</tbody>
-			</animated.table>
-		</div>
-	);
 
 	return (
 		<div
@@ -202,7 +181,7 @@ export const PageHandlersView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="page-handlers">
+					<h1 id="page-handlers" style={h1Style(isMobileOrTablet)}>
 						Page Handlers
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -214,51 +193,14 @@ export const PageHandlersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="handler-behavior"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
 						Handler Behavior
 					</AnchorHeading>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									marginBottom: '0.5rem',
-									fontWeight: 600
-								}}
-							>
-								Framework Handlers
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								React, Angular, Svelte, Vue handlers perform
-								server-side rendering and return hydrated HTML.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									marginBottom: '0.5rem',
-									fontWeight: 600
-								}}
-							>
-								Static Handlers
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								HTML and HTMX handlers serve pre-built files
-								directly without SSR processing.
-							</p>
-						</animated.div>
-					</div>
+					<HandlerBehaviorCards themeSprings={themeSprings} />
 					<p style={paragraphSpacedStyle}>
 						All handlers work seamlessly with Elysia's routing
 						system and return properly formatted responses.
@@ -266,15 +208,15 @@ export const PageHandlersView = ({
 						<code style={tableCodeStyle}>prepare()</code>. Always
 						use{' '}
 						<code style={tableCodeStyle}>asset(manifest, key)</code>{' '}
-						to look up script paths—it will throw if the artifact
+						to look up script paths: it will throw if the artifact
 						doesn't exist.
 					</p>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="handlereactpagerequest"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -285,7 +227,10 @@ export const PageHandlersView = ({
 						component is rendered to HTML with createElement, then
 						hydrated on the client with the provided index script.
 					</p>
-					{renderParamsTable(reactParams)}
+					<ParamsTable
+						params={reactParams}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={reactHandler}
 						language="typescript"
@@ -296,8 +241,8 @@ export const PageHandlersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="handleangularpagerequest"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -308,7 +253,10 @@ export const PageHandlersView = ({
 						factory importer pattern for lazy loading Angular
 						components.
 					</p>
-					{renderParamsTable(angularParams)}
+					<ParamsTable
+						params={angularParams}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={angularHandler}
 						language="typescript"
@@ -319,8 +267,8 @@ export const PageHandlersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="handlesveltepagerequest"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -328,10 +276,13 @@ export const PageHandlersView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Handles server-side rendering for Svelte pages. The
-						component parameter is only used for type inference—the
+						component parameter is only used for type inference: the
 						actual rendering uses the compiled page at pagePath.
 					</p>
-					{renderParamsTable(svelteParams)}
+					<ParamsTable
+						params={svelteParams}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={svelteHandler}
 						language="typescript"
@@ -342,8 +293,8 @@ export const PageHandlersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="handlevuepagerequest"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -355,7 +306,10 @@ export const PageHandlersView = ({
 						you pass a headTag parameter (use generateHeadElement
 						helper for convenience).
 					</p>
-					{renderParamsTable(vueParams)}
+					<ParamsTable
+						params={vueParams}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={vueHandler}
 						language="typescript"
@@ -366,8 +320,8 @@ export const PageHandlersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="handlehtmlpagerequest"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -378,50 +332,10 @@ export const PageHandlersView = ({
 						through the build process to update resource paths to
 						their bundled versions.
 					</p>
-					<div style={tableContainerStyle}>
-						<animated.table style={tableStyle(themeSprings)}>
-							<thead>
-								<tr>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Parameter
-									</animated.th>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Type
-									</animated.th>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Description
-									</animated.th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<code style={tableCodeStyle}>html</code>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<code style={tableCodeStyle}>
-											string
-										</code>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										Path to the HTML file
-									</animated.td>
-								</tr>
-							</tbody>
-						</animated.table>
-					</div>
+					<ParamsTable
+						params={htmlParams}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={htmlHandler}
 						language="typescript"
@@ -432,8 +346,8 @@ export const PageHandlersView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="handlehtmxpagerequest"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -443,50 +357,10 @@ export const PageHandlersView = ({
 						Serves HTMX template files. Like HTML handler, files go
 						through the build process for path updates.
 					</p>
-					<div style={tableContainerStyle}>
-						<animated.table style={tableStyle(themeSprings)}>
-							<thead>
-								<tr>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Parameter
-									</animated.th>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Type
-									</animated.th>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Description
-									</animated.th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<code style={tableCodeStyle}>htmx</code>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										<code style={tableCodeStyle}>
-											string
-										</code>
-									</animated.td>
-									<animated.td
-										style={tableCellStyle(themeSprings)}
-									>
-										Path to the HTMX template file
-									</animated.td>
-								</tr>
-							</tbody>
-						</animated.table>
-					</div>
+					<ParamsTable
+						params={htmxParams}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={htmxHandler}
 						language="typescript"
@@ -504,14 +378,14 @@ export const PageHandlersView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

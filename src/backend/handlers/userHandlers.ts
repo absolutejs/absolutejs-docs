@@ -12,16 +12,6 @@ type GetDBUser = {
 	db: DatabaseType;
 };
 
-export const getDBUser = async ({ authSub, db }: GetDBUser) => {
-	const [user] = await db
-		.select()
-		.from(schema.users)
-		.where(eq(schema.users.auth_sub, authSub))
-		.execute();
-
-	return user;
-};
-
 export const createDBUser = async ({
 	auth_sub,
 	db,
@@ -37,7 +27,6 @@ export const createDBUser = async ({
 
 	return newUser;
 };
-
 export const createUser = ({
 	userIdentity,
 	authProvider,
@@ -63,7 +52,15 @@ export const createUser = ({
 		metadata: userIdentity
 	});
 };
+export const getDBUser = async ({ authSub, db }: GetDBUser) => {
+	const [user] = await db
+		.select()
+		.from(schema.users)
+		.where(eq(schema.users.auth_sub, authSub))
+		.execute();
 
+	return user;
+};
 export const getUser = ({
 	userIdentity,
 	authProvider,

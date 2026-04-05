@@ -1,9 +1,10 @@
+/* eslint-disable no-await-in-loop */
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
-import { env } from 'process';
+import { env, stdin, stderr, stdout } from 'node:process';
 import { schema } from '../schema';
 import { getProvidersByStatus } from '../../src/backend/handlers/providerHandlers';
-import readline from 'readline';
+import { createInterface } from 'node:readline/promises';
 import { PROVIDER_STATUSES } from '../../src/constants';
 
 if (!env.DATABASE_URL) {
@@ -13,14 +14,18 @@ if (!env.DATABASE_URL) {
 const sql = neon(env.DATABASE_URL);
 const db = drizzle(sql, { schema });
 
-const rl = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout
+const readlineInterface = createInterface({
+	input: stdin,
+	output: stdout
 });
-const ask = (q: string) =>
-	new Promise<string>((resolve) =>
-		rl.question(q, (answer) => resolve(answer.trim()))
-	);
+const askQuestion = async (question: string) =>
+	(await readlineInterface.question(question)).trim();
+const printLine = (text: string) => {
+	stdout.write(`${text}\n`);
+};
+const printError = (text: string) => {
+	stderr.write(`${text}\n`);
+};
 
 const validStatuses = PROVIDER_STATUSES;
 type Status = (typeof validStatuses)[number];
@@ -29,40 +34,47 @@ let status: Status | undefined;
 let index: number;
 
 do {
-	validStatuses.forEach((s, i) => console.log(`${i + 1}) ${s}`));
+	validStatuses.forEach((statusOption, statusIndex) =>
+		printLine(`${statusIndex + 1}) ${statusOption}`)
+	);
 	index =
-		Number(await ask(`Select status type [1-${validStatuses.length}]: `)) -
-		1;
+		Number(
+			await askQuestion(
+				`Select status type [1-${validStatuses.length}]: `
+			)
+		) - 1;
 
 	if (index >= 0 && index < validStatuses.length) {
 		status = validStatuses[index];
 	} else {
-		console.log('Invalid status.');
+		printError('Invalid status.');
 	}
 } while (!status);
 
 const providers = await getProvidersByStatus(db, status);
 
 if (providers.length === 0) {
-	console.log(`No providers found with status "${status}".`);
+	printLine(`No providers found with status "${status}".`);
 } else {
-	console.log(`Providers with status "${status}":`);
+	printLine(`Providers with status "${status}":`);
 	const operations = ['authorize', 'profile', 'refresh', 'revoke'] as const;
 
 	providers.forEach((provider) => {
-		const matchingOps = operations.filter((op) => provider[op] === status);
+		const matchingOperations = operations.filter(
+			(operation) => provider[operation] === status
+		);
 
-		if (matchingOps.length === 0) {
-			console.log(
+		if (matchingOperations.length === 0) {
+			printLine(
 				`- ${provider.name} (no operations with status "${status}")`
 			);
 		} else {
-			console.log(`- ${provider.name}:`);
-			matchingOps.forEach((op) => {
-				console.log(`    • ${op} (${status})`);
+			printLine(`- ${provider.name}:`);
+			matchingOperations.forEach((operation) => {
+				printLine(`    • ${operation} (${status})`);
 			});
 		}
 	});
 }
 
-rl.close();
+readlineInterface.close();

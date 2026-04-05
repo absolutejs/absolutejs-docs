@@ -1,6 +1,5 @@
 import { CSSProperties } from 'react';
 import { FaGithub } from 'react-icons/fa';
-import { ThemeProps } from '../../../types/springTypes';
 import { sectionStyle } from '../../styles/homeStyles';
 
 const ctaContainerStyle: CSSProperties = {
@@ -67,7 +66,7 @@ const secondaryCtaStyle: CSSProperties = {
 	textDecoration: 'none'
 };
 
-export const CTASection = ({ themeSprings }: ThemeProps) => (
+export const CTASection = () => (
 	<section style={{ ...sectionStyle, paddingBottom: '6rem' }}>
 		<div style={ctaContainerStyle}>
 			<h2 style={ctaTitleStyle}>Ready to Build Something Amazing?</h2>
@@ -81,9 +80,9 @@ export const CTASection = ({ themeSprings }: ThemeProps) => (
 				</a>
 				<a
 					href="https://github.com/absolutejs/absolute"
-					target="_blank"
 					rel="noopener noreferrer"
 					style={secondaryCtaStyle}
+					target="_blank"
 				>
 					<FaGithub />
 					View on GitHub

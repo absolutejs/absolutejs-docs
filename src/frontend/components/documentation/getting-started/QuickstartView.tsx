@@ -14,20 +14,18 @@ import {
 	schemaSetup,
 	serverWithAuth
 } from '../../../data/documentation/quickstartDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { QuickstartFeatureCards } from './QuickstartFeatureCards';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
@@ -53,8 +51,6 @@ export const QuickstartView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -70,12 +66,12 @@ export const QuickstartView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="quickstart">
+					<h1 id="quickstart" style={h1Style(isMobileOrTablet)}>
 						Quickstart
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Build a blog with Google OAuth, a database, typed props,
-						and a type-safe API client — all in one codebase.
+						and a type-safe API client, all in one codebase.
 					</p>
 				</animated.div>
 
@@ -87,64 +83,13 @@ export const QuickstartView = ({
 						dashboard, a validated JSON API, and a client
 						that&apos;s fully typed against your server.
 					</p>
-					<div
-						style={{
-							display: 'grid',
-							gap: '0.75rem',
-							gridTemplateColumns: isMobile
-								? '1fr'
-								: '1fr 1fr 1fr',
-							marginTop: '1rem'
-						}}
-					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									fontWeight: 600,
-									marginBottom: '0.25rem'
-								}}
-							>
-								<strong style={strongStyle}>Auth</strong>
-							</p>
-							<p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
-								Google OAuth with session management
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									fontWeight: 600,
-									marginBottom: '0.25rem'
-								}}
-							>
-								<strong style={strongStyle}>SSR + DB</strong>
-							</p>
-							<p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
-								Server-rendered pages with Drizzle types
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									fontWeight: 600,
-									marginBottom: '0.25rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									API + Client
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
-								Validated endpoints with Eden Treaty
-							</p>
-						</animated.div>
-					</div>
+					<QuickstartFeatureCards themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="scaffold"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -158,9 +103,9 @@ export const QuickstartView = ({
 					/>
 					<p style={{ ...paragraphSpacedStyle, marginTop: '1rem' }}>
 						This sets up a React project with PostgreSQL, Drizzle
-						ORM, Google OAuth, and Tailwind — dependencies
-						installed, ready to go. The <code>--skip</code> flag
-						uses defaults for everything else.{' '}
+						ORM, Google OAuth, and Tailwind dependencies installed,
+						ready to go. The <code>--skip</code> flag uses defaults
+						for everything else.{' '}
 						<animated.span
 							onClick={() => {
 								onNavigate('create-absolutejs');
@@ -181,8 +126,8 @@ export const QuickstartView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="env"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -193,12 +138,12 @@ export const QuickstartView = ({
 						can get Google credentials from the{' '}
 						<a
 							href="https://console.cloud.google.com/apis/credentials"
-							target="_blank"
 							rel="noopener noreferrer"
 							style={{
 								color: primaryColor,
 								textDecoration: 'underline'
 							}}
+							target="_blank"
 						>
 							Google Cloud Console
 						</a>
@@ -214,8 +159,8 @@ export const QuickstartView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="schema"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -224,7 +169,7 @@ export const QuickstartView = ({
 					<p style={paragraphSpacedStyle}>
 						Your database schema is the single source of truth for
 						types. Drizzle infers <code>User</code> and{' '}
-						<code>Post</code> directly from the table definitions —
+						<code>Post</code> directly from the table definitions :
 						no codegen, no drift:
 					</p>
 					<PrismPlus
@@ -237,8 +182,8 @@ export const QuickstartView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="config"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -257,8 +202,8 @@ export const QuickstartView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="pages"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -267,7 +212,7 @@ export const QuickstartView = ({
 					<p style={paragraphSpacedStyle}>
 						A public home page that shows posts and a login link,
 						and a protected dashboard for authenticated users. Props
-						are typed against your schema — change a column and
+						are typed against your schema; change a column and
 						TypeScript shows every page that needs updating:
 					</p>
 					<PrismPlus
@@ -277,7 +222,7 @@ export const QuickstartView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
-						The dashboard receives a <code>User</code> — guaranteed
+						The dashboard receives a <code>User</code>, guaranteed
 						by the <code>protectRoute</code> guard on the server:
 					</p>
 					<PrismPlus
@@ -290,8 +235,8 @@ export const QuickstartView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="server"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -314,8 +259,8 @@ export const QuickstartView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="eden"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -324,8 +269,7 @@ export const QuickstartView = ({
 					<p style={paragraphSpacedStyle}>
 						Eden Treaty takes the type of your server and gives your
 						client full autocomplete, compile-time route checking,
-						and typed responses — including the auth status
-						endpoint:
+						and typed responses, including the auth status endpoint:
 					</p>
 					<PrismPlus
 						codeString={edenTreatySetup}
@@ -346,8 +290,8 @@ export const QuickstartView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="dev"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -370,7 +314,7 @@ export const QuickstartView = ({
 					/>
 					<p style={{ ...paragraphSpacedStyle, marginTop: '1rem' }}>
 						Open http://localhost:3000. Click &quot;Sign in with
-						Google&quot; to test the full OAuth flow — AbsoluteJS
+						Google&quot; to test the full OAuth flow. AbsoluteJS
 						handles the redirect, callback, token exchange, and
 						session creation automatically. Edit any component and
 						HMR updates it instantly with your form inputs and
@@ -387,15 +331,15 @@ export const QuickstartView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

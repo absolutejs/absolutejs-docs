@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
@@ -12,8 +13,7 @@ import {
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -28,6 +28,29 @@ const tocItems: TocItem[] = [
 	{ href: '#eslint', label: 'ESLint' },
 	{ href: '#prettier', label: 'Prettier' }
 ];
+
+type CliFeatureListProps = {
+	items: Array<{
+		description: string;
+		highlight?: ReactNode;
+	}>;
+};
+
+const CliFeatureList = ({ items }: CliFeatureListProps) => (
+	<ul style={listStyle}>
+		{items.map((item, index) => (
+			<li key={index} style={listItemStyle}>
+				{item.highlight ? (
+					<>
+						{item.description} <code>{item.highlight}</code>
+					</>
+				) : (
+					item.description
+				)}
+			</li>
+		))}
+	</ul>
+);
 
 export const EslintPrettierView = ({
 	currentPageId,
@@ -52,7 +75,7 @@ export const EslintPrettierView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="eslint-prettier">
+					<h1 id="eslint-prettier" style={h1Style(isMobileOrTablet)}>
 						ESLint & Prettier
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -63,8 +86,8 @@ export const EslintPrettierView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="eslint"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -80,25 +103,28 @@ export const EslintPrettierView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Uses the ESLint config from your project root
-						</li>
-						<li style={listItemStyle}>
-							Cache is stored in{' '}
-							<code>.absolutejs/eslint-cache</code>
-						</li>
-						<li style={listItemStyle}>
-							All additional arguments are passed through to
-							ESLint
-						</li>
-					</ul>
+					<CliFeatureList
+						items={[
+							{
+								description:
+									'Uses the ESLint config from your project root'
+							},
+							{
+								description: 'Cache is stored in',
+								highlight: '.absolutejs/eslint-cache'
+							},
+							{
+								description:
+									'All additional arguments are passed through to ESLint'
+							}
+						]}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="prettier"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -114,19 +140,22 @@ export const EslintPrettierView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Uses the Prettier config from your project root
-						</li>
-						<li style={listItemStyle}>
-							Cache is stored in{' '}
-							<code>.absolutejs/prettier.cache.json</code>
-						</li>
-						<li style={listItemStyle}>
-							All additional arguments are passed through to
-							Prettier
-						</li>
-					</ul>
+					<CliFeatureList
+						items={[
+							{
+								description:
+									'Uses the Prettier config from your project root'
+							},
+							{
+								description: 'Cache is stored in',
+								highlight: '.absolutejs/prettier.cache.json'
+							},
+							{
+								description:
+									'All additional arguments are passed through to Prettier'
+							}
+						]}
+					/>
 				</section>
 
 				<DocsNavigation
@@ -138,14 +167,14 @@ export const EslintPrettierView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

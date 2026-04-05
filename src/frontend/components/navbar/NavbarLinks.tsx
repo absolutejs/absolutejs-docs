@@ -21,22 +21,22 @@ export const NavbarLinks = ({ navbarData, themeSprings }: NavbarLinksProps) => (
 			if (isNavbarDropdown(element)) {
 				return (
 					<NavbarDropdown
-						themeSprings={themeSprings}
+						href={element.href}
 						key={element.label}
 						label={element.label}
-						href={element.href}
 						links={element.links}
+						themeSprings={themeSprings}
 					/>
 				);
 			}
 
 			return (
 				<NavbarLink
-					themeSprings={themeSprings}
-					key={element.label}
-					icon={element.icon}
 					href={element.href}
+					icon={element.icon}
+					key={element.label}
 					label={element.label}
+					themeSprings={themeSprings}
 				/>
 			);
 		})}

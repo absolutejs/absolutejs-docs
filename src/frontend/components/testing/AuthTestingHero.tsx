@@ -20,7 +20,7 @@ export const AuthTestingHero = ({ themeSprings }: ThemeProps) => (
 		information tags and their current status.
 		<br />
 		<br />
-		Test providers from this screen by opening a provider's tab—you'll find
+		Test providers from this screen by opening a provider's tab: you'll find
 		a link to create an OAuth app on that provider and controls to exercise
 		each step of the OAuth 2.0 flow.
 	</animated.p>

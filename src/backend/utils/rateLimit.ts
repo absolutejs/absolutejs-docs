@@ -12,21 +12,23 @@ const CLEANUP_INTERVAL_MS = 300_000;
 setInterval(() => {
 	const now = Date.now();
 	for (const [key, entry] of windows) {
-		if (now - entry.windowStart > WINDOW_MS) {
-			windows.delete(key);
-		}
+		if (now - entry.windowStart <= WINDOW_MS) continue;
+
+		windows.delete(key);
 	}
 }, CLEANUP_INTERVAL_MS);
 
-export const isRateLimited = (ip: string) => {
+export const isRateLimited = (ipAddress: string) => {
 	const now = Date.now();
-	const entry = windows.get(ip);
+	const entry = windows.get(ipAddress);
 
 	if (!entry || now - entry.windowStart > WINDOW_MS) {
-		windows.set(ip, { count: 1, windowStart: now });
+		windows.set(ipAddress, { count: 1, windowStart: now });
+
 		return false;
 	}
 
 	entry.count++;
+
 	return entry.count > MAX_REQUESTS;
 };

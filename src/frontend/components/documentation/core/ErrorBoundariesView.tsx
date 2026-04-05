@@ -11,17 +11,15 @@ import {
 	errorFallbackChain,
 	pageSpecificExample
 } from '../../../data/documentation/errorBoundariesDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
+import { ErrorBoundariesConventionFilesList } from './ErrorBoundariesConventionFilesList';
+import { ErrorBoundariesHowItWorksList } from './ErrorBoundariesHowItWorksList';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
@@ -50,8 +48,6 @@ export const ErrorBoundariesView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -67,7 +63,7 @@ export const ErrorBoundariesView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="error-boundaries">
+					<h1 id="error-boundaries" style={h1Style(isMobileOrTablet)}>
 						Error Boundaries
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -79,8 +75,8 @@ export const ErrorBoundariesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="how-it-works"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -94,33 +90,13 @@ export const ErrorBoundariesView = ({
 						and renders the matching error convention component
 						instead of crashing.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Auto-detection</strong>{' '}
-							— the build scans for <code>error.tsx</code>,{' '}
-							<code>*.error.tsx</code>, and{' '}
-							<code>not-found.tsx</code> files
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>SSR catch</strong> —
-							when a page throws during server-side rendering, the
-							error is caught and the convention component
-							receives it as a prop
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Client hydration
-							</strong>{' '}
-							— the error page hydrates on the client just like
-							any other page
-						</li>
-					</ul>
+					<ErrorBoundariesHowItWorksList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="convention-files"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -136,28 +112,13 @@ export const ErrorBoundariesView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>error.tsx</strong> —
-							default error page for all pages in that framework
-							directory
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Page.error.tsx</strong>{' '}
-							— page-specific error boundary that overrides the
-							default for that page only
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>not-found.tsx</strong> —
-							custom 404 page rendered when no route matches
-						</li>
-					</ul>
+					<ErrorBoundariesConventionFilesList />
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="error-pages"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -185,8 +146,8 @@ export const ErrorBoundariesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="page-specific-errors"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -209,8 +170,8 @@ export const ErrorBoundariesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="not-found-pages"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -232,8 +193,8 @@ export const ErrorBoundariesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="fallback-chain"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -258,8 +219,8 @@ export const ErrorBoundariesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="multi-framework"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -272,8 +233,8 @@ export const ErrorBoundariesView = ({
 						shape.
 					</p>
 					<AnchorHeading
-						level="h3"
 						id="svelte-error"
+						level="h3"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -286,8 +247,8 @@ export const ErrorBoundariesView = ({
 						themeSprings={themeSprings}
 					/>
 					<AnchorHeading
-						level="h3"
 						id="vue-error"
+						level="h3"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -300,8 +261,8 @@ export const ErrorBoundariesView = ({
 						themeSprings={themeSprings}
 					/>
 					<AnchorHeading
-						level="h3"
 						id="angular-error"
+						level="h3"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -317,8 +278,8 @@ export const ErrorBoundariesView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="example-project"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -329,9 +290,9 @@ export const ErrorBoundariesView = ({
 						configured for multiple frameworks in the{' '}
 						<a
 							href="https://github.com/alexkahndev/absolutejs-error-boundaries-example"
-							target="_blank"
 							rel="noopener noreferrer"
 							style={{ color: 'inherit' }}
+							target="_blank"
 						>
 							error-boundaries-example
 						</a>{' '}
@@ -348,14 +309,14 @@ export const ErrorBoundariesView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

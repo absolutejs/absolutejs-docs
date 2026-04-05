@@ -13,16 +13,12 @@ import {
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
@@ -31,6 +27,8 @@ import { PrismPlus } from '../../utils/PrismPlus';
 import { TypeSafetyFlowDiagram } from '../../diagrams/TypeSafetyFlowDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { DataFetchingFeatureCard } from './DataFetchingFeatureCard';
+import { DataFetchingTypeFlowList } from './DataFetchingTypeFlowList';
 
 const tocItems: TocItem[] = [
 	{ href: '#server-side', label: 'Server-Side Fetching' },
@@ -64,7 +62,7 @@ export const DataFetchingView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 style={h1Style(isMobileOrTablet)} id="data-fetching">
+					<h1 id="data-fetching" style={h1Style(isMobileOrTablet)}>
 						Data Fetching
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -75,8 +73,8 @@ export const DataFetchingView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="server-side"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -96,38 +94,20 @@ export const DataFetchingView = ({
 							marginTop: '1rem'
 						}}
 					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									No Client Waterfalls
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Data is fetched before rendering. No loading
-								states for initial page load.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Secure by Default
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								Database queries run on the server. Credentials
-								never reach the client.
-							</p>
-						</animated.div>
+						<DataFetchingFeatureCard
+							themeSprings={themeSprings}
+							title="No Client Waterfalls"
+						>
+							Data is fetched before rendering. No loading states
+							for initial page load.
+						</DataFetchingFeatureCard>
+						<DataFetchingFeatureCard
+							themeSprings={themeSprings}
+							title="Secure by Default"
+						>
+							Database queries run on the server. Credentials
+							never reach the client.
+						</DataFetchingFeatureCard>
 					</div>
 					<PrismPlus
 						codeString={dataFetchingServer}
@@ -139,8 +119,8 @@ export const DataFetchingView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="eden-treaty"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -161,38 +141,20 @@ export const DataFetchingView = ({
 							marginTop: '1rem'
 						}}
 					>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Route Validation
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								TypeScript errors if you try to call a route
-								that doesn&apos;t exist on your server.
-							</p>
-						</animated.div>
-						<animated.div style={featureCardStyle(themeSprings)}>
-							<p
-								style={{
-									...paragraphSpacedStyle,
-									marginBottom: '0.5rem'
-								}}
-							>
-								<strong style={strongStyle}>
-									Request Body Typing
-								</strong>
-							</p>
-							<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-								POST/PUT bodies are validated at compile time
-								against your endpoint&apos;s schema.
-							</p>
-						</animated.div>
+						<DataFetchingFeatureCard
+							themeSprings={themeSprings}
+							title="Route Validation"
+						>
+							TypeScript errors if you try to call a route that
+							doesn&apos;t exist on your server.
+						</DataFetchingFeatureCard>
+						<DataFetchingFeatureCard
+							themeSprings={themeSprings}
+							title="Request Body Typing"
+						>
+							POST/PUT bodies are validated at compile time
+							against your endpoint&apos;s schema.
+						</DataFetchingFeatureCard>
 					</div>
 
 					<animated.h3
@@ -261,8 +223,8 @@ export const DataFetchingView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="type-flow"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -280,28 +242,31 @@ export const DataFetchingView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Schema → Types</strong>:
-							Drizzle/Prisma infer types from your schema
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>Query → Results</strong>
-							: Query results are typed based on your schema
-						</li>
-						<li style={listItemStyle}>
-							<strong style={strongStyle}>
-								Props → Components
-							</strong>
-							: handleReactPageRequest validates prop types
-						</li>
-					</ul>
+					<DataFetchingTypeFlowList
+						items={[
+							{
+								description:
+									'Drizzle/Prisma infer types from your schema',
+								label: 'Schema \u2192 Types'
+							},
+							{
+								description:
+									'Query results are typed based on your schema',
+								label: 'Query \u2192 Results'
+							},
+							{
+								description:
+									'handleReactPageRequest validates prop types',
+								label: 'Props \u2192 Components'
+							}
+						]}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						level="h2"
 						id="status-responses"
+						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
@@ -329,14 +294,14 @@ export const DataFetchingView = ({
 			</div>
 
 			{showDesktopToc && (
-				<TableOfContents themeSprings={themeSprings} items={tocItems} />
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			)}
 			{isMobileOrTablet && onTocToggle && (
 				<MobileTableOfContents
-					themeSprings={themeSprings}
-					items={tocItems}
 					isOpen={tocOpen ?? false}
+					items={tocItems}
 					onToggle={onTocToggle}
+					themeSprings={themeSprings}
 				/>
 			)}
 		</div>

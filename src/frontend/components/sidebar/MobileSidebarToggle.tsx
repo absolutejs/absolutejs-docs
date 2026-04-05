@@ -12,7 +12,7 @@ export const MobileSidebarToggle = ({
 	themeSprings
 }: MobileSidebarToggleProps) => {
 	const [hoverSpring, hoverApi] = useSpring(() => ({
-		config: { tension: 400, friction: 26 },
+		config: { friction: 26, tension: 400 },
 		opacity: 0.85
 	}));
 
