@@ -81,19 +81,17 @@ export const htmxExample = `\
 <html lang="en">
 <head>
   <title>HTMX App</title>
-  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="/htmx/htmx.min.js"></script>
   <link rel="stylesheet" href="./styles/htmx-app.css">
 </head>
 <body>
   <h1>HTMX Application</h1>
 
-  <button hx-get="/api/data" hx-target="#results">
+  <button hx-get="/api/data" hx-target="#results" hx-swap="innerHTML">
     Load Data
   </button>
 
   <div id="results"></div>
-
-  <script src="./scripts/htmx-helpers.ts"></script>
 </body>
 </html>`;
 export const htmxHandler = `\
@@ -105,14 +103,13 @@ new Elysia()
     handleHTMXPageRequest('./build/pages/app.html')
   )`;
 export const htmxScopedStateHtml = `\
-<!-- Each user's button clicks only affect their own count -->
-<div>
-  Count: <span id="count" hx-get="/api/count" hx-trigger="load">0</span>
-</div>
-
-<button hx-post="/api/increment" hx-target="#count" hx-swap="innerHTML">
-  +1
+<button hx-post="/api/increment" hx-target="#count" hx-swap="outerHTML">
+  Increment
 </button>
+
+<span id="count" hx-get="/api/count" hx-trigger="load">
+  Loading...
+</span>
 
 <!-- User A clicks 5 times → sees 5 -->
 <!-- User B visits the page → sees 0 (their own fresh state) -->
@@ -139,3 +136,51 @@ new Elysia()
     return \`<span>\${++scopedStore.count}</span>\`;
   })
   .listen(3000);`;
+export const htmxStreamingEndpoints = `\
+import { Elysia } from 'elysia';
+import { handleHTMXPageRequest } from '@absolutejs/absolute';
+
+const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+new Elysia()
+  .get('/dashboard', () =>
+    handleHTMXPageRequest('./build/pages/dashboard.html')
+  )
+  .get('/dashboard/cards/summary', async () => {
+    await delay(500);
+    return '<article class="card"><h2>Summary</h2><p>Resolved first</p></article>';
+  })
+  .get('/dashboard/cards/activity', async () => {
+    await delay(1800);
+    return '<article class="card"><h2>Activity</h2><p>Resolved later</p></article>';
+  });
+
+// AbsoluteJS lowers each <abs-htmx-stream-slot>
+// to hx-get + hx-trigger="load" + hx-swap="outerHTML".`;
+export const htmxStreamingPage = `\
+<!-- src/htmx/pages/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>HTMX Live Dashboard</title>
+  <script src="/htmx/htmx.min.js"></script>
+</head>
+<body>
+  <section class="grid">
+    <abs-htmx-stream-slot src="/dashboard/cards/summary">
+      <article class="card card-fallback">
+        <h2>Summary</h2>
+        <p>Loading...</p>
+      </article>
+    </abs-htmx-stream-slot>
+
+    <abs-htmx-stream-slot src="/dashboard/cards/activity">
+      <article class="card card-fallback">
+        <h2>Activity</h2>
+        <p>Loading...</p>
+      </article>
+    </abs-htmx-stream-slot>
+  </section>
+</body>
+</html>`;

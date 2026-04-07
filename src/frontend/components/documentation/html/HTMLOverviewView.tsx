@@ -10,6 +10,10 @@ import {
 	htmlSourceExample
 } from '../../../data/documentation/htmlHtmxDocsCode';
 import {
+	streamingRawHtmlExample,
+	streamingRawHtmlTemplate
+} from '../../../data/documentation/streamingDocsCode';
+import {
 	h1Style,
 	mainContentStyle,
 	paragraphLargeStyle,
@@ -30,7 +34,8 @@ const tocItems: TocItem[] = [
 	{ href: '#build-config', label: 'Build Configuration' },
 	{ href: '#page-handler', label: 'Page Handler' },
 	{ href: '#how-it-works', label: 'How It Works' },
-	{ href: '#asset-detection', label: 'Asset Detection' }
+	{ href: '#asset-detection', label: 'Asset Detection' },
+	{ href: '#out-of-order-streaming', label: 'Out-of-Order Streaming' }
 ];
 
 export const HTMLOverviewView = ({
@@ -60,9 +65,8 @@ export const HTMLOverviewView = ({
 						HTML
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Build HTML pages with automatic asset bundling.
-						AbsoluteJS detects JS, TS, and CSS files, bundles them,
-						and updates paths automatically.
+						Build HTML pages with automatic asset bundling and raw
+						out-of-order streaming support.
 					</p>
 				</animated.div>
 
@@ -161,6 +165,39 @@ export const HTMLOverviewView = ({
 						themeSprings={themeSprings}
 					/>
 					<AssetFeatureList />
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="out-of-order-streaming"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Out-of-Order Streaming
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						HTML uses the raw streaming transport directly, and the
+						server stays explicit: pass <code>streamingSlots</code>{' '}
+						to <code>handleHTMLPageRequest</code> while the document
+						renders stable fallback placeholders.
+					</p>
+					<PrismPlus
+						codeString={streamingRawHtmlTemplate}
+						language="html"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
+						The route passes the explicit streaming slot
+						definitions:
+					</p>
+					<PrismPlus
+						codeString={streamingRawHtmlExample}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<DocsNavigation

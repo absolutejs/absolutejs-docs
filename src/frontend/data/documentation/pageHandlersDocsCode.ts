@@ -1,58 +1,3 @@
-export const reactHandler = `import { asset } from '@absolutejs/absolute';
-import { handleReactPageRequest } from '@absolutejs/absolute/react';
-import { Elysia } from 'elysia';
-import { Home } from './pages/Home';
-
-const app = new Elysia()
-  .get('/', () =>
-    handleReactPageRequest(
-      Home,
-      asset(manifest, 'HomeIndex'),
-      { count: 0 }
-    )
-  )
-  .listen(3000);`;
-
-export const svelteHandler = `import { asset } from '@absolutejs/absolute';
-import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
-import { Elysia } from 'elysia';
-import SvelteExample from './components/SvelteExample.svelte';
-
-const app = new Elysia()
-  .get('/svelte', () =>
-    handleSveltePageRequest(
-      SvelteExample,
-      asset(manifest, 'SvelteExample'),
-      asset(manifest, 'SvelteExampleIndex'),
-      {
-        initialCount: 0,
-        cssPath: asset(manifest, 'SvelteExampleCSS')
-      }
-    )
-  )
-  .listen(3000);`;
-
-export const vueHandler = `import { asset, generateHeadElement } from '@absolutejs/absolute';
-import { handleVuePageRequest } from '@absolutejs/absolute/vue';
-import { Elysia } from 'elysia';
-import VueExample from './components/VueExample.vue';
-
-const app = new Elysia()
-  .get('/vue', () =>
-    handleVuePageRequest(
-      VueExample,
-      asset(manifest, 'VueExample'),
-      asset(manifest, 'VueExampleIndex'),
-      generateHeadElement({
-        cssPath: asset(manifest, 'VueExampleCSS'),
-        title: 'AbsoluteJS + Vue',
-        description: 'A Vue.js example with AbsoluteJS'
-      }),
-      { initialCount: 0 }
-    )
-  )
-  .listen(3000);`;
-
 export const angularHandler = `import { asset, generateHeadElement } from '@absolutejs/absolute';
 import { handleAngularPageRequest } from '@absolutejs/absolute/angular';
 import { Elysia } from 'elysia';
@@ -71,7 +16,47 @@ const app = new Elysia()
     )
   )
   .listen(3000);`;
+export const elysiaIntegration = `import { asset } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
+import { Elysia } from 'elysia';
+import { Profile, Dashboard, SearchResults } from './components';
 
+const app = new Elysia()
+  // Using route params
+  .get('/user/:id', ({ params: { id } }) =>
+    handleReactPageRequest(
+      Profile,
+      asset(manifest, 'ProfileIndex'),
+      { userId: id }
+    )
+  )
+  // Using cookies
+  .get('/dashboard', ({ cookie: { session } }) =>
+    handleReactPageRequest(
+      Dashboard,
+      asset(manifest, 'DashboardIndex'),
+      { sessionId: session?.value }
+    )
+  )
+  // Using query params
+  .get('/search', ({ query: { q, page } }) =>
+    handleReactPageRequest(
+      SearchResults,
+      asset(manifest, 'SearchResultsIndex'),
+      {
+        searchQuery: q,
+        currentPage: parseInt(page || '1')
+      }
+    )
+  )
+  .listen(3000);`;
+export const generateHead = `import { generateHeadElement } from '@absolutejs/absolute';
+
+const headElement = generateHeadElement({
+  cssPath: '/dist/styles.css',
+  title: 'My Application',
+  description: 'A modern web application built with AbsoluteJS'
+});`;
 export const htmlHandler = `import { handleHTMLPageRequest } from '@absolutejs/absolute';
 import { Elysia } from 'elysia';
 
@@ -80,7 +65,14 @@ const app = new Elysia()
     handleHTMLPageRequest('build/pages/HTMLExample.html')
   )
   .listen(3000);`;
+export const htmlStreamingHandler = `import { handleHTMLPageRequest } from '@absolutejs/absolute';
+import { Elysia } from 'elysia';
 
+const app = new Elysia()
+  .get('/reports', () =>
+    handleHTMLPageRequest('build/pages/Reports.html')
+  )
+  .listen(3000);`;
 export const htmxHandler = `import { handleHTMXPageRequest } from '@absolutejs/absolute';
 import { Elysia } from 'elysia';
 
@@ -89,15 +81,21 @@ const app = new Elysia()
     handleHTMXPageRequest('build/pages/HTMXExample.html')
   )
   .listen(3000);`;
+export const htmxStreamingHandler = `import { handleHTMXPageRequest } from '@absolutejs/absolute';
+import { Elysia } from 'elysia';
 
-export const generateHead = `import { generateHeadElement } from '@absolutejs/absolute';
+const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
-const headElement = generateHeadElement({
-  cssPath: '/dist/styles.css',
-  title: 'My Application',
-  description: 'A modern web application built with AbsoluteJS'
-});`;
-
+const app = new Elysia()
+  .get('/htmx/live', () =>
+    handleHTMXPageRequest('build/pages/LiveDashboard.html')
+  )
+  .get('/htmx/live/cards/summary', async () => {
+    await delay(500);
+    return '<article><h2>Summary</h2><p>Resolved first</p></article>';
+  })
+  .listen(3000);`;
 export const multipleFrameworks = `import { asset, generateHeadElement } from '@absolutejs/absolute';
 import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
@@ -143,7 +141,6 @@ const app = new Elysia()
     handleHTMLPageRequest('build/pages/terms.html')
   )
   .listen(3000);`;
-
 export const propsExample = `import { asset } from '@absolutejs/absolute';
 import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { Elysia } from 'elysia';
@@ -180,38 +177,55 @@ const invalidProps = {
   map: new Map(),                  // Map
   set: new Set()                   // Set
 };`;
-
-export const elysiaIntegration = `import { asset } from '@absolutejs/absolute';
+export const reactHandler = `import { asset } from '@absolutejs/absolute';
 import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { Elysia } from 'elysia';
-import { Profile, Dashboard, SearchResults } from './components';
+import { Home } from './pages/Home';
 
 const app = new Elysia()
-  // Using route params
-  .get('/user/:id', ({ params: { id } }) =>
+  .get('/', () =>
     handleReactPageRequest(
-      Profile,
-      asset(manifest, 'ProfileIndex'),
-      { userId: id }
+      Home,
+      asset(manifest, 'HomeIndex'),
+      { count: 0 }
     )
   )
-  // Using cookies
-  .get('/dashboard', ({ cookie: { session } }) =>
-    handleReactPageRequest(
-      Dashboard,
-      asset(manifest, 'DashboardIndex'),
-      { sessionId: session?.value }
-    )
-  )
-  // Using query params
-  .get('/search', ({ query: { q, page } }) =>
-    handleReactPageRequest(
-      SearchResults,
-      asset(manifest, 'SearchResultsIndex'),
+  .listen(3000);`;
+export const svelteHandler = `import { asset } from '@absolutejs/absolute';
+import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
+import { Elysia } from 'elysia';
+import SvelteExample from './components/SvelteExample.svelte';
+
+const app = new Elysia()
+  .get('/svelte', () =>
+    handleSveltePageRequest(
+      SvelteExample,
+      asset(manifest, 'SvelteExample'),
+      asset(manifest, 'SvelteExampleIndex'),
       {
-        searchQuery: q,
-        currentPage: parseInt(page || '1')
+        initialCount: 0,
+        cssPath: asset(manifest, 'SvelteExampleCSS')
       }
+    )
+  )
+  .listen(3000);`;
+export const vueHandler = `import { asset, generateHeadElement } from '@absolutejs/absolute';
+import { handleVuePageRequest } from '@absolutejs/absolute/vue';
+import { Elysia } from 'elysia';
+import VueExample from './components/VueExample.vue';
+
+const app = new Elysia()
+  .get('/vue', () =>
+    handleVuePageRequest(
+      VueExample,
+      asset(manifest, 'VueExample'),
+      asset(manifest, 'VueExampleIndex'),
+      generateHeadElement({
+        cssPath: asset(manifest, 'VueExampleCSS'),
+        title: 'AbsoluteJS + Vue',
+        description: 'A Vue.js example with AbsoluteJS'
+      }),
+      { initialCount: 0 }
     )
   )
   .listen(3000);`;

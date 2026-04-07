@@ -9,6 +9,10 @@ import {
 } from '../../../data/documentation/componentsDocsCode';
 import { imageReactUsage } from '../../../data/documentation/imageOptDocsCode';
 import {
+	streamingReactPrimitive,
+	streamingReactRaw
+} from '../../../data/documentation/streamingDocsCode';
+import {
 	h1Style,
 	mainContentStyle,
 	paragraphLargeStyle,
@@ -31,7 +35,8 @@ const tocItems: TocItem[] = [
 	{ href: '#image-component', label: 'Image Component' },
 	{ href: '#image-props', label: 'Image Props' },
 	{ href: '#priority-preloading', label: 'Priority & Preloading' },
-	{ href: '#fill-mode', label: 'Fill Mode' }
+	{ href: '#fill-mode', label: 'Fill Mode' },
+	{ href: '#streaming-components', label: 'Streaming Components' }
 ];
 
 export const ReactComponentsView = ({
@@ -61,8 +66,8 @@ export const ReactComponentsView = ({
 						React Components
 					</h1>
 					<p style={paragraphLargeStyle}>
-						AbsoluteJS provides Head, JsonLd, and Image components
-						for React. Import them from{' '}
+						AbsoluteJS provides Head, JsonLd, Image, StreamSlot, and
+						SuspenseSlot components for React. Import them from{' '}
 						<code>@absolutejs/absolute/react/components</code>.
 					</p>
 				</animated.div>
@@ -212,6 +217,49 @@ export const ReactComponentsView = ({
 						or <code>objectFit: 'contain'</code> to control how the
 						image scales within the container.
 					</p>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="streaming-components"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Streaming Components
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						React has both layers of the out-of-order streaming
+						model. Use <code>StreamSlot</code> when you want the raw
+						transport and will provide fallback and resolved HTML
+						yourself. Use <code>SuspenseSlot</code> when you want to
+						author fallback and resolved UI directly in JSX.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						<code>SuspenseSlot</code> is the framework-native
+						surface. It still lowers into the same slot transport
+						underneath, so slots can resolve out of DOM order while
+						staying in document order.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Raw transport with <code>StreamSlot</code>:
+					</p>
+					<PrismPlus
+						codeString={streamingReactRaw}
+						language="tsx"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Framework-native transport with{' '}
+						<code>SuspenseSlot</code>:
+					</p>
+					<PrismPlus
+						codeString={streamingReactPrimitive}
+						language="tsx"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<DocsNavigation

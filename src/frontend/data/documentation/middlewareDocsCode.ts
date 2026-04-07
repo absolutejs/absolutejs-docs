@@ -1,92 +1,3 @@
-export const middlewareComparison = `\
-// Next.js middleware pattern:
-// └── middleware.ts (single file, runs before every request)
-
-// AbsoluteJS / Elysia equivalent:
-// └── Lifecycle hooks : more granular, more powerful
-
-new Elysia()
-  // onRequest : runs on EVERY request (like Next.js middleware)
-  .onRequest(({ set }) => {
-    set.headers['X-Powered-By'] = 'AbsoluteJS';
-  })
-
-  // onBeforeHandle : runs after validation, before handler
-  // This is where auth checks, redirects, and access control go
-  .onBeforeHandle(({ cookie, status }) => {
-    if (!cookie.session.value) return status(401);
-  })
-
-  // guard : scope hooks to specific route groups
-  .guard(
-    { beforeHandle: requireAuth },
-    (app) => app
-      .get('/dashboard', () => 'protected')
-      .get('/settings', () => 'protected')
-  )
-
-  // Any route outside the guard is NOT protected
-  .get('/', () => 'public')`;
-
-export const lifecycleOverview = `\
-// Elysia Request Lifecycle (in order)
-// ═══════════════════════════════════
-
-// 1. onRequest       : Earliest hook. Minimal context. Always global.
-//                       Best for: rate limiting, analytics, custom headers
-
-// 2. onParse         : Body parsing (JSON, form data, etc.)
-
-// 3. onTransform     : Mutate context before validation
-//    └── derive()    : Create per-request context values (pre-validation)
-
-// ── Validation ──   : Schema validation runs here
-
-// 4. onBeforeHandle  : After validation, before handler
-//    └── resolve()   : Like derive() but type-safe (post-validation)
-//                       Best for: auth checks, access control, redirects
-
-// 5. Route Handler   : Your actual route logic
-
-// 6. onAfterHandle   : Transform or inspect the response
-
-// 7. mapResponse     : Convert to Web Standard Response (compression, etc.)
-
-// 8. onError         : Catches thrown errors from any phase
-
-// 9. onAfterResponse : After response sent. Best for: cleanup, logging`;
-
-export const registrationOrder = `\
-// IMPORTANT: Hooks only apply to routes registered AFTER them
-// (except onRequest, which is always global)
-
-new Elysia()
-  .onBeforeHandle(() => console.log('auth check'))
-
-  .get('/protected', () => 'has auth check')    // ✓ hook applies
-
-  .onBeforeHandle(() => console.log('logging'))
-
-  .get('/both', () => 'has both hooks')          // ✓ both hooks apply
-  .listen(3000);`;
-
-export const authGuardProtectRoute = `\
-// Using @absolutejs/auth : the built-in solution
-import { absoluteAuth } from '@absolutejs/auth';
-
-new Elysia()
-  .use(absoluteAuth<User>(authConfig))
-
-  // protectRoute is available on all routes after .use(absoluteAuth)
-  .get('/dashboard', ({ protectRoute }) =>
-    protectRoute(
-      // Authenticated : render the page
-      () => handleReactPageRequest(Dashboard, asset(manifest, 'DashboardIndex')),
-      // Not authenticated : render fallback
-      () => handleReactPageRequest(SignIn, asset(manifest, 'SignInIndex'))
-    )
-  )`;
-
 export const authGuardManual = `\
 // Manual auth pattern using guard + resolve
 // resolve runs AFTER validation, so types are guaranteed
@@ -112,35 +23,22 @@ new Elysia()
 
   // Routes outside the guard have no auth requirement
   .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))`;
-
-export const redirects = `\
-// Redirects using set.redirect in onBeforeHandle
+export const authGuardProtectRoute = `\
+// Using @absolutejs/auth : the built-in solution
+import { absoluteAuth } from '@absolutejs/auth';
 
 new Elysia()
-  .onBeforeHandle(({ set, request }) => {
-    const url = new URL(request.url);
+  .use(absoluteAuth<User>(authConfig))
 
-    // Redirect HTTP to HTTPS
-    if (url.protocol === 'http:') {
-      set.redirect = \`https://\${url.host}\${url.pathname}\`;
-      return;  // early return skips the handler
-    }
-  })
-
-  // Redirect old URLs to new ones
-  .get('/old-page', ({ set }) => {
-    set.redirect = '/new-page';
-  })
-
-  // Auth redirect : send unauthenticated users to login
-  .get('/dashboard', ({ cookie, set }) => {
-    if (!cookie.session.value) {
-      set.redirect = '/login';
-      return;
-    }
-    return handleReactPageRequest(Dashboard, asset(manifest, 'DashboardIndex'));
-  })`;
-
+  // protectRoute is available on all routes after .use(absoluteAuth)
+  .get('/dashboard', ({ protectRoute }) =>
+    protectRoute(
+      // Authenticated : render the page
+      () => handleReactPageRequest(Dashboard, asset(manifest, 'DashboardIndex')),
+      // Not authenticated : render fallback
+      () => handleReactPageRequest(SignIn, asset(manifest, 'SignInIndex'))
+    )
+  )`;
 export const corsHeaders = `\
 // Option 1: Use the @elysiajs/cors plugin (recommended)
 import { cors } from '@elysiajs/cors';
@@ -171,7 +69,62 @@ new Elysia()
       return new Response(null, { status: 204 });
     }
   })`;
+export const lifecycleOverview = `\
+// Elysia Request Lifecycle (in order)
+// ═══════════════════════════════════
 
+// 1. onRequest       : Earliest hook. Minimal context. Always global.
+//                       Best for: rate limiting, analytics, custom headers
+
+// 2. onParse         : Body parsing (JSON, form data, etc.)
+
+// 3. onTransform     : Mutate context before validation
+//    └── derive()    : Create per-request context values (pre-validation)
+
+// ── Validation ──   : Schema validation runs here
+
+// 4. onBeforeHandle  : After validation, before handler
+//    └── resolve()   : Like derive() but type-safe (post-validation)
+//                       Best for: auth checks, access control, redirects
+
+// 5. Route Handler   : Your actual route logic
+
+// 6. onAfterHandle   : Transform or inspect the response
+
+// 7. mapResponse     : Convert to Web Standard Response (compression, etc.)
+
+// 8. onError         : Catches thrown errors from any phase
+
+// 9. onAfterResponse : After response sent. Best for: cleanup, logging`;
+export const middlewareComparison = `\
+// Next.js middleware pattern:
+// └── middleware.ts (single file, runs before every request)
+
+// AbsoluteJS / Elysia equivalent:
+// └── Lifecycle hooks : more granular, more powerful
+
+new Elysia()
+  // onRequest : runs on EVERY request (like Next.js middleware)
+  .onRequest(({ set }) => {
+    set.headers['X-Powered-By'] = 'AbsoluteJS';
+  })
+
+  // onBeforeHandle : runs after validation, before handler
+  // This is where auth checks, redirects, and access control go
+  .onBeforeHandle(({ cookie, status }) => {
+    if (!cookie.session.value) return status(401);
+  })
+
+  // guard : scope hooks to specific route groups
+  .guard(
+    { beforeHandle: requireAuth },
+    (app) => app
+      .get('/dashboard', () => 'protected')
+      .get('/settings', () => 'protected')
+  )
+
+  // Any route outside the guard is NOT protected
+  .get('/', () => 'public')`;
 export const rateLimiting = `\
 // Simple rate limiter using onRequest + state
 
@@ -204,7 +157,46 @@ new Elysia()
   .use(rateLimiter)
   .get('/', () => 'Hello')
   .listen(3000);`;
+export const redirects = `\
+// Redirects using set.redirect in onBeforeHandle
 
+new Elysia()
+  .onBeforeHandle(({ set, request }) => {
+    const url = new URL(request.url);
+
+    // Redirect HTTP to HTTPS
+    if (url.protocol === 'http:') {
+      set.redirect = \`https://\${url.host}\${url.pathname}\`;
+      return;  // early return skips the handler
+    }
+  })
+
+  // Redirect old URLs to new ones
+  .get('/old-page', ({ set }) => {
+    set.redirect = '/new-page';
+  })
+
+  // Auth redirect : send unauthenticated users to login
+  .get('/dashboard', ({ cookie, set }) => {
+    if (!cookie.session.value) {
+      set.redirect = '/login';
+      return;
+    }
+    return handleReactPageRequest(Dashboard, asset(manifest, 'DashboardIndex'));
+  })`;
+export const registrationOrder = `\
+// IMPORTANT: Hooks only apply to routes registered AFTER them
+// (except onRequest, which is always global)
+
+new Elysia()
+  .onBeforeHandle(() => console.log('auth check'))
+
+  .get('/protected', () => 'has auth check')    // ✓ hook applies
+
+  .onBeforeHandle(() => console.log('logging'))
+
+  .get('/both', () => 'has both hooks')          // ✓ both hooks apply
+  .listen(3000);`;
 export const scopingMiddleware = `\
 // Elysia hooks are ISOLATED by default (local scope)
 // Three scope levels control where hooks apply:

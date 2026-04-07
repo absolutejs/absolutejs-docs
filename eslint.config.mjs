@@ -251,7 +251,7 @@ export default defineConfig([
 		}
 	},
 	{
-		files: ['eslint.config.mjs'],
+		files: ['eslint.config.mjs', 'absolute.config.ts'],
 		rules: {
 			'no-magic-numbers': 'off',
 			'no-restricted-exports': 'off'

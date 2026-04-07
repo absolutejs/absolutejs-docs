@@ -3,6 +3,10 @@ import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { imageVueUsage } from '../../../data/documentation/imageOptDocsCode';
 import {
+	streamingVuePrimitive,
+	streamingVueRaw
+} from '../../../data/documentation/streamingDocsCode';
+import {
 	h1Style,
 	mainContentStyle,
 	paragraphLargeStyle,
@@ -22,7 +26,8 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 const tocItems: TocItem[] = [
 	{ href: '#image-component', label: 'Image Component' },
 	{ href: '#image-props', label: 'Image Props' },
-	{ href: '#fill-mode', label: 'Fill Mode' }
+	{ href: '#fill-mode', label: 'Fill Mode' },
+	{ href: '#streaming-components', label: 'Streaming Components' }
 ];
 
 export const VueComponentsView = ({
@@ -52,8 +57,10 @@ export const VueComponentsView = ({
 						Vue Components
 					</h1>
 					<p style={paragraphLargeStyle}>
-						AbsoluteJS provides an Image component for Vue. Import
-						it from <code>@absolutejs/absolute/vue</code>.
+						AbsoluteJS provides an Image component plus StreamSlot
+						and SuspenseSlot for Vue. Import them from{' '}
+						<code>@absolutejs/absolute/vue</code> or{' '}
+						<code>@absolutejs/absolute/vue/components</code>.
 					</p>
 				</animated.div>
 
@@ -107,6 +114,50 @@ export const VueComponentsView = ({
 						component handles preload link injection without
 						Teleport, so priority images work correctly during SSR.
 					</p>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="streaming-components"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Streaming Components
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Vue supports both layers of AbsoluteJS streaming. Use{' '}
+						<code>StreamSlot</code> when you want the raw transport
+						and will provide fallback and resolved HTML yourself.
+						Use <code>SuspenseSlot</code> when you want to author
+						fallback and resolved UI as normal Vue markup.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						<code>SuspenseSlot</code> uses Vue-authored fallback and
+						default slots on top of the shared out-of-order
+						transport, so slot resolution order can differ from
+						declaration order without forcing you back into string
+						HTML.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Raw transport with <code>StreamSlot</code>:
+					</p>
+					<PrismPlus
+						codeString={streamingVueRaw}
+						language="html"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Framework-native transport with{' '}
+						<code>SuspenseSlot</code>:
+					</p>
+					<PrismPlus
+						codeString={streamingVuePrimitive}
+						language="html"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<DocsNavigation

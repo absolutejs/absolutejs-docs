@@ -7,6 +7,10 @@ import {
 } from '../../../data/documentation/componentsDocsCode';
 import { imageSvelteUsage } from '../../../data/documentation/imageOptDocsCode';
 import {
+	streamingSveltePrimitive,
+	streamingSvelteRaw
+} from '../../../data/documentation/streamingDocsCode';
+import {
 	h1Style,
 	mainContentStyle,
 	paragraphLargeStyle,
@@ -27,7 +31,8 @@ const tocItems: TocItem[] = [
 	{ href: '#head-component', label: 'Head Component' },
 	{ href: '#jsonld-component', label: 'JsonLd Component' },
 	{ href: '#image-component', label: 'Image Component' },
-	{ href: '#image-props', label: 'Image Props' }
+	{ href: '#image-props', label: 'Image Props' },
+	{ href: '#streaming-components', label: 'Streaming Components' }
 ];
 
 export const SvelteComponentsView = ({
@@ -60,9 +65,8 @@ export const SvelteComponentsView = ({
 						Svelte Components
 					</h1>
 					<p style={paragraphLargeStyle}>
-						AbsoluteJS provides Head, JsonLd, and Image components
-						for Svelte. Import them from their respective module
-						paths.
+						AbsoluteJS provides Head, JsonLd, Image, StreamSlot, and
+						AwaitSlot for Svelte.
 					</p>
 				</animated.div>
 
@@ -158,6 +162,49 @@ export const SvelteComponentsView = ({
 						React Image component:
 					</p>
 					<SvelteImagePropsList />
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="streaming-components"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Streaming Components
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Svelte exposes the shared streaming transport through
+						<code>StreamSlot</code> and the higher-level{' '}
+						<code>AwaitSlot</code> primitive. Use{' '}
+						<code>StreamSlot</code>
+						when you want the raw transport directly. Use{' '}
+						<code>AwaitSlot</code> when you want Svelte-authored
+						fallback and resolved UI.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						This keeps authoring in normal Svelte markup while still
+						letting async regions resolve independently of DOM
+						order.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Raw transport with <code>StreamSlot</code>:
+					</p>
+					<PrismPlus
+						codeString={streamingSvelteRaw}
+						language="html"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Framework-native transport with <code>AwaitSlot</code>:
+					</p>
+					<PrismPlus
+						codeString={streamingSveltePrimitive}
+						language="html"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<DocsNavigation

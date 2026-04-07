@@ -136,7 +136,19 @@ function handleAngularPageRequest<TProps extends Record<string, unknown>>(
 ): Promise<Response>;
 
 // HTML page handler: import from '@absolutejs/absolute'
-function handleHTMLPageRequest(pagePath: string): BunFile;
+type StaticPageRequestOptions = {
+  streamingSlots?: StreamingSlot[];
+  policy?: StreamingSlotPolicy;
+  nonce?: string;
+  onError?: (error: unknown, slot: StreamingSlot) => void;
+};
+
+function handleHTMLPageRequest(
+  pagePath: string,
+  options?: StaticPageRequestOptions
+): Promise<Response>;
 
 // HTMX page handler: import from '@absolutejs/absolute'
-function handleHTMXPageRequest(pagePath: string): BunFile;`;
+function handleHTMXPageRequest(
+  pagePath: string
+): Promise<Response>;`;

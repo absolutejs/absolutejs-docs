@@ -1,11 +1,3 @@
-export const gettingStarted = `import { createOAuth2Client } from 'citra';
-
-const googleClient = await createOAuth2Client('google', {
-  clientId: 'YOUR_CLIENT_ID',
-  clientSecret: 'YOUR_CLIENT_SECRET',
-  redirectUri: 'https://yourapp.com/auth/callback'
-});`;
-
 export const buildingAuthUrl = `const currentState = generateState();
 const codeVerifier = generateCodeVerifier();
 const authUrl = await googleClient.createAuthorizationUrl({
@@ -29,7 +21,6 @@ headers.append(
 	'Set-Cookie',
 	\`pkce_code_verifier=\${codeVerifier}; HttpOnly; Path=/; Secure; SameSite=Lax\`
 );`;
-
 export const callback = `// Parse callback URL parameters
 const request = new Request('https://yourapp.com/auth/callback');
 const params = new URL(request.url).searchParams;
@@ -73,14 +64,19 @@ const tokenResponse = await googleClient.validateAuthorizationCode({
   code,
   codeVerifier
 });`;
-
 export const fetchUserProfile = `// Get the access token from server session
 const session = await getSession(request);
 const accessToken = session.accessToken;
 
 const profile = await googleClient.fetchUserProfile(accessToken);
 console.log(profile);`;
+export const gettingStarted = `import { createOAuth2Client } from 'citra';
 
+const googleClient = await createOAuth2Client('google', {
+  clientId: 'YOUR_CLIENT_ID',
+  clientSecret: 'YOUR_CLIENT_SECRET',
+  redirectUri: 'https://yourapp.com/auth/callback'
+});`;
 export const refreshAccessToken = `// Get the refresh token from server session
 const session = await getSession(request);
 const refreshToken = session.refreshToken;
@@ -88,7 +84,6 @@ const refreshToken = session.refreshToken;
 if (refreshToken) {
   const newTokens = await googleClient.refreshAccessToken(refreshToken);
 }`;
-
 export const revokeToken = `// Get the access token from server session
 const session = await getSession(request);
 const accessToken = session.accessToken;

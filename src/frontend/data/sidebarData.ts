@@ -33,6 +33,7 @@ import { BuildManifestView } from '../components/documentation/core/BuildManifes
 import { ErrorBoundariesView } from '../components/documentation/core/ErrorBoundariesView';
 import { IslandsView } from '../components/documentation/core/IslandsView';
 import { LoadingStatesView } from '../components/documentation/core/LoadingStatesView';
+import { OutOfOrderStreamingView } from '../components/documentation/core/OutOfOrderStreamingView';
 import { RoutingHandlersView } from '../components/documentation/core/RoutingHandlersView';
 import { SSRModelView } from '../components/documentation/core/SSRModelView';
 import { TypeSafetyView } from '../components/documentation/core/TypeSafetyView';
@@ -138,6 +139,7 @@ export const docsViews = definePortalViews({
 	middleware: MiddlewareView,
 	mkcert: MkcertView,
 	'networking-plugin': NetworkingPluginView,
+	'out-of-order-streaming': OutOfOrderStreamingView,
 	overview: Overview,
 	'page-handlers': PageHandlersView,
 	'production-build': ProductionBuildView,
@@ -191,7 +193,8 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'type-safety', label: 'Type Safety' },
 			{ id: 'islands', label: 'Islands' },
 			{ id: 'error-boundaries', label: 'Error Boundaries' },
-			{ id: 'loading-states', label: 'Loading States' }
+			{ id: 'loading-states', label: 'Loading States' },
+			{ id: 'out-of-order-streaming', label: 'Out-of-Order Streaming' }
 		],
 		icon: animated(FaLayerGroup),
 		label: 'Core Concepts'

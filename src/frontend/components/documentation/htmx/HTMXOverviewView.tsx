@@ -9,7 +9,9 @@ import {
 	htmxExample,
 	htmxHandler,
 	htmxScopedStateHtml,
-	htmxScopedStateSetup
+	htmxScopedStateSetup,
+	htmxStreamingEndpoints,
+	htmxStreamingPage
 } from '../../../data/documentation/htmlHtmxDocsCode';
 import {
 	h1Style,
@@ -26,7 +28,6 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { PrismPlus } from '../../utils/PrismPlus';
-import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
@@ -34,6 +35,7 @@ const tocItems: TocItem[] = [
 	{ href: '#page-handler', label: 'Page Handler' },
 	{ href: '#example', label: 'Example' },
 	{ href: '#api-endpoints', label: 'API Endpoints' },
+	{ href: '#out-of-order-streaming', label: 'Out-of-Order Streaming' },
 	{ href: '#scoped-state', label: 'Per-User State' }
 ];
 
@@ -58,8 +60,6 @@ export const HTMXOverviewView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,
-	tocOpen,
-	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
 	const showDesktopToc = !isMobileOrTablet;
@@ -81,8 +81,8 @@ export const HTMXOverviewView = ({
 						HTMX
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Build interactive applications with HTMX&apos;s
-						HTML-over-the-wire approach.
+						Build interactive applications with HTMX's
+						HTML-over-the-wire model and native fragment updates.
 					</p>
 				</animated.div>
 
@@ -118,7 +118,9 @@ export const HTMXOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Pass the path to the built HTML file to{' '}
-						<code>handleHTMXPageRequest</code>:
+						<code>handleHTMXPageRequest</code>. HTMX interactivity
+						stays in the document and your endpoints, not in a
+						page-local sidecar.
 					</p>
 					<PrismPlus
 						codeString={htmxHandler}
@@ -200,6 +202,44 @@ export const HTMXOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
+						id="out-of-order-streaming"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Out-of-Order Streaming
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						HTMX gets its own first-class primitive:{' '}
+						<code>&lt;abs-htmx-stream-slot&gt;</code>. AbsoluteJS
+						lowers each tag into native HTMX markup, so the browser
+						still performs normal <code>hx-get</code> fragment
+						requests and swaps in the returned HTML when that
+						endpoint finishes.
+					</p>
+					<PrismPlus
+						codeString={htmxStreamingPage}
+						language="html"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
+						The server stays explicit: serve the page with{' '}
+						<code>handleHTMXPageRequest</code> and expose one
+						fragment endpoint per region. The authored HTMX page
+						stays declarative, while AbsoluteJS handles the lowering
+						step.
+					</p>
+					<PrismPlus
+						codeString={htmxStreamingEndpoints}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
 						id="scoped-state"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
@@ -209,11 +249,11 @@ export const HTMXOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						When building interactive HTMX applications, you often
-						need state that&apos;s specific to each user. For
-						example, a counter button should only increment that
-						user&apos;s count, not everyone&apos;s. The{' '}
-						<code>elysia-scoped-state</code> plugin solves this by
-						automatically managing per-user sessions.
+						need state that's specific to each user. For example, a
+						counter button should only increment that user's count,
+						not everyone's. The <code>elysia-scoped-state</code>{' '}
+						plugin solves this by automatically managing per-user
+						sessions.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Without scoped state, all users would share the same
@@ -232,7 +272,7 @@ export const HTMXOverviewView = ({
 							marginTop: '1.5rem'
 						}}
 					>
-						The HTML stays the same, but now each user&apos;s
+						The HTML stays the same, but now each user's
 						interactions only affect their own state:
 					</p>
 					<PrismPlus
@@ -258,40 +298,9 @@ export const HTMXOverviewView = ({
 									</strong>
 								),
 								text: "Each user's scopedStore is completely independent"
-							},
-							{
-								label: (
-									<strong style={strongStyle}>
-										No client-side state
-									</strong>
-								),
-								text: "All state lives on the server, perfect for HTMX's HTML-over-the-wire approach"
 							}
 						]}
 					/>
-					<p
-						style={{
-							...paragraphSpacedStyle,
-							marginTop: '1rem'
-						}}
-					>
-						See the{' '}
-						<a
-							href="#"
-							onClick={(event) => {
-								event.preventDefault();
-								onNavigate('scoped-state');
-							}}
-							style={{
-								color: 'inherit',
-								textDecoration: 'underline'
-							}}
-						>
-							Scoped State documentation
-						</a>{' '}
-						for more details on configuration options and advanced
-						usage.
-					</p>
 				</section>
 
 				<DocsNavigation
@@ -304,14 +313,6 @@ export const HTMXOverviewView = ({
 
 			{showDesktopToc && (
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
-			)}
-			{isMobileOrTablet && onTocToggle && (
-				<MobileTableOfContents
-					isOpen={tocOpen ?? false}
-					items={tocItems}
-					onToggle={onTocToggle}
-					themeSprings={themeSprings}
-				/>
 			)}
 		</div>
 	);
