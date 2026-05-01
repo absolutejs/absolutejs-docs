@@ -72,7 +72,6 @@ export default defineConfig([
 
 	{
 		files: ['**/*.{js,mjs,cjs,ts,tsx,jsx}'],
-		ignores: ['node_modules/**'],
 		plugins: {
 			absolute: absolutePlugin,
 			promise: promisePlugin,
@@ -104,6 +103,15 @@ export default defineConfig([
 					caseSensitive: true,
 					natural: true,
 					order: 'asc',
+					pureImports: [
+						'asset',
+						'getEnv',
+						'getStatus',
+						'isValidProviderOption',
+						't.Object',
+						't.Optional',
+						't.String'
+					],
 					variablesBeforeFunctions: true
 				}
 			],

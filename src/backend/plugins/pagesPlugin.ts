@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { User } from '../../../db/schema';
-import { handleReactPageRequest, asset, getEnv } from '@absolutejs/absolute';
+import { asset, getEnv } from '@absolutejs/absolute';
+import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import {
 	getStatus,
 	isValidProviderOption,
@@ -46,19 +47,23 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 					return status(error.code, error.message);
 				}
 
-				return handleReactPageRequest(
-					Home,
-					asset(manifest, 'HomeIndex'),
-					{
+				return handleReactPageRequest({
+					index: asset(manifest, 'HomeIndex'),
+					Page: Home,
+					props: {
 						theme: theme?.value,
 						user
 					}
-				);
+				});
 			}
 		)
 		.get('/signup/:redirect?', ({ cookie: { theme } }) =>
-			handleReactPageRequest(Signup, asset(manifest, 'SignupIndex'), {
-				theme: theme?.value
+			handleReactPageRequest({
+				index: asset(manifest, 'SignupIndex'),
+				Page: Signup,
+				props: {
+					theme: theme?.value
+				}
 			})
 		)
 		.get(
@@ -77,27 +82,27 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 					return status(error.code, error.message);
 				}
 
-				return handleReactPageRequest(
-					Blog,
-					asset(manifest, 'BlogIndex'),
-					{
+				return handleReactPageRequest({
+					index: asset(manifest, 'BlogIndex'),
+					Page: Blog,
+					props: {
 						theme: theme?.value,
 						user
 					}
-				);
+				});
 			}
 		)
 		.get('/profile', ({ cookie: { theme }, protectRoute, redirect }) =>
 			protectRoute(
 				(user) =>
-					handleReactPageRequest(
-						Profile,
-						asset(manifest, 'ProfileIndex'),
-						{
+					handleReactPageRequest({
+						index: asset(manifest, 'ProfileIndex'),
+						Page: Profile,
+						props: {
 							theme: theme?.value,
 							user
 						}
-					),
+					}),
 				async () => redirect('/signup/profile')
 			)
 		)
@@ -118,15 +123,15 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 					return status(error.code, error.message);
 				}
 
-				return handleReactPageRequest(
-					Documentation,
-					asset(manifest, 'DocumentationIndex'),
-					{
+				return handleReactPageRequest({
+					index: asset(manifest, 'DocumentationIndex'),
+					Page: Documentation,
+					props: {
 						initialView: view ?? 'overview',
 						theme: theme?.value,
 						user
 					}
-				);
+				});
 			},
 			{
 				params: t.Object({ view: t.Optional(docsViewEnum) })
@@ -149,10 +154,10 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 					return status(error.code, error.message);
 				}
 
-				return handleReactPageRequest(
-					AuthTesting,
-					asset(manifest, 'AuthTestingIndex'),
-					{
+				return handleReactPageRequest({
+					index: asset(manifest, 'AuthTestingIndex'),
+					Page: AuthTesting,
+					props: {
 						initialProvider:
 							query.provider &&
 							isValidProviderOption(query.provider)
@@ -161,7 +166,7 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 						theme: theme?.value,
 						user
 					}
-				);
+				});
 			},
 			{
 				query: t.Object({ provider: t.Optional(t.String()) })
@@ -176,15 +181,15 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 							return redirect('/signup/telemetry');
 						}
 
-						return handleReactPageRequest(
-							TelemetryDashboard,
-							asset(manifest, 'TelemetryDashboardIndex'),
-							{
+						return handleReactPageRequest({
+							index: asset(manifest, 'TelemetryDashboardIndex'),
+							Page: TelemetryDashboard,
+							props: {
 								initialView: view ?? 'overview',
 								theme: theme?.value,
 								user
 							}
-						);
+						});
 					},
 					async () => redirect('/signup/telemetry')
 				),
