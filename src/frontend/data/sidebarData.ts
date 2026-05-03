@@ -24,6 +24,7 @@ import { StartView } from '../components/documentation/cli/StartView';
 import { TelemetryView } from '../components/documentation/cli/TelemetryView';
 import { TypecheckView } from '../components/documentation/cli/TypecheckView';
 import { AssetsView } from '../components/documentation/config/AssetsView';
+import { BunBuildOptionsView } from '../components/documentation/config/BunBuildOptionsView';
 import { EnvironmentVariablesView } from '../components/documentation/config/EnvironmentVariablesView';
 import { HeadMetaTagsView } from '../components/documentation/config/HeadMetaTagsView';
 import { ImageOptimizationView } from '../components/documentation/config/ImageOptimizationView';
@@ -63,6 +64,7 @@ import { MiddlewareView } from '../components/documentation/server/MiddlewareVie
 import { NetworkingPluginView } from '../components/documentation/server/NetworkingPluginView';
 import { AngularOverviewView } from '../components/documentation/angular/AngularOverviewView';
 import { AngularComponentsView } from '../components/documentation/angular/AngularComponentsView';
+import { AngularSpaView } from '../components/documentation/angular/AngularSpaView';
 import { HTMLOverviewView } from '../components/documentation/html/HTMLOverviewView';
 import { HTMLImageOptView } from '../components/documentation/html/HTMLImageOptView';
 import { HTMLAIView } from '../components/documentation/html/HTMLAIView';
@@ -71,10 +73,13 @@ import { HTMXAIView } from '../components/documentation/htmx/HTMXAIView';
 import { ReactOverviewView } from '../components/documentation/react/ReactOverviewView';
 import { ReactComponentsView } from '../components/documentation/react/ReactComponentsView';
 import { ReactHooksView } from '../components/documentation/react/ReactHooksView';
+import { ReactSpaView } from '../components/documentation/react/ReactSpaView';
 import { SvelteOverviewView } from '../components/documentation/svelte/SvelteOverviewView';
 import { SvelteComponentsView } from '../components/documentation/svelte/SvelteComponentsView';
+import { SvelteSpaView } from '../components/documentation/svelte/SvelteSpaView';
 import { VueOverviewView } from '../components/documentation/vue/VueOverviewView';
 import { VueComponentsView } from '../components/documentation/vue/VueComponentsView';
+import { VueSpaView } from '../components/documentation/vue/VueSpaView';
 import { VueAIView } from '../components/documentation/vue/VueAIView';
 import { AIOverviewView } from '../components/documentation/ai/AIOverviewView';
 import { AIProvidersView } from '../components/documentation/ai/AIProvidersView';
@@ -104,8 +109,10 @@ export const docsViews = definePortalViews({
 	'angular-components': AngularComponentsView,
 	'angular-islands': AngularIslandsView,
 	'angular-overview': AngularOverviewView,
+	'angular-spa': AngularSpaView,
 	assets: AssetsView,
 	'build-and-manifest': BuildManifestView,
+	'bun-build-options': BunBuildOptionsView,
 	citra: CitraView,
 	compile: CompileView,
 	'create-absolutejs': CreateAbsoluteJSView,
@@ -149,6 +156,7 @@ export const docsViews = definePortalViews({
 	'react-hooks': ReactHooksView,
 	'react-islands': ReactIslandsView,
 	'react-overview': ReactOverviewView,
+	'react-spa': ReactSpaView,
 	'routing-and-handlers': RoutingHandlersView,
 	'scoped-state': ScopedStateView,
 	'server-state': ServerStateView,
@@ -160,6 +168,7 @@ export const docsViews = definePortalViews({
 	'svelte-components': SvelteComponentsView,
 	'svelte-islands': SvelteIslandsView,
 	'svelte-overview': SvelteOverviewView,
+	'svelte-spa': SvelteSpaView,
 	'tailwind-css': TailwindCSSView,
 	telemetry: TelemetryView,
 	'type-safety': TypeSafetyView,
@@ -168,7 +177,8 @@ export const docsViews = definePortalViews({
 	'vue-ai': VueAIView,
 	'vue-components': VueComponentsView,
 	'vue-islands': VueIslandsView,
-	'vue-overview': VueOverviewView
+	'vue-overview': VueOverviewView,
+	'vue-spa': VueSpaView
 });
 
 export const sidebarData: MenuItem[] = [
@@ -218,6 +228,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'react-overview', label: 'Overview' },
 			{ id: 'react-components', label: 'Components' },
 			{ id: 'react-hooks', label: 'Hooks' },
+			{ id: 'react-spa', label: 'SPA' },
 			{ id: 'react-islands', label: 'Islands' },
 			{ id: 'react-ai', label: 'AI' }
 		],
@@ -228,6 +239,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'svelte-overview', label: 'Overview' },
 			{ id: 'svelte-components', label: 'Components' },
+			{ id: 'svelte-spa', label: 'SPA' },
 			{ id: 'svelte-islands', label: 'Islands' },
 			{ id: 'svelte-ai', label: 'AI' }
 		],
@@ -238,6 +250,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'vue-overview', label: 'Overview' },
 			{ id: 'vue-components', label: 'Components' },
+			{ id: 'vue-spa', label: 'SPA' },
 			{ id: 'vue-islands', label: 'Islands' },
 			{ id: 'vue-ai', label: 'AI' }
 		],
@@ -248,6 +261,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'angular-overview', label: 'Overview' },
 			{ id: 'angular-components', label: 'Components' },
+			{ id: 'angular-spa', label: 'SPA' },
 			{ id: 'angular-islands', label: 'Islands' },
 			{ id: 'angular-ai', label: 'AI' }
 		],
@@ -319,6 +333,7 @@ export const sidebarData: MenuItem[] = [
 	{
 		buttons: [
 			{ id: 'environment-variables', label: 'Environment Variables' },
+			{ id: 'bun-build-options', label: 'Bun Build Options' },
 			{ id: 'tailwind-css', label: 'Tailwind CSS' },
 			{ id: 'head-meta-tags', label: 'Head & Meta Tags' },
 			{ id: 'image-optimization', label: 'Image Optimization' },
