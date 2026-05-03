@@ -41,11 +41,17 @@ export class DashboardComponent {
   }
 }`.replace(/\\/g, '`');
 export const streamingPageHandlerIntegration = `\
-// Framework page handlers stream automatically when slots register during render
+// Framework page handlers are opt-in for slot streaming
+// when 'collectStreamingSlots: true' is passed
 import { handleReactPageRequest } from '@absolutejs/absolute/react';
 
 app.get('/dashboard', () =>
-  handleReactPageRequest(Dashboard, asset(manifest, 'DashboardIndex'))
+  handleReactPageRequest(
+    Dashboard,
+    asset(manifest, 'DashboardIndex'),
+    undefined,
+    { collectStreamingSlots: true }
+  )
 );`;
 export const streamingRawFrameworkSnippet = `\
 import { StreamSlot } from '@absolutejs/absolute/vue/components';

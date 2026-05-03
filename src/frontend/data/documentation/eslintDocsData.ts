@@ -90,6 +90,14 @@ export const eslintDocsData: EslintDocsSection[] = [
 		title: 'absolute/no-nested-jsx-return'
 	},
 	{
+		afterCode: eslintDocsCode.noNondeterministicRender.afterCode,
+		beforeCode: eslintDocsCode.noNondeterministicRender.beforeCode,
+		description:
+			'Disallows nondeterministic values like Math.random, Date.now, performance.now, crypto.randomUUID, and new Date() inside Angular component field initializers and inline templates. These cause SSR hydration mismatches between server and client renders. Use injected deterministic tokens or compute the value before render instead.',
+		href: '#no-nondeterministic-render',
+		title: 'absolute/no-nondeterministic-render'
+	},
+	{
 		afterCode: eslintDocsCode.noOrNoneComponent.afterCode,
 		beforeCode: eslintDocsCode.noOrNoneComponent.beforeCode,
 		description:

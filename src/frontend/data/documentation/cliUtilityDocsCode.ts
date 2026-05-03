@@ -1,9 +1,20 @@
 export const eslintCommand = `\
-# Run ESLint with caching
+# Run ESLint with caching across the whole project
 absolute eslint
 
-# Pass additional args to ESLint
-absolute eslint --fix`;
+# Lint a specific path (no implicit '.' is appended)
+absolute eslint src/backend
+
+# Pass-through to ESLint: autofix, CI-friendly output, strictness
+absolute eslint --fix
+absolute eslint --quiet --max-warnings 0
+absolute eslint --format json -o eslint-report.json
+
+# Wipe the cache file (does NOT invoke ESLint)
+absolute eslint --clear-cache
+
+# Relocate the cache (useful in monorepos / CI to avoid collisions)
+ABSOLUTE_ESLINT_CACHE=.cache/eslint absolute eslint`;
 export const infoCommand = `\
 # Print system info for bug reports
 absolute info`;

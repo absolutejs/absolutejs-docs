@@ -60,6 +60,12 @@ const reactParams: HandlerParam[] = [
 			'Type-safe props matching the component requirements (optional)',
 		param: 'props',
 		type: 'Props'
+	},
+	{
+		description:
+			'Enable framework slot streaming by collecting registered slots during SSR. Disabled by default.',
+		param: 'options',
+		type: 'FrameworkPageHandlerOptions'
 	}
 ];
 
@@ -88,6 +94,12 @@ const angularParams: HandlerParam[] = [
 		description: 'Type-safe props (optional if component has no props)',
 		param: 'props',
 		type: 'Props'
+	},
+	{
+		description:
+			'Enable framework slot streaming by collecting registered slots during SSR. Disabled by default.',
+		param: 'options',
+		type: 'FrameworkPageHandlerOptions'
 	}
 ];
 
@@ -111,6 +123,12 @@ const svelteParams: HandlerParam[] = [
 		description: 'Type-safe props (optional if component has no props)',
 		param: 'props',
 		type: 'Props'
+	},
+	{
+		description:
+			'Enable framework slot streaming by collecting registered slots during SSR. Disabled by default.',
+		param: 'options',
+		type: 'FrameworkPageHandlerOptions'
 	}
 ];
 
@@ -139,6 +157,12 @@ const vueParams: HandlerParam[] = [
 		description: 'Type-safe props (optional if component has no props)',
 		param: 'props',
 		type: 'Props'
+	},
+	{
+		description:
+			'Enable framework slot streaming by collecting registered slots during SSR. Disabled by default.',
+		param: 'options',
+		type: 'FrameworkPageHandlerOptions'
 	}
 ];
 

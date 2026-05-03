@@ -236,6 +236,12 @@ export const ReactComponentsView = ({
 						author fallback and resolved UI directly in JSX.
 					</p>
 					<p style={paragraphSpacedStyle}>
+						These primitives are only activated when the route uses{' '}
+						<code>handleReactPageRequest</code> with{' '}
+						<code>{`{ collectStreamingSlots: true }`}</code> in the
+						options argument.
+					</p>
+					<p style={paragraphSpacedStyle}>
 						<code>SuspenseSlot</code> is the framework-native
 						surface. It still lowers into the same slot transport
 						underneath, so slots can resolve out of DOM order while

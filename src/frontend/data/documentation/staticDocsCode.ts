@@ -4,6 +4,13 @@ absolute compile
 
 # With options
 absolute compile src/backend/server.ts --outdir dist --outfile my-app`;
+export const compileDynamicFiles = `\
+// Not auto-discoverable at compile time
+const name = request.query.name;
+const file = await Bun.file(join(import.meta.dir, 'uploads', name)).text();
+
+// Put user uploads, generated files, or databases outside the compiled binary
+// and read them from a configured runtime path instead.`;
 export const compileOutput = `\
 $ absolute compile
 
@@ -29,6 +36,17 @@ export const compileRun = `\
 
 # Or set a custom port
 PORT=8080 ./compiled-server`;
+export const compileRuntimeFiles = `\
+// Embedded automatically
+const templateUrl = new URL('./runtime/template.html', import.meta.url);
+const html = await Bun.file(templateUrl).text();
+
+// Also embedded when each segment is static
+const textPath = join(import.meta.dir, 'runtime', 'message.txt');
+const text = await Bun.file(textPath).text();
+
+const jsonPath = resolve(import.meta.dir, 'runtime', 'data.json');
+const json = await Bun.file(jsonPath).json();`;
 export const isrConfig = `\
 // absolute.config.ts
 import { defineConfig } from "@absolutejs/absolute";

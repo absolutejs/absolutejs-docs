@@ -176,6 +176,24 @@ const List = () => (
 );`
 };
 
+export const noNondeterministicRender: EslintDocsCode = {
+	afterCode: `\
+@Component({
+	template: '<p>{{ value }}</p>'
+})
+export class Dashboard {
+	readonly value = this.random();
+	private readonly random = inject(DETERMINISTIC_RANDOM);
+}`,
+	beforeCode: `\
+@Component({
+	template: '<p>{{ Math.random() }}</p>'
+})
+export class Dashboard {
+	readonly id = crypto.randomUUID();
+}`
+};
+
 export const noOrNoneComponent: EslintDocsCode = {
 	afterCode: `{enabled && <Button />}`,
 	beforeCode: `\

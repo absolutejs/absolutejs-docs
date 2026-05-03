@@ -15,15 +15,19 @@ new Elysia()
       return status(401, 'Unauthorized');
     }
 
-    return handleReactPageRequest(Dashboard, indexPath, { user });
+    return handleReactPageRequest({
+      Page: Dashboard,
+      index: indexPath,
+      props: { user }
+    });
   })`;
 export const elysiaGroups = `\
 // Group routes for organization and shared middleware
 
 new Elysia()
   // Public routes
-  .get('/', () => handleReactPageRequest(Home, indexPath))
-  .get('/about', () => handleReactPageRequest(About, indexPath))
+  .get('/', () => handleReactPageRequest({ Page: Home, index: indexPath }))
+  .get('/about', () => handleReactPageRequest({ Page: About, index: indexPath }))
 
   // API group with shared prefix
   .group('/api', (app) =>
@@ -37,10 +41,10 @@ new Elysia()
     app
       .derive(requireAuth)
       .get('/dashboard', ({ user }) =>
-        handleReactPageRequest(Dashboard, indexPath, { user })
+        handleReactPageRequest({ Page: Dashboard, index: indexPath, props: { user } })
       )
       .get('/settings', ({ user }) =>
-        handleReactPageRequest(Settings, indexPath, { user })
+        handleReactPageRequest({ Page: Settings, index: indexPath, props: { user } })
       )
   )`;
 export const elysiaLifecycle = `\
@@ -112,7 +116,7 @@ new Elysia()
   .use(swagger())
 
   // Page routes
-  .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
+  .get('/', () => handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') }))
 
   // API routes: just regular Elysia
   .get('/api/users', () => getUsers())

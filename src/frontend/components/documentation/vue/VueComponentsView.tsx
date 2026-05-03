@@ -133,6 +133,12 @@ export const VueComponentsView = ({
 						fallback and resolved UI as normal Vue markup.
 					</p>
 					<p style={paragraphSpacedStyle}>
+						These primitives are only enabled when the route uses{' '}
+						<code>handleVuePageRequest</code> with{' '}
+						<code>{`{ collectStreamingSlots: true }`}</code> in the
+						options argument.
+					</p>
+					<p style={paragraphSpacedStyle}>
 						<code>SuspenseSlot</code> uses Vue-authored fallback and
 						default slots on top of the shared out-of-order
 						transport, so slot resolution order can differ from

@@ -153,6 +153,12 @@ export const AngularComponentsView = ({
 						placeholder and resolved UI.
 					</p>
 					<p style={paragraphSpacedStyle}>
+						These primitives are only enabled when the route uses{' '}
+						<code>handleAngularPageRequest</code> with{' '}
+						<code>{`{ collectStreamingSlots: true }`}</code> in the
+						options argument.
+					</p>
+					<p style={paragraphSpacedStyle}>
 						AbsoluteJS lowers <code>@defer</code> into the shared
 						slot transport and routes the client handoff through
 						Angular's own rendering model so streamed regions stay

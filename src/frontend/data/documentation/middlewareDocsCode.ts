@@ -22,7 +22,7 @@ new Elysia()
   )
 
   // Routes outside the guard have no auth requirement
-  .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))`;
+  .get('/', () => handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') }))`;
 export const authGuardProtectRoute = `\
 // Using @absolutejs/auth : the built-in solution
 import { absoluteAuth } from '@absolutejs/auth';
@@ -34,9 +34,9 @@ new Elysia()
   .get('/dashboard', ({ protectRoute }) =>
     protectRoute(
       // Authenticated : render the page
-      () => handleReactPageRequest(Dashboard, asset(manifest, 'DashboardIndex')),
+      () => handleReactPageRequest({ Page: Dashboard, index: asset(manifest, 'DashboardIndex') }),
       // Not authenticated : render fallback
-      () => handleReactPageRequest(SignIn, asset(manifest, 'SignInIndex'))
+      () => handleReactPageRequest({ Page: SignIn, index: asset(manifest, 'SignInIndex') })
     )
   )`;
 export const corsHeaders = `\
@@ -182,7 +182,7 @@ new Elysia()
       set.redirect = '/login';
       return;
     }
-    return handleReactPageRequest(Dashboard, asset(manifest, 'DashboardIndex'));
+    return handleReactPageRequest({ Page: Dashboard, index: asset(manifest, 'DashboardIndex') });
   })`;
 export const registrationOrder = `\
 // IMPORTANT: Hooks only apply to routes registered AFTER them

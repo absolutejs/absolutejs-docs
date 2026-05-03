@@ -103,6 +103,12 @@ export const ReactOverviewView = ({
 						components. Pass the component, its bundled index file,
 						and optional props:
 					</p>
+					<p style={paragraphSpacedStyle}>
+						Framework handlers are non-streaming by default. Add{' '}
+						<code>{`{ collectStreamingSlots: true }`}</code> as the
+						4th argument to enable out-of-order slot streaming for
+						<code>SuspenseSlot</code> and <code>StreamSlot</code>.
+					</p>
 					<PrismPlus
 						codeString={reactHandler}
 						language="typescript"
@@ -208,8 +214,9 @@ export const ReactOverviewView = ({
 						Streaming SSR
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						AbsoluteJS uses React&apos;s streaming SSR to send HTML
-						progressively to the browser:
+						AbsoluteJS routes React streaming through
+						<code>SuspenseSlot</code> and can send HTML
+						progressively when the page handler opts in:
 					</p>
 					<PrismPlus
 						codeString={reactStreaming}

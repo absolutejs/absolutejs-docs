@@ -21,7 +21,7 @@
 		"db:push": "drizzle-kit push"
 	},
 	"dependencies": {
-		"@absolutejs/absolute": "0.19.0-beta.462",
+		"@absolutejs/absolute": "^0.19.0-beta.816",
 		"@absolutejs/auth": "0.22.4",
 		"@elysiajs/eden": "1.4.9",
 		"@elysiajs/static": "1.4.7",
@@ -45,7 +45,7 @@
 		"@types/react-syntax-highlighter": "15.5.13",
 		"drizzle-kit": "0.30.6",
 		"eslint": "10.2.0",
-		"eslint-plugin-absolute": "0.2.6",
+		"eslint-plugin-absolute": "^0.3.0",
 		"eslint-plugin-jsx-a11y": "6.10.2",
 		"eslint-plugin-promise": "7.2.1",
 		"eslint-plugin-react-compiler": "19.1.0-rc.2",

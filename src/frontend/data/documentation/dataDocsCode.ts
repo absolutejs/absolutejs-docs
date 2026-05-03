@@ -11,7 +11,11 @@ export const dataFetchingError = `\
     return status(404, 'Post not found');
   }
 
-  return handleReactPageRequest(PostPage, indexPath, { post });
+  return handleReactPageRequest({
+    Page: PostPage,
+    index: indexPath,
+    props: { post }
+  });
 }, {
   params: t.Object({ id: t.String() })
 })`;
@@ -26,11 +30,11 @@ export const dataFetchingServer = `\
   });
 
   // TypeScript knows posts is Post[] with author relation
-  return handleReactPageRequest(
-    PostList,
-    asset(manifest, 'PostListIndex'),
-    { posts }  // Type-safe: PostListProps['posts'] must match
-  );
+  return handleReactPageRequest({
+    Page: PostList,
+    index: asset(manifest, 'PostListIndex'),
+    props: { posts }  // Type-safe: PostListProps['posts'] must match
+  });
 })`;
 export const dataFetchingTyped = `\
 // Types flow from database schema to components

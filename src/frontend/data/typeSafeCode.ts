@@ -13,7 +13,7 @@ const db = drizzle(sql, { schema });
 
 const server = new Elysia()
     .use(absolutejs)
-    .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
+    .get('/', () => handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') }))
     .get('/api/users/:subject',
     async ({ status, params: { subject } }) => {
         try {

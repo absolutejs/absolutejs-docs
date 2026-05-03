@@ -36,9 +36,9 @@ import { handleHTMXPageRequest } from '@absolutejs/absolute';
 
 new Elysia()
   .use(absolutejs)
-  .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
-  .get('/admin', () => handleAngularPageRequest(adminImporter, adminPage, adminIndex))
-  .get('/dashboard', () => handleSveltePageRequest(Dashboard, dashPage, dashIndex))
+  .get('/', () => handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') }))
+  .get('/admin', () => handleAngularPageRequest<typeof AdminPage>({ pagePath: adminPage, indexPath: adminIndex }))
+  .get('/dashboard', () => handleSveltePageRequest<typeof Dashboard>({ pagePath: dashPage, indexPath: dashIndex }))
   .get('/widget', () => handleHTMXPageRequest('./build/pages/widget.html'))
   .use(networking);`;
 export const simpleExample = `\
@@ -60,7 +60,7 @@ const { absolutejs, manifest } = await prepare();
 new Elysia()
   .use(absolutejs)
   .get('/', () =>
-    handleReactPageRequest(Home, asset(manifest, 'HomeIndex'))
+    handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') })
   )
   .use(networking);`;
 export const typeSafetyFlow = `\
@@ -77,7 +77,7 @@ export type Post = typeof posts.$inferSelect;
 // 2. Server handler : TypeScript enforces the props match
 .get('/posts/:id', async ({ params }) => {
   const post = await db.query.posts.findFirst({ where: eq(posts.id, params.id) });
-  return handleReactPageRequest(PostPage, asset(manifest, 'PostPageIndex'), { post });
+  return handleReactPageRequest({ Page: PostPage, index: asset(manifest, 'PostPageIndex'), props: { post } });
 })
 
 // 3. Component receives typed props : no manual type wiring

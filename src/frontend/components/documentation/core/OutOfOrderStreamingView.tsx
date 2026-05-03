@@ -45,7 +45,9 @@ const AuthoringLayerList = () => (
 			<strong style={strongStyle}>Framework primitives</strong> : you
 			author fallback and resolved UI with JSX, Svelte markup, Vue
 			templates, or Angular template syntax. AbsoluteJS lowers that into
-			the same slot transport underneath.
+			the same slot transport underneath, but only when the handler is
+			enabled for streaming with
+			<code>collectStreamingSlots: true</code>.
 		</li>
 	</ul>
 );
@@ -101,6 +103,13 @@ export const OutOfOrderStreamingView = ({
 						can reach the browser first even if that region appears
 						later in the document. Declaration order stays stable in
 						the HTML, but slot resolution order is independent.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						For framework-generated pages, this behavior is opt-in.
+						Pass <code>collectStreamingSlots: true</code> to the
+						relevant framework page handler to enable slot
+						streaming. Without it, framework handlers render as
+						standard SSR.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						This is useful for dashboards, feeds, sidebars, and any
@@ -214,6 +223,12 @@ export const OutOfOrderStreamingView = ({
 						<code>SuspenseSlot</code> and <code>StreamSlot</code>,
 						and Angular supports both raw streaming slot components
 						and lowered <code>@defer</code> boundaries.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Framework page handlers default to regular SSR. Enable
+						them here only when you need out-of-order streaming by
+						passing <code>{`{ collectStreamingSlots: true }`}</code>{' '}
+						as the page-handler options argument.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						This page is the transport overview. The

@@ -183,6 +183,12 @@ export const SvelteComponentsView = ({
 						fallback and resolved UI.
 					</p>
 					<p style={paragraphSpacedStyle}>
+						These primitives are only enabled when the route uses{' '}
+						<code>handleSveltePageRequest</code> with{' '}
+						<code>{`{ collectStreamingSlots: true }`}</code> in the
+						options argument.
+					</p>
+					<p style={paragraphSpacedStyle}>
 						This keeps authoring in normal Svelte markup while still
 						letting async regions resolve independently of DOM
 						order.

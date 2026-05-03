@@ -12,10 +12,10 @@ import { handleReactPageRequest } from '@absolutejs/absolute/react';
 
 new Elysia()
   .get('/', () =>
-    handleReactPageRequest(Home, asset(manifest, 'HomeIndex'))
+    handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') })
   )
   .get('/about', () =>
-    handleReactPageRequest(About, asset(manifest, 'AboutIndex'))
+    handleReactPageRequest({ Page: About, index: asset(manifest, 'AboutIndex') })
   )`;
 export const reactHydration = `\
 // Client-side hydration happens automatically
@@ -141,15 +141,15 @@ new Elysia()
     const notifications = await getNotifications(user.id);
 
     // Type error if props don't match DashboardProps!
-    return handleReactPageRequest(
-      Dashboard,
-      asset(manifest, 'DashboardIndex'),
-      {
+    return handleReactPageRequest({
+      Page: Dashboard,
+      index: asset(manifest, 'DashboardIndex'),
+      props: {
         user,
         notifications,
         unreadCount: notifications.filter(n => !n.read).length
       }
-    );
+    });
   })`;
 export const reactTypeSafetyTypes = `\
 // db/schema.ts

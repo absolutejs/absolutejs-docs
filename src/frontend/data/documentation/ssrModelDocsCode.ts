@@ -27,7 +27,7 @@ export const propsInjection = `\
 })`;
 export const renderToStream = `\
 .get('/', () =>
-  handleReactPageRequest(Home, asset(manifest, 'HomeIndex'))
+  handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') })
 )`;
 export const ssrFlow = `\
 // 1. Request comes in

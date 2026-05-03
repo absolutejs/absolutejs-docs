@@ -113,6 +113,11 @@ export const SvelteOverviewView = ({
 						<code>asset()</code> to get the compiled paths for both
 						the page and index files:
 					</p>
+					<p style={paragraphSpacedStyle}>
+						Framework handlers are non-streaming by default. Add{' '}
+						<code>{`{ collectStreamingSlots: true }`}</code> as the
+						final argument to opt into framework streaming.
+					</p>
 					<PrismPlus
 						codeString={svelteHandler}
 						language="typescript"

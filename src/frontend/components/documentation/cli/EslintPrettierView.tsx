@@ -107,15 +107,33 @@ export const EslintPrettierView = ({
 						items={[
 							{
 								description:
-									'Uses the ESLint config from your project root'
+									'Uses the ESLint config from your project root (eslint.config.{js,mjs,cjs,ts,mts,cts})'
 							},
 							{
-								description: 'Cache is stored in',
+								description: 'Cache is stored by default in',
 								highlight: '.absolutejs/eslint-cache'
 							},
 							{
 								description:
-									'All additional arguments are passed through to ESLint'
+									'Override the cache location with the env var',
+								highlight: 'ABSOLUTE_ESLINT_CACHE'
+							},
+							{
+								description: 'Wipe the cache with',
+								highlight: '--clear-cache'
+							},
+							{
+								description:
+									'Lint scope honors positional paths — without one, the CLI appends',
+								highlight: '.'
+							},
+							{
+								description:
+									'All other arguments pass through to ESLint (--fix, --quiet, --max-warnings, --format, etc.)'
+							},
+							{
+								description:
+									'Warns when your flat config has a non-global ignores block — a common ESLint v9 footgun that silently makes lint walk node_modules'
 							}
 						]}
 					/>

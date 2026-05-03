@@ -7,7 +7,7 @@ const indexPath = asset(manifest, 'HomeIndex');
 
 // Use it in your page handlers
 .get('/', () =>
-  handleReactPageRequest(Home, asset(manifest, 'HomeIndex'))
+  handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') })
 )`;
 export const buildOptions = `\
 // absolute.config.ts
@@ -89,7 +89,7 @@ const { absolutejs, manifest } = await prepare();
 new Elysia()
   .use(absolutejs)  // Adds HMR routes in development
   .get('/', () =>
-    handleReactPageRequest(Home, asset(manifest, 'HomeIndex'))
+    handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') })
   )
   .listen(3000);`;
 export const simpleReactConfig = `\

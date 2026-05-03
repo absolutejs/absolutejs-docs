@@ -3,7 +3,7 @@ import { networking } from '@absolutejs/absolute';
 import { Elysia } from 'elysia';
 
 new Elysia()
-  .get('/', () => handleReactPageRequest(Home, indexPath))
+  .get('/', () => handleReactPageRequest({ Page: Home, index: indexPath }))
   .use(networking);  // Starts the server: no .listen() needed`;
 export const networkingEnv = `\
 # .env file
@@ -34,7 +34,7 @@ const { absolutejs, manifest } = await prepare();
 
 new Elysia()
   .use(absolutejs)
-  .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
+  .get('/', () => handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') }))
   .get('/api/health', () => ({ status: 'ok' }))
   .use(networking);`;
 export const networkingHost = `\

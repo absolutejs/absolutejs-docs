@@ -1,19 +1,19 @@
 export const angularHandler = `import { asset, generateHeadElement } from '@absolutejs/absolute';
 import { handleAngularPageRequest } from '@absolutejs/absolute/angular';
 import { Elysia } from 'elysia';
+import type * as DashboardPage from './angular/Dashboard.server';
 
 const app = new Elysia()
   .get('/angular', () =>
-    handleAngularPageRequest(
-      () => import('./angular/Dashboard.server'),
-      asset(manifest, 'Dashboard'),
-      asset(manifest, 'DashboardIndex'),
-      generateHeadElement({
+    handleAngularPageRequest<typeof DashboardPage>({
+      pagePath: asset(manifest, 'Dashboard'),
+      indexPath: asset(manifest, 'DashboardIndex'),
+      headTag: generateHeadElement({
         title: 'AbsoluteJS + Angular',
         description: 'An Angular example with AbsoluteJS'
       }),
-      { user: { name: 'Alex' } }
-    )
+      props: { user: { name: 'Alex' } }
+    })
   )
   .listen(3000);`;
 export const elysiaIntegration = `import { asset } from '@absolutejs/absolute';
@@ -24,30 +24,30 @@ import { Profile, Dashboard, SearchResults } from './components';
 const app = new Elysia()
   // Using route params
   .get('/user/:id', ({ params: { id } }) =>
-    handleReactPageRequest(
-      Profile,
-      asset(manifest, 'ProfileIndex'),
-      { userId: id }
-    )
+    handleReactPageRequest({
+      Page: Profile,
+      index: asset(manifest, 'ProfileIndex'),
+      props: { userId: id }
+    })
   )
   // Using cookies
   .get('/dashboard', ({ cookie: { session } }) =>
-    handleReactPageRequest(
-      Dashboard,
-      asset(manifest, 'DashboardIndex'),
-      { sessionId: session?.value }
-    )
+    handleReactPageRequest({
+      Page: Dashboard,
+      index: asset(manifest, 'DashboardIndex'),
+      props: { sessionId: session?.value }
+    })
   )
   // Using query params
   .get('/search', ({ query: { q, page } }) =>
-    handleReactPageRequest(
-      SearchResults,
-      asset(manifest, 'SearchResultsIndex'),
-      {
+    handleReactPageRequest({
+      Page: SearchResults,
+      index: asset(manifest, 'SearchResultsIndex'),
+      props: {
         searchQuery: q,
         currentPage: parseInt(page || '1')
       }
-    )
+    })
   )
   .listen(3000);`;
 export const generateHead = `import { generateHeadElement } from '@absolutejs/absolute';
@@ -102,39 +102,37 @@ import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
 import { handleVuePageRequest } from '@absolutejs/absolute/vue';
 import { handleHTMLPageRequest } from '@absolutejs/absolute';
 import { Elysia } from 'elysia';
+import type About from './svelte/About.svelte';
+import type Contact from './vue/Contact.vue';
 
 // Import components
 import Home from './react/Home';
-import About from './svelte/About.svelte';
-import Contact from './vue/Contact.vue';
 
 const app = new Elysia()
   // React page
   .get('/', () =>
-    handleReactPageRequest(
-      Home,
-      asset(manifest, 'HomeIndex'),
-      { title: 'Welcome' }
-    )
+    handleReactPageRequest({
+      Page: Home,
+      index: asset(manifest, 'HomeIndex'),
+      props: { title: 'Welcome' }
+    })
   )
   // Svelte page
   .get('/about', () =>
-    handleSveltePageRequest(
-      About,
-      asset(manifest, 'About'),
-      asset(manifest, 'AboutIndex'),
-      { company: '@absolutejs/absolute' }
-    )
+    handleSveltePageRequest<typeof About>({
+      pagePath: asset(manifest, 'About'),
+      indexPath: asset(manifest, 'AboutIndex'),
+      props: { company: '@absolutejs/absolute' }
+    })
   )
   // Vue page
   .get('/contact', () =>
-    handleVuePageRequest(
-      Contact,
-      asset(manifest, 'Contact'),
-      asset(manifest, 'ContactIndex'),
-      generateHeadElement({ title: 'Contact Us' }),
-      { email: 'hello@example.com' }
-    )
+    handleVuePageRequest<typeof Contact>({
+      pagePath: asset(manifest, 'Contact'),
+      indexPath: asset(manifest, 'ContactIndex'),
+      headTag: generateHeadElement({ title: 'Contact Us' }),
+      props: { email: 'hello@example.com' }
+    })
   )
   // Static HTML
   .get('/terms', () =>
@@ -161,11 +159,11 @@ const validProps = {
 
 const app = new Elysia()
   .get('/dashboard', () =>
-    handleReactPageRequest(
-      Dashboard,
-      asset(manifest, 'DashboardIndex'),
-      validProps
-    )
+    handleReactPageRequest({
+      Page: Dashboard,
+      index: asset(manifest, 'DashboardIndex'),
+      props: validProps
+    })
   )
   .listen(3000);
 
@@ -184,48 +182,46 @@ import { Home } from './pages/Home';
 
 const app = new Elysia()
   .get('/', () =>
-    handleReactPageRequest(
-      Home,
-      asset(manifest, 'HomeIndex'),
-      { count: 0 }
-    )
+    handleReactPageRequest({
+      Page: Home,
+      index: asset(manifest, 'HomeIndex'),
+      props: { count: 0 }
+    })
   )
   .listen(3000);`;
 export const svelteHandler = `import { asset } from '@absolutejs/absolute';
 import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
 import { Elysia } from 'elysia';
-import SvelteExample from './components/SvelteExample.svelte';
+import type SvelteExample from './components/SvelteExample.svelte';
 
 const app = new Elysia()
   .get('/svelte', () =>
-    handleSveltePageRequest(
-      SvelteExample,
-      asset(manifest, 'SvelteExample'),
-      asset(manifest, 'SvelteExampleIndex'),
-      {
+    handleSveltePageRequest<typeof SvelteExample>({
+      pagePath: asset(manifest, 'SvelteExample'),
+      indexPath: asset(manifest, 'SvelteExampleIndex'),
+      props: {
         initialCount: 0,
         cssPath: asset(manifest, 'SvelteExampleCSS')
       }
-    )
+    })
   )
   .listen(3000);`;
 export const vueHandler = `import { asset, generateHeadElement } from '@absolutejs/absolute';
 import { handleVuePageRequest } from '@absolutejs/absolute/vue';
 import { Elysia } from 'elysia';
-import VueExample from './components/VueExample.vue';
+import type VueExample from './components/VueExample.vue';
 
 const app = new Elysia()
   .get('/vue', () =>
-    handleVuePageRequest(
-      VueExample,
-      asset(manifest, 'VueExample'),
-      asset(manifest, 'VueExampleIndex'),
-      generateHeadElement({
+    handleVuePageRequest<typeof VueExample>({
+      pagePath: asset(manifest, 'VueExample'),
+      indexPath: asset(manifest, 'VueExampleIndex'),
+      headTag: generateHeadElement({
         cssPath: asset(manifest, 'VueExampleCSS'),
         title: 'AbsoluteJS + Vue',
         description: 'A Vue.js example with AbsoluteJS'
       }),
-      { initialCount: 0 }
-    )
+      props: { initialCount: 0 }
+    })
   )
   .listen(3000);`;

@@ -45,6 +45,119 @@ new Elysia()
     assets: './public',    // Served at root: /image.png
     prefix: '/static'      // Or with prefix: /static/image.png
   }))`;
+export const bunBuildMultiService = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  app: {
+    entry: 'src/backend/server.ts',
+    reactDirectory: './src/frontend',
+    bunBuild: {
+      reactClient: {
+        minify: {
+          whitespace: true,
+          syntax: true,
+          identifiers: false
+        }
+      }
+    }
+  },
+  worker: {
+    kind: 'command',
+    command: ['bun', 'run', 'src/worker.ts']
+  }
+});`;
+export const bunBuildPassKeys = `\
+type BunBuildPassKey =
+  | 'server'
+  | 'reactClient'
+  | 'nonReactClient'
+  | 'islandClient'
+  | 'globalCss'
+  | 'vueCss';`;
+export const bunBuildPerPass = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  entry: 'src/backend/server.ts',
+  reactDirectory: './src/frontend',
+  vueDirectory: './src/vue',
+  bunBuild: {
+    default: {
+      sourcemap: 'linked'
+    },
+    reactClient: {
+      minify: false
+    },
+    nonReactClient: {
+      minify: {
+        whitespace: true,
+        syntax: true,
+        identifiers: false
+      }
+    },
+    vueCss: {
+      naming: '[name].[hash].[ext]'
+    }
+  }
+});`;
+export const bunBuildReservedFields = `\
+// These Bun BuildConfig fields are owned by AbsoluteJS
+// and cannot be configured through bunBuild.
+type ReservedBunBuildConfigKey =
+  | 'entrypoints'
+  | 'outdir'
+  | 'outfile'
+  | 'root'
+  | 'target'
+  | 'format'
+  | 'throw'
+  | 'compile';`;
+export const bunBuildShorthand = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  entry: 'src/backend/server.ts',
+  reactDirectory: './src/frontend',
+  bunBuild: {
+    sourcemap: 'linked',
+    drop: ['console']
+  }
+});`;
+export const bunBuildSingleService = `\
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  entry: 'src/backend/server.ts',
+  reactDirectory: './src/frontend',
+  bunBuild: {
+    reactClient: {
+      minify: {
+        whitespace: true,
+        syntax: true,
+        identifiers: false
+      }
+    },
+    nonReactClient: {
+      minify: {
+        whitespace: true,
+        syntax: true,
+        identifiers: false
+      }
+    },
+    islandClient: {
+      minify: {
+        whitespace: true,
+        syntax: true,
+        identifiers: false
+      }
+    }
+  }
+});`;
 export const customConfigPath = `\
 // Load from a custom config path
 const { absolutejs, manifest } = await prepare('./custom.config.ts');`;
@@ -187,7 +300,7 @@ const { absolutejs, manifest } = await prepare();
 
 new Elysia()
   .use(absolutejs)  // Adds HMR routes in development
-  .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
+  .get('/', () => handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') }))
   .listen(3000);`;
 export const tailwindBuild = `\
 // absolute.config.ts

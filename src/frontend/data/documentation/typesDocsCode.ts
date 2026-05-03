@@ -102,11 +102,19 @@ const homePath = manifest['HomePageIndex'];
 const postPath = manifest['PostPageIndex'];
 // Returns: '/assets/PostPage-m3n4o5p6.js'`;
 export const pageHandlerTypes = `\
+// Streaming slot collection is opt-in for framework handlers.
+// Disabled by default; set to true to enable.
+type FrameworkPageHandlerOptions = {
+  collectStreamingSlots?: boolean;
+};
+
 // React page handler: import from '@absolutejs/absolute/react'
 function handleReactPageRequest<TProps extends Record<string, unknown>>(
   Component: React.ComponentType<TProps>,
   scriptPath: string,
-  ...props: keyof TProps extends never ? [] : [props: TProps]
+  ...params: keyof TProps extends never
+    ? [props?: TProps, options?: FrameworkPageHandlerOptions]
+    : [props: TProps, options?: FrameworkPageHandlerOptions]
 ): Promise<Response>;
 
 // Svelte page handler: import from '@absolutejs/absolute/svelte'
@@ -114,7 +122,9 @@ function handleSveltePageRequest<TProps extends Record<string, unknown>>(
   Component: SvelteComponent,
   pagePath: string,
   scriptPath: string,
-  props?: TProps
+  ...params: keyof TProps extends never
+    ? [props?: TProps, options?: FrameworkPageHandlerOptions]
+    : [props: TProps, options?: FrameworkPageHandlerOptions]
 ): Promise<Response>;
 
 // Vue page handler: import from '@absolutejs/absolute/vue'
@@ -123,17 +133,22 @@ function handleVuePageRequest<TProps extends Record<string, unknown>>(
   pagePath: string,
   scriptPath: string,
   headTag?: string,
-  ...props: keyof TProps extends never ? [] : [props: TProps]
+  ...params: keyof TProps extends never
+    ? [props?: TProps, options?: FrameworkPageHandlerOptions]
+    : [props: TProps, options?: FrameworkPageHandlerOptions]
 ): Promise<Response>;
 
 // Angular page handler: import from '@absolutejs/absolute/angular'
-function handleAngularPageRequest<TProps extends Record<string, unknown>>(
-  importer: () => Promise<{ factory: (props: TProps) => unknown }>,
-  pagePath: string,
-  scriptPath: string,
-  headTag?: string,
-  ...props: keyof TProps extends never ? [] : [props: TProps]
-): Promise<Response>;
+function defineAngularPage<TProps extends Record<string, unknown>>(definition: {
+  component: Type<unknown>;
+}): AngularPageDefinition<TProps>;
+
+function handleAngularPageRequest<TPageModule>(input: {
+  pagePath: string;
+  indexPath: string;
+  headTag?: string;
+  props: AngularPagePropsOf<TPageModule>;
+}): Promise<Response>;
 
 // HTML page handler: import from '@absolutejs/absolute'
 type StaticPageRequestOptions = {

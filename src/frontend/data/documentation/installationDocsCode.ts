@@ -24,7 +24,7 @@ const { absolutejs, manifest } = await prepare();
 
 new Elysia()
   .use(absolutejs)
-  .get('/', () => handleReactPageRequest(Home, asset(manifest, 'HomeIndex')))
+  .get('/', () => handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') }))
   .listen(3000);
 
 console.log('Server running at http://localhost:3000');`;

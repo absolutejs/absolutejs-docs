@@ -185,18 +185,24 @@ const app = new Elysia()
   .get('/', async ({ getStatus }) => {
     const { data: user } = await getStatus();
     const allPosts = await db.query.posts.findMany();
-    return handleReactPageRequest(Home, asset(manifest, 'HomeIndex'), {
-      posts: allPosts,
-      user
+    return handleReactPageRequest({
+      Page: Home,
+      index: asset(manifest, 'HomeIndex'),
+      props: {
+        posts: allPosts,
+        user
+      }
     });
   })
 
   // Protected dashboard : user is typed as User from your schema
   .get('/dashboard', ({ status, protectRoute }) =>
     protectRoute(
-      (user) => handleReactPageRequest(
-        Dashboard, asset(manifest, 'DashboardIndex'), { user }
-      ),
+      (user) => handleReactPageRequest({
+        Page: Dashboard,
+        index: asset(manifest, 'DashboardIndex'),
+        props: { user }
+      }),
       (error) => status(error.code, error.message)
     )
   )
