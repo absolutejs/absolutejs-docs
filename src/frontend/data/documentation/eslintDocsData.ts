@@ -18,6 +18,14 @@ export const eslintDocsData: EslintDocsSection[] = [
 		title: 'absolute/explicit-object-types'
 	},
 	{
+		afterCode: eslintDocsCode.inlineStyleLimit.afterCode,
+		beforeCode: eslintDocsCode.inlineStyleLimit.beforeCode,
+		description:
+			'Disallows inline JSX style objects with too many keys (default: 3) and encourages extracting them into a named constant or a styles file. Configurable via a number (`["error", 5]`) or an object (`{ maxKeys: 5 }`).',
+		href: '#inline-style-limit',
+		title: 'absolute/inline-style-limit'
+	},
+	{
 		afterCode: eslintDocsCode.localizeReactProps.afterCode,
 		beforeCode: eslintDocsCode.localizeReactProps.beforeCode,
 		description:
@@ -66,12 +74,12 @@ export const eslintDocsData: EslintDocsSection[] = [
 		title: 'absolute/no-explicit-return-type'
 	},
 	{
-		afterCode: eslintDocsCode.noInlinePropTypes.afterCode,
-		beforeCode: eslintDocsCode.noInlinePropTypes.beforeCode,
+		afterCode: eslintDocsCode.noInlineObjectTypes.afterCode,
+		beforeCode: eslintDocsCode.noInlineObjectTypes.beforeCode,
 		description:
-			'Enforces the use of named or predefined types for component props, preventing the use of inline type definitions when passing props.',
-		href: '#no-inline-prop-types',
-		title: 'absolute/no-inline-prop-types'
+			'Disallows inline object type literals on variable annotations, class fields, function/method/constructor parameters, and generic type arguments on calls or `new` expressions. Descends through wrappers like `T[]`, `Array<T>`, `Promise<T>`, `Record<K, V>`, unions, and intersections so the inner shape still gets caught. Configurable via `minProperties` (default 2) — set to 1 to also flag single-property cases. Index-signature-only types are skipped.',
+		href: '#no-inline-object-types',
+		title: 'absolute/no-inline-object-types'
 	},
 	{
 		afterCode: eslintDocsCode.noMultiStyleObjects.afterCode,
@@ -106,6 +114,14 @@ export const eslintDocsData: EslintDocsSection[] = [
 		title: 'absolute/no-or-none-component'
 	},
 	{
+		afterCode: eslintDocsCode.noRedundantTypeAnnotation.afterCode,
+		beforeCode: eslintDocsCode.noRedundantTypeAnnotation.beforeCode,
+		description:
+			"Type-aware rule that flags variable annotations whose type already matches what TypeScript would infer from the initializer. Fires on `const foo: T = bar()` when `bar()` already returns `T`, on `const foo: Foo = new Foo()`, on identifier and member-access initializers, and on `as` casts. Skips literal initializers (where the annotation does widening work like `const foo: string = 'hello'`), object/array literals (contextually typed), and aliased annotations whose alias the initializer doesn't carry. Requires `parserOptions.project` for typed services; falls back to a no-op without them.",
+		href: '#no-redundant-type-annotation',
+		title: 'absolute/no-redundant-type-annotation'
+	},
+	{
 		afterCode: eslintDocsCode.noTransitionCssProperties.afterCode,
 		beforeCode: eslintDocsCode.noTransitionCssProperties.beforeCode,
 		description:
@@ -138,6 +154,14 @@ export const eslintDocsData: EslintDocsSection[] = [
 		title: 'absolute/no-useless-function'
 	},
 	{
+		afterCode: eslintDocsCode.preferInlineExports.afterCode,
+		beforeCode: eslintDocsCode.preferInlineExports.beforeCode,
+		description:
+			'Flags trailing `export { foo }` statements when `foo` is a local declaration in the same file and could just have `export` prepended at the declaration site. Allows `export { foo } from "..."` (re-exports), aliased forms like `export { foo as bar }`, and type-only exports — those have distinct semantics. AI tooling commonly emits the trailing form when mechanically rewriting `export default`, and this rule cleans it up.',
+		href: '#prefer-inline-exports',
+		title: 'absolute/prefer-inline-exports'
+	},
+	{
 		afterCode: eslintDocsCode.seperateStyleFiles.afterCode,
 		beforeCode: eslintDocsCode.seperateStyleFiles.beforeCode,
 		description:
@@ -160,5 +184,13 @@ export const eslintDocsData: EslintDocsSection[] = [
 			'This is just the same as the sort-keys ESLint rule with an addition. While it does enforce consistent key ordering within objects it also provides automatic fixing to sort keys alphabetically, the built in function for --fix rather than manual order changes.',
 		href: '#sort-keys-fixable',
 		title: 'absolute/sort-keys-fixable'
+	},
+	{
+		afterCode: eslintDocsCode.springNamingConvention.afterCode,
+		beforeCode: eslintDocsCode.springNamingConvention.beforeCode,
+		description:
+			"Enforces a naming convention for `useSpring` and `useSprings` hook destructuring. The first variable must end with `Springs` (e.g., `boxSprings`); the second must be the matching `<base>Api` (e.g., `boxApi`). For `useSprings` (plural), the base must itself end in `s` (e.g., `itemsSprings` / `itemsApi`). Keeps spring identity readable at call sites and consistent across the codebase.",
+		href: '#spring-naming-convention',
+		title: 'absolute/spring-naming-convention'
 	}
 ];

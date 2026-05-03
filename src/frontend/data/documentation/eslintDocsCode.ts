@@ -21,6 +21,25 @@ name: "app"
 };`
 };
 
+export const inlineStyleLimit: EslintDocsCode = {
+	afterCode: `\
+const cardStyle = {
+	border: '1px solid black',
+	color: 'red',
+	margin: 8,
+	padding: 4
+};
+
+<div style={cardStyle} />`,
+	beforeCode: `\
+<div style={{
+	border: '1px solid black',
+	color: 'red',
+	margin: 8,
+	padding: 4
+}} />`
+};
+
 export const localizeReactProps: EslintDocsCode = {
 	afterCode: `\
 const MyComponent = () => {
@@ -103,23 +122,25 @@ const getUserName = (user: User): string => {
 }`
 };
 
-export const noInlinePropTypes: EslintDocsCode = {
+export const noInlineObjectTypes: EslintDocsCode = {
 	afterCode: `\
-type StyleProps = {
-  marginTop: number;
+type Config = {
+	host: string;
+	port: number;
 };
 
-type Props = {
-  style: StyleProps;
-};
+const config: Config = getConfig();
 
-const MyComp = ({ style }: Props) => <div style={style} />;`,
+const fetchUsers = (opts: Config) => api.get('/users', opts);
+
+const cache = new Map<string, Config>();`,
 	beforeCode: `\
-type Props = {
-  style: { marginTop: number };
-};
+const config: { host: string; port: number } = getConfig();
 
-const MyComp = ({ style }: Props) => <div style={style} />;`
+const fetchUsers = (opts: { host: string; port: number }) =>
+	api.get('/users', opts);
+
+const cache = new Map<string, { host: string; port: number }>();`
 };
 
 export const noMultiStyleObjects: EslintDocsCode = {
@@ -203,6 +224,21 @@ const MaybeButton({ enabled }) {
 }`
 };
 
+export const noRedundantTypeAnnotation: EslintDocsCode = {
+	afterCode: `\
+const getCount = (): number => 5;
+
+const count = getCount();
+const user = new User();
+const name = user.name;`,
+	beforeCode: `\
+const getCount = (): number => 5;
+
+const count: number = getCount();
+const user: User = new User();
+const name: string = user.name;`
+};
+
 export const noTransitionCssProperties: EslintDocsCode = {
 	afterCode: `\
 import { animated } from '@react-spring/web';
@@ -230,6 +266,23 @@ export const noUselessFunction: EslintDocsCode = {
 function callFoo(...args) {
     return foo(...args);
 }`
+};
+
+export const preferInlineExports: EslintDocsCode = {
+	afterCode: `\
+export const greeting = 'hello';
+
+export function greet() {
+	return greeting;
+}`,
+	beforeCode: `\
+const greeting = 'hello';
+
+function greet() {
+	return greeting;
+}
+
+export { greet, greeting };`
 };
 
 export const seperateStyleFiles: EslintDocsCode = {
@@ -266,4 +319,17 @@ export const a = 1;`
 export const sortKeys: EslintDocsCode = {
 	afterCode: `const obj = { Beta: 3, apple: 2, zebra: 1 };`,
 	beforeCode: `const obj = { zebra: 1, apple: 2, Beta: 3 };`
+};
+
+export const springNamingConvention: EslintDocsCode = {
+	afterCode: `\
+const [boxSprings, boxApi] = useSpring(() => ({ x: 0 }));
+
+const [itemsSprings, itemsApi] = useSprings(items.length, () => ({
+	opacity: 1
+}));`,
+	beforeCode: `\
+const [styles, api] = useSpring(() => ({ x: 0 }));
+
+const [items, api] = useSprings(items.length, () => ({ opacity: 1 }));`
 };
