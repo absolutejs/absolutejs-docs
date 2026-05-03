@@ -10,6 +10,14 @@ export type EslintDocsSection = {
 
 export const eslintDocsData: EslintDocsSection[] = [
 	{
+		afterCode: eslintDocsCode.angularOneFeaturePerFile.afterCode,
+		beforeCode: eslintDocsCode.angularOneFeaturePerFile.beforeCode,
+		description:
+			'Angular-only. Disallows defining more than one Angular feature class (`@Component`, `@Directive`, `@Pipe`, `@Injectable`, `@NgModule`) per file. Mirrors the Angular Style Guide\'s Single Responsibility / Rule of One. Member decorators like `@Input` and `@Output` are not features and are ignored. Spec and Storybook files legitimately define stub/host classes alongside the subject under test — disable the rule for those files via an ESLint override (e.g., `{ files: ["**/*.spec.ts", "**/*.stories.ts"], rules: { "absolute/angular-one-feature-per-file": "off" } }`).',
+		href: '#angular-one-feature-per-file',
+		title: 'absolute/angular-one-feature-per-file'
+	},
+	{
 		afterCode: eslintDocsCode.explicitObjectTypes.afterCode,
 		beforeCode: eslintDocsCode.explicitObjectTypes.beforeCode,
 		description:

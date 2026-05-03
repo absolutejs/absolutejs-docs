@@ -3,6 +3,24 @@ type EslintDocsCode = {
 	afterCode: string;
 };
 
+export const angularOneFeaturePerFile: EslintDocsCode = {
+	afterCode: `\
+// foo.component.ts
+@Component({ selector: 'app-foo', template: '' })
+export class FooComponent {}
+
+// foo.service.ts
+@Injectable({ providedIn: 'root' })
+export class FooService {}`,
+	beforeCode: `\
+// foo.ts
+@Component({ selector: 'app-foo', template: '' })
+export class FooComponent {}
+
+@Injectable({ providedIn: 'root' })
+export class FooService {}`
+};
+
 export const explicitObjectTypes: EslintDocsCode = {
 	afterCode: `\
 type Config = {
