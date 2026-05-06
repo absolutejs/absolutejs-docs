@@ -7,7 +7,9 @@ import {
 	errorComponentSvelte,
 	errorComponentVue,
 	errorComponentAngular,
+	errorComponentHtml,
 	notFoundReact,
+	notFoundAngular,
 	errorFallbackChain,
 	pageSpecificExample
 } from '../../../data/documentation/errorBoundariesDocsCode';
@@ -35,6 +37,7 @@ const tocItems: TocItem[] = [
 	{ href: '#error-pages', label: 'Error Pages' },
 	{ href: '#page-specific-errors', label: 'Page-Specific Errors' },
 	{ href: '#not-found-pages', label: 'Not-Found Pages' },
+	{ href: '#universal-html-fallback', label: 'Universal HTML Fallback' },
 	{ href: '#fallback-chain', label: 'Fallback Chain' },
 	{ href: '#multi-framework', label: 'Multi-Framework' },
 	{ href: '#example-project', label: 'Example Project' }
@@ -85,10 +88,10 @@ export const ErrorBoundariesView = ({
 					<p style={paragraphSpacedStyle}>
 						AbsoluteJS uses a file convention to detect error and
 						not-found pages. During the build, it scans your pages
-						directory for files matching the convention patterns. At
-						runtime, when SSR throws an error, AbsoluteJS catches it
-						and renders the matching error convention component
-						instead of crashing.
+						directories for files matching the convention patterns.
+						At runtime, when SSR throws an error, AbsoluteJS
+						catches it and renders the matching error convention
+						component instead of crashing.
 					</p>
 					<ErrorBoundariesHowItWorksList />
 				</section>
@@ -125,9 +128,11 @@ export const ErrorBoundariesView = ({
 						Error Pages
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						An error convention component receives an{' '}
-						<code>error</code> prop with <code>message</code> and an
-						optional <code>stack</code>. Here is a React example:
+						An error convention component receives a flat{' '}
+						<code>ErrorPageProps</code> object —{' '}
+						<code>{'{ name, message, stack? }'}</code>, a
+						serializable subset of <code>Error</code>. Here is a
+						React example:
 					</p>
 					<PrismPlus
 						codeString={errorComponentReact}
@@ -136,10 +141,14 @@ export const ErrorBoundariesView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						The <code>error</code> prop is always an object with{' '}
-						<code>{'{ message: string; stack?: string }'}</code>. In
-						production, <code>stack</code> is omitted for security.
-						In development, the full stack trace is included for
+						The shape is{' '}
+						<code>
+							{
+								'Pick<Error, "name" | "message" | "stack">'
+							}
+						</code>
+						. In production <code>stack</code> is omitted; in
+						development the full stack trace is included for
 						debugging.
 					</p>
 				</section>
@@ -155,8 +164,8 @@ export const ErrorBoundariesView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Name an error file after the page it belongs to. For
-						example, <code>Home.error.tsx</code> only activates when{' '}
-						<code>Home.tsx</code> throws. This lets you show
+						example, <code>Home.error.tsx</code> only activates
+						when <code>Home.tsx</code> throws. This lets you show
 						different error UI per page while keeping a generic
 						fallback.
 					</p>
@@ -179,8 +188,8 @@ export const ErrorBoundariesView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The <code>not-found.tsx</code> convention file handles
-						404 responses. When a request hits a route that does not
-						exist, AbsoluteJS renders this component with a 404
+						404 responses. When a request hits a route that does
+						not exist, AbsoluteJS renders this component with a 404
 						status code.
 					</p>
 					<PrismPlus
@@ -189,6 +198,50 @@ export const ErrorBoundariesView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
+					<p style={paragraphSpacedStyle}>
+						For function-style not-found pages (Angular, plain
+						HTML-string renderers), use{' '}
+						<code>defineRenderNotFoundPage</code>. The helper types
+						the return as a real HTML document — the string must
+						start with <code>{'<!DOCTYPE html>'}</code>:
+					</p>
+					<PrismPlus
+						codeString={notFoundAngular}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="universal-html-fallback"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Universal HTML Fallback
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Drop an <code>error.html</code> in your html pages
+						directory and any framework that fails to render its
+						own error page falls through to it. Tokens are replaced
+						server-side from the thrown <code>Error</code>:{' '}
+						<code>{'{{name}}'}</code>, <code>{'{{message}}'}</code>
+						, <code>{'{{stack}}'}</code> (HTML-escaped;{' '}
+						<code>stack</code> blanks in production).
+					</p>
+					<PrismPlus
+						codeString={errorComponentHtml}
+						language="markup"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						The <code>not-found.html</code> equivalent is the
+						project-wide 404 fallback when no framework registers
+						its own.
+					</p>
 				</section>
 
 				<section style={sectionStyle}>
@@ -201,8 +254,9 @@ export const ErrorBoundariesView = ({
 						Fallback Chain
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						When an error occurs, AbsoluteJS resolves the error page
-						using a priority chain. The most specific match wins:
+						When an error occurs, AbsoluteJS resolves the error
+						page using a priority chain. The most specific match
+						wins:
 					</p>
 					<PrismPlus
 						codeString={errorFallbackChain}
@@ -227,10 +281,10 @@ export const ErrorBoundariesView = ({
 						Multi-Framework
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Error conventions work across all supported frameworks.
-						Each framework uses its own syntax but follows the same
-						file naming pattern and receives the same error prop
-						shape.
+						Error conventions work across all supported
+						frameworks. Each framework uses its own syntax but
+						follows the same file naming pattern and receives the
+						same flat <code>ErrorPageProps</code> shape.
 					</p>
 					<AnchorHeading
 						id="svelte-error"
@@ -268,6 +322,13 @@ export const ErrorBoundariesView = ({
 					>
 						Angular
 					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Angular convention error pages use the function-style{' '}
+						<code>defineRenderErrorPage</code> helper. The helper
+						types the return as a real HTML document so missing
+						doctypes fail to type-check rather than slipping into
+						runtime:
+					</p>
 					<PrismPlus
 						codeString={errorComponentAngular}
 						language="typescript"

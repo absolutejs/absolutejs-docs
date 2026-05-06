@@ -18,5 +18,15 @@ export const ErrorBoundariesConventionFilesList = () => (
 			<strong style={strongStyle}>not-found.tsx</strong> : custom 404 page
 			rendered when no route matches
 		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>error.html</strong> : universal HTML
+			fallback shared across frameworks. Tokens{' '}
+			<code>{'{{name}}'}</code>, <code>{'{{message}}'}</code>, and{' '}
+			<code>{'{{stack}}'}</code> are replaced server-side
+		</li>
+		<li style={listItemStyle}>
+			<strong style={strongStyle}>not-found.html</strong> : universal 404
+			fallback for any framework
+		</li>
 	</ul>
 );
