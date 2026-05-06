@@ -223,12 +223,14 @@ export const ErrorBoundariesView = ({
 						Universal HTML Fallback
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Drop an <code>error.html</code> in your html pages
-						directory and any framework that fails to render its
-						own error page falls through to it. Tokens are replaced
-						server-side from the thrown <code>Error</code>:{' '}
-						<code>{'{{name}}'}</code>, <code>{'{{message}}'}</code>
-						, <code>{'{{stack}}'}</code> (HTML-escaped;{' '}
+						Drop an <code>error.html</code> into <em>any</em>{' '}
+						configured framework's pages directory — no extra
+						config flag, no dedicated dir. Any framework that
+						fails to render its own error page falls through to it.
+						Tokens are replaced server-side from the thrown{' '}
+						<code>Error</code>: <code>{'{{name}}'}</code>,{' '}
+						<code>{'{{message}}'}</code>,{' '}
+						<code>{'{{stack}}'}</code> (HTML-escaped;{' '}
 						<code>stack</code> blanks in production).
 					</p>
 					<PrismPlus

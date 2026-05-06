@@ -58,7 +58,7 @@ defineProps<ErrorPageProps>();
   </div>
 </template>`;
 export const errorComponentHtml = `\
-<!-- src/frontend/html/pages/error.html -->
+<!-- drop in any pages dir, e.g. src/frontend/react/pages/error.html -->
 <!DOCTYPE html>
 <html>
   <body style="padding: 2rem; font-family: system-ui;">
@@ -74,10 +74,8 @@ src/frontend/react/pages/
   About.tsx
   error.tsx          # default error page for all React pages
   not-found.tsx      # 404 page
-
-src/frontend/html/pages/
-  error.html         # universal HTML fallback (any framework)
-  not-found.html     # universal HTML 404 fallback`;
+  error.html         # universal HTML fallback (any framework, zero config)
+  not-found.html     # universal 404 fallback`;
 export const errorFallbackChain = `\
 Error Fallback Chain (highest to lowest priority):
 
