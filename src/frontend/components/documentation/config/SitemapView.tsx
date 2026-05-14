@@ -25,12 +25,16 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { SitemapConfigurationSection } from './SitemapConfigurationSection';
 import { SitemapExcludeRoutesSection } from './SitemapExcludeRoutesSection';
 import { SitemapHowItWorksSection } from './SitemapHowItWorksSection';
+import { SitemapPerPageMetadataSection } from './SitemapPerPageMetadataSection';
+import { SitemapSpaSubRoutesSection } from './SitemapSpaSubRoutesSection';
 
 const tocItems: TocItem[] = [
 	{ href: '#how-it-works', label: 'How It Works' },
 	{ href: '#zero-config', label: 'Zero Config' },
 	{ href: '#example-output', label: 'Example Output' },
 	{ href: '#configuration', label: 'Configuration' },
+	{ href: '#per-page-metadata', label: 'Per-Page Metadata' },
+	{ href: '#spa-sub-routes', label: 'SPA Sub-Routes' },
 	{ href: '#exclude-routes', label: 'Excluding Routes' },
 	{ href: '#dynamic-routes', label: 'Dynamic Routes' },
 	{ href: '#type-reference', label: 'Type Reference' }
@@ -116,6 +120,10 @@ export const SitemapView = ({
 				</section>
 
 				<SitemapConfigurationSection themeSprings={themeSprings} />
+
+				<SitemapPerPageMetadataSection themeSprings={themeSprings} />
+
+				<SitemapSpaSubRoutesSection themeSprings={themeSprings} />
 
 				<SitemapExcludeRoutesSection themeSprings={themeSprings} />
 

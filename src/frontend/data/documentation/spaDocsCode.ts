@@ -278,7 +278,6 @@ new Elysia()
 export const vueSpaPage = `\
 <!-- frontend/vue/pages/VueSpa.vue -->
 <script setup lang="ts">
-import { defineComponent, h } from 'vue';
 import {
   createMemoryHistory,
   createRouter,
