@@ -13,7 +13,11 @@ import {
 	angularMultiFramework,
 	angularProviderModel,
 	angularResolverPendingTask,
-	angularViewTransitions
+	angularUseResource,
+	angularUseSubscription,
+	angularUseTimers,
+	angularViewTransitions,
+	angularZonelessTriggers
 } from '../../../data/documentation/angularDocsCode';
 import {
 	h1Style,
@@ -35,6 +39,8 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#build-config', label: 'Build Configuration' },
+	{ href: '#zoneless', label: 'Zoneless Change Detection' },
+	{ href: '#composables', label: 'Composables' },
 	{ href: '#page-handler', label: 'Page Handler' },
 	{ href: '#provider-model', label: 'Provider Model' },
 	{ href: '#components', label: 'Components' },
@@ -114,6 +120,163 @@ export const AngularOverviewView = ({
 					</p>
 					<PrismPlus
 						codeString={angularBuild}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="zoneless"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Zoneless Change Detection
+					</AnchorHeading>
+					<p style={paragraphLargeStyle}>
+						AbsoluteJS bootstraps every Angular page with{' '}
+						<code>provideZonelessChangeDetection()</code>. There is
+						no opt-out: <code>zone.js</code> is never loaded into
+						the client bundle, never patches the browser&apos;s
+						async primitives, and never auto-ticks change
+						detection. This produces smaller bundles and aligns
+						with Angular&apos;s long-term direction, but it changes
+						what triggers a re-render.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						In a zoneless app, change detection runs only in
+						response to <strong style={strongStyle}>explicit</strong>{' '}
+						triggers. Mutating a plain class property inside an{' '}
+						<code>await</code>, <code>setTimeout</code>,{' '}
+						RxJS <code>.subscribe</code> callback, or other async
+						source updates the value but does <em>not</em> tell
+						Angular to re-evaluate the template. The most reliable
+						way to make state reactive is to store it in a{' '}
+						<code>signal()</code>:
+					</p>
+					<PrismPlus
+						codeString={angularZonelessTriggers}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Two-way <code>[(ngModel)]</code> bindings and template
+						event handlers like <code>(click)</code> are handled
+						for you &mdash; Angular installs its own listener
+						wrappers that tick CD when those fire. The
+						gotcha-prone surfaces are{' '}
+						<code>await</code>/<code>then</code>, raw{' '}
+						<code>setTimeout</code>, and observables you subscribe
+						to manually. The composables in the next section cover
+						those.
+					</p>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="composables"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Composables
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						AbsoluteJS ships a small set of zoneless-safe
+						composables from{' '}
+						<code>@absolutejs/absolute/angular</code>. They cover
+						the three patterns that most often leak state or fail
+						to re-render in a zoneless app: timers, async data
+						fetching, and Observable subscriptions. Each must be
+						called inside an Angular injection context (component
+						constructor, field initializer, or{' '}
+						<code>runInInjectionContext</code>).
+					</p>
+					<p style={paragraphSpacedStyle}>
+						<code>useTimers()</code> &mdash; component-scoped{' '}
+						<code>setTimeout</code> / <code>setInterval</code> with
+						automatic cleanup on destroy. Use it instead of raw{' '}
+						<code>setTimeout</code> so timers never outlive the
+						component that scheduled them, and pair it with
+						signals if the callback drives the template.
+					</p>
+					<PrismPlus
+						codeString={angularUseTimers}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						<code>useResource()</code> &mdash; signal-backed async
+						fetcher. Returns <code>data</code>, <code>error</code>,
+						and <code>loading</code> signals plus{' '}
+						<code>refresh()</code> and <code>mutate()</code>{' '}
+						methods. The fetcher receives an{' '}
+						<code>AbortSignal</code> that fires on destroy or on a
+						subsequent refresh, so in-flight requests are cancelled
+						deterministically. Reading the returned signals in a
+						template is enough to drive re-renders. Use{' '}
+						<code>mutate(value)</code> after an edit action returns
+						the new entity, so you can update the displayed value
+						without a wasteful re-fetch.
+					</p>
+					<PrismPlus
+						codeString={angularUseResource}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						If the fetcher depends on state that&apos;s set{' '}
+						<em>after</em> field initializers run &mdash; a typical
+						example is <code>this.id</code> assigned by the page
+						factory from a <code>:id</code> route param &mdash; pass{' '}
+						<code>{`{ start: 'pending' }`}</code> and call{' '}
+						<code>refresh()</code> from <code>ngOnInit</code>. That
+						keeps <code>loading()</code> <code>true</code> on first
+						paint so the template renders the spinner branch
+						immediately, with no blank-frame flash between mount
+						and the first fetch. The other values are{' '}
+						<code>{`'immediate'`}</code> (the default &mdash; fire
+						the fetcher at construction) and <code>{`'idle'`}</code>{' '}
+						(dormant until <code>refresh()</code> or{' '}
+						<code>mutate()</code> is called explicitly).
+					</p>
+					<p style={paragraphSpacedStyle}>
+						<strong style={strongStyle}>
+							When to reach for TanStack Query instead.
+						</strong>{' '}
+						<code>useResource</code> is intentionally minimal: each
+						instance owns its own copy of the data. Two components
+						that fetch the same entity will fire two requests, and
+						an edit in one place won&apos;t propagate to another
+						unless you wire it through manually. If you need a
+						shared cache, request deduplication, automatic refetch
+						on focus or reconnect, query invalidation by key,
+						optimistic updates with rollback, or paginated/infinite
+						queries, install{' '}
+						<code>@tanstack/angular-query</code> alongside this
+						composable. Use <code>useResource</code> for one-off
+						fetches and trivial admin screens; reach for TanStack
+						Query when the data layer is shared across pages or
+						needs cache semantics.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						<code>useSubscription()</code> &mdash; wraps{' '}
+						<code>observable.subscribe(...)</code> with{' '}
+						<code>takeUntilDestroyed()</code> so you can&apos;t
+						forget the cleanup operator. The most common source of
+						Angular memory leaks collapses into a single call. The
+						observer body still needs signals (or an explicit{' '}
+						<code>cdr.markForCheck()</code>) if it mutates state
+						that drives the template &mdash; subscription teardown
+						is the only thing this composable handles.
+					</p>
+					<PrismPlus
+						codeString={angularUseSubscription}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

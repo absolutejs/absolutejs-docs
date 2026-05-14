@@ -278,6 +278,103 @@ export const page = defineAngularPage<SettingsProps>({
     props: { user, preferences }
   });
 })`;
+export const angularZonelessTriggers = `\
+// AbsoluteJS bootstraps Angular with provideZonelessChangeDetection().
+// Change detection runs ONLY when one of these happens:
+//
+//   1. A signal you read in a template is updated         (signal.set / .update)
+//   2. A template DOM event fires                         ((click), (input), ...)
+//   3. AsyncPipe receives an emission                     ({{ obs$ | async }})
+//   4. cdr.markForCheck() / cdr.detectChanges() is called (manual escape hatch)
+//   5. HttpClient (and a few other built-ins) settle      (PendingTasks tracker)
+//
+// Plain property assignment in an await/setTimeout/subscribe callback does
+// NOT tick CD. The value changes; the template does not re-evaluate.
+
+@Component({ /* ... */ })
+export class ProfileComponent {
+  // Broken in zoneless mode: setting plainLoading after await never updates UI.
+  plainLoading = false;
+
+  // Correct: the signal triggers CD on its consumers automatically.
+  loading = signal(false);
+
+  async load() {
+    this.loading.set(true);
+    await this.profileService.fetch();
+    this.loading.set(false);
+  }
+}`;
+export const angularUseTimers = `\
+import { useTimers } from '@absolutejs/absolute/angular';
+import { Component, signal } from '@angular/core';
+
+@Component({ /* ... */ })
+export class FlashMessage {
+  private timers = useTimers();
+  visible = signal(false);
+
+  show() {
+    this.visible.set(true);
+    // Auto-cleared on component destroy. Signals tick CD in the callback.
+    this.timers.setTimeout(() => this.visible.set(false), 3000);
+  }
+}`;
+export const angularUseResource = `\
+import { useResource } from '@absolutejs/absolute/angular';
+import { Component, inject } from '@angular/core';
+import { ApiClient } from './api';
+
+@Component({
+  selector: 'app-profile',
+  standalone: true,
+  template: \`
+    @if (profile.loading()) {
+      <p>Loading...</p>
+    } @else if (profile.error()) {
+      <p>Failed to load.</p>
+    } @else if (profile.data(); as p) {
+      <h1>{{ p.name }}</h1>
+      <button (click)="rename(p, 'Renamed')">Rename</button>
+    }
+    <button (click)="profile.refresh()">Reload</button>
+  \`,
+})
+export class ProfileComponent {
+  private api = inject(ApiClient);
+  // Signal-backed async data. data/error/loading are signals, so reading them
+  // in the template auto-ticks CD. The AbortSignal aborts on destroy or refresh.
+  profile = useResource((signal) => this.api.profile.get({ signal }));
+
+  async rename(current: Profile, name: string) {
+    const updated = await this.api.profile.update({ id: current.id, name });
+    // mutate() writes the new value into the resource without a wasteful
+    // re-fetch. Pass a value or an updater function.
+    this.profile.mutate(updated);
+  }
+}`;
+export const angularUseSubscription = `\
+import { useSubscription } from '@absolutejs/absolute/angular';
+import { Component, inject } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
+
+@Component({ /* ... */ })
+export class HeaderComponent {
+  private router = inject(Router);
+  currentPath = signal('');
+
+  ngOnInit() {
+    // Equivalent to .pipe(takeUntilDestroyed(destroyRef)).subscribe(...) -
+    // teardown happens automatically when the component is destroyed.
+    useSubscription(
+      this.router.events.pipe(
+        filter((event) => event instanceof NavigationEnd),
+      ),
+      (event) => this.currentPath.set(event.urlAfterRedirects),
+    );
+  }
+}`;
 export const angularViewTransitions = `\
 // CSS-only changes: stylesheet is hot-swapped instantly : no re-bootstrap
 
