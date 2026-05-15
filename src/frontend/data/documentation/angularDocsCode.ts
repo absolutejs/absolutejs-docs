@@ -1,10 +1,64 @@
 export const angularBuild = `\
 // absolute.config.ts
 import { defineConfig } from '@absolutejs/absolute';
+import { appProviders } from './src/angular/appProviders';
 
 export default defineConfig({
-  angularDirectory: 'src/angular'
+  angularDirectory: 'src/angular',
+  // Optional. Pass a real typed value (not a string path) so TS catches
+  // a missing import or renamed binding. The framework AST-parses this
+  // file at build time to find the import path of \`appProviders\`, then
+  // bakes a matching import into every per-page generated providers file.
+  angular: { providers: appProviders }
 });`;
+export const angularAppProviders = `\
+// src/angular/appProviders.ts
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import type { EnvironmentProviders, Provider } from '@angular/core';
+
+// Global DI every Angular page on this server gets at SSR + client bootstrap.
+// Per-page additions (router, APP_BASE_HREF) are auto-wired by the build,
+// so keep this file focused on cross-cutting concerns: http, error
+// handlers, interceptors, locale, app-wide services.
+export const appProviders: ReadonlyArray<Provider | EnvironmentProviders> = [
+  provideHttpClient(withFetch())
+];`;
+export const angularPageWithRoutes = `\
+// src/angular/portal/portal.ts
+import { Component } from '@angular/core';
+import { RouterOutlet, type Routes } from '@angular/router';
+import { DashboardComponent } from './dashboard/dashboard';
+import { SettingsComponent } from './settings/settings';
+
+// Top-level export — same pattern Angular itself uses in app.routes.ts.
+// AbsoluteJS detects this export at build time and auto-wires
+// provideRouter(routes, withComponentInputBinding(), withViewTransitions())
+// into the page's bootstrap providers.
+export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'settings', component: SettingsComponent }
+];
+
+@Component({
+  selector: 'portal-page',
+  standalone: true,
+  imports: [RouterOutlet],
+  template: '<router-outlet />'
+})
+export class PortalComponent {}`;
+export const angularSimplePage = `\
+// src/angular/about/about.ts
+// No routes, no providers exports — just a standalone @Component.
+// The framework still wires up the global \`appProviders\` from the config.
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'about-page',
+  standalone: true,
+  template: '<h1>About AbsoluteJS</h1>'
+})
+export class AboutComponent {}`;
 export const angularClientScripts = `\
 // For dynamic client-side behavior, use registerClientScript
 import { registerClientScript } from '@absolutejs/absolute';
@@ -20,10 +74,10 @@ registerClientScript(() => {
 });`;
 export const angularComponent = `\
 // src/angular/Dashboard.server.ts
-import { defineAngularPage } from '@absolutejs/absolute/angular';
-import { Component, inject, InjectionToken } from '@angular/core';
+import { Component } from '@angular/core';
+import { usePageContext } from '@absolutejs/absolute/angular';
 
-type DashboardProps = {
+export type Context = {
   user: {
     name: string;
     email: string;
@@ -31,16 +85,14 @@ type DashboardProps = {
   };
 };
 
-export const USER = new InjectionToken<DashboardProps['user']>('USER');
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   template: \`
     <div class="dashboard">
-      <h1>Welcome back, {{ user.name }}</h1>
-      <p>Email: {{ user.email }}</p>
-      <p>Role: {{ user.role }}</p>
+      <h1>Welcome back, {{ ctx.user.name }}</h1>
+      <p>Email: {{ ctx.user.email }}</p>
+      <p>Role: {{ ctx.user.role }}</p>
     </div>
   \`,
   styles: [\`
@@ -52,13 +104,8 @@ export const USER = new InjectionToken<DashboardProps['user']>('USER');
   \`]
 })
 export class Dashboard {
-  readonly user = inject(USER);
-}
-
-// Explicit page declaration: selects the render root and carries the prop type.
-export const page = defineAngularPage<DashboardProps>({
-  component: Dashboard
-});`;
+  readonly ctx = usePageContext<Context>();
+}`;
 export const angularDeterministicEnv = `\
 import {
   DETERMINISTIC_NOW,
@@ -102,14 +149,14 @@ new Elysia()
   .get('/dashboard', async ({ cookie }) => {
     const user = await getUser(cookie);
 
-    return handleAngularPageRequest<typeof DashboardPage>({
+    return handleAngularPageRequest<DashboardPage.Context>({
       pagePath: asset(manifest, 'Dashboard'),
       indexPath: asset(manifest, 'DashboardIndex'),
       headTag: generateHeadElement({
         title: 'Dashboard',
         description: 'User dashboard'
       }),
-      props: { user }
+      requestContext: { user }
     });
   })`;
 export const angularHttpTransferCache = `\
@@ -141,8 +188,10 @@ export class AccountService {
 export const angularHydration = `\
 // Server-side rendering
 // 1. Server renders the component using Angular platform-server
-// 2. Props are serialized to window.__INITIAL_PROPS__
-// 3. Client-side Angular bootstraps and hydrates the page
+// 2. \`requestContext\` is serialized into window.__ABS_ANGULAR_REQUEST_CONTEXT__
+// 3. Client-side Angular bootstraps and re-provides REQUEST_CONTEXT
+//    with the same value, so \`usePageContext<T>()\` returns identical
+//    data on both phases
 // 4. The component becomes interactive with all Angular features
 
 // Zoneless by default : no Zone.js needed
@@ -170,11 +219,11 @@ new Elysia()
   .use(absolutejs)
   .get('/', () => handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') }))
   .get('/admin', () =>
-    handleAngularPageRequest<typeof AdminPage>({
+    handleAngularPageRequest<AdminPage.Context>({
       pagePath: asset(manifest, 'Admin'),
       indexPath: asset(manifest, 'AdminIndex'),
       headTag: generateHeadElement({ title: 'Admin Panel' }),
-      props: { stats: adminStats }
+      requestContext: { stats: adminStats }
     })
   )
   .get('/store', () =>
@@ -186,26 +235,35 @@ new Elysia()
     })
   )`;
 export const angularProviderModel = `\
-// src/angular/Admin.server.ts
+// src/angular/admin/admin.ts
+// Page modules are pure Angular. No \`export const providers\`, no
+// \`provideRouter(routes)\`, no APP_BASE_HREF boilerplate — the build
+// composes a per-page providers file by combining:
+//
+//   [
+//     ...appProviders,             // from absolute.config.ts > angular.providers
+//     provideRouter(routes, ...),  // only when this page exports \`routes\`
+//     { provide: APP_BASE_HREF,    // inferred from the Elysia mount path
+//       useValue: '/admin/' }      // e.g. .get('/admin/*', ...) → '/admin/'
+//   ]
+//
+// SSR and the client bundle both load the same generated file so the
+// DI graph is identical on both phases.
 import { Component } from '@angular/core';
-import { defineAngularPage } from '@absolutejs/absolute/angular';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { RouterOutlet, type Routes } from '@angular/router';
+
+export const routes: Routes = [
+  { path: '', component: AdminDashboardComponent },
+  { path: 'users', component: AdminUsersComponent }
+];
 
 @Component({
   selector: 'admin-page',
   standalone: true,
+  imports: [RouterOutlet],
   template: '<router-outlet />'
 })
-export class AdminPage {}
-
-// Canonical app DI location. AbsoluteJS uses this on the server and the client.
-export const providers = [
-  provideHttpClient(withFetch()),
-  provideRouter(routes)
-];
-
-export const page = defineAngularPage({ component: AdminPage });`;
+export class AdminComponent {}`;
 export const angularResolverPendingTask = `\
 import { withPendingTask } from '@absolutejs/absolute/angular';
 import type { ResolveFn } from '@angular/router';
@@ -304,6 +362,27 @@ export class ProfileComponent {
     await this.profileService.fetch();
     this.loading.set(false);
   }
+}`;
+export const angularUsePageContext = `\
+import { usePageContext } from '@absolutejs/absolute/angular';
+import { Component } from '@angular/core';
+
+// Declare the page's context shape next to the component. The backend's
+// handleAngularPageRequest<Context>({ requestContext }) call is typechecked
+// against this same type, so both sides agree on what's in flight.
+export type Context = {
+  user: { id: string; name: string; role: 'admin' | 'user' };
+};
+
+@Component({
+  selector: 'app-dashboard',
+  standalone: true,
+  template: \`<p>Welcome, {{ ctx.user.name }}</p>\`
+})
+export class DashboardComponent {
+  // One generic, no \`as\` cast at the call site. The composable owns the
+  // single cast from REQUEST_CONTEXT's \`unknown\` value type to T.
+  readonly ctx = usePageContext<Context>();
 }`;
 export const angularUseTimers = `\
 import { useTimers } from '@absolutejs/absolute/angular';

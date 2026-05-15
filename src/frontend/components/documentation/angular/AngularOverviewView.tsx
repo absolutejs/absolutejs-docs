@@ -3,6 +3,7 @@ import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import {
+	angularAppProviders,
 	angularBuild,
 	angularClientScripts,
 	angularComponent,
@@ -11,8 +12,11 @@ import {
 	angularHydration,
 	angularHttpTransferCache,
 	angularMultiFramework,
+	angularPageWithRoutes,
 	angularProviderModel,
 	angularResolverPendingTask,
+	angularSimplePage,
+	angularUsePageContext,
 	angularUseResource,
 	angularUseSubscription,
 	angularUseTimers,
@@ -43,6 +47,7 @@ const tocItems: TocItem[] = [
 	{ href: '#composables', label: 'Composables' },
 	{ href: '#page-handler', label: 'Page Handler' },
 	{ href: '#provider-model', label: 'Provider Model' },
+	{ href: '#routing', label: 'Routing' },
 	{ href: '#components', label: 'Components' },
 	{ href: '#hydration', label: 'Hydration' },
 	{ href: '#http-transfer-cache', label: 'HTTP Transfer Cache' },
@@ -116,10 +121,37 @@ export const AngularOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						Add Angular to your build by specifying the directory
 						containing your Angular components in{' '}
-						<code>absolute.config.ts</code>:
+						<code>absolute.config.ts</code>. The optional{' '}
+						<code>angular.providers</code> field declares the global
+						DI provider array every Angular page on this server
+						receives at SSR and client bootstrap &mdash; the place
+						for cross-cutting concerns like{' '}
+						<code>provideHttpClient</code>, error handlers,
+						interceptors, and locale providers:
 					</p>
 					<PrismPlus
 						codeString={angularBuild}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Write the providers as a real typed value (not a
+						string path). TypeScript catches a missing import or
+						renamed binding at compile time, and the framework
+						AST-parses <code>absolute.config.ts</code> at build
+						time to find the import path of the binding referenced
+						here, then bakes a matching import into every per-page
+						generated providers file. Per-page additions like{' '}
+						<code>provideRouter(routes)</code> and{' '}
+						<code>APP_BASE_HREF</code> are auto-wired by the build
+						from page-level signals &mdash; you never write either
+						yourself. See <a href="#provider-model">Provider Model</a>{' '}
+						and <a href="#routing">Routing</a> for the full
+						auto-wire pipeline.
+					</p>
+					<PrismPlus
+						codeString={angularAppProviders}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -195,6 +227,31 @@ export const AngularOverviewView = ({
 						constructor, field initializer, or{' '}
 						<code>runInInjectionContext</code>).
 					</p>
+					<p style={paragraphSpacedStyle}>
+						<code>usePageContext&lt;T&gt;()</code> &mdash;
+						typed accessor for the per-request payload the
+						backend handler passed via{' '}
+						<code>requestContext</code>. AbsoluteJS hydrates
+						the value into Angular&apos;s standard{' '}
+						<code>REQUEST_CONTEXT</code> token on both SSR and
+						client bootstrap, so the object{' '}
+						<code>usePageContext()</code> returns is identical
+						across phases. The page declares its own{' '}
+						<code>Context</code> type near the component and
+						passes it as the generic argument; the same type
+						parameterises{' '}
+						<code>
+							handleAngularPageRequest&lt;Context&gt;()
+						</code>{' '}
+						in the backend, so the contract is enforced at the
+						call site and there is no per-page cast.
+					</p>
+					<PrismPlus
+						codeString={angularUsePageContext}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 					<p style={paragraphSpacedStyle}>
 						<code>useTimers()</code> &mdash; component-scoped{' '}
 						<code>setTimeout</code> / <code>setInterval</code> with
@@ -348,17 +405,26 @@ export const AngularOverviewView = ({
 						Components
 					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
-						Angular components in AbsoluteJS use standalone
-						components. Each non-trivial page exports a{' '}
-						<code>page</code> declaration from{' '}
-						<code>defineAngularPage</code> so the page handler knows
-						the render root and the route prop type.
+						Angular pages in AbsoluteJS are plain standalone
+						components. A page module&apos;s{' '}
+						<code>default export</code> is the page root; nothing
+						else is required. There is no{' '}
+						<code>defineAngularPage</code> wrapper, no exported{' '}
+						<code>providers</code> array, and no per-prop{' '}
+						<code>InjectionToken</code> ceremony.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						Props passed from your server are provided through
-						Angular DI. Export an <code>InjectionToken</code> whose
-						name matches the prop key in screaming snake case, then
-						read it with <code>inject()</code> inside the component:
+						Per-request data passed from the backend handler&apos;s{' '}
+						<code>requestContext</code> argument is read with the{' '}
+						<code>usePageContext&lt;T&gt;()</code> composable. The
+						page declares its own <code>Context</code> type next to
+						the component and passes it as the generic; the same
+						type parameterises{' '}
+						<code>
+							handleAngularPageRequest&lt;Context&gt;()
+						</code>{' '}
+						on the backend, so the contract is enforced at the call
+						site:
 					</p>
 					<PrismPlus
 						codeString={angularComponent}
@@ -379,34 +445,54 @@ export const AngularOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						AbsoluteJS owns the framework providers needed for SSR,
-						hydration, request tokens, sanitization, zoneless change
-						detection, transfer cache, and server-safe animation
-						handling. Application providers belong in the Angular
-						page module&apos;s exported <code>providers</code>{' '}
-						array.
+						hydration, request tokens, sanitization, zoneless
+						change detection, transfer cache, and server-safe
+						animation handling. Application providers come from
+						one place &mdash; the{' '}
+						<code>angular.providers</code> array in{' '}
+						<code>absolute.config.ts</code>. Page modules do{' '}
+						<strong style={strongStyle}>not</strong> export a{' '}
+						<code>providers</code> array of their own.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						Put <code>provideHttpClient</code>,{' '}
-						<code>provideRouter</code>, app services, interceptors,
-						locale providers, and other app DI there. The page
-						module providers are used for both server rendering and
-						browser hydration. For request-specific data, inject{' '}
+						The build runs an AST scan before any framework
+						compile: it walks the project from your server
+						entrypoint, finds every{' '}
+						<code>handleAngularPageRequest({'{...}'})</code> call,
+						resolves the manifest key for each page, then emits
+						one generated providers file per page under{' '}
+						<code>.absolutejs/generated/angular/providers/</code>.
+						Each generated file imports{' '}
+						<code>appProviders</code> from the path it found in
+						your config, optionally adds{' '}
+						<code>provideRouter(routes, ...)</code> when the page
+						declares routes (see <a href="#routing">Routing</a>),
+						and appends an{' '}
+						<code>APP_BASE_HREF</code> provider inferred from the
+						Elysia mount path (
+						<code>.get(&apos;/admin/*&apos;, ...)</code> &rarr;{' '}
+						<code>&apos;/admin/&apos;</code>). The SSR handler and
+						the client bundle both load the same generated file,
+						so the DI graph is identical on both phases.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						For request-specific data, inject{' '}
 						<code>REQUEST</code>, <code>REQUEST_CONTEXT</code>, or{' '}
-						<code>RESPONSE_INIT</code> from your service or resolver
-						instead of passing providers to the handler.
-					</p>
-					<p style={paragraphSpacedStyle}>
-						Angular route-level <code>providers</code> inside{' '}
-						<code>provideRouter</code> route definitions continue to
-						work normally. Use them for services or token values
-						that should be scoped to one matched route subtree.
+						<code>RESPONSE_INIT</code> from your service or
+						resolver, or read the typed payload with{' '}
+						<code>usePageContext&lt;T&gt;()</code>. Angular
+						route-level <code>providers</code> inside{' '}
+						<code>provideRouter</code> route definitions continue
+						to work normally for token values that should be
+						scoped to one matched route subtree.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Lazy routes using <code>loadComponent</code> also work
 						during SSR, including imports from installed packages.
 						The package must be importable from the server runtime
 						environment; if a package is only available to the
-						browser bundle, SSR cannot resolve that route component.
+						browser bundle, SSR cannot resolve that route
+						component.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						If an Angular route guard redirects during SSR by
@@ -417,6 +503,67 @@ export const AngularOverviewView = ({
 					</p>
 					<PrismPlus
 						codeString={angularProviderModel}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="routing"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Routing
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						AbsoluteJS is a multi-page application: each Angular
+						page bootstraps its own application root. A page that
+						wants client-side sub-routes declares them with a
+						top-level <code>export const routes: Routes</code>{' '}
+						&mdash; the same export name and shape that Angular
+						itself uses in <code>app.routes.ts</code>. The build
+						scans every file under your{' '}
+						<code>angularDirectory</code> for this export and, when
+						found, auto-wires{' '}
+						<code>
+							provideRouter(routes, withComponentInputBinding(),
+							withViewTransitions())
+						</code>{' '}
+						into that page&apos;s generated providers file.
+					</p>
+					<PrismPlus
+						codeString={angularPageWithRoutes}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						<code>APP_BASE_HREF</code> is auto-inferred. The build
+						also emits a small route-mounts map alongside the
+						providers files: one entry per Elysia mount that hosts
+						an Angular page. The SSR handler matches the incoming
+						request URL against that map at runtime to set
+						<code>APP_BASE_HREF</code> for the current request,
+						and the client bundle imports the per-page providers
+						file with the base path baked in. You never write{' '}
+						<code>{`{ provide: APP_BASE_HREF, useValue: '/portal/' }`}</code>{' '}
+						by hand &mdash; that detail tracks the mount path
+						automatically, so renaming a mount in the Elysia
+						chain does not also require touching the Angular page.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Pages without sub-routes need nothing extra. Omit the{' '}
+						<code>routes</code> export and the build skips{' '}
+						<code>provideRouter</code> for that page &mdash; the
+						generated providers file is just{' '}
+						<code>[...appProviders]</code> plus the inferred base
+						path:
+					</p>
+					<PrismPlus
+						codeString={angularSimplePage}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
