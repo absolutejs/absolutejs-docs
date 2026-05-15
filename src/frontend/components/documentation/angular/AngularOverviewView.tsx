@@ -332,6 +332,20 @@ export const AngularOverviewView = ({
 						that drives the template &mdash; subscription teardown
 						is the only thing this composable handles.
 					</p>
+					<p style={paragraphSpacedStyle}>
+						<code>inject(DestroyRef)</code> is only legal in an
+						Angular injection context (constructor, field
+						initializer,{' '}
+						<code>runInInjectionContext</code>), so a call from{' '}
+						<code>ngOnInit</code> or any other lifecycle hook
+						can&apos;t automatically capture the host&apos;s{' '}
+						<code>DestroyRef</code>. When that happens{' '}
+						<code>useSubscription</code> falls back to a plain
+						subscription (the caller owns teardown) and logs a
+						one-time warning. The cleanest fix is to capture{' '}
+						<code>DestroyRef</code> once in a field initializer
+						and pass it through:
+					</p>
 					<PrismPlus
 						codeString={angularUseSubscription}
 						language="typescript"
@@ -458,22 +472,38 @@ export const AngularOverviewView = ({
 						The build runs an AST scan before any framework
 						compile: it walks the project from your server
 						entrypoint, finds every{' '}
-						<code>handleAngularPageRequest({'{...}'})</code> call,
-						resolves the manifest key for each page, then emits
-						one generated providers file per page under{' '}
-						<code>.absolutejs/generated/angular/providers/</code>.
-						Each generated file imports{' '}
-						<code>appProviders</code> from the path it found in
-						your config, optionally adds{' '}
-						<code>provideRouter(routes, ...)</code> when the page
-						declares routes (see <a href="#routing">Routing</a>),
-						and appends an{' '}
-						<code>APP_BASE_HREF</code> provider inferred from the
-						Elysia mount path (
+						<code>handleAngularPageRequest({'{...}'})</code>{' '}
+						call, then injects the providers declaration
+						directly into each page&apos;s compiled server
+						output:
+					</p>
+					<p style={paragraphSpacedStyle}>
+						<code>
+							export const providers = [...appProviders,
+							provideRouter(routes, withComponentInputBinding(),
+							withViewTransitions()),{' '}
+							{`{ provide: APP_BASE_HREF, useValue: "/admin/" }`}
+							];
+						</code>
+					</p>
+					<p style={paragraphSpacedStyle}>
+						The <code>appProviders</code> import resolves to the
+						path the build extracted from{' '}
+						<code>absolute.config.ts</code>;{' '}
+						<code>provideRouter(routes, ...)</code> is appended
+						only when the page exports a{' '}
+						<code>routes</code> array (see{' '}
+						<a href="#routing">Routing</a>), and the{' '}
+						<code>APP_BASE_HREF</code> entry is included only
+						when the Elysia mount is a sub-router pattern (
 						<code>.get(&apos;/admin/*&apos;, ...)</code> &rarr;{' '}
-						<code>&apos;/admin/&apos;</code>). The SSR handler and
-						the client bundle both load the same generated file,
-						so the DI graph is identical on both phases.
+						<code>&apos;/admin/&apos;</code>). Because the
+						declaration lives in the page module itself, the
+						page&apos;s server bundle and the client wrapper
+						both read the same <code>providers</code> export off
+						the same module &mdash; one{' '}
+						<code>@angular/core</code> instance, no runtime
+						providers indirection.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						For request-specific data, inject{' '}

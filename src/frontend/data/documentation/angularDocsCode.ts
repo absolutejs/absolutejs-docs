@@ -7,8 +7,12 @@ export default defineConfig({
   angularDirectory: 'src/angular',
   // Optional. Pass a real typed value (not a string path) so TS catches
   // a missing import or renamed binding. The framework AST-parses this
-  // file at build time to find the import path of \`appProviders\`, then
-  // bakes a matching import into every per-page generated providers file.
+  // file at build time to find the source of \`appProviders\`, then
+  // injects a matching \`import { appProviders } from "..."\` plus an
+  // \`export const providers = [...appProviders, /* router, base-href */]\`
+  // directly into every page's compiled server output. SSR reads
+  // \`pageModule.providers\`, the client wrapper reads it from the same
+  // module — single \`@angular/core\` instance for page + providers.
   angular: { providers: appProviders }
 });`;
 export const angularAppProviders = `\
@@ -238,17 +242,19 @@ export const angularProviderModel = `\
 // src/angular/admin/admin.ts
 // Page modules are pure Angular. No \`export const providers\`, no
 // \`provideRouter(routes)\`, no APP_BASE_HREF boilerplate — the build
-// composes a per-page providers file by combining:
+// appends the providers declaration directly to this module's compiled
+// server output:
 //
-//   [
+//   export const providers = [
 //     ...appProviders,             // from absolute.config.ts > angular.providers
 //     provideRouter(routes, ...),  // only when this page exports \`routes\`
 //     { provide: APP_BASE_HREF,    // inferred from the Elysia mount path
 //       useValue: '/admin/' }      // e.g. .get('/admin/*', ...) → '/admin/'
-//   ]
+//   ];
 //
-// SSR and the client bundle both load the same generated file so the
-// DI graph is identical on both phases.
+// SSR reads \`pageModule.providers\` from the bundled page; the client
+// wrapper reads the same export off the same module — one
+// \`@angular/core\` instance across both phases.
 import { Component } from '@angular/core';
 import { RouterOutlet, type Routes } from '@angular/router';
 
@@ -434,23 +440,27 @@ export class ProfileComponent {
 }`;
 export const angularUseSubscription = `\
 import { useSubscription } from '@absolutejs/absolute/angular';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 
 @Component({ /* ... */ })
 export class HeaderComponent {
   private router = inject(Router);
+  // Capture once in a field initializer — these run inside the
+  // injection context. Passing the captured ref into useSubscription
+  // is what keeps automatic teardown alive for calls from lifecycle
+  // hooks like ngOnInit, where inject(DestroyRef) is illegal.
+  private destroyRef = inject(DestroyRef);
   currentPath = signal('');
 
   ngOnInit() {
-    // Equivalent to .pipe(takeUntilDestroyed(destroyRef)).subscribe(...) -
-    // teardown happens automatically when the component is destroyed.
     useSubscription(
       this.router.events.pipe(
         filter((event) => event instanceof NavigationEnd),
       ),
       (event) => this.currentPath.set(event.urlAfterRedirects),
+      this.destroyRef,
     );
   }
 }`;
