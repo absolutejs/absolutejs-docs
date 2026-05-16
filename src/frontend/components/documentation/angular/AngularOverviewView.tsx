@@ -141,14 +141,17 @@ export const AngularOverviewView = ({
 						renamed binding at compile time, and the framework
 						AST-parses <code>absolute.config.ts</code> at build
 						time to find the import path of the binding referenced
-						here, then bakes a matching import into every per-page
-						generated providers file. Per-page additions like{' '}
+						here, then bakes a matching import + an{' '}
+						<code>export const providers = [...]</code>{' '}
+						declaration directly into every page&apos;s compiled
+						server output. Per-page additions like{' '}
 						<code>provideRouter(routes)</code> and{' '}
-						<code>APP_BASE_HREF</code> are auto-wired by the build
-						from page-level signals &mdash; you never write either
-						yourself. See <a href="#provider-model">Provider Model</a>{' '}
-						and <a href="#routing">Routing</a> for the full
-						auto-wire pipeline.
+						<code>APP_BASE_HREF</code> are auto-wired by the
+						build from page-level signals &mdash; you never write
+						either yourself. See{' '}
+						<a href="#provider-model">Provider Model</a> and{' '}
+						<a href="#routing">Routing</a> for the full auto-wire
+						pipeline.
 					</p>
 					<PrismPlus
 						codeString={angularAppProviders}
@@ -562,7 +565,8 @@ export const AngularOverviewView = ({
 							provideRouter(routes, withComponentInputBinding(),
 							withViewTransitions())
 						</code>{' '}
-						into that page&apos;s generated providers file.
+						into the providers literal appended to that
+						page&apos;s compiled server output.
 					</p>
 					<PrismPlus
 						codeString={angularPageWithRoutes}
@@ -571,26 +575,23 @@ export const AngularOverviewView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						<code>APP_BASE_HREF</code> is auto-inferred. The build
-						also emits a small route-mounts map alongside the
-						providers files: one entry per Elysia mount that hosts
-						an Angular page. The SSR handler matches the incoming
-						request URL against that map at runtime to set
-						<code>APP_BASE_HREF</code> for the current request,
-						and the client bundle imports the per-page providers
-						file with the base path baked in. You never write{' '}
+						<code>APP_BASE_HREF</code> is auto-inferred from the
+						handler call&apos;s Elysia mount path at build time.{' '}
+						<code>.get(&apos;/portal/*&apos;, ...)</code> bakes{' '}
 						<code>{`{ provide: APP_BASE_HREF, useValue: '/portal/' }`}</code>{' '}
-						by hand &mdash; that detail tracks the mount path
-						automatically, so renaming a mount in the Elysia
-						chain does not also require touching the Angular page.
+						into the page&apos;s injected providers; root mounts
+						(<code>/</code>, single-segment routes) leave the
+						framework default (<code>/</code>) in place. You
+						never write that provider by hand &mdash; renaming a
+						mount in the Elysia chain doesn&apos;t require
+						touching the Angular page.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Pages without sub-routes need nothing extra. Omit the{' '}
 						<code>routes</code> export and the build skips{' '}
 						<code>provideRouter</code> for that page &mdash; the
-						generated providers file is just{' '}
-						<code>[...appProviders]</code> plus the inferred base
-						path:
+						injected providers literal is just{' '}
+						<code>[...appProviders]</code>:
 					</p>
 					<PrismPlus
 						codeString={angularSimplePage}
