@@ -82,6 +82,14 @@ export const eslintDocsData: EslintDocsSection[] = [
 		title: 'absolute/no-explicit-return-type'
 	},
 	{
+		afterCode: eslintDocsCode.noImportMetaPath.afterCode,
+		beforeCode: eslintDocsCode.noImportMetaPath.beforeCode,
+		description:
+			"Disallows deriving filesystem paths from a module's own location — `import.meta.dir`/`dirname`/`filename` and `fileURLToPath(import.meta.url)`. These resolve relative to the current file, which is your `src/` tree under `absolute dev` but the bundled `dist/` under `absolute start`, so module-relative runtime/data paths silently break in production (and only there, since dev runs from source). Anchor to `projectRoot` from @absolutejs/absolute (or `process.cwd()`). The bundler-rewritten `new URL('./asset', import.meta.url)` asset form is allowed. This targets application server code; a library locating its own shipped assets is a legitimate exception — disable the rule for those files via an override.",
+		href: '#no-import-meta-path',
+		title: 'absolute/no-import-meta-path'
+	},
+	{
 		afterCode: eslintDocsCode.noInlineObjectTypes.afterCode,
 		beforeCode: eslintDocsCode.noInlineObjectTypes.beforeCode,
 		description:
@@ -136,6 +144,14 @@ export const eslintDocsData: EslintDocsSection[] = [
 			"This rule prevents using the transition CSS property completely. Using CSS transitions can interfere with React Spring's animation system, causing unexpected or broken animations. All animations and transitions should be handled through React Spring instead of native CSS transitions.",
 		href: '#no-transition-cssproperties',
 		title: 'absolute/no-transition-cssproperties'
+	},
+	{
+		afterCode: eslintDocsCode.noTrivialAlias.afterCode,
+		beforeCode: eslintDocsCode.noTrivialAlias.beforeCode,
+		description:
+			"Disallows identity aliases that rename a type or value without transforming it — `type X = Y` and `const x = y`. Pick one name and use it everywhere; duplicate aliases drift when one side is updated and the other isn't. Transformations pass: generic application, unions/intersections, type operators (Pick, Partial, ReturnType), and branded primitives.",
+		href: '#no-trivial-alias',
+		title: 'absolute/no-trivial-alias'
 	},
 	{
 		afterCode: eslintDocsCode.noUnnecessaryDiv.afterCode,

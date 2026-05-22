@@ -140,6 +140,20 @@ const getUserName = (user: User): string => {
 }`
 };
 
+export const noImportMetaPath: EslintDocsCode = {
+	afterCode: `\
+import { projectRoot } from '@absolutejs/absolute';
+import { resolve } from 'node:path';
+
+// Same path under \`absolute dev\` and \`absolute start\`.
+const dataDir = resolve(projectRoot, '.data');`,
+	beforeCode: `\
+import { resolve } from 'node:path';
+
+// src/backend in dev, the bundled dist/ after \`absolute start\` — breaks.
+const dataDir = resolve(import.meta.dir, '..', '.data');`
+};
+
 export const noInlineObjectTypes: EslintDocsCode = {
 	afterCode: `\
 type Config = {
@@ -263,6 +277,12 @@ import { animated } from '@react-spring/web';
 
 const Box = () => <animated.div style={{ opacity: 1 }} />;`,
 	beforeCode: `<div style={{ transition: 'all 0.3s ease' }} />`
+};
+
+export const noTrivialAlias: EslintDocsCode = {
+	afterCode: `\
+type AccountId = string & { readonly __brand: unique symbol };`,
+	beforeCode: `type AccountId = string;`
 };
 
 export const noUnnecessaryDiv: EslintDocsCode = {
