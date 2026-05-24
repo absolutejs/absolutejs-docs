@@ -62,6 +62,7 @@ import { ElysiaPluginCompositionView } from '../components/documentation/server/
 import { ElysiaValidationView } from '../components/documentation/server/ElysiaValidationView';
 import { MiddlewareView } from '../components/documentation/server/MiddlewareView';
 import { NetworkingPluginView } from '../components/documentation/server/NetworkingPluginView';
+import { TunnelView } from '../components/documentation/server/TunnelView';
 import { AngularOverviewView } from '../components/documentation/angular/AngularOverviewView';
 import { AngularComponentsView } from '../components/documentation/angular/AngularComponentsView';
 import { AngularSpaView } from '../components/documentation/angular/AngularSpaView';
@@ -119,6 +120,7 @@ export const docsViews = definePortalViews({
 	'cron-jobs': CronJobsView,
 	'data-fetching': DataFetchingView,
 	dev: DevView,
+	'dev-tunnel': TunnelView,
 	docker: DockerView,
 	'elysia-cors': ElysiaCorsView,
 	'elysia-integration': ElysiaIntegrationView,
@@ -295,7 +297,8 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'elysia-cors', label: 'CORS' },
 			{ id: 'cron-jobs', label: 'Cron Jobs' },
 			{ id: 'middleware', label: 'Middleware' },
-			{ id: 'networking-plugin', label: 'Networking Plugin' }
+			{ id: 'networking-plugin', label: 'Networking Plugin' },
+			{ id: 'dev-tunnel', label: 'Dev Tunnel' }
 		],
 		icon: animated(FaServer),
 		label: 'Elysia Integration'
