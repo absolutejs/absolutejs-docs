@@ -3,7 +3,8 @@ import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	lsCommand,
-	lsOutput
+	lsOutput,
+	lsSizesOutput
 } from '../../../data/documentation/cliUtilityDocsCode';
 import {
 	h1Style,
@@ -23,7 +24,8 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#usage', label: 'Usage' },
-	{ href: '#output', label: 'Reading the output' }
+	{ href: '#output', label: 'Reading the output' },
+	{ href: '#sizes', label: 'Bundle sizes' }
 ];
 
 export const LsView = ({
@@ -53,8 +55,8 @@ export const LsView = ({
 						absolute ls
 					</h1>
 					<p style={paragraphLargeStyle}>
-						List every page, island, and asset your project builds —
-						grouped by framework, with on-disk sizes.
+						List your project&apos;s pages, grouped by framework —
+						read straight from source, so it is always current.
 					</p>
 				</animated.div>
 
@@ -68,12 +70,13 @@ export const LsView = ({
 						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>absolute ls</code> reads the manifest at{' '}
-						<code>build/manifest.json</code>, so run{' '}
-						<code>absolute build</code> (or <code>absolute dev</code>)
-						first. Add <code>--all</code> to include shared chunks in
-						the listing, or <code>--json</code> for the structured
-						entries — handy for bundle-size budgets in CI.
+						<code>absolute ls</code> discovers pages the same way the
+						build does — scanning <code>&lt;frameworkDir&gt;/pages</code>{' '}
+						for each framework in your config. Because it reads source,
+						not build output, it never goes stale and works the same
+						whether you use <code>dev</code>, <code>start</code>, or{' '}
+						<code>compile</code> — including multi-service workspace
+						configs. No build required.
 					</p>
 					<PrismPlus
 						codeString={lsCommand}
@@ -93,17 +96,38 @@ export const LsView = ({
 						Reading the output
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Each framework gets its own group with a file count and
-						subtotal. Every row is one built artifact, tagged by kind:{' '}
-						<code>page</code> (the server bundle or static page),{' '}
-						<code>index</code> (its client hydration entry),{' '}
-						<code>client</code> and <code>island</code> bundles,{' '}
-						<code>css</code>, and shared <code>chunk</code>s. Sizes are
-						read straight from disk so you can spot what is shipping
-						before you deploy.
+						Each framework gets its own group with a page count. Every
+						row is a page and its source file. <code>--json</code>{' '}
+						emits the same data as structured groups for scripting.
 					</p>
 					<PrismPlus
 						codeString={lsOutput}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="sizes"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Bundle sizes
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Sizes live in build output, so they are opt-in. Pass{' '}
+						<code>--sizes</code> to read a build&apos;s manifest and
+						show each page&apos;s shipped size (server bundle +
+						hydration entry + client/island bundles + CSS). Point it at
+						a build with <code>--outdir</code> (defaults to your{' '}
+						<code>buildDirectory</code>); a <code>built 4m ago</code>{' '}
+						note keeps staleness visible.
+					</p>
+					<PrismPlus
+						codeString={lsSizesOutput}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}

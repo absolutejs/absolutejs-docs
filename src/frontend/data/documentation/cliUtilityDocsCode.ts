@@ -26,30 +26,42 @@ $ absolute info
   Platform: linux x64
   Node: v22.0.0`;
 export const lsCommand = `\
-# List the pages, islands, and assets your project builds
+# List your project's pages, grouped by framework (reads source — no build needed)
 absolute ls
 
-# Include shared chunks in the listing
-absolute ls --all
+# Add built bundle sizes from a build you point at
+absolute ls --sizes
+absolute ls --sizes --outdir dist
 
 # Machine-readable output
 absolute ls --json`;
 export const lsOutput = `\
 $ absolute ls
 
-  React · 1 file · 207.0 KB
-    HomeIndex        index   207.0 KB
+  React · 2 pages
+    Dashboard  src/frontend/react/pages/Dashboard.tsx
+    Home       src/frontend/react/pages/Home.tsx
 
-  Vue · 3 files · 1.2 MB
-    Dashboard        page      1.2 MB
-    DashboardIndex   index     2.3 KB
-    DashboardClient  client    278 B
+  Vue · 1 page
+    Settings   src/frontend/vue/pages/Settings.vue
 
-  Shared · 7 files · 234.6 KB
-    AppCSS           css       4.6 KB
-    + 6 shared chunks · 230.0 KB (--all to list)
+  HTMX · 1 page
+    Inbox      src/frontend/htmx/pages/Inbox.html
 
-  3 frameworks · 11 files · 1.6 MB · build/manifest.json`;
+  3 frameworks · 4 pages`;
+export const lsSizesOutput = `\
+$ absolute ls --sizes
+
+  build/manifest.json · built 4m 12s ago
+
+  React · 2 pages
+    Dashboard  312.4 KB  src/frontend/react/pages/Dashboard.tsx
+    Home       207.0 KB  src/frontend/react/pages/Home.tsx
+
+  Vue · 1 page
+    Settings   918.7 KB  src/frontend/vue/pages/Settings.vue
+
+  3 frameworks · 4 pages`;
 export const mkcertCommand = `\
 # Setup trusted HTTPS certificates for local development
 absolute mkcert`;
