@@ -70,6 +70,7 @@ import { EslintView } from '../components/documentation/packages/eslint/EslintVi
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
 import { TypesView } from '../components/documentation/reference/TypesView';
 import { CronJobsView } from '../components/documentation/server/CronJobsView';
+import { EdenTreatyPerformanceView } from '../components/documentation/server/EdenTreatyPerformanceView';
 import { ElysiaCorsView } from '../components/documentation/server/ElysiaCorsView';
 import { ElysiaIntegrationView } from '../components/documentation/server/ElysiaIntegrationView';
 import { ElysiaPluginCompositionView } from '../components/documentation/server/ElysiaPluginCompositionView';
@@ -139,6 +140,7 @@ export const docsViews = definePortalViews({
 	'dev-tunnel': TunnelView,
 	docker: DockerView,
 	doctor: DoctorView,
+	'eden-treaty-performance': EdenTreatyPerformanceView,
 	'elysia-cors': ElysiaCorsView,
 	'elysia-integration': ElysiaIntegrationView,
 	'elysia-plugin-composition': ElysiaPluginCompositionView,
@@ -359,6 +361,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'elysia-integration', label: 'Overview' },
 			{ id: 'elysia-plugin-composition', label: 'Plugin Composition' },
+			{ id: 'eden-treaty-performance', label: 'Type Performance' },
 			{ id: 'elysia-validation', label: 'Validation' },
 			{ id: 'elysia-cors', label: 'CORS' },
 			{ id: 'cron-jobs', label: 'Cron Jobs' },
