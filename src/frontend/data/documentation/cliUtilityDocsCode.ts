@@ -47,6 +47,33 @@ absolute eslint --clear-cache
 
 # Relocate the cache (useful in monorepos / CI to avoid collisions)
 ABSOLUTE_ESLINT_CACHE=.cache/eslint absolute eslint`;
+export const generateCommand = `\
+# Generate a page — component file, CSS, nav, and route all wired up
+absolute generate page dashboard --framework react
+
+# --framework is optional when only one framework is configured
+absolute generate page settings
+
+# An API plugin with GET/POST stubs, mounted on the server
+absolute generate api users
+
+# A reusable component (no route)
+absolute generate component Button --framework svelte`;
+export const generateOutput = `\
+$ absolute generate page dashboard --framework react
+
+✓ Generated page dashboard (react)
+
+  Created
+    src/frontend/react/pages/Dashboard.tsx
+    src/frontend/styles/indexes/dashboard.css
+    src/frontend/shared/navData.ts
+  Updated
+    src/backend/plugins/pagesPlugin.ts
+
+  Route  /dashboard
+
+  Next  run \`absolute prettier --write\` to format edits, then \`absolute dev\``;
 export const infoCommand = `\
 # Print system info for bug reports
 absolute info`;
