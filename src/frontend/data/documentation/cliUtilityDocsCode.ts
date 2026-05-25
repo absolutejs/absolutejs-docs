@@ -26,34 +26,30 @@ $ absolute info
   Platform: linux x64
   Node: v22.0.0`;
 export const lsCommand = `\
-# List every running AbsoluteJS server on the machine
+# List the pages, islands, and assets your project builds
 absolute ls
 
-# Same thing, process-manager muscle memory
-absolute ps
-
-# Auto-refreshing dashboard you can act on
-absolute ls --watch
+# Include shared chunks in the listing
+absolute ls --all
 
 # Machine-readable output
 absolute ls --json`;
-export const lsKillCommand = `\
-# Stop a server by pid, or free a port an orphan is squatting
-absolute ls --kill 48210
-absolute ls --kill 3001
-
-# Stop every running server
-absolute ls --kill-all`;
 export const lsOutput = `\
 $ absolute ls
 
-  NAME        SOURCE     PORT  PID    UPTIME  STATUS  URL
-  my-app      dev        3000  48210  2m 14s  ready   http://localhost:3000/
-  api-server  untracked  3001  51388  5h 42m  ready   http://localhost:3001/`;
-export const lsPortConflict = `\
-$ absolute dev
+  React · 1 file · 207.0 KB
+    HomeIndex        index   207.0 KB
 
-  Port 3000 is in use (held by pid 51388 — bun run dist/server.js), trying another one... → http://localhost:3001/`;
+  Vue · 3 files · 1.2 MB
+    Dashboard        page      1.2 MB
+    DashboardIndex   index     2.3 KB
+    DashboardClient  client    278 B
+
+  Shared · 7 files · 234.6 KB
+    AppCSS           css       4.6 KB
+    + 6 shared chunks · 230.0 KB (--all to list)
+
+  3 frameworks · 11 files · 1.6 MB · build/manifest.json`;
 export const mkcertCommand = `\
 # Setup trusted HTTPS certificates for local development
 absolute mkcert`;
@@ -71,6 +67,32 @@ absolute prettier
 
 # Fix formatting
 absolute prettier --write`;
+export const psCommand = `\
+# List every running AbsoluteJS server on the machine
+absolute ps
+
+# Auto-refreshing dashboard you can act on
+absolute ps --watch
+
+# Machine-readable output
+absolute ps --json`;
+export const psKillCommand = `\
+# Stop a server by pid, or free a port an orphan is squatting
+absolute ps --kill 48210
+absolute ps --kill 3001
+
+# Stop every running server
+absolute ps --kill-all`;
+export const psOutput = `\
+$ absolute ps
+
+  NAME        SOURCE     PORT  PID    UPTIME  STATUS  URL
+  my-app      dev        3000  48210  2m 14s  ready   http://localhost:3000/
+  api-server  untracked  3001  51388  5h 42m  ready   http://localhost:3001/`;
+export const psPortConflict = `\
+$ absolute dev
+
+  Port 3000 is in use (held by pid 51388 — bun run dist/server.js), trying another one... → http://localhost:3001/`;
 export const telemetryCommand = `\
 # Check telemetry status
 absolute telemetry

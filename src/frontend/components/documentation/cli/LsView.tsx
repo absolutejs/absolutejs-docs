@@ -3,9 +3,7 @@ import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	lsCommand,
-	lsKillCommand,
-	lsOutput,
-	lsPortConflict
+	lsOutput
 } from '../../../data/documentation/cliUtilityDocsCode';
 import {
 	h1Style,
@@ -25,12 +23,10 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#usage', label: 'Usage' },
-	{ href: '#orphans', label: 'Catching orphans' },
-	{ href: '#stopping', label: 'Stopping servers' },
-	{ href: '#port-conflicts', label: 'Port conflicts' }
+	{ href: '#output', label: 'Reading the output' }
 ];
 
-export const ListView = ({
+export const LsView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,
@@ -57,8 +53,8 @@ export const ListView = ({
 						absolute ls
 					</h1>
 					<p style={paragraphLargeStyle}>
-						List and manage every running AbsoluteJS server on the
-						machine. <code>absolute ps</code> is an alias.
+						List every page, island, and asset your project builds —
+						grouped by framework, with on-disk sizes.
 					</p>
 				</animated.div>
 
@@ -72,10 +68,12 @@ export const ListView = ({
 						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>absolute ls</code> prints a table of the dev,
-						start, and compiled servers currently running. Add{' '}
-						<code>--watch</code> for an auto-refreshing dashboard you
-						can act on, or <code>--json</code> for scripting.
+						<code>absolute ls</code> reads the manifest at{' '}
+						<code>build/manifest.json</code>, so run{' '}
+						<code>absolute build</code> (or <code>absolute dev</code>)
+						first. Add <code>--all</code> to include shared chunks in
+						the listing, or <code>--json</code> for the structured
+						entries — handy for bundle-size budgets in CI.
 					</p>
 					<PrismPlus
 						codeString={lsCommand}
@@ -87,72 +85,25 @@ export const ListView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="orphans"
+						id="output"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Catching orphans
+						Reading the output
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Rather than trusting a registry file, <code>ls</code>{' '}
-						scans the machine&apos;s listening sockets (via{' '}
-						<code>lsof</code>, falling back to <code>ss</code>) and
-						unions the result with the servers AbsoluteJS launched. So
-						it still shows a server whose dev controller died, a
-						hand-run <code>bun dist/server.js</code> build, or anything
-						else holding a port — these appear with the{' '}
-						<code>untracked</code> source so you always know what is
-						actually running.
+						Each framework gets its own group with a file count and
+						subtotal. Every row is one built artifact, tagged by kind:{' '}
+						<code>page</code> (the server bundle or static page),{' '}
+						<code>index</code> (its client hydration entry),{' '}
+						<code>client</code> and <code>island</code> bundles,{' '}
+						<code>css</code>, and shared <code>chunk</code>s. Sizes are
+						read straight from disk so you can spot what is shipping
+						before you deploy.
 					</p>
 					<PrismPlus
 						codeString={lsOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						id="stopping"
-						level="h2"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Stopping servers
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Pass <code>--kill</code> a pid or a port to stop a single
-						server (handy for freeing a port an orphan is squatting),
-						or <code>--kill-all</code> to clear every running server
-						at once.
-					</p>
-					<PrismPlus
-						codeString={lsKillCommand}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						id="port-conflicts"
-						level="h2"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Port conflicts
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						When <code>absolute dev</code> finds its port already
-						taken, it names the process holding it before falling back
-						to the next port — so you can decide whether to{' '}
-						<code>absolute ls --kill</code> it or move on.
-					</p>
-					<PrismPlus
-						codeString={lsPortConflict}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}

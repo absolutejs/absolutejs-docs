@@ -19,8 +19,9 @@ import { CompileView } from '../components/documentation/cli/CompileView';
 import { DevView } from '../components/documentation/cli/DevView';
 import { EslintPrettierView } from '../components/documentation/cli/EslintPrettierView';
 import { InfoView } from '../components/documentation/cli/InfoView';
-import { ListView } from '../components/documentation/cli/ListView';
+import { LsView } from '../components/documentation/cli/LsView';
 import { MkcertView } from '../components/documentation/cli/MkcertView';
+import { PsView } from '../components/documentation/cli/PsView';
 import { StartView } from '../components/documentation/cli/StartView';
 import { TelemetryView } from '../components/documentation/cli/TelemetryView';
 import { TypecheckView } from '../components/documentation/cli/TypecheckView';
@@ -146,7 +147,7 @@ export const docsViews = definePortalViews({
 	installation: InstallationView,
 	islands: IslandsView,
 	'loading-states': LoadingStatesView,
-	ls: ListView,
+	ls: LsView,
 	middleware: MiddlewareView,
 	mkcert: MkcertView,
 	'networking-plugin': NetworkingPluginView,
@@ -154,6 +155,7 @@ export const docsViews = definePortalViews({
 	overview: Overview,
 	'page-handlers': PageHandlersView,
 	'production-build': ProductionBuildView,
+	ps: PsView,
 	quickstart: QuickstartView,
 	'react-ai': ReactAIView,
 	'react-components': ReactComponentsView,
@@ -217,8 +219,9 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'dev', label: 'Dev' },
 			{ id: 'start', label: 'Start' },
-			{ id: 'ls', label: 'Processes' },
 			{ id: 'compile', label: 'Compile' },
+			{ id: 'ls', label: 'Build output' },
+			{ id: 'ps', label: 'Processes' },
 			{ id: 'eslint-prettier', label: 'ESLint & Prettier' },
 			{ id: 'typecheck', label: 'Typecheck' },
 			{ id: 'mkcert', label: 'Mkcert' },
