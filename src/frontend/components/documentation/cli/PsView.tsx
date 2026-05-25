@@ -73,9 +73,12 @@ export const PsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>absolute ps</code> prints a table of the dev,
-						start, and compiled servers currently running. Add{' '}
-						<code>--watch</code> for an auto-refreshing dashboard you
-						can act on, or <code>--json</code> for scripting.
+						start, and compiled servers currently running — name,
+						port, pid, uptime, memory, and status. Add{' '}
+						<code>--watch</code> for an auto-refreshing dashboard
+						where you can stop the highlighted server (<code>s</code>)
+						or free its port (<code>f</code>, prefilled) without
+						typing it, or <code>--json</code> for scripting.
 					</p>
 					<PrismPlus
 						codeString={psCommand}

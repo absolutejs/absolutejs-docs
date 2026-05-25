@@ -98,9 +98,9 @@ absolute ps --kill-all`;
 export const psOutput = `\
 $ absolute ps
 
-  NAME        SOURCE     PORT  PID    UPTIME  STATUS  URL
-  my-app      dev        3000  48210  2m 14s  ready   http://localhost:3000/
-  api-server  untracked  3001  51388  5h 42m  ready   http://localhost:3001/`;
+  NAME        SOURCE     PORT  PID    UPTIME  MEM       STATUS  URL
+  my-app      dev        3000  48210  2m 14s  142.6 MB  ready   http://localhost:3000/
+  api-server  untracked  3001  51388  5h 42m  88.1 MB   ready   http://localhost:3001/`;
 export const psPortConflict = `\
 $ absolute dev
 
