@@ -11,6 +11,7 @@ import {
 	FaPuzzlePiece,
 	FaCog,
 	FaLightbulb,
+	FaListUl,
 	FaTerminal,
 	FaRobot
 } from 'react-icons/fa';
@@ -54,6 +55,7 @@ import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
+import { EslintRuleView } from '../components/documentation/packages/eslint/EslintRuleView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
 import { TypesView } from '../components/documentation/reference/TypesView';
@@ -131,7 +133,33 @@ export const docsViews = definePortalViews({
 	'environment-variables': EnvironmentVariablesView,
 	'error-boundaries': ErrorBoundariesView,
 	eslint: EslintView,
+	'eslint-angular-one-feature-per-file': EslintRuleView,
+	'eslint-explicit-object-types': EslintRuleView,
+	'eslint-inline-style-limit': EslintRuleView,
+	'eslint-localize-react-props': EslintRuleView,
+	'eslint-max-depth-extended': EslintRuleView,
+	'eslint-max-jsxnesting': EslintRuleView,
+	'eslint-min-var-length': EslintRuleView,
+	'eslint-no-button-navigation': EslintRuleView,
+	'eslint-no-explicit-return-type': EslintRuleView,
+	'eslint-no-import-meta-path': EslintRuleView,
+	'eslint-no-inline-object-types': EslintRuleView,
+	'eslint-no-multi-style-objects': EslintRuleView,
+	'eslint-no-nested-jsx-return': EslintRuleView,
+	'eslint-no-nondeterministic-render': EslintRuleView,
+	'eslint-no-or-none-component': EslintRuleView,
+	'eslint-no-redundant-type-annotation': EslintRuleView,
+	'eslint-no-transition-cssproperties': EslintRuleView,
+	'eslint-no-trivial-alias': EslintRuleView,
+	'eslint-no-unnecessary-div': EslintRuleView,
+	'eslint-no-unnecessary-key': EslintRuleView,
+	'eslint-no-useless-function': EslintRuleView,
+	'eslint-prefer-inline-exports': EslintRuleView,
 	'eslint-prettier': EslintPrettierView,
+	'eslint-seperate-style-files': EslintRuleView,
+	'eslint-sort-exports': EslintRuleView,
+	'eslint-sort-keys-fixable': EslintRuleView,
+	'eslint-spring-naming-convention': EslintRuleView,
 	'examples-recipes': ExamplesRecipesView,
 	'head-meta-tags': HeadMetaTagsView,
 	hosting: HostingView,
@@ -330,6 +358,117 @@ export const sidebarData: MenuItem[] = [
 		],
 		icon: animated(FaPuzzlePiece),
 		label: 'Ecosystem'
+	},
+	{
+		buttons: [
+			{ id: 'eslint', label: 'Overview' },
+			{
+				id: 'eslint-angular-one-feature-per-file',
+				label: 'angular-one-feature-per-file'
+			},
+			{
+				id: 'eslint-explicit-object-types',
+				label: 'explicit-object-types'
+			},
+			{
+				id: 'eslint-inline-style-limit',
+				label: 'inline-style-limit'
+			},
+			{
+				id: 'eslint-localize-react-props',
+				label: 'localize-react-props'
+			},
+			{
+				id: 'eslint-max-depth-extended',
+				label: 'max-depth-extended'
+			},
+			{
+				id: 'eslint-max-jsxnesting',
+				label: 'max-jsxnesting'
+			},
+			{
+				id: 'eslint-min-var-length',
+				label: 'min-var-length'
+			},
+			{
+				id: 'eslint-no-button-navigation',
+				label: 'no-button-navigation'
+			},
+			{
+				id: 'eslint-no-explicit-return-type',
+				label: 'no-explicit-return-type'
+			},
+			{
+				id: 'eslint-no-import-meta-path',
+				label: 'no-import-meta-path'
+			},
+			{
+				id: 'eslint-no-inline-object-types',
+				label: 'no-inline-object-types'
+			},
+			{
+				id: 'eslint-no-multi-style-objects',
+				label: 'no-multi-style-objects'
+			},
+			{
+				id: 'eslint-no-nested-jsx-return',
+				label: 'no-nested-jsx-return'
+			},
+			{
+				id: 'eslint-no-nondeterministic-render',
+				label: 'no-nondeterministic-render'
+			},
+			{
+				id: 'eslint-no-or-none-component',
+				label: 'no-or-none-component'
+			},
+			{
+				id: 'eslint-no-redundant-type-annotation',
+				label: 'no-redundant-type-annotation'
+			},
+			{
+				id: 'eslint-no-transition-cssproperties',
+				label: 'no-transition-cssproperties'
+			},
+			{
+				id: 'eslint-no-trivial-alias',
+				label: 'no-trivial-alias'
+			},
+			{
+				id: 'eslint-no-unnecessary-div',
+				label: 'no-unnecessary-div'
+			},
+			{
+				id: 'eslint-no-unnecessary-key',
+				label: 'no-unnecessary-key'
+			},
+			{
+				id: 'eslint-no-useless-function',
+				label: 'no-useless-function'
+			},
+			{
+				id: 'eslint-prefer-inline-exports',
+				label: 'prefer-inline-exports'
+			},
+			{
+				id: 'eslint-seperate-style-files',
+				label: 'seperate-style-files'
+			},
+			{
+				id: 'eslint-sort-exports',
+				label: 'sort-exports'
+			},
+			{
+				id: 'eslint-sort-keys-fixable',
+				label: 'sort-keys-fixable'
+			},
+			{
+				id: 'eslint-spring-naming-convention',
+				label: 'spring-naming-convention'
+			}
+		],
+		icon: animated(FaListUl),
+		label: 'ESLint Rules'
 	},
 	{
 		buttons: [
