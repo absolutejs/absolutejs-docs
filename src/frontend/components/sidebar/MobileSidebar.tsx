@@ -138,6 +138,8 @@ export const MobileSidebar = ({
 									onToggle={() =>
 										onToggleSection(element.label)
 									}
+									onToggleSection={onToggleSection}
+									openSections={openSections}
 									startIndex={startIndexForDropdown(index)}
 									themeSprings={themeSprings}
 									view={view}

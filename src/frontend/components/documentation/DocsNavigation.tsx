@@ -2,7 +2,7 @@ import { animated } from '@react-spring/web';
 import { CSSProperties, useMemo } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { ThemeSprings } from '../../../types/springTypes';
-import { isMenuDropdown } from '../../../types/types';
+import { isMenuDropdown, isSubmenuButton } from '../../../types/types';
 import { sidebarData } from '../../data/sidebarData';
 
 type NavItem = {
@@ -85,17 +85,30 @@ export const DocsNavigation = ({
 }: DocsNavigationProps) => {
 	const flattenedPages = useMemo<NavItem[]>(
 		() =>
-			sidebarData.flatMap((section) =>
-				isMenuDropdown(section)
-					? section.buttons.map(
-							(button): NavItem => ({
-								id: button.id,
-								label: button.label,
-								sectionLabel: section.label
-							})
-						)
-					: [{ id: section.id, label: section.label }]
-			),
+			sidebarData.flatMap((section) => {
+				if (!isMenuDropdown(section)) {
+					return [{ id: section.id, label: section.label }];
+				}
+
+				return section.buttons.flatMap((button) => {
+					const self: NavItem = {
+						id: button.id,
+						label: button.label,
+						sectionLabel: section.label
+					};
+					if (!isSubmenuButton(button)) return [self];
+
+					const children = button.buttons.map(
+						(child): NavItem => ({
+							id: child.id,
+							label: child.label,
+							sectionLabel: section.label
+						})
+					);
+
+					return [self, ...children];
+				});
+			}),
 		[]
 	);
 

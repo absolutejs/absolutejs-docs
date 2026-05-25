@@ -49,6 +49,8 @@ export const Sidebar = ({
 							linksSprings={linksSprings}
 							navigateToView={navigateToView}
 							onToggle={() => onToggleSection(element.label)}
+							onToggleSection={onToggleSection}
+							openSections={openSections}
 							startIndex={startIndexForDropdown(index)}
 							themeSprings={themeSprings}
 							view={view}

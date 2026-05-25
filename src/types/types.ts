@@ -33,6 +33,7 @@ export type MenuButton<V extends string = DocsView> = {
 	id: V;
 	label: string;
 	icon?: AnimatedComponent<IconType>;
+	buttons?: MenuButton<V>[];
 };
 
 export type MenuItem<V extends string = DocsView> =
@@ -42,6 +43,11 @@ export type MenuItem<V extends string = DocsView> =
 export const isMenuDropdown = <V extends string>(
 	element: MenuItem<V>
 ): element is MenuDropdown<V> => 'buttons' in element;
+
+export const isSubmenuButton = <V extends string>(
+	button: MenuButton<V>
+): button is MenuButton<V> & { buttons: MenuButton<V>[] } =>
+	Array.isArray(button.buttons) && button.buttons.length > 0;
 
 export type DocsView = keyof typeof docsViews;
 

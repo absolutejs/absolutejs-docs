@@ -1,6 +1,6 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useState } from 'react';
-import { DocsView, isMenuDropdown } from '../../types/types';
+import { DocsView, isMenuDropdown, isSubmenuButton } from '../../types/types';
 import { isValidViewId } from '../../types/typeGuards';
 import { Navbar } from '../components/navbar/Navbar';
 import { AuroraBackground } from '../components/utils/AuroraBackground';
@@ -19,14 +19,23 @@ type DocumentationProps = {
 	initialView: DocsView;
 };
 
-const findSectionForView = (view: DocsView) => {
+const findOpenKeysForView = (view: DocsView) => {
 	for (const section of sidebarData) {
 		if (!isMenuDropdown(section)) continue;
-		if (section.buttons.some((btn) => btn.id === view))
-			return section.label;
+		const match = section.buttons.find(
+			(button) =>
+				button.id === view ||
+				(isSubmenuButton(button) &&
+					button.buttons.some((child) => child.id === view))
+		);
+		if (!match) continue;
+		const keys = [section.label];
+		if (isSubmenuButton(match)) keys.push(match.id);
+
+		return keys;
 	}
 
-	return null;
+	return [];
 };
 
 export const Documentation = ({
@@ -41,11 +50,9 @@ export const Documentation = ({
 	const isTablet = isSizeOrLess('lg') && !isMobile;
 	const isMobileOrTablet = isMobile || isTablet;
 
-	const [openSections, setOpenSections] = useState<Set<string>>(() => {
-		const initial = findSectionForView(initialView);
-
-		return initial ? new Set([initial]) : new Set();
-	});
+	const [openSections, setOpenSections] = useState<Set<string>>(
+		() => new Set(findOpenKeysForView(initialView))
+	);
 
 	const [sidebarSpring, sidebarSpringApi] = useSpring(() => ({
 		config: { friction: 40, tension: 275 },
@@ -57,10 +64,10 @@ export const Documentation = ({
 
 	const handleNavigate = (newView: DocsView) => {
 		navigateToView(newView);
-		const section = findSectionForView(newView);
-		if (!section) return;
+		const keys = findOpenKeysForView(newView);
+		if (keys.length === 0) return;
 
-		setOpenSections((current) => new Set([...current, section]));
+		setOpenSections((current) => new Set([...current, ...keys]));
 	};
 
 	const handleToggleSection = (label: string) => {

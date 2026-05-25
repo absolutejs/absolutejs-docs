@@ -11,7 +11,6 @@ import {
 	FaPuzzlePiece,
 	FaCog,
 	FaLightbulb,
-	FaListUl,
 	FaTerminal,
 	FaRobot
 } from 'react-icons/fa';
@@ -353,122 +352,120 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'absolute-auth', label: 'Absolute Auth' },
 			{ id: 'citra', label: 'Citra' },
 			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
-			{ id: 'eslint', label: 'ESLint' },
+			{
+				buttons: [
+					{
+						id: 'eslint-angular-one-feature-per-file',
+						label: 'angular-one-feature-per-file'
+					},
+					{
+						id: 'eslint-explicit-object-types',
+						label: 'explicit-object-types'
+					},
+					{
+						id: 'eslint-inline-style-limit',
+						label: 'inline-style-limit'
+					},
+					{
+						id: 'eslint-localize-react-props',
+						label: 'localize-react-props'
+					},
+					{
+						id: 'eslint-max-depth-extended',
+						label: 'max-depth-extended'
+					},
+					{
+						id: 'eslint-max-jsxnesting',
+						label: 'max-jsxnesting'
+					},
+					{
+						id: 'eslint-min-var-length',
+						label: 'min-var-length'
+					},
+					{
+						id: 'eslint-no-button-navigation',
+						label: 'no-button-navigation'
+					},
+					{
+						id: 'eslint-no-explicit-return-type',
+						label: 'no-explicit-return-type'
+					},
+					{
+						id: 'eslint-no-import-meta-path',
+						label: 'no-import-meta-path'
+					},
+					{
+						id: 'eslint-no-inline-object-types',
+						label: 'no-inline-object-types'
+					},
+					{
+						id: 'eslint-no-multi-style-objects',
+						label: 'no-multi-style-objects'
+					},
+					{
+						id: 'eslint-no-nested-jsx-return',
+						label: 'no-nested-jsx-return'
+					},
+					{
+						id: 'eslint-no-nondeterministic-render',
+						label: 'no-nondeterministic-render'
+					},
+					{
+						id: 'eslint-no-or-none-component',
+						label: 'no-or-none-component'
+					},
+					{
+						id: 'eslint-no-redundant-type-annotation',
+						label: 'no-redundant-type-annotation'
+					},
+					{
+						id: 'eslint-no-transition-cssproperties',
+						label: 'no-transition-cssproperties'
+					},
+					{
+						id: 'eslint-no-trivial-alias',
+						label: 'no-trivial-alias'
+					},
+					{
+						id: 'eslint-no-unnecessary-div',
+						label: 'no-unnecessary-div'
+					},
+					{
+						id: 'eslint-no-unnecessary-key',
+						label: 'no-unnecessary-key'
+					},
+					{
+						id: 'eslint-no-useless-function',
+						label: 'no-useless-function'
+					},
+					{
+						id: 'eslint-prefer-inline-exports',
+						label: 'prefer-inline-exports'
+					},
+					{
+						id: 'eslint-seperate-style-files',
+						label: 'seperate-style-files'
+					},
+					{
+						id: 'eslint-sort-exports',
+						label: 'sort-exports'
+					},
+					{
+						id: 'eslint-sort-keys-fixable',
+						label: 'sort-keys-fixable'
+					},
+					{
+						id: 'eslint-spring-naming-convention',
+						label: 'spring-naming-convention'
+					}
+				],
+				id: 'eslint',
+				label: 'ESLint'
+			},
 			{ id: 'scoped-state', label: 'Scoped State' }
 		],
 		icon: animated(FaPuzzlePiece),
 		label: 'Ecosystem'
-	},
-	{
-		buttons: [
-			{ id: 'eslint', label: 'Overview' },
-			{
-				id: 'eslint-angular-one-feature-per-file',
-				label: 'angular-one-feature-per-file'
-			},
-			{
-				id: 'eslint-explicit-object-types',
-				label: 'explicit-object-types'
-			},
-			{
-				id: 'eslint-inline-style-limit',
-				label: 'inline-style-limit'
-			},
-			{
-				id: 'eslint-localize-react-props',
-				label: 'localize-react-props'
-			},
-			{
-				id: 'eslint-max-depth-extended',
-				label: 'max-depth-extended'
-			},
-			{
-				id: 'eslint-max-jsxnesting',
-				label: 'max-jsxnesting'
-			},
-			{
-				id: 'eslint-min-var-length',
-				label: 'min-var-length'
-			},
-			{
-				id: 'eslint-no-button-navigation',
-				label: 'no-button-navigation'
-			},
-			{
-				id: 'eslint-no-explicit-return-type',
-				label: 'no-explicit-return-type'
-			},
-			{
-				id: 'eslint-no-import-meta-path',
-				label: 'no-import-meta-path'
-			},
-			{
-				id: 'eslint-no-inline-object-types',
-				label: 'no-inline-object-types'
-			},
-			{
-				id: 'eslint-no-multi-style-objects',
-				label: 'no-multi-style-objects'
-			},
-			{
-				id: 'eslint-no-nested-jsx-return',
-				label: 'no-nested-jsx-return'
-			},
-			{
-				id: 'eslint-no-nondeterministic-render',
-				label: 'no-nondeterministic-render'
-			},
-			{
-				id: 'eslint-no-or-none-component',
-				label: 'no-or-none-component'
-			},
-			{
-				id: 'eslint-no-redundant-type-annotation',
-				label: 'no-redundant-type-annotation'
-			},
-			{
-				id: 'eslint-no-transition-cssproperties',
-				label: 'no-transition-cssproperties'
-			},
-			{
-				id: 'eslint-no-trivial-alias',
-				label: 'no-trivial-alias'
-			},
-			{
-				id: 'eslint-no-unnecessary-div',
-				label: 'no-unnecessary-div'
-			},
-			{
-				id: 'eslint-no-unnecessary-key',
-				label: 'no-unnecessary-key'
-			},
-			{
-				id: 'eslint-no-useless-function',
-				label: 'no-useless-function'
-			},
-			{
-				id: 'eslint-prefer-inline-exports',
-				label: 'prefer-inline-exports'
-			},
-			{
-				id: 'eslint-seperate-style-files',
-				label: 'seperate-style-files'
-			},
-			{
-				id: 'eslint-sort-exports',
-				label: 'sort-exports'
-			},
-			{
-				id: 'eslint-sort-keys-fixable',
-				label: 'sort-keys-fixable'
-			},
-			{
-				id: 'eslint-spring-naming-convention',
-				label: 'spring-naming-convention'
-			}
-		],
-		icon: animated(FaListUl),
-		label: 'ESLint Rules'
 	},
 	{
 		buttons: [

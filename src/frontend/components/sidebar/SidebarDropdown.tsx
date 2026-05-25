@@ -5,10 +5,11 @@ import {
 	SidebarLinksSprings,
 	ThemeSprings
 } from '../../../types/springTypes';
-import { MenuButton } from '../../../types/types';
+import { MenuButton, isSubmenuButton } from '../../../types/types';
 import { useContainerQuery } from '../../hooks/useContainerQuery';
 import { AnimatedFaChevronDown } from '../utils/AnimatedComponents';
 import { SidebarLink } from './SidebarLink';
+import { SidebarSubmenu } from './SidebarSubmenu';
 
 type SidebarDropdownProps<V extends string> = {
 	label: string;
@@ -22,6 +23,8 @@ type SidebarDropdownProps<V extends string> = {
 	view: V;
 	isOpen: boolean;
 	onToggle: () => void;
+	openSections: Set<string>;
+	onToggleSection: (key: string) => void;
 };
 
 export const SidebarDropdown = <V extends string>({
@@ -35,7 +38,9 @@ export const SidebarDropdown = <V extends string>({
 	navigateToView,
 	themeSprings,
 	isOpen,
-	onToggle
+	onToggle,
+	openSections,
+	onToggleSection
 }: SidebarDropdownProps<V>) => {
 	const {
 		ref,
@@ -113,20 +118,32 @@ export const SidebarDropdown = <V extends string>({
 					overflow: 'hidden'
 				}}
 			>
-				{buttons.map((button, index) => (
-					<SidebarLink
-						icon={button.icon}
-						id={button.id}
-						index={startIndex + index}
-						key={index}
-						label={button.label}
-						linksApi={linksApi}
-						linkSprings={linksSprings[startIndex + index]}
-						navigateToView={navigateToView}
-						themeSprings={themeSprings}
-						view={view}
-					/>
-				))}
+				{buttons.map((button, index) =>
+					isSubmenuButton(button) ? (
+						<SidebarSubmenu
+							button={button}
+							isOpen={openSections.has(button.id)}
+							key={button.id}
+							navigateToView={navigateToView}
+							onToggle={() => onToggleSection(button.id)}
+							themeSprings={themeSprings}
+							view={view}
+						/>
+					) : (
+						<SidebarLink
+							icon={button.icon}
+							id={button.id}
+							index={startIndex + index}
+							key={button.id}
+							label={button.label}
+							linksApi={linksApi}
+							linkSprings={linksSprings[startIndex + index]}
+							navigateToView={navigateToView}
+							themeSprings={themeSprings}
+							view={view}
+						/>
+					)
+				)}
 			</animated.nav>
 		</div>
 	);

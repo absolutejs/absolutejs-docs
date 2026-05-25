@@ -34,6 +34,9 @@ export const SidebarLink = <V extends string>({
 }: SidebarLinkProps<V>) => {
 	const Icon = icon;
 	const isOverview = id === 'overview';
+	// Links with a negative index (the Overview link and nested sub-links) are
+	// not part of the shared flat-index spring set, so they animate locally.
+	const isStandalone = index < 0;
 	const isActive = view === id;
 
 	const [springStyles, springApi] = useSpring(() => ({
@@ -43,19 +46,19 @@ export const SidebarLink = <V extends string>({
 	}));
 
 	useEffect(() => {
-		if (isOverview) {
+		if (isStandalone) {
 			void springApi.start({
 				backgroundColor: isActive ? primaryColor : 'transparent',
 				opacity: isActive ? 1 : 0
 			});
 		}
-	}, [isActive, isOverview, springApi]);
+	}, [isActive, isStandalone, springApi]);
 
 	return (
 		<animated.button
 			onClick={() => {
 				navigateToView(id);
-				if (isOverview) {
+				if (isStandalone) {
 					void springApi.start({
 						backgroundColor: primaryColor,
 						opacity: 1
@@ -80,7 +83,7 @@ export const SidebarLink = <V extends string>({
 			}}
 			onMouseEnter={() => {
 				if (isActive) return;
-				if (isOverview) {
+				if (isStandalone) {
 					void springApi.start({ opacity: 1 });
 
 					return;
@@ -94,7 +97,7 @@ export const SidebarLink = <V extends string>({
 			}}
 			onMouseLeave={() => {
 				if (isActive) return;
-				if (isOverview) {
+				if (isStandalone) {
 					void springApi.start({ opacity: 0 });
 
 					return;
@@ -128,7 +131,7 @@ export const SidebarLink = <V extends string>({
 					),
 					borderRadius: '6px',
 					inset: 0,
-					opacity: isOverview
+					opacity: isStandalone
 						? springStyles.opacity
 						: linkSprings?.opacity,
 					pointerEvents: 'none',
@@ -138,7 +141,7 @@ export const SidebarLink = <V extends string>({
 			/>
 			<animated.div
 				style={{
-					backgroundColor: isOverview
+					backgroundColor: isStandalone
 						? springStyles.backgroundColor
 						: linkSprings?.backgroundColor,
 					borderRadius: '2px',
