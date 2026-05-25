@@ -24,6 +24,7 @@ import { FrameworksView } from '../components/documentation/cli/FrameworksView';
 import { GenerateView } from '../components/documentation/cli/GenerateView';
 import { InfoView } from '../components/documentation/cli/InfoView';
 import { InspectView } from '../components/documentation/cli/InspectView';
+import { IslandsView as IslandsCliView } from '../components/documentation/cli/IslandsView';
 import { LogsView } from '../components/documentation/cli/LogsView';
 import { LsView } from '../components/documentation/cli/LsView';
 import { MemView } from '../components/documentation/cli/MemView';
@@ -186,6 +187,7 @@ export const docsViews = definePortalViews({
 	inspect: InspectView,
 	installation: InstallationView,
 	islands: IslandsView,
+	'islands-cli': IslandsCliView,
 	'loading-states': LoadingStatesView,
 	logs: LogsView,
 	ls: LsView,
@@ -271,6 +273,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'mem', label: 'Memory' },
 			{ id: 'logs', label: 'Logs' },
 			{ id: 'inspect', label: 'Inspect' },
+			{ id: 'islands-cli', label: 'Islands' },
 			{ id: 'doctor', label: 'Doctor' },
 			{ id: 'env', label: 'Env' },
 			{ id: 'eslint-prettier', label: 'ESLint & Prettier' },

@@ -137,6 +137,29 @@ $ absolute inspect
   04:34:58  GET     /missing  404     8ms    —
 
   4 requests · 54ms avg · 116ms p95 · live · q quit`;
+export const islandsCommand = `\
+# List islands by framework, hydration strategy, and the pages that mount them
+absolute islands
+
+# Add the shipped JS size per island (reads the build manifest)
+absolute islands --sizes
+
+# Machine-readable
+absolute islands --json`;
+export const islandsOutput = `\
+$ absolute islands --sizes
+
+  ⬡ ReactCounter  react · 5 pages · 4 cross-framework  1 KB
+    src/frontend/react/components/ReactCounter
+    src/frontend/react/pages/Home.tsx            load
+    src/frontend/vue/pages/VueHost.vue           load                 → in vue
+    src/frontend/svelte/pages/SvelteHost.svelte  load, idle, visible  → in svelte
+
+  ⬡ AngularCounter  angular · 5 pages · 5 cross-framework  159 KB
+    src/frontend/angular/components/angular-counter
+    src/frontend/react/pages/Home.tsx            load                 → in react
+
+  4 islands · 4 frameworks · 44 mounts · 39 cross-framework`;
 export const logsCommand = `\
 # Tail a running server's log by name (from any terminal)
 absolute logs my-app
