@@ -1,9 +1,45 @@
+export const addAuthCommand = `\
+# Scaffold the code wiring for an @absolutejs/auth feature
+absolute add auth:mfa
+absolute add auth:credentials
+absolute add auth:sso
+
+# also: passwordless, webauthn, organizations, roles, scim,
+# portal, lockout, compliance, sessions, audit, webhooks`;
+export const addAuthOutput = `\
+$ absolute add auth:mfa
+
+✓ Scaffolded src/mfaConfig.ts.
+
+  Wire it in:
+    import { mfaConfig } from './mfaConfig';
+    // add to your auth() call:
+    mfa: mfaConfig
+
+  Next  fill the TODO stubs, run 'absolute prettier --write', then 'absolute dev'`;
 export const addCommand = `\
 # Add a framework: installs deps, updates config, scaffolds a starter page
 absolute add svelte
 
 # Configure + scaffold only, skip the dependency install
 absolute add vue --no-install`;
+export const addIntegrationCommand = `\
+# Install + wire an official Elysia plugin
+absolute add openapi      # config-driven: enables it in absolute.config.ts
+absolute add telemetry    # installs @elysiajs/opentelemetry + enables it
+absolute add cors         # installs @elysiajs/cors, prints the .use(...) to add
+absolute add jwt
+absolute add cron`;
+export const addIntegrationOutput = `\
+$ absolute add cors
+
+✓ Installed @elysiajs/cors.
+
+  Add to your server:
+    import { cors } from '@elysiajs/cors';
+    .use(cors())
+
+  Next  wire it in, then run 'absolute dev'`;
 export const addOutput = `\
 $ absolute add svelte
 
@@ -60,6 +96,23 @@ $ absolute api
   DELETE  /api/account/:id  params: id
 
   4 routes · my-app · \`absolute api --open\` for the UI`;
+export const configCommand = `\
+# Open the Absolute Config visual editor in your browser
+absolute config
+
+# Pick the port and open it automatically
+absolute config --port 4099 --open
+
+# Point at a specific config file
+absolute config --config ./absolute.config.ts`;
+export const configOutput = `\
+$ absolute config
+
+  ABSOLUTEJS v0.19.0-beta.1051  ready in 283ms
+
+  ➜  Local:   https://config.absolute.localhost:4099/
+
+  Open it in your browser, or pass --open.`;
 export const doctorCommand = `\
 # Diagnose the project (bun, config, framework dirs, env, dev port)
 absolute doctor

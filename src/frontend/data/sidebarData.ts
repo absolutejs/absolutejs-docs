@@ -18,6 +18,7 @@ import { MenuItem } from '../../types/types';
 import { AnalyzeView } from '../components/documentation/cli/AnalyzeView';
 import { ApiView } from '../components/documentation/cli/ApiView';
 import { CompileView } from '../components/documentation/cli/CompileView';
+import { ConfigView } from '../components/documentation/cli/ConfigView';
 import { DevView } from '../components/documentation/cli/DevView';
 import { DoctorView } from '../components/documentation/cli/DoctorView';
 import { EnvView } from '../components/documentation/cli/EnvView';
@@ -143,6 +144,7 @@ export const docsViews = definePortalViews({
 	'bun-build-options': BunBuildOptionsView,
 	citra: CitraView,
 	compile: CompileView,
+	config: ConfigView,
 	'create-absolutejs': CreateAbsoluteJSView,
 	'cron-jobs': CronJobsView,
 	'data-fetching': DataFetchingView,
@@ -283,6 +285,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'compile', label: 'Compile' },
 			{ id: 'generate', label: 'Generate' },
 			{ id: 'frameworks', label: 'Add / Remove' },
+			{ id: 'config', label: 'Config' },
 			{ id: 'ls', label: 'Build output' },
 			{ id: 'analyze', label: 'Analyze' },
 			{ id: 'routes', label: 'Routes' },

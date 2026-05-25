@@ -2,7 +2,11 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
+	addAuthCommand,
+	addAuthOutput,
 	addCommand,
+	addIntegrationCommand,
+	addIntegrationOutput,
 	addOutput,
 	htmxCommand,
 	htmxOutput,
@@ -27,6 +31,8 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#add', label: 'Adding a framework' },
+	{ href: '#integrations', label: 'Adding integrations' },
+	{ href: '#auth-features', label: 'Scaffolding auth features' },
 	{ href: '#remove', label: 'Removing a framework' },
 	{ href: '#htmx', label: 'Self-hosting htmx' }
 ];
@@ -92,6 +98,77 @@ export const FrameworksView = ({
 					/>
 					<PrismPlus
 						codeString={addOutput}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="integrations"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Adding integrations
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>add</code> also installs and wires the official Elysia
+						plugins. <code>absolute add openapi</code> and{' '}
+						<code>absolute add telemetry</code> are config-driven — they
+						flip the field in <code>absolute.config.ts</code> that the
+						runtime reads to mount them (and install the package when one
+						is needed) — while <code>cors</code>, <code>jwt</code>, and{' '}
+						<code>cron</code> install the package and print the exact{' '}
+						<code>.use(...)</code> to add to your server. The same plugins
+						are available as one-click toggles in the Integrations panel of{' '}
+						<code>absolute config</code>.
+					</p>
+					<PrismPlus
+						codeString={addIntegrationCommand}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+					<PrismPlus
+						codeString={addIntegrationOutput}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="auth-features"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Scaffolding auth features
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>absolute add auth:&lt;feature&gt;</code> scaffolds the
+						starter code wiring for an <code>@absolutejs/auth</code>{' '}
+						feature — a typed <code>&lt;feature&gt;Config.ts</code> with the
+						required store (seeded with an in-memory factory) and hook stubs
+						(<code>TODO</code>s) plus sensible defaults — and prints the
+						spread to add to your <code>auth()</code> call. Targets include{' '}
+						<code>mfa</code>, <code>credentials</code>, <code>sso</code>,{' '}
+						<code>passwordless</code>, <code>webauthn</code>,{' '}
+						<code>organizations</code>, and more. The Auth panel in{' '}
+						<code>absolute config</code> exposes the same scaffolds as a
+						button per unconfigured feature.
+					</p>
+					<PrismPlus
+						codeString={addAuthCommand}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+					<PrismPlus
+						codeString={addAuthOutput}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
