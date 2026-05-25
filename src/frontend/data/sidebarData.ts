@@ -65,6 +65,11 @@ import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
+import { AuthComplianceView } from '../components/documentation/packages/auth/AuthComplianceView';
+import { AuthCredentialsView } from '../components/documentation/packages/auth/AuthCredentialsView';
+import { AuthOrganizationsView } from '../components/documentation/packages/auth/AuthOrganizationsView';
+import { AuthPasswordlessView } from '../components/documentation/packages/auth/AuthPasswordlessView';
+import { AuthSsoView } from '../components/documentation/packages/auth/AuthSsoView';
 import { EslintRuleView } from '../components/documentation/packages/eslint/EslintRuleView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
@@ -129,6 +134,11 @@ export const docsViews = definePortalViews({
 	'angular-spa': AngularSpaView,
 	api: ApiView,
 	assets: AssetsView,
+	'auth-compliance': AuthComplianceView,
+	'auth-credentials': AuthCredentialsView,
+	'auth-organizations': AuthOrganizationsView,
+	'auth-passwordless': AuthPasswordlessView,
+	'auth-sso': AuthSsoView,
 	'build-and-manifest': BuildManifestView,
 	'bun-build-options': BunBuildOptionsView,
 	citra: CitraView,
@@ -385,7 +395,26 @@ export const sidebarData: MenuItem[] = [
 	},
 	{
 		buttons: [
-			{ id: 'absolute-auth', label: 'Absolute Auth' },
+			{
+				buttons: [
+					{ id: 'auth-credentials', label: 'Credentials & MFA' },
+					{ id: 'auth-sso', label: 'Enterprise SSO & SCIM' },
+					{
+						id: 'auth-organizations',
+						label: 'Organizations & RBAC'
+					},
+					{
+						id: 'auth-passwordless',
+						label: 'Passwordless & Passkeys'
+					},
+					{
+						id: 'auth-compliance',
+						label: 'Audit, Compliance & Webhooks'
+					}
+				],
+				id: 'absolute-auth',
+				label: 'Absolute Auth'
+			},
 			{ id: 'citra', label: 'Citra' },
 			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
 			{

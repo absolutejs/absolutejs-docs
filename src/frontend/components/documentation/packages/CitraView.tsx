@@ -6,8 +6,10 @@ import {
 	callback,
 	fetchUserProfile,
 	gettingStarted,
+	oidcClient,
 	refreshAccessToken,
-	revokeToken
+	revokeToken,
+	verifyIdToken
 } from '../../../data/citraDocsCode';
 import { providerData } from '../../../data/providerData';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
@@ -39,6 +41,7 @@ const tocItems: TocItem[] = [
 	{ href: '#handling-callback', label: 'Handling Callback' },
 	{ href: '#fetching-user-profile', label: 'User Profile' },
 	{ href: '#refreshing-revoking-tokens', label: 'Token Management' },
+	{ href: '#oidc-client', label: 'OIDC Client' },
 	{ href: '#supported-providers', label: 'Supported Providers' }
 ];
 
@@ -329,6 +332,40 @@ export const CitraView = ({
 					/>
 					<PrismPlus
 						codeString={revokeToken}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="oidc-client"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						OIDC Client
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Beyond the per-provider OAuth clients, Citra ships a
+						discovery-driven OpenID Connect client for connecting to
+						any compliant IdP at runtime — the foundation for
+						enterprise SSO.
+					</p>
+					<PrismPlus
+						codeString={oidcClient}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						ID tokens are verified in-house against the issuer&apos;s
+						JWKS (RS256 / ES256) via WebCrypto — no extra crypto
+						dependency:
+					</p>
+					<PrismPlus
+						codeString={verifyIdToken}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

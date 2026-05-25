@@ -77,6 +77,24 @@ const googleClient = await createOAuth2Client('google', {
   clientSecret: 'YOUR_CLIENT_SECRET',
   redirectUri: 'https://yourapp.com/auth/callback'
 });`;
+export const oidcClient = `import { createOIDCClient } from 'citra';
+
+// Discovery-driven: only the issuer + client credentials. The authorize, token,
+// userinfo, and JWKS endpoints are resolved at runtime from
+// {issuer}/.well-known/openid-configuration. Works with any compliant IdP.
+const client = await createOIDCClient({
+  issuer: 'https://acme.okta.com',
+  clientId: 'YOUR_CLIENT_ID',
+  clientSecret: 'YOUR_CLIENT_SECRET',
+  redirectUri: 'https://yourapp.com/auth/callback'
+});
+
+const { url, state, codeVerifier, nonce } = await client.createAuthorizationUrl({
+  scope: ['openid', 'email', 'profile']
+});
+// …redirect, then on callback:
+const tokens = await client.validateAuthorizationCode({ code, codeVerifier });
+const profile = await client.fetchUserProfile(tokens.access_token);`;
 export const refreshAccessToken = `// Get the refresh token from server session
 const session = await getSession(request);
 const refreshToken = session.refreshToken;
@@ -91,3 +109,15 @@ const accessToken = session.accessToken;
 if (isRevocableProviderOption('google')) {
   await googleClient.revokeToken(accessToken);
 }`;
+export const verifyIdToken = `import { verifyIdToken } from 'citra';
+
+// In-house JWKS verification (RS256 / ES256) via WebCrypto — no 'jose' dependency.
+// Checks the signature against the issuer's JWKS plus iss / aud / exp (+skew) /
+// nonce / sub. Network-free if you pass a cached JWKS.
+const claims = await verifyIdToken(tokens.id_token, {
+  issuer: 'https://acme.okta.com',
+  audience: 'YOUR_CLIENT_ID',
+  nonce
+});
+
+console.log(claims.sub, claims.email);`;

@@ -1,0 +1,198 @@
+import { animated } from '@react-spring/web';
+import { DocsViewProps } from '../../../../../types/springTypes';
+import {
+	credentialsRoutes,
+	credentialsSetup,
+	lockoutSetup,
+	mfaSetup,
+	stepUpUsage
+} from '../../../../data/documentation/authCredentialsDocsCode';
+import {
+	h1Style,
+	mainContentStyle,
+	paragraphLargeStyle,
+	paragraphSpacedStyle,
+	sectionStyle
+} from '../../../../styles/docsStyles';
+import {
+	gradientHeadingStyle,
+	heroGradientStyle
+} from '../../../../styles/gradientStyles';
+import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
+import { PrismPlus } from '../../../utils/PrismPlus';
+import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
+import { DocsNavigation } from '../../DocsNavigation';
+
+const tocItems: TocItem[] = [
+	{ href: '#email-password', label: 'Email & Password' },
+	{ href: '#routes', label: 'Routes' },
+	{ href: '#mfa', label: 'Multi-Factor Auth' },
+	{ href: '#step-up', label: 'Step-Up Auth' },
+	{ href: '#lockout', label: 'Account Lockout' }
+];
+
+export const AuthCredentialsView = ({
+	currentPageId,
+	onNavigate,
+	themeSprings,
+	tocOpen,
+	onTocToggle,
+	isMobileOrTablet
+}: DocsViewProps) => {
+	const showDesktopToc = !isMobileOrTablet;
+
+	return (
+		<div
+			style={{
+				display: 'flex',
+				flex: 1,
+				minHeight: 0,
+				overflowX: 'hidden',
+				overflowY: 'auto',
+				position: 'relative'
+			}}
+		>
+			<div style={mainContentStyle(isMobileOrTablet)}>
+				<animated.div style={heroGradientStyle(themeSprings)}>
+					<h1 id="auth-credentials" style={h1Style(isMobileOrTablet)}>
+						Credentials &amp; MFA
+					</h1>
+					<p style={paragraphLargeStyle}>
+						Add local email/password sign-in, multi-factor auth, and
+						account lockout. Every block is additive and optional —
+						each produces the same session as OAuth, transparent to
+						protectRoute.
+					</p>
+				</animated.div>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="email-password"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Email &amp; Password
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The credentials block owns password hashing and single-use,
+						hashed-at-rest verification / reset tokens. You own the
+						user table through the hooks; the store ships in-memory,
+						Postgres, and Neon flavors.
+					</p>
+					<PrismPlus
+						codeString={credentialsSetup}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="routes"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Routes
+					</AnchorHeading>
+					<PrismPlus
+						codeString={credentialsRoutes}
+						language="text"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="mfa"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Multi-Factor Auth
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						TOTP (authenticator apps) plus single-use backup codes.
+						The TOTP secret is AES-GCM encrypted at rest. When MFA is
+						enrolled, login parks the session and only promotes it
+						once a factor is verified.
+					</p>
+					<PrismPlus
+						codeString={mfaSetup}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="step-up"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Step-Up Auth
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Gate sensitive actions behind a fresh authentication. A
+						token refresh does not count as recent auth, so
+						destructive operations can demand a real login or MFA.
+					</p>
+					<PrismPlus
+						codeString={stepUpUsage}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="lockout"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Account Lockout
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Per-identity attempt throttling on the login route. The
+						store is in-memory, Postgres, or Redis — Redis gives
+						atomic counters with native per-key TTL, shared across
+						instances and self-expiring.
+					</p>
+					<PrismPlus
+						codeString={lockoutSetup}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
+			</div>
+
+			{showDesktopToc && (
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
+			)}
+			{isMobileOrTablet && onTocToggle && (
+				<MobileTableOfContents
+					isOpen={tocOpen ?? false}
+					items={tocItems}
+					onToggle={onTocToggle}
+					themeSprings={themeSprings}
+				/>
+			)}
+		</div>
+	);
+};
