@@ -172,22 +172,47 @@ in the chain (e.g. `auth<User>()`, ~40 routes generic over a 27‑field row) tha
 itself intractable. Measured on intent: type‑checking **`server.ts` alone timed out > 5 min at
 10 GB**, independent of Eden.
 
-So a full green `absolute typecheck` needs **both**:
+A full green `absolute typecheck` needs **both** halves fixed:
 
-1. **Frontend:** compose per‑plugin Eden clients (above). ✅ done on intent — whole frontend checks
-   in ~49 s.
-2. **Backend:** stop materializing one giant accumulated app type in `server.ts`. Options (each
-   needs careful, runtime‑verified work since you can't lean on `tsc` until it's fixed):
-   - Group plugins into **sub‑apps / controllers** and `.use()` the groups, so no single chain
-     accumulates all ~15 at full width.
-   - Use the **array form** `.use([p1, p2, …])` where it reduces nesting.
-   - Keep the heaviest generic plugin (the auth mega‑plugin) as its own mounted instance and avoid
-     threading its full type through the rest of the chain.
-   - As a last resort, widen the app entry's inferred type so tsc doesn't deeply instantiate it
-     (you lose nothing on the frontend now that Eden no longer reads `typeof server`).
+1. **Frontend:** compose per‑plugin Eden clients (above). ✅
+2. **Backend:** stop materializing one giant accumulated app type in `server.ts`. ✅
 
-> Until the backend is addressed, `absolute typecheck` still OOMs even though the frontend is fixed.
-> The app continues to **build and run** fine (Bun bundles without `tsc`).
+### Backend fix (what worked on intent)
+
+Register the bulk plugins through a loose **`AnyElysia[]`** and widen the async `auth` plugin to
+`Promise<AnyElysia>`, so the `.use()` chain stops accumulating the per‑route type. `AnyElysia`
+(exported by `elysia`) is the universal loose instance type — a specific `Elysia<…>` is NOT
+assignable to the *base* `Elysia` (its `store`/`decorator` defaults are empty), so reach for
+`AnyElysia`, not `Elysia`.
+
+```ts
+import { type AnyElysia, Elysia } from 'elysia'
+
+// async + generic over a 27-field User → its ~40 route types are the worst offender; widen it.
+const authPlugin = auth<User>(absoluteAuthConfig(db)) as Promise<AnyElysia>
+
+// the rest of the plugins, widened so none compound into the chain type. Order is preserved
+// (.use(array) mounts in array order); runtime is unchanged (the casts are type-only).
+const bulkPlugins: AnyElysia[] = [usersPlugin(db), athletePlugin(db), /* … */ pagesPlugin(db, manifest)]
+
+const server = new Elysia()
+  .use(absolutejs).use(networking)
+  .use(rateLimitA)/* … */
+  .use(authPlugin)
+  .use(bulkPlugins)
+  .onRequest(/* … */)
+  .on('error', /* … */)
+
+void server // nothing reads `typeof server` anymore, so don't export it
+```
+
+This is safe because **nothing reads `typeof server`** once the frontend uses per‑plugin Eden
+clients. Keep middleware/guard order identical (rate limits → auth → routes). Verify by booting the
+app and hitting a route from each plugin group.
+
+> **Result on intent:** `absolute typecheck` went from *never finishing at 13 GB* to **✓ passing at
+> the default heap**. (`server.ts` alone: from >5 min/10 GB timeout → 46 s / 0 errors.) The app's
+> runtime is unchanged throughout — only the inferred types got lighter.
 
 ## References
 
