@@ -58,3 +58,27 @@ await auth<User>({
 // /.well-known/openid-configuration — fully self-hosted (you own the keys, no
 // api.workos.com). The authorize login reuses your session, so it gets
 // passkeys / MFA / SSO for free.`;
+export const oidcTokenExchange = `\
+// AI-agent / MCP "on-behalf-of": an agent (a registered client) trades a user's
+// access token for a narrower, short-lived, audience-bound delegated token.
+//
+//   POST /oauth2/token
+//     grant_type=urn:ietf:params:oauth:grant-type:token-exchange
+//     subject_token=<the user's access token>
+//     subject_token_type=urn:ietf:params:oauth:token-type:access_token
+//     resource=https://api.example/mcp   // RFC 8707 — binds the token's aud
+//     scope=documents:read               // narrowed (must be a subset)
+//   -> { access_token, issued_token_type, scope, token_type }
+//
+// The issued token keeps the user's sub, sets aud to the resource, and adds an
+// act claim ({ sub: <agent client id> }) recording the delegation. DPoP-bindable.
+
+import { mcpProtectedResourceMetadata } from '@absolutejs/auth';
+
+// Serve at /.well-known/oauth-protected-resource on your MCP / resource server so
+// agent clients discover this authorization server (RFC 9728):
+const metadata = mcpProtectedResourceMetadata({
+  issuer: 'https://id.yourapp.com',
+  resource: 'https://api.example/mcp',
+  scopes: ['documents:read']
+});`;

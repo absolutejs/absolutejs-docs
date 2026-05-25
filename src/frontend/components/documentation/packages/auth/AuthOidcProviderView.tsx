@@ -2,7 +2,8 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	oidcDpop,
-	oidcProvider
+	oidcProvider,
+	oidcTokenExchange
 } from '../../../../data/documentation/authOidcProviderDocsCode';
 import {
 	h1Style,
@@ -24,7 +25,8 @@ import { DocsNavigation } from '../../DocsNavigation';
 const tocItems: TocItem[] = [
 	{ href: '#provider', label: 'Become an IdP' },
 	{ href: '#endpoints', label: 'Endpoints' },
-	{ href: '#dpop', label: 'DPoP (sender-constrained)' }
+	{ href: '#dpop', label: 'DPoP (sender-constrained)' },
+	{ href: '#token-exchange', label: 'AI-agent / MCP token exchange' }
 ];
 
 export const AuthOidcProviderView = ({
@@ -128,6 +130,35 @@ export const AuthOidcProviderView = ({
 					</p>
 					<PrismPlus
 						codeString={oidcDpop}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="token-exchange"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						AI-agent / MCP token exchange
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The 2026 frontier. An agent trades a user&apos;s token for a
+						narrower, short-lived, audience-bound{' '}
+						<strong>on-behalf-of</strong> token via{' '}
+						<strong>RFC 8693 token exchange</strong> — the issued token
+						keeps the user&apos;s <code>sub</code>, binds <code>aud</code>{' '}
+						to the resource (<strong>RFC 8707</strong>), and records the
+						delegation in an <code>act</code> claim (DPoP-bindable).{' '}
+						<code>mcpProtectedResourceMetadata</code> emits the MCP /
+						RFC 9728 discovery doc. Matches Auth0&apos;s &quot;Auth for
+						MCP&quot;.
+					</p>
+					<PrismPlus
+						codeString={oidcTokenExchange}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
