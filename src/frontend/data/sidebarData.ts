@@ -19,6 +19,7 @@ import { CompileView } from '../components/documentation/cli/CompileView';
 import { DevView } from '../components/documentation/cli/DevView';
 import { EslintPrettierView } from '../components/documentation/cli/EslintPrettierView';
 import { InfoView } from '../components/documentation/cli/InfoView';
+import { ListView } from '../components/documentation/cli/ListView';
 import { MkcertView } from '../components/documentation/cli/MkcertView';
 import { StartView } from '../components/documentation/cli/StartView';
 import { TelemetryView } from '../components/documentation/cli/TelemetryView';
@@ -145,6 +146,7 @@ export const docsViews = definePortalViews({
 	installation: InstallationView,
 	islands: IslandsView,
 	'loading-states': LoadingStatesView,
+	ls: ListView,
 	middleware: MiddlewareView,
 	mkcert: MkcertView,
 	'networking-plugin': NetworkingPluginView,
@@ -215,6 +217,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'dev', label: 'Dev' },
 			{ id: 'start', label: 'Start' },
+			{ id: 'ls', label: 'Processes' },
 			{ id: 'compile', label: 'Compile' },
 			{ id: 'eslint-prettier', label: 'ESLint & Prettier' },
 			{ id: 'typecheck', label: 'Typecheck' },

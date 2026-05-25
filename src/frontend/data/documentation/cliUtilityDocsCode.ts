@@ -25,6 +25,35 @@ $ absolute info
   Bun v1.3.11
   Platform: linux x64
   Node: v22.0.0`;
+export const lsCommand = `\
+# List every running AbsoluteJS server on the machine
+absolute ls
+
+# Same thing, process-manager muscle memory
+absolute ps
+
+# Auto-refreshing dashboard you can act on
+absolute ls --watch
+
+# Machine-readable output
+absolute ls --json`;
+export const lsKillCommand = `\
+# Stop a server by pid, or free a port an orphan is squatting
+absolute ls --kill 48210
+absolute ls --kill 3001
+
+# Stop every running server
+absolute ls --kill-all`;
+export const lsOutput = `\
+$ absolute ls
+
+  NAME        SOURCE     PORT  PID    UPTIME  STATUS  URL
+  my-app      dev        3000  48210  2m 14s  ready   http://localhost:3000/
+  api-server  untracked  3001  51388  5h 42m  ready   http://localhost:3001/`;
+export const lsPortConflict = `\
+$ absolute dev
+
+  Port 3000 is in use (held by pid 51388 — bun run dist/server.js), trying another one... → http://localhost:3001/`;
 export const mkcertCommand = `\
 # Setup trusted HTTPS certificates for local development
 absolute mkcert`;
