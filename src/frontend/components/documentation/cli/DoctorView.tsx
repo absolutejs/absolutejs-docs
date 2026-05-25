@@ -71,8 +71,12 @@ export const DoctorView = ({
 						Run <code>absolute doctor</code> from your project root.
 						Each check is green (ok), yellow (warning), or red
 						(failure); the command exits non-zero if anything fails,
-						so it doubles as a CI gate. <code>--json</code> emits the
-						checks for scripting.
+						so it doubles as a CI gate. <code>--fix</code> repairs the
+						safe issues automatically — creating any missing framework
+						directories and scaffolding unset <code>getEnv()</code> keys
+						into <code>.env.example</code> (placeholders only, never
+						invented secrets). <code>--json</code> emits the checks for
+						scripting.
 					</p>
 					<PrismPlus
 						codeString={doctorCommand}

@@ -2,9 +2,8 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
-	memCommand,
-	memHeapSnapshot,
-	memOutput
+	apiCommand,
+	apiOutput
 } from '../../../data/documentation/cliUtilityDocsCode';
 import {
 	h1Style,
@@ -24,11 +23,10 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#usage', label: 'Usage' },
-	{ href: '#output', label: 'Reading the output' },
-	{ href: '#heap-snapshots', label: 'Heap snapshots' }
+	{ href: '#openapi', label: 'OpenAPI' }
 ];
 
-export const MemView = ({
+export const ApiView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,
@@ -51,12 +49,12 @@ export const MemView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="mem" style={h1Style(isMobileOrTablet)}>
-						absolute mem
+					<h1 id="api" style={h1Style(isMobileOrTablet)}>
+						absolute api
 					</h1>
 					<p style={paragraphLargeStyle}>
-						A memory report for your running servers — and a one-key
-						heap snapshot when something is actually leaking.
+						Your API surface at a glance — and a real OpenAPI spec
+						generated from the types you already wrote.
 					</p>
 				</animated.div>
 
@@ -70,16 +68,14 @@ export const MemView = ({
 						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>absolute mem</code> lists every running AbsoluteJS
-						server by resident memory (RSS), biggest first, alongside
-						your system&apos;s total usage. It reads RSS externally —
-						no server changes needed — so it works on dev, start,
-						compiled, and untracked servers alike. Add{' '}
-						<code>--json</code> for the per-server and system numbers
-						in a scriptable shape (handy for CI memory budgets).
+						With a dev server running, <code>absolute api</code> lists
+						the app&apos;s routes (filtering out dev-machinery and asset
+						routes), method-colored, with a hint of each route&apos;s
+						params, query, and body fields. <code>--json</code> emits
+						the route + schema data for tooling.
 					</p>
 					<PrismPlus
-						codeString={memCommand}
+						codeString={apiCommand}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
@@ -88,56 +84,26 @@ export const MemView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="output"
+						id="openapi"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Reading the output
+						OpenAPI
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Each row is a server with its RSS and a bar showing its
-						share of total system memory, followed by the resident
-						total and the system&apos;s used/free split. One caveat
-						specific to Bun: RSS often stays high because the
-						allocator doesn&apos;t return freed memory to the OS, so a
-						big RSS isn&apos;t necessarily a leak — it&apos;s the
-						fast, at-a-glance view. For the real leak signal, take a
-						heap snapshot.
+						<code>absolute api --openapi</code> emits an OpenAPI 3
+						document built straight from Elysia&apos;s validation
+						schemas. Because Elysia&apos;s <code>t.Object(...)</code>{' '}
+						params, query, body, and response definitions are already
+						JSON Schema, they map directly into the spec — so the
+						types you wrote to validate requests become accurate,
+						importable API docs with zero extra annotation. Pipe it to a
+						file and load it into Swagger UI, Postman, or a client
+						generator.
 					</p>
 					<PrismPlus
-						codeString={memOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						id="heap-snapshots"
-						level="h2"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Heap snapshots
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						While <code>absolute dev</code> is running, press{' '}
-						<code>m</code> (or type <code>heap</code>) to dump a heap
-						snapshot of the server to your project root. It&apos;s a
-						standard V8 <code>.heapsnapshot</code> you can load in
-						Chrome DevTools under Memory — where{' '}
-						<code>heapUsed</code> growing across snapshots is the
-						reliable sign of a real leak, unlike RSS. Take two snapshots
-						and run <code>absolute mem diff a.heapsnapshot
-						b.heapsnapshot</code> to see exactly which object types grew
-						between them — the leak, named. Also wired up:{' '}
-						<code>absolute ps --watch</code> shows a live memory peak
-						and trend sparkline per server.
-					</p>
-					<PrismPlus
-						codeString={memHeapSnapshot}
+						codeString={apiOutput}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}

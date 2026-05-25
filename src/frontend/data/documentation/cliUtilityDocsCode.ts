@@ -20,9 +20,49 @@ $ absolute add svelte
     src/backend/plugins/pagesPlugin.ts
 
   Route  /svelte-example`;
+export const analyzeCommand = `\
+# Bundle size breakdown by category (pages, islands, chunks, CSS)
+absolute analyze
+
+# Record a baseline; later runs show the diff (+/- per category)
+absolute analyze --save`;
+export const analyzeOutput = `\
+$ absolute analyze
+
+  Pages          312 KB   +4 KB
+  Hydration      180 KB   —
+  Islands        165 KB   —
+  Shared chunks  410 KB   -2 KB
+  CSS            18 KB    —
+  ──────────────────────────
+  Total          1.1 MB   +2 KB
+
+  Biggest changes
+    +4 KB   Dashboard
+    -2 KB   Chunk5wc6pv6k
+
+  vs baseline .absolute-size-baseline.json`;
+export const apiCommand = `\
+# Show the API surface from a running dev server
+absolute api
+
+# Emit an OpenAPI 3 document from Elysia's typed schemas
+absolute api --openapi > openapi.json`;
+export const apiOutput = `\
+$ absolute api
+
+  GET     /
+  GET     /dashboard
+  POST    /api/login        body: email, password
+  DELETE  /api/account/:id  params: id
+
+  4 routes · my-app · \`absolute api --openapi\` for a spec`;
 export const doctorCommand = `\
 # Diagnose the project (bun, config, framework dirs, env, dev port)
 absolute doctor
+
+# Auto-fix safe issues: create missing framework dirs, scaffold .env.example
+absolute doctor --fix
 
 # Machine-readable, exits non-zero on failures (for CI)
 absolute doctor --json`;
@@ -230,6 +270,9 @@ $ absolute ls --sizes
 export const memCommand = `\
 # Memory report for every running server, biggest first
 absolute mem
+
+# Diff two heap snapshots by object type to find leaks
+absolute mem diff before.heapsnapshot after.heapsnapshot
 
 # Machine-readable (per-server RSS + system totals)
 absolute mem --json`;

@@ -69,8 +69,11 @@ export const InspectView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						With a dev server running, <code>absolute inspect</code>{' '}
-						opens a live dashboard that refreshes as requests come in —
-						press <code>q</code> to quit (the server keeps running).
+						opens a live dashboard that refreshes as requests come in.
+						Use <code>↑/↓</code> to select a request and the detail pane
+						shows its status, timing, query, and request/response
+						headers; press <code>q</code> to quit (the server keeps
+						running).
 						Piped or in CI it prints a one-shot snapshot instead, and{' '}
 						<code>--json</code> emits the captured requests for
 						scripting. The inspector is dev-only and adds nothing to a

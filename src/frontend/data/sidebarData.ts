@@ -15,6 +15,8 @@ import {
 	FaRobot
 } from 'react-icons/fa';
 import { MenuItem } from '../../types/types';
+import { AnalyzeView } from '../components/documentation/cli/AnalyzeView';
+import { ApiView } from '../components/documentation/cli/ApiView';
 import { CompileView } from '../components/documentation/cli/CompileView';
 import { DevView } from '../components/documentation/cli/DevView';
 import { DoctorView } from '../components/documentation/cli/DoctorView';
@@ -118,11 +120,13 @@ export const docsViews = definePortalViews({
 	'ai-providers': AIProvidersView,
 	'ai-streaming': AIStreamingView,
 	'ai-tools': AIToolsView,
+	analyze: AnalyzeView,
 	'angular-ai': AngularAIView,
 	'angular-components': AngularComponentsView,
 	'angular-islands': AngularIslandsView,
 	'angular-overview': AngularOverviewView,
 	'angular-spa': AngularSpaView,
+	api: ApiView,
 	assets: AssetsView,
 	'build-and-manifest': BuildManifestView,
 	'bun-build-options': BunBuildOptionsView,
@@ -268,7 +272,9 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'generate', label: 'Generate' },
 			{ id: 'frameworks', label: 'Add / Remove' },
 			{ id: 'ls', label: 'Build output' },
+			{ id: 'analyze', label: 'Analyze' },
 			{ id: 'routes', label: 'Routes' },
+			{ id: 'api', label: 'API' },
 			{ id: 'ps', label: 'Processes' },
 			{ id: 'mem', label: 'Memory' },
 			{ id: 'logs', label: 'Logs' },
