@@ -2,10 +2,9 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
-	buildProfile,
-	productionBuild,
-	productionStart
-} from '../../../data/documentation/deploymentDocsCode';
+	routesCommand,
+	routesOutput
+} from '../../../data/documentation/cliUtilityDocsCode';
 import {
 	h1Style,
 	mainContentStyle,
@@ -17,21 +16,17 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
-import { ProductionBuildFeatureCards } from './ProductionBuildFeatureCards';
-import { ProductionBuildOptimizationTips } from './ProductionBuildOptimizationTips';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
-	{ href: '#building', label: 'Building for Production' },
-	{ href: '#profiling', label: 'Profiling the Build' },
-	{ href: '#running', label: 'Running in Production' },
-	{ href: '#optimization', label: 'Optimization Tips' }
+	{ href: '#usage', label: 'Usage' },
+	{ href: '#how-it-works', label: 'How it works' }
 ];
 
-export const ProductionBuildView = ({
+export const RoutesView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,
@@ -54,57 +49,38 @@ export const ProductionBuildView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="production-build" style={h1Style(isMobileOrTablet)}>
-						Production Build
+					<h1 id="routes" style={h1Style(isMobileOrTablet)}>
+						absolute routes
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Build and run your AbsoluteJS application in production
-						with optimized bundles and proper process management.
+						Every route your app actually serves — pages and API —
+						in one method-colored table.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="building"
+						id="usage"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Building for Production
+						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The build command bundles all your frontend code,
-						generates hashed asset filenames for cache busting, and
-						creates the manifest file for asset lookup:
+						With a dev server running, <code>absolute routes</code>{' '}
+						prints its full route table — method, path, sorted and
+						colored by verb. <code>--json</code> emits the same data
+						for scripting.
 					</p>
 					<PrismPlus
-						codeString={productionBuild}
+						codeString={routesCommand}
 						language="bash"
-						showLineNumbers={true}
+						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<ProductionBuildFeatureCards themeSprings={themeSprings} />
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						id="profiling"
-						level="h2"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Profiling the Build
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						When a build feels slow, run{' '}
-						<code>absolute build --profile</code> to see where the time
-						goes. It prints the slowest phases and a per-framework
-						rollup, so you can tell whether a single framework&apos;s
-						compile or a particular bundle is the bottleneck before
-						you start optimizing.
-					</p>
 					<PrismPlus
-						codeString={buildProfile}
+						codeString={routesOutput}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
@@ -113,36 +89,21 @@ export const ProductionBuildView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="running"
+						id="how-it-works"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Running in Production
+						How it works
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Start your production server directly with Bun, or use a
-						process manager like PM2 for automatic restarts and
-						clustering:
+						The table is read from the live server’s in-memory route
+						list at request time, so it reflects exactly what is
+						mounted — page routes, API routes, and plugin routes
+						alike. The introspection endpoint is only exposed in
+						development and is never served by a compiled production
+						build.
 					</p>
-					<PrismPlus
-						codeString={productionStart}
-						language="bash"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						id="optimization"
-						level="h2"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Optimization Tips
-					</AnchorHeading>
-					<ProductionBuildOptimizationTips />
 				</section>
 
 				<DocsNavigation

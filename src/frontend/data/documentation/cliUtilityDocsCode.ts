@@ -1,3 +1,35 @@
+export const doctorCommand = `\
+# Diagnose the project (bun, config, framework dirs, env, dev port)
+absolute doctor
+
+# Machine-readable, exits non-zero on failures (for CI)
+absolute doctor --json`;
+export const doctorOutput = `\
+$ absolute doctor
+
+  ✓ Bun runtime           v1.3.14
+  ✓ @absolutejs/absolute  v0.19.0-beta.1038
+  ✓ Native binary         v0.19.0-beta.1008
+  ✓ Config                absolute.config.ts loaded
+  ✓ react pages           ./src/frontend/react
+  ✓ vue pages             ./src/frontend/vue
+  ✗ Env vars              missing DATABASE_URL
+  ⚠ Dev port              3000 in use by pid 48210
+
+  8 checks · 1 failed · 1 warning`;
+export const envCommand = `\
+# Report the env vars the app reads via getEnv()
+absolute env
+
+# Fail (exit 1) if any are missing — for CI
+absolute env --check`;
+export const envOutput = `\
+$ absolute env
+
+  ✓ DATABASE_URL          set      2 files
+  ✗ OAUTH2_CALLBACK_URI   missing  1 file
+
+  2 referenced · 1 missing`;
 export const eslintCommand = `\
 # Run ESLint with caching across the whole project
 absolute eslint
@@ -25,6 +57,36 @@ $ absolute info
   Bun v1.3.11
   Platform: linux x64
   Node: v22.0.0`;
+export const logsCommand = `\
+# Tail a running server's log by name (from any terminal)
+absolute logs my-app
+
+# Follow live, last 100 lines
+absolute logs my-app -f -n 100`;
+export const logsOutput = `\
+$ absolute logs my-app
+
+  [build] ready in 312ms
+  GET / 200 4ms
+  GET /api/users 200 12ms
+  — following my-app · ctrl+c to stop —`;
+export const lsBudgetCommand = `\
+# Fail the build if any page ships more than a size budget (needs --sizes)
+absolute ls --sizes --budget 500kb
+
+# Also accepts mb; combine with --json for CI
+absolute ls --sizes --budget 1mb --json`;
+export const lsBudgetOutput = `\
+$ absolute ls --sizes --budget 500kb
+
+  React · 2 pages
+    Dashboard  312.4 KB  src/frontend/react/pages/Dashboard.tsx
+    Home       207.0 KB  src/frontend/react/pages/Home.tsx
+
+  Vue · 1 page
+    Settings   918.7 KB  src/frontend/vue/pages/Settings.vue   over budget
+
+  1 page over the 500 KB budget · exit 1`;
 export const lsCommand = `\
 # List your project's pages, grouped by framework (reads source — no build needed)
 absolute ls
@@ -126,6 +188,21 @@ export const psPortConflict = `\
 $ absolute dev
 
   Port 3000 is in use (held by pid 51388 — bun run dist/server.js), trying another one... → http://localhost:3001/`;
+export const routesCommand = `\
+# List every route (pages + API) of a running dev server
+absolute routes
+
+# Machine-readable
+absolute routes --json`;
+export const routesOutput = `\
+$ absolute routes
+
+  GET     /
+  GET     /dashboard
+  DELETE  /api/account/:id
+  POST    /api/login
+
+  4 routes · my-app`;
 export const telemetryCommand = `\
 # Check telemetry status
 absolute telemetry

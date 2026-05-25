@@ -1,3 +1,17 @@
+export const buildProfile = `\
+$ absolute build --profile
+
+  ✓ built in 4.21s
+
+  Slowest phases
+    angular ssr compile   1.84s
+    vue bundle            0.97s
+    react bundle          0.61s
+    svelte bundle         0.42s
+    assets + manifest     0.18s
+
+  By framework
+    angular  2.10s   react  0.61s   vue  0.97s   svelte  0.42s`;
 export const dockerCompose = `\
 version: '3.8'
 

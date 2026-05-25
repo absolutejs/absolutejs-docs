@@ -2,10 +2,9 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
-	buildProfile,
-	productionBuild,
-	productionStart
-} from '../../../data/documentation/deploymentDocsCode';
+	doctorCommand,
+	doctorOutput
+} from '../../../data/documentation/cliUtilityDocsCode';
 import {
 	h1Style,
 	mainContentStyle,
@@ -17,21 +16,17 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
-import { ProductionBuildFeatureCards } from './ProductionBuildFeatureCards';
-import { ProductionBuildOptimizationTips } from './ProductionBuildOptimizationTips';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
-	{ href: '#building', label: 'Building for Production' },
-	{ href: '#profiling', label: 'Profiling the Build' },
-	{ href: '#running', label: 'Running in Production' },
-	{ href: '#optimization', label: 'Optimization Tips' }
+	{ href: '#usage', label: 'Usage' },
+	{ href: '#checks', label: 'What it checks' }
 ];
 
-export const ProductionBuildView = ({
+export const DoctorView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,
@@ -54,57 +49,33 @@ export const ProductionBuildView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="production-build" style={h1Style(isMobileOrTablet)}>
-						Production Build
+					<h1 id="doctor" style={h1Style(isMobileOrTablet)}>
+						absolute doctor
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Build and run your AbsoluteJS application in production
-						with optimized bundles and proper process management.
+						One command to answer “why won’t it start?” — a health
+						check of your project and environment.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="building"
+						id="usage"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Building for Production
+						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The build command bundles all your frontend code,
-						generates hashed asset filenames for cache busting, and
-						creates the manifest file for asset lookup:
+						Run <code>absolute doctor</code> from your project root.
+						Each check is green (ok), yellow (warning), or red
+						(failure); the command exits non-zero if anything fails,
+						so it doubles as a CI gate. <code>--json</code> emits the
+						checks for scripting.
 					</p>
 					<PrismPlus
-						codeString={productionBuild}
-						language="bash"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-					<ProductionBuildFeatureCards themeSprings={themeSprings} />
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						id="profiling"
-						level="h2"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Profiling the Build
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						When a build feels slow, run{' '}
-						<code>absolute build --profile</code> to see where the time
-						goes. It prints the slowest phases and a per-framework
-						rollup, so you can tell whether a single framework&apos;s
-						compile or a particular bundle is the bottleneck before
-						you start optimizing.
-					</p>
-					<PrismPlus
-						codeString={buildProfile}
+						codeString={doctorCommand}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
@@ -113,36 +84,27 @@ export const ProductionBuildView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="running"
+						id="checks"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Running in Production
+						What it checks
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Start your production server directly with Bun, or use a
-						process manager like PM2 for automatic restarts and
-						clustering:
+						The Bun runtime, that <code>@absolutejs/absolute</code>{' '}
+						and the platform native binary resolve, that{' '}
+						<code>absolute.config.ts</code> loads, that each
+						configured framework’s <code>pages</code> directory
+						exists, that every <code>getEnv()</code> variable is set,
+						and whether the dev port is free.
 					</p>
 					<PrismPlus
-						codeString={productionStart}
+						codeString={doctorOutput}
 						language="bash"
-						showLineNumbers={true}
+						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						id="optimization"
-						level="h2"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Optimization Tips
-					</AnchorHeading>
-					<ProductionBuildOptimizationTips />
 				</section>
 
 				<DocsNavigation

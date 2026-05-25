@@ -2,6 +2,8 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
+	lsBudgetCommand,
+	lsBudgetOutput,
 	lsCommand,
 	lsOutput,
 	lsSizesOutput
@@ -25,7 +27,8 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 const tocItems: TocItem[] = [
 	{ href: '#usage', label: 'Usage' },
 	{ href: '#output', label: 'Reading the output' },
-	{ href: '#sizes', label: 'Bundle sizes' }
+	{ href: '#sizes', label: 'Bundle sizes' },
+	{ href: '#budgets', label: 'Size budgets' }
 ];
 
 export const LsView = ({
@@ -128,6 +131,38 @@ export const LsView = ({
 					</p>
 					<PrismPlus
 						codeString={lsSizesOutput}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="budgets"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Size budgets
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Add <code>--budget</code> (alongside <code>--sizes</code>)
+						to enforce a per-page ceiling. Pages over the limit are
+						flagged in red and the command exits non-zero, so a
+						runaway bundle fails CI instead of quietly shipping.
+						Budgets accept <code>kb</code> or <code>mb</code> — for
+						example <code>--budget 500kb</code> or{' '}
+						<code>--budget 1mb</code>.
+					</p>
+					<PrismPlus
+						codeString={lsBudgetCommand}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+					<PrismPlus
+						codeString={lsBudgetOutput}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}

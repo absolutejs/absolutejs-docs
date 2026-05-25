@@ -17,12 +17,16 @@ import {
 import { MenuItem } from '../../types/types';
 import { CompileView } from '../components/documentation/cli/CompileView';
 import { DevView } from '../components/documentation/cli/DevView';
+import { DoctorView } from '../components/documentation/cli/DoctorView';
+import { EnvView } from '../components/documentation/cli/EnvView';
 import { EslintPrettierView } from '../components/documentation/cli/EslintPrettierView';
 import { InfoView } from '../components/documentation/cli/InfoView';
+import { LogsView } from '../components/documentation/cli/LogsView';
 import { LsView } from '../components/documentation/cli/LsView';
 import { MemView } from '../components/documentation/cli/MemView';
 import { MkcertView } from '../components/documentation/cli/MkcertView';
 import { PsView } from '../components/documentation/cli/PsView';
+import { RoutesView } from '../components/documentation/cli/RoutesView';
 import { StartView } from '../components/documentation/cli/StartView';
 import { TelemetryView } from '../components/documentation/cli/TelemetryView';
 import { TypecheckView } from '../components/documentation/cli/TypecheckView';
@@ -126,10 +130,12 @@ export const docsViews = definePortalViews({
 	dev: DevView,
 	'dev-tunnel': TunnelView,
 	docker: DockerView,
+	doctor: DoctorView,
 	'elysia-cors': ElysiaCorsView,
 	'elysia-integration': ElysiaIntegrationView,
 	'elysia-plugin-composition': ElysiaPluginCompositionView,
 	'elysia-validation': ElysiaValidationView,
+	env: EnvView,
 	'environment-variables': EnvironmentVariablesView,
 	'error-boundaries': ErrorBoundariesView,
 	eslint: EslintView,
@@ -175,6 +181,7 @@ export const docsViews = definePortalViews({
 	installation: InstallationView,
 	islands: IslandsView,
 	'loading-states': LoadingStatesView,
+	logs: LogsView,
 	ls: LsView,
 	mem: MemView,
 	middleware: MiddlewareView,
@@ -192,6 +199,7 @@ export const docsViews = definePortalViews({
 	'react-islands': ReactIslandsView,
 	'react-overview': ReactOverviewView,
 	'react-spa': ReactSpaView,
+	routes: RoutesView,
 	'routing-and-handlers': RoutingHandlersView,
 	'scoped-state': ScopedStateView,
 	'server-state': ServerStateView,
@@ -250,8 +258,12 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'start', label: 'Start' },
 			{ id: 'compile', label: 'Compile' },
 			{ id: 'ls', label: 'Build output' },
+			{ id: 'routes', label: 'Routes' },
 			{ id: 'ps', label: 'Processes' },
 			{ id: 'mem', label: 'Memory' },
+			{ id: 'logs', label: 'Logs' },
+			{ id: 'doctor', label: 'Doctor' },
+			{ id: 'env', label: 'Env' },
 			{ id: 'eslint-prettier', label: 'ESLint & Prettier' },
 			{ id: 'typecheck', label: 'Typecheck' },
 			{ id: 'mkcert', label: 'Mkcert' },
