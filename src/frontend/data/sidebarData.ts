@@ -19,6 +19,7 @@ import { AnalyzeView } from '../components/documentation/cli/AnalyzeView';
 import { ApiView } from '../components/documentation/cli/ApiView';
 import { CompileView } from '../components/documentation/cli/CompileView';
 import { ConfigView } from '../components/documentation/cli/ConfigView';
+import { DbView } from '../components/documentation/cli/DbView';
 import { DevView } from '../components/documentation/cli/DevView';
 import { DoctorView } from '../components/documentation/cli/DoctorView';
 import { EnvView } from '../components/documentation/cli/EnvView';
@@ -148,6 +149,7 @@ export const docsViews = definePortalViews({
 	'create-absolutejs': CreateAbsoluteJSView,
 	'cron-jobs': CronJobsView,
 	'data-fetching': DataFetchingView,
+	db: DbView,
 	dev: DevView,
 	'dev-tunnel': TunnelView,
 	docker: DockerView,
@@ -286,6 +288,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'generate', label: 'Generate' },
 			{ id: 'frameworks', label: 'Add / Remove' },
 			{ id: 'config', label: 'Config' },
+			{ id: 'db', label: 'Database' },
 			{ id: 'ls', label: 'Build output' },
 			{ id: 'analyze', label: 'Analyze' },
 			{ id: 'routes', label: 'Routes' },

@@ -113,6 +113,31 @@ $ absolute config
   ➜  Local:   https://config.absolute.localhost:4099/
 
   Open it in your browser, or pass --open.`;
+export const dbBackupOutput = `\
+$ absolute db backup
+  ✓ backup → backups/backup-2026-05-25T18-30-42-239Z.json
+    8 tables, 1240 rows
+
+$ absolute db restore
+  ✓ restored 8 tables, 1240 rows (idempotent upsert by primary key)`;
+export const dbCommands = `\
+# Back up every table to backups/<timestamp>.json (+ latest.json)
+absolute db backup
+
+# Scope, exclude, or send the dump elsewhere
+absolute db backup --only users,posts
+absolute db backup --exclude sessions --out ./snapshots
+
+# Idempotent restore — upsert each row by primary key, foreign-key ordered
+absolute db restore                      # newest backup: backups/latest.json
+absolute db restore ./snapshots/backup-2026-05-25.json
+
+# Wipe matching tables first, then restore (confirms; -y skips the prompt)
+absolute db restore --truncate -y
+
+# Run the project's seed script (db/seed.ts by default)
+absolute db seed
+absolute db seed ./db/demo-seed.ts`;
 export const doctorCommand = `\
 # Diagnose the project (bun, config, framework dirs, env, dev port)
 absolute doctor
