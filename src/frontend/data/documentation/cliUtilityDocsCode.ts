@@ -46,8 +46,11 @@ export const apiCommand = `\
 # Show the API surface from a running dev server
 absolute api
 
-# Emit an OpenAPI 3 document from Elysia's typed schemas
-absolute api --openapi > openapi.json`;
+# Open the OpenAPI UI (Scalar, served by @elysiajs/openapi at /openapi)
+absolute api --open
+
+# Print the OpenAPI spec the plugin generates from your typed routes
+absolute api --json > openapi.json`;
 export const apiOutput = `\
 $ absolute api
 
@@ -56,7 +59,7 @@ $ absolute api
   POST    /api/login        body: email, password
   DELETE  /api/account/:id  params: id
 
-  4 routes · my-app · \`absolute api --openapi\` for a spec`;
+  4 routes · my-app · \`absolute api --open\` for the UI`;
 export const doctorCommand = `\
 # Diagnose the project (bun, config, framework dirs, env, dev port)
 absolute doctor

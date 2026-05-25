@@ -68,11 +68,14 @@ export const ApiView = ({
 						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						With a dev server running, <code>absolute api</code> lists
-						the app&apos;s routes (filtering out dev-machinery and asset
-						routes), method-colored, with a hint of each route&apos;s
-						params, query, and body fields. <code>--json</code> emits
-						the route + schema data for tooling.
+						AbsoluteJS wires <code>@elysiajs/openapi</code> into the dev
+						runtime, so a Scalar UI is live at <code>/openapi</code>{' '}
+						with zero setup. <code>absolute api</code> reads that
+						generated spec and lists the app&apos;s real routes
+						(dev-machinery excluded), method-colored, with a hint of
+						each route&apos;s params and body. <code>--open</code>{' '}
+						launches the Scalar UI in your browser; <code>--json</code>{' '}
+						prints the spec.
 					</p>
 					<PrismPlus
 						codeString={apiCommand}
@@ -92,15 +95,15 @@ export const ApiView = ({
 						OpenAPI
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>absolute api --openapi</code> emits an OpenAPI 3
-						document built straight from Elysia&apos;s validation
-						schemas. Because Elysia&apos;s <code>t.Object(...)</code>{' '}
-						params, query, body, and response definitions are already
-						JSON Schema, they map directly into the spec — so the
-						types you wrote to validate requests become accurate,
-						importable API docs with zero extra annotation. Pipe it to a
-						file and load it into Swagger UI, Postman, or a client
-						generator.
+						Because your params, query, body, and response are Elysia{' '}
+						<code>t.Object(...)</code> schemas — already JSON Schema —{' '}
+						<code>@elysiajs/openapi</code> turns them into accurate,
+						importable API docs with zero annotation: the types you
+						wrote to validate requests become your docs. Toggle and
+						customize it with <code>openapi</code> in{' '}
+						<code>absolute.config.ts</code> (on by default in dev,
+						opt-in for production) — set the path, swap Scalar for
+						Swagger, or override the title and version.
 					</p>
 					<PrismPlus
 						codeString={apiOutput}
