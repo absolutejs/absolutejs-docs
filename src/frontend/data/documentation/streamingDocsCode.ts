@@ -1,8 +1,7 @@
-export const streamingAngularPrimitive = `\
-@Component({
+export const streamingAngularPrimitive = `@Component({
   standalone: true,
   imports: [DeferSlotComponent],
-  template: \
+  template: \`
     <main>
       <h1>Dashboard</h1>
 
@@ -12,16 +11,15 @@ export const streamingAngularPrimitive = `\
         <app-activity-skeleton></app-activity-skeleton>
       }
     </main>
-  \
+  \`
 })
 export class DashboardComponent {
   activity = this.loadActivity();
-}`.replace(/\\/g, '`');
-export const streamingAngularRaw = `\
-@Component({
+}`;
+export const streamingAngularRaw = `@Component({
   standalone: true,
   imports: [StreamSlotComponent],
-  template: \
+  template: \`
     <main>
       <h1>Dashboard</h1>
 
@@ -31,7 +29,7 @@ export const streamingAngularRaw = `\
         [resolve]="loadActivityHtml"
       />
     </main>
-  \
+  \`
 })
 export class DashboardComponent {
   loadActivityHtml = async () => renderActivityHtml(await this.loadActivity());
@@ -39,7 +37,7 @@ export class DashboardComponent {
   private async loadActivity() {
     return fetchActivity();
   }
-}`.replace(/\\/g, '`');
+}`;
 export const streamingPageHandlerIntegration = `\
 // Framework page handlers are opt-in for slot streaming
 // when 'collectStreamingSlots: true' is passed

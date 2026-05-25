@@ -25,7 +25,7 @@ export type EslintRule = {
 	/** Bare rule name, e.g. `no-import-meta-path`. The configured name is `absolute/<name>`. */
 	name: string;
 	category: EslintRuleCategory;
-	/** One-line summary rendered under the title, mirroring the rule's `meta.docs.description`. */
+	/** One-line summary rendered under the title, mirroring the rule’s `meta.docs.description`. */
 	summary: string;
 	/** `meta.type` — drives the Problem / Suggestion badge. */
 	problemType: 'problem' | 'suggestion';
