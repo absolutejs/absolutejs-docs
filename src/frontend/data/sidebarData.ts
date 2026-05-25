@@ -67,6 +67,7 @@ import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
+import { AuthApiKeysView } from '../components/documentation/packages/auth/AuthApiKeysView';
 import { AuthComplianceView } from '../components/documentation/packages/auth/AuthComplianceView';
 import { AuthCredentialsView } from '../components/documentation/packages/auth/AuthCredentialsView';
 import { AuthOrganizationsView } from '../components/documentation/packages/auth/AuthOrganizationsView';
@@ -136,6 +137,7 @@ export const docsViews = definePortalViews({
 	'angular-spa': AngularSpaView,
 	api: ApiView,
 	assets: AssetsView,
+	'auth-apikeys': AuthApiKeysView,
 	'auth-compliance': AuthComplianceView,
 	'auth-credentials': AuthCredentialsView,
 	'auth-organizations': AuthOrganizationsView,
@@ -409,6 +411,7 @@ export const sidebarData: MenuItem[] = [
 						id: 'auth-organizations',
 						label: 'Organizations & RBAC'
 					},
+					{ id: 'auth-apikeys', label: 'API Keys & M2M' },
 					{
 						id: 'auth-passwordless',
 						label: 'Passwordless & Passkeys'
