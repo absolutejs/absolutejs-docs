@@ -62,6 +62,27 @@ $ absolute ls --sizes
     Settings   918.7 KB  src/frontend/vue/pages/Settings.vue
 
   3 frameworks · 4 pages`;
+export const memCommand = `\
+# Memory report for every running server, biggest first
+absolute mem
+
+# Machine-readable (per-server RSS + system totals)
+absolute mem --json`;
+export const memHeapSnapshot = `\
+$ absolute dev
+  ...
+# press  m  (or type: heap)
+[absolute] heap snapshot written: heap-48210-1716600000000.heapsnapshot
+# load it in Chrome DevTools › Memory › Load`;
+export const memOutput = `\
+$ absolute mem
+
+  NAME     SOURCE     PORT  RSS       % SYS
+  my-app   dev        3000  142.6 MB  ███░░░░░░░░░░ 0.9%
+  api      untracked  3001  88.1 MB   ██░░░░░░░░░░░ 0.5%
+
+  2 servers · 230.7 MB resident total
+  system  6.2 GB / 16.0 GB used · 9.8 GB free`;
 export const mkcertCommand = `\
 # Setup trusted HTTPS certificates for local development
 absolute mkcert`;

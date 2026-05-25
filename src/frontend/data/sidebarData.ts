@@ -20,6 +20,7 @@ import { DevView } from '../components/documentation/cli/DevView';
 import { EslintPrettierView } from '../components/documentation/cli/EslintPrettierView';
 import { InfoView } from '../components/documentation/cli/InfoView';
 import { LsView } from '../components/documentation/cli/LsView';
+import { MemView } from '../components/documentation/cli/MemView';
 import { MkcertView } from '../components/documentation/cli/MkcertView';
 import { PsView } from '../components/documentation/cli/PsView';
 import { StartView } from '../components/documentation/cli/StartView';
@@ -175,6 +176,7 @@ export const docsViews = definePortalViews({
 	islands: IslandsView,
 	'loading-states': LoadingStatesView,
 	ls: LsView,
+	mem: MemView,
 	middleware: MiddlewareView,
 	mkcert: MkcertView,
 	'networking-plugin': NetworkingPluginView,
@@ -249,6 +251,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'compile', label: 'Compile' },
 			{ id: 'ls', label: 'Build output' },
 			{ id: 'ps', label: 'Processes' },
+			{ id: 'mem', label: 'Memory' },
 			{ id: 'eslint-prettier', label: 'ESLint & Prettier' },
 			{ id: 'typecheck', label: 'Typecheck' },
 			{ id: 'mkcert', label: 'Mkcert' },

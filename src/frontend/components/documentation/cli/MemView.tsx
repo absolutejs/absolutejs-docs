@@ -2,10 +2,9 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
-	psCommand,
-	psKillCommand,
-	psOutput,
-	psPortConflict
+	memCommand,
+	memHeapSnapshot,
+	memOutput
 } from '../../../data/documentation/cliUtilityDocsCode';
 import {
 	h1Style,
@@ -25,12 +24,11 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#usage', label: 'Usage' },
-	{ href: '#orphans', label: 'Catching orphans' },
-	{ href: '#stopping', label: 'Stopping servers' },
-	{ href: '#port-conflicts', label: 'Port conflicts' }
+	{ href: '#output', label: 'Reading the output' },
+	{ href: '#heap-snapshots', label: 'Heap snapshots' }
 ];
 
-export const PsView = ({
+export const MemView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,
@@ -53,12 +51,12 @@ export const PsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="ps" style={h1Style(isMobileOrTablet)}>
-						absolute ps
+					<h1 id="mem" style={h1Style(isMobileOrTablet)}>
+						absolute mem
 					</h1>
 					<p style={paragraphLargeStyle}>
-						List and manage every running AbsoluteJS server on the
-						machine — including orphans no registry knows about.
+						A memory report for your running servers — and a one-key
+						heap snapshot when something is actually leaking.
 					</p>
 				</animated.div>
 
@@ -72,17 +70,16 @@ export const PsView = ({
 						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>absolute ps</code> prints a table of the dev,
-						start, and compiled servers currently running — name,
-						port, pid, uptime, memory, and status. Add{' '}
-						<code>--watch</code> for an auto-refreshing dashboard
-						that adds a memory peak and trend sparkline per server,
-						and lets you stop the highlighted server (<code>s</code>)
-						or free its port (<code>f</code>, prefilled) without
-						typing it, or <code>--json</code> for scripting.
+						<code>absolute mem</code> lists every running AbsoluteJS
+						server by resident memory (RSS), biggest first, alongside
+						your system&apos;s total usage. It reads RSS externally —
+						no server changes needed — so it works on dev, start,
+						compiled, and untracked servers alike. Add{' '}
+						<code>--json</code> for the per-server and system numbers
+						in a scriptable shape (handy for CI memory budgets).
 					</p>
 					<PrismPlus
-						codeString={psCommand}
+						codeString={memCommand}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
@@ -91,26 +88,25 @@ export const PsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="orphans"
+						id="output"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Catching orphans
+						Reading the output
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Rather than trusting a registry file, <code>ps</code>{' '}
-						scans the machine&apos;s listening sockets (via{' '}
-						<code>lsof</code>, falling back to <code>ss</code>) and
-						unions the result with the servers AbsoluteJS launched. So
-						it still shows a server whose dev controller died, a
-						hand-run <code>bun dist/server.js</code> build, or anything
-						else holding a port — these appear with the{' '}
-						<code>untracked</code> source so you always know what is
-						actually running.
+						Each row is a server with its RSS and a bar showing its
+						share of total system memory, followed by the resident
+						total and the system&apos;s used/free split. One caveat
+						specific to Bun: RSS often stays high because the
+						allocator doesn&apos;t return freed memory to the OS, so a
+						big RSS isn&apos;t necessarily a leak — it&apos;s the
+						fast, at-a-glance view. For the real leak signal, take a
+						heap snapshot.
 					</p>
 					<PrismPlus
-						codeString={psOutput}
+						codeString={memOutput}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
@@ -119,44 +115,26 @@ export const PsView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="stopping"
+						id="heap-snapshots"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Stopping servers
+						Heap snapshots
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Pass <code>--kill</code> a pid or a port to stop a single
-						server (handy for freeing a port an orphan is squatting),
-						or <code>--kill-all</code> to clear every running server
-						at once.
+						While <code>absolute dev</code> is running, press{' '}
+						<code>m</code> (or type <code>heap</code>) to dump a heap
+						snapshot of the server to your project root. It&apos;s a
+						standard V8 <code>.heapsnapshot</code> you can load in
+						Chrome DevTools under Memory — where{' '}
+						<code>heapUsed</code> growing across snapshots is the
+						reliable sign of a real leak, unlike RSS. Also wired up:{' '}
+						<code>absolute ps --watch</code> shows a live memory peak
+						and trend sparkline per server.
 					</p>
 					<PrismPlus
-						codeString={psKillCommand}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
-					/>
-				</section>
-
-				<section style={sectionStyle}>
-					<AnchorHeading
-						id="port-conflicts"
-						level="h2"
-						style={gradientHeadingStyle(themeSprings)}
-						themeSprings={themeSprings}
-					>
-						Port conflicts
-					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						When <code>absolute dev</code> finds its port already
-						taken, it names the process holding it before falling back
-						to the next port — so you can decide whether to{' '}
-						<code>absolute ps --kill</code> it or move on.
-					</p>
-					<PrismPlus
-						codeString={psPortConflict}
+						codeString={memHeapSnapshot}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
