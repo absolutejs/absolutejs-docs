@@ -23,6 +23,7 @@ import { EslintPrettierView } from '../components/documentation/cli/EslintPretti
 import { FrameworksView } from '../components/documentation/cli/FrameworksView';
 import { GenerateView } from '../components/documentation/cli/GenerateView';
 import { InfoView } from '../components/documentation/cli/InfoView';
+import { InspectView } from '../components/documentation/cli/InspectView';
 import { LogsView } from '../components/documentation/cli/LogsView';
 import { LsView } from '../components/documentation/cli/LsView';
 import { MemView } from '../components/documentation/cli/MemView';
@@ -182,6 +183,7 @@ export const docsViews = definePortalViews({
 	'htmx-overview': HTMXOverviewView,
 	'image-optimization': ImageOptimizationView,
 	info: InfoView,
+	inspect: InspectView,
 	installation: InstallationView,
 	islands: IslandsView,
 	'loading-states': LoadingStatesView,
@@ -268,6 +270,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'ps', label: 'Processes' },
 			{ id: 'mem', label: 'Memory' },
 			{ id: 'logs', label: 'Logs' },
+			{ id: 'inspect', label: 'Inspect' },
 			{ id: 'doctor', label: 'Doctor' },
 			{ id: 'env', label: 'Env' },
 			{ id: 'eslint-prettier', label: 'ESLint & Prettier' },

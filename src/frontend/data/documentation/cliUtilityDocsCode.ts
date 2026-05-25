@@ -120,6 +120,23 @@ $ absolute info
   Bun v1.3.11
   Platform: linux x64
   Node: v22.0.0`;
+export const inspectCommand = `\
+# Live request inspector for a running dev server
+absolute inspect
+
+# One-shot snapshot (when piped) or machine-readable JSON
+absolute inspect | cat
+absolute inspect --json`;
+export const inspectOutput = `\
+$ absolute inspect
+
+  TIME      METHOD  PATH      STATUS  TOOK   SIZE
+  04:34:57  GET     /         200     5ms    —
+  04:34:57  GET     /react    200     65ms   —
+  04:34:57  GET     /vue      200     116ms  —
+  04:34:58  GET     /missing  404     8ms    —
+
+  4 requests · 54ms avg · 116ms p95 · live · q quit`;
 export const logsCommand = `\
 # Tail a running server's log by name (from any terminal)
 absolute logs my-app
