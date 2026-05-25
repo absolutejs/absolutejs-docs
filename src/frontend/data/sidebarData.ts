@@ -67,10 +67,15 @@ import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
+import { AuthAbuseView } from '../components/documentation/packages/auth/AuthAbuseView';
 import { AuthAdaptiveView } from '../components/documentation/packages/auth/AuthAdaptiveView';
 import { AuthApiKeysView } from '../components/documentation/packages/auth/AuthApiKeysView';
+import { AuthAuditIntegrityView } from '../components/documentation/packages/auth/AuthAuditIntegrityView';
 import { AuthComplianceView } from '../components/documentation/packages/auth/AuthComplianceView';
 import { AuthCredentialsView } from '../components/documentation/packages/auth/AuthCredentialsView';
+import { AuthFgaView } from '../components/documentation/packages/auth/AuthFgaView';
+import { AuthImpersonationView } from '../components/documentation/packages/auth/AuthImpersonationView';
+import { AuthOidcProviderView } from '../components/documentation/packages/auth/AuthOidcProviderView';
 import { AuthOrganizationsView } from '../components/documentation/packages/auth/AuthOrganizationsView';
 import { AuthPasswordlessView } from '../components/documentation/packages/auth/AuthPasswordlessView';
 import { AuthSsoView } from '../components/documentation/packages/auth/AuthSsoView';
@@ -138,10 +143,15 @@ export const docsViews = definePortalViews({
 	'angular-spa': AngularSpaView,
 	api: ApiView,
 	assets: AssetsView,
+	'auth-abuse': AuthAbuseView,
 	'auth-adaptive': AuthAdaptiveView,
 	'auth-apikeys': AuthApiKeysView,
+	'auth-audit-integrity': AuthAuditIntegrityView,
 	'auth-compliance': AuthComplianceView,
 	'auth-credentials': AuthCredentialsView,
+	'auth-fga': AuthFgaView,
+	'auth-impersonation': AuthImpersonationView,
+	'auth-oidc-provider': AuthOidcProviderView,
 	'auth-organizations': AuthOrganizationsView,
 	'auth-passwordless': AuthPasswordlessView,
 	'auth-sso': AuthSsoView,
@@ -415,6 +425,20 @@ export const sidebarData: MenuItem[] = [
 					},
 					{ id: 'auth-apikeys', label: 'API Keys & M2M' },
 					{ id: 'auth-adaptive', label: 'Adaptive Auth' },
+					{
+						id: 'auth-oidc-provider',
+						label: 'OAuth2 / OIDC Provider'
+					},
+					{ id: 'auth-fga', label: 'Fine-Grained Authz' },
+					{
+						id: 'auth-impersonation',
+						label: 'Admin Impersonation'
+					},
+					{ id: 'auth-abuse', label: 'Bot & Abuse Protection' },
+					{
+						id: 'auth-audit-integrity',
+						label: 'Tamper-evident Audit'
+					},
 					{
 						id: 'auth-passwordless',
 						label: 'Passwordless & Passkeys'
