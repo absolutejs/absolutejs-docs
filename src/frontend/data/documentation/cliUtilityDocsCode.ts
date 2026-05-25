@@ -1,3 +1,25 @@
+export const addCommand = `\
+# Add a framework: installs deps, updates config, scaffolds a starter page
+absolute add svelte
+
+# Configure + scaffold only, skip the dependency install
+absolute add vue --no-install`;
+export const addOutput = `\
+$ absolute add svelte
+
+  Installing Svelte dependencies…
+✓ Added Svelte to your project
+
+  Installed 2 package(s).
+  Created
+    src/frontend/svelte/pages/SvelteExample.svelte
+    src/frontend/styles/indexes/svelte-example.css
+    src/frontend/shared/navData.ts
+  Updated
+    absolute.config.ts
+    src/backend/plugins/pagesPlugin.ts
+
+  Route  /svelte-example`;
 export const doctorCommand = `\
 # Diagnose the project (bun, config, framework dirs, env, dev port)
 absolute doctor
@@ -74,6 +96,20 @@ $ absolute generate page dashboard --framework react
   Route  /dashboard
 
   Next  run \`absolute prettier --write\` to format edits, then \`absolute dev\``;
+export const htmxCommand = `\
+# Report the self-hosted htmx version (and the CLI's vendored default)
+absolute htmx
+
+# Install / upgrade the pinned copy from jsDelivr
+absolute htmx latest
+absolute htmx 2.0.6`;
+export const htmxOutput = `\
+$ absolute htmx
+
+  installed  2.0.6
+  vendored   2.0.6
+
+  Upgrade with \`absolute htmx <version>\` (e.g. \`absolute htmx latest\`)`;
 export const infoCommand = `\
 # Print system info for bug reports
 absolute info`;
@@ -215,6 +251,21 @@ export const psPortConflict = `\
 $ absolute dev
 
   Port 3000 is in use (held by pid 51388 — bun run dist/server.js), trying another one... → http://localhost:3001/`;
+export const removeCommand = `\
+# Remove a framework from the config (keeps your source files)
+absolute remove svelte
+
+# Also uninstall the framework's dependencies
+absolute remove svelte --prune`;
+export const removeOutput = `\
+$ absolute remove svelte
+
+✓ Removed svelteDirectory from absolute.config.ts
+
+  Kept  src/frontend/svelte — delete its source manually if no longer needed.
+  Still references  src/backend/plugins/pagesPlugin.ts (calls handleSveltePageRequest)
+
+  Run \`absolute remove svelte --prune\` to also uninstall: svelte, svelte-check`;
 export const routesCommand = `\
 # List every route (pages + API) of a running dev server
 absolute routes

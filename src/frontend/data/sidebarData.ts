@@ -20,6 +20,7 @@ import { DevView } from '../components/documentation/cli/DevView';
 import { DoctorView } from '../components/documentation/cli/DoctorView';
 import { EnvView } from '../components/documentation/cli/EnvView';
 import { EslintPrettierView } from '../components/documentation/cli/EslintPrettierView';
+import { FrameworksView } from '../components/documentation/cli/FrameworksView';
 import { GenerateView } from '../components/documentation/cli/GenerateView';
 import { InfoView } from '../components/documentation/cli/InfoView';
 import { LogsView } from '../components/documentation/cli/LogsView';
@@ -168,6 +169,7 @@ export const docsViews = definePortalViews({
 	'eslint-sort-keys-fixable': EslintRuleView,
 	'eslint-spring-naming-convention': EslintRuleView,
 	'examples-recipes': ExamplesRecipesView,
+	frameworks: FrameworksView,
 	generate: GenerateView,
 	'head-meta-tags': HeadMetaTagsView,
 	hosting: HostingView,
@@ -260,6 +262,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'start', label: 'Start' },
 			{ id: 'compile', label: 'Compile' },
 			{ id: 'generate', label: 'Generate' },
+			{ id: 'frameworks', label: 'Add / Remove' },
 			{ id: 'ls', label: 'Build output' },
 			{ id: 'routes', label: 'Routes' },
 			{ id: 'ps', label: 'Processes' },
