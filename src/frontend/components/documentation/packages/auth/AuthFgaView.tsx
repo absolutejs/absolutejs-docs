@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
+	fgaCache,
 	fgaCheck,
 	fgaReverse,
 	fgaSchema
@@ -25,7 +26,8 @@ import { DocsNavigation } from '../../DocsNavigation';
 const tocItems: TocItem[] = [
 	{ href: '#schema', label: 'Schema & inheritance' },
 	{ href: '#check', label: 'Warrants, check & query' },
-	{ href: '#reverse', label: 'Reverse queries & DSL' }
+	{ href: '#reverse', label: 'Reverse queries & DSL' },
+	{ href: '#cache', label: 'Caching' }
 ];
 
 export const AuthFgaView = ({
@@ -131,6 +133,30 @@ export const AuthFgaView = ({
 					</p>
 					<PrismPlus
 						codeString={fgaReverse}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="cache"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Caching
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Pass a <code>cache</code> to memoize <code>check</code> (and
+						the checks <code>listObjects</code> runs). A write clears the
+						cache on that instance; other instances see staleness up to{' '}
+						<code>ttlMs</code> — supply a shared <code>FgaCache</code> for a
+						multi-instance deployment.
+					</p>
+					<PrismPlus
+						codeString={fgaCache}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

@@ -1,12 +1,32 @@
+export const abuseCaptcha = `\
+import {
+  createAbuseGuard,
+  verifyHcaptcha,
+  verifyRecaptcha,
+  verifyTurnstile
+} from '@absolutejs/auth';
+
+// Built-in CAPTCHA adapters call the provider's siteverify for you (remoteip is
+// taken from the assess context). All three share the same shape; reCAPTCHA v3
+// also takes a minScore.
+const turnstile = verifyTurnstile({ secret: process.env.TURNSTILE_SECRET });
+const recaptcha = verifyRecaptcha({ minScore: 0.5, secret: process.env.RECAPTCHA_SECRET });
+const hcaptcha = verifyHcaptcha({ secret: process.env.HCAPTCHA_SECRET });
+
+const abuse = createAbuseGuard({ verifyCaptcha: turnstile, captchaAction: 'deny' });`;
 export const abuseGuard = `\
-import { createAbuseGuard, defaultBotClassifier } from '@absolutejs/auth';
+import {
+  createAbuseGuard,
+  defaultBotClassifier,
+  verifyTurnstile
+} from '@absolutejs/auth';
 
 // The decision pipeline: IP allow/deny (exact or IPv4 CIDR) + a CAPTCHA hook +
 // a bot classifier -> allow / challenge / deny. The framework half of WorkOS
 // "Radar" (which is hosted-only); you supply the signals.
 export const abuse = createAbuseGuard({
-  // wrap Turnstile / reCAPTCHA / hCaptcha; return true to pass
-  verifyCaptcha: (token) => verifyTurnstile(token),
+  // a built-in adapter (Turnstile/reCAPTCHA/hCaptcha) or your own (token) => boolean
+  verifyCaptcha: verifyTurnstile({ secret: process.env.TURNSTILE_SECRET }),
   // built-in User-Agent heuristic, or pass your own (e.g. an AI-agent detector)
   classifyBot: defaultBotClassifier,
   ipDeny: ['203.0.113.0/24'],

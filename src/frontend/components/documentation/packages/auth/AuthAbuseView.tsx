@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
+	abuseCaptcha,
 	abuseGuard,
 	abuseLogin
 } from '../../../../data/documentation/authAbuseDocsCode';
@@ -23,6 +24,7 @@ import { DocsNavigation } from '../../DocsNavigation';
 
 const tocItems: TocItem[] = [
 	{ href: '#guard', label: 'The guard' },
+	{ href: '#captcha', label: 'CAPTCHA adapters' },
 	{ href: '#wire', label: 'Wire into login' }
 ];
 
@@ -80,6 +82,31 @@ export const AuthAbuseView = ({
 					</p>
 					<PrismPlus
 						codeString={abuseGuard}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="captcha"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						CAPTCHA adapters
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Built-in <code>verifyTurnstile</code>,{' '}
+						<code>verifyRecaptcha</code> (with an optional v3{' '}
+						<code>minScore</code>), and <code>verifyHcaptcha</code> wrap
+						each provider&apos;s <code>siteverify</code> call (the client
+						IP is taken from the assess context). Drop one into{' '}
+						<code>verifyCaptcha</code> — no extra plumbing.
+					</p>
+					<PrismPlus
+						codeString={abuseCaptcha}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
