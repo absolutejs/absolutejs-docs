@@ -40,6 +40,25 @@ await auth<User>({
 //         POST /auth/organizations/:org/invitations
 //         POST /auth/organizations/invitations/accept   { token }
 //         GET/DELETE members + invitations    (gated to active members)`;
+export const orgsJit = `\
+import { autoAssignOrgsByEmail } from '@absolutejs/auth';
+
+// JIT / domain-based assignment: every new user automatically joins the orgs
+// their email domain maps to. Call from your OAuth-callback / register hook —
+// idempotent (skips orgs the user already belongs to), returns the orgs newly
+// added so you can audit-log them.
+const domains = {
+  'acme.com': ['org_acme'],
+  'eng.acme.com': ['org_acme', 'org_acme_eng']
+};
+
+await autoAssignOrgsByEmail({
+  email: user.email,
+  getOrgsForDomain: (domain) => domains[domain] ?? [],
+  organizationStore,
+  roles: ['member'],
+  userId: user.sub
+});`;
 export const protectPermissionUsage = `\
 // auth() exposes a protectPermission derive alongside protectRoute. It delegates
 // the decision to your hasPermission hook: 401 when unauthenticated, 403 when

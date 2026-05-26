@@ -3,6 +3,7 @@ import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	invitations,
 	organizationsSetup,
+	orgsJit,
 	protectPermissionUsage,
 	rolesResolver
 } from '../../../../data/documentation/authOrganizationsDocsCode';
@@ -26,6 +27,7 @@ import { DocsNavigation } from '../../DocsNavigation';
 const tocItems: TocItem[] = [
 	{ href: '#organizations', label: 'Organizations' },
 	{ href: '#invitations', label: 'Invitations' },
+	{ href: '#jit', label: 'JIT / domain assignment' },
 	{ href: '#roles', label: 'Roles & Permissions' },
 	{ href: '#protect-permission', label: 'protectPermission' }
 ];
@@ -105,6 +107,30 @@ export const AuthOrganizationsView = ({
 					</p>
 					<PrismPlus
 						codeString={invitations}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="jit"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						JIT / domain assignment
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>autoAssignOrgsByEmail</code> auto-joins every new user to
+						the orgs their email domain maps to — call it from your
+						OAuth-callback or register hook. Idempotent (skips orgs the
+						user already belongs to); returns the orgs newly added, so you
+						can audit-log them.
+					</p>
+					<PrismPlus
+						codeString={orgsJit}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

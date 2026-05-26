@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
+	oidcClaims,
 	oidcDpop,
 	oidcProvider,
 	oidcTokenExchange
@@ -25,6 +26,7 @@ import { DocsNavigation } from '../../DocsNavigation';
 const tocItems: TocItem[] = [
 	{ href: '#provider', label: 'Become an IdP' },
 	{ href: '#endpoints', label: 'Endpoints' },
+	{ href: '#claims', label: 'Custom access-token claims' },
 	{ href: '#dpop', label: 'DPoP (sender-constrained)' },
 	{ href: '#token-exchange', label: 'AI-agent / MCP token exchange' }
 ];
@@ -109,6 +111,33 @@ export const AuthOidcProviderView = ({
 						<code>getGrantedScopes</code> hook (auto-granted for
 						first-party clients).
 					</p>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="claims"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Custom access-token claims
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>getAccessTokenClaims</code> lets you add per-token claims
+						(email, name, org_id, tenant tier, …) to every issued access
+						token. Reserved keys (<code>iss</code>, <code>sub</code>,{' '}
+						<code>aud</code>, <code>exp</code>, <code>iat</code>,{' '}
+						<code>jti</code>, <code>client_id</code>, <code>scope</code>,{' '}
+						<code>token_use</code>, <code>act</code>, <code>cnf</code>) are
+						stripped before merge, so the hook can&apos;t rewrite the
+						token&apos;s identity, lifetime, or DPoP binding.
+					</p>
+					<PrismPlus
+						codeString={oidcClaims}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>

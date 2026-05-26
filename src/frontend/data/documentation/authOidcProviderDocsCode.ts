@@ -1,3 +1,14 @@
+export const oidcClaims = `\
+// Add consumer claims (email/name/org_id/...) to every access token. Reserved keys
+// — iss, sub, aud, exp, iat, jti, client_id, scope, token_use, act, cnf — are
+// stripped before merge, so the hook can't rewrite the token's identity or lifetime.
+oidc: {
+  // ...the rest of your OIDC config
+  getAccessTokenClaims: async ({ sub }) => {
+    const user = await getUserBySub(sub);
+    return { email: user.email, name: user.name, org_id: user.orgId };
+  }
+}`;
 export const oidcDpop = `\
 import { verifyDpopProof, verifyJwt } from '@absolutejs/auth';
 

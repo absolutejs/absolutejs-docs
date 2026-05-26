@@ -68,6 +68,7 @@ import { CreateAbsoluteJSView } from '../components/documentation/packages/Creat
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
 import { AuthAbuseView } from '../components/documentation/packages/auth/AuthAbuseView';
+import { AuthActionsView } from '../components/documentation/packages/auth/AuthActionsView';
 import { AuthAdaptiveView } from '../components/documentation/packages/auth/AuthAdaptiveView';
 import { AuthApiKeysView } from '../components/documentation/packages/auth/AuthApiKeysView';
 import { AuthAuditIntegrityView } from '../components/documentation/packages/auth/AuthAuditIntegrityView';
@@ -81,6 +82,7 @@ import { AuthOidcProviderView } from '../components/documentation/packages/auth/
 import { AuthOrganizationsView } from '../components/documentation/packages/auth/AuthOrganizationsView';
 import { AuthPasswordlessView } from '../components/documentation/packages/auth/AuthPasswordlessView';
 import { AuthSsoView } from '../components/documentation/packages/auth/AuthSsoView';
+import { AuthVaultView } from '../components/documentation/packages/auth/AuthVaultView';
 import { EslintRuleView } from '../components/documentation/packages/eslint/EslintRuleView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
@@ -146,6 +148,7 @@ export const docsViews = definePortalViews({
 	api: ApiView,
 	assets: AssetsView,
 	'auth-abuse': AuthAbuseView,
+	'auth-actions': AuthActionsView,
 	'auth-adaptive': AuthAdaptiveView,
 	'auth-apikeys': AuthApiKeysView,
 	'auth-audit-integrity': AuthAuditIntegrityView,
@@ -159,6 +162,7 @@ export const docsViews = definePortalViews({
 	'auth-organizations': AuthOrganizationsView,
 	'auth-passwordless': AuthPasswordlessView,
 	'auth-sso': AuthSsoView,
+	'auth-vault': AuthVaultView,
 	'build-and-manifest': BuildManifestView,
 	'bun-build-options': BunBuildOptionsView,
 	citra: CitraView,
@@ -458,7 +462,9 @@ export const sidebarData: MenuItem[] = [
 					{
 						id: 'auth-compliance',
 						label: 'Audit, Compliance & Webhooks'
-					}
+					},
+					{ id: 'auth-actions', label: 'Actions Pipeline' },
+					{ id: 'auth-vault', label: 'Vault' }
 				],
 				id: 'absolute-auth',
 				label: 'Absolute Auth'
