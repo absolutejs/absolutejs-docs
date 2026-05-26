@@ -1,3 +1,19 @@
+export const breachCheckOnLogin = `\
+import { auth } from '@absolutejs/auth';
+
+// Turnkey: let the credentials block run the login-time HIBP check for you.
+// On a successful login it adds passwordCompromised to the response — it never
+// blocks (the user is already authenticated), so prompt a reset on the next
+// screen. Fails open on a HIBP outage.
+auth({
+  credentials: {
+    // ...credentialStore, getUserByEmail, onCreateCredentialUser, etc.
+    checkBreachesOnLogin: true
+  }
+});
+
+// client, after POST /auth/login:
+// if (data.passwordCompromised) showResetPasswordPrompt();`;
 export const compromisedCredential = `\
 import { isPasswordCompromised } from '@absolutejs/auth';
 

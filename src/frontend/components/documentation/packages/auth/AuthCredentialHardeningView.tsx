@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
+	breachCheckOnLogin,
 	compromisedCredential,
 	emailValidation
 } from '../../../../data/documentation/authCredentialHardeningDocsCode';
@@ -96,11 +97,26 @@ export const AuthCredentialHardeningView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Sign-up already blocks breached passwords (the credentials
-						policy&apos;s <code>checkBreaches</code>).{' '}
-						<code>isPasswordCompromised</code> adds the login-time check —
-						the half of Auth0 &quot;Credential Guard&quot; a self-hosted
+						policy&apos;s <code>checkBreaches</code>). The login-time check
+						is the half of Auth0 &quot;Credential Guard&quot; a self-hosted
 						library can do: catch a password that was fine at sign-up but
-						later leaked, and force a reset. Fails open on a HIBP outage.
+						later leaked, and prompt a reset. Fails open on a HIBP outage.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Turnkey: set <code>checkBreachesOnLogin: true</code> on the
+						credentials config. A successful login then carries{' '}
+						<code>passwordCompromised</code> in its response (it never
+						blocks — the user is already authenticated).
+					</p>
+					<PrismPlus
+						codeString={breachCheckOnLogin}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Or call <code>isPasswordCompromised</code> yourself for full
+						control over the response:
 					</p>
 					<PrismPlus
 						codeString={compromisedCredential}
