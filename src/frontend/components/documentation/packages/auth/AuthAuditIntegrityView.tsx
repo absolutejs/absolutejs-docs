@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
+	auditSharding,
 	auditSiem,
 	auditTamperEvident,
 	auditVerify
@@ -24,6 +25,7 @@ import { DocsNavigation } from '../../DocsNavigation';
 
 const tocItems: TocItem[] = [
 	{ href: '#tamper-evident', label: 'Tamper-evident chain' },
+	{ href: '#sharding', label: 'Per-writer sharding' },
 	{ href: '#verify', label: 'Verify the chain' },
 	{ href: '#siem', label: 'SIEM streaming' }
 ];
@@ -83,6 +85,35 @@ export const AuthAuditIntegrityView = ({
 					</p>
 					<PrismPlus
 						codeString={auditTamperEvident}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="sharding"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Per-writer sharding
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						A single in-process chain can&apos;t span concurrent
+						instances or survive a redeploy. So the chain is keyed per{' '}
+						<code>writerId</code> — by default a fresh random id per
+						process, so every instance and deploy is a self-contained
+						chain that never forks another writer&apos;s.{' '}
+						<code>verifyAuditChain</code> groups by <code>writerId</code>{' '}
+						and verifies each independently. A single-writer deployment
+						can pass a stable <code>writerId</code> (with{' '}
+						<code>loadWriterHead</code>) to keep one continuous chain
+						across restarts.
+					</p>
+					<PrismPlus
+						codeString={auditSharding}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

@@ -1,3 +1,25 @@
+export const auditSharding = `\
+import { createNeonAuditSink, createTamperEvidentSink } from '@absolutejs/auth';
+
+// One hash-chain per WRITER. A single in-process chain can't span concurrent
+// instances or survive a redeploy (each restart is a new process), so by default
+// every process gets its own random writerId — each instance / deploy is a
+// self-contained, independently-verifiable chain that never forks another.
+const auditStore = createTamperEvidentSink({
+  secret: process.env.AUDIT_HMAC_KEY,
+  sink: createNeonAuditSink(process.env.DATABASE_URL)
+  // writerId defaults to a fresh random id per process
+});
+
+// Single-writer deployment? Pass a stable writerId to keep ONE continuous chain
+// across restarts. Supply loadWriterHead to resume without a scan (return that
+// writer's most recent integrity hash, or undefined to start at genesis).
+const single = createTamperEvidentSink({
+  loadWriterHead: (writerId) => readLatestHashFor(writerId),
+  secret: process.env.AUDIT_HMAC_KEY,
+  sink: createNeonAuditSink(process.env.DATABASE_URL),
+  writerId: 'audit-writer-1'
+});`;
 export const auditSiem = `\
 import { auth, createSiemLogStream } from '@absolutejs/auth';
 
@@ -38,8 +60,9 @@ await auth<User>({ providersConfiguration: {}, audit: { auditStore } });`;
 export const auditVerify = `\
 import { verifyAuditChain } from '@absolutejs/auth';
 
-// Pass events oldest-first. Detects any modified, removed, or reordered entry
-// and returns the index of the first broken link.
+// Pass events oldest-first. Each writer's sub-chain is verified independently
+// (grouped by writerId), detecting any modified, removed, or reordered entry and
+// returning the input index of the first broken link.
 const recent = (await auditStore.list?.({ limit: 1000 })) ?? [];
 const result = await verifyAuditChain(
   recent.reverse(),
