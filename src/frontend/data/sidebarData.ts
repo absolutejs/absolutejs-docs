@@ -120,6 +120,9 @@ import { VueAIView } from '../components/documentation/vue/VueAIView';
 import { AIOverviewView } from '../components/documentation/ai/AIOverviewView';
 import { AIProvidersView } from '../components/documentation/ai/AIProvidersView';
 import { AIPluginView } from '../components/documentation/ai/AIPluginView';
+import { SyncAdaptersView } from '../components/documentation/sync/SyncAdaptersView';
+import { SyncCRDTView } from '../components/documentation/sync/SyncCRDTView';
+import { SyncFrameworksView } from '../components/documentation/sync/SyncFrameworksView';
 import { SyncOverviewView } from '../components/documentation/sync/SyncOverviewView';
 import { AIToolsView } from '../components/documentation/ai/AIToolsView';
 import { AIStreamingView } from '../components/documentation/ai/AIStreamingView';
@@ -261,6 +264,9 @@ export const docsViews = definePortalViews({
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
+	'sync-adapters': SyncAdaptersView,
+	'sync-crdt': SyncCRDTView,
+	'sync-frameworks': SyncFrameworksView,
 	'sync-overview': SyncOverviewView,
 	'svelte-ai': SvelteAIView,
 	'svelte-components': SvelteComponentsView,
@@ -427,7 +433,12 @@ export const sidebarData: MenuItem[] = [
 		label: 'AI'
 	},
 	{
-		buttons: [{ id: 'sync-overview', label: 'Overview' }],
+		buttons: [
+			{ id: 'sync-overview', label: 'Overview' },
+			{ id: 'sync-crdt', label: 'CRDT & Collaboration' },
+			{ id: 'sync-frameworks', label: 'Framework Hooks' },
+			{ id: 'sync-adapters', label: 'CRDT Adapters' }
+		],
 		icon: animated(FaSync),
 		label: 'Sync'
 	},
