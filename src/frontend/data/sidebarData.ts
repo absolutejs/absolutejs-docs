@@ -12,7 +12,8 @@ import {
 	FaCog,
 	FaLightbulb,
 	FaTerminal,
-	FaRobot
+	FaRobot,
+	FaSync
 } from 'react-icons/fa';
 import { MenuItem } from '../../types/types';
 import { AnalyzeView } from '../components/documentation/cli/AnalyzeView';
@@ -119,6 +120,7 @@ import { VueAIView } from '../components/documentation/vue/VueAIView';
 import { AIOverviewView } from '../components/documentation/ai/AIOverviewView';
 import { AIProvidersView } from '../components/documentation/ai/AIProvidersView';
 import { AIPluginView } from '../components/documentation/ai/AIPluginView';
+import { SyncOverviewView } from '../components/documentation/sync/SyncOverviewView';
 import { AIToolsView } from '../components/documentation/ai/AIToolsView';
 import { AIStreamingView } from '../components/documentation/ai/AIStreamingView';
 import { ReactAIView } from '../components/documentation/react/ReactAIView';
@@ -259,6 +261,7 @@ export const docsViews = definePortalViews({
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
+	'sync-overview': SyncOverviewView,
 	'svelte-ai': SvelteAIView,
 	'svelte-components': SvelteComponentsView,
 	'svelte-islands': SvelteIslandsView,
@@ -422,6 +425,11 @@ export const sidebarData: MenuItem[] = [
 		],
 		icon: animated(FaRobot),
 		label: 'AI'
+	},
+	{
+		buttons: [{ id: 'sync-overview', label: 'Overview' }],
+		icon: animated(FaSync),
+		label: 'Sync'
 	},
 	{
 		buttons: [
