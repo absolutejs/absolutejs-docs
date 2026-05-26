@@ -72,6 +72,7 @@ import { AuthActionsView } from '../components/documentation/packages/auth/AuthA
 import { AuthAdaptiveView } from '../components/documentation/packages/auth/AuthAdaptiveView';
 import { AuthApiKeysView } from '../components/documentation/packages/auth/AuthApiKeysView';
 import { AuthAuditIntegrityView } from '../components/documentation/packages/auth/AuthAuditIntegrityView';
+import { AuthClientView } from '../components/documentation/packages/auth/AuthClientView';
 import { AuthComplianceView } from '../components/documentation/packages/auth/AuthComplianceView';
 import { AuthCredentialHardeningView } from '../components/documentation/packages/auth/AuthCredentialHardeningView';
 import { AuthCredentialsView } from '../components/documentation/packages/auth/AuthCredentialsView';
@@ -152,6 +153,7 @@ export const docsViews = definePortalViews({
 	'auth-adaptive': AuthAdaptiveView,
 	'auth-apikeys': AuthApiKeysView,
 	'auth-audit-integrity': AuthAuditIntegrityView,
+	'auth-client': AuthClientView,
 	'auth-compliance': AuthComplianceView,
 	'auth-credential-hardening': AuthCredentialHardeningView,
 	'auth-credentials': AuthCredentialsView,
@@ -464,7 +466,8 @@ export const sidebarData: MenuItem[] = [
 						label: 'Audit, Compliance & Webhooks'
 					},
 					{ id: 'auth-actions', label: 'Actions Pipeline' },
-					{ id: 'auth-vault', label: 'Vault' }
+					{ id: 'auth-vault', label: 'Vault' },
+					{ id: 'auth-client', label: 'Client SDK & Hooks' }
 				],
 				id: 'absolute-auth',
 				label: 'Absolute Auth'
