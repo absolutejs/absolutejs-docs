@@ -72,9 +72,11 @@ import { AuthAdaptiveView } from '../components/documentation/packages/auth/Auth
 import { AuthApiKeysView } from '../components/documentation/packages/auth/AuthApiKeysView';
 import { AuthAuditIntegrityView } from '../components/documentation/packages/auth/AuthAuditIntegrityView';
 import { AuthComplianceView } from '../components/documentation/packages/auth/AuthComplianceView';
+import { AuthCredentialHardeningView } from '../components/documentation/packages/auth/AuthCredentialHardeningView';
 import { AuthCredentialsView } from '../components/documentation/packages/auth/AuthCredentialsView';
 import { AuthFgaView } from '../components/documentation/packages/auth/AuthFgaView';
 import { AuthImpersonationView } from '../components/documentation/packages/auth/AuthImpersonationView';
+import { AuthMultiSessionView } from '../components/documentation/packages/auth/AuthMultiSessionView';
 import { AuthOidcProviderView } from '../components/documentation/packages/auth/AuthOidcProviderView';
 import { AuthOrganizationsView } from '../components/documentation/packages/auth/AuthOrganizationsView';
 import { AuthPasswordlessView } from '../components/documentation/packages/auth/AuthPasswordlessView';
@@ -148,9 +150,11 @@ export const docsViews = definePortalViews({
 	'auth-apikeys': AuthApiKeysView,
 	'auth-audit-integrity': AuthAuditIntegrityView,
 	'auth-compliance': AuthComplianceView,
+	'auth-credential-hardening': AuthCredentialHardeningView,
 	'auth-credentials': AuthCredentialsView,
 	'auth-fga': AuthFgaView,
 	'auth-impersonation': AuthImpersonationView,
+	'auth-multi-session': AuthMultiSessionView,
 	'auth-oidc-provider': AuthOidcProviderView,
 	'auth-organizations': AuthOrganizationsView,
 	'auth-passwordless': AuthPasswordlessView,
@@ -438,6 +442,14 @@ export const sidebarData: MenuItem[] = [
 					{
 						id: 'auth-audit-integrity',
 						label: 'Tamper-evident Audit'
+					},
+					{
+						id: 'auth-multi-session',
+						label: 'Multi-session & Guest'
+					},
+					{
+						id: 'auth-credential-hardening',
+						label: 'Credential Hardening'
 					},
 					{
 						id: 'auth-passwordless',
