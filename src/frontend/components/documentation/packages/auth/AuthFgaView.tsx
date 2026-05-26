@@ -2,6 +2,7 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	fgaCheck,
+	fgaReverse,
 	fgaSchema
 } from '../../../../data/documentation/authFgaDocsCode';
 import {
@@ -23,7 +24,8 @@ import { DocsNavigation } from '../../DocsNavigation';
 
 const tocItems: TocItem[] = [
 	{ href: '#schema', label: 'Schema & inheritance' },
-	{ href: '#check', label: 'Warrants, check & query' }
+	{ href: '#check', label: 'Warrants, check & query' },
+	{ href: '#reverse', label: 'Reverse queries & DSL' }
 ];
 
 export const AuthFgaView = ({
@@ -104,6 +106,31 @@ export const AuthFgaView = ({
 					</p>
 					<PrismPlus
 						codeString={fgaCheck}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="reverse"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Reverse queries &amp; DSL
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>listObjects</code> answers the inverse of{' '}
+						<code>check</code> — &quot;which resources of this type can the
+						subject access?&quot; — by enumerating candidates and checking
+						each (add a reverse index for very high object counts).{' '}
+						<code>parseSchema</code> lets you author the schema in the
+						OpenFGA-style DSL instead of the object form.
+					</p>
+					<PrismPlus
+						codeString={fgaReverse}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

@@ -32,6 +32,24 @@ const viewers = await fga.listSubjects({
   resourceId: 'doc1',
   relation: 'viewer'
 });`;
+export const fgaReverse = `\
+// Reverse query — which documents can alice view? (the inverse of check)
+const docs = await fga.listObjects({
+  resourceType: 'document',
+  relation: 'viewer',
+  subjectType: 'user',
+  subjectId: 'alice'
+}); // -> ['doc1', ...]
+
+// Author the schema in the OpenFGA-style DSL and parse it, instead of the
+// object form. Grammar (one statement per line):
+//   type document
+//     relations
+//       define owner: [user]
+//       define editor: [user] or owner
+//       define viewer: [user] or editor or viewer from parent
+import { parseSchema } from '@absolutejs/auth';
+const schema = parseSchema(dsl);`;
 export const fgaSchema = `\
 import { createFgaEngine, createNeonWarrantStore } from '@absolutejs/auth';
 import type { FgaSchema } from '@absolutejs/auth';

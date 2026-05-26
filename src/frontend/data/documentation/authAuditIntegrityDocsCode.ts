@@ -1,3 +1,14 @@
+export const auditRetention = `\
+import { exportAuditCsv } from '@absolutejs/auth';
+
+// CSV export (RFC-4180 quoted) — the parity piece to WorkOS CSV export.
+const events = (await auditStore.list?.({ limit: 10000 })) ?? [];
+const csv = exportAuditCsv(events.reverse()); // oldest-first
+
+// Retention: delete events older than the window; returns the count removed.
+// Note: pruning necessarily drops the tamper-evidence of the removed rows.
+const ninetyDaysMs = 90 * 24 * 60 * 60 * 1000;
+await auditStore.prune?.(Date.now() - ninetyDaysMs);`;
 export const auditSharding = `\
 import { createNeonAuditSink, createTamperEvidentSink } from '@absolutejs/auth';
 

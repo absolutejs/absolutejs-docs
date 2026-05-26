@@ -42,3 +42,25 @@ export const adaptiveTrust = `\
 // After the user clears the step-up (MFA verified), remember this device so the
 // new_device rule stops firing for it next time:
 await risk.trustDevice(user.sub, deviceId, 'Work laptop');`;
+export const adaptiveWeighted = `\
+import { fingerprintDevice, scoreRisk } from '@absolutejs/auth';
+
+// A stable device id from client signals (a better default than a UA string
+// alone) — use it as the adaptive deviceId.
+const deviceId = await fingerprintDevice({
+  userAgent, language, timezone, platform, screen, canvasHash
+});
+
+// Weighted scoring, an alternative to per-rule actions: each fired signal adds
+// its weight; the summed score maps to an action via thresholds. proxy/off_hours
+// fire only when you pass isProxy/localHour.
+const result = await scoreRisk(
+  {
+    knownDeviceStore,
+    loginHistoryStore,
+    weights: { new_country: 30, velocity: 70 },
+    thresholds: { stepUp: 40, deny: 80 }
+  },
+  { deviceId, geo, isProxy, localHour, userId: user.sub }
+);
+// result -> { action: 'step_up', score: 65, reasons: [...] }`;

@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
+	auditRetention,
 	auditSharding,
 	auditSiem,
 	auditTamperEvident,
@@ -27,6 +28,7 @@ const tocItems: TocItem[] = [
 	{ href: '#tamper-evident', label: 'Tamper-evident chain' },
 	{ href: '#sharding', label: 'Per-writer sharding' },
 	{ href: '#verify', label: 'Verify the chain' },
+	{ href: '#retention', label: 'Retention & CSV export' },
 	{ href: '#siem', label: 'SIEM streaming' }
 ];
 
@@ -137,6 +139,30 @@ export const AuthAuditIntegrityView = ({
 					</p>
 					<PrismPlus
 						codeString={auditVerify}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="retention"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Retention &amp; CSV export
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>exportAuditCsv</code> renders events to RFC-4180 CSV (the
+						parity piece to WorkOS&apos;s CSV export), and{' '}
+						<code>auditStore.prune(before)</code> enforces a retention
+						window by deleting older events. Pruning necessarily drops the
+						tamper-evidence of the removed rows.
+					</p>
+					<PrismPlus
+						codeString={auditRetention}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

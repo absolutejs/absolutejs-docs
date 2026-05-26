@@ -3,7 +3,8 @@ import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	adaptiveEngine,
 	adaptiveLogin,
-	adaptiveTrust
+	adaptiveTrust,
+	adaptiveWeighted
 } from '../../../../data/documentation/authAdaptiveDocsCode';
 import {
 	h1Style,
@@ -25,7 +26,8 @@ import { DocsNavigation } from '../../DocsNavigation';
 const tocItems: TocItem[] = [
 	{ href: '#engine', label: 'Engine & Rules' },
 	{ href: '#assess', label: 'Assess & Act' },
-	{ href: '#trust', label: 'Trusting Devices' }
+	{ href: '#trust', label: 'Trusting Devices' },
+	{ href: '#weighted', label: 'Weighted scoring & fingerprint' }
 ];
 
 export const AuthAdaptiveView = ({
@@ -134,6 +136,33 @@ export const AuthAdaptiveView = ({
 					</p>
 					<PrismPlus
 						codeString={adaptiveTrust}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="weighted"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Weighted scoring &amp; fingerprint
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>scoreRisk</code> is an Auth0-style alternative to the
+						per-rule actions: each fired signal adds its weight and the
+						summed score maps to an action via thresholds. It adds two
+						consumer-fed signals — <code>proxy</code> and{' '}
+						<code>off_hours</code> (from <code>isProxy</code> /{' '}
+						<code>localHour</code>). <code>fingerprintDevice</code> hashes
+						client signals into a stable <code>deviceId</code> — a stronger
+						default than a User-Agent string alone.
+					</p>
+					<PrismPlus
+						codeString={adaptiveWeighted}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
