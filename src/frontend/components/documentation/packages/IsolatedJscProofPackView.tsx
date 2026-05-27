@@ -30,6 +30,7 @@ const tocItems: TocItem[] = [
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
 	{ href: '#example', label: 'Agent tool example' },
+	{ href: '#decision-guide', label: 'Decision guide' },
 	{ href: '#security', label: 'Security posture' },
 	{ href: '#start-here', label: 'Start here' }
 ];
@@ -278,6 +279,46 @@ export const IsolatedJscProofPackView = ({
 					/>
 				</section>
 
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="decision-guide"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Bun sandboxing decision guide
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Use <code>backend: &apos;ffi&apos;</code> for
+						hostile-code production paths on macOS or Linux where
+						JavaScriptCore is available. Use{' '}
+						<code>backend: &apos;auto&apos;</code> for local
+						development, demos, CI smoke tests, and portable
+						defaults. When the Worker fallback is the only option,
+						keep it behind a process or container boundary if
+						hostile workloads could reach meaningful host secrets.
+					</p>
+					<ul style={listStyle}>
+						<li style={listItemStyle}>
+							<span style={strongStyle}>FFI:</span> lowest cold
+							heap, interrupt-driven timeouts, isolate survives
+							timeouts, and eval / Function-constructor residuals
+							are closed.
+						</li>
+						<li style={listItemStyle}>
+							<span style={strongStyle}>Worker fallback:</span>{' '}
+							portable heap isolation and resource caps, but
+							deploy it with OS-level blast-radius controls for
+							arbitrary third-party code.
+						</li>
+						<li style={listItemStyle}>
+							<span style={strongStyle}>Host tools:</span> expose
+							powers through <code>Reference</code> or the typed
+							capability broker, then validate, timeout, and audit
+							every call.
+						</li>
+					</ul>
+				</section>
 				<section style={sectionStyle}>
 					<AnchorHeading
 						id="security"
