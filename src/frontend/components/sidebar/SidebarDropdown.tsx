@@ -49,17 +49,12 @@ export const SidebarDropdown = <V extends string>({
 
 	// TODO: Update the rule to handle icons or other components someone doesnt control
 
-	// Only animate when we have a measured height, otherwise use auto
-	const hasHeight = scrollHeight > 0;
 	const dropdownSprings = useSpring({
 		config: { friction: 26, tension: 300 },
 		height: isOpen ? scrollHeight : 0,
 		opacity: isOpen ? 1 : 0,
 		transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)'
 	});
-
-	// Use auto height until we have a measurement
-	const heightStyle = !hasHeight && isOpen ? 'auto' : dropdownSprings.height;
 
 	const Icon = icon;
 
@@ -113,9 +108,9 @@ export const SidebarDropdown = <V extends string>({
 			<animated.nav
 				ref={ref}
 				style={{
-					height: heightStyle,
+					height: isOpen ? 'auto' : dropdownSprings.height,
 					opacity: dropdownSprings.opacity,
-					overflow: 'hidden'
+					overflow: isOpen ? 'visible' : 'hidden'
 				}}
 			>
 				{buttons.map((button, index) =>

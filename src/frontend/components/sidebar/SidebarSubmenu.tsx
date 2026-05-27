@@ -27,15 +27,12 @@ export const SidebarSubmenu = <V extends string>({
 		dimensions: { scrollHeight }
 	} = useContainerQuery<HTMLDivElement>();
 
-	const hasHeight = scrollHeight > 0;
 	const submenuSprings = useSpring({
 		config: { friction: 26, tension: 300 },
 		height: isOpen ? scrollHeight : 0,
 		opacity: isOpen ? 1 : 0,
 		transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)'
 	});
-
-	const heightStyle = !hasHeight && isOpen ? 'auto' : submenuSprings.height;
 
 	return (
 		<div style={{ width: '100%' }}>
@@ -84,10 +81,10 @@ export const SidebarSubmenu = <V extends string>({
 					borderLeft: themeSprings.themeTertiary.to(
 						(color) => `1px solid ${color}`
 					),
-					height: heightStyle,
+					height: isOpen ? 'auto' : submenuSprings.height,
 					marginLeft: '0.75rem',
 					opacity: submenuSprings.opacity,
-					overflow: 'hidden',
+					overflow: isOpen ? 'visible' : 'hidden',
 					paddingLeft: '0.25rem'
 				}}
 			>
