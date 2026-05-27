@@ -499,14 +499,6 @@ export const SyncWeHeardYouView = ({
 						}}
 					>
 						<li>
-							<strong>"Code Mode" for AI agents</strong> —
-							expose typed TS APIs of host tools to the model,
-							let it write one function chaining them.
-							Cloudflare's pattern; 80% token reduction. Coming
-							to <code>@absolutejs/ai</code>'s{' '}
-							<code>codeExecutionTool</code>.
-						</li>
-						<li>
 							<strong>
 								Per-tenant metrics as a system collection
 							</strong>{' '}
@@ -533,6 +525,23 @@ export const SyncWeHeardYouView = ({
 							Substrate first, hosted later.
 						</li>
 					</ul>
+					<p style={paragraphSpacedStyle}>
+						<strong>Just shipped:</strong>{' '}
+						<a
+							href="https://www.npmjs.com/package/@absolutejs/ai"
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							<code>@absolutejs/ai@0.0.12</code>
+						</a>{' '}
+						added <code>codeModeTool</code> &mdash; the typed-API
+						version of <code>codeExecutionTool</code>. Expose N
+						host tools as typed TS signatures; the model emits
+						ONE function chaining them; ~80% token reduction on
+						multi-tool turns (Cloudflare Dynamic Workers'
+						pattern). Sub-tool results stay out of the model's
+						context.
+					</p>
 					<p style={paragraphSpacedStyle}>
 						Hit us with anything we missed. Issues at{' '}
 						<a
