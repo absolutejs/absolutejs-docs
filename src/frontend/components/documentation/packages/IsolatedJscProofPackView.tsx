@@ -34,7 +34,7 @@ const tocItems: TocItem[] = [
 	{ href: '#start-here', label: 'Start here' }
 ];
 
-const shippedItems = [
+const shippedItems: Array<{ feature: string; result: string }> = [
 	{
 		feature: 'Benchmark proof pack',
 		result: 'Reproducible local measurements for FFI, Worker, Bun process-spawn, and optional Node isolated-vm baselines.'
