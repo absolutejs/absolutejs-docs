@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-070', label: '0.7.0 proof pack' },
+	{ href: '#isolated-jsc-072', label: '0.7.2 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
 	{ href: '#example', label: 'Agent tool example' },
@@ -53,7 +53,7 @@ const shippedItems = [
 	},
 	{
 		feature: 'Capability broker',
-		result: 'Named host tools with validation hooks, timeout, concurrency, tenant context, and audit events.'
+		result: 'Named host tools with validation hooks, timeout, concurrency, tenant context, audit events, typed tool definitions, and typed host-side direct calls.'
 	},
 	{
 		feature: 'Doctor CLI',
@@ -71,29 +71,47 @@ bunx @absolutejs/isolated-jsc`;
 const agentToolCode = `import {
   compileTypeScriptCallable,
   createCapabilityBroker,
-  createIsolate
+  createIsolate,
+  defineCapabilityTool
 } from "@absolutejs/isolated-jsc";
+
+type TenantContext = { id: string; plan: "free" | "pro" };
+type OrderLookup = { id: string };
+type Order = { id: string; status: string; totalUsd: number };
 
 const broker = createCapabilityBroker(
   {
-    lookupOrder: {
+    lookupOrder: defineCapabilityTool<
+      OrderLookup,
+      Order | null,
+      TenantContext
+    >({
       timeoutMs: 100,
-      validateInput: (input) => ({ id: String((input as { id: unknown }).id) }),
+      validateInput: (input) => {
+        if (input === null || typeof input !== "object") {
+          throw new Error("lookupOrder input must be an object");
+        }
+        const id = (input as { id?: unknown }).id;
+        if (typeof id !== "string") {
+          throw new Error("lookupOrder input requires a string id");
+        }
+        return { id };
+      },
       handler: async ({ id }, tenant) => lookupOrderForTenant(tenant.id, id)
-    }
+    })
   },
   { context: { id: "tenant_acme", plan: "pro" } }
 );
+
+// Direct host calls infer Order | null from the tool map.
+const order = await broker.call("lookupOrder", { id: "ord_123" });
 
 const isolate = await createIsolate({ memoryLimit: 256 });
 const context = await isolate.createContext();
 
 const agent = await compileTypeScriptCallable(
   context,
-  \`async (
-    tools: (name: string, input: unknown) => Promise<unknown>,
-    orderId: string
-  ) => await tools("lookupOrder", { id: orderId })\`
+  'async (tools, orderId) => await tools("lookupOrder", { id: orderId })'
 );
 
 const { result, metrics } = await agent.callWithMetrics(
@@ -124,15 +142,16 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-070" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.7.0 Proof Pack
+					<h1 id="isolated-jsc-072" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.7.2 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
-						This is not broad launch mode. The 0.7.0 release is a
+						This is not broad launch mode. The 0.7.2 line is a
 						proof-pack update for the Bun isolation wedge: give Bun
 						apps an isolated-vm-shaped JavaScriptCore path for
 						tenant scripts, AI-generated code, and plugin execution
-						without leaving the Bun runtime.
+						without leaving the Bun runtime, with typed capability
+						tools that are easier to adopt safely.
 					</p>
 				</animated.div>
 
@@ -146,11 +165,14 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.7.0</code> moves the package from a raw
+						Version <code>0.7.2</code> moves the package from a raw
 						isolate primitive toward an adoption-ready proof pack:
 						benchmarks, migration framing, security guidance,
 						TypeScript execution, safer host tools, diagnostics, and
-						a runnable agent example.
+						a runnable agent example. The <code>0.7.1</code> and{' '}
+						<code>0.7.2</code> patch releases add the typed
+						capability helper and typed <code>broker.call()</code>
+						returns on top of that proof pack.
 					</p>
 					<div style={tableContainerStyle}>
 						<animated.table style={tableStyle(themeSprings)}>
@@ -242,9 +264,10 @@ export const IsolatedJscProofPackView = ({
 						Agent tool example
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The new example is the intended adoption shape: compile
-						a TypeScript callable, pass a brokered tool dispatcher
-						as a Reference, set a timeout, and capture per-call
+						The example is the intended adoption shape: define typed
+						host tools, call them directly from the host when
+						useful, pass the brokered dispatcher as a Reference to
+						untrusted code, set a timeout, and capture per-call
 						metrics.
 					</p>
 					<PrismPlus

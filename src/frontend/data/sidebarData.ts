@@ -610,7 +610,7 @@ export const sidebarData: MenuItem[] = [
 				label: 'Voice'
 			},
 			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
-			{ id: 'isolated-jsc', label: 'isolated-jsc 0.7.0' },
+			{ id: 'isolated-jsc', label: 'isolated-jsc 0.7.2' },
 			{
 				buttons: [
 					{
