@@ -2,7 +2,9 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	clientUsage,
-	reactHooks
+	passkeyAutofill,
+	reactHooks,
+	upgradeToPasskey
 } from '../../../../data/documentation/authClientDocsCode';
 import {
 	h1Style,
@@ -23,7 +25,9 @@ import { DocsNavigation } from '../../DocsNavigation';
 
 const tocItems: TocItem[] = [
 	{ href: '#client', label: 'createAuthClient' },
-	{ href: '#react', label: 'React hooks' }
+	{ href: '#react', label: 'React hooks' },
+	{ href: '#passkey-autofill', label: 'Passkey autofill' },
+	{ href: '#upgrade-passkey', label: 'Upgrade to passkey' }
 ];
 
 export const AuthClientView = ({
@@ -108,6 +112,55 @@ export const AuthClientView = ({
 					</p>
 					<PrismPlus
 						codeString={reactHooks}
+						language="tsx"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="passkey-autofill"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Passkey autofill
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>0.37.0</code> ships <code>usePasskeyAutofill</code>{' '}
+						across React, Vue, Solid, and Svelte. Mount it on the sign-in
+						page and the browser surfaces the user&apos;s saved passkeys
+						in its autofill dropdown — one tap signs them in.{' '}
+						<code>@simplewebauthn/browser</code> is an optional peer dep
+						loaded via dynamic import; non-passkey consumers pay nothing.
+					</p>
+					<PrismPlus
+						codeString={passkeyAutofill}
+						language="tsx"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="upgrade-passkey"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Upgrade to passkey
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>useUpgradeToPasskey</code> queries whether the
+						signed-in user has any passkeys yet and exposes a{' '}
+						<code>shouldPrompt</code> flag — true iff they have none.
+						Wire it to a post-sign-in CTA so password users see a
+						&quot;save a passkey to this device?&quot; prompt.
+					</p>
+					<PrismPlus
+						codeString={upgradeToPasskey}
 						language="tsx"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

@@ -1,12 +1,11 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
-	backgroundEmailScan,
-	breachCheckOnLogin,
-	compromisedCredential,
-	emailValidation,
-	pruneInactiveUsersExample
-} from '../../../../data/documentation/authCredentialHardeningDocsCode';
+	issuerOfferFlow,
+	issuerSetup,
+	statusListFlow,
+	verifierFlow
+} from '../../../../data/documentation/authVerifiableCredentialsDocsCode';
 import {
 	h1Style,
 	mainContentStyle,
@@ -25,13 +24,13 @@ import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#email', label: 'Email validation' },
-	{ href: '#compromised', label: 'Compromised credentials' },
-	{ href: '#background-scan', label: 'Background breach re-scan' },
-	{ href: '#prune-inactive', label: 'Prune inactive users' }
+	{ href: '#issuer', label: 'Issuer setup' },
+	{ href: '#offer-flow', label: 'Credential offer flow' },
+	{ href: '#verifier', label: 'Verifier (OID4VP)' },
+	{ href: '#status', label: 'Revocation: Status List' }
 ];
 
-export const AuthCredentialHardeningView = ({
+export const AuthVerifiableCredentialsView = ({
 	currentPageId,
 	onNavigate,
 	themeSprings,
@@ -55,35 +54,41 @@ export const AuthCredentialHardeningView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1
-						id="auth-credential-hardening"
+						id="auth-verifiable-credentials"
 						style={h1Style(isMobileOrTablet)}
 					>
-						Credential Hardening
+						Verifiable Credentials
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Block junk emails at sign-up, and catch passwords that show
-						up in a breach after the account already exists.
+						<code>0.40.0</code> ships a complete SD-JWT VC stack:
+						OpenID4VCI issuer (your IdP becomes a credential issuer
+						a wallet can collect), OpenID4VP verifier (accept a wallet
+						presentation as proof-of-claim), and Bitstring Status List
+						for revocation. First OSS TypeScript auth library to ship
+						the full issue → present → verify → revoke loop. Future
+						EU eIDAS 2.0 wallets, Apple Wallet, Google Wallet, and the
+						current EUDI Wallet ecosystem all speak this protocol family.
 					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="email"
+						id="issuer"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Email validation
+						Issuer setup
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>validateEmailDeliverability</code> checks format,
-						blocks disposable domains (a starter list ships built-in;
-						extend it), and optionally confirms the domain has MX
-						records. <code>isDisposableEmail</code> is exposed on its own
-						too.
+						Declare what credentials you offer + a resolver that
+						produces the claim bag. The package handles SD-JWT signing,
+						selective-disclosure hash math, cnf holder binding, and
+						the c_nonce ceremony. Pre-authorized_code flow only in
+						this cycle; auth-code flow follows when a consumer asks.
 					</p>
 					<PrismPlus
-						codeString={emailValidation}
+						codeString={issuerSetup}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -92,38 +97,23 @@ export const AuthCredentialHardeningView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="compromised"
+						id="offer-flow"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Compromised credentials
+						Credential offer flow
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Sign-up already blocks breached passwords (the credentials
-						policy&apos;s <code>checkBreaches</code>). The login-time check
-						is the half of Auth0 &quot;Credential Guard&quot; a self-hosted
-						library can do: catch a password that was fine at sign-up but
-						later leaked, and prompt a reset. Fails open on a HIBP outage.
-					</p>
-					<p style={paragraphSpacedStyle}>
-						Turnkey: set <code>checkBreachesOnLogin: true</code> on the
-						credentials config. A successful login then carries{' '}
-						<code>passwordCompromised</code> in its response (it never
-						blocks — the user is already authenticated).
+						Mint an offer, hand the QR / deeplink to the wallet. The
+						wallet trades the pre-auth code at the regular OIDC
+						<code> /oauth2/token</code> endpoint, then POSTs its
+						proof-of-possession JWT to <code>/vci/credential</code>.
+						The package verifies the proof signature, mints the
+						SD-JWT VC bound to the wallet&apos;s key.
 					</p>
 					<PrismPlus
-						codeString={breachCheckOnLogin}
-						language="typescript"
-						showLineNumbers={true}
-						themeSprings={themeSprings}
-					/>
-					<p style={paragraphSpacedStyle}>
-						Or call <code>isPasswordCompromised</code> yourself for full
-						control over the response:
-					</p>
-					<PrismPlus
-						codeString={compromisedCredential}
+						codeString={issuerOfferFlow}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -132,23 +122,24 @@ export const AuthCredentialHardeningView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="background-scan"
+						id="verifier"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Background breach re-scan
+						Verifier (OID4VP)
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>0.37.0</code> adds <code>runEmailBreachScan</code> —
-						the email counterpart to the login-time password check.
-						Walks your user population in cursor-paged batches against
-						HIBP&apos;s <code>breachedaccount</code> API. Wire it up
-						as a cron and notify users whose addresses show up in new
-						breaches.
+						Accept presentations from any wallet. Mint a request
+						(returns a <code>request_uri</code> for the wallet
+						deeplink), the wallet POSTs back a key-binding-signed
+						<code> vp_token</code>, the package verifies every link
+						in the chain (issuer signature, holder binding,
+						requested-claim coverage, optional status check) and
+						fires your hook.
 					</p>
 					<PrismPlus
-						codeString={backgroundEmailScan}
+						codeString={verifierFlow}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -157,25 +148,24 @@ export const AuthCredentialHardeningView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="prune-inactive"
+						id="status"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Prune inactive users
+						Revocation: Status List
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The other half of <code>0.37.0</code>&apos;s background ops:{' '}
-						<code>pruneInactiveUsers</code> is a pure orchestrator
-						that walks a paged user population, identifies anyone
-						past the threshold, and lets you decide what
-						&quot;prune&quot; means via the <code>onDelete</code>{' '}
-						hook (soft-delete, hard-delete, disable + notify).{' '}
-						<code>dryRun: true</code> reports candidates without
-						touching anything.
+						Bitstring Status List (draft-ietf-oauth-status-list-12).
+						Compressed bitmap in a signed JWT, served from a stable
+						URL. Each credential references its slot via the
+						<code> status</code> claim; verifiers check the bit
+						at verify time. Re-signs on every fetch so revocations
+						land immediately. Postgres stores for offers, nonces,
+						and presentation requests all ship alongside.
 					</p>
 					<PrismPlus
-						codeString={pruneInactiveUsersExample}
+						codeString={statusListFlow}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

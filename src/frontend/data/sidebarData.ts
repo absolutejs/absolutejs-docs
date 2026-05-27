@@ -73,19 +73,24 @@ import { AuthActionsView } from '../components/documentation/packages/auth/AuthA
 import { AuthAdaptiveView } from '../components/documentation/packages/auth/AuthAdaptiveView';
 import { AuthApiKeysView } from '../components/documentation/packages/auth/AuthApiKeysView';
 import { AuthAuditIntegrityView } from '../components/documentation/packages/auth/AuthAuditIntegrityView';
+import { AuthCibaView } from '../components/documentation/packages/auth/AuthCibaView';
 import { AuthClientView } from '../components/documentation/packages/auth/AuthClientView';
 import { AuthComplianceView } from '../components/documentation/packages/auth/AuthComplianceView';
 import { AuthCredentialHardeningView } from '../components/documentation/packages/auth/AuthCredentialHardeningView';
 import { AuthCredentialsView } from '../components/documentation/packages/auth/AuthCredentialsView';
 import { AuthFgaView } from '../components/documentation/packages/auth/AuthFgaView';
 import { AuthImpersonationView } from '../components/documentation/packages/auth/AuthImpersonationView';
+import { AuthMigrationsView } from '../components/documentation/packages/auth/AuthMigrationsView';
+import { AuthMtlsView } from '../components/documentation/packages/auth/AuthMtlsView';
 import { AuthMultiSessionView } from '../components/documentation/packages/auth/AuthMultiSessionView';
+import { AuthObservabilityView } from '../components/documentation/packages/auth/AuthObservabilityView';
 import { AuthOidcProviderView } from '../components/documentation/packages/auth/AuthOidcProviderView';
 import { AuthOrganizationsView } from '../components/documentation/packages/auth/AuthOrganizationsView';
 import { AuthPasswordlessView } from '../components/documentation/packages/auth/AuthPasswordlessView';
 import { AuthPluginsView } from '../components/documentation/packages/auth/AuthPluginsView';
 import { AuthSsoView } from '../components/documentation/packages/auth/AuthSsoView';
 import { AuthVaultView } from '../components/documentation/packages/auth/AuthVaultView';
+import { AuthVerifiableCredentialsView } from '../components/documentation/packages/auth/AuthVerifiableCredentialsView';
 import { EslintRuleView } from '../components/documentation/packages/eslint/EslintRuleView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
@@ -162,19 +167,24 @@ export const docsViews = definePortalViews({
 	'auth-adaptive': AuthAdaptiveView,
 	'auth-apikeys': AuthApiKeysView,
 	'auth-audit-integrity': AuthAuditIntegrityView,
+	'auth-ciba': AuthCibaView,
 	'auth-client': AuthClientView,
 	'auth-compliance': AuthComplianceView,
 	'auth-credential-hardening': AuthCredentialHardeningView,
 	'auth-credentials': AuthCredentialsView,
 	'auth-fga': AuthFgaView,
 	'auth-impersonation': AuthImpersonationView,
+	'auth-migrations': AuthMigrationsView,
+	'auth-mtls': AuthMtlsView,
 	'auth-multi-session': AuthMultiSessionView,
+	'auth-observability': AuthObservabilityView,
 	'auth-oidc-provider': AuthOidcProviderView,
 	'auth-organizations': AuthOrganizationsView,
 	'auth-passwordless': AuthPasswordlessView,
 	'auth-plugins': AuthPluginsView,
 	'auth-sso': AuthSsoView,
 	'auth-vault': AuthVaultView,
+	'auth-verifiable-credentials': AuthVerifiableCredentialsView,
 	'build-and-manifest': BuildManifestView,
 	'bun-build-options': BunBuildOptionsView,
 	citra: CitraView,
@@ -269,6 +279,11 @@ export const docsViews = definePortalViews({
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
+	'svelte-ai': SvelteAIView,
+	'svelte-components': SvelteComponentsView,
+	'svelte-islands': SvelteIslandsView,
+	'svelte-overview': SvelteOverviewView,
+	'svelte-spa': SvelteSpaView,
 	'sync-actions': SyncActionsJobsView,
 	'sync-adapters': SyncAdaptersView,
 	'sync-crdt': SyncCRDTView,
@@ -276,11 +291,6 @@ export const docsViews = definePortalViews({
 	'sync-frameworks': SyncFrameworksView,
 	'sync-graph': SyncGraphCollectionsView,
 	'sync-overview': SyncOverviewView,
-	'svelte-ai': SvelteAIView,
-	'svelte-components': SvelteComponentsView,
-	'svelte-islands': SvelteIslandsView,
-	'svelte-overview': SvelteOverviewView,
-	'svelte-spa': SvelteSpaView,
 	'tailwind-css': TailwindCSSView,
 	telemetry: TelemetryView,
 	'type-safety': TypeSafetyView,
@@ -498,7 +508,15 @@ export const sidebarData: MenuItem[] = [
 					{ id: 'auth-actions', label: 'Actions Pipeline' },
 					{ id: 'auth-vault', label: 'Vault' },
 					{ id: 'auth-plugins', label: 'First-party Plugins' },
-					{ id: 'auth-client', label: 'Client SDK & Hooks' }
+					{ id: 'auth-client', label: 'Client SDK & Hooks' },
+					{
+						id: 'auth-verifiable-credentials',
+						label: 'Verifiable Credentials'
+					},
+					{ id: 'auth-ciba', label: 'CIBA (Backchannel Auth)' },
+					{ id: 'auth-mtls', label: 'mTLS & Cert-Bound Tokens' },
+					{ id: 'auth-observability', label: 'Observability' },
+					{ id: 'auth-migrations', label: 'Database Migrations' }
 				],
 				id: 'absolute-auth',
 				label: 'Absolute Auth'
