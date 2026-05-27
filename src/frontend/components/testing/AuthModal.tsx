@@ -1,8 +1,8 @@
 import {
 	isRefreshableProviderOption,
 	isRevocableProviderOption,
-	ProviderOption
-} from '@absolutejs/auth';
+	type ProviderOption
+} from '@absolutejs/auth/providers';
 import { animated } from '@react-spring/web';
 import { Dispatch, SetStateAction } from 'react';
 import { FiExternalLink } from 'react-icons/fi';

@@ -137,6 +137,7 @@ import { SyncSandboxView } from '../components/documentation/sync/SyncSandboxVie
 import { SyncVsConvexView } from '../components/documentation/sync/SyncVsConvexView';
 import { SyncVsFirebaseView } from '../components/documentation/sync/SyncVsFirebaseView';
 import { SyncWeHeardYouView } from '../components/documentation/sync/SyncWeHeardYouView';
+import { SyncLaunchView } from '../components/documentation/sync/SyncLaunchView';
 import { AIToolsView } from '../components/documentation/ai/AIToolsView';
 import { AIStreamingView } from '../components/documentation/ai/AIStreamingView';
 import { ReactAIView } from '../components/documentation/react/ReactAIView';
@@ -294,6 +295,7 @@ export const docsViews = definePortalViews({
 	'sync-eden': SyncEdenTypedView,
 	'sync-frameworks': SyncFrameworksView,
 	'sync-graph': SyncGraphCollectionsView,
+	'sync-launch': SyncLaunchView,
 	'sync-overview': SyncOverviewView,
 	'sync-sandbox': SyncSandboxView,
 	'sync-vs-convex': SyncVsConvexView,
@@ -468,6 +470,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'sync-sandbox', label: 'Sandboxed Mutations' },
 			{ id: 'sync-frameworks', label: 'Framework Hooks' },
 			{ id: 'sync-adapters', label: 'CRDT Adapters' },
+			{ id: 'sync-launch', label: '1.7.9 Launch' },
 			{ id: 'sync-vs-convex', label: 'vs Convex' },
 			{ id: 'sync-vs-firebase', label: 'vs Firebase' },
 			{ id: 'sync-we-heard-you', label: 'We Heard You' }

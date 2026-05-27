@@ -1,4 +1,4 @@
-import { ProviderOption } from 'citra';
+import { ProviderOption } from '@absolutejs/auth/providers';
 
 export type ProviderInfo = {
 	name: string;

@@ -1,4 +1,7 @@
-import { ProviderOption, providerOptions } from '@absolutejs/auth';
+import {
+	providerOptions,
+	type ProviderOption
+} from '@absolutejs/auth/providers';
 import { useState } from 'react';
 import { User } from '../../../../db/schema';
 import { ThemeSprings } from '../../../types/springTypes';

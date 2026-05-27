@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { providers } from 'citra';
+import { providers } from '@absolutejs/auth/providers';
 import { ThemeProps } from '../../../../../types/springTypes';
 import {
 	strongStyle,

@@ -1,4 +1,4 @@
-import { ProviderOption } from '@absolutejs/auth';
+import type { ProviderOption } from '@absolutejs/auth/providers';
 import { animated } from '@react-spring/web';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Navbar } from '../components/navbar/Navbar';

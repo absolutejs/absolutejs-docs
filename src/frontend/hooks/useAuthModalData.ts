@@ -1,4 +1,4 @@
-import { ProviderOption } from '@absolutejs/auth';
+import type { ProviderOption } from '@absolutejs/auth/providers';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useToast } from '../components/utils/ToastProvider';

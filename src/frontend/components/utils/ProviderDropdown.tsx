@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { ProviderOption, providerOptions } from 'citra';
+import { ProviderOption, providerOptions } from '@absolutejs/auth/providers';
 import { Dispatch, SetStateAction } from 'react';
 import { ThemeSprings } from '../../../types/springTypes';
 import { providerData } from '../../data/providerData';

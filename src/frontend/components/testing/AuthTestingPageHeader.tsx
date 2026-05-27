@@ -1,4 +1,4 @@
-import { providerOptions } from '@absolutejs/auth';
+import { providerOptions } from '@absolutejs/auth/providers';
 import { animated } from '@react-spring/web';
 import { ThemeProps } from '../../../types/springTypes';
 
