@@ -2,6 +2,8 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	portalSetup,
+	scimAttributeMapping,
+	scimGroupDelta,
 	scimSetup,
 	ssoConnections,
 	ssoDiscovery,
@@ -33,6 +35,8 @@ const tocItems: TocItem[] = [
 	{ href: '#saml-idp', label: 'SAML IdP role' },
 	{ href: '#discovery', label: 'Discovery & SLO' },
 	{ href: '#scim', label: 'SCIM Provisioning' },
+	{ href: '#scim-attributes', label: 'SCIM Attribute Mapping' },
+	{ href: '#scim-groups', label: 'SCIM Group Diff' },
 	{ href: '#portal', label: 'Admin Portal' }
 ];
 
@@ -208,6 +212,67 @@ export const AuthSsoView = ({
 					</p>
 					<PrismPlus
 						codeString={scimSetup}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						<code>0.38.0</code> added the required SCIM 2.0 discovery
+						endpoints (<code>/Schemas</code>, <code>/Schemas/:id</code>,{' '}
+						<code>/ResourceTypes</code>, <code>/ResourceTypes/:id</code>){' '}
+						that Okta and Azure AD probe during connection setup — they
+						work automatically with the core User + Group schemas, and
+						extend through <code>customAttributes.schemas</code>.
+					</p>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="scim-attributes"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						SCIM Attribute Mapping
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>defineScimAttributeMap</code> handles the Okta
+						admin&apos;s eternal pain: declarative bidirectional mapping
+						between an enterprise extension URI&apos;s claims (e.g.
+						<code> manager</code>, <code>department</code>) and your
+						custom fields (<code>reporting_to</code>, etc.). The
+						package threads inbound JSON through <code>fromScim</code>{' '}
+						and surfaces it on <code>input.custom</code>;{' '}
+						<code>toScim</code> flows the other way. The declared
+						schemas show up automatically in <code>/Schemas</code> +{' '}
+						<code>/ResourceTypes</code>.
+					</p>
+					<PrismPlus
+						codeString={scimAttributeMapping}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="scim-groups"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						SCIM Group Diff
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>diffScimGroupMembers</code> is a small set-diff helper
+						for <code>onScimGroupReplace</code> — compute{' '}
+						<code>{'{added, removed}'}</code> deltas against your existing
+						membership table without rolling your own loop. Keyed by{' '}
+						<code>member.value</code> (the user&apos;s SCIM id).
+					</p>
+					<PrismPlus
+						codeString={scimGroupDelta}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

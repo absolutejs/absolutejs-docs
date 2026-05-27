@@ -19,6 +19,35 @@ else go('/profile');
 await client.passwordless.requestMagicLink({ email });
 await client.mfa.challenge({ code });
 const sessions = await client.sessions.list();`;
+export const passkeyAutofill = `\
+import { createAuthClient } from '@absolutejs/auth/client';
+import { usePasskeyAutofill } from '@absolutejs/auth/react';
+
+// 0.37.0: WebAuthn conditional-UI. Mount on the sign-in page with an
+// <input autocomplete="username webauthn"> and call start() in an effect;
+// the browser surfaces the user's saved passkeys directly in its autofill
+// dropdown — one tap and you're authenticated. @simplewebauthn/browser is
+// an optional peer dep loaded dynamically; non-passkey consumers pay nothing.
+
+const client = createAuthClient();
+
+function SignInForm() {
+  const { start, data, error, isPending } = usePasskeyAutofill(client);
+  useEffect(() => { void start(); }, [start]);
+
+  return (
+    <form>
+      <input
+        name="email"
+        autoComplete="username webauthn"
+      />
+      <input name="password" type="password" autoComplete="current-password" />
+      <button disabled={isPending}>Sign in</button>
+      {data?.status === 'authenticated' && <Redirect to="/dashboard" />}
+      {error && <p>{error.message}</p>}
+    </form>
+  );
+}`;
 export const reactHooks = `\
 import { createAuthClient } from '@absolutejs/auth/client';
 import {
@@ -54,4 +83,25 @@ function SignInForm() {
 }
 
 // Vue / Solid / Svelte composables wrap the same client — same shapes,
-// different reactivity.`;
+// different reactivity. 0.33.0 shipped the sibling sub-exports:
+// @absolutejs/auth/vue, @absolutejs/auth/solid, @absolutejs/auth/svelte.`;
+export const upgradeToPasskey = `\
+import { useUpgradeToPasskey } from '@absolutejs/auth/react';
+
+// 0.37.0: "save a passkey to this device?" prompt for password users.
+// shouldPrompt is true iff the signed-in user has zero passkeys; register()
+// runs the WebAuthn registration ceremony and refetches the list.
+function PostSignInPasskeyPrompt({ client }) {
+  const { shouldPrompt, register, isPending } = useUpgradeToPasskey(client);
+  if (!shouldPrompt) return null;
+
+  return (
+    <Banner>
+      Save a passkey to this device for faster sign-in next time?
+      <button onClick={() => register()} disabled={isPending}>
+        Save passkey
+      </button>
+    </Banner>
+  );
+}`;
+
