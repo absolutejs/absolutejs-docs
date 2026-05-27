@@ -224,7 +224,12 @@ export const SyncVsConvexView = ({
 						</a>{' '}
 						— a Bun-native JavaScriptCore sandbox we built
 						because <code>isolated-vm</code> is V8-only and
-						doesn't load under Bun.
+						doesn't load under Bun. See the dedicated{' '}
+						<a href="/documentation/sync-sandbox">
+							Sandboxed Mutations
+						</a>{' '}
+						page for backends, bench numbers, and the full
+						trade-off table.
 					</p>
 					<PrismPlus
 						codeString={syncVsConvexSandbox}

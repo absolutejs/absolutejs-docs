@@ -133,6 +133,7 @@ import { SyncEdenTypedView } from '../components/documentation/sync/SyncEdenType
 import { SyncFrameworksView } from '../components/documentation/sync/SyncFrameworksView';
 import { SyncGraphCollectionsView } from '../components/documentation/sync/SyncGraphCollectionsView';
 import { SyncOverviewView } from '../components/documentation/sync/SyncOverviewView';
+import { SyncSandboxView } from '../components/documentation/sync/SyncSandboxView';
 import { SyncVsConvexView } from '../components/documentation/sync/SyncVsConvexView';
 import { AIToolsView } from '../components/documentation/ai/AIToolsView';
 import { AIStreamingView } from '../components/documentation/ai/AIStreamingView';
@@ -292,6 +293,7 @@ export const docsViews = definePortalViews({
 	'sync-frameworks': SyncFrameworksView,
 	'sync-graph': SyncGraphCollectionsView,
 	'sync-overview': SyncOverviewView,
+	'sync-sandbox': SyncSandboxView,
 	'sync-vs-convex': SyncVsConvexView,
 	'tailwind-css': TailwindCSSView,
 	telemetry: TelemetryView,
@@ -459,6 +461,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'sync-graph', label: 'Operator-graph Queries' },
 			{ id: 'sync-actions', label: 'Actions, Jobs & Schedules' },
 			{ id: 'sync-crdt', label: 'CRDT & Collaboration' },
+			{ id: 'sync-sandbox', label: 'Sandboxed Mutations' },
 			{ id: 'sync-frameworks', label: 'Framework Hooks' },
 			{ id: 'sync-adapters', label: 'CRDT Adapters' },
 			{ id: 'sync-vs-convex', label: 'vs Convex' }
