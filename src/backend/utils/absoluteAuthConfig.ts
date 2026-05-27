@@ -1,5 +1,5 @@
 import {
-	createAuthConfiguration,
+	defineAuthConfig,
 	instantiateUserSession
 } from '@absolutejs/auth';
 import { DatabaseType, User } from '../../../db/schema';
@@ -8,7 +8,7 @@ import { createUser, getUser } from '../handlers/userHandlers';
 import { providersConfiguration } from './providersConfiguration';
 
 export const absoluteAuthConfig = (db: DatabaseType) =>
-	createAuthConfiguration<User>({
+	defineAuthConfig<User>({
 		providersConfiguration: providersConfiguration,
 		onCallbackError: async ({ error, authProvider }) => {
 			await handleStatusUpdate({

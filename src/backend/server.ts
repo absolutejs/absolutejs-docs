@@ -1,5 +1,5 @@
 import { getEnv, networking, prepare } from '@absolutejs/absolute';
-import { absoluteAuth } from '@absolutejs/auth';
+import { auth } from '@absolutejs/auth';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { Elysia } from 'elysia';
@@ -16,10 +16,18 @@ const db = drizzle(sql, {
 
 const { absolutejs, manifest } = await prepare();
 
+// @absolutejs/auth grew enough OAuth2/OIDC/SSO/credentials/etc. routes since 0.22
+// that inlining its plugin into the Elysia .use() chain blows TS's union budget
+// (TS2590). Type-erase to a bare Elysia for this leg — the docs frontend doesn't
+// Eden-call any auth routes anyway (signout goes through plain fetch).
+const authPluginRich = await auth<User>(absoluteAuthConfig(db));
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- intentional type erasure to keep the Elysia .use() chain under TS's union budget; see comment above
+const authPlugin = authPluginRich as unknown as Elysia;
+
 const server = new Elysia()
 	.use(absolutejs)
 	.use(providerPlugin(db))
-	.use(absoluteAuth<User>(absoluteAuthConfig(db)))
+	.use(authPlugin)
 	.use(telemetryPlugin(db))
 	.use(pagesPlugin(manifest))
 	.use(networking)
