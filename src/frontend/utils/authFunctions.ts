@@ -1,11 +1,10 @@
-import { server } from './edenTreaty';
-
+// @absolutejs/auth routes are intentionally type-erased on the server (see
+// server.ts: the chain blows TS's union budget otherwise), so call signout via
+// plain fetch instead of through the Eden treaty.
 export const handleSignOut = async () => {
-	// @ts-expect-error - The oauth2 routes come from a third party plugin and arent being typed correctly but do exist
-	const { error } = await server.oauth2.signout.delete();
-
-	if (error) {
-		console.error('Logout failed:', error);
+	const response = await fetch('/oauth2/signout', { method: 'DELETE' });
+	if (!response.ok) {
+		console.error('Logout failed:', response.status);
 
 		return;
 	}

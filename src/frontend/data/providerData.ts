@@ -55,6 +55,13 @@ export const providerData: ProviderData = {
 		name: 'Atlassian',
 		primaryColor: '#0052CC'
 	},
+	attio: {
+		createNewCredentialsUrl: 'https://app.attio.com/_settings/developers',
+		logoUrl: '/assets/svg/attio-logo.svg',
+		manageCredentialsUrl: 'https://app.attio.com/_settings/developers',
+		name: 'Attio',
+		primaryColor: '#1A2940'
+	},
 	auth0: {
 		createNewCredentialsUrl: 'https://manage.auth0.com/#/applications',
 		logoUrl: '/assets/svg/auth0-logo.svg',
@@ -108,6 +115,13 @@ export const providerData: ProviderData = {
 		manageCredentialsUrl: 'https://www.bungie.net/en/Application',
 		name: 'Bungie',
 		primaryColor: '#0075BB'
+	},
+	close: {
+		createNewCredentialsUrl: 'https://app.close.com/settings/developer/',
+		logoUrl: '/assets/svg/close-logo.svg',
+		manageCredentialsUrl: 'https://app.close.com/settings/developer/',
+		name: 'Close',
+		primaryColor: '#FB6B41'
 	},
 	coinbase: {
 		createNewCredentialsUrl: 'https://www.coinbase.com/settings/api',
@@ -195,6 +209,13 @@ export const providerData: ProviderData = {
 		name: 'GitLab',
 		primaryColor: '#FC6D26'
 	},
+	gohighlevel: {
+		createNewCredentialsUrl: 'https://marketplace.gohighlevel.com/',
+		logoUrl: '/assets/svg/gohighlevel-logo.svg',
+		manageCredentialsUrl: 'https://marketplace.gohighlevel.com/',
+		name: 'GoHighLevel',
+		primaryColor: '#02B5B0'
+	},
 	google: {
 		createNewCredentialsUrl:
 			'https://console.cloud.google.com/apis/credentials',
@@ -203,6 +224,13 @@ export const providerData: ProviderData = {
 			'https://console.cloud.google.com/apis/credentials',
 		name: 'Google',
 		primaryColor: '#4285F4'
+	},
+	hubspot: {
+		createNewCredentialsUrl: 'https://app.hubspot.com/developer/',
+		logoUrl: '/assets/svg/hubspot-logo.svg',
+		manageCredentialsUrl: 'https://app.hubspot.com/developer/',
+		name: 'HubSpot',
+		primaryColor: '#FF7A59'
 	},
 	intuit: {
 		createNewCredentialsUrl: 'https://developer.intuit.com/workspaces',
@@ -297,6 +325,13 @@ export const providerData: ProviderData = {
 		name: 'Microsoft Entra ID',
 		primaryColor: '#000000'
 	},
+	monday: {
+		createNewCredentialsUrl: 'https://developer.monday.com/apps',
+		logoUrl: '/assets/svg/monday-logo.svg',
+		manageCredentialsUrl: 'https://developer.monday.com/apps',
+		name: 'monday.com',
+		primaryColor: '#FF3D57'
+	},
 	myanimelist: {
 		createNewCredentialsUrl: 'https://myanimelist.net/apiconfig/create',
 		logoUrl: '/assets/svg/myanimelist-logo.svg',
@@ -341,6 +376,13 @@ export const providerData: ProviderData = {
 			'https://www.patreon.com/portal/registration/register-clients',
 		name: 'Patreon',
 		primaryColor: '#000000'
+	},
+	pipedrive: {
+		createNewCredentialsUrl: 'https://app.pipedrive.com/developer-hub',
+		logoUrl: '/assets/svg/pipedrive-logo.svg',
+		manageCredentialsUrl: 'https://app.pipedrive.com/developer-hub',
+		name: 'Pipedrive',
+		primaryColor: '#2BB36F'
 	},
 	polar: {
 		createNewCredentialsUrl: 'https://polar.sh/dashboard',
@@ -504,6 +546,13 @@ export const providerData: ProviderData = {
 		manageCredentialsUrl: 'https://oauth.yandex.com/client/my',
 		name: 'Yandex',
 		primaryColor: '#5282FF'
+	},
+	zoho: {
+		createNewCredentialsUrl: 'https://api-console.zoho.com/',
+		logoUrl: '/assets/svg/zoho-logo.svg',
+		manageCredentialsUrl: 'https://api-console.zoho.com/',
+		name: 'Zoho',
+		primaryColor: '#D6363D'
 	},
 	zoom: {
 		createNewCredentialsUrl: 'https://marketplace.zoom.us/develop/create',
