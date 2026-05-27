@@ -125,6 +125,7 @@ import { SyncAdaptersView } from '../components/documentation/sync/SyncAdaptersV
 import { SyncCRDTView } from '../components/documentation/sync/SyncCRDTView';
 import { SyncEdenTypedView } from '../components/documentation/sync/SyncEdenTypedView';
 import { SyncFrameworksView } from '../components/documentation/sync/SyncFrameworksView';
+import { SyncGraphCollectionsView } from '../components/documentation/sync/SyncGraphCollectionsView';
 import { SyncOverviewView } from '../components/documentation/sync/SyncOverviewView';
 import { AIToolsView } from '../components/documentation/ai/AIToolsView';
 import { AIStreamingView } from '../components/documentation/ai/AIStreamingView';
@@ -271,6 +272,7 @@ export const docsViews = definePortalViews({
 	'sync-crdt': SyncCRDTView,
 	'sync-eden': SyncEdenTypedView,
 	'sync-frameworks': SyncFrameworksView,
+	'sync-graph': SyncGraphCollectionsView,
 	'sync-overview': SyncOverviewView,
 	'svelte-ai': SvelteAIView,
 	'svelte-components': SvelteComponentsView,
@@ -440,6 +442,7 @@ export const sidebarData: MenuItem[] = [
 		buttons: [
 			{ id: 'sync-overview', label: 'Overview' },
 			{ id: 'sync-eden', label: 'End-to-end Types' },
+			{ id: 'sync-graph', label: 'Operator-graph Queries' },
 			{ id: 'sync-crdt', label: 'CRDT & Collaboration' },
 			{ id: 'sync-frameworks', label: 'Framework Hooks' },
 			{ id: 'sync-adapters', label: 'CRDT Adapters' }
