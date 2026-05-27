@@ -135,6 +135,7 @@ import { SyncGraphCollectionsView } from '../components/documentation/sync/SyncG
 import { SyncOverviewView } from '../components/documentation/sync/SyncOverviewView';
 import { SyncSandboxView } from '../components/documentation/sync/SyncSandboxView';
 import { SyncVsConvexView } from '../components/documentation/sync/SyncVsConvexView';
+import { SyncVsFirebaseView } from '../components/documentation/sync/SyncVsFirebaseView';
 import { SyncWeHeardYouView } from '../components/documentation/sync/SyncWeHeardYouView';
 import { AIToolsView } from '../components/documentation/ai/AIToolsView';
 import { AIStreamingView } from '../components/documentation/ai/AIStreamingView';
@@ -296,6 +297,7 @@ export const docsViews = definePortalViews({
 	'sync-overview': SyncOverviewView,
 	'sync-sandbox': SyncSandboxView,
 	'sync-vs-convex': SyncVsConvexView,
+	'sync-vs-firebase': SyncVsFirebaseView,
 	'sync-we-heard-you': SyncWeHeardYouView,
 	'tailwind-css': TailwindCSSView,
 	telemetry: TelemetryView,
@@ -467,6 +469,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'sync-frameworks', label: 'Framework Hooks' },
 			{ id: 'sync-adapters', label: 'CRDT Adapters' },
 			{ id: 'sync-vs-convex', label: 'vs Convex' },
+			{ id: 'sync-vs-firebase', label: 'vs Firebase' },
 			{ id: 'sync-we-heard-you', label: 'We Heard You' }
 		],
 		icon: animated(FaSync),
