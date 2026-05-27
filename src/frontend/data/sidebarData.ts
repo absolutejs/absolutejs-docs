@@ -121,6 +121,7 @@ import { VueAIView } from '../components/documentation/vue/VueAIView';
 import { AIOverviewView } from '../components/documentation/ai/AIOverviewView';
 import { AIProvidersView } from '../components/documentation/ai/AIProvidersView';
 import { AIPluginView } from '../components/documentation/ai/AIPluginView';
+import { SyncActionsJobsView } from '../components/documentation/sync/SyncActionsJobsView';
 import { SyncAdaptersView } from '../components/documentation/sync/SyncAdaptersView';
 import { SyncCRDTView } from '../components/documentation/sync/SyncCRDTView';
 import { SyncEdenTypedView } from '../components/documentation/sync/SyncEdenTypedView';
@@ -268,6 +269,7 @@ export const docsViews = definePortalViews({
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
+	'sync-actions': SyncActionsJobsView,
 	'sync-adapters': SyncAdaptersView,
 	'sync-crdt': SyncCRDTView,
 	'sync-eden': SyncEdenTypedView,
@@ -443,6 +445,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'sync-overview', label: 'Overview' },
 			{ id: 'sync-eden', label: 'End-to-end Types' },
 			{ id: 'sync-graph', label: 'Operator-graph Queries' },
+			{ id: 'sync-actions', label: 'Actions, Jobs & Schedules' },
 			{ id: 'sync-crdt', label: 'CRDT & Collaboration' },
 			{ id: 'sync-frameworks', label: 'Framework Hooks' },
 			{ id: 'sync-adapters', label: 'CRDT Adapters' }
