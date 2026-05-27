@@ -38,6 +38,29 @@ if (action === 'step_up') {
   return status('OK', { status: 'mfa_required' }); // route into the MFA gate
 }
 // action === 'allow' -> promote the session as usual`;
+export const adaptiveStrongFingerprint = `\
+// In the browser — the strong fingerprint client. Same shape as the server-side
+// fingerprintDevice (returns a stable base64url deviceId), but the input is
+// canvas + audio + WebGL + font enumeration + screen geometry instead of a UA
+// string. Sub-100ms, runs on demand, no SDK / no third-party request.
+import { collectDeviceFingerprint } from '@absolutejs/auth/fingerprint-client';
+
+// On your signin page:
+const deviceId = await collectDeviceFingerprint();
+await fetch('/auth/login', {
+  method: 'POST',
+  body: JSON.stringify({ email, password }),
+  headers: {
+    'content-type': 'application/json',
+    'x-client-fingerprint': deviceId
+  }
+});
+
+// On the server, prefer the client-provided id; fall back to fingerprintDevice
+// (User-Agent only) for old clients:
+const deviceId =
+  request.headers.get('x-client-fingerprint') ??
+  await fingerprintDevice({ userAgent: request.headers.get('user-agent') });`;
 export const adaptiveTrust = `\
 // After the user clears the step-up (MFA verified), remember this device so the
 // new_device rule stops firing for it next time:

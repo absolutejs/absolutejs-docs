@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
+	vaultFederatedTokens,
 	vaultRotation,
 	vaultUsage
 } from '../../../../data/documentation/authVaultDocsCode';
@@ -23,6 +24,7 @@ import { DocsNavigation } from '../../DocsNavigation';
 
 const tocItems: TocItem[] = [
 	{ href: '#vault', label: 'Vault' },
+	{ href: '#federated-tokens', label: 'Federated tokens' },
 	{ href: '#rotation', label: 'Key rotation' }
 ];
 
@@ -79,6 +81,33 @@ export const AuthVaultView = ({
 					</p>
 					<PrismPlus
 						codeString={vaultUsage}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="federated-tokens"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Federated tokens
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>createFederatedTokenStore</code> +{' '}
+						<code>getOrRefreshFederatedTokens</code> wrap the vault into
+						Auth0&apos;s &quot;Token Vault&quot;: stash a user&apos;s
+						third-party OAuth tokens (Google Drive, Slack, GitHub) so
+						background jobs and AI agents can call those APIs as the
+						user, with automatic refresh ~30s before expiry. The package
+						never bundles a provider list; you bring the citra{' '}
+						<code>providerInstance</code> you already use for sign-in.
+					</p>
+					<PrismPlus
+						codeString={vaultFederatedTokens}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

@@ -3,6 +3,7 @@ import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	adaptiveEngine,
 	adaptiveLogin,
+	adaptiveStrongFingerprint,
 	adaptiveTrust,
 	adaptiveWeighted
 } from '../../../../data/documentation/authAdaptiveDocsCode';
@@ -27,7 +28,8 @@ const tocItems: TocItem[] = [
 	{ href: '#engine', label: 'Engine & Rules' },
 	{ href: '#assess', label: 'Assess & Act' },
 	{ href: '#trust', label: 'Trusting Devices' },
-	{ href: '#weighted', label: 'Weighted scoring & fingerprint' }
+	{ href: '#weighted', label: 'Weighted scoring & fingerprint' },
+	{ href: '#strong-fingerprint', label: 'Browser fingerprint client' }
 ];
 
 export const AuthAdaptiveView = ({
@@ -163,6 +165,32 @@ export const AuthAdaptiveView = ({
 					</p>
 					<PrismPlus
 						codeString={adaptiveWeighted}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="strong-fingerprint"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Browser fingerprint client
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>@absolutejs/auth/fingerprint-client</code> ships a
+						browser-only <code>collectDeviceFingerprint()</code> that
+						hashes canvas + AudioContext + WebGL + font enumeration +
+						screen geometry into a stable base64url id — the
+						FingerprintJS algorithm set, self-hostable, no SDK and no
+						third-party request. Pair it with the server-side{' '}
+						<code>fingerprintDevice</code> as a fallback for old clients.
+					</p>
+					<PrismPlus
+						codeString={adaptiveStrongFingerprint}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

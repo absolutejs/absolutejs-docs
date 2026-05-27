@@ -113,3 +113,48 @@ await auth<User>({
 
 // Mounts GET /sso/saml/:org/authorize, POST /sso/saml/:org/acs,
 // GET /sso/saml/:org/metadata, and the /logout + /slo Single-Logout endpoints.`;
+export const ssoSamlIdp = `\
+import {
+  auth,
+  createNeonSamlServiceProviderStore,
+  samlIdpRoutes
+} from '@absolutejs/auth';
+
+// SAML 2.0 IdP role — the inverse of ssoSaml. The package is now the issuer of
+// assertions to legacy SaaS relying parties (Salesforce, Workday, Concur — every
+// app older than OIDC that still demands SAML SSO). Same delegation philosophy:
+// you supply a SamlIdpAdapter wrapping a vetted XML-DSig library; the package
+// owns route wiring + SP store + auto-POST form generation.
+const samlServiceProviderStore = createNeonSamlServiceProviderStore(
+  process.env.DATABASE_URL
+);
+await samlServiceProviderStore.saveServiceProvider({
+  entityId: 'https://acme.salesforce.com',
+  acsUrl: 'https://acme.salesforce.com/?so=00D...',
+  certificate: '-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----'
+});
+
+const idpRoutes = samlIdpRoutes<User>({
+  idpAdapter: yourSamlIdpAdapter, // wraps @node-saml/node-saml or samlify
+  idpEntityId: 'https://id.yourapp.com/sso/saml/idp',
+  samlServiceProviderStore,
+  getNameId: (user) => user.email,
+  getSamlAttributes: (user) => ({
+    email: user.email,
+    firstName: user.firstName,
+    groups: user.groups
+  }),
+  loginUrl: '/signin'
+});
+
+// Mounts:
+//   POST {ssoRoute}/saml/idp/sso                    (HTTP-POST binding)
+//   GET  {ssoRoute}/saml/idp/sso                    (HTTP-Redirect binding)
+//   GET  {ssoRoute}/saml/idp/sso/initiate?sp=...    (IdP-initiated SSO — no AuthnRequest)
+//   GET  {ssoRoute}/saml/idp/metadata
+//
+// SP-initiated flow: parse the AuthnRequest twice (first to learn the Issuer,
+// then with the SP's cert to verify the signature). Use the session if present;
+// otherwise redirect to loginUrl with return_to. IdP-initiated flow: the user is
+// already signed in to your app, they pick an SP, and the package POSTs the
+// assertion straight to the SP's ACS URL.`;

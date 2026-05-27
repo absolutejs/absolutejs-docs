@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
+	bulkImport,
 	credentialsRoutes,
 	credentialsSetup,
 	lockoutSetup,
@@ -29,7 +30,8 @@ const tocItems: TocItem[] = [
 	{ href: '#routes', label: 'Routes' },
 	{ href: '#mfa', label: 'Multi-Factor Auth' },
 	{ href: '#step-up', label: 'Step-Up Auth' },
-	{ href: '#lockout', label: 'Account Lockout' }
+	{ href: '#lockout', label: 'Account Lockout' },
+	{ href: '#bulk-import', label: 'Bulk import & legacy hashes' }
 ];
 
 export const AuthCredentialsView = ({
@@ -168,6 +170,35 @@ export const AuthCredentialsView = ({
 					</p>
 					<PrismPlus
 						codeString={lockoutSetup}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="bulk-import"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Bulk import &amp; legacy hashes
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>importUser</code> / <code>importUsers</code> migrate an
+						Auth0, Cognito, or Firebase export in one pass — argon2id
+						and bcrypt hashes verify natively via{' '}
+						<code>Bun.password</code>. Legacy formats (Auth0 PBKDF2,
+						Cognito SHA-256) are recognized by <code>isLegacyHash</code>{' '}
+						and verified by the matching <code>verifyAuth0Pbkdf2</code>{' '}
+						/ <code>verifyCognitoSha256</code>; opt in to{' '}
+						<code>rehashOnLogin</code> and the first successful sign-in
+						silently upgrades the stored hash to argon2id. No forced
+						password reset, no public breach.
+					</p>
+					<PrismPlus
+						codeString={bulkImport}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

@@ -1,3 +1,43 @@
+export const bulkImport = `\
+import {
+  importUsers,
+  isLegacyHash,
+  rehashCredentialPassword,
+  verifyAuth0Pbkdf2,
+  verifyCognitoSha256
+} from '@absolutejs/auth';
+
+// Migrate an Auth0 / Cognito / Firebase export without forcing every user to
+// reset their password. importUsers writes one row per record; argon2id and
+// bcrypt hashes verify natively on next login. Legacy formats (Auth0 PBKDF2,
+// Cognito SHA-256) are recognized by the isLegacyHash wrapper and verified by
+// the matching legacy verifier; rehashOnLogin upgrades them to argon2id the
+// first time the user signs in.
+const result = await importUsers(records, {
+  credentialStore: createNeonCredentialStore(process.env.DATABASE_URL),
+  onCreateUser: ({ email, fields }) => createUser({ email, ...fields }),
+  // Optional: detect + verify legacy formats (no rehash needed at import time).
+  passwordVerifier: async (password, hash) => {
+    if (hash.startsWith('auth0_pbkdf2:')) return verifyAuth0Pbkdf2(password, hash);
+    if (hash.startsWith('cognito_sha256:')) return verifyCognitoSha256(password, hash);
+    return Bun.password.verify(password, hash);
+  }
+});
+console.info(\`imported \${result.imported}, skipped \${result.skipped}\`);
+
+// On the credentials block, opt in to silent upgrade-on-login:
+credentials: {
+  // ...the rest of your credentials config
+  passwordVerifier: async (password, hash) => {
+    if (isLegacyHash(hash)) {
+      return hash.startsWith('auth0_pbkdf2:')
+        ? verifyAuth0Pbkdf2(password, hash)
+        : verifyCognitoSha256(password, hash);
+    }
+    return Bun.password.verify(password, hash);
+  },
+  rehashOnLogin: true // calls rehashCredentialPassword behind the scenes
+}`;
 export const credentialsRoutes = `\
 // The credentials block mounts these routes (transparent to protectRoute):
 POST /auth/register                 { email, password, ...extraFields }

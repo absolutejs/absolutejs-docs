@@ -6,7 +6,8 @@ import {
 	ssoConnections,
 	ssoDiscovery,
 	ssoOidc,
-	ssoSaml
+	ssoSaml,
+	ssoSamlIdp
 } from '../../../../data/documentation/authSsoDocsCode';
 import {
 	h1Style,
@@ -29,6 +30,7 @@ const tocItems: TocItem[] = [
 	{ href: '#connections', label: 'Connections' },
 	{ href: '#oidc', label: 'OIDC' },
 	{ href: '#saml', label: 'SAML' },
+	{ href: '#saml-idp', label: 'SAML IdP role' },
 	{ href: '#discovery', label: 'Discovery & SLO' },
 	{ href: '#scim', label: 'SCIM Provisioning' },
 	{ href: '#portal', label: 'Admin Portal' }
@@ -132,6 +134,33 @@ export const AuthSsoView = ({
 					</p>
 					<PrismPlus
 						codeString={ssoSaml}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="saml-idp"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						SAML IdP role
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The inverse of the SP role: your app issues SAML assertions
+						to legacy SaaS RPs (Salesforce, Workday, Concur — anything
+						older than OIDC). Register each relying party in the{' '}
+						<code>samlServiceProviderStore</code>; mount{' '}
+						<code>samlIdpRoutes</code> with a{' '}
+						<code>SamlIdpAdapter</code> that wraps the same vetted
+						XML-DSig library the SP role uses. Both SP-initiated (via
+						AuthnRequest) and IdP-initiated SSO are supported.
+					</p>
+					<PrismPlus
+						codeString={ssoSamlIdp}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

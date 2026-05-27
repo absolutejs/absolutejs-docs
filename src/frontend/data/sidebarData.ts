@@ -83,6 +83,7 @@ import { AuthMultiSessionView } from '../components/documentation/packages/auth/
 import { AuthOidcProviderView } from '../components/documentation/packages/auth/AuthOidcProviderView';
 import { AuthOrganizationsView } from '../components/documentation/packages/auth/AuthOrganizationsView';
 import { AuthPasswordlessView } from '../components/documentation/packages/auth/AuthPasswordlessView';
+import { AuthPluginsView } from '../components/documentation/packages/auth/AuthPluginsView';
 import { AuthSsoView } from '../components/documentation/packages/auth/AuthSsoView';
 import { AuthVaultView } from '../components/documentation/packages/auth/AuthVaultView';
 import { EslintRuleView } from '../components/documentation/packages/eslint/EslintRuleView';
@@ -169,6 +170,7 @@ export const docsViews = definePortalViews({
 	'auth-oidc-provider': AuthOidcProviderView,
 	'auth-organizations': AuthOrganizationsView,
 	'auth-passwordless': AuthPasswordlessView,
+	'auth-plugins': AuthPluginsView,
 	'auth-sso': AuthSsoView,
 	'auth-vault': AuthVaultView,
 	'build-and-manifest': BuildManifestView,
@@ -489,6 +491,7 @@ export const sidebarData: MenuItem[] = [
 					},
 					{ id: 'auth-actions', label: 'Actions Pipeline' },
 					{ id: 'auth-vault', label: 'Vault' },
+					{ id: 'auth-plugins', label: 'First-party Plugins' },
 					{ id: 'auth-client', label: 'Client SDK & Hooks' }
 				],
 				id: 'absolute-auth',
