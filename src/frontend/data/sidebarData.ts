@@ -68,6 +68,24 @@ import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { IsolatedJscProofPackView } from '../components/documentation/packages/IsolatedJscProofPackView';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
+import {
+	VoiceAdapterContractsView,
+	VoiceAdaptersView,
+	VoiceApiReferenceView,
+	VoiceAssistantsToolsView,
+	VoiceClientFrameworksView,
+	VoiceComparisonView,
+	VoiceEcosystemView,
+	VoiceOpsProofView,
+	VoiceOverviewView,
+	VoiceRouteSurfacesView,
+	VoiceRuntimeView,
+	VoiceTesterDiscordView,
+	VoiceTesterScenariosView,
+	VoiceTesterView,
+	VoiceStorageTestingView,
+	VoiceTelephonyView
+} from '../components/documentation/packages/VoicePackageView';
 import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
 import { AuthAbuseView } from '../components/documentation/packages/auth/AuthAbuseView';
 import { AuthActionsView } from '../components/documentation/packages/auth/AuthActionsView';
@@ -254,11 +272,11 @@ export const docsViews = definePortalViews({
 	'htmx-overview': HTMXOverviewView,
 	'image-optimization': ImageOptimizationView,
 	info: InfoView,
-	'isolated-jsc': IsolatedJscProofPackView,
 	inspect: InspectView,
 	installation: InstallationView,
 	islands: IslandsView,
 	'islands-cli': IslandsCliView,
+	'isolated-jsc': IsolatedJscProofPackView,
 	'loading-states': LoadingStatesView,
 	logs: LogsView,
 	ls: LsView,
@@ -308,6 +326,22 @@ export const docsViews = definePortalViews({
 	'type-safety': TypeSafetyView,
 	typecheck: TypecheckView,
 	types: TypesView,
+	voice: VoiceOverviewView,
+	'voice-adapter-contracts': VoiceAdapterContractsView,
+	'voice-adapters': VoiceAdaptersView,
+	'voice-api-reference': VoiceApiReferenceView,
+	'voice-assistants-tools': VoiceAssistantsToolsView,
+	'voice-client-frameworks': VoiceClientFrameworksView,
+	'voice-comparison': VoiceComparisonView,
+	'voice-ecosystem': VoiceEcosystemView,
+	'voice-ops-proof': VoiceOpsProofView,
+	'voice-route-surfaces': VoiceRouteSurfacesView,
+	'voice-runtime': VoiceRuntimeView,
+	'voice-storage-testing': VoiceStorageTestingView,
+	'voice-telephony': VoiceTelephonyView,
+	'voice-tester': VoiceTesterView,
+	'voice-tester-discord': VoiceTesterDiscordView,
+	'voice-tester-scenarios': VoiceTesterScenariosView,
 	'vue-ai': VueAIView,
 	'vue-components': VueComponentsView,
 	'vue-islands': VueIslandsView,
@@ -539,6 +573,42 @@ export const sidebarData: MenuItem[] = [
 				label: 'Absolute Auth'
 			},
 			{ id: 'citra', label: 'Citra' },
+			{
+				buttons: [
+					{ id: 'voice-ecosystem', label: 'Ecosystem' },
+					{ id: 'voice-comparison', label: 'Comparison' },
+					{ id: 'voice-runtime', label: 'Runtime' },
+					{ id: 'voice-adapters', label: 'Adapters' },
+					{
+						id: 'voice-adapter-contracts',
+						label: 'Adapter Contracts'
+					},
+					{ id: 'voice-route-surfaces', label: 'Route Surfaces' },
+					{
+						id: 'voice-assistants-tools',
+						label: 'Assistants & Tools'
+					},
+					{ id: 'voice-telephony', label: 'Telephony' },
+					{ id: 'voice-ops-proof', label: 'Ops & Proof' },
+					{
+						id: 'voice-client-frameworks',
+						label: 'Client & Frameworks'
+					},
+					{ id: 'voice-tester', label: 'Tester' },
+					{
+						id: 'voice-tester-scenarios',
+						label: 'Tester Scenarios'
+					},
+					{
+						id: 'voice-tester-discord',
+						label: 'Discord Testing'
+					},
+					{ id: 'voice-storage-testing', label: 'Storage & Testing' },
+					{ id: 'voice-api-reference', label: 'API Reference' }
+				],
+				id: 'voice',
+				label: 'Voice'
+			},
 			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
 			{ id: 'isolated-jsc', label: 'isolated-jsc 0.7.0' },
 			{
