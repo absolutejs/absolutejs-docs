@@ -470,7 +470,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'sync-sandbox', label: 'Sandboxed Mutations' },
 			{ id: 'sync-frameworks', label: 'Framework Hooks' },
 			{ id: 'sync-adapters', label: 'CRDT Adapters' },
-			{ id: 'sync-launch', label: '1.7.9 Launch' },
+			{ id: 'sync-launch', label: '1.8.0 Update' },
 			{ id: 'sync-vs-convex', label: 'vs Convex' },
 			{ id: 'sync-vs-firebase', label: 'vs Firebase' },
 			{ id: 'sync-we-heard-you', label: 'We Heard You' }

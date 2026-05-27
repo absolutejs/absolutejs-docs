@@ -1,3 +1,4 @@
+/* eslint-disable absolute/max-jsxnesting */
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
@@ -20,53 +21,71 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { DocsNavigation } from '../DocsNavigation';
+import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
-	{ href: '#sync-179-launch', label: 'Sync 1.7.9 launch' },
+	{ href: '#sync-180-update', label: 'Sync 1.8.0 update' },
 	{ href: '#what-shipped', label: 'What shipped' },
+	{ href: '#tanstack-db', label: 'TanStack DB adapter' },
 	{ href: '#benchmarks', label: 'Benchmarks' },
 	{ href: '#why-it-matters', label: 'Why it matters' },
 	{ href: '#start-here', label: 'Start here' }
 ];
 
-const shippedItems = [
+const tanstackDbExample =
+	'import { createCollection } from "@tanstack/db";\nimport { createSyncTanStackCollectionOptions } from "@absolutejs/sync/tanstack-db";\n\ntype Order = { id: string; total: number; status: string };\n\nconst orders = createCollection(\n\tcreateSyncTanStackCollectionOptions<Order>({\n\t\tid: "orders",\n\t\turl: "ws://localhost:3000/sync/ws",\n\t\tcollection: "orders",\n\t\tgetKey: (order) => order.id,\n\t\tmutations: {\n\t\t\tinsert: "createOrder",\n\t\t\tupdate: "updateOrder",\n\t\t\tdelete: "deleteOrder"\n\t\t}\n\t})\n);';
+
+type ShippedItem = {
+	feature: string;
+	packageName: string;
+	result: string;
+	version: string;
+};
+
+const shippedItems: ShippedItem[] = [
 	{
-		packageName: '@absolutejs/ai',
-		version: '0.0.12',
 		feature: 'Code Mode host tools',
-		result: 'Expose one run_code tool with typed TypeScript signatures for host capabilities, so an agent can chain multiple calls inside one sandboxed function.'
+		packageName: '@absolutejs/ai',
+		result: 'Expose one run_code tool with typed TypeScript signatures for host capabilities, so an agent can chain multiple calls inside one sandboxed function.',
+		version: '0.0.12'
 	},
 	{
-		packageName: '@absolutejs/sync',
-		version: '1.7.6',
 		feature: 'Handler metrics',
-		result: 'Capture per-call duration, CPU, heap, success, and error data for sandboxed mutations without letting telemetry failures break user traffic.'
+		packageName: '@absolutejs/sync',
+		result: 'Capture per-call duration, CPU, heap, success, and error data for sandboxed mutations without letting telemetry failures break user traffic.',
+		version: '1.7.6'
 	},
 	{
-		packageName: '@absolutejs/sync',
-		version: '1.7.7',
 		feature: 'actions.now()',
-		result: 'Move mutation time reads behind an engine-controlled API, setting up deterministic replay and optimistic rebase work.'
+		packageName: '@absolutejs/sync',
+		result: 'Move mutation time reads behind an engine-controlled API, setting up deterministic replay and optimistic rebase work.',
+		version: '1.7.7'
 	},
 	{
-		packageName: '@absolutejs/sync',
-		version: '1.7.8',
 		feature: 'bridgeFetch',
-		result: 'Let sandboxed mutations call allowlisted HTTP APIs while the host injects credentials that never enter the sandbox.'
-	},
-	{
 		packageName: '@absolutejs/sync',
-		version: '1.7.9',
-		feature: 'MCP server',
-		result: 'Expose collections, mutations, snapshots, inspection, and mutation runs through @absolutejs/sync/mcp for MCP-aware clients.'
+		result: 'Let sandboxed mutations call allowlisted HTTP APIs while the host injects credentials that never enter the sandbox.',
+		version: '1.7.8'
 	},
 	{
-		packageName: '@absolutejs/isolated-jsc',
-		version: '0.6.0',
+		feature: 'MCP server',
+		packageName: '@absolutejs/sync',
+		result: 'Expose collections, mutations, snapshots, inspection, and mutation runs through @absolutejs/sync/mcp for MCP-aware clients.',
+		version: '1.7.9'
+	},
+	{
+		feature: 'TanStack DB adapter',
+		packageName: '@absolutejs/sync',
+		result: 'Add @absolutejs/sync/tanstack-db so TanStack DB can own the client collection graph while Absolute Sync supplies the live transport and server mutations.',
+		version: '1.8.0'
+	},
+	{
 		feature: 'Context.compileCallable',
-		result: 'Compile a sandboxed function once and call it repeatedly, which became the hot path for sync sandboxedHandler.'
+		packageName: '@absolutejs/isolated-jsc',
+		result: 'Compile a sandboxed function once and call it repeatedly, which became the hot path for sync sandboxedHandler.',
+		version: '0.6.0'
 	}
 ];
 
@@ -93,16 +112,16 @@ export const SyncLaunchView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="sync-179-launch" style={h1Style(isMobileOrTablet)}>
-						Sync 1.7.9 Launch
+					<h1 id="sync-180-update" style={h1Style(isMobileOrTablet)}>
+						Sync 1.8.0 Strategic Update
 					</h1>
 					<p style={paragraphLargeStyle}>
-						This release batch turns the competitive sync-engine
-						complaints we keep hearing into shipped surface area:
-						correct reconnect catch-up, fast in-process sandboxes,
-						sandboxed user mutations, credential-brokered HTTP,
-						per-call metrics, MCP access, and Code Mode for AI
-						tools.
+						Sync is not in broad launch mode yet. The 1.8.0 update
+						is a strategic integration release: keep the hard-won
+						engine work from 1.7.9, then plug it into TanStack DB so
+						teams can use TanStack&apos;s client-side collection
+						graph with Absolute Sync as the live,
+						server-authoritative transport.
 					</p>
 				</animated.div>
 
@@ -116,9 +135,11 @@ export const SyncLaunchView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The batch spans three packages because the sync story
-						now includes the engine, the sandbox runtime underneath
-						it, and the AI tooling that can drive it.
+						The current release arc spans three packages because the
+						sync story now includes the engine, the sandbox runtime
+						underneath it, the AI tooling that can drive it, and a
+						TanStack DB adapter for apps that already want TanStack
+						on the client.
 					</p>
 					<div style={tableContainerStyle}>
 						<animated.table style={tableStyle(themeSprings)}>
@@ -168,6 +189,38 @@ export const SyncLaunchView = ({
 							</tbody>
 						</animated.table>
 					</div>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="tanstack-db"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						TanStack DB adapter
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The new <code>@absolutejs/sync/tanstack-db</code>{' '}
+						subpath returns TanStack DB collection options. TanStack
+						DB owns local collection queries and reactivity;
+						Absolute Sync owns WebSocket catch-up, reconnect,
+						server-authoritative mutations, offline mutation replay,
+						and optional local-first read cache.
+					</p>
+					<PrismPlus
+						codeString={tanstackDbExample}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						<code>@tanstack/db</code> is optional and pinned to{' '}
+						<code>&gt;= 0.6.7 &lt;0.7</code> because the TanStack DB
+						API is still pre-1.0. The adapter accepts string or
+						number keys, matching TanStack DB&apos;s current key
+						surface.
+					</p>
 				</section>
 
 				<section style={sectionStyle}>
