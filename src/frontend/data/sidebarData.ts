@@ -66,6 +66,7 @@ import { QuickstartView } from '../components/documentation/getting-started/Quic
 import { Overview } from '../components/documentation/overview/OverviewView';
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
+import { IsolatedJscProofPackView } from '../components/documentation/packages/IsolatedJscProofPackView';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import { AbsoluteAuthView } from '../components/documentation/packages/auth/AbsoluteAuthView';
 import { AuthAbuseView } from '../components/documentation/packages/auth/AuthAbuseView';
@@ -253,6 +254,7 @@ export const docsViews = definePortalViews({
 	'htmx-overview': HTMXOverviewView,
 	'image-optimization': ImageOptimizationView,
 	info: InfoView,
+	'isolated-jsc': IsolatedJscProofPackView,
 	inspect: InspectView,
 	installation: InstallationView,
 	islands: IslandsView,
@@ -538,6 +540,7 @@ export const sidebarData: MenuItem[] = [
 			},
 			{ id: 'citra', label: 'Citra' },
 			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
+			{ id: 'isolated-jsc', label: 'isolated-jsc 0.7.0' },
 			{
 				buttons: [
 					{
