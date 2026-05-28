@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-0811', label: '0.8.11 proof pack' },
+	{ href: '#isolated-jsc-0812', label: '0.8.12 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
@@ -194,6 +194,7 @@ receipt.capabilityCallsDropped;    // number of audit events not retained
 receipt.capabilityCallsTruncated;  // true when the audit buffer overflowed
 receipt.console.truncated;         // true when console capture overflowed
 receipt.error?.code;               // machine-readable failure, when present
+receipt.schemaVersion;             // 1 — stable receipt schema marker
 receipt.outputBytes;               // estimated successful-result bytes`;
 
 export const IsolatedJscProofPackView = ({
@@ -219,8 +220,8 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-0811" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.8.11 Proof Pack
+					<h1 id="isolated-jsc-0812" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.8.12 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
 						This is still not broad launch mode. The 0.8.x line
@@ -243,7 +244,7 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.8.11</code> keeps the proof pack but adds
+						Version <code>0.8.12</code> keeps the proof pack but adds
 						the API shape services actually want: choose a policy,
 						run one-off source with <code>runIsolated()</code>,
 						create a pooled <code>createIsolatedRunner()</code>,
@@ -322,7 +323,11 @@ export const IsolatedJscProofPackView = ({
 						<code>CAPABILITY_OUTPUT_SIZE_LIMIT</code>.
 						Version <code>0.8.11</code> carries the same capability
 						error metadata through the FFI backend, including host{' '}
-						<code>Reference</code> throws and async rejections.
+						<code>Reference</code> throws and async rejections. Version{' '}
+						<code>0.8.12</code> adds <code>schemaVersion: 1</code>{' '}
+						to capability manifest entries and execution receipts
+						so apps can persist and parse these audit records
+						against an explicit stable schema.
 					</p>
 					<PrismPlus
 						codeString={receiptLimitsCode}
