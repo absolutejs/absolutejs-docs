@@ -243,8 +243,9 @@ export const SyncSandboxView = ({
 						picks FFI when <code>libJavaScriptCore</code> is
 						reachable and Worker otherwise. Both backends now
 						run the same precompiled-function dispatch hot path
-						(<code>Context.compileCallable</code>, added in{' '}
-						isolated-jsc 0.6), so the choice trades:
+						(<code>Context.compileCallable</code>, now surfaced by{' '}
+						<code>createIsolatedRunner().call()</code> in
+						isolated-jsc 0.8), so the choice trades:
 					</p>
 					<ul
 						style={{
@@ -298,7 +299,7 @@ export const SyncSandboxView = ({
 						<code>benchmarks/sync/scripts/bench-sandbox.ts</code>
 						{' '}on WSL2, Bun 1.3.14, against{' '}
 						<code>@absolutejs/sync@1.7.5</code> +{' '}
-						<code>@absolutejs/isolated-jsc@0.6.0</code>.
+						<code>@absolutejs/isolated-jsc@0.8.0</code>.
 					</p>
 					<PrismPlus
 						codeString={syncSandboxBenchTable}

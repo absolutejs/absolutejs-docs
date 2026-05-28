@@ -64,7 +64,7 @@ sudo apt install libjavascriptcoregtk-4.1-0   # Ubuntu/Debian
 sudo apt install libjavascriptcoregtk-6.0-1   # newer distros`;
 
 export const syncSandboxBenchTable = `\
-warm-dispatch p50 (sync 1.7.5 + isolated-jsc 0.6.0, WSL2, Bun 1.3.14):
+warm-dispatch p50 (sync 1.7.5 + isolated-jsc 0.8.0, WSL2, Bun 1.3.14):
 
   Lane                  Worker     FFI      ops/sec (best)
   --------------------- --------- --------- --------------
@@ -81,9 +81,9 @@ with many awaited actions per call.`;
 export const syncSandboxArchitecture = `\
 // What the engine does the first time a sandboxedHandler mutation runs:
 //
-//   1. createIsolate({ backend, memoryLimit })
-//      → spawns the JSC VM (Bun Worker on Worker backend, libJSC via
-//        bun:ffi on FFI backend).
+//   1. createIsolatedRunner({ policy, pool })
+//      → creates a keyed pool of JSC VMs (Bun Worker on Worker backend,
+//        libJSC via bun:ffi on FFI backend).
 //
 //   2. createContext()
 //      → fresh global scope, hardened (no fetch, Bun, process, …).
@@ -94,8 +94,9 @@ export const syncSandboxArchitecture = `\
 //        a per-call integer callId. Concurrent calls are safe because
 //        each has its own callId → its own actions slot.
 //
-//   4. compileCallable(wrappedSource)
-//      → compiles ONCE. The compiled function takes (callId, args, ctx)
+//   4. runner.precompile(name, wrappedSource, { key })
+//      → compiles ONCE per tenant/mutation key. The compiled function takes
+//        (callId, args, ctx)
 //        and builds the in-VM actions shim that dispatches through
 //        __dispatch with its callId.
 //
@@ -104,7 +105,10 @@ export const syncSandboxArchitecture = `\
 //   const callId = nextCallId++;
 //   callMap.set(callId, actions);
 //   try {
-//     return await callable.call([callId, args, ctx], { timeout });
+//     return await runner.call(name, wrappedSource, [callId, args, ctx], {
+//       key,
+//       run: { timeout },
+//     });
 //   } finally {
 //     callMap.delete(callId);
 //   }

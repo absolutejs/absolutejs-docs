@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-073', label: '0.7.3 proof pack' },
+	{ href: '#isolated-jsc-080', label: '0.8.0 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
 	{ href: '#example', label: 'Agent tool example' },
@@ -63,6 +63,10 @@ const shippedItems: Array<{ feature: string; result: string }> = [
 	{
 		feature: 'Agent-tool example',
 		result: 'A runnable demo combining TypeScript callables, brokered tools, tenant context, metrics, and audit events.'
+	},
+	{
+		feature: 'Policy presets + runners',
+		result: 'Product-ready presets for AI tools, tenant scripts, plugins, and trusted code, plus one-shot and pooled runner APIs for request paths.'
 	}
 ];
 
@@ -70,9 +74,8 @@ const installCode = `bun add @absolutejs/isolated-jsc
 bunx @absolutejs/isolated-jsc`;
 
 const agentToolCode = `import {
-  compileTypeScriptCallable,
   createCapabilityBroker,
-  createIsolate,
+  createIsolatedRunner,
   defineCapabilityTool
 } from "@absolutejs/isolated-jsc";
 
@@ -107,18 +110,26 @@ const broker = createCapabilityBroker(
 // Direct host calls infer Order | null from the tool map.
 const order = await broker.call("lookupOrder", { id: "ord_123" });
 
-const isolate = await createIsolate({ memoryLimit: 256 });
-const context = await isolate.createContext();
+const runner = createIsolatedRunner({
+  policy: "ai-tool",
+  pool: { maxSize: 64, idleMs: 60_000 },
+});
 
-const agent = await compileTypeScriptCallable(
-  context,
-  'async (tools, orderId) => await tools("lookupOrder", { id: orderId })'
+await runner.precompile(
+  "agentLookup",
+  'async (tools, orderId) => await tools("lookupOrder", { id: orderId })',
+  { key: "tenant_acme" }
 );
 
-const { result, metrics } = await agent.callWithMetrics(
+const { result, metrics } = await runner.call(
+  "agentLookup",
+  'async (tools, orderId) => await tools("lookupOrder", { id: orderId })',
   [broker.reference, "ord_123"],
-  { timeout: 500 }
-);`;
+  { key: "tenant_acme", withMetrics: true }
+);
+
+const stats = runner.stats();
+await runner.dispose();`;
 
 export const IsolatedJscProofPackView = ({
 	currentPageId,
@@ -143,16 +154,16 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-073" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.7.3 Proof Pack
+					<h1 id="isolated-jsc-080" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.8.0 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
-						This is not broad launch mode. The 0.7.2 line is a
-						proof-pack update for the Bun isolation wedge: give Bun
-						apps an isolated-vm-shaped JavaScriptCore path for
-						tenant scripts, AI-generated code, and plugin execution
-						without leaving the Bun runtime, with typed capability
-						tools that are easier to adopt safely.
+						This is still not broad launch mode. The 0.8.0 line
+						moves isolated-jsc from raw isolate primitives toward a
+						product API for the Bun isolation wedge: policy presets,
+						one-shot execution, pooled keyed runners, precompiled
+						callables, and cache observability for tenant scripts,
+						AI-generated code, and plugin execution.
 					</p>
 				</animated.div>
 
@@ -166,17 +177,13 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.7.3</code> keeps the package moving from
-						a raw isolate primitive toward an adoption-ready proof
-						pack: benchmarks, migration framing, security guidance,
-						TypeScript execution, safer host tools, diagnostics, and
-						a runnable agent example. The <code>0.7.1</code> and{' '}
-						<code>0.7.2</code> patch releases added the typed
-						capability helper and typed <code>broker.call()</code>
-						returns on top of that proof pack; <code>
-							0.7.3
-						</code>{' '}
-						packages the changelog and release history.
+						Version <code>0.8.0</code> keeps the proof pack but adds
+						the API shape services actually want: choose a policy,
+						run one-off source with <code>runIsolated()</code>, or
+						create a pooled <code>createIsolatedRunner()</code>,
+						warm hot functions with <code>precompile()</code>, call
+						them repeatedly with <code>call()</code>, and inspect
+						cache growth with <code>stats()</code>.
 					</p>
 					<div style={tableContainerStyle}>
 						<animated.table style={tableStyle(themeSprings)}>
