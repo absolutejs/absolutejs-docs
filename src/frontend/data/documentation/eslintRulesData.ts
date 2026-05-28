@@ -1200,6 +1200,71 @@ const Build = () => {
 		category: 'Code Quality',
 		correct: [
 			{
+				code: `try {
+	await save();
+} catch (error) {
+	throw error;
+}`,
+				label: 'Rethrow the error'
+			},
+			{
+				code: `try {
+	await save();
+} catch (error) {
+	console.error(error);
+	return null;
+}`,
+				label: 'Handle or record the failure'
+			},
+			{
+				code: `try {
+	await save();
+} catch (error) {
+	failed = true;
+}`
+			}
+		],
+		details: [
+			'Disallows `catch` blocks that do not do real work. Core ESLint’s `no-empty` rule allows comment-only blocks, which makes it easy for generated code to silence an error path with `// ignore` while still swallowing the exception. This rule treats comments as non-work and requires the catch body to handle, propagate, or record the failure.',
+			'The rule reports empty blocks, comment-only blocks, `EmptyStatement`s, and expression statements with no side effect such as `error;`, `error.message;`, or `void error;`. It allows statements that change control flow or have observable effects: `throw`, `return`, function calls, assignments, updates, declarations, and other real statements.'
+		],
+		fixable: false,
+		id: 'eslint-no-useless-catch',
+		incorrect: [
+			{
+				code: `try {
+	await save();
+} catch (error) {
+	// ignore
+}`
+			},
+			{
+				code: `try {
+	await save();
+} catch (error) {
+	error;
+	error.message;
+	void error;
+}`,
+				label: 'No-op expressions are not handling'
+			}
+		],
+		language: 'typescript',
+		name: 'no-useless-catch',
+		options: [],
+		problemType: 'problem',
+		related: ['no-useless-function'],
+		requiresTypeInfo: false,
+		summary:
+			'Disallow catch blocks that contain only comments or no-op statements.',
+		whenNotToUse: [
+			'If a boundary intentionally swallows a failure, still prefer a real statement that records the decision, returns a fallback, or rethrows a wrapped error. Disable the rule only for code where silent failure is an explicit API contract.'
+		]
+	},
+	{
+		category: 'Code Quality',
+		correct: [
+			{
 				code: `// Export the object directly
 export const springConfig = { tension: 200, friction: 20 };
 

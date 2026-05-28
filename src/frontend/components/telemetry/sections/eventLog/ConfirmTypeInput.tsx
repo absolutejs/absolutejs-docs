@@ -35,8 +35,8 @@ export const ConfirmTypeInput = ({
 					() => setCopied(false),
 					TELEMETRY_CONFIRM_INPUT_LAYOUT.copyFeedbackDurationMs
 				);
-			} catch {
-				// Clipboard access can fail outside secure contexts.
+			} catch (error) {
+				console.warn('Failed to copy confirmation text.', error);
 			}
 		};
 

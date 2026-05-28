@@ -252,6 +252,7 @@ export const docsViews = definePortalViews({
 	'eslint-no-trivial-alias': EslintRuleView,
 	'eslint-no-unnecessary-div': EslintRuleView,
 	'eslint-no-unnecessary-key': EslintRuleView,
+	'eslint-no-useless-catch': EslintRuleView,
 	'eslint-no-useless-function': EslintRuleView,
 	'eslint-prefer-inline-exports': EslintRuleView,
 	'eslint-prettier': EslintPrettierView,
@@ -277,8 +278,8 @@ export const docsViews = definePortalViews({
 	installation: InstallationView,
 	islands: IslandsView,
 	'islands-cli': IslandsCliView,
-	'isolated-jsc-bun': IsolatedJscBunPositioningView,
 	'isolated-jsc': IsolatedJscProofPackView,
+	'isolated-jsc-bun': IsolatedJscBunPositioningView,
 	'loading-states': LoadingStatesView,
 	logs: LogsView,
 	ls: LsView,
@@ -695,6 +696,10 @@ export const sidebarData: MenuItem[] = [
 					{
 						id: 'eslint-no-unnecessary-key',
 						label: 'no-unnecessary-key'
+					},
+					{
+						id: 'eslint-no-useless-catch',
+						label: 'no-useless-catch'
 					},
 					{
 						id: 'eslint-no-useless-function',

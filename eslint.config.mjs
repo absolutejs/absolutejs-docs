@@ -87,6 +87,7 @@ export default defineConfig([
 				{ allowedVars: ['_', 'id', 'db', 'OK', 'ws'], minLength: 3 }
 			],
 			'absolute/no-explicit-return-type': 'error',
+			'absolute/no-useless-catch': 'error',
 			'absolute/no-useless-function': 'error',
 			'absolute/sort-exports': [
 				'error',

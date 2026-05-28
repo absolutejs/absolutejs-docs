@@ -152,8 +152,8 @@ export const EventLogSection = ({
 						return next;
 					});
 				}, TELEMETRY_EVENT_LOG_LAYOUT.copyFeedbackDurationMs);
-			} catch {
-				// Clipboard access can fail outside secure contexts.
+			} catch (error) {
+				console.warn('Failed to copy telemetry event log cell.', error);
 			}
 		};
 
