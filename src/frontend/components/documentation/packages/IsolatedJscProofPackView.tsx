@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-072', label: '0.7.2 proof pack' },
+	{ href: '#isolated-jsc-073', label: '0.7.3 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
 	{ href: '#example', label: 'Agent tool example' },
@@ -143,8 +143,8 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-072" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.7.2 Proof Pack
+					<h1 id="isolated-jsc-073" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.7.3 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
 						This is not broad launch mode. The 0.7.2 line is a
@@ -166,14 +166,17 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.7.2</code> moves the package from a raw
-						isolate primitive toward an adoption-ready proof pack:
-						benchmarks, migration framing, security guidance,
+						Version <code>0.7.3</code> keeps the package moving from
+						a raw isolate primitive toward an adoption-ready proof
+						pack: benchmarks, migration framing, security guidance,
 						TypeScript execution, safer host tools, diagnostics, and
 						a runnable agent example. The <code>0.7.1</code> and{' '}
-						<code>0.7.2</code> patch releases add the typed
+						<code>0.7.2</code> patch releases added the typed
 						capability helper and typed <code>broker.call()</code>
-						returns on top of that proof pack.
+						returns on top of that proof pack; <code>
+							0.7.3
+						</code>{' '}
+						packages the changelog and release history.
 					</p>
 					<div style={tableContainerStyle}>
 						<animated.table style={tableStyle(themeSprings)}>
@@ -226,6 +229,13 @@ export const IsolatedJscProofPackView = ({
 						<code>@absolutejs/isolated-jsc</code> makes untrusted
 						TypeScript and JavaScript execution embeddable inside
 						Bun.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						For the deeper market and objection-handling frame, see{' '}
+						<a href="/documentation/isolated-jsc-bun">
+							isolated-jsc for Bun
+						</a>
+						.
 					</p>
 					<ul style={listStyle}>
 						<li style={listItemStyle}>

@@ -66,6 +66,7 @@ import { QuickstartView } from '../components/documentation/getting-started/Quic
 import { Overview } from '../components/documentation/overview/OverviewView';
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
+import { IsolatedJscBunPositioningView } from '../components/documentation/packages/IsolatedJscBunPositioningView';
 import { IsolatedJscProofPackView } from '../components/documentation/packages/IsolatedJscProofPackView';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import {
@@ -276,6 +277,7 @@ export const docsViews = definePortalViews({
 	installation: InstallationView,
 	islands: IslandsView,
 	'islands-cli': IslandsCliView,
+	'isolated-jsc-bun': IsolatedJscBunPositioningView,
 	'isolated-jsc': IsolatedJscProofPackView,
 	'loading-states': LoadingStatesView,
 	logs: LogsView,
@@ -610,7 +612,8 @@ export const sidebarData: MenuItem[] = [
 				label: 'Voice'
 			},
 			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
-			{ id: 'isolated-jsc', label: 'isolated-jsc 0.7.2' },
+			{ id: 'isolated-jsc', label: 'isolated-jsc 0.7.3' },
+			{ id: 'isolated-jsc-bun', label: 'isolated-jsc for Bun' },
 			{
 				buttons: [
 					{
