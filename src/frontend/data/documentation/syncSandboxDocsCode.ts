@@ -64,7 +64,7 @@ sudo apt install libjavascriptcoregtk-4.1-0   # Ubuntu/Debian
 sudo apt install libjavascriptcoregtk-6.0-1   # newer distros`;
 
 export const syncSandboxBenchTable = `\
-warm-dispatch p50 (sync 1.7.5 + isolated-jsc 0.8.0, WSL2, Bun 1.3.14):
+warm-dispatch p50 (sync 1.7.5 + isolated-jsc 0.8.x, WSL2, Bun 1.3.14):
 
   Lane                  Worker     FFI      ops/sec (best)
   --------------------- --------- --------- --------------

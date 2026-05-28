@@ -185,8 +185,9 @@ export const IsolatedJscBunPositioningView = ({
 						Workers are the portable substrate and fallback backend.
 						This package adds the sandbox product layer: hardened
 						globals, heap limits, timeouts, metrics, error fidelity,
-						TypeScript helpers, pools, and explicit host capability
-						brokers.
+						TypeScript helpers, pools, execution receipts, output
+						limits, and explicit host capability brokers with
+						manifests, redaction, and bounded audit buffers.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						<span style={strongStyle}>
@@ -336,7 +337,8 @@ export const IsolatedJscBunPositioningView = ({
 						Workers are the portable substrate and fallback path.
 						The product layer adds hardened globals, memory limits,
 						timeout behavior, error fidelity, TypeScript helpers,
-						and capability brokers.
+						execution receipts, result and console limits, and
+						capability brokers with redacted bounded audit events.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						<span style={strongStyle}>
@@ -365,8 +367,9 @@ export const IsolatedJscBunPositioningView = ({
 						<span style={strongStyle}>Expanded:</span> Run untrusted
 						JavaScript and TypeScript inside a bounded
 						JavaScriptCore isolate, from a Bun host, with explicit
-						capability brokering instead of ambient <code>Bun</code>
-						/<code>process</code> access.
+						capability brokering, redacted receipts, and bounded
+						outputs instead of ambient <code>Bun</code>/
+						<code>process</code> access.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						<span style={strongStyle}>Security:</span> Use FFI for

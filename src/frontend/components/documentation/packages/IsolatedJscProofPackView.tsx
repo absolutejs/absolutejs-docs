@@ -26,8 +26,9 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-080', label: '0.8.0 proof pack' },
+	{ href: '#isolated-jsc-088', label: '0.8.8 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
+	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
 	{ href: '#example', label: 'Agent tool example' },
 	{ href: '#decision-guide', label: 'Decision guide' },
@@ -54,7 +55,15 @@ const shippedItems: Array<{ feature: string; result: string }> = [
 	},
 	{
 		feature: 'Capability broker',
-		result: 'Named host tools with validation hooks, timeout, concurrency, tenant context, audit events, typed tool definitions, and typed host-side direct calls.'
+		result: 'Named host tools with validation hooks, timeout, concurrency, tenant context, manifests, redacted audit events, bounded audit buffers, typed tool definitions, and typed host-side direct calls.'
+	},
+	{
+		feature: 'Execution receipts',
+		result: 'Per-run receipts for scripts, callables, one-shot execution, and pooled runners, including backend, policy, timing, metrics, output size, capability summaries, console bounds, and dropped-audit counts.'
+	},
+	{
+		feature: 'Output boundaries',
+		result: 'Run-level result byte limits plus isolate-level console entry/byte limits so successful outputs and captured logs stay bounded.'
 	},
 	{
 		feature: 'Doctor CLI',
@@ -74,6 +83,7 @@ const installCode = `bun add @absolutejs/isolated-jsc
 bunx @absolutejs/isolated-jsc`;
 
 const agentToolCode = `import {
+  createCapabilityAuditBuffer,
   createCapabilityBroker,
   createIsolatedRunner,
   defineCapabilityTool
@@ -83,6 +93,8 @@ type TenantContext = { id: string; plan: "free" | "pro" };
 type OrderLookup = { id: string };
 type Order = { id: string; status: string; totalUsd: number };
 
+const audit = createCapabilityAuditBuffer<TenantContext>({ maxEvents: 100 });
+
 const broker = createCapabilityBroker(
   {
     lookupOrder: defineCapabilityTool<
@@ -90,7 +102,17 @@ const broker = createCapabilityBroker(
       Order | null,
       TenantContext
     >({
+      description: "Read one order by id for the current tenant",
+      input: "OrderLookup",
+      output: "Order | null",
+      risk: "read-only",
       timeoutMs: 100,
+      redactAuditInput: (input) => ({ id: (input as { id?: unknown }).id }),
+      redactAuditOutput: (output) => {
+        if (output === null) return null;
+        const order = output as Order;
+        return { id: order.id, status: order.status };
+      },
       validateInput: (input) => {
         if (input === null || typeof input !== "object") {
           throw new Error("lookupOrder input must be an object");
@@ -104,8 +126,13 @@ const broker = createCapabilityBroker(
       handler: async ({ id }, tenant) => lookupOrderForTenant(tenant.id, id)
     })
   },
-  { context: { id: "tenant_acme", plan: "pro" } }
+  {
+    context: { id: "tenant_acme", plan: "pro" },
+    onAudit: audit.onAudit
+  }
 );
+
+const manifest = broker.manifest();
 
 // Direct host calls infer Order | null from the tool map.
 const order = await broker.call("lookupOrder", { id: "ord_123" });
@@ -125,11 +152,47 @@ const { result, metrics } = await runner.call(
   "agentLookup",
   'async (tools, orderId) => await tools("lookupOrder", { id: orderId })',
   [broker.reference, "ord_123"],
-  { key: "tenant_acme", withMetrics: true }
+  {
+    key: "tenant_acme",
+    run: {
+      ...audit.receiptOptions(),
+      maxResultBytes: 16_384,
+      purpose: "agent-tool-call",
+      tenant: "tenant_acme"
+    },
+    withMetrics: true
+  }
 );
 
 const stats = runner.stats();
 await runner.dispose();`;
+
+const receiptLimitsCode = `import {
+  createCapabilityAuditBuffer,
+  runIsolated
+} from "@absolutejs/isolated-jsc";
+
+const audit = createCapabilityAuditBuffer({ maxEvents: 32 });
+
+const { result, receipt } = await runIsolated("await tools('now'); 42", {
+  policy: "tenant-script",
+  globals: { tools: broker.reference },
+  maxConsoleEntries: 4,
+  maxConsoleBytes: 512,
+  run: {
+    ...audit.receiptOptions(),
+    executionId: "exec_123",
+    maxResultBytes: 16_384,
+    purpose: "tenant-plugin",
+    tenant: "tenant_acme",
+  },
+  withReceipt: true
+});
+
+receipt.capabilityCallsDropped;    // number of audit events not retained
+receipt.capabilityCallsTruncated;  // true when the audit buffer overflowed
+receipt.console.truncated;         // true when console capture overflowed
+receipt.outputBytes;               // estimated successful-result bytes`;
 
 export const IsolatedJscProofPackView = ({
 	currentPageId,
@@ -154,16 +217,17 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-080" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.8.0 Proof Pack
+					<h1 id="isolated-jsc-088" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.8.8 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
-						This is still not broad launch mode. The 0.8.0 line
-						moves isolated-jsc from raw isolate primitives toward a
+						This is still not broad launch mode. The 0.8.x line
+						moves isolated-jsc from raw isolate primitives into a
 						product API for the Bun isolation wedge: policy presets,
 						one-shot execution, pooled keyed runners, precompiled
-						callables, and cache observability for tenant scripts,
-						AI-generated code, and plugin execution.
+						callables, capability manifests, redacted bounded audit
+						events, execution receipts, and output limits for tenant
+						scripts, AI-generated code, and plugin execution.
 					</p>
 				</animated.div>
 
@@ -177,13 +241,14 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.8.0</code> keeps the proof pack but adds
+						Version <code>0.8.8</code> keeps the proof pack but adds
 						the API shape services actually want: choose a policy,
-						run one-off source with <code>runIsolated()</code>, or
+						run one-off source with <code>runIsolated()</code>,
 						create a pooled <code>createIsolatedRunner()</code>,
-						warm hot functions with <code>precompile()</code>, call
-						them repeatedly with <code>call()</code>, and inspect
-						cache growth with <code>stats()</code>.
+						warm hot functions with <code>precompile()</code>,
+						review declared host powers with capability manifests,
+						redact and bound audit events, and inspect every run
+						with receipts.
 					</p>
 					<div style={tableContainerStyle}>
 						<animated.table style={tableStyle(themeSprings)}>
@@ -219,6 +284,42 @@ export const IsolatedJscProofPackView = ({
 							</tbody>
 						</animated.table>
 					</div>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="receipts-limits"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Receipts + limits
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The new launch framing is not just "run code in a
+						sandbox." The host gets reviewable capability manifests,
+						redacted audit events, bounded audit buffers, and
+						execution receipts that survive success and failure
+						paths. Receipts carry the backend, policy, tenant and
+						purpose labels, timing, metrics, output size, capability
+						call summaries, console overflow flags, and capability
+						audit truncation counts.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						<code>maxResultBytes</code> rejects oversized successful
+						outputs with <code>ResultSizeError</code>.{' '}
+						<code>maxConsoleEntries</code> and{' '}
+						<code>maxConsoleBytes</code> bound captured console
+						output. <code>createCapabilityAuditBuffer()</code>
+						bounds retained capability events and records how many
+						were dropped.
+					</p>
+					<PrismPlus
+						codeString={receiptLimitsCode}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
