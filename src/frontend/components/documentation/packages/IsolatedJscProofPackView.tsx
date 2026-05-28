@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-0810', label: '0.8.10 proof pack' },
+	{ href: '#isolated-jsc-0811', label: '0.8.11 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
@@ -219,8 +219,8 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-0810" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.8.10 Proof Pack
+					<h1 id="isolated-jsc-0811" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.8.11 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
 						This is still not broad launch mode. The 0.8.x line
@@ -243,7 +243,7 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.8.10</code> keeps the proof pack but adds
+						Version <code>0.8.11</code> keeps the proof pack but adds
 						the API shape services actually want: choose a policy,
 						run one-off source with <code>runIsolated()</code>,
 						create a pooled <code>createIsolatedRunner()</code>,
@@ -320,6 +320,9 @@ export const IsolatedJscProofPackView = ({
 						before sandbox code receives them, and receipts retain
 						machine-readable error codes such as{' '}
 						<code>CAPABILITY_OUTPUT_SIZE_LIMIT</code>.
+						Version <code>0.8.11</code> carries the same capability
+						error metadata through the FFI backend, including host{' '}
+						<code>Reference</code> throws and async rejections.
 					</p>
 					<PrismPlus
 						codeString={receiptLimitsCode}
