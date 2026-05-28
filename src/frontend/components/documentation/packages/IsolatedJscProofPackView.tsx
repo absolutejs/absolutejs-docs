@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-0813', label: '0.8.13 proof pack' },
+	{ href: '#isolated-jsc-0814', label: '0.8.14 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
@@ -220,8 +220,8 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-0813" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.8.13 Proof Pack
+					<h1 id="isolated-jsc-0814" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.8.14 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
 						This is still not broad launch mode. The 0.8.x line
@@ -244,7 +244,7 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.8.13</code> keeps the proof pack but adds
+						Version <code>0.8.14</code> keeps the proof pack but adds
 						the API shape services actually want: choose a policy,
 						run one-off source with <code>runIsolated()</code>,
 						create a pooled <code>createIsolatedRunner()</code>,
@@ -330,7 +330,10 @@ export const IsolatedJscProofPackView = ({
 						against an explicit stable schema. Version{' '}
 						<code>0.8.13</code> locks those v1 key sets with
 						contract tests so future audit-surface changes are
-						intentional.
+						intentional. Version <code>0.8.14</code> expands the
+						broker examples with default audit redactors and
+						per-tool overrides for masked email addresses, opaque
+						card tokens, and processor trace identifiers.
 					</p>
 					<PrismPlus
 						codeString={receiptLimitsCode}
