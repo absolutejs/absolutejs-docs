@@ -148,6 +148,7 @@ import { AIProvidersView } from '../components/documentation/ai/AIProvidersView'
 import { AIPluginView } from '../components/documentation/ai/AIPluginView';
 import { SyncActionsJobsView } from '../components/documentation/sync/SyncActionsJobsView';
 import { SyncAdaptersView } from '../components/documentation/sync/SyncAdaptersView';
+import { SyncPacksView } from '../components/documentation/sync/SyncPacksView';
 import { SyncCRDTView } from '../components/documentation/sync/SyncCRDTView';
 import { SyncEdenTypedView } from '../components/documentation/sync/SyncEdenTypedView';
 import { SyncFrameworksView } from '../components/documentation/sync/SyncFrameworksView';
@@ -314,6 +315,7 @@ export const docsViews = definePortalViews({
 	'svelte-spa': SvelteSpaView,
 	'sync-actions': SyncActionsJobsView,
 	'sync-adapters': SyncAdaptersView,
+	'sync-packs': SyncPacksView,
 	'sync-crdt': SyncCRDTView,
 	'sync-eden': SyncEdenTypedView,
 	'sync-frameworks': SyncFrameworksView,
@@ -509,6 +511,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'sync-sandbox', label: 'Sandboxed Mutations' },
 			{ id: 'sync-frameworks', label: 'Framework Hooks' },
 			{ id: 'sync-adapters', label: 'CRDT Adapters' },
+			{ id: 'sync-packs', label: 'Sync Packs' },
 			{ id: 'sync-launch', label: '1.8.0 Update' },
 			{ id: 'sync-vs-convex', label: 'vs Convex' },
 			{ id: 'sync-vs-firebase', label: 'vs Firebase' },
