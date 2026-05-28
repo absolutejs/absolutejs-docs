@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-0814', label: '0.8.14 proof pack' },
+	{ href: '#isolated-jsc-0815', label: '0.8.15 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
@@ -75,7 +75,7 @@ const shippedItems: Array<{ feature: string; result: string }> = [
 	},
 	{
 		feature: 'Policy presets + runners',
-		result: 'Product-ready presets for AI tools, tenant scripts, plugins, and trusted code, plus one-shot and pooled runner APIs for request paths.'
+		result: 'Product-ready recipes for AI tools, tenant scripts, plugins, and trusted code, including recommended result, console, audit, broker, and pool defaults.'
 	}
 ];
 
@@ -220,13 +220,13 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-0814" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.8.14 Proof Pack
+					<h1 id="isolated-jsc-0815" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.8.15 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
 						This is still not broad launch mode. The 0.8.x line
 						moves isolated-jsc from raw isolate primitives into a
-						product API for the Bun isolation wedge: policy presets,
+						product API for the Bun isolation wedge: policy recipes,
 						one-shot execution, pooled keyed runners, precompiled
 						callables, capability manifests, redacted bounded audit
 						events, execution receipts, and output limits for tenant
@@ -244,7 +244,7 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.8.14</code> keeps the proof pack but adds
+						Version <code>0.8.15</code> keeps the proof pack but adds
 						the API shape services actually want: choose a policy,
 						run one-off source with <code>runIsolated()</code>,
 						create a pooled <code>createIsolatedRunner()</code>,
@@ -333,7 +333,12 @@ export const IsolatedJscProofPackView = ({
 						intentional. Version <code>0.8.14</code> expands the
 						broker examples with default audit redactors and
 						per-tool overrides for masked email addresses, opaque
-						card tokens, and processor trace identifiers.
+						card tokens, and processor trace identifiers. Version{' '}
+						<code>0.8.15</code> adds packaged policy recipes for
+						recommended result limits, console limits, audit buffer
+						caps, broker caps, and runner pool settings; policy
+						isolates also inherit the recipe result-size limit as a
+						default run option.
 					</p>
 					<PrismPlus
 						codeString={receiptLimitsCode}
