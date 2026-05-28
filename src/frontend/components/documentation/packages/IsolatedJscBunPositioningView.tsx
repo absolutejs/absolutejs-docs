@@ -187,7 +187,8 @@ export const IsolatedJscBunPositioningView = ({
 						globals, heap limits, timeouts, metrics, error fidelity,
 						TypeScript helpers, pools, execution receipts, output
 						limits, and explicit host capability brokers with
-						manifests, redaction, and bounded audit buffers.
+						manifests, redaction, per-tool output byte caps, and
+						bounded audit buffers.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						<span style={strongStyle}>

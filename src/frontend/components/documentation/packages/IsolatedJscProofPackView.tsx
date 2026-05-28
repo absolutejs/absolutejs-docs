@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-088', label: '0.8.8 proof pack' },
+	{ href: '#isolated-jsc-0810', label: '0.8.10 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
@@ -55,7 +55,7 @@ const shippedItems: Array<{ feature: string; result: string }> = [
 	},
 	{
 		feature: 'Capability broker',
-		result: 'Named host tools with validation hooks, timeout, concurrency, tenant context, manifests, redacted audit events, bounded audit buffers, typed tool definitions, and typed host-side direct calls.'
+		result: 'Named host tools with validation hooks, timeout, concurrency, output byte caps, tenant context, manifests, redacted audit events, bounded audit buffers, typed tool definitions, and typed host-side direct calls.'
 	},
 	{
 		feature: 'Execution receipts',
@@ -63,7 +63,7 @@ const shippedItems: Array<{ feature: string; result: string }> = [
 	},
 	{
 		feature: 'Output boundaries',
-		result: 'Run-level result byte limits plus isolate-level console entry/byte limits so successful outputs and captured logs stay bounded.'
+		result: 'Run-level result byte limits, per-capability output byte limits, and isolate-level console entry/byte limits so successful outputs, tool outputs, and captured logs stay bounded.'
 	},
 	{
 		feature: 'Doctor CLI',
@@ -105,6 +105,7 @@ const broker = createCapabilityBroker(
       description: "Read one order by id for the current tenant",
       input: "OrderLookup",
       output: "Order | null",
+      maxOutputBytes: 16_384,
       risk: "read-only",
       timeoutMs: 100,
       redactAuditInput: (input) => ({ id: (input as { id?: unknown }).id }),
@@ -192,6 +193,7 @@ const { result, receipt } = await runIsolated("await tools('now'); 42", {
 receipt.capabilityCallsDropped;    // number of audit events not retained
 receipt.capabilityCallsTruncated;  // true when the audit buffer overflowed
 receipt.console.truncated;         // true when console capture overflowed
+receipt.error?.code;               // machine-readable failure, when present
 receipt.outputBytes;               // estimated successful-result bytes`;
 
 export const IsolatedJscProofPackView = ({
@@ -217,8 +219,8 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-088" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.8.8 Proof Pack
+					<h1 id="isolated-jsc-0810" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.8.10 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
 						This is still not broad launch mode. The 0.8.x line
@@ -241,14 +243,14 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.8.8</code> keeps the proof pack but adds
+						Version <code>0.8.10</code> keeps the proof pack but adds
 						the API shape services actually want: choose a policy,
 						run one-off source with <code>runIsolated()</code>,
 						create a pooled <code>createIsolatedRunner()</code>,
 						warm hot functions with <code>precompile()</code>,
 						review declared host powers with capability manifests,
-						redact and bound audit events, and inspect every run
-						with receipts.
+						redact and bound audit events, cap host capability
+						outputs, and inspect every run with receipts.
 					</p>
 					<div style={tableContainerStyle}>
 						<animated.table style={tableStyle(themeSprings)}>
@@ -312,7 +314,12 @@ export const IsolatedJscProofPackView = ({
 						<code>maxConsoleBytes</code> bound captured console
 						output. <code>createCapabilityAuditBuffer()</code>
 						bounds retained capability events and records how many
-						were dropped.
+						were dropped. Capability tools can set{' '}
+						<code>maxOutputBytes</code> so oversized host-tool
+						results reject with a <code>CapabilityError</code>
+						before sandbox code receives them, and receipts retain
+						machine-readable error codes such as{' '}
+						<code>CAPABILITY_OUTPUT_SIZE_LIMIT</code>.
 					</p>
 					<PrismPlus
 						codeString={receiptLimitsCode}
