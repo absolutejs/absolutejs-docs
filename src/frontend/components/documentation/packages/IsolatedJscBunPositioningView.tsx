@@ -27,6 +27,7 @@ import { DocsNavigation } from '../DocsNavigation';
 const tocItems: TocItem[] = [
 	{ href: '#bun-positioning', label: 'Bun positioning' },
 	{ href: '#gap', label: 'The gap' },
+	{ href: '#quick-answers', label: 'Quick answers' },
 	{ href: '#options', label: 'Existing options' },
 	{ href: '#fit', label: 'Where it fits' },
 	{ href: '#pain-points', label: 'Pain points' },
@@ -157,6 +158,47 @@ export const IsolatedJscBunPositioningView = ({
 							addon, not a JavaScriptCore solution for Bun.
 						</li>
 					</ul>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="quick-answers"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Quick answers
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<span style={strongStyle}>
+							Why not Node isolated-vm?
+						</span>{' '}
+						It is the right shape for Node/V8, but Bun is
+						JavaScriptCore. <code>isolated-jsc</code> ports the
+						isolate-shaped API to Bun/JSC instead of trying to load
+						a V8 addon.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						<span style={strongStyle}>
+							Why not just use Bun Workers?
+						</span>{' '}
+						Workers are the portable substrate and fallback backend.
+						This package adds the sandbox product layer: hardened
+						globals, heap limits, timeouts, metrics, error fidelity,
+						TypeScript helpers, pools, and explicit host capability
+						brokers.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						<span style={strongStyle}>
+							When should I require FFI?
+						</span>{' '}
+						Require <code>backend: &apos;ffi&apos;</code> for
+						hostile-code production paths on macOS or Linux where
+						JavaScriptCore is available. Use{' '}
+						<code>backend: &apos;auto&apos;</code> for portable
+						defaults, demos, and CI. Add OS boundaries when a
+						sandbox escape would expose meaningful host secrets.
+					</p>
 				</section>
 
 				<section style={sectionStyle}>
