@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-0818', label: '0.8.18 proof pack' },
+	{ href: '#isolated-jsc-0819', label: '0.8.19 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
@@ -220,8 +220,8 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-0818" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.8.18 Proof Pack
+					<h1 id="isolated-jsc-0819" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.8.19 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
 						This is still not broad launch mode. The 0.8.x line
@@ -244,7 +244,7 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.8.18</code> keeps the proof pack but adds
+						Version <code>0.8.19</code> keeps the proof pack but adds
 						the API shape services actually want: choose a policy,
 						run one-off source with <code>runIsolated()</code>,
 						create a pooled <code>createIsolatedRunner()</code>,
@@ -354,7 +354,12 @@ export const IsolatedJscProofPackView = ({
 						source helpers for real <code>.ts</code>,{' '}
 						<code>.tsx</code>, <code>.js</code>, and{' '}
 						<code>.jsx</code> files, including one-shot execution and
-						runner methods for default-export callable files.
+						runner methods for default-export callable files. Version{' '}
+						<code>0.8.19</code> adds explicit context checkpoints
+						with schema version, backend, byte length,
+						included/skipped counts, skipped-key reasons, and
+						<code>maxBytes</code> / <code>include</code> /{' '}
+						<code>exclude</code> controls.
 					</p>
 					<PrismPlus
 						codeString={receiptLimitsCode}

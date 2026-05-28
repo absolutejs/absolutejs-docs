@@ -444,8 +444,9 @@ export const SyncWeHeardYouView = ({
 						</a>
 						: "Vue and Svelte examples wrap the low-level client
 						but lack first-class hooks or components. Angular and
-						plain JavaScript require even more scaffolding." Zero
-						is React/TS-only.
+						plain JavaScript require even more scaffolding." AbsoluteJS
+						is not React-only: the broader framework surface covers
+						React, Vue, HTML, HTMX, Angular, and Ember.
 					</p>
 					<PrismPlus
 						codeString={syncWeHeardYouFrameworks}
