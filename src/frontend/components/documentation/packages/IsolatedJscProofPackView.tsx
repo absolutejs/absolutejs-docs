@@ -26,7 +26,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-0817', label: '0.8.17 proof pack' },
+	{ href: '#isolated-jsc-0818', label: '0.8.18 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
@@ -51,7 +51,7 @@ const shippedItems: Array<{ feature: string; result: string }> = [
 	},
 	{
 		feature: 'TypeScript helpers',
-		result: 'Bun-native transpilation helpers for scripts and reusable callables before isolate execution.'
+		result: 'Bun-native transpilation helpers for string source and real .ts/.tsx/.js/.jsx files before isolate execution.'
 	},
 	{
 		feature: 'Capability broker',
@@ -220,8 +220,8 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-0817" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.8.17 Proof Pack
+					<h1 id="isolated-jsc-0818" style={h1Style(isMobileOrTablet)}>
+						isolated-jsc 0.8.18 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
 						This is still not broad launch mode. The 0.8.x line
@@ -244,7 +244,7 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.8.17</code> keeps the proof pack but adds
+						Version <code>0.8.18</code> keeps the proof pack but adds
 						the API shape services actually want: choose a policy,
 						run one-off source with <code>runIsolated()</code>,
 						create a pooled <code>createIsolatedRunner()</code>,
@@ -350,7 +350,11 @@ export const IsolatedJscProofPackView = ({
 						pause/resume images, because the public JSC C API has no
 						stable serializer for a whole context or group, closure
 						graph, pending promise state, call stack, or JIT/profile
-						state.
+						state. Version <code>0.8.18</code> adds file-backed
+						source helpers for real <code>.ts</code>,{' '}
+						<code>.tsx</code>, <code>.js</code>, and{' '}
+						<code>.jsx</code> files, including one-shot execution and
+						runner methods for default-export callable files.
 					</p>
 					<PrismPlus
 						codeString={receiptLimitsCode}
