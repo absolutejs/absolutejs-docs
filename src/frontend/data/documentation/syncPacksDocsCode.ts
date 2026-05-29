@@ -10,12 +10,16 @@ engine.registerPack(
     getActorId: (ctx) => ctx.session.userId,
     scope: (ctx) => ctx.session.workspaceId,
     heartbeatTtlSec: 30,
+    // 0.3 — typing state with a TTL inside state.typingExpiresAt.
+    typingTtlSec: 5,
   }),
 );
 
 // The engine now exposes:
 //   - 'presence'              (collection — subscribe with { channel })
 //   - 'presence:heartbeat'    (mutation)
+//   - 'presence:cursor'       (mutation — patches state.cursor)
+//   - 'presence:typing'       (mutation — patches state.typing + .typingExpiresAt)
 //   - 'presence:leave'        (mutation)
 //   - 'presence:cleanup'      (cron-fired schedule)`;
 
@@ -81,10 +85,15 @@ engine.registerPack(createPresencePack({ prefix: 'chat_', /* ... */ }));
 // Tables: docs_presence + chat_presence — no collision.`;
 
 export const syncPacksComposition = `\
-// Composition rule (enforced socially, not technically): packs read each
-// other's collections, packs MUST NOT call each other's mutations.
-//
-// ✅ A docs pack subscribes to the presence collection:
+// Composition rule: packs read each other's collections, packs MUST NOT
+// call each other's mutations. Cross-pack data flows through the change
+// feed, not the call graph — that's the structural difference from
+// Convex Components, and the reason a pack can be swapped or removed
+// without rippling through every dependent pack.
+
+// ─── (1) The subscription seam ─────────────────────────────────────────
+// A docs feature can subscribe to the presence collection to render
+// typing/cursor indicators without ever importing presence's mutations:
 const inDoc = await engine.subscribe({
   collection: 'presence',
   params: { channel: docId },
@@ -92,8 +101,60 @@ const inDoc = await engine.subscribe({
   onDiff: rerenderTypingIndicators,
 });
 
-// ❌ A docs pack handler that called presence's mutation:
-//      await engine.runMutation('presence:heartbeat', /* ... */);
-// would couple the two packs at runtime — exactly the lock-in shape we
-// avoid. Cross-pack data flows through the change feed, not the call
-// graph.`;
+// ─── (2) The host-callback seam ────────────────────────────────────────
+// Some packs (mentions, audit, …) need to fan OUT to other packs at
+// write time. The pattern: the pack exposes a typed hook in its config,
+// and the HOST closes over the engine to call a sister pack's mutation.
+// The pack itself stays unaware of any other pack.
+engine.registerPack(
+  createMentionsPack({
+    getActorId: (ctx) => ctx.session.userId,
+    resolveActorId: async (username) => userIdByUsername(username),
+    onMention: async ({ mention }, ctx) => {
+      // Host wiring — mentions never imports notifications.
+      await engine.runMutation(
+        'notifications:notify',
+        {
+          actorId: mention.mentionedActorId,
+          kind: 'mention',
+          title: 'You were mentioned',
+          body: mention.snippet,
+          href: \`/comments/\${mention.sourceId}\`,
+        },
+        { systemTrusted: true, userId: mention.authorId ?? undefined },
+      );
+    },
+  }),
+);
+
+// A doc-pack handler that called \`presence:heartbeat\` directly would
+// couple the two packs at runtime — the lock-in shape we avoid.`;
+
+export const syncPacksFavoritesPin = `\
+// Pack feature evolution stays inside the pack's npm semver — the
+// engine doesn't need to know about new mutations. Example: favorites 0.2
+// adds a pinning surface alongside the existing favorite/unfavorite/toggle.
+engine.registerPack(
+  createFavoritesPack<Ctx, Task>({
+    getActorId: (ctx) => ctx.userId,
+    joinResources: { table: 'tasks', hydrate: () => allTasks() },
+  }),
+);
+
+// Mutations now on the engine (0.2):
+//   - 'favorites:favorite'    { resourceKind, resourceId }
+//   - 'favorites:unfavorite'  { resourceKind, resourceId }
+//   - 'favorites:toggle'      { resourceKind, resourceId }
+//   - 'favorites:pin'         { resourceKind, resourceId }   // NEW
+//   - 'favorites:unpin'       { resourceKind, resourceId }   // NEW
+//   - 'favorites:togglePin'   { resourceKind, resourceId }   // NEW
+
+// Row shape adds a single nullable field; the client sorts pinned-first:
+type FavoriteRow = {
+  id: string;
+  resourceKind: string;
+  resourceId: string;
+  actorId: string;
+  createdAt: number;
+  pinnedAt: number | null;   // NEW
+};`;
