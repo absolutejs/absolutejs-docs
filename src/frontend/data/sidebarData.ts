@@ -148,6 +148,7 @@ import { AIProvidersView } from '../components/documentation/ai/AIProvidersView'
 import { AIPluginView } from '../components/documentation/ai/AIPluginView';
 import { SyncActionsJobsView } from '../components/documentation/sync/SyncActionsJobsView';
 import { SyncAdaptersView } from '../components/documentation/sync/SyncAdaptersView';
+import { SyncCodeModeView } from '../components/documentation/sync/SyncCodeModeView';
 import { SyncPacksView } from '../components/documentation/sync/SyncPacksView';
 import { SyncCRDTView } from '../components/documentation/sync/SyncCRDTView';
 import { SyncEdenTypedView } from '../components/documentation/sync/SyncEdenTypedView';
@@ -315,6 +316,7 @@ export const docsViews = definePortalViews({
 	'svelte-spa': SvelteSpaView,
 	'sync-actions': SyncActionsJobsView,
 	'sync-adapters': SyncAdaptersView,
+	'sync-code-mode': SyncCodeModeView,
 	'sync-packs': SyncPacksView,
 	'sync-crdt': SyncCRDTView,
 	'sync-eden': SyncEdenTypedView,
@@ -512,6 +514,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'sync-frameworks', label: 'Framework Hooks' },
 			{ id: 'sync-adapters', label: 'CRDT Adapters' },
 			{ id: 'sync-packs', label: 'Sync Packs' },
+			{ id: 'sync-code-mode', label: 'Code Mode for Mutations' },
 			{ id: 'sync-launch', label: '1.8.0 Update' },
 			{ id: 'sync-vs-convex', label: 'vs Convex' },
 			{ id: 'sync-vs-firebase', label: 'vs Firebase' },
