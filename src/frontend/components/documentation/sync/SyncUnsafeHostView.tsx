@@ -25,6 +25,7 @@ import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#unsafe-host', label: 'unsafeHost escape hatch' },
+	{ href: '#demo', label: 'Live worked example' },
 	{ href: '#when', label: 'When to reach for it' },
 	{ href: '#signature', label: 'The signature' },
 	{ href: '#name', label: 'Why the loud name' },
@@ -75,6 +76,43 @@ export const SyncUnsafeHostView = ({
 						"this leaves the safe-deterministic surface."
 					</p>
 				</animated.div>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="demo"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Live worked example
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The{' '}
+						<a
+							href="https://github.com/absolutejs/examples/tree/main/sync"
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							<code>examples/sync</code>
+						</a>{' '}
+						app's React page renders an{' '}
+						<code>UnsafeHostPanel</code> with a form that
+						fires a sandboxed <code>audit:emit</code>{' '}
+						mutation. The handler runs inside isolated-jsc,
+						reaches through to{' '}
+						<code>unsafeHost.shipToWebhook</code> (a stand-in
+						for a real outbound integration), and writes the
+						resulting record through{' '}
+						<code>actions.insert('audit_log', …)</code>. The
+						panel reads two signals: the live{' '}
+						<code>audit_log</code> collection (proving the
+						transactional write committed) and a host-side
+						counter exposed at{' '}
+						<code>/sync/audit/webhook-calls</code> (proving
+						the host fn fired). The Playwright test asserts
+						both effects landed.
+					</p>
+				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
