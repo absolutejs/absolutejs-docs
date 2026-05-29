@@ -13,7 +13,8 @@ import {
 	FaLightbulb,
 	FaTerminal,
 	FaRobot,
-	FaSync
+	FaSync,
+	FaTachometerAlt
 } from 'react-icons/fa';
 import { MenuItem } from '../../types/types';
 import { AnalyzeView } from '../components/documentation/cli/AnalyzeView';
@@ -157,6 +158,7 @@ import { SyncEdenTypedView } from '../components/documentation/sync/SyncEdenType
 import { SyncFrameworksView } from '../components/documentation/sync/SyncFrameworksView';
 import { SyncGraphCollectionsView } from '../components/documentation/sync/SyncGraphCollectionsView';
 import { SyncOverviewView } from '../components/documentation/sync/SyncOverviewView';
+import { RateLimitOverviewView } from '../components/documentation/rate-limit/RateLimitOverviewView';
 import { SyncSandboxView } from '../components/documentation/sync/SyncSandboxView';
 import { SyncVsConvexView } from '../components/documentation/sync/SyncVsConvexView';
 import { SyncVsFirebaseView } from '../components/documentation/sync/SyncVsFirebaseView';
@@ -328,6 +330,7 @@ export const docsViews = definePortalViews({
 	'sync-graph': SyncGraphCollectionsView,
 	'sync-launch': SyncLaunchView,
 	'sync-overview': SyncOverviewView,
+	'rate-limit-overview': RateLimitOverviewView,
 	'sync-sandbox': SyncSandboxView,
 	'sync-vs-convex': SyncVsConvexView,
 	'sync-vs-firebase': SyncVsFirebaseView,
@@ -527,6 +530,11 @@ export const sidebarData: MenuItem[] = [
 		],
 		icon: animated(FaSync),
 		label: 'Sync'
+	},
+	{
+		buttons: [{ id: 'rate-limit-overview', label: 'Overview' }],
+		icon: animated(FaTachometerAlt),
+		label: 'Rate Limit'
 	},
 	{
 		buttons: [
