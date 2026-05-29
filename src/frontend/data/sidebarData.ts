@@ -67,6 +67,7 @@ import { Overview } from '../components/documentation/overview/OverviewView';
 import { CitraView } from '../components/documentation/packages/CitraView';
 import { CreateAbsoluteJSView } from '../components/documentation/packages/CreateAbsoluteJSView';
 import { IsolatedJscBunPositioningView } from '../components/documentation/packages/IsolatedJscBunPositioningView';
+import { IsolatedJscHibernationView } from '../components/documentation/packages/IsolatedJscHibernationView';
 import { IsolatedJscProofPackView } from '../components/documentation/packages/IsolatedJscProofPackView';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import {
@@ -283,6 +284,7 @@ export const docsViews = definePortalViews({
 	'islands-cli': IslandsCliView,
 	'isolated-jsc': IsolatedJscProofPackView,
 	'isolated-jsc-bun': IsolatedJscBunPositioningView,
+	'isolated-jsc-hibernation': IsolatedJscHibernationView,
 	'loading-states': LoadingStatesView,
 	logs: LogsView,
 	ls: LsView,
@@ -624,6 +626,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
 			{ id: 'isolated-jsc', label: 'isolated-jsc 0.8.20' },
 			{ id: 'isolated-jsc-bun', label: 'isolated-jsc for Bun' },
+			{ id: 'isolated-jsc-hibernation', label: 'Pool Hibernation (0.9)' },
 			{
 				buttons: [
 					{
