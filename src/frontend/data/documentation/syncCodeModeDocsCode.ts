@@ -101,6 +101,48 @@ try {
   return { error: e.message, partiallyCommitted: ['comment'] };
 }`;
 
+export const syncCodeModeTransactional = `\
+// Cross-mutation atomicity in sync 1.11+. Pair the per-mutation
+// host fns with a transactional batch host fn:
+import {
+  engineMutationsAsHostTools,
+  transactionalBatchAsHostTool,
+} from '@absolutejs/sync/code-mode';
+import { codeModeTool } from '@absolutejs/ai/tools';
+
+const hostTools = {
+  // Per-mutation fns — for scripts that branch on intermediate results.
+  ...engineMutationsAsHostTools({
+    engine,
+    ctx: () => ({ userId: currentUserId() }),
+    mutations: [
+      { name: 'comments:create',         description: '...', tsSignature: '...' },
+      { name: 'comments:toggleReaction', description: '...', tsSignature: '...' },
+    ],
+  }),
+  // Atomic batch — for all-or-nothing semantics.
+  run_transaction: transactionalBatchAsHostTool({
+    engine,
+    ctx: () => ({ userId: currentUserId() }),
+    allowedMutations: ['comments:create', 'comments:toggleReaction'],
+  }),
+};
+const tool = codeModeTool({ tools: hostTools });`;
+
+export const syncCodeModeTransactionalChain = `\
+// What the model emits when it wants atomicity. The batch is one
+// DB transaction; any handler throwing rolls everything back.
+// Trade-off: there are no intermediate results — the model can't
+// branch on what one mutation returned. Use the per-mutation host
+// fns for that, this batch for "commit all or none."
+const results = await run_transaction([
+  { name: 'comments:create',
+    args: { resourceId: 'r-1', body: 'hi @bob' } },
+  { name: 'comments:toggleReaction',
+    args: { commentId: 'c-known-id', emoji: '🎉' } },
+]);
+return { ids: results.map((row) => row.id) };`;
+
 export const syncCodeModeDemo = `\
 // Worked example in examples/sync — the React page's CodeModePanel
 // posts to /sync/code-mode/run. The server wires the host-tool

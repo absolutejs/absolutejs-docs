@@ -5,7 +5,9 @@ import {
 	syncCodeModeDemo,
 	syncCodeModeFactory,
 	syncCodeModeNaming,
-	syncCodeModeSemantics
+	syncCodeModeSemantics,
+	syncCodeModeTransactional,
+	syncCodeModeTransactionalChain
 } from '../../../data/documentation/syncCodeModeDocsCode';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
@@ -32,7 +34,7 @@ const tocItems: TocItem[] = [
 	{ href: '#naming', label: 'Host-fn naming' },
 	{ href: '#semantics', label: 'v0.1 semantics' },
 	{ href: '#demo', label: 'Worked example' },
-	{ href: '#roadmap', label: 'v0.2 roadmap' }
+	{ href: '#transactional', label: 'Atomic batches (1.11+)' }
 ];
 
 export const SyncCodeModeView = ({
@@ -205,13 +207,16 @@ export const SyncCodeModeView = ({
 						a follow-up turn.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						Cross-mutation atomicity (all-or-nothing across N
-						runMutations) is <strong>not</strong> provided in
-						v0.1. It would need a new engine batch primitive
-						that holds one tx open across multiple handlers —
-						a deliberate v0.2 followup. Shipping the v0.1
-						surface honestly beats promising transactional
-						semantics the engine can't keep.
+						When you need cross-mutation atomicity instead —
+						all-or-nothing across N runMutations — skip the
+						per-mutation host fns and reach for{' '}
+						<code>transactionalBatchAsHostTool</code> +{' '}
+						<code>engine.runMutations</code> in sync 1.11+
+						(see <a href="#transactional">Atomic batches</a>{' '}
+						below). The per-mutation surface here ships
+						honest v0.1 semantics; the batched surface ships
+						the all-or-nothing variant. Pick per host fn, not
+						per engine.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						In practice: design the host fns so each is
@@ -269,33 +274,63 @@ export const SyncCodeModeView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
-						id="roadmap"
+						id="transactional"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						v0.2 roadmap
+						Atomic batches (1.11+)
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The cross-mutation atomicity gap is the v0.1
-						design's most honest limitation. v0.2 will add an
-						engine batch primitive —{' '}
-						<code>engine.runMutations([...specs], ctx)</code>{' '}
-						— that holds one DB transaction open across
-						multiple handlers and emits the resulting diffs
-						in a single live batch. The host-tool factory
-						will gain an opt-in <code>transactional: true</code>{' '}
-						flag that routes every model-emitted{' '}
-						<code>runMutation</code> through the new
-						primitive, restoring all-or-nothing semantics
-						without changing the model-facing prompt.
+						<code>sync@1.11.0</code> closes the cross-mutation
+						atomicity gap. The engine gains{' '}
+						<code>runMutations(specs, ctx)</code>: N mutations
+						in one DB transaction, accumulated buffered
+						changes that fan out as ONE live diff on commit,
+						and full rollback on any thrown handler — no
+						partial commits, no surprise per-mutation diffs.
+						Per-mutation <code>authorize</code> still runs
+						(inside the tx); per-mutation retry policies do
+						not apply to batches.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						Until that ships, prefer idempotent mutations in
-						any host-tool set you expose to an agent and
-						document the partial-failure behavior in the host
-						fn descriptions so the model can compensate when
-						appropriate.
+						The <code>/code-mode</code> subpath gains{' '}
+						<code>transactionalBatchAsHostTool</code>, which
+						returns one Code Mode host fn (by convention{' '}
+						<code>run_transaction</code>) that takes an{' '}
+						<code>Array&lt;&#123; name, args &#125;&gt;</code> from
+						the model. The model can use the per-mutation
+						host fns when it needs to branch on intermediate
+						results, OR call <code>run_transaction</code>{' '}
+						when it needs all-or-nothing semantics. Drop both
+						into the same <code>codeModeTool({'{ tools }'})</code>{' '}
+						map.
+					</p>
+					<PrismPlus
+						codeString={syncCodeModeTransactional}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						What the model emits for the atomic path:
+					</p>
+					<PrismPlus
+						codeString={syncCodeModeTransactionalChain}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						The trade-off the batch makes explicit: the model
+						can't reference an intermediate result inside the
+						spec list (it's data, not code). When the script
+						needs to thread a value from mutation 1 into
+						mutation 2's args, use the per-mutation host fns
+						and accept partial-failure compensation. When it
+						needs to commit several pre-shaped writes
+						together or not at all, use{' '}
+						<code>run_transaction</code>.
 					</p>
 				</section>
 			</div>
