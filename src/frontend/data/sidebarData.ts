@@ -624,7 +624,7 @@ export const sidebarData: MenuItem[] = [
 				label: 'Voice'
 			},
 			{ id: 'create-absolutejs', label: 'Create AbsoluteJS' },
-			{ id: 'isolated-jsc', label: 'isolated-jsc 0.8.20' },
+			{ id: 'isolated-jsc', label: 'isolated-jsc 0.8.21' },
 			{ id: 'isolated-jsc-bun', label: 'isolated-jsc for Bun' },
 			{ id: 'isolated-jsc-hibernation', label: 'Pool Hibernation (0.9)' },
 			{
