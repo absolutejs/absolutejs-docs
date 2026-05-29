@@ -14,7 +14,8 @@ import {
 	FaTerminal,
 	FaRobot,
 	FaSync,
-	FaTachometerAlt
+	FaTachometerAlt,
+	FaShip
 } from 'react-icons/fa';
 import { MenuItem } from '../../types/types';
 import { AnalyzeView } from '../components/documentation/cli/AnalyzeView';
@@ -159,6 +160,11 @@ import { SyncFrameworksView } from '../components/documentation/sync/SyncFramewo
 import { SyncGraphCollectionsView } from '../components/documentation/sync/SyncGraphCollectionsView';
 import { SyncOverviewView } from '../components/documentation/sync/SyncOverviewView';
 import { RateLimitOverviewView } from '../components/documentation/rate-limit/RateLimitOverviewView';
+import { RuntimeOverviewView } from '../components/documentation/runtime/RuntimeOverviewView';
+import { MeteringOverviewView } from '../components/documentation/metering/MeteringOverviewView';
+import { RouterOverviewView } from '../components/documentation/router/RouterOverviewView';
+import { SecretsOverviewView } from '../components/documentation/secrets/SecretsOverviewView';
+import { DeployOverviewView } from '../components/documentation/deploy/DeployOverviewView';
 import { SyncSandboxView } from '../components/documentation/sync/SyncSandboxView';
 import { SyncVsConvexView } from '../components/documentation/sync/SyncVsConvexView';
 import { SyncVsFirebaseView } from '../components/documentation/sync/SyncVsFirebaseView';
@@ -331,6 +337,11 @@ export const docsViews = definePortalViews({
 	'sync-launch': SyncLaunchView,
 	'sync-overview': SyncOverviewView,
 	'rate-limit-overview': RateLimitOverviewView,
+	'runtime-overview': RuntimeOverviewView,
+	'metering-overview': MeteringOverviewView,
+	'router-overview': RouterOverviewView,
+	'secrets-overview': SecretsOverviewView,
+	'deploy-overview': DeployOverviewView,
 	'sync-sandbox': SyncSandboxView,
 	'sync-vs-convex': SyncVsConvexView,
 	'sync-vs-firebase': SyncVsFirebaseView,
@@ -535,6 +546,17 @@ export const sidebarData: MenuItem[] = [
 		buttons: [{ id: 'rate-limit-overview', label: 'Overview' }],
 		icon: animated(FaTachometerAlt),
 		label: 'Rate Limit'
+	},
+	{
+		buttons: [
+			{ id: 'runtime-overview', label: 'Runtime' },
+			{ id: 'metering-overview', label: 'Metering' },
+			{ id: 'router-overview', label: 'Router' },
+			{ id: 'secrets-overview', label: 'Secrets' },
+			{ id: 'deploy-overview', label: 'Deploy' }
+		],
+		icon: animated(FaShip),
+		label: 'PaaS Substrate'
 	},
 	{
 		buttons: [
