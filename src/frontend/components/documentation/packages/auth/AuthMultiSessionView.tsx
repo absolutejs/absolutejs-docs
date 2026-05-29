@@ -2,7 +2,8 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	guestSession,
-	multiSession
+	multiSession,
+	refreshSessionUser
 } from '../../../../data/documentation/authMultiSessionDocsCode';
 import {
 	h1Style,
@@ -23,7 +24,8 @@ import { DocsNavigation } from '../../DocsNavigation';
 
 const tocItems: TocItem[] = [
 	{ href: '#multi-session', label: 'Switch accounts' },
-	{ href: '#guest', label: 'Guest sessions' }
+	{ href: '#guest', label: 'Guest sessions' },
+	{ href: '#refresh-user', label: 'Refresh session user' }
 ];
 
 export const AuthMultiSessionView = ({
@@ -102,6 +104,36 @@ export const AuthMultiSessionView = ({
 					</p>
 					<PrismPlus
 						codeString={guestSession}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="refresh-user"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Refresh session user
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The <code>user</code> that <code>protectRoute</code> and{' '}
+						<code>userStatus</code> hand you is the snapshot serialized
+						into the session at login — it is <strong>not</strong>{' '}
+						re-read from your user table per request. A change made{' '}
+						<em>after</em> login (a role grant, a ban, a tier change)
+						stays invisible to that user&apos;s live sessions, so
+						role-gated routes keep returning <code>403</code> even
+						though the row is correct. Call{' '}
+						<code>refreshUserSessions</code> from your own mutator after
+						the write to push the fresh <code>user</code> into every
+						active session for that user.
+					</p>
+					<PrismPlus
+						codeString={refreshSessionUser}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
