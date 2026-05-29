@@ -150,6 +150,7 @@ import { SyncActionsJobsView } from '../components/documentation/sync/SyncAction
 import { SyncAdaptersView } from '../components/documentation/sync/SyncAdaptersView';
 import { SyncCodeModeView } from '../components/documentation/sync/SyncCodeModeView';
 import { SyncPacksView } from '../components/documentation/sync/SyncPacksView';
+import { SyncUnsafeHostView } from '../components/documentation/sync/SyncUnsafeHostView';
 import { SyncCRDTView } from '../components/documentation/sync/SyncCRDTView';
 import { SyncEdenTypedView } from '../components/documentation/sync/SyncEdenTypedView';
 import { SyncFrameworksView } from '../components/documentation/sync/SyncFrameworksView';
@@ -318,6 +319,7 @@ export const docsViews = definePortalViews({
 	'sync-adapters': SyncAdaptersView,
 	'sync-code-mode': SyncCodeModeView,
 	'sync-packs': SyncPacksView,
+	'sync-unsafe-host': SyncUnsafeHostView,
 	'sync-crdt': SyncCRDTView,
 	'sync-eden': SyncEdenTypedView,
 	'sync-frameworks': SyncFrameworksView,
@@ -515,6 +517,7 @@ export const sidebarData: MenuItem[] = [
 			{ id: 'sync-adapters', label: 'CRDT Adapters' },
 			{ id: 'sync-packs', label: 'Sync Packs' },
 			{ id: 'sync-code-mode', label: 'Code Mode for Mutations' },
+			{ id: 'sync-unsafe-host', label: 'unsafeHost Escape Hatch' },
 			{ id: 'sync-launch', label: '1.8.0 Update' },
 			{ id: 'sync-vs-convex', label: 'vs Convex' },
 			{ id: 'sync-vs-firebase', label: 'vs Firebase' },
