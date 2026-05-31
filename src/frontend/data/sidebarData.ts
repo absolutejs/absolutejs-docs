@@ -165,6 +165,9 @@ import { MeteringOverviewView } from '../components/documentation/metering/Meter
 import { RouterOverviewView } from '../components/documentation/router/RouterOverviewView';
 import { SecretsOverviewView } from '../components/documentation/secrets/SecretsOverviewView';
 import { DeployOverviewView } from '../components/documentation/deploy/DeployOverviewView';
+import { DispatchOverviewView } from '../components/documentation/dispatch/DispatchOverviewView';
+import { AuditOverviewView } from '../components/documentation/audit/AuditOverviewView';
+import { TelemetryPackageView } from '../components/documentation/telemetry-package/TelemetryPackageView';
 import { SyncSandboxView } from '../components/documentation/sync/SyncSandboxView';
 import { SyncVsConvexView } from '../components/documentation/sync/SyncVsConvexView';
 import { SyncVsFirebaseView } from '../components/documentation/sync/SyncVsFirebaseView';
@@ -342,6 +345,9 @@ export const docsViews = definePortalViews({
 	'router-overview': RouterOverviewView,
 	'secrets-overview': SecretsOverviewView,
 	'deploy-overview': DeployOverviewView,
+	'dispatch-overview': DispatchOverviewView,
+	'audit-overview': AuditOverviewView,
+	'telemetry-overview': TelemetryPackageView,
 	'sync-sandbox': SyncSandboxView,
 	'sync-vs-convex': SyncVsConvexView,
 	'sync-vs-firebase': SyncVsFirebaseView,
@@ -557,6 +563,15 @@ export const sidebarData: MenuItem[] = [
 		],
 		icon: animated(FaShip),
 		label: 'PaaS Substrate'
+	},
+	{
+		buttons: [
+			{ id: 'dispatch-overview', label: 'Dispatch' },
+			{ id: 'audit-overview', label: 'Audit' },
+			{ id: 'telemetry-overview', label: 'Telemetry' }
+		],
+		icon: animated(FaShip),
+		label: 'Cross-cutting Substrate'
 	},
 	{
 		buttons: [
