@@ -170,6 +170,7 @@ import { AuditOverviewView } from '../components/documentation/audit/AuditOvervi
 import { TelemetryPackageView } from '../components/documentation/telemetry-package/TelemetryPackageView';
 import { QueueOverviewView } from '../components/documentation/queue/QueueOverviewView';
 import { ClusterBusView } from '../components/documentation/cluster-bus/ClusterBusView';
+import { SubstrateAuditView } from '../components/documentation/substrate/SubstrateAuditView';
 import { SyncSandboxView } from '../components/documentation/sync/SyncSandboxView';
 import { SyncVsConvexView } from '../components/documentation/sync/SyncVsConvexView';
 import { SyncVsFirebaseView } from '../components/documentation/sync/SyncVsFirebaseView';
@@ -352,6 +353,7 @@ export const docsViews = definePortalViews({
 	'telemetry-overview': TelemetryPackageView,
 	'queue-overview': QueueOverviewView,
 	'cluster-bus-overview': ClusterBusView,
+	'substrate-audit': SubstrateAuditView,
 	'sync-sandbox': SyncSandboxView,
 	'sync-vs-convex': SyncVsConvexView,
 	'sync-vs-firebase': SyncVsFirebaseView,
@@ -570,6 +572,7 @@ export const sidebarData: MenuItem[] = [
 	},
 	{
 		buttons: [
+			{ id: 'substrate-audit', label: 'Substrate complete (G1–G7)' },
 			{ id: 'dispatch-overview', label: 'Dispatch' },
 			{ id: 'audit-overview', label: 'Audit' },
 			{ id: 'telemetry-overview', label: 'Telemetry' },
