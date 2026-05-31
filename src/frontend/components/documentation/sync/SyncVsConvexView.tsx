@@ -81,6 +81,16 @@ export const SyncVsConvexView = ({
 						hatches it gives you. This page is the honest
 						comparison.
 					</p>
+					<p style={paragraphSpacedStyle}>
+						This page focuses on sync-vs-Convex specifically.
+						The seven cross-cutting gaps the substrate audit
+						named (audit log, OTel, dispatch, cluster bus,
+						replay, migration) are consolidated on{' '}
+						<a href="/documentation/substrate-audit">
+							Substrate complete (G1–G7)
+						</a>
+						.
+					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>

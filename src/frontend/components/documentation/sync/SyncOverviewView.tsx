@@ -71,6 +71,15 @@ export const SyncOverviewView = ({
 						scheduled functions — all without adopting a hosted
 						backend.
 					</p>
+					<p style={paragraphSpacedStyle}>
+						For the operator surface (point-in-time replay,
+						tenant migration primitives, hash-chain audit, OTel
+						across the substrate), see{' '}
+						<a href="/documentation/substrate-audit">
+							Substrate complete (G1–G7)
+						</a>
+						.
+					</p>
 				</animated.div>
 
 				<section style={sectionStyle}>
