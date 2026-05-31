@@ -227,3 +227,43 @@ for (const line of readFileSync('./tasks.jsonl', 'utf8').trim().split('\\n')) {
 //  2. Date/timestamp normalization is the most common gotcha. Firestore
 //     timestamps come back as { _seconds, _nanoseconds }; convert to JS
 //     Date or ISO string before the insert.`;
+
+export const syncVsFirebaseOperator = `# Operator surface — what each ships
+
+  Firebase's operator-grade story is managed: point-in-time
+  recovery up to 7 days on Firestore (Enterprise extends), managed
+  export/import to GCS buckets, hosted dashboards. The price is
+  vendor lock-in and the cost surprises you came to leave.
+
+  Sync's operator-grade story is composable primitives you wire
+  into your own host:
+
+    Firebase                            | sync
+    ────────────────────────────────────|─────────────────────────────────────────
+    Point-in-time recovery (PITR)       | engine.replayTo({ at, tables? }) (1.22)
+    Managed, 7-day window, Firestore    | Bounded change log, retention is yours
+    Standard / Enterprise               | to configure (changeLogRetainMs).
+                                        | syncDevtools Replay panel (1.23) is
+                                        | the clickable demo.
+
+    Cloud Firestore Managed             | engine.fence({ reason }) +
+    Export/Import (GCS buckets,         | exportSnapshot() + importSnapshot()
+    operator console)                   | (1.24)
+                                        | Three composable verbs the host
+                                        | choreographs — no "spin up the
+                                        | export job, wait, restore" loop.
+
+    Firestore Audit Logs                | @absolutejs/audit + withIntegrity
+    (Cloud Logging, retention by org)   | (hash-chain tamper evidence;
+                                        | SHA-256 or HMAC-SHA256)
+
+    Cloud Trace / Cloud Monitoring      | OTel spans across every substrate
+                                        | package via @absolutejs/telemetry —
+                                        | wire ONE TracerProvider, every
+                                        | package emits.
+
+  Direction of tradeoff: Firebase ships "managed and done." Sync
+  ships "primitives you own and operate." For teams who left
+  Firebase because of bills + lock-in, owning the operator surface
+  IS the point — the substrate gives you the verbs so you don't
+  rebuild them.`;

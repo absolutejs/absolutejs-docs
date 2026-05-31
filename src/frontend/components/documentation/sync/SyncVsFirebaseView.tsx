@@ -8,6 +8,7 @@ import {
 	syncVsFirebaseMigrationScript,
 	syncVsFirebaseMutationAfter,
 	syncVsFirebaseMutationBefore,
+	syncVsFirebaseOperator,
 	syncVsFirebaseTldr,
 	syncVsFirebaseTopicServer
 } from '../../../data/documentation/syncVsFirebaseDocsCode';
@@ -36,6 +37,7 @@ const tocItems: TocItem[] = [
 	{ href: '#topics', label: 'Security rules → topics' },
 	{ href: '#mutations', label: 'doc.set → mutations' },
 	{ href: '#cost', label: 'Cost worked example' },
+	{ href: '#operator', label: 'Operator surface' },
 	{ href: '#auth', label: 'Auth (keep or migrate)' },
 	{ href: '#migration', label: 'One-shot migration script' }
 ];
@@ -76,6 +78,16 @@ export const SyncVsFirebaseView = ({
 						what maps to what, what the migration script looks
 						like, and what the realistic cost difference is on a
 						worked example.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						This page focuses on sync-vs-Firebase specifically.
+						The substrate's operator-grade primitives (audit,
+						OTel, dispatch, cluster bus, replay, migration) are
+						consolidated on{' '}
+						<a href="/documentation/substrate-audit">
+							Substrate complete (G1–G7)
+						</a>
+						.
 					</p>
 				</animated.div>
 
@@ -278,6 +290,30 @@ export const SyncVsFirebaseView = ({
 						codeString={syncVsFirebaseCostExample}
 						language="typescript"
 						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="operator"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Operator surface
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Firebase's operator-grade story is managed:
+						point-in-time recovery, managed export/import,
+						hosted dashboards. The tradeoff is the vendor
+						lock-in + cost surprises you came to leave. Sync
+						ships composable primitives you wire into your
+						host — fewer bells, more control.
+					</p>
+					<PrismPlus
+						codeString={syncVsFirebaseOperator}
+						language="markdown"
 						themeSprings={themeSprings}
 					/>
 				</section>
