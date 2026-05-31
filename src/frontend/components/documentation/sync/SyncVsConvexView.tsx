@@ -6,7 +6,9 @@ import {
 	syncVsConvexGaps,
 	syncVsConvexHonestyFooter,
 	syncVsConvexMatrix,
+	syncVsConvexMigrate,
 	syncVsConvexPickEach,
+	syncVsConvexReplay,
 	syncVsConvexSandbox,
 	syncVsConvexSharedModel,
 	syncVsConvexWireDiff
@@ -35,6 +37,8 @@ const tocItems: TocItem[] = [
 	{ href: '#wire-diff', label: 'Row-level diffs vs full results' },
 	{ href: '#cache', label: 'Cross-client query cache' },
 	{ href: '#sandbox', label: 'Sandboxed handlers' },
+	{ href: '#replay', label: 'Point-in-time replay' },
+	{ href: '#migrate', label: 'Tenant migration' },
 	{ href: '#gaps', label: 'What sync doesn’t have yet' },
 	{ href: '#pick-each', label: 'When to pick each' },
 	{ href: '#honesty', label: 'Honest framing' }
@@ -233,6 +237,62 @@ export const SyncVsConvexView = ({
 					</p>
 					<PrismPlus
 						codeString={syncVsConvexSandbox}
+						language="markdown"
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="replay"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Point-in-time replay
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Convex's time-travel queries land in sync as{' '}
+						<code>engine.replayTo({'{ at, tables? }'})</code>{' '}
+						(1.22) plus a clickable Replay panel in{' '}
+						<code>syncDevtools</code> (1.23). Walks the bounded
+						change log forward to a target timestamp and returns
+						the per-table rows that existed then. Accuracy is
+						bounded by your retention policy — set{' '}
+						<code>changeLogRetainMs</code> wide for forensic use
+						cases.
+					</p>
+					<PrismPlus
+						codeString={syncVsConvexReplay}
+						language="markdown"
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="migrate"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Tenant migration
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Moving a tenant between engines (sharding rebalance,
+						cross-region move, point-in-time clone for staging)
+						is a first-class operation in sync 1.24. Three
+						composable verbs — <code>fence</code>,{' '}
+						<code>exportSnapshot</code>,{' '}
+						<code>importSnapshot</code> — let you choreograph
+						the strictness vs availability tradeoff yourself
+						instead of taking whatever a monolithic{' '}
+						<code>migrate()</code> would prescribe. Reads stay
+						open under fence so live subscribers don't go dark
+						during the transfer.
+					</p>
+					<PrismPlus
+						codeString={syncVsConvexMigrate}
 						language="markdown"
 						themeSprings={themeSprings}
 					/>

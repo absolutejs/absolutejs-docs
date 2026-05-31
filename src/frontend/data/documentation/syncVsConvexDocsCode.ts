@@ -30,7 +30,8 @@ export const syncVsConvexMatrix = `# Feature parity matrix
   Determinism guarantees           | strict (managed)   | developer-owned    | sync trusts the developer; sandbox is opt-in
   DB choice                        | Convex DB only     | any                | Postgres, MySQL, SQLite, Drizzle, Prisma
   Handler language                 | JS only            | any host code      | TS, async, host imports, your runtime
-  Time-travel queries              | ✓                  | ⨯ (Tier 3)         | not yet
+  Time-travel queries              | ✓                  | ✓ (1.22)           | engine.replayTo({ at, tables? }) — see below
+  Tenant migration primitives      | ⨯                  | ✓ (1.24)           | engine.fence / exportSnapshot / importSnapshot
   Multi-region replication         | managed            | DIY                | host-level concern, no managed offering
   Hosting model                    | managed only       | self-host          | managed PaaS planned (uses isolated-jsc)`;
 
@@ -163,9 +164,6 @@ export const syncVsConvexGaps = `# What sync doesn't have yet
 
   Honest list of where Convex is ahead and we haven't caught up:
 
-  - Time-travel queries. Convex lets you snapshot any past commit and
-    read against it. Sync's change log makes this technically possible
-    but the read API isn't there yet (Tier 3 plan item).
   - Managed deployment. Convex is a hosted product. Sync is a library;
     the absolutejs hosted PaaS is planned (and isolated-jsc was built
     to power its sandbox slot).
@@ -173,11 +171,9 @@ export const syncVsConvexGaps = `# What sync doesn't have yet
     you opt into sandboxedHandler, where the sandbox enforces resource
     caps but not "no random / no real time" determinism).
   - Multi-region with managed failover. Convex handles this for you;
-    in sync this is a deployment choice (Postgres logical replication +
-    a cluster bus per region works, but you operate it).
-  - A dashboard. Convex has a polished console. Sync has
-    engine.inspect() + engine.onActivity(...) for tooling-via-code,
-    but no first-party UI.`;
+    in sync this is a deployment choice (Postgres logical replication
+    or Redis pub/sub via @absolutejs/sync-bus-redis works, but you
+    operate it).`;
 
 export const syncVsConvexPickEach = `# When to pick each
 
@@ -186,7 +182,6 @@ export const syncVsConvexPickEach = `# When to pick each
   - JS-only mutation handlers are fine.
   - You don't need to choose your database — Convex's is good and
     you'd rather not operate one.
-  - You want time-travel queries today.
   - You want strict determinism guaranteed by the runtime, with no
     developer responsibility for it.
   - You're not running Bun (Convex doesn't run on Bun specifically;
@@ -209,10 +204,9 @@ export const syncVsConvexPickEach = `# When to pick each
 
 export const syncVsConvexHonestyFooter = `# Honest framing
 
-  Sync started six days ago (first commit 2026-05-23). Convex is years
-  old, well-funded, with a real team. This page records what we've
-  shipped and where the trade-offs land today; it's not a verdict on
-  the products.
+  Sync's first commit was 2026-05-23. Convex is years old, well-funded,
+  with a real team. This page records what we've shipped and where the
+  trade-offs land today; it's not a verdict on the products.
 
   We were able to close most of the architectural gaps quickly because:
   - We didn't have to commit to backwards compat. Convex has paying
@@ -224,7 +218,99 @@ export const syncVsConvexHonestyFooter = `# Honest framing
   - Convex's gaps are well-tracked in their public issue tracker
     (#95, etc) — we had the targets written down.
 
-  The gaps we still have (time-travel, managed deployment, strict
-  determinism) are real and not artifacts of "we're new." They'll
-  take real time to close. We're documenting them honestly here so
-  you can plan.`;
+  The gaps we still have (managed deployment, strict determinism,
+  managed multi-region failover) are real and not artifacts of "we're
+  new." They're host-operator concerns and will land alongside the
+  absolutejs hosted PaaS. We're documenting them honestly here so you
+  can plan.`;
+
+export const syncVsConvexReplay = `# Point-in-time replay (sync 1.22, 1.23)
+
+  Convex's time-travel queries let you read against any past commit —
+  the killer feature for "I deleted prod, restore us to 2h ago" and
+  forensic "what did the tenant see at 14:32?" stories. Sync 1.22
+  shipped the same primitive as engine.replayTo({ at, tables? }):
+
+    const twoHoursAgo = Date.now() - 2 * 60 * 60 * 1000;
+    const result = await engine.replayTo({
+      at: twoHoursAgo,
+      tables: ['orders']
+    });
+    if (result.truncated) {
+      console.warn('Best-effort — log retention window too short.');
+    }
+    console.log(result.rows.orders);
+
+  How it works: sync's change log is bounded by changeLogSize +
+  changeLogRetainMs. replayTo walks the log forward to the target
+  timestamp, folds each insert/update/delete into a per-table keyed
+  view (last-write-wins per row key, delete removes), and returns
+  { asOfVersion, asOfAt, rows, truncated }. truncated=true when the
+  log doesn't extend back to the target — result is best-effort from
+  the oldest retained entry.
+
+  For forensic use cases, set changeLogRetainMs wide:
+
+    createSyncEngine({
+      changeLogSize: 100_000,
+      changeLogRetainMs: 14 * 24 * 60 * 60 * 1000 // 14-day window
+    });
+
+  Sync 1.23 added a Replay panel to syncDevtools — a datetime picker,
+  optional tables filter, and a clickable Replay button. The same
+  endpoint is exposed as JSON at GET <devtoolsPath>/replay so admin
+  shells can wrap it without screen-scraping HTML.
+
+  When Convex's version is better: Convex's storage layer is
+  designed for forever-retention out of the box, so any historical
+  timestamp resolves exactly. Sync's accuracy is bounded by your
+  retention policy — set the window wide for forensics, narrow for
+  short-tail use cases.`;
+
+export const syncVsConvexMigrate = `# Tenant migration primitives (sync 1.24)
+
+  Moving a tenant between sync engines (sharding rebalance,
+  cross-region tenant move, point-in-time clone for staging) is a
+  first-class operation. Sync 1.24 ships three composable verbs:
+
+    // ── on the source ──
+    const fence = source.fence({ reason: 'tenant-7 → us-east-2' });
+    try {
+      const snapshot = await source.exportSnapshot();
+      await transport(snapshot); // S3, message bus, your choice
+      // ── on the target ──
+      await target.importSnapshot(snapshot, {
+        onProgress: (table, done, total) =>
+          observability.gauge('migrate.rows', { table, done, total })
+      });
+      await dnsCutover(); // direct clients at target
+    } finally {
+      fence.lift();
+    }
+
+  - fence({ reason }) pauses new mutations on the source so its
+    captured state stops drifting. runMutation rejects with
+    EngineFencedError carrying the reason. Reads keep working —
+    subscribe / hydrate / streamChanges stay open, so live readers
+    don't go dark during the transfer. Multiple fences compose:
+    every handle has to lift() before the engine unfences.
+  - exportSnapshot() walks each registered reader's all(ctx) and
+    returns a portable EngineSnapshot { sourceInstanceId, version,
+    exportedAt, tables }. Optionally narrow with { tables: [...] }
+    for partial migrations.
+  - importSnapshot(snapshot, options) bulk-loads via each table's
+    registered writer on the target. onProgress fires per row.
+    Tables in the snapshot without a writer on the target are
+    surfaced in result.skipped so a misconfigured target doesn't
+    silently drop rows.
+
+  Why three verbs, not one big migrate(): a monolithic call would
+  conflate pause-writes, capture-state, transport-bytes, and reapply
+  — but transport is your choice (S3? Kafka? gRPC?) and the strictness
+  vs availability tradeoff (fence-first vs export-first) is
+  operator policy. The substrate offers the verbs; the choreography
+  is yours.
+
+  Out of scope: out-of-band writes (CDC drivers, raw SQL). The fence
+  only blocks runMutation; halt CDC separately or the snapshot will
+  drift between export and import.`;
