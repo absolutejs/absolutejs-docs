@@ -6,6 +6,10 @@
 		"type": "git",
 		"url": "https://github.com/absolutejs/absolutejs.git"
 	},
+	"homepage": "https://github.com/absolutejs/absolutejs-docs",
+	"bugs": {
+		"url": "https://github.com/absolutejs/absolutejs-docs/issues"
+	},
 	"main": "./dist/index.js",
 	"types": "./dist/src/index.d.ts",
 	"license": "BSL-1.1",

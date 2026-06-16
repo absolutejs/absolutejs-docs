@@ -4,7 +4,14 @@ import { absoluteAuth } from '@absolutejs/auth';
 import { getEnv } from '@absolutejs/absolute';
 
 const app = new Elysia()
-  .use(absoluteAuth<User>({
+  // No \`<User>\` type argument needed — \`User\` is INFERRED from \`getUser\`.
+  .use(absoluteAuth({
+    // \`getUser\` resolves your app user from a session subject. It is required,
+    // and it is the single source of truth for \`User\`: the type is inferred
+    // from what you return here, and every other user-typed callback
+    // (createUser, getUserByEmail, onCallbackSuccess, …) is checked against
+    // that same shape — so a mismatched user is a compile error, not a bug.
+    getUser: (sub) => findUserBySub(sub),
     providersConfiguration: {
       google: {
         credentials: {

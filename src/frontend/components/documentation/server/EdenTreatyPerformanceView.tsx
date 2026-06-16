@@ -1,7 +1,7 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
-	edenBackendWidening,
+	edenBackendReturnType,
 	edenTreatyComposedClient,
 	edenTreatySubApp,
 	edenTreatyWholeApp
@@ -27,7 +27,7 @@ const tocItems: TocItem[] = [
 	{ href: '#symptom', label: 'The Symptom' },
 	{ href: '#why', label: 'Why It Happens' },
 	{ href: '#frontend', label: 'Fix: Per-Plugin Clients' },
-	{ href: '#backend', label: 'Fix: Widen the Backend' },
+	{ href: '#backend', label: 'Fix: Cheap Return Types' },
 	{ href: '#notes', label: 'Notes' }
 ];
 
@@ -163,17 +163,31 @@ export const EdenTreatyPerformanceView = ({
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Fix: Widen the Backend
+						Fix: Cheap Return Types
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Fixing the client is only half of it. The server entry has
-						the same problem: a long `.use()` chain accumulates the
-						merged per-route type. Register the heavy plugins through a
-						loose `AnyElysia` so the chain stops accumulating — the
-						casts are type-only, so order and runtime are unchanged.
+						Fixing the client is only half of it, and the server entry
+						is where most teams reach for casts. Resist that. The cause
+						is the plugin&apos;s own return type: a config-conditional
+						plugin (`config.x ? routes(x) : new Elysia()`) produces a
+						union at every branch, and `.use()` distributes over unions
+						— so the merged type trends toward 2^N and eventually can&apos;t
+						even be serialized (`TS7056`). Casting it to `AnyElysia` at
+						each call site hides the symptom but throws the types away.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						The cure is to give the plugin an explicit return type that
+						exposes only what consumers actually read. `@absolutejs/auth`
+						is the worked example: its route paths are configurable, so
+						Elysia keys them by `string` (never a literal) — there is no
+						precise route type to expose anyway. What is precise is the
+						typed `protectRoute` context, so `auth()` returns that, and
+						`User` is inferred from your `getUser`. Consumers just
+						`.use(authPlugin)` — no cast, full inference, instant
+						type-check.
 					</p>
 					<PrismPlus
-						codeString={edenBackendWidening}
+						codeString={edenBackendReturnType}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -193,8 +207,18 @@ export const EdenTreatyPerformanceView = ({
 						Do not reach for this on a small app — a handful of plugins
 						type-checks fine. Prefer plain `fetch` for one-off or
 						bearer-authenticated calls, since those add nothing to the
-						treaty type. And once nothing reads `typeof server`, the
-						server type can be widened freely.
+						treaty type. And prefer a cheap, explicit return type at the
+						plugin boundary over a cast at the call site: a cast erases
+						the types for everyone, while a well-chosen return type
+						keeps exactly the surface consumers need and nothing they
+						don&apos;t.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						This is how the AbsoluteJS route plugins are built, so you
+						never cast them: `@absolutejs/auth` returns its typed
+						`protectRoute` context, `@absolutejs/voice` returns a base
+						Elysia (its Twilio routes are reached by path), and so on.
+						Mount them and keep your own typed surface fully inferred.
 					</p>
 				</section>
 

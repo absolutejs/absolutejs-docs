@@ -1,22 +1,28 @@
-export const edenBackendWidening = `\
-// The backend has the same disease: a long \`.use()\` chain accumulates the
-// merged per-route type. Widen the heavy plugins so it cannot.
-import { type AnyElysia, Elysia } from 'elysia';
+export const edenBackendReturnType = `\
+// The real fix lives in the PLUGIN, not the call site. A plugin with many
+// routes — especially config-conditional ones — has an inferred return type
+// that MULTIPLIES: every \`config.x ? routes(x) : new Elysia()\` is a union,
+// and \`.use()\` distributes over unions, so N optional plugins trend toward
+// 2^N. It blows past tsc's serialization limit (TS7056) long before any route
+// ceiling. Casting it away at every call site is a workaround; giving the
+// plugin an explicit, cheap return type is the cure.
 
-// An async, generic-over-User plugin with many routes is the worst offender.
-const authPlugin = auth<User>(config) as Promise<AnyElysia>;
+// Expose only what consumers actually read. @absolutejs/auth is the worked
+// example: its route PATHS are configurable (authorizeRoute, callbackRoute…),
+// so Elysia keys those routes by \`string\` — there is no literal route type to
+// expose anyway. What IS precise is the typed \`protectRoute\` context, so
+// auth() returns that, and User is inferred from your \`getUser\`:
+//
+//   export const auth = async <User>(
+//     config: AuthConfig<User>          // User inferred from config.getUser
+//   ) => composed as unknown as AuthInstance<User>;  // one internal bridge
 
-// The rest, widened so none compound. Order is preserved; the casts are
-// type-only, so every plugin still mounts at runtime.
-const bulkPlugins: AnyElysia[] = [usersPlugin(db), athletePlugin(db) /* … */];
-
+// Consumers just mount it — no cast, full inference, instant type-check. Your
+// typed Eden surface (the REST plugin Treaty reads) stays fully inferred:
 const server = new Elysia()
   .use(framework)
-  .use(authPlugin)
-  .use(bulkPlugins);
-
-// Use AnyElysia, NOT the base \`Elysia\` — a specific \`Elysia<…>\` is not
-// assignable to the base type (its store/decorator defaults are empty).`;
+  .use(authPlugin)        // Promise<AuthInstance<User>> — small + typed
+  .use(apiPlugin(db));    // your Eden surface; stays precisely inferred`;
 export const edenTreatyComposedClient = `\
 // Keep the ergonomic \`server.*\` surface AND stay fast: build one client per
 // plugin, then compose them back into the same shape with EXPLICIT leaf
