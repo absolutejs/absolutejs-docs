@@ -1,17 +1,16 @@
 {
 	"name": "@absolutejs/docs",
 	"version": "0.0.1",
-	"description": "Documentation for AbsoluteJS and its associated packages.",
+	"private": true,
+	"description": "Documentation site for AbsoluteJS and its associated packages (deployed app, not a published library).",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/absolutejs/absolutejs.git"
+		"url": "https://github.com/absolutejs/absolutejs-docs.git"
 	},
 	"homepage": "https://github.com/absolutejs/absolutejs-docs",
 	"bugs": {
 		"url": "https://github.com/absolutejs/absolutejs-docs/issues"
 	},
-	"main": "./dist/index.js",
-	"types": "./dist/src/index.d.ts",
 	"license": "BSL-1.1",
 	"author": "Alex Kahn",
 	"scripts": {
