@@ -3,14 +3,15 @@ name: Deploy
 # Continuous deployment for the docs site (absolutejs.com). origin/main is the
 # single source of truth for what runs on the droplet.
 #
-#   push to main → typecheck (hard gate) → sync code to droplet → compile on the
-#                  droplet → atomic swap + smoke + auto-rollback
+#   push to main → typecheck → pull droplet env → compile ON THE RUNNER →
+#                  scp binary → atomic swap + smoke + auto-rollback
 #
-# Compiles ON the droplet (same as renown): `absolute compile` pre-renders by
-# booting the server, which is awkward on a CI runner. The droplet has swap and
-# nodejs (esbuild's postinstall needs node). The docs service is stopped just for
-# the swap; renown (port 3000) is untouched. Runtime env lives at /srv/docs/.env
-# on the droplet and PORT is pinned by the systemd unit (Environment=PORT=3001).
+# Compile on the runner (7 GB RAM), NOT the droplet: `bun --compile` bundling the
+# ~300 MB standalone binary OOMs on the 1 GB droplet. The droplet only runs the
+# binary. The droplet's /srv/docs/.env is pulled and baked at build time so prod
+# config (OAUTH2_CALLBACK_URI etc.) is correct. PORT is forced to a free port for
+# the pre-render only (the server auto-listens during pre-render; the droplet .env
+# PORT/​systemd Environment governs runtime).
 #
 # Required repo secret:
 #   ABSOLUTEJS_SSH_KEY — private key authorized as root@ on the droplet.
@@ -26,6 +27,7 @@ concurrency:
 env:
   HOST: 159.89.87.74
   APP_DIR: /srv/docs
+  PORT: "3001"   # runtime port (smoke test); pre-render uses a free port below
 
 jobs:
   deploy:
@@ -38,7 +40,7 @@ jobs:
         with:
           bun-version: 1.3.14
 
-      - name: Install dependencies (for typecheck)
+      - name: Install dependencies
         run: bun install --frozen-lockfile
 
       - name: Typecheck (hard gate — blocks every deploy)
@@ -50,52 +52,47 @@ jobs:
           printf '%s\n' "${{ secrets.ABSOLUTEJS_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-      - name: Sync code to droplet (keeps the droplet's own .env)
+      - name: Pull droplet env (bakes prod config at build time)
         run: |
-          rsync -az --delete \
-            --exclude='.git' --exclude='node_modules' --exclude='dist' --exclude='build' \
-            --exclude='.env' --exclude='.env.prod' --exclude='*.log' \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            ./ "root@${HOST}:${APP_DIR}/"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "root@${HOST}" \
+            "cat ${APP_DIR}/.env" > .env
+          test -s .env || { echo "::error::could not read ${HOST}:${APP_DIR}/.env"; exit 1; }
+          sed -i '/^PORT=/d' .env   # runtime PORT comes from the droplet's systemd unit
 
-      - name: Compile on droplet + atomic swap + smoke + rollback
+      - name: Compile standalone binary (PORT=3999 → free port for pre-render)
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "root@${HOST}" "APP_DIR=${APP_DIR} bash -s" <<'EOSSH'
+          PORT=3999 bunx absolute compile --outfile "$GITHUB_WORKSPACE/compiled-server"
+          test -f "$GITHUB_WORKSPACE/compiled-server" || { echo "::error::no compiled-server produced"; exit 1; }
+          echo "artifact: $(stat -c %s "$GITHUB_WORKSPACE/compiled-server") bytes"
+
+      - name: Ship — checksum + backup + atomic swap + smoke + auto-rollback
+        run: |
           set -euo pipefail
-          APP_DIR="${APP_DIR:-/srv/docs}"
-          chown -R docs:docs "$APP_DIR"
-
-          # Install deps (esbuild postinstall needs nodejs, present on the box).
-          sudo -u docs -H bash -lc "export PATH=\$HOME/.bun/bin:\$PATH; cd '$APP_DIR' && bun install --frozen-lockfile"
-
-          cd "$APP_DIR"
-          TS=$(date +%Y%m%d-%H%M%S)
-          [ -f compiled-server ] && cp -a compiled-server "compiled-server.bak-$TS" || true
-
-          # Stop docs so the pre-render/port is free; renown (3000) stays up.
-          systemctl stop docs || true
-          if ! sudo -u docs -H bash -lc "export PATH=\$HOME/.bun/bin:\$PATH; cd '$APP_DIR' && bunx absolute compile --outfile '$APP_DIR/compiled-server.new'" || [ ! -f compiled-server.new ]; then
-            echo '::error::compile failed — restoring previous binary'
-            systemctl start docs || true
-            exit 1
-          fi
-
-          mv compiled-server.new compiled-server
-          chown docs:docs compiled-server && chmod 755 compiled-server
-          systemctl start docs && sleep 5
-
-          A=$(systemctl is-active docs || echo inactive)
-          C=$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:3001 || echo 000)
-          echo "active=$A app=$C (backup compiled-server.bak-$TS)"
-          if [ "$A" != active ] || [ "$C" != 200 ]; then
-            echo '!!! SMOKE FAILED — rolling back !!!'
-            if [ -f "compiled-server.bak-$TS" ]; then systemctl stop docs; cp -a "compiled-server.bak-$TS" compiled-server; systemctl start docs; sleep 4; fi
-            echo "rolled back: active=$(systemctl is-active docs || echo inactive)"
-            exit 1
-          fi
-
-          { ls -t compiled-server.bak-* 2>/dev/null | tail -n +3 | xargs -r rm -f; } || true
-          { ls -dt /tmp/absolutejs-compiled-runtime-* 2>/dev/null | tail -n +3 | xargs -r rm -rf; } || true
-          echo "deploy ok"
-          EOSSH
+          SHA="$(sha256sum compiled-server | cut -c1-16)"
+          echo "shipping sha=${SHA} → docs (${HOST})"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "root@${HOST}" \
+            "cd ${APP_DIR} && rm -f compiled-server.new && ls -t compiled-server.bak-* 2>/dev/null | tail -n +2 | xargs -r rm -f"
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            compiled-server "root@${HOST}:${APP_DIR}/compiled-server.new"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "root@${HOST}" "
+            set -e
+            cd ${APP_DIR}
+            GOT=\$(sha256sum compiled-server.new | cut -c1-16)
+            if [ \"\$GOT\" != \"${SHA}\" ]; then echo 'CHECKSUM MISMATCH — aborting'; rm -f compiled-server.new; exit 1; fi
+            TS=\$(date +%Y%m%d-%H%M%S)
+            [ -f compiled-server ] && cp -a compiled-server \"compiled-server.bak-\$TS\" || true
+            systemctl stop docs
+            mv compiled-server.new compiled-server
+            chown docs:docs compiled-server && chmod 755 compiled-server
+            systemctl start docs && sleep 5
+            A=\$(systemctl is-active docs); C=\$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:${PORT} || echo 000)
+            echo \"active=\$A app=\$C (backup compiled-server.bak-\$TS)\"
+            if [ \"\$A\" != active ] || [ \"\$C\" != 200 ]; then
+              echo '!!! SMOKE FAILED — rolling back !!!'
+              if [ -f \"compiled-server.bak-\$TS\" ]; then systemctl stop docs; cp -a \"compiled-server.bak-\$TS\" compiled-server; systemctl start docs; sleep 4; fi
+              echo \"rolled back: active=\$(systemctl is-active docs)\"; exit 1
+            fi
+            { ls -t compiled-server.bak-* 2>/dev/null | tail -n +3 | xargs -r rm -f; } || true
+            { ls -dt /tmp/absolutejs-compiled-runtime-* 2>/dev/null | tail -n +3 | xargs -r rm -rf; } || true
+          "
           echo "deployed ${{ github.sha }} → absolutejs.com"
