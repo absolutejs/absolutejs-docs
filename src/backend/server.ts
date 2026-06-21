@@ -24,19 +24,24 @@ const authPluginRich = await auth<User>(absoluteAuthConfig(db));
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- intentional type erasure to keep the Elysia .use() chain under TS's union budget; see comment above
 const authPlugin = authPluginRich as unknown as Elysia;
 
-const server = new Elysia()
+const builtApp = new Elysia()
 	.use(absolutejs)
 	.use(providerPlugin(db))
 	.use(authPlugin)
 	.use(telemetryPlugin(db))
 	.use(pagesPlugin(manifest))
-	.use(networking)
 	.on('error', (error) => {
 		const { request } = error;
 		console.error(
 			`Server error on ${request.method} ${request.url}: ${error.message}`
 		);
 	});
+
+// `networking` WRAPS the fully-built app as the canonical outermost form — the
+// runtime VALUE export that `absolute start`/`absolute compile` mount as the backend.
+// The prior `.use(networking)` + type-only export compiled to a static-only binary
+// (every dynamic/auth route 404s). Matches the renown + dealroom (>=1064) pattern.
+export const server = networking(builtApp);
 
 export type Server = typeof server;
 
