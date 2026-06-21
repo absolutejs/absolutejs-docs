@@ -59,9 +59,9 @@ jobs:
           test -s .env || { echo "::error::could not read ${HOST}:${APP_DIR}/.env"; exit 1; }
           sed -i '/^PORT=/d' .env   # runtime PORT comes from the droplet's systemd unit
 
-      - name: Compile standalone binary (PORT=3999 → free port for pre-render)
+      - name: Compile standalone binary (PORT=0 → OS-assigned free port for pre-render)
         run: |
-          PORT=3999 bunx absolute compile --outfile "$GITHUB_WORKSPACE/compiled-server"
+          PORT=0 bunx absolute compile --outfile "$GITHUB_WORKSPACE/compiled-server"
           test -f "$GITHUB_WORKSPACE/compiled-server" || { echo "::error::no compiled-server produced"; exit 1; }
           echo "artifact: $(stat -c %s "$GITHUB_WORKSPACE/compiled-server") bytes"
 
