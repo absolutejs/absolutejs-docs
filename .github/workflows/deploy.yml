@@ -27,7 +27,11 @@ concurrency:
 env:
   HOST: 159.89.87.74
   APP_DIR: /srv/docs
-  PORT: "3001"   # runtime port (smoke test); pre-render uses a free port below
+  # NOTE: deliberately do NOT set PORT here. Setting PORT makes the app's
+  # networking() auto-listen on it during `absolute compile` pre-render, which
+  # collides with the pre-render harness (EADDRINUSE). With no PORT, absolute
+  # manages the pre-render port itself. Runtime PORT comes from the droplet's
+  # systemd unit (Environment=PORT=3001).
 
 jobs:
   deploy:
@@ -59,9 +63,9 @@ jobs:
           test -s .env || { echo "::error::could not read ${HOST}:${APP_DIR}/.env"; exit 1; }
           sed -i '/^PORT=/d' .env   # runtime PORT comes from the droplet's systemd unit
 
-      - name: Compile standalone binary (PORT=0 → OS-assigned free port for pre-render)
+      - name: Compile standalone binary (no PORT → absolute manages pre-render port)
         run: |
-          PORT=0 bunx absolute compile --outfile "$GITHUB_WORKSPACE/compiled-server"
+          bunx absolute compile --outfile "$GITHUB_WORKSPACE/compiled-server"
           test -f "$GITHUB_WORKSPACE/compiled-server" || { echo "::error::no compiled-server produced"; exit 1; }
           echo "artifact: $(stat -c %s "$GITHUB_WORKSPACE/compiled-server") bytes"
 
@@ -85,7 +89,7 @@ jobs:
             mv compiled-server.new compiled-server
             chown docs:docs compiled-server && chmod 755 compiled-server
             systemctl start docs && sleep 5
-            A=\$(systemctl is-active docs); C=\$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:${PORT} || echo 000)
+            A=\$(systemctl is-active docs); C=\$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:3001 || echo 000)
             echo \"active=\$A app=\$C (backup compiled-server.bak-\$TS)\"
             if [ \"\$A\" != active ] || [ \"\$C\" != 200 ]; then
               echo '!!! SMOKE FAILED — rolling back !!!'
