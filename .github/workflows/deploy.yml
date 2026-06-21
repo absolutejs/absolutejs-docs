@@ -1,0 +1,101 @@
+name: Deploy
+
+# Continuous deployment for the docs site (absolutejs.com). origin/main is the
+# single source of truth for what runs on the droplet.
+#
+#   push to main → typecheck (hard gate) → sync code to droplet → compile on the
+#                  droplet → atomic swap + smoke + auto-rollback
+#
+# Compiles ON the droplet (same as renown): `absolute compile` pre-renders by
+# booting the server, which is awkward on a CI runner. The droplet has swap and
+# nodejs (esbuild's postinstall needs node). The docs service is stopped just for
+# the swap; renown (port 3000) is untouched. Runtime env lives at /srv/docs/.env
+# on the droplet and PORT is pinned by the systemd unit (Environment=PORT=3001).
+#
+# Required repo secret:
+#   ABSOLUTEJS_SSH_KEY — private key authorized as root@ on the droplet.
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  HOST: 159.89.87.74
+  APP_DIR: /srv/docs
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: Install dependencies (for typecheck)
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck (hard gate — blocks every deploy)
+        run: bun run typecheck
+
+      - name: Configure SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.ABSOLUTEJS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Sync code to droplet (keeps the droplet's own .env)
+        run: |
+          rsync -az --delete \
+            --exclude='.git' --exclude='node_modules' --exclude='dist' --exclude='build' \
+            --exclude='.env' --exclude='.env.prod' --exclude='*.log' \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            ./ "root@${HOST}:${APP_DIR}/"
+
+      - name: Compile on droplet + atomic swap + smoke + rollback
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "root@${HOST}" "APP_DIR=${APP_DIR} bash -s" <<'EOSSH'
+          set -euo pipefail
+          APP_DIR="${APP_DIR:-/srv/docs}"
+          chown -R docs:docs "$APP_DIR"
+
+          # Install deps (esbuild postinstall needs nodejs, present on the box).
+          sudo -u docs -H bash -lc "export PATH=\$HOME/.bun/bin:\$PATH; cd '$APP_DIR' && bun install --frozen-lockfile"
+
+          cd "$APP_DIR"
+          TS=$(date +%Y%m%d-%H%M%S)
+          [ -f compiled-server ] && cp -a compiled-server "compiled-server.bak-$TS" || true
+
+          # Stop docs so the pre-render/port is free; renown (3000) stays up.
+          systemctl stop docs || true
+          if ! sudo -u docs -H bash -lc "export PATH=\$HOME/.bun/bin:\$PATH; cd '$APP_DIR' && bunx absolute compile --outfile '$APP_DIR/compiled-server.new'" || [ ! -f compiled-server.new ]; then
+            echo '::error::compile failed — restoring previous binary'
+            systemctl start docs || true
+            exit 1
+          fi
+
+          mv compiled-server.new compiled-server
+          chown docs:docs compiled-server && chmod 755 compiled-server
+          systemctl start docs && sleep 5
+
+          A=$(systemctl is-active docs || echo inactive)
+          C=$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:3001 || echo 000)
+          echo "active=$A app=$C (backup compiled-server.bak-$TS)"
+          if [ "$A" != active ] || [ "$C" != 200 ]; then
+            echo '!!! SMOKE FAILED — rolling back !!!'
+            if [ -f "compiled-server.bak-$TS" ]; then systemctl stop docs; cp -a "compiled-server.bak-$TS" compiled-server; systemctl start docs; sleep 4; fi
+            echo "rolled back: active=$(systemctl is-active docs || echo inactive)"
+            exit 1
+          fi
+
+          { ls -t compiled-server.bak-* 2>/dev/null | tail -n +3 | xargs -r rm -f; } || true
+          { ls -dt /tmp/absolutejs-compiled-runtime-* 2>/dev/null | tail -n +3 | xargs -r rm -rf; } || true
+          echo "deploy ok"
+          EOSSH
+          echo "deployed ${{ github.sha }} → absolutejs.com"
