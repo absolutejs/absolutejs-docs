@@ -103,6 +103,7 @@ import { AuthCredentialHardeningView } from '../components/documentation/package
 import { AuthCredentialsView } from '../components/documentation/packages/auth/AuthCredentialsView';
 import { AuthFgaView } from '../components/documentation/packages/auth/AuthFgaView';
 import { AuthImpersonationView } from '../components/documentation/packages/auth/AuthImpersonationView';
+import { AuthMfaView } from '../components/documentation/packages/auth/AuthMfaView';
 import { AuthMigrationsView } from '../components/documentation/packages/auth/AuthMigrationsView';
 import { AuthMtlsView } from '../components/documentation/packages/auth/AuthMtlsView';
 import { AuthMultiSessionView } from '../components/documentation/packages/auth/AuthMultiSessionView';
@@ -217,6 +218,7 @@ export const docsViews = definePortalViews({
 	'auth-credentials': AuthCredentialsView,
 	'auth-fga': AuthFgaView,
 	'auth-impersonation': AuthImpersonationView,
+	'auth-mfa': AuthMfaView,
 	'auth-migrations': AuthMigrationsView,
 	'auth-mtls': AuthMtlsView,
 	'auth-multi-session': AuthMultiSessionView,
@@ -587,6 +589,7 @@ export const sidebarData: MenuItem[] = [
 			{
 				buttons: [
 					{ id: 'auth-credentials', label: 'Credentials & MFA' },
+					{ id: 'auth-mfa', label: 'Multi-Factor Auth' },
 					{ id: 'auth-sso', label: 'Enterprise SSO & SCIM' },
 					{
 						id: 'auth-organizations',
