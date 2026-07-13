@@ -4,7 +4,6 @@ import {
 	FaBook,
 	FaBoxOpen,
 	FaBrain,
-	FaBroadcastTower,
 	FaBug,
 	FaBullhorn,
 	FaBullseye,
@@ -42,7 +41,6 @@ import {
 	FaMobileAlt,
 	FaPaintBrush,
 	FaPaperPlane,
-	FaPlayCircle,
 	FaPlug,
 	FaPuzzlePiece,
 	FaRandom,
@@ -264,6 +262,14 @@ import { DispatchOverviewView } from '../components/documentation/dispatch/Dispa
 import { AuditOverviewView } from '../components/documentation/audit/AuditOverviewView';
 import { TelemetryPackageView } from '../components/documentation/telemetry-package/TelemetryPackageView';
 import { QueueOverviewView } from '../components/documentation/queue/QueueOverviewView';
+import { QueueJobsView } from '../components/documentation/queue/QueueJobsView';
+import { QueueOperationsView } from '../components/documentation/queue/QueueOperationsView';
+import { McpCapabilitiesView } from '../components/documentation/mcp/McpCapabilitiesView';
+import { McpEndpointsView } from '../components/documentation/mcp/McpEndpointsView';
+import { McpFeedbackView } from '../components/documentation/mcp/McpFeedbackView';
+import { DemoBrowserView } from '../components/documentation/demo/DemoBrowserView';
+import { DemoRecordingView } from '../components/documentation/demo/DemoRecordingView';
+import { ErrorPipelineView } from '../components/documentation/error-pipeline/ErrorPipelineView';
 import { ClusterBusView } from '../components/documentation/cluster-bus/ClusterBusView';
 import { SyncSandboxView } from '../components/documentation/sync/SyncSandboxView';
 import { SyncVsConvexView } from '../components/documentation/sync/SyncVsConvexView';
@@ -343,7 +349,9 @@ export const docsViews = definePortalViews({
 	'cron-jobs': CronJobsView,
 	'data-fetching': DataFetchingView,
 	db: DbView,
+	'demo-browser': DemoBrowserView,
 	'demo-overview': DemoPackageView,
+	'demo-recording': DemoRecordingView,
 	'deploy-overview': DeployOverviewView,
 	dev: DevView,
 	'dev-tunnel': TunnelView,
@@ -363,6 +371,7 @@ export const docsViews = definePortalViews({
 	env: EnvView,
 	'environment-variables': EnvironmentVariablesView,
 	'error-boundaries': ErrorBoundariesView,
+	'error-pipeline': ErrorPipelineView,
 	'errors-overview': ErrorsPackageView,
 	eslint: EslintView,
 	'eslint-angular-one-feature-per-file': EslintRuleView,
@@ -421,6 +430,9 @@ export const docsViews = definePortalViews({
 	'logs-overview': LogsPackageView,
 	ls: LsView,
 	'manifest-overview': ManifestPackageView,
+	'mcp-capabilities': McpCapabilitiesView,
+	'mcp-endpoints': McpEndpointsView,
+	'mcp-feedback': McpFeedbackView,
 	'mcp-overview': McpPackageView,
 	'media-overview': MediaPackageView,
 	'meeting-overview': MeetingPackageView,
@@ -441,6 +453,8 @@ export const docsViews = definePortalViews({
 	'production-build': ProductionBuildView,
 	ps: PsView,
 	'pwa-overview': PwaPackageView,
+	'queue-jobs': QueueJobsView,
+	'queue-operations': QueueOperationsView,
 	'queue-overview': QueueOverviewView,
 	quickstart: QuickstartView,
 	'rag-frameworks': RagFrameworksView,
@@ -793,8 +807,12 @@ export const sidebarData: MenuItem[] = [
 		label: 'Sync'
 	},
 	{
+		buttons: [
+			{ id: 'queue-overview', label: 'Overview' },
+			{ id: 'queue-jobs', label: 'Jobs & Scheduling' },
+			{ id: 'queue-operations', label: 'Operations' }
+		],
 		icon: animated(FaTasks),
-		id: 'queue-overview',
 		label: 'Queue'
 	},
 	{
@@ -826,8 +844,13 @@ export const sidebarData: MenuItem[] = [
 		label: 'RAG'
 	},
 	{
+		buttons: [
+			{ id: 'mcp-overview', label: 'Overview' },
+			{ id: 'mcp-endpoints', label: 'Endpoints & Transport' },
+			{ id: 'mcp-capabilities', label: 'Guards, Prompts & Resources' },
+			{ id: 'mcp-feedback', label: 'Feedback & Elicitation' }
+		],
 		icon: animated(FaPlug),
-		id: 'mcp-overview',
 		label: 'MCP'
 	},
 	{
@@ -960,19 +983,14 @@ export const sidebarData: MenuItem[] = [
 		label: 'Logs'
 	},
 	{
+		buttons: [
+			{ id: 'error-pipeline', label: 'Pipeline Overview' },
+			{ id: 'errors-overview', label: 'Errors' },
+			{ id: 'beacon-overview', label: 'Beacon' },
+			{ id: 'replay-overview', label: 'Replay' }
+		],
 		icon: animated(FaBug),
-		id: 'errors-overview',
-		label: 'Errors'
-	},
-	{
-		icon: animated(FaBroadcastTower),
-		id: 'beacon-overview',
-		label: 'Beacon'
-	},
-	{
-		icon: animated(FaPlayCircle),
-		id: 'replay-overview',
-		label: 'Replay'
+		label: 'Error Pipeline'
 	},
 	{
 		icon: animated(FaClipboardList),
@@ -1053,8 +1071,12 @@ export const sidebarData: MenuItem[] = [
 		label: 'Vue Composables'
 	},
 	{
+		buttons: [
+			{ id: 'demo-overview', label: 'Overview' },
+			{ id: 'demo-browser', label: 'Browser & Desktop' },
+			{ id: 'demo-recording', label: 'Recording & Voiceover' }
+		],
 		icon: animated(FaDesktop),
-		id: 'demo-overview',
 		label: 'Demo'
 	},
 	{ heading: 'On-chain' },
