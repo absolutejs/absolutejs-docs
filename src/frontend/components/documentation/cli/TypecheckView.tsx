@@ -21,6 +21,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -77,11 +78,9 @@ export const TypecheckView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<PrismPlus
-						codeString={typecheckOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={typecheckOutput.command}
+						output={typecheckOutput.output}
 					/>
 				</section>
 

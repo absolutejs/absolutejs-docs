@@ -158,18 +158,6 @@ export const streamingSvelteRaw = `\
     resolve={async () => renderActivityHtml(await getActivity())}
   />
 </main>`;
-export const streamingTransportModes = `\
-Current transport (shipped default)
-- One HTML document response stays open
-- Slot fallbacks are in the initial HTML
-- Resolved slot patches arrive through the same response
-- Browser tab can keep showing a loading spinner until the final slot patch arrives
-
-Detached transport (planned)
-- Initial HTML document closes earlier
-- Slot fallbacks are still rendered in the initial HTML
-- Late slot updates arrive over a secondary channel such as streaming fetch() or SSE
-- Same slot APIs, different delivery transport semantics`;
 export const streamingVuePrimitive = `\
 <script setup lang="ts">
 import { SuspenseSlot } from '@absolutejs/absolute/vue/components';

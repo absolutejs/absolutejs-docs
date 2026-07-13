@@ -21,6 +21,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -73,10 +74,11 @@ export const LsView = ({
 						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>absolute ls</code> discovers pages the same way the
-						build does — scanning <code>&lt;frameworkDir&gt;/pages</code>{' '}
-						for each framework in your config. Because it reads source,
-						not build output, it never goes stale and works the same
+						<code>absolute ls</code> discovers pages the same way
+						the build does — scanning{' '}
+						<code>&lt;frameworkDir&gt;/pages</code> for each
+						framework in your config. Because it reads source, not
+						build output, it never goes stale and works the same
 						whether you use <code>dev</code>, <code>start</code>, or{' '}
 						<code>compile</code> — including multi-service workspace
 						configs. No build required.
@@ -99,15 +101,14 @@ export const LsView = ({
 						Reading the output
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Each framework gets its own group with a page count. Every
-						row is a page and its source file. <code>--json</code>{' '}
-						emits the same data as structured groups for scripting.
+						Each framework gets its own group with a page count.
+						Every row is a page and its source file.{' '}
+						<code>--json</code> emits the same data as structured
+						groups for scripting.
 					</p>
-					<PrismPlus
-						codeString={lsOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={lsOutput.command}
+						output={lsOutput.output}
 					/>
 				</section>
 
@@ -124,16 +125,14 @@ export const LsView = ({
 						Sizes live in build output, so they are opt-in. Pass{' '}
 						<code>--sizes</code> to read a build&apos;s manifest and
 						show each page&apos;s shipped size (server bundle +
-						hydration entry + client/island bundles + CSS). Point it at
-						a build with <code>--outdir</code> (defaults to your{' '}
-						<code>buildDirectory</code>); a <code>built 4m ago</code>{' '}
-						note keeps staleness visible.
+						hydration entry + client/island bundles + CSS). Point it
+						at a build with <code>--outdir</code> (defaults to your{' '}
+						<code>buildDirectory</code>); a{' '}
+						<code>built 4m ago</code> note keeps staleness visible.
 					</p>
-					<PrismPlus
-						codeString={lsSizesOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={lsSizesOutput.command}
+						output={lsSizesOutput.output}
 					/>
 				</section>
 
@@ -147,13 +146,14 @@ export const LsView = ({
 						Size budgets
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Add <code>--budget</code> (alongside <code>--sizes</code>)
-						to enforce a per-page ceiling. Pages over the limit are
-						flagged in red and the command exits non-zero, so a
-						runaway bundle fails CI instead of quietly shipping.
-						Budgets accept <code>kb</code> or <code>mb</code> — for
-						example <code>--budget 500kb</code> or{' '}
-						<code>--budget 1mb</code>.
+						Add <code>--budget</code> (alongside{' '}
+						<code>--sizes</code>) to enforce a per-page ceiling.
+						Pages over the limit are flagged in red and the command
+						exits non-zero, so a runaway bundle fails CI instead of
+						quietly shipping. Budgets accept <code>kb</code> or{' '}
+						<code>mb</code> — for example{' '}
+						<code>--budget 500kb</code> or <code>--budget 1mb</code>
+						.
 					</p>
 					<PrismPlus
 						codeString={lsBudgetCommand}
@@ -161,11 +161,9 @@ export const LsView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<PrismPlus
-						codeString={lsBudgetOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={lsBudgetOutput.command}
+						output={lsBudgetOutput.output}
 					/>
 				</section>
 

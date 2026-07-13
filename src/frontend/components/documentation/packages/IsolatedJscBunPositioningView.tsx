@@ -41,53 +41,53 @@ const alternatives: Array<{
 	bunGap: string;
 }> = [
 	{
-		option: 'new Function / direct eval',
+		bunGap: 'No meaningful authority boundary. User code sees the host global surface.',
 		goodFit: 'Trusted configuration snippets',
-		bunGap: 'No meaningful authority boundary. User code sees the host global surface.'
+		option: 'new Function / direct eval'
 	},
 	{
-		option: 'Node node:vm',
+		bunGap: 'Node documents it as not a security mechanism for untrusted code, and it is Node/V8 rather than Bun/JSC.',
 		goodFit: 'Convenience contexts for trusted or semi-trusted code',
-		bunGap: 'Node documents it as not a security mechanism for untrusted code, and it is Node/V8 rather than Bun/JSC.'
+		option: 'Node node:vm'
 	},
 	{
-		option: 'Node isolated-vm',
+		bunGap: 'It is a V8 addon. It does not give Bun a JavaScriptCore-native isolate primitive.',
 		goodFit: 'Mature isolate-shaped API for Node users',
-		bunGap: 'It is a V8 addon. It does not give Bun a JavaScriptCore-native isolate primitive.'
+		option: 'Node isolated-vm'
 	},
 	{
-		option: 'Bun Worker',
+		bunGap: 'Useful substrate, but not a complete untrusted-code permissions model by itself.',
 		goodFit: 'Portable separate-thread execution in Bun',
-		bunGap: 'Useful substrate, but not a complete untrusted-code permissions model by itself.'
+		option: 'Bun Worker'
 	},
 	{
-		option: 'Process or container per script',
+		bunGap: 'Higher cold start, higher RSS, serialized IPC, and more operational surface for frequent tenant scripts.',
 		goodFit: 'Stronger blast-radius control',
-		bunGap: 'Higher cold start, higher RSS, serialized IPC, and more operational surface for frequent tenant scripts.'
+		option: 'Process or container per script'
 	},
 	{
-		option: 'Cloudflare Workers / Deno Deploy',
+		bunGap: 'Excellent platforms, but they change the runtime and deployment model instead of embedding in a Bun server.',
 		goodFit: 'Hosted or platform isolate execution',
-		bunGap: 'Excellent platforms, but they change the runtime and deployment model instead of embedding in a Bun server.'
+		option: 'Cloudflare Workers / Deno Deploy'
 	}
 ];
 
 const painPoints: Array<{ title: string; body: string }> = [
 	{
-		title: 'AI code execution',
-		body: 'Model-generated snippets need timeouts, heap caps, console capture, and host tools without file, network, process, or shell authority.'
+		body: 'Model-generated snippets need timeouts, heap caps, console capture, and host tools without file, network, process, or shell authority.',
+		title: 'AI code execution'
 	},
 	{
-		title: 'Tenant scripting',
-		body: 'SaaS teams want customer-authored transforms, policy checks, workflow steps, and webhooks without a custom service per tenant.'
+		body: 'SaaS teams want customer-authored transforms, policy checks, workflow steps, and webhooks without a custom service per tenant.',
+		title: 'Tenant scripting'
 	},
 	{
-		title: 'Plugin evaluation',
-		body: 'Internal tools and build systems want plugins while keeping filesystem, network, process, and package-manager access explicit.'
+		body: 'Internal tools and build systems want plugins while keeping filesystem, network, process, and package-manager access explicit.',
+		title: 'Plugin evaluation'
 	},
 	{
-		title: 'Node-to-Bun migration',
-		body: 'Teams that already know isolated-vm need an isolate-shaped JavaScriptCore path when the host app moves to Bun.'
+		body: 'Teams that already know isolated-vm need an isolate-shaped JavaScriptCore path when the host app moves to Bun.',
+		title: 'Node-to-Bun migration'
 	}
 ];
 
@@ -188,7 +188,10 @@ export const IsolatedJscBunPositioningView = ({
 						TypeScript helpers, pools, execution receipts, output
 						limits, and explicit host capability brokers with
 						manifests, redaction, per-tool output byte caps, and
-						bounded audit buffers.
+						bounded audit buffers. As of 0.11.0 that layer also
+						covers hibernating keyed pools that checkpoint idle
+						tenants to bytes, operator-shaped pool metrics with
+						drain and warm, and optional OpenTelemetry tracing.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						<span style={strongStyle}>
@@ -338,8 +341,10 @@ export const IsolatedJscBunPositioningView = ({
 						Workers are the portable substrate and fallback path.
 						The product layer adds hardened globals, memory limits,
 						timeout behavior, error fidelity, TypeScript helpers,
-						execution receipts, result and console limits, and
-						capability brokers with redacted bounded audit events.
+						execution receipts, result and console limits,
+						capability brokers with redacted bounded audit events,
+						and hibernating keyed pools with operator metrics and
+						OpenTelemetry tracing.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						<span style={strongStyle}>

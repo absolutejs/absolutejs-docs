@@ -2,7 +2,6 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
-	tunnelArchitecture,
 	tunnelClientConfig,
 	tunnelClientEnv,
 	tunnelDevOutput,
@@ -25,8 +24,32 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../utils/StepFlow';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+
+const tunnelFlowSteps: StepFlowStep[] = [
+	{
+		actor: 'Internet',
+		description:
+			'Twilio, Stripe, GitHub — any webhook or WebSocket — calls your public URL over HTTPS / WSS.',
+		title: 'A provider hits the relay'
+	},
+	{
+		actor: 'Relay',
+		description:
+			'The only public piece. It holds one control WebSocket that your dev machine opened (outbound, so no inbound firewall rules needed) and serializes every public request over that socket. WebSocket connections are multiplexed over the same control socket by id.',
+		title: 'The relay forwards the request down the control socket'
+	},
+	{
+		actor: 'Your laptop',
+		code: 'bun run dev → localhost:3000',
+		description:
+			'The dev client replays the request against your local server and streams the response back up through the relay to the caller.',
+		title: 'Your dev server answers'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#why', label: 'Why a Tunnel' },
@@ -83,10 +106,11 @@ export const TunnelView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Providers like Twilio, Stripe, GitHub, and OAuth
-						callbacks need a public HTTPS URL to reach your code. Your
-						dev machine is behind NAT, so the choice is usually
-						redeploy-on-every-change or a third-party tunnel service.
-						AbsoluteJS gives you a third option you fully own.
+						callbacks need a public HTTPS URL to reach your code.
+						Your dev machine is behind NAT, so the choice is usually
+						redeploy-on-every-change or a third-party tunnel
+						service. AbsoluteJS gives you a third option you fully
+						own.
 					</p>
 					<PrismPlus
 						codeString={tunnelWhy}
@@ -113,10 +137,8 @@ export const TunnelView = ({
 						streams responses back. WebSocket connections are
 						multiplexed over the same control socket by id.
 					</p>
-					<PrismPlus
-						codeString={tunnelArchitecture}
-						language="text"
-						showLineNumbers={false}
+					<StepFlow
+						steps={tunnelFlowSteps}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -205,13 +227,15 @@ export const TunnelView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						When a tunnel is configured, <code>bun run dev</code>{' '}
-						prints a <code>Public:</code> URL alongside the local one:
+						prints a <code>Public:</code> URL alongside the local
+						one. It routes straight to your local server — use it as
+						any webhook provider&apos;s callback URL and every
+						request hits your live code with full HMR, breakpoints,
+						and logs:
 					</p>
-					<PrismPlus
-						codeString={tunnelDevOutput}
-						language="text"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={tunnelDevOutput.command}
+						output={tunnelDevOutput.output}
 					/>
 				</section>
 

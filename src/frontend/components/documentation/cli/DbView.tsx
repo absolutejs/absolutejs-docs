@@ -3,7 +3,8 @@ import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	dbBackupOutput,
-	dbCommands
+	dbCommands,
+	dbRestoreOutput
 } from '../../../data/documentation/cliUtilityDocsCode';
 import {
 	h1Style,
@@ -18,6 +19,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -105,11 +107,13 @@ export const DbView = ({
 						your project’s seed script (<code>db/seed.ts</code> by
 						default, or a path you pass).
 					</p>
-					<PrismPlus
-						codeString={dbBackupOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={dbBackupOutput.command}
+						output={dbBackupOutput.output}
+					/>
+					<TerminalFrame
+						command={dbRestoreOutput.command}
+						output={dbRestoreOutput.output}
 					/>
 				</section>
 

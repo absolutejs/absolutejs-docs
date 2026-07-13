@@ -58,16 +58,6 @@ abuse: {
   // ...the rest of your abuse config
   shouldBlock: (request) => blockedCountry(request.headers)
 }`;
-export const pluginsPhilosophy = `\
-// The plugins package is deliberately tiny — each plugin is a small named function
-// (20-40 LOC) that returns the same primitive your code already accepts (an
-// AuditSink, a (headers) => boolean, a (email) => verdict). There's no plugin
-// registry, no lifecycle, no install command, no DI container.
-//
-// If you want a plugin we don't ship, write the same shape of function and pass it
-// to the same hook. The hooks are the contract; the plugins package is just our
-// own opinionated, batteries-included examples for the things you'd otherwise
-// look up a Stack Overflow answer to write yourself.`;
 export const pluginsPosthog = `\
 import { posthogIdentifyPlugin } from '@absolutejs/auth/plugins';
 

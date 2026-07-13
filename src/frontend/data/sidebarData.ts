@@ -40,6 +40,7 @@ import {
 	FaMicrochip,
 	FaMicrophone,
 	FaMobileAlt,
+	FaPaintBrush,
 	FaPaperPlane,
 	FaPlayCircle,
 	FaPlug,
@@ -170,6 +171,7 @@ import {
 	RenownPackageView,
 	ReplayPackageView,
 	RulesPackageView,
+	StudioPackageView,
 	TourPackageView,
 	VscodeExtensionPackageView,
 	VueComposablesPackageView
@@ -202,6 +204,13 @@ import { AuthVerifiableCredentialsView } from '../components/documentation/packa
 import { EslintRuleView } from '../components/documentation/packages/eslint/EslintRuleView';
 import { EslintView } from '../components/documentation/packages/eslint/EslintView';
 import { PlatformOverviewView } from '../components/documentation/platform/PlatformOverviewView';
+import { RagFrameworksView } from '../components/documentation/rag/RagFrameworksView';
+import { RagIngestionView } from '../components/documentation/rag/RagIngestionView';
+import { RagQualityView } from '../components/documentation/rag/RagQualityView';
+import { RagRetrievalView } from '../components/documentation/rag/RagRetrievalView';
+import { TourActionsView } from '../components/documentation/tour/TourActionsView';
+import { TourBranchingView } from '../components/documentation/tour/TourBranchingView';
+import { TourChecklistView } from '../components/documentation/tour/TourChecklistView';
 import { PageHandlersView } from '../components/documentation/reference/PageHandlersView';
 import { TypesView } from '../components/documentation/reference/TypesView';
 import { CronJobsView } from '../components/documentation/server/CronJobsView';
@@ -434,7 +443,11 @@ export const docsViews = definePortalViews({
 	'pwa-overview': PwaPackageView,
 	'queue-overview': QueueOverviewView,
 	quickstart: QuickstartView,
+	'rag-frameworks': RagFrameworksView,
+	'rag-ingestion': RagIngestionView,
 	'rag-overview': RagPackageView,
+	'rag-quality': RagQualityView,
+	'rag-retrieval': RagRetrievalView,
 	'rate-limit-overview': RateLimitOverviewView,
 	'react-ai': ReactAIView,
 	'react-components': ReactComponentsView,
@@ -456,6 +469,7 @@ export const docsViews = definePortalViews({
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
+	'studio-overview': StudioPackageView,
 	'substrate-audit': PlatformOverviewView,
 	'svelte-ai': SvelteAIView,
 	'svelte-components': SvelteComponentsView,
@@ -480,6 +494,9 @@ export const docsViews = definePortalViews({
 	'tailwind-css': TailwindCSSView,
 	telemetry: TelemetryView,
 	'telemetry-overview': TelemetryPackageView,
+	'tour-actions': TourActionsView,
+	'tour-branching': TourBranchingView,
+	'tour-checklist': TourChecklistView,
 	'tour-overview': TourPackageView,
 	'type-safety': TypeSafetyView,
 	typecheck: TypecheckView,
@@ -798,8 +815,14 @@ export const sidebarData: MenuItem[] = [
 		label: 'AI'
 	},
 	{
+		buttons: [
+			{ id: 'rag-overview', label: 'Overview' },
+			{ id: 'rag-ingestion', label: 'Ingestion & Chunking' },
+			{ id: 'rag-retrieval', label: 'Retrieval & Adapters' },
+			{ id: 'rag-quality', label: 'Quality & Governance' },
+			{ id: 'rag-frameworks', label: 'Frameworks & Chat' }
+		],
 		icon: animated(FaBrain),
-		id: 'rag-overview',
 		label: 'RAG'
 	},
 	{
@@ -1010,8 +1033,13 @@ export const sidebarData: MenuItem[] = [
 		label: 'PWA'
 	},
 	{
+		buttons: [
+			{ id: 'tour-overview', label: 'Overview' },
+			{ id: 'tour-actions', label: 'Actions & Demo Data' },
+			{ id: 'tour-branching', label: 'Branching & Events' },
+			{ id: 'tour-checklist', label: 'Checklist & Hotspots' }
+		],
 		icon: animated(FaMapSigns),
-		id: 'tour-overview',
 		label: 'Tour'
 	},
 	{
@@ -1040,6 +1068,11 @@ export const sidebarData: MenuItem[] = [
 		icon: animated(FaRocket),
 		id: 'create-absolutejs',
 		label: 'Create AbsoluteJS'
+	},
+	{
+		icon: animated(FaPaintBrush),
+		id: 'studio-overview',
+		label: 'Studio'
 	},
 	{
 		buttons: [

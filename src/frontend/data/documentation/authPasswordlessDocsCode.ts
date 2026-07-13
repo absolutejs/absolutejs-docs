@@ -1,14 +1,3 @@
-export const passwordlessRoutes = `\
-// Magic links (mounted when onSendMagicLink is set):
-POST /auth/passwordless/magic-link          { email }   -> emails a one-time link
-POST /auth/passwordless/magic-link/verify   { token }   -> session
-
-// Email / SMS OTP (mounted when onSendOtp is set):
-POST /auth/passwordless/otp                 { email }   -> sends a 6-digit code
-POST /auth/passwordless/otp/verify          { email, code } -> session
-
-// The token is delivered out-of-band and never returned from the (unauthenticated)
-// request route. Both verify routes mint the same SessionData as every other flow.`;
 export const passwordlessSetup = `\
 import {
   auth,
@@ -27,18 +16,6 @@ await auth<User>({
     onSendOtp: ({ email, code }) => sendEmail(email, \`Your code: \${code}\`)
   }
 });`;
-export const webauthnFlow = `\
-// Registration (add a passkey to the authenticated caller):
-POST /auth/webauthn/register/options
-POST /auth/webauthn/register/verify
-
-// Authentication (passwordless, discoverable-credential sign-in -> session):
-POST /auth/webauthn/authenticate/options
-POST /auth/webauthn/authenticate/verify
-
-// A short-lived, single-use cookie binds an options request to its verify
-// request. The signature counter is persisted and bumped on each assertion to
-// detect cloned authenticators.`;
 export const webauthnSetup = `\
 import {
   auth,

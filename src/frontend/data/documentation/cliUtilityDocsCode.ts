@@ -1,3 +1,8 @@
+type TerminalSession = {
+	command: string;
+	output: string;
+};
+
 export const addAuthCommand = `\
 # Scaffold the code wiring for an @absolutejs/auth feature
 absolute add auth:mfa
@@ -6,9 +11,9 @@ absolute add auth:sso
 
 # also: passwordless, webauthn, organizations, roles, scim,
 # portal, lockout, compliance, sessions, audit, webhooks`;
-export const addAuthOutput = `\
-$ absolute add auth:mfa
-
+export const addAuthOutput: TerminalSession = {
+	command: 'absolute add auth:mfa',
+	output: `\
 ✓ Scaffolded src/mfaConfig.ts.
 
   Wire it in:
@@ -16,7 +21,8 @@ $ absolute add auth:mfa
     // add to your auth() call:
     mfa: mfaConfig
 
-  Next  fill the TODO stubs, run 'absolute prettier --write', then 'absolute dev'`;
+  Next  fill the TODO stubs, run 'absolute prettier --write', then 'absolute dev'`
+};
 export const addCommand = `\
 # Add a framework: installs deps, updates config, scaffolds a starter page
 absolute add svelte
@@ -30,19 +36,20 @@ absolute add telemetry    # installs @elysiajs/opentelemetry + enables it
 absolute add cors         # installs @elysiajs/cors, prints the .use(...) to add
 absolute add jwt
 absolute add cron`;
-export const addIntegrationOutput = `\
-$ absolute add cors
-
+export const addIntegrationOutput: TerminalSession = {
+	command: 'absolute add cors',
+	output: `\
 ✓ Installed @elysiajs/cors.
 
   Add to your server:
     import { cors } from '@elysiajs/cors';
     .use(cors())
 
-  Next  wire it in, then run 'absolute dev'`;
-export const addOutput = `\
-$ absolute add svelte
-
+  Next  wire it in, then run 'absolute dev'`
+};
+export const addOutput: TerminalSession = {
+	command: 'absolute add svelte',
+	output: `\
   Installing Svelte dependencies…
 ✓ Added Svelte to your project
 
@@ -55,16 +62,17 @@ $ absolute add svelte
     absolute.config.ts
     src/backend/plugins/pagesPlugin.ts
 
-  Route  /svelte-example`;
+  Route  /svelte-example`
+};
 export const analyzeCommand = `\
 # Bundle size breakdown by category (pages, islands, chunks, CSS)
 absolute analyze
 
 # Record a baseline; later runs show the diff (+/- per category)
 absolute analyze --save`;
-export const analyzeOutput = `\
-$ absolute analyze
-
+export const analyzeOutput: TerminalSession = {
+	command: 'absolute analyze',
+	output: `\
   Pages          312 KB   +4 KB
   Hydration      180 KB   —
   Islands        165 KB   —
@@ -77,7 +85,8 @@ $ absolute analyze
     +4 KB   Dashboard
     -2 KB   Chunk5wc6pv6k
 
-  vs baseline .absolute-size-baseline.json`;
+  vs baseline .absolute-size-baseline.json`
+};
 export const apiCommand = `\
 # Show the API surface from a running dev server
 absolute api
@@ -87,15 +96,16 @@ absolute api --open
 
 # Print the OpenAPI spec the plugin generates from your typed routes
 absolute api --json > openapi.json`;
-export const apiOutput = `\
-$ absolute api
-
+export const apiOutput: TerminalSession = {
+	command: 'absolute api',
+	output: `\
   GET     /
   GET     /dashboard
   POST    /api/login        body: email, password
   DELETE  /api/account/:id  params: id
 
-  4 routes · my-app · \`absolute api --open\` for the UI`;
+  4 routes · my-app · \`absolute api --open\` for the UI`
+};
 export const configCommand = `\
 # Open the Absolute Config visual editor in your browser
 absolute config
@@ -105,21 +115,21 @@ absolute config --port 4099 --open
 
 # Point at a specific config file
 absolute config --config ./absolute.config.ts`;
-export const configOutput = `\
-$ absolute config
-
+export const configOutput: TerminalSession = {
+	command: 'absolute config',
+	output: `\
   ABSOLUTEJS v0.19.0-beta.1051  ready in 283ms
 
   ➜  Local:   https://config.absolute.localhost:4099/
 
-  Open it in your browser, or pass --open.`;
-export const dbBackupOutput = `\
-$ absolute db backup
+  Open it in your browser, or pass --open.`
+};
+export const dbBackupOutput: TerminalSession = {
+	command: 'absolute db backup',
+	output: `\
   ✓ backup → backups/backup-2026-05-25T18-30-42-239Z.json
-    8 tables, 1240 rows
-
-$ absolute db restore
-  ✓ restored 8 tables, 1240 rows (idempotent upsert by primary key)`;
+    8 tables, 1240 rows`
+};
 export const dbCommands = `\
 # Back up every table to backups/<timestamp>.json (+ latest.json)
 absolute db backup
@@ -138,6 +148,11 @@ absolute db restore --truncate -y
 # Run the project's seed script (db/seed.ts by default)
 absolute db seed
 absolute db seed ./db/demo-seed.ts`;
+export const dbRestoreOutput: TerminalSession = {
+	command: 'absolute db restore',
+	output: `\
+  ✓ restored 8 tables, 1240 rows (idempotent upsert by primary key)`
+};
 export const doctorCommand = `\
 # Diagnose the project (bun, config, framework dirs, env, dev port)
 absolute doctor
@@ -147,9 +162,9 @@ absolute doctor --fix
 
 # Machine-readable, exits non-zero on failures (for CI)
 absolute doctor --json`;
-export const doctorOutput = `\
-$ absolute doctor
-
+export const doctorOutput: TerminalSession = {
+	command: 'absolute doctor',
+	output: `\
   ✓ Bun runtime           v1.3.14
   ✓ @absolutejs/absolute  v0.19.0-beta.1038
   ✓ Native binary         v0.19.0-beta.1008
@@ -159,20 +174,22 @@ $ absolute doctor
   ✗ Env vars              missing DATABASE_URL
   ⚠ Dev port              3000 in use by pid 48210
 
-  8 checks · 1 failed · 1 warning`;
+  8 checks · 1 failed · 1 warning`
+};
 export const envCommand = `\
 # Report the env vars the app reads via getEnv()
 absolute env
 
 # Fail (exit 1) if any are missing — for CI
 absolute env --check`;
-export const envOutput = `\
-$ absolute env
-
+export const envOutput: TerminalSession = {
+	command: 'absolute env',
+	output: `\
   ✓ DATABASE_URL          set      2 files
   ✗ OAUTH2_CALLBACK_URI   missing  1 file
 
-  2 referenced · 1 missing`;
+  2 referenced · 1 missing`
+};
 export const eslintCommand = `\
 # Run ESLint with caching across the whole project
 absolute eslint
@@ -202,9 +219,9 @@ absolute generate api users
 
 # A reusable component (no route)
 absolute generate component Button --framework svelte`;
-export const generateOutput = `\
-$ absolute generate page dashboard --framework react
-
+export const generateOutput: TerminalSession = {
+	command: 'absolute generate page dashboard --framework react',
+	output: `\
 ✓ Generated page dashboard (react)
 
   Created
@@ -216,7 +233,8 @@ $ absolute generate page dashboard --framework react
 
   Route  /dashboard
 
-  Next  run \`absolute prettier --write\` to format edits, then \`absolute dev\``;
+  Next  run \`absolute prettier --write\` to format edits, then \`absolute dev\``
+};
 export const htmxCommand = `\
 # Report the self-hosted htmx version (and the CLI's vendored default)
 absolute htmx
@@ -224,23 +242,22 @@ absolute htmx
 # Install / upgrade the pinned copy from jsDelivr
 absolute htmx latest
 absolute htmx 2.0.6`;
-export const htmxOutput = `\
-$ absolute htmx
-
+export const htmxOutput: TerminalSession = {
+	command: 'absolute htmx',
+	output: `\
   installed  2.0.6
   vendored   2.0.6
 
-  Upgrade with \`absolute htmx <version>\` (e.g. \`absolute htmx latest\`)`;
-export const infoCommand = `\
-# Print system info for bug reports
-absolute info`;
-export const infoOutput = `\
-$ absolute info
-
+  Upgrade with \`absolute htmx <version>\` (e.g. \`absolute htmx latest\`)`
+};
+export const infoOutput: TerminalSession = {
+	command: 'absolute info',
+	output: `\
   AbsoluteJS v0.19.0-beta.174
   Bun v1.3.11
   Platform: linux x64
-  Node: v22.0.0`;
+  Node: v22.0.0`
+};
 export const inspectCommand = `\
 # Live request inspector for a running dev server
 absolute inspect
@@ -248,16 +265,17 @@ absolute inspect
 # One-shot snapshot (when piped) or machine-readable JSON
 absolute inspect | cat
 absolute inspect --json`;
-export const inspectOutput = `\
-$ absolute inspect
-
+export const inspectOutput: TerminalSession = {
+	command: 'absolute inspect',
+	output: `\
   TIME      METHOD  PATH      STATUS  TOOK   SIZE
   04:34:57  GET     /         200     5ms    —
   04:34:57  GET     /react    200     65ms   —
   04:34:57  GET     /vue      200     116ms  —
   04:34:58  GET     /missing  404     8ms    —
 
-  4 requests · 54ms avg · 116ms p95 · live · q quit`;
+  4 requests · 54ms avg · 116ms p95 · live · q quit`
+};
 export const islandsCommand = `\
 # List islands by framework, hydration strategy, and the pages that mount them
 absolute islands
@@ -267,9 +285,9 @@ absolute islands --sizes
 
 # Machine-readable
 absolute islands --json`;
-export const islandsOutput = `\
-$ absolute islands --sizes
-
+export const islandsOutput: TerminalSession = {
+	command: 'absolute islands --sizes',
+	output: `\
   ⬡ ReactCounter  react · 5 pages · 4 cross-framework  1 KB
     src/frontend/react/components/ReactCounter
     src/frontend/react/pages/Home.tsx            load
@@ -280,29 +298,31 @@ $ absolute islands --sizes
     src/frontend/angular/components/angular-counter
     src/frontend/react/pages/Home.tsx            load                 → in react
 
-  4 islands · 4 frameworks · 44 mounts · 39 cross-framework`;
+  4 islands · 4 frameworks · 44 mounts · 39 cross-framework`
+};
 export const logsCommand = `\
 # Tail a running server's log by name (from any terminal)
 absolute logs my-app
 
 # Follow live, last 100 lines
 absolute logs my-app -f -n 100`;
-export const logsOutput = `\
-$ absolute logs my-app
-
+export const logsOutput: TerminalSession = {
+	command: 'absolute logs my-app',
+	output: `\
   [build] ready in 312ms
   GET / 200 4ms
   GET /api/users 200 12ms
-  — following my-app · ctrl+c to stop —`;
+  — following my-app · ctrl+c to stop —`
+};
 export const lsBudgetCommand = `\
 # Fail the build if any page ships more than a size budget (needs --sizes)
 absolute ls --sizes --budget 500kb
 
 # Also accepts mb; combine with --json for CI
 absolute ls --sizes --budget 1mb --json`;
-export const lsBudgetOutput = `\
-$ absolute ls --sizes --budget 500kb
-
+export const lsBudgetOutput: TerminalSession = {
+	command: 'absolute ls --sizes --budget 500kb',
+	output: `\
   React · 2 pages
     Dashboard  312.4 KB  src/frontend/react/pages/Dashboard.tsx
     Home       207.0 KB  src/frontend/react/pages/Home.tsx
@@ -310,7 +330,8 @@ $ absolute ls --sizes --budget 500kb
   Vue · 1 page
     Settings   918.7 KB  src/frontend/vue/pages/Settings.vue   over budget
 
-  1 page over the 500 KB budget · exit 1`;
+  1 page over the 500 KB budget · exit 1`
+};
 export const lsCommand = `\
 # List your project's pages, grouped by framework (reads source — no build needed)
 absolute ls
@@ -321,9 +342,9 @@ absolute ls --sizes --outdir dist
 
 # Machine-readable output
 absolute ls --json`;
-export const lsOutput = `\
-$ absolute ls
-
+export const lsOutput: TerminalSession = {
+	command: 'absolute ls',
+	output: `\
   React · 2 pages
     Dashboard  src/frontend/react/pages/Dashboard.tsx
     Home       src/frontend/react/pages/Home.tsx
@@ -334,10 +355,11 @@ $ absolute ls
   HTMX · 1 page
     Inbox      src/frontend/htmx/pages/Inbox.html
 
-  3 frameworks · 4 pages`;
-export const lsSizesOutput = `\
-$ absolute ls --sizes
-
+  3 frameworks · 4 pages`
+};
+export const lsSizesOutput: TerminalSession = {
+	command: 'absolute ls --sizes',
+	output: `\
   build/manifest.json · built 4m 12s ago
 
   React · 2 pages
@@ -347,7 +369,8 @@ $ absolute ls --sizes
   Vue · 1 page
     Settings   918.7 KB  src/frontend/vue/pages/Settings.vue
 
-  3 frameworks · 4 pages`;
+  3 frameworks · 4 pages`
+};
 export const memCommand = `\
 # Memory report for every running server, biggest first
 absolute mem
@@ -357,21 +380,24 @@ absolute mem diff before.heapsnapshot after.heapsnapshot
 
 # Machine-readable (per-server RSS + system totals)
 absolute mem --json`;
-export const memHeapSnapshot = `\
-$ absolute dev
+export const memHeapSnapshot: TerminalSession = {
+	command: 'absolute dev',
+	output: `\
   ...
 # press  m  (or type: heap)
 [absolute] heap snapshot written: heap-48210-1716600000000.heapsnapshot
-# load it in Chrome DevTools › Memory › Load`;
-export const memOutput = `\
-$ absolute mem
-
+# load it in Chrome DevTools › Memory › Load`
+};
+export const memOutput: TerminalSession = {
+	command: 'absolute mem',
+	output: `\
   NAME     SOURCE     PORT  RSS       % SYS
   my-app   dev        3000  142.6 MB  ███░░░░░░░░░░ 0.9%
   api      untracked  3001  88.1 MB   ██░░░░░░░░░░░ 0.5%
 
   2 servers · 230.7 MB resident total
-  system  6.2 GB / 16.0 GB used · 9.8 GB free`;
+  system  6.2 GB / 16.0 GB used · 9.8 GB free`
+};
 export const mkcertCommand = `\
 # Setup trusted HTTPS certificates for local development
 absolute mkcert`;
@@ -405,46 +431,50 @@ absolute ps --kill 3001
 
 # Stop every running server
 absolute ps --kill-all`;
-export const psOutput = `\
-$ absolute ps
-
+export const psOutput: TerminalSession = {
+	command: 'absolute ps',
+	output: `\
   NAME        SOURCE     PORT  PID    UPTIME  MEM       STATUS  URL
   my-app      dev        3000  48210  2m 14s  142.6 MB  ready   http://localhost:3000/
-  api-server  untracked  3001  51388  5h 42m  88.1 MB   ready   http://localhost:3001/`;
-export const psPortConflict = `\
-$ absolute dev
-
-  Port 3000 is in use (held by pid 51388 — bun run dist/server.js), trying another one... → http://localhost:3001/`;
+  api-server  untracked  3001  51388  5h 42m  88.1 MB   ready   http://localhost:3001/`
+};
+export const psPortConflict: TerminalSession = {
+	command: 'absolute dev',
+	output: `\
+  Port 3000 is in use (held by pid 51388 — bun run dist/server.js), trying another one... → http://localhost:3001/`
+};
 export const removeCommand = `\
 # Remove a framework from the config (keeps your source files)
 absolute remove svelte
 
 # Also uninstall the framework's dependencies
 absolute remove svelte --prune`;
-export const removeOutput = `\
-$ absolute remove svelte
-
+export const removeOutput: TerminalSession = {
+	command: 'absolute remove svelte',
+	output: `\
 ✓ Removed svelteDirectory from absolute.config.ts
 
   Kept  src/frontend/svelte — delete its source manually if no longer needed.
   Still references  src/backend/plugins/pagesPlugin.ts (calls handleSveltePageRequest)
 
-  Run \`absolute remove svelte --prune\` to also uninstall: svelte, svelte-check`;
+  Run \`absolute remove svelte --prune\` to also uninstall: svelte, svelte-check`
+};
 export const routesCommand = `\
 # List every route (pages + API) of a running dev server
 absolute routes
 
 # Machine-readable
 absolute routes --json`;
-export const routesOutput = `\
-$ absolute routes
-
+export const routesOutput: TerminalSession = {
+	command: 'absolute routes',
+	output: `\
   GET     /
   GET     /dashboard
   DELETE  /api/account/:id
   POST    /api/login
 
-  4 routes · my-app`;
+  4 routes · my-app`
+};
 export const telemetryCommand = `\
 # Check telemetry status
 absolute telemetry
@@ -475,6 +505,7 @@ export default defineConfig({
     "typecheck": "absolute typecheck"
   }
 }`;
-export const typecheckOutput = `\
-$ absolute typecheck
-✓ Typecheck passed`;
+export const typecheckOutput: TerminalSession = {
+	command: 'absolute typecheck',
+	output: '✓ Typecheck passed'
+};

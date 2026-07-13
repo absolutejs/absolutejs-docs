@@ -19,6 +19,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -71,12 +72,13 @@ export const MemView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>absolute mem</code> lists every running AbsoluteJS
-						server by resident memory (RSS), biggest first, alongside
-						your system&apos;s total usage. It reads RSS externally —
-						no server changes needed — so it works on dev, start,
-						compiled, and untracked servers alike. Add{' '}
-						<code>--json</code> for the per-server and system numbers
-						in a scriptable shape (handy for CI memory budgets).
+						server by resident memory (RSS), biggest first,
+						alongside your system&apos;s total usage. It reads RSS
+						externally — no server changes needed — so it works on
+						dev, start, compiled, and untracked servers alike. Add{' '}
+						<code>--json</code> for the per-server and system
+						numbers in a scriptable shape (handy for CI memory
+						budgets).
 					</p>
 					<PrismPlus
 						codeString={memCommand}
@@ -100,16 +102,14 @@ export const MemView = ({
 						share of total system memory, followed by the resident
 						total and the system&apos;s used/free split. One caveat
 						specific to Bun: RSS often stays high because the
-						allocator doesn&apos;t return freed memory to the OS, so a
-						big RSS isn&apos;t necessarily a leak — it&apos;s the
+						allocator doesn&apos;t return freed memory to the OS, so
+						a big RSS isn&apos;t necessarily a leak — it&apos;s the
 						fast, at-a-glance view. For the real leak signal, take a
 						heap snapshot.
 					</p>
-					<PrismPlus
-						codeString={memOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={memOutput.command}
+						output={memOutput.output}
 					/>
 				</section>
 
@@ -124,23 +124,24 @@ export const MemView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						While <code>absolute dev</code> is running, press{' '}
-						<code>m</code> (or type <code>heap</code>) to dump a heap
-						snapshot of the server to your project root. It&apos;s a
-						standard V8 <code>.heapsnapshot</code> you can load in
-						Chrome DevTools under Memory — where{' '}
+						<code>m</code> (or type <code>heap</code>) to dump a
+						heap snapshot of the server to your project root.
+						It&apos;s a standard V8 <code>.heapsnapshot</code> you
+						can load in Chrome DevTools under Memory — where{' '}
 						<code>heapUsed</code> growing across snapshots is the
-						reliable sign of a real leak, unlike RSS. Take two snapshots
-						and run <code>absolute mem diff a.heapsnapshot
-						b.heapsnapshot</code> to see exactly which object types grew
-						between them — the leak, named. Also wired up:{' '}
-						<code>absolute ps --watch</code> shows a live memory peak
-						and trend sparkline per server.
+						reliable sign of a real leak, unlike RSS. Take two
+						snapshots and run{' '}
+						<code>
+							absolute mem diff a.heapsnapshot b.heapsnapshot
+						</code>{' '}
+						to see exactly which object types grew between them —
+						the leak, named. Also wired up:{' '}
+						<code>absolute ps --watch</code> shows a live memory
+						peak and trend sparkline per server.
 					</p>
-					<PrismPlus
-						codeString={memHeapSnapshot}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={memHeapSnapshot.command}
+						output={memHeapSnapshot.output}
 					/>
 				</section>
 

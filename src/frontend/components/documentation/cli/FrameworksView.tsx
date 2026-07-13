@@ -26,6 +26,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -64,9 +65,9 @@ export const FrameworksView = ({
 						Add &amp; remove frameworks
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Start with one framework and add another whenever you need
-						it — AbsoluteJS handles the dependencies, config, and a
-						working starter page for you.
+						Start with one framework and add another whenever you
+						need it — AbsoluteJS handles the dependencies, config,
+						and a working starter page for you.
 					</p>
 				</animated.div>
 
@@ -84,11 +85,12 @@ export const FrameworksView = ({
 						version-aligned dependencies with <code>bun add</code>,
 						inserts the framework&apos;s directory into{' '}
 						<code>absolute.config.ts</code>, and scaffolds a minimal
-						starter page — wiring its route, navigation, and stylesheet
-						in exactly like <code>generate page</code>. Pass{' '}
-						<code>--no-install</code> to configure and scaffold without
-						touching dependencies. It&apos;s idempotent: adding a
-						framework that&apos;s already configured just prints a note.
+						starter page — wiring its route, navigation, and
+						stylesheet in exactly like <code>generate page</code>.
+						Pass <code>--no-install</code> to configure and scaffold
+						without touching dependencies. It&apos;s idempotent:
+						adding a framework that&apos;s already configured just
+						prints a note.
 					</p>
 					<PrismPlus
 						codeString={addCommand}
@@ -96,11 +98,9 @@ export const FrameworksView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<PrismPlus
-						codeString={addOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={addOutput.command}
+						output={addOutput.output}
 					/>
 				</section>
 
@@ -114,15 +114,16 @@ export const FrameworksView = ({
 						Adding integrations
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>add</code> also installs and wires the official Elysia
-						plugins. <code>absolute add openapi</code> and{' '}
-						<code>absolute add telemetry</code> are config-driven — they
-						flip the field in <code>absolute.config.ts</code> that the
-						runtime reads to mount them (and install the package when one
-						is needed) — while <code>cors</code>, <code>jwt</code>, and{' '}
-						<code>cron</code> install the package and print the exact{' '}
-						<code>.use(...)</code> to add to your server. The same plugins
-						are available as one-click toggles in the Integrations panel of{' '}
+						<code>add</code> also installs and wires the official
+						Elysia plugins. <code>absolute add openapi</code> and{' '}
+						<code>absolute add telemetry</code> are config-driven —
+						they flip the field in <code>absolute.config.ts</code>{' '}
+						that the runtime reads to mount them (and install the
+						package when one is needed) — while <code>cors</code>,{' '}
+						<code>jwt</code>, and <code>cron</code> install the
+						package and print the exact <code>.use(...)</code> to
+						add to your server. The same plugins are available as
+						one-click toggles in the Integrations panel of{' '}
 						<code>absolute config</code>.
 					</p>
 					<PrismPlus
@@ -131,11 +132,9 @@ export const FrameworksView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<PrismPlus
-						codeString={addIntegrationOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={addIntegrationOutput.command}
+						output={addIntegrationOutput.output}
 					/>
 				</section>
 
@@ -149,17 +148,19 @@ export const FrameworksView = ({
 						Scaffolding auth features
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>absolute add auth:&lt;feature&gt;</code> scaffolds the
-						starter code wiring for an <code>@absolutejs/auth</code>{' '}
-						feature — a typed <code>&lt;feature&gt;Config.ts</code> with the
-						required store (seeded with an in-memory factory) and hook stubs
-						(<code>TODO</code>s) plus sensible defaults — and prints the
-						spread to add to your <code>auth()</code> call. Targets include{' '}
-						<code>mfa</code>, <code>credentials</code>, <code>sso</code>,{' '}
+						<code>absolute add auth:&lt;feature&gt;</code> scaffolds
+						the starter code wiring for an{' '}
+						<code>@absolutejs/auth</code> feature — a typed{' '}
+						<code>&lt;feature&gt;Config.ts</code> with the required
+						store (seeded with an in-memory factory) and hook stubs
+						(<code>TODO</code>s) plus sensible defaults — and prints
+						the spread to add to your <code>auth()</code> call.
+						Targets include <code>mfa</code>,{' '}
+						<code>credentials</code>, <code>sso</code>,{' '}
 						<code>passwordless</code>, <code>webauthn</code>,{' '}
 						<code>organizations</code>, and more. The Auth panel in{' '}
-						<code>absolute config</code> exposes the same scaffolds as a
-						button per unconfigured feature.
+						<code>absolute config</code> exposes the same scaffolds
+						as a button per unconfigured feature.
 					</p>
 					<PrismPlus
 						codeString={addAuthCommand}
@@ -167,11 +168,9 @@ export const FrameworksView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<PrismPlus
-						codeString={addAuthOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={addAuthOutput.command}
+						output={addAuthOutput.output}
 					/>
 				</section>
 
@@ -187,10 +186,10 @@ export const FrameworksView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>absolute remove &lt;framework&gt;</code> drops the
 						directory entry from <code>absolute.config.ts</code> but
-						never deletes your source — that&apos;s too easy to regret.
-						It tells you which routing files still call the
-						framework&apos;s page handler so you can clean them up, and{' '}
-						<code>--prune</code> additionally uninstalls the
+						never deletes your source — that&apos;s too easy to
+						regret. It tells you which routing files still call the
+						framework&apos;s page handler so you can clean them up,
+						and <code>--prune</code> additionally uninstalls the
 						framework&apos;s dependencies.
 					</p>
 					<PrismPlus
@@ -199,11 +198,9 @@ export const FrameworksView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<PrismPlus
-						codeString={removeOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={removeOutput.command}
+						output={removeOutput.output}
 					/>
 				</section>
 
@@ -217,16 +214,16 @@ export const FrameworksView = ({
 						Self-hosting htmx
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						htmx&apos;s own guidance is to download a pinned copy into
-						your project rather than rely on a CDN, so AbsoluteJS
-						vendors a known-good htmx build and{' '}
-						<code>absolute add htmx</code> places it for you offline.
-						The <code>absolute htmx</code> command reports the version
-						you have installed, and{' '}
+						htmx&apos;s own guidance is to download a pinned copy
+						into your project rather than rely on a CDN, so
+						AbsoluteJS vendors a known-good htmx build and{' '}
+						<code>absolute add htmx</code> places it for you
+						offline. The <code>absolute htmx</code> command reports
+						the version you have installed, and{' '}
 						<code>absolute htmx &lt;version&gt;</code> (or{' '}
-						<code>latest</code>) fetches any release from jsDelivr and
-						swaps it in — so you upgrade with one command instead of
-						hand-managing the file.
+						<code>latest</code>) fetches any release from jsDelivr
+						and swaps it in — so you upgrade with one command
+						instead of hand-managing the file.
 					</p>
 					<PrismPlus
 						codeString={htmxCommand}
@@ -234,11 +231,9 @@ export const FrameworksView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<PrismPlus
-						codeString={htmxOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={htmxOutput.command}
+						output={htmxOutput.output}
 					/>
 				</section>
 

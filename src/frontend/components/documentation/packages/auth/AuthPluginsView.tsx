@@ -3,7 +3,6 @@ import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	pluginsAlertSinks,
 	pluginsGeoDeny,
-	pluginsPhilosophy,
 	pluginsPosthog
 } from '../../../../data/documentation/authPluginsDocsCode';
 import {
@@ -18,6 +17,7 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
@@ -57,11 +57,12 @@ export const AuthPluginsView = ({
 						First-party Plugins
 					</h1>
 					<p style={paragraphLargeStyle}>
-						A small bundle of opinionated, ~20-LOC helpers for the things
-						you&apos;d otherwise write twice — Slack / Discord / PagerDuty
-						audit sinks, disposable-email and geo deny lists, PostHog
-						identify. Each is a plain function returning a shape the
-						package already accepts; no plugin registry, no lifecycle.
+						A small bundle of opinionated, ~20-LOC helpers for the
+						things you&apos;d otherwise write twice — Slack /
+						Discord / PagerDuty audit sinks, disposable-email and
+						geo deny lists, PostHog identify. Each is a plain
+						function returning a shape the package already accepts;
+						no plugin registry, no lifecycle.
 					</p>
 				</animated.div>
 
@@ -75,21 +76,30 @@ export const AuthPluginsView = ({
 						Philosophy
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The benefit of this package is that the hooks already let you
-						do anything. A &quot;plugin&quot; is just a function you pass
-						to one of those hooks. So <code>/plugins</code> is exactly
-						that — small named functions that return the same primitives
-						(<code>AuditSink</code>, <code>(headers) =&gt; boolean</code>,{' '}
+						The benefit of this package is that the hooks already
+						let you do anything. A &quot;plugin&quot; is just a
+						function you pass to one of those hooks. So{' '}
+						<code>/plugins</code> is exactly that — small named
+						functions that return the same primitives (
+						<code>AuditSink</code>,{' '}
+						<code>(headers) =&gt; boolean</code>,{' '}
 						<code>(email) =&gt; verdict</code>) your config already
-						consumes. If you want one we don&apos;t ship, write the same
-						shape and pass it to the same hook.
+						consumes. If you want one we don&apos;t ship, write the
+						same shape and pass it to the same hook.
 					</p>
-					<PrismPlus
-						codeString={pluginsPhilosophy}
-						language="text"
-						showLineNumbers={false}
+					<Callout
 						themeSprings={themeSprings}
-					/>
+						title="Deliberately tiny"
+						variant="note"
+					>
+						Each plugin is a small named function (20-40 LOC), and
+						there is no plugin registry, no lifecycle, no install
+						command, no DI container. The hooks are the contract;
+						the plugins package is just our own opinionated,
+						batteries-included examples for the things you&apos;d
+						otherwise look up a Stack Overflow answer to write
+						yourself.
+					</Callout>
 				</section>
 
 				<section style={sectionStyle}>
@@ -102,13 +112,14 @@ export const AuthPluginsView = ({
 						Alert sinks
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>slackAlertPlugin</code>, <code>discordAlertPlugin</code>,
-						and <code>pagerdutyAlertPlugin</code> each return an{' '}
+						<code>slackAlertPlugin</code>,{' '}
+						<code>discordAlertPlugin</code>, and{' '}
+						<code>pagerdutyAlertPlugin</code> each return an{' '}
 						<code>AuditSink</code> tuned for that destination&apos;s
-						payload format. Filter to the events you actually want to wake
-						up for — impersonation, MFA-disabled, abuse blocks,
-						lockouts — and forward everything else only to your audit
-						table.
+						payload format. Filter to the events you actually want
+						to wake up for — impersonation, MFA-disabled, abuse
+						blocks, lockouts — and forward everything else only to
+						your audit table.
 					</p>
 					<PrismPlus
 						codeString={pluginsAlertSinks}
@@ -128,11 +139,12 @@ export const AuthPluginsView = ({
 						Geo block &amp; disposable email
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>denyDisposableEmailPlugin</code> blocks signups from
-						throwaway mail providers; <code>geoBlockPlugin</code> takes an
-						allow- or deny-list of ISO-3166 country codes and reads
-						whichever header your CDN already populates. Both compose
-						with the existing credentials and abuse hooks — no separate
+						<code>denyDisposableEmailPlugin</code> blocks signups
+						from throwaway mail providers;{' '}
+						<code>geoBlockPlugin</code> takes an allow- or deny-list
+						of ISO-3166 country codes and reads whichever header
+						your CDN already populates. Both compose with the
+						existing credentials and abuse hooks — no separate
 						middleware pipeline.
 					</p>
 					<PrismPlus
@@ -153,10 +165,11 @@ export const AuthPluginsView = ({
 						PostHog identify
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>posthogIdentifyPlugin</code> streams every audit event
-						as <code>$identify</code>, keyed by the audit event&apos;s{' '}
-						<code>userId</code>. Same sink interface as the alert
-						plugins, so you can chain it alongside Slack/PagerDuty.
+						<code>posthogIdentifyPlugin</code> streams every audit
+						event as <code>$identify</code>, keyed by the audit
+						event&apos;s <code>userId</code>. Same sink interface as
+						the alert plugins, so you can chain it alongside
+						Slack/PagerDuty.
 					</p>
 					<PrismPlus
 						codeString={pluginsPosthog}

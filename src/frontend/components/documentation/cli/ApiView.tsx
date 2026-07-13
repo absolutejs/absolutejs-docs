@@ -18,6 +18,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -68,14 +69,15 @@ export const ApiView = ({
 						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						AbsoluteJS wires <code>@elysiajs/openapi</code> into the dev
-						runtime, so a Scalar UI is live at <code>/openapi</code>{' '}
-						with zero setup. <code>absolute api</code> reads that
-						generated spec and lists the app&apos;s real routes
-						(dev-machinery excluded), method-colored, with a hint of
-						each route&apos;s params and body. <code>--open</code>{' '}
-						launches the Scalar UI in your browser; <code>--json</code>{' '}
-						prints the spec.
+						AbsoluteJS wires <code>@elysiajs/openapi</code> into the
+						dev runtime, so a Scalar UI is live at{' '}
+						<code>/openapi</code> with zero setup.{' '}
+						<code>absolute api</code> reads that generated spec and
+						lists the app&apos;s real routes (dev-machinery
+						excluded), method-colored, with a hint of each
+						route&apos;s params and body. <code>--open</code>{' '}
+						launches the Scalar UI in your browser;{' '}
+						<code>--json</code> prints the spec.
 					</p>
 					<PrismPlus
 						codeString={apiCommand}
@@ -95,21 +97,19 @@ export const ApiView = ({
 						OpenAPI
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Because your params, query, body, and response are Elysia{' '}
-						<code>t.Object(...)</code> schemas — already JSON Schema —{' '}
-						<code>@elysiajs/openapi</code> turns them into accurate,
-						importable API docs with zero annotation: the types you
-						wrote to validate requests become your docs. Toggle and
-						customize it with <code>openapi</code> in{' '}
+						Because your params, query, body, and response are
+						Elysia <code>t.Object(...)</code> schemas — already JSON
+						Schema — <code>@elysiajs/openapi</code> turns them into
+						accurate, importable API docs with zero annotation: the
+						types you wrote to validate requests become your docs.
+						Toggle and customize it with <code>openapi</code> in{' '}
 						<code>absolute.config.ts</code> (on by default in dev,
 						opt-in for production) — set the path, swap Scalar for
 						Swagger, or override the title and version.
 					</p>
-					<PrismPlus
-						codeString={apiOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={apiOutput.command}
+						output={apiOutput.output}
 					/>
 				</section>
 

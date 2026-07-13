@@ -1,3 +1,8 @@
+type TerminalSession = {
+	command: string;
+	output: string;
+};
+
 export const devCommand = `\
 # Start development server with HMR
 absolute dev
@@ -20,13 +25,14 @@ export default defineConfig({
     }
   }
 });`;
-export const devOutput = `\
-$ absolute dev
-
+export const devOutput: TerminalSession = {
+	command: 'absolute dev',
+	output: `\
   ABSOLUTEJS v0.19.0  ready in 1.23s
 
   ➜  Local: http://localhost:3000/
-  ➜  Network: http://192.168.1.42:3000/`;
+  ➜  Network: http://192.168.1.42:3000/`
+};
 export const devtoolsJsonResponse = `\
 {
   "workspace": {
@@ -54,22 +60,24 @@ absolute start --outdir build
 
 # With a custom server entry
 absolute start src/backend/server.ts`;
-export const startOutput = `\
-$ absolute start
-
+export const startOutput: TerminalSession = {
+	command: 'absolute start',
+	output: `\
   Building assets (3.15s)
   Bundling production server (544ms)
 
   ABSOLUTEJS v0.19.0  ready in 3.69s
 
-  ➜  Local: http://localhost:3000/`;
-export const startWithSSG = `\
-$ absolute start
-
+  ➜  Local: http://localhost:3000/`
+};
+export const startWithSSG: TerminalSession = {
+	command: 'absolute start',
+	output: `\
   Building assets (3.15s)
   Bundling production server (544ms)
   Pre-rendering static pages (5 pages, 512ms)
 
   ABSOLUTEJS v0.19.0  ready in 4.19s
 
-  ➜  Local: http://localhost:3000/`;
+  ➜  Local: http://localhost:3000/`
+};

@@ -44,11 +44,5 @@ bun run src/backend/server.ts --host
 # This binds to 0.0.0.0 instead of localhost
 # Useful for testing on mobile devices or local network access`;
 export const networkingLogging = `\
-// The plugin logs connection info on startup:
-
-// Without --host flag:
-// Server running at http://localhost:3000
-
-// With --host flag:
-// Server running at http://localhost:3000
-// Network: http://192.168.1.100:3000`;
+Server running at http://localhost:3000
+Network: http://192.168.1.100:3000`;

@@ -26,9 +26,11 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
+import { PackageCard, PackageCardGrid } from '../../utils/PackageCardGrid';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
+	{ href: '#provider-lineup', label: 'Provider Lineup' },
 	{ href: '#provider-interface', label: 'Provider Interface' },
 	{ href: '#anthropic', label: 'Anthropic' },
 	{ href: '#openai', label: 'OpenAI' },
@@ -38,6 +40,40 @@ const tocItems: TocItem[] = [
 	{ href: '#openai-compatible', label: 'OpenAI-Compatible' },
 	{ href: '#custom-provider', label: 'Custom Provider' },
 	{ href: '#multi-provider', label: 'Multi-Provider Setup' }
+];
+
+const providerCards: PackageCard[] = [
+	{
+		description:
+			'Claude models with tool calling, vision, PDF input, and extended thinking.',
+		name: 'Anthropic'
+	},
+	{
+		description:
+			'Standard chat completions API with tool calling and vision support.',
+		name: 'OpenAI'
+	},
+	{
+		description:
+			'Responses API for reasoning models (o3, o4-mini) and image generation.',
+		name: 'OpenAI Responses'
+	},
+	{
+		description:
+			'Gemini API with tool calling, vision, PDF, reasoning, and image generation.',
+		name: 'Gemini'
+	},
+	{
+		description:
+			'Run local models for free, with tool calling for compatible models.',
+		name: 'Ollama'
+	},
+	{
+		badge: 'DeepSeek · Mistral · xAI',
+		description:
+			'Convenience wrappers with correct base URLs pre-configured for providers that implement the OpenAI API format.',
+		name: 'OpenAI-Compatible'
+	}
 ];
 
 export const AIProvidersView = ({
@@ -72,6 +108,26 @@ export const AIProvidersView = ({
 						switch providers without changing client code.
 					</p>
 				</animated.div>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="provider-lineup"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Provider Lineup
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Every provider on this page shares the same streaming
+						interface. Pick the one that matches your models and
+						deployment, then jump to its section for a full example.
+					</p>
+					<PackageCardGrid
+						items={providerCards}
+						themeSprings={themeSprings}
+					/>
+				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading

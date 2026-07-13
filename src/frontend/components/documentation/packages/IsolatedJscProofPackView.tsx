@@ -9,24 +9,26 @@ import {
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
 	sectionStyle,
-	strongStyle,
-	tableCellStyle,
-	tableContainerStyle,
-	tableHeaderStyle,
-	tableStyle
+	strongStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { StatBand, StatTile } from '../../utils/StatBand';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import {
+	VersionTimeline,
+	VersionTimelineEntry
+} from '../../utils/VersionTimeline';
 import { DocsNavigation } from '../DocsNavigation';
 
 const tocItems: TocItem[] = [
-	{ href: '#isolated-jsc-0821', label: '0.8.21 proof pack' },
+	{ href: '#isolated-jsc-proof-pack', label: '0.11.0 proof pack' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
@@ -36,46 +38,175 @@ const tocItems: TocItem[] = [
 	{ href: '#start-here', label: 'Start here' }
 ];
 
-const shippedItems: Array<{ feature: string; result: string }> = [
+const shippedRows: DocsTableCell[][] = [
+	[
+		'Benchmark proof pack',
+		'Reproducible local measurements for FFI, Worker, Bun process-spawn, and optional Node isolated-vm baselines.'
+	],
+	[
+		'Migration guide',
+		'A concrete path for teams moving a Node isolated-vm workload to Bun and JavaScriptCore.'
+	],
+	[
+		'Security model',
+		'Explicit FFI vs Worker guarantees, Worker residuals, resource limits, and deployment hardening guidance.'
+	],
+	[
+		'TypeScript helpers',
+		'Bun-native transpilation helpers for string source and real .ts/.tsx/.js/.jsx files before isolate execution.'
+	],
+	[
+		'Capability broker',
+		'Named host tools with validation hooks, timeout, concurrency, output byte caps, tenant context, manifests, redacted audit events, bounded audit buffers, typed tool definitions, and typed host-side direct calls.'
+	],
+	[
+		'Execution receipts',
+		'Per-run receipts for scripts, callables, one-shot execution, and pooled runners, including backend, policy, timing, metrics, output size, capability summaries, console bounds, and dropped-audit counts.'
+	],
+	[
+		'Output boundaries',
+		'Run-level result byte limits, per-capability output byte limits, and isolate-level console entry/byte limits so successful outputs, tool outputs, and captured logs stay bounded.'
+	],
+	[
+		'Doctor CLI',
+		'A package bin that reports Bun/platform details, FFI availability, checked JSC paths, and install hints.'
+	],
+	[
+		'Agent-tool example',
+		'A runnable demo combining TypeScript callables, brokered tools, tenant context, metrics, and audit events.'
+	],
+	[
+		'Policy presets + runners',
+		'Product-ready recipes for AI tools, tenant scripts, plugins, and trusted code, including recommended result, console, audit, broker, and pool defaults.'
+	],
+	[
+		'Hibernating isolate pool',
+		'A keyed isolate + context pool that checkpoints idle tenants down to bytes and wakes them transparently on the next call, with a pluggable hibernation store (0.9.0).'
+	],
+	[
+		'Pool operator surface',
+		'metrics(), drain(), and warm(key) on both pools for cost metering, graceful shard shutdown, and predictive pre-warm (0.10.0).'
+	],
+	[
+		'OpenTelemetry tracing',
+		'Optional tracerProvider on the hibernating pool emits an isolated_jsc.run span per pool.run with tenant and wake attributes (0.11.0).'
+	]
+];
+
+const benchmarkStats: StatTile[] = [
 	{
-		feature: 'Benchmark proof pack',
-		result: 'Reproducible local measurements for FFI, Worker, Bun process-spawn, and optional Node isolated-vm baselines.'
+		detail: 'FFI backend, 100 warm iterations of bench:proof',
+		label: 'Warm callable p50',
+		unit: 'ms',
+		value: '0.23'
 	},
 	{
-		feature: 'Migration guide',
-		result: 'A concrete path for teams moving a Node isolated-vm workload to Bun and JavaScriptCore.'
+		detail: 'FFI backend, includes backend startup',
+		label: 'Cold isolate p50',
+		unit: 'ms',
+		value: '1.15'
 	},
 	{
-		feature: 'Security model',
-		result: 'Explicit FFI vs Worker guarantees, Worker residuals, resource limits, and deployment hardening guidance.'
+		detail: 'FFI backend; the Worker fallback sits at ~46 MB',
+		label: 'Cold heap',
+		unit: 'KB',
+		value: '~300'
 	},
 	{
-		feature: 'TypeScript helpers',
-		result: 'Bun-native transpilation helpers for string source and real .ts/.tsx/.js/.jsx files before isolate execution.'
+		detail: 'Bun subprocess per execution, the baseline it replaces',
+		label: 'Process-spawn p50',
+		unit: 'ms',
+		value: '25.8'
+	}
+];
+
+const releaseTimeline: VersionTimelineEntry[] = [
+	{
+		description:
+			'Preserves host Reference error metadata — capability code, tool, and output-size fields — when errors cross the FFI backend.',
+		title: 'FFI error metadata parity',
+		version: '0.8.11'
 	},
 	{
-		feature: 'Capability broker',
-		result: 'Named host tools with validation hooks, timeout, concurrency, output byte caps, tenant context, manifests, redacted audit events, bounded audit buffers, typed tool definitions, and typed host-side direct calls.'
+		description:
+			'Adds schemaVersion: 1 to capability manifest entries and execution receipts so apps can persist and parse audit records against an explicit stable schema.',
+		title: 'Stable audit schema',
+		version: '0.8.12'
 	},
 	{
-		feature: 'Execution receipts',
-		result: 'Per-run receipts for scripts, callables, one-shot execution, and pooled runners, including backend, policy, timing, metrics, output size, capability summaries, console bounds, and dropped-audit counts.'
+		description:
+			'Contract tests lock the schema-v1 manifest and receipt key sets so future audit-surface changes are intentional.',
+		title: 'Schema contract tests',
+		version: '0.8.13'
 	},
 	{
-		feature: 'Output boundaries',
-		result: 'Run-level result byte limits, per-capability output byte limits, and isolate-level console entry/byte limits so successful outputs, tool outputs, and captured logs stay bounded.'
+		description:
+			'Expands default and per-tool audit redactors: masked emails, opaque card tokens, and redacted processor trace identifiers.',
+		title: 'Broker redaction examples',
+		version: '0.8.14'
 	},
 	{
-		feature: 'Doctor CLI',
-		result: 'A package bin that reports Bun/platform details, FFI availability, checked JSC paths, and install hints.'
+		description:
+			'Resolved policies carry recommended result, console, audit buffer, broker, and runner pool settings; policy isolates inherit the recipe result-size limit as a default run option.',
+		title: 'Packaged policy recipes',
+		version: '0.8.15'
 	},
 	{
-		feature: 'Agent-tool example',
-		result: 'A runnable demo combining TypeScript callables, brokered tools, tenant context, metrics, and audit events.'
+		description:
+			'policyAuditOptions(), policyBrokerOptions(), policyConsoleOptions(), policyRunOptions(), and policyRunnerOptions() return copy-safe option objects for wiring recipes into surrounding APIs.',
+		title: 'Policy helper builders',
+		version: '0.8.16'
 	},
 	{
-		feature: 'Policy presets + runners',
-		result: 'Product-ready recipes for AI tools, tenant scripts, plugins, and trusted code, including recommended result, console, audit, broker, and pool defaults.'
+		description:
+			'SNAPSHOT_RESEARCH.md documents why the public JSC C API supports data checkpoints but not a V8-style heap pause/resume snapshot.',
+		title: 'Checkpoint boundary documented',
+		version: '0.8.17'
+	},
+	{
+		description:
+			'Scripts and callables can live in real .ts/.tsx/.js/.jsx files via compileTypeScriptFile(), runIsolatedFile(), and runner file methods instead of string literals.',
+		title: 'File-backed sources',
+		version: '0.8.18'
+	},
+	{
+		description:
+			'context.checkpoint(options) with schema version, byte length, skip reasons, and maxBytes / include / exclude controls, plus createContext({ checkpoint }) restore.',
+		title: 'Explicit context checkpoints',
+		version: '0.8.19'
+	},
+	{
+		description:
+			'validateContextCheckpoint() and runtime restore validation fail malformed persisted checkpoints before seed code runs; backend parity tests cover Worker and FFI.',
+		title: 'Restore validation',
+		version: '0.8.20'
+	},
+	{
+		description:
+			'checkpointWithReceipt() and createContextWithReceipt() return schema-v1 CheckpointReceipt envelopes; the error path rethrows with the receipt attached.',
+		title: 'Checkpoint receipts',
+		version: '0.8.21'
+	},
+	{
+		description:
+			'createHibernatingIsolatePool checkpoints idle tenant contexts to bytes and wakes them transparently on the next call; createInMemoryHibernationStore ships as the default pluggable store.',
+		highlight: true,
+		title: 'Hibernating isolate pool',
+		version: '0.9.0'
+	},
+	{
+		description:
+			'metrics(), drain(), and warm(key) on both pools — cumulative cost counters for metering, graceful shard shutdown, and predictive pre-warm without invoking user code.',
+		highlight: true,
+		title: 'Pool operator surface',
+		version: '0.10.0'
+	},
+	{
+		description:
+			'HibernatingIsolatePoolOptions.tracerProvider accepts any @opentelemetry/api-compatible provider and emits an isolated_jsc.run span per pool.run(key, fn); zero-cost when omitted.',
+		highlight: true,
+		title: 'OpenTelemetry tracing',
+		version: '0.11.0'
 	}
 ];
 
@@ -220,17 +351,23 @@ export const IsolatedJscProofPackView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="isolated-jsc-0821" style={h1Style(isMobileOrTablet)}>
-						isolated-jsc 0.8.21 Proof Pack
+					<h1
+						id="isolated-jsc-proof-pack"
+						style={h1Style(isMobileOrTablet)}
+					>
+						isolated-jsc 0.11.0 Proof Pack
 					</h1>
 					<p style={paragraphLargeStyle}>
 						This is still not broad launch mode. The 0.8.x line
-						moves isolated-jsc from raw isolate primitives into a
+						moved isolated-jsc from raw isolate primitives into a
 						product API for the Bun isolation wedge: policy recipes,
 						one-shot execution, pooled keyed runners, precompiled
 						callables, capability manifests, redacted bounded audit
 						events, execution receipts, and output limits for tenant
-						scripts, AI-generated code, and plugin execution.
+						scripts, AI-generated code, and plugin execution. The
+						0.9.0 through 0.11.0 releases add the multi-tenant
+						economics layer on top: hibernating keyed pools,
+						operator-shaped pool metrics, and OpenTelemetry tracing.
 					</p>
 				</animated.div>
 
@@ -244,49 +381,31 @@ export const IsolatedJscProofPackView = ({
 						What shipped
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Version <code>0.8.21</code> keeps the proof pack but adds
-						the API shape services actually want: choose a policy,
-						run one-off source with <code>runIsolated()</code>,
-						create a pooled <code>createIsolatedRunner()</code>,
-						warm hot functions with <code>precompile()</code>,
-						review declared host powers with capability manifests,
-						redact and bound audit events, cap host capability
-						outputs, and inspect every run with receipts.
+						As of <code>0.11.0</code> the package keeps the proof
+						pack but adds the API shape services actually want:
+						choose a policy, run one-off source with{' '}
+						<code>runIsolated()</code>, create a pooled{' '}
+						<code>createIsolatedRunner()</code>, warm hot functions
+						with <code>precompile()</code>, hibernate idle tenants
+						with <code>createHibernatingIsolatePool()</code>, review
+						declared host powers with capability manifests, redact
+						and bound audit events, cap host capability outputs, and
+						inspect every run with receipts.
 					</p>
-					<div style={tableContainerStyle}>
-						<animated.table style={tableStyle(themeSprings)}>
-							<thead>
-								<tr>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Feature
-									</animated.th>
-									<animated.th
-										style={tableHeaderStyle(themeSprings)}
-									>
-										Why it matters
-									</animated.th>
-								</tr>
-							</thead>
-							<tbody>
-								{shippedItems.map((item) => (
-									<tr key={item.feature}>
-										<animated.td
-											style={tableCellStyle(themeSprings)}
-										>
-											{item.feature}
-										</animated.td>
-										<animated.td
-											style={tableCellStyle(themeSprings)}
-										>
-											{item.result}
-										</animated.td>
-									</tr>
-								))}
-							</tbody>
-						</animated.table>
-					</div>
+					<p style={paragraphSpacedStyle}>
+						Headline numbers from the repeatable{' '}
+						<code>bench:proof</code> run (100 warm / 10 cold
+						iterations):
+					</p>
+					<StatBand
+						stats={benchmarkStats}
+						themeSprings={themeSprings}
+					/>
+					<DocsTable
+						columns={['Feature', 'Why it matters']}
+						rows={shippedRows}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -321,60 +440,17 @@ export const IsolatedJscProofPackView = ({
 						before sandbox code receives them, and receipts retain
 						machine-readable error codes such as{' '}
 						<code>CAPABILITY_OUTPUT_SIZE_LIMIT</code>.
-						Version <code>0.8.11</code> carries the same capability
-						error metadata through the FFI backend, including host{' '}
-						<code>Reference</code> throws and async rejections. Version{' '}
-						<code>0.8.12</code> adds <code>schemaVersion: 1</code>{' '}
-						to capability manifest entries and execution receipts
-						so apps can persist and parse these audit records
-						against an explicit stable schema. Version{' '}
-						<code>0.8.13</code> locks those v1 key sets with
-						contract tests so future audit-surface changes are
-						intentional. Version <code>0.8.14</code> expands the
-						broker examples with default audit redactors and
-						per-tool overrides for masked email addresses, opaque
-						card tokens, and processor trace identifiers. Version{' '}
-						<code>0.8.15</code> adds packaged policy recipes for
-						recommended result limits, console limits, audit buffer
-						caps, broker caps, and runner pool settings; policy
-						isolates also inherit the recipe result-size limit as a
-						default run option. Version <code>0.8.16</code> adds
-						copy-safe helper builders such as{' '}
-						<code>policyAuditOptions()</code>,{' '}
-						<code>policyBrokerOptions()</code>, and{' '}
-						<code>policyRunnerOptions()</code> so apps can wire
-						recipes into surrounding APIs without hand-copying
-						nested recipe fields. Version <code>0.8.17</code>{' '}
-						documents the JavaScriptCore checkpoint boundary: context
-						snapshots are structured data checkpoints, not heap
-						pause/resume images, because the public JSC C API has no
-						stable serializer for a whole context or group, closure
-						graph, pending promise state, call stack, or JIT/profile
-						state. Version <code>0.8.18</code> adds file-backed
-						source helpers for real <code>.ts</code>,{' '}
-						<code>.tsx</code>, <code>.js</code>, and{' '}
-						<code>.jsx</code> files, including one-shot execution and
-						runner methods for default-export callable files. Version{' '}
-						<code>0.8.19</code> adds explicit context checkpoints
-						with schema version, backend, byte length,
-						included/skipped counts, skipped-key reasons, and
-						<code>maxBytes</code> / <code>include</code> /{' '}
-						<code>exclude</code> controls. Version{' '}
-						<code>0.8.20</code> adds restore validation for persisted
-						checkpoints, backend parity tests for Worker and FFI
-						checkpoint behavior, and a runnable checkpoint
-						persistence/resume example. Version <code>0.8.21</code>{' '}
-						adds <code>context.checkpointWithReceipt()</code> and{' '}
-						<code>isolate.createContextWithReceipt()</code>, returning
-						schema-v1 <code>CheckpointReceipt</code> envelopes that
-						carry <code>operation</code> ("create" | "restore"),{' '}
-						<code>executionId</code>, <code>durationMs</code>,{' '}
-						<code>byteLength</code>, aggregated{' '}
-						<code>skippedReasons</code> counts, the source backend on
-						restore, and optional <code>purpose</code> /{' '}
-						<code>tenant</code> / <code>policy</code> labels — the
-						error path rethrows with the receipt attached.
 					</p>
+					<p style={paragraphSpacedStyle}>
+						Every release since <code>0.8.11</code> tightened this
+						surface. The line runs from error-metadata parity
+						through checkpoints and receipts to the hibernating pool
+						and tracing:
+					</p>
+					<VersionTimeline
+						entries={releaseTimeline}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={receiptLimitsCode}
 						language="typescript"

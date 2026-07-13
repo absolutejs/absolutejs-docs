@@ -20,6 +20,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -77,8 +78,8 @@ export const PsView = ({
 						port, pid, uptime, memory, and status. Add{' '}
 						<code>--watch</code> for an auto-refreshing dashboard
 						that adds a memory peak and trend sparkline per server,
-						and lets you stop the highlighted server (<code>s</code>)
-						or free its port (<code>f</code>, prefilled) without
+						and lets you stop the highlighted server (<code>s</code>
+						) or free its port (<code>f</code>, prefilled) without
 						typing it, or <code>--json</code> for scripting.
 					</p>
 					<PrismPlus
@@ -102,18 +103,16 @@ export const PsView = ({
 						Rather than trusting a registry file, <code>ps</code>{' '}
 						scans the machine&apos;s listening sockets (via{' '}
 						<code>lsof</code>, falling back to <code>ss</code>) and
-						unions the result with the servers AbsoluteJS launched. So
-						it still shows a server whose dev controller died, a
-						hand-run <code>bun dist/server.js</code> build, or anything
-						else holding a port — these appear with the{' '}
+						unions the result with the servers AbsoluteJS launched.
+						So it still shows a server whose dev controller died, a
+						hand-run <code>bun dist/server.js</code> build, or
+						anything else holding a port — these appear with the{' '}
 						<code>untracked</code> source so you always know what is
 						actually running.
 					</p>
-					<PrismPlus
-						codeString={psOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={psOutput.command}
+						output={psOutput.output}
 					/>
 				</section>
 
@@ -127,10 +126,10 @@ export const PsView = ({
 						Stopping servers
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Pass <code>--kill</code> a pid or a port to stop a single
-						server (handy for freeing a port an orphan is squatting),
-						or <code>--kill-all</code> to clear every running server
-						at once.
+						Pass <code>--kill</code> a pid or a port to stop a
+						single server (handy for freeing a port an orphan is
+						squatting), or <code>--kill-all</code> to clear every
+						running server at once.
 					</p>
 					<PrismPlus
 						codeString={psKillCommand}
@@ -151,15 +150,13 @@ export const PsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						When <code>absolute dev</code> finds its port already
-						taken, it names the process holding it before falling back
-						to the next port — so you can decide whether to{' '}
+						taken, it names the process holding it before falling
+						back to the next port — so you can decide whether to{' '}
 						<code>absolute ps --kill</code> it or move on.
 					</p>
-					<PrismPlus
-						codeString={psPortConflict}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={psPortConflict.command}
+						output={psPortConflict.output}
 					/>
 				</section>
 

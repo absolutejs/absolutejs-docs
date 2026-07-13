@@ -16,13 +16,29 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
-import {
-	streamingRawFrameworkSnippet,
-	streamingTransportModes
-} from '../../../data/documentation/streamingDocsCode';
+import { streamingRawFrameworkSnippet } from '../../../data/documentation/streamingDocsCode';
+
+const transportModeRows: DocsTableCell[][] = [
+	[
+		'Document response',
+		'One HTML document response stays open',
+		'Initial HTML document closes earlier'
+	],
+	[
+		'Slot fallbacks',
+		'In the initial HTML',
+		'Still rendered in the initial HTML'
+	],
+	[
+		'Resolved slot patches',
+		'Arrive through the same response',
+		'Arrive over a secondary channel such as streaming fetch() or SSE'
+	]
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#what-it-is', label: 'What It Is' },
@@ -159,12 +175,21 @@ export const OutOfOrderStreamingView = ({
 						document. This is the most SSR-native model and works
 						across the supported frameworks.
 					</p>
-					<PrismPlus
-						codeString={streamingTransportModes}
-						language="text"
-						showLineNumbers={false}
+					<DocsTable
+						columns={[
+							'Behavior',
+							'Current transport (shipped default)',
+							'Detached transport (planned)'
+						]}
+						rows={transportModeRows}
 						themeSprings={themeSprings}
 					/>
+					<p style={paragraphSpacedStyle}>
+						With the current transport, the browser tab can keep
+						showing a loading spinner until the final slot patch
+						arrives. The detached transport keeps the same slot APIs
+						— only the delivery transport semantics differ.
+					</p>
 				</section>
 
 				<section style={sectionStyle}>

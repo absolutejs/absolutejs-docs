@@ -1,5 +1,5 @@
 export const isolatedJscHibernationBasic = `\
-// @absolutejs/isolated-jsc@0.9.0 — createHibernatingIsolatePool.
+// @absolutejs/isolated-jsc — createHibernatingIsolatePool (0.9.0+).
 import { createHibernatingIsolatePool } from '@absolutejs/isolated-jsc';
 
 const pool = createHibernatingIsolatePool({
@@ -30,7 +30,6 @@ const resumed = await pool.run('tenant-42', async (context) => {
 // resumed === 2
 
 pool.stats(); // { active: 1, hibernated: 0, total: 1 }`;
-
 export const isolatedJscHibernationBoundary = `\
 // What hibernation captures vs. what it doesn't.
 //
@@ -60,7 +59,6 @@ export const isolatedJscHibernationBoundary = `\
 // The data/code split is the same model AWS Lambda uses for
 // "init code runs once per cold start." Hibernation = fast cold start
 // because the data is already there.`;
-
 export const isolatedJscHibernationConcurrency = `\
 // Single-flight wake. N concurrent calls to a hibernated key share one
 // spawn — you don't get N isolates racing to restore the same
@@ -83,39 +81,6 @@ const work = pool.run('tenant-42', longRunningJob);
 const hibernation = pool.hibernate('tenant-42');
 // 'hibernation' resolves AFTER 'work' — checkpoint includes the final
 // state from longRunningJob.`;
-
-export const isolatedJscHibernationStorage = `\
-// Pluggable storage. The default is in-memory (one process). For
-// production you typically want a persistent store so warm contexts
-// survive a deploy.
-import type { HibernationStore, ContextCheckpoint } from '@absolutejs/isolated-jsc';
-
-const redisStore: HibernationStore = {
-  get: async (key) => {
-    const raw = await redis.get(\`isolated:\${key}\`);
-    return raw === null ? undefined : JSON.parse(raw) as ContextCheckpoint;
-  },
-  put: async (key, checkpoint) => {
-    await redis.set(\`isolated:\${key}\`, JSON.stringify(checkpoint), 'EX', 86_400);
-  },
-  delete: async (key) => {
-    await redis.del(\`isolated:\${key}\`);
-  },
-};
-
-const pool = createHibernatingIsolatePool({
-  hibernateAfterMs: 30_000,
-  hibernationStore: redisStore,
-});
-
-// \`pool.dispose()\` does NOT delete hibernated checkpoints from the
-// store — the store may be shared with other processes. To purge,
-// iterate through your store externally.
-
-// If your store loses the checkpoint between hibernate and wake (TTL
-// expiry, manual eviction, network partition), the pool falls back to
-// fresh-spawn instead of throwing. The key is treated as new.`;
-
 export const isolatedJscHibernationObservability = `\
 // Observability hook. Useful when you want to ship hibernate/wake
 // events to your metrics sink (Prometheus, Datadog, OTLP, …).
@@ -148,3 +113,34 @@ const { active, hibernated, total } = pool.stats();
 // total <= maxSize at all times. LRU eviction drops hibernated entries
 // before active ones, so you usually shed cheap state (checkpoints in
 // the store) before expensive state (live isolates).`;
+export const isolatedJscHibernationStorage = `\
+// Pluggable storage. The default is in-memory (one process). For
+// production you typically want a persistent store so warm contexts
+// survive a deploy.
+import type { HibernationStore, ContextCheckpoint } from '@absolutejs/isolated-jsc';
+
+const redisStore: HibernationStore = {
+  get: async (key) => {
+    const raw = await redis.get(\`isolated:\${key}\`);
+    return raw === null ? undefined : JSON.parse(raw) as ContextCheckpoint;
+  },
+  put: async (key, checkpoint) => {
+    await redis.set(\`isolated:\${key}\`, JSON.stringify(checkpoint), 'EX', 86_400);
+  },
+  delete: async (key) => {
+    await redis.del(\`isolated:\${key}\`);
+  },
+};
+
+const pool = createHibernatingIsolatePool({
+  hibernateAfterMs: 30_000,
+  hibernationStore: redisStore,
+});
+
+// \`pool.dispose()\` does NOT delete hibernated checkpoints from the
+// store — the store may be shared with other processes. To purge,
+// iterate through your store externally.
+
+// If your store loses the checkpoint between hibernate and wake (TTL
+// expiry, manual eviction, network partition), the pool falls back to
+// fresh-spawn instead of throwing. The key is treated as new.`;

@@ -38,17 +38,6 @@ credentials: {
   },
   rehashOnLogin: true // calls rehashCredentialPassword behind the scenes
 }`;
-export const credentialsRoutes = `\
-// The credentials block mounts these routes (transparent to protectRoute):
-POST /auth/register                 { email, password, ...extraFields }
-POST /auth/login                    { email, password } -> { status }
-POST /auth/verify-email             { token }
-POST /auth/verify-email/request     { email }
-POST /auth/reset-password           { token, password }
-POST /auth/reset-password/request   { email }
-
-// Passwords are hashed with Bun.password (argon2id). Existing argon2id/bcrypt
-// hashes verify as-is, so you can migrate a legacy user table with no rehash.`;
 export const credentialsSetup = `\
 import { auth, createNeonCredentialStore } from '@absolutejs/auth';
 

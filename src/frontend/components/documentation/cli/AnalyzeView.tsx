@@ -18,6 +18,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -53,8 +54,8 @@ export const AnalyzeView = ({
 						absolute analyze
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Break down what your build ships — by category — and catch
-						size regressions before they land.
+						Break down what your build ships — by category — and
+						catch size regressions before they land.
 					</p>
 				</animated.div>
 
@@ -68,12 +69,12 @@ export const AnalyzeView = ({
 						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>absolute analyze</code> reads your build manifest and
-						groups every shipped asset into categories — page bundles,
-						hydration entries, client bundles, islands, shared chunks,
-						and CSS — with a running total. It reads from disk, so it
-						works on any build without a server. Add <code>--json</code>{' '}
-						for the raw per-asset sizes.
+						<code>absolute analyze</code> reads your build manifest
+						and groups every shipped asset into categories — page
+						bundles, hydration entries, client bundles, islands,
+						shared chunks, and CSS — with a running total. It reads
+						from disk, so it works on any build without a server.
+						Add <code>--json</code> for the raw per-asset sizes.
 					</p>
 					<PrismPlus
 						codeString={analyzeCommand}
@@ -94,18 +95,17 @@ export const AnalyzeView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Run <code>absolute analyze --save</code> to record a
-						baseline (<code>.absolute-size-baseline.json</code>, safe to
-						commit). After that, every <code>analyze</code> shows the
-						delta per category plus the biggest individual changes — so
-						a pull request can surface <code>Dashboard +4 KB</code>{' '}
-						instead of letting bundle bloat creep in unnoticed. Pair it
-						with <code>ls --budget</code> to fail CI on a hard ceiling.
+						baseline (<code>.absolute-size-baseline.json</code>,
+						safe to commit). After that, every <code>analyze</code>{' '}
+						shows the delta per category plus the biggest individual
+						changes — so a pull request can surface{' '}
+						<code>Dashboard +4 KB</code> instead of letting bundle
+						bloat creep in unnoticed. Pair it with{' '}
+						<code>ls --budget</code> to fail CI on a hard ceiling.
 					</p>
-					<PrismPlus
-						codeString={analyzeOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={analyzeOutput.command}
+						output={analyzeOutput.output}
 					/>
 				</section>
 

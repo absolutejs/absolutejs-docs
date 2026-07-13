@@ -1,4 +1,4 @@
-import { ProviderOption } from '@absolutejs/auth/providers';
+import { ProviderOption } from 'citra';
 
 export type ProviderInfo = {
 	name: string;
@@ -115,6 +115,13 @@ export const providerData: ProviderData = {
 		manageCredentialsUrl: 'https://www.bungie.net/en/Application',
 		name: 'Bungie',
 		primaryColor: '#0075BB'
+	},
+	calendly: {
+		createNewCredentialsUrl: 'https://developer.calendly.com/console/apps',
+		logoUrl: '/assets/svg/todo-put-file.svg',
+		manageCredentialsUrl: 'https://developer.calendly.com/console/apps',
+		name: 'Calendly',
+		primaryColor: '#006BFF'
 	},
 	close: {
 		createNewCredentialsUrl: 'https://app.close.com/settings/developer/',
@@ -360,6 +367,13 @@ export const providerData: ProviderData = {
 		name: 'Okta',
 		primaryColor: '#007DC1'
 	},
+	onspark: {
+		createNewCredentialsUrl: 'https://onspark.com',
+		logoUrl: '/assets/svg/todo-put-file.svg',
+		manageCredentialsUrl: 'https://onspark.com',
+		name: 'onSpark',
+		primaryColor: '#000000'
+	},
 	osu: {
 		createNewCredentialsUrl:
 			'https://osu.ppy.sh/home/account/edit#new-oauth-application',
@@ -440,6 +454,13 @@ export const providerData: ProviderData = {
 		logoUrl: '/assets/png/SLA-Slack-from-Salesforce-logo.png',
 		manageCredentialsUrl: 'https://api.slack.com/apps',
 		name: 'Slack',
+		primaryColor: '#4A154B'
+	},
+	slackuser: {
+		createNewCredentialsUrl: 'https://api.slack.com/apps',
+		logoUrl: '/assets/png/SLA-Slack-from-Salesforce-logo.png',
+		manageCredentialsUrl: 'https://api.slack.com/apps',
+		name: 'Slack User',
 		primaryColor: '#4A154B'
 	},
 	spotify: {

@@ -77,19 +77,6 @@ if (proof === undefined || proof.jkt !== token?.payload.cnf?.jkt) {
 // short-lived nonce (returned as DPoP-Nonce: <value>). Mitigates pre-computed
 // proof replays. RFC 9470 acr_values: pass acr_values=urn:mace:incommon:iap:silver
 // to /authorize and require step-up before the code is issued.`;
-export const oidcIntrospect = `\
-// RFC 7662 token introspection — resource servers ask the AS whether a token is
-// still live (revoked? expired? right audience?). Active reply mirrors the JWT
-// claims (sub, scope, aud, exp, cnf, token_use); inactive replies with just
-// { active: false }. Required by many enterprise procurement reviews.
-//
-//   POST {oidcRoute}/introspect    (client_secret_basic, client_secret_post, or
-//                                   private_key_jwt — the same auth the token
-//                                   endpoint accepts)
-//     token=<access or refresh token>
-//     token_type_hint=access_token   // optional
-//
-// Returns the live token state; revoked refresh tokens flip to { active: false }.`;
 export const oidcJar = `\
 import { signJwt } from '@absolutejs/auth';
 
@@ -235,28 +222,6 @@ await auth<User>({
 // /.well-known/openid-configuration — fully self-hosted (you own the keys, no
 // api.workos.com). The authorize login reuses your session, so it gets
 // passkeys / MFA / SSO for free.`;
-export const oidcReauth = `\
-// OIDC prompt + max_age + id_token_hint — re-authentication signals from RPs.
-//   prompt=login      -> ignore the active session, force a fresh login
-//   prompt=none       -> never show UI; return login_required if no session
-//   prompt=select_account -> route to your account-chooser (account_selection_required)
-//   max_age=300       -> if the session is older than 300s, re-authenticate
-//   id_token_hint=... -> verify the active user matches; mismatch -> login_required
-//
-// All four are honored automatically. The package compares max_age to the session's
-// auth_time and bounces to loginUrl when needed (preserving return_to). Pair with
-// requireRecentAuth on sensitive RP actions for end-to-end freshness guarantees.`;
-export const oidcRevoke = `\
-// RFC 7009 token revocation — clients voluntarily kill a refresh token (e.g. on
-// "Sign out of this device"). Returns 200 whether the token existed or not (the
-// spec forbids leaking that).
-//
-//   POST {oidcRoute}/revoke   (same client auth as /token + /introspect)
-//     token=<refresh or access token>
-//     token_type_hint=refresh_token   // optional
-//
-// Revoking a refresh token also flips its access tokens to active=false at the
-// introspect endpoint.`;
 export const oidcTokenExchange = `\
 // AI-agent / MCP "on-behalf-of": an agent (a registered client) trades a user's
 // access token for a narrower, short-lived, audience-bound delegated token.

@@ -25,10 +25,13 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { CompileCliOptions } from './CompileCliOptions';
 import { CompileEmbeddedGrid } from './CompileEmbeddedGrid';
+
+const compileOutputText = compileOutput.replace('$ absolute compile\n\n', '');
 
 const tocItems: TocItem[] = [
 	{ href: '#compiling', label: 'Compiling Your App' },
@@ -142,11 +145,9 @@ export const CompileView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<PrismPlus
-						codeString={compileOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command="absolute compile"
+						output={compileOutputText}
 					/>
 				</section>
 

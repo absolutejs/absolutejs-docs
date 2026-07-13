@@ -18,6 +18,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -67,11 +68,12 @@ export const LogsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Every server registers its log file in the global
-						instance registry, so <code>absolute logs &lt;name&gt;</code>{' '}
-						prints it from anywhere on the machine. Run{' '}
-						<code>absolute logs</code> with no name to see which
-						servers are available. Add <code>-f</code> to follow live,
-						and <code>-n &lt;count&gt;</code> to set how many trailing
+						instance registry, so{' '}
+						<code>absolute logs &lt;name&gt;</code> prints it from
+						anywhere on the machine. Run <code>absolute logs</code>{' '}
+						with no name to see which servers are available. Add{' '}
+						<code>-f</code> to follow live, and{' '}
+						<code>-n &lt;count&gt;</code> to set how many trailing
 						lines to start from.
 					</p>
 					<PrismPlus
@@ -80,11 +82,9 @@ export const LogsView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<PrismPlus
-						codeString={logsOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={logsOutput.command}
+						output={logsOutput.output}
 					/>
 				</section>
 

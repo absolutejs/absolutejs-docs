@@ -96,22 +96,6 @@ async function confirmTotpEnrollment(code: string) {
   const { backupCodes } = await res.json();
   return backupCodes; // show these ONCE — tell the user to save them. Never retrievable again.
 }`;
-export const mfaRoutes = `\
-// --- Enrollment (caller must already be authenticated) ---
-POST /auth/mfa/totp/setup    {}              -> { secret, uri }         // uri = otpauth:// for the QR
-POST /auth/mfa/totp/verify   { code }        -> { backupCodes }         // activates TOTP, returns codes ONCE
-
-// --- SMS enrollment (only when onSendSmsCode is set) ---
-POST /auth/mfa/sms/setup     { phone }       -> { status: 'sent' }      // texts a verification code
-POST /auth/mfa/sms/verify    { code }        -> { status: 'verified' }  // activates the SMS factor
-
-// --- Login challenge (after login returns { status: 'mfa_required' }) ---
-POST /auth/mfa/challenge     { code }                     -> { status: 'authenticated' }  // TOTP or backup code
-POST /auth/mfa/challenge     { factor: 'sms', action: 'send' }   -> { status: 'sent' }
-POST /auth/mfa/challenge     { factor: 'sms', code }             -> { status: 'authenticated' }
-
-// The secret/backupCodes are returned exactly once. Never re-fetchable. Store the QR at
-// enrollment and the backup codes somewhere the user can save them.`;
 export const mfaServerSetup = `\
 import { auth, createNeonMfaStore } from '@absolutejs/auth';
 

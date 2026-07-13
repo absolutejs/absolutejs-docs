@@ -18,6 +18,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -71,12 +72,13 @@ export const DoctorView = ({
 						Run <code>absolute doctor</code> from your project root.
 						Each check is green (ok), yellow (warning), or red
 						(failure); the command exits non-zero if anything fails,
-						so it doubles as a CI gate. <code>--fix</code> repairs the
-						safe issues automatically — creating any missing framework
-						directories and scaffolding unset <code>getEnv()</code> keys
-						into <code>.env.example</code> (placeholders only, never
-						invented secrets). <code>--json</code> emits the checks for
-						scripting.
+						so it doubles as a CI gate. <code>--fix</code> repairs
+						the safe issues automatically — creating any missing
+						framework directories and scaffolding unset{' '}
+						<code>getEnv()</code> keys into{' '}
+						<code>.env.example</code> (placeholders only, never
+						invented secrets). <code>--json</code> emits the checks
+						for scripting.
 					</p>
 					<PrismPlus
 						codeString={doctorCommand}
@@ -100,14 +102,12 @@ export const DoctorView = ({
 						and the platform native binary resolve, that{' '}
 						<code>absolute.config.ts</code> loads, that each
 						configured framework’s <code>pages</code> directory
-						exists, that every <code>getEnv()</code> variable is set,
-						and whether the dev port is free.
+						exists, that every <code>getEnv()</code> variable is
+						set, and whether the dev port is free.
 					</p>
-					<PrismPlus
-						codeString={doctorOutput}
-						language="bash"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						command={doctorOutput.command}
+						output={doctorOutput.output}
 					/>
 				</section>
 

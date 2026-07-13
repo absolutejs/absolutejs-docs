@@ -2,7 +2,6 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../../types/springTypes';
 import {
 	bulkImport,
-	credentialsRoutes,
 	credentialsSetup,
 	lockoutSetup,
 	mfaSetup,
@@ -20,10 +19,51 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
+import { Endpoint, EndpointTable } from '../../../utils/EndpointTable';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const credentialEndpoints: Endpoint[] = [
+	{
+		description: 'Create a local account.',
+		method: 'POST',
+		note: 'Body: { email, password, ...extraFields }',
+		path: '/auth/register'
+	},
+	{
+		description: 'Sign in with email and password.',
+		method: 'POST',
+		note: 'Body: { email, password } — returns { status }',
+		path: '/auth/login'
+	},
+	{
+		description: 'Confirm an email with its verification token.',
+		method: 'POST',
+		note: 'Body: { token }',
+		path: '/auth/verify-email'
+	},
+	{
+		description: 'Request a new verification email.',
+		method: 'POST',
+		note: 'Body: { email }',
+		path: '/auth/verify-email/request'
+	},
+	{
+		description: 'Set a new password with a reset token.',
+		method: 'POST',
+		note: 'Body: { token, password }',
+		path: '/auth/reset-password'
+	},
+	{
+		description: 'Request a password-reset email.',
+		method: 'POST',
+		note: 'Body: { email }',
+		path: '/auth/reset-password/request'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#email-password', label: 'Email & Password' },
@@ -78,10 +118,10 @@ export const AuthCredentialsView = ({
 						Email &amp; Password
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The credentials block owns password hashing and single-use,
-						hashed-at-rest verification / reset tokens. You own the
-						user table through the hooks; the store ships in-memory,
-						Postgres, and Neon flavors.
+						The credentials block owns password hashing and
+						single-use, hashed-at-rest verification / reset tokens.
+						You own the user table through the hooks; the store
+						ships in-memory, Postgres, and Neon flavors.
 					</p>
 					<PrismPlus
 						codeString={credentialsSetup}
@@ -100,12 +140,20 @@ export const AuthCredentialsView = ({
 					>
 						Routes
 					</AnchorHeading>
-					<PrismPlus
-						codeString={credentialsRoutes}
-						language="text"
-						showLineNumbers={false}
+					<p style={paragraphSpacedStyle}>
+						The credentials block mounts these routes, transparent
+						to <code>protectRoute</code>:
+					</p>
+					<EndpointTable
+						endpoints={credentialEndpoints}
 						themeSprings={themeSprings}
 					/>
+					<Callout themeSprings={themeSprings} variant="info">
+						Passwords are hashed with <code>Bun.password</code>{' '}
+						(argon2id). Existing argon2id/bcrypt hashes verify
+						as-is, so you can migrate a legacy user table with no
+						rehash.
+					</Callout>
 				</section>
 
 				<section style={sectionStyle}>
@@ -119,9 +167,9 @@ export const AuthCredentialsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						TOTP (authenticator apps) plus single-use backup codes.
-						The TOTP secret is AES-GCM encrypted at rest. When MFA is
-						enrolled, login parks the session and only promotes it
-						once a factor is verified.
+						The TOTP secret is AES-GCM encrypted at rest. When MFA
+						is enrolled, login parks the session and only promotes
+						it once a factor is verified.
 					</p>
 					<PrismPlus
 						codeString={mfaSetup}
@@ -186,16 +234,17 @@ export const AuthCredentialsView = ({
 						Bulk import &amp; legacy hashes
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>importUser</code> / <code>importUsers</code> migrate an
-						Auth0, Cognito, or Firebase export in one pass — argon2id
-						and bcrypt hashes verify natively via{' '}
+						<code>importUser</code> / <code>importUsers</code>{' '}
+						migrate an Auth0, Cognito, or Firebase export in one
+						pass — argon2id and bcrypt hashes verify natively via{' '}
 						<code>Bun.password</code>. Legacy formats (Auth0 PBKDF2,
-						Cognito SHA-256) are recognized by <code>isLegacyHash</code>{' '}
-						and verified by the matching <code>verifyAuth0Pbkdf2</code>{' '}
-						/ <code>verifyCognitoSha256</code>; opt in to{' '}
-						<code>rehashOnLogin</code> and the first successful sign-in
-						silently upgrades the stored hash to argon2id. No forced
-						password reset, no public breach.
+						Cognito SHA-256) are recognized by{' '}
+						<code>isLegacyHash</code> and verified by the matching{' '}
+						<code>verifyAuth0Pbkdf2</code> /{' '}
+						<code>verifyCognitoSha256</code>; opt in to{' '}
+						<code>rehashOnLogin</code> and the first successful
+						sign-in silently upgrades the stored hash to argon2id.
+						No forced password reset, no public breach.
 					</p>
 					<PrismPlus
 						codeString={bulkImport}

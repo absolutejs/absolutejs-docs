@@ -5,6 +5,7 @@ import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
+import { PackageCard, PackageCardGrid } from '../../utils/PackageCardGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents } from '../../utils/TableOfContents';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
@@ -52,6 +53,7 @@ type VoiceTable = {
 
 type VoiceSection = {
 	body?: string;
+	cards?: PackageCard[];
 	code?: {
 		language: string;
 		source: string;
@@ -330,110 +332,186 @@ const routeSurfaces: Array<[string, string]> = [
 	['turnQuality', 'Turn quality report routes.']
 ];
 
-const adapterPackages: Array<[string, string]> = [
-	[
-		'@absolutejs/voice-assemblyai',
-		'AssemblyAI streaming STT adapter for universal-streaming speech models.'
-	],
-	[
-		'@absolutejs/voice-azure',
-		'Azure Speech adapter with Neural TTS over REST and streaming STT over the WebSocket Unified Speech Protocol.'
-	],
-	[
-		'@absolutejs/voice-cartesia',
-		'Cartesia streaming TTS adapter using SSE or byte-stream endpoints.'
-	],
-	[
-		'@absolutejs/voice-deepgram',
-		'Deepgram streaming STT adapter that normalizes partial, final, and speech_final endpoint events.'
-	],
-	[
-		'@absolutejs/voice-elevenlabs',
-		'ElevenLabs streaming TTS adapter, with optional warm WebSocket sessions for lower startup latency.'
-	],
-	[
-		'@absolutejs/voice-gemini',
-		'Gemini Live realtime adapter that normalizes input transcripts, output transcripts, assistant audio, turn completion, and errors.'
-	],
-	[
-		'@absolutejs/voice-gladia',
-		'Gladia v2 live STT adapter with two-step session handshake and multilingual code-switch support.'
-	],
-	[
-		'@absolutejs/voice-google-speech',
-		'Google Cloud Speech-to-Text adapter with buffered REST recognition and real-time HTTP/2 streaming.'
-	],
-	[
-		'@absolutejs/voice-lmnt',
-		'LMNT streaming TTS adapter for aurora, blizzard, and mochi models.'
-	],
-	[
-		'@absolutejs/voice-neets',
-		'Neets low-cost TTS adapter for ar-diff-50k, style-tts-2, and vits models.'
-	],
-	[
-		'@absolutejs/voice-openai',
-		'OpenAI Realtime adapter for full-duplex realtime speech sessions.'
-	],
-	[
-		'@absolutejs/voice-openai-whisper',
-		'OpenAI Whisper buffered-batch STT adapter for flush/close transcription.'
-	],
-	[
-		'@absolutejs/voice-playht',
-		'PlayHT streaming TTS adapter for Play3.0-mini, PlayDialog, and PlayHT2.0-turbo models.'
-	],
-	[
-		'@absolutejs/voice-rime',
-		'Rime streaming TTS adapter for mist, mistv2, and arcana voice models.'
-	],
-	[
-		'@absolutejs/voice-smallest',
-		'Smallest AI raw PCM TTS adapter for Lightning and Lightning-v2 models.'
-	],
-	[
-		'@absolutejs/voice-soniox',
-		'Soniox real-time STT adapter with language hints and telephony encodings.'
-	],
-	[
-		'@absolutejs/voice-speechmatics',
-		'Speechmatics real-time STT adapter for regional WebSocket endpoints.'
-	]
+const adapterPackages: PackageCard[] = [
+	{
+		badge: 'STT',
+		description:
+			'AssemblyAI streaming STT adapter for universal-streaming speech models.',
+		name: 'AssemblyAI',
+		packageName: '@absolutejs/voice-assemblyai',
+		version: '0.0.19-beta.124'
+	},
+	{
+		badge: 'STT · TTS',
+		description:
+			'Azure Speech adapter with Neural TTS over REST and streaming STT over the WebSocket Unified Speech Protocol.',
+		name: 'Azure Speech',
+		packageName: '@absolutejs/voice-azure',
+		version: '0.0.1-beta.4'
+	},
+	{
+		badge: 'TTS',
+		description:
+			'Cartesia streaming TTS adapter using SSE or byte-stream endpoints.',
+		name: 'Cartesia',
+		packageName: '@absolutejs/voice-cartesia',
+		version: '0.0.1-beta.3'
+	},
+	{
+		badge: 'STT',
+		description:
+			'Deepgram streaming STT adapter that normalizes partial, final, and speech_final endpoint events.',
+		name: 'Deepgram',
+		packageName: '@absolutejs/voice-deepgram',
+		version: '0.0.20-beta.99'
+	},
+	{
+		badge: 'TTS',
+		description:
+			'ElevenLabs streaming TTS adapter, with optional warm WebSocket sessions for lower startup latency.',
+		name: 'ElevenLabs',
+		packageName: '@absolutejs/voice-elevenlabs',
+		version: '0.0.23'
+	},
+	{
+		badge: 'Realtime',
+		description:
+			'Gemini Live realtime adapter that normalizes input transcripts, output transcripts, assistant audio, turn completion, and errors.',
+		name: 'Gemini Live',
+		packageName: '@absolutejs/voice-gemini',
+		version: '0.0.1-beta.41'
+	},
+	{
+		badge: 'STT',
+		description:
+			'Gladia v2 live STT adapter with two-step session handshake and multilingual code-switch support.',
+		name: 'Gladia',
+		packageName: '@absolutejs/voice-gladia',
+		version: '0.0.1-beta.2'
+	},
+	{
+		badge: 'STT',
+		description:
+			'Google Cloud Speech-to-Text adapter with buffered REST recognition and real-time HTTP/2 streaming.',
+		name: 'Google Speech',
+		packageName: '@absolutejs/voice-google-speech',
+		version: '0.0.1-beta.3'
+	},
+	{
+		badge: 'TTS',
+		description:
+			'LMNT streaming TTS adapter for aurora, blizzard, and mochi models.',
+		name: 'LMNT',
+		packageName: '@absolutejs/voice-lmnt',
+		version: '0.0.1-beta.3'
+	},
+	{
+		badge: 'TTS',
+		description:
+			'Neets low-cost TTS adapter for ar-diff-50k, style-tts-2, and vits models.',
+		name: 'Neets',
+		packageName: '@absolutejs/voice-neets',
+		version: '0.0.1-beta.3'
+	},
+	{
+		badge: 'Realtime',
+		description:
+			'OpenAI Realtime adapter for full-duplex realtime speech sessions.',
+		name: 'OpenAI Realtime',
+		packageName: '@absolutejs/voice-openai',
+		version: '0.0.7-beta.41'
+	},
+	{
+		badge: 'STT',
+		description:
+			'OpenAI Whisper buffered-batch STT adapter for flush/close transcription.',
+		name: 'OpenAI Whisper',
+		packageName: '@absolutejs/voice-openai-whisper',
+		version: '0.0.1-beta.2'
+	},
+	{
+		badge: 'TTS',
+		description:
+			'PlayHT streaming TTS adapter for Play3.0-mini, PlayDialog, and PlayHT2.0-turbo models.',
+		name: 'PlayHT',
+		packageName: '@absolutejs/voice-playht',
+		version: '0.0.1-beta.3'
+	},
+	{
+		badge: 'TTS',
+		description:
+			'Rime streaming TTS adapter for mist, mistv2, and arcana voice models.',
+		name: 'Rime',
+		packageName: '@absolutejs/voice-rime',
+		version: '0.0.1-beta.3'
+	},
+	{
+		badge: 'TTS',
+		description:
+			'Smallest AI raw PCM TTS adapter for Lightning and Lightning-v2 models.',
+		name: 'Smallest AI',
+		packageName: '@absolutejs/voice-smallest',
+		version: '0.0.1-beta.3'
+	},
+	{
+		badge: 'STT',
+		description:
+			'Soniox real-time STT adapter with language hints and telephony encodings.',
+		name: 'Soniox',
+		packageName: '@absolutejs/voice-soniox',
+		version: '0.0.1-beta.2'
+	},
+	{
+		badge: 'STT',
+		description:
+			'Speechmatics real-time STT adapter for regional WebSocket endpoints.',
+		name: 'Speechmatics',
+		packageName: '@absolutejs/voice-speechmatics',
+		version: '0.0.1-beta.2'
+	}
 ];
 
-const adapterCapabilityMatrix: Array<[string, string]> = [
-	[
-		'Realtime STT',
-		'Deepgram, AssemblyAI, Azure, Gladia, Google Speech streaming, Soniox, and Speechmatics implement STTAdapter sessions.'
-	],
-	[
-		'Buffered STT',
-		'OpenAI Whisper and googleSpeech() accumulate audio and emit a final transcript on flush or close.'
-	],
-	[
-		'TTS',
-		'Azure, Cartesia, ElevenLabs, LMNT, Neets, PlayHT, Rime, and Smallest implement TTSAdapter sessions.'
-	],
-	[
-		'Full realtime',
-		'OpenAI Realtime and Gemini Live implement RealtimeAdapter for unified input audio, transcripts, assistant audio, and turn completion.'
-	],
-	[
-		'Telephony encodings',
-		'Gladia, Google Speech, Soniox, Speechmatics, and Azure document μ-law or A-law support in addition to PCM paths.'
-	],
-	[
-		'Language control',
-		'Provider options and STTAdapterOpenOptions.languageStrategy resolve fixed languages, allow-switching lists, or auto-detect hints where the provider supports them.'
-	],
-	[
-		'Endpointing',
-		'Adapters normalize vendor endpoint events such as Deepgram speech_final, Gladia end_of_utterance, Google speech activity events, Azure turn.end, and Speechmatics end-of-turn events.'
-	],
-	[
-		'Auth',
-		'Most adapters accept API keys; Azure also supports token auth, and Google Speech supports API key, OAuth, or refresh hooks.'
-	]
+const adapterCapabilityMatrix: PackageCard[] = [
+	{
+		description:
+			'Deepgram, AssemblyAI, Azure, Gladia, Google Speech streaming, Soniox, and Speechmatics implement STTAdapter sessions.',
+		name: 'Realtime STT'
+	},
+	{
+		description:
+			'OpenAI Whisper and googleSpeech() accumulate audio and emit a final transcript on flush or close.',
+		name: 'Buffered STT'
+	},
+	{
+		description:
+			'Azure, Cartesia, ElevenLabs, LMNT, Neets, PlayHT, Rime, and Smallest implement TTSAdapter sessions.',
+		name: 'TTS'
+	},
+	{
+		description:
+			'OpenAI Realtime and Gemini Live implement RealtimeAdapter for unified input audio, transcripts, assistant audio, and turn completion.',
+		name: 'Full realtime'
+	},
+	{
+		description:
+			'Gladia, Google Speech, Soniox, Speechmatics, and Azure document μ-law or A-law support in addition to PCM paths.',
+		name: 'Telephony encodings'
+	},
+	{
+		description:
+			'Provider options and STTAdapterOpenOptions.languageStrategy resolve fixed languages, allow-switching lists, or auto-detect hints where the provider supports them.',
+		name: 'Language control'
+	},
+	{
+		description:
+			'Adapters normalize vendor endpoint events such as Deepgram speech_final, Gladia end_of_utterance, Google speech activity events, Azure turn.end, and Speechmatics end-of-turn events.',
+		name: 'Endpointing'
+	},
+	{
+		description:
+			'Most adapters accept API keys; Azure also supports token auth, and Google Speech supports API key, OAuth, or refresh hooks.',
+		name: 'Auth'
+	}
 ];
 
 const testerModes: Array<[string, string]> = [
@@ -818,19 +896,13 @@ const voicePages: Record<VoicePageId, VoicePageDefinition> = {
 				title: 'Usage'
 			},
 			{
+				cards: adapterPackages,
 				id: 'packages',
-				table: {
-					headers: ['Package', 'Purpose'],
-					rows: adapterPackages
-				},
 				title: 'Packages'
 			},
 			{
+				cards: adapterCapabilityMatrix,
 				id: 'capabilities',
-				table: {
-					headers: ['Capability', 'Providers'],
-					rows: adapterCapabilityMatrix
-				},
 				title: 'Capability Matrix'
 			},
 			{
@@ -1619,6 +1691,12 @@ const VoiceSectionBlock = ({
 						</animated.div>
 					))}
 				</div>
+			)}
+			{section.cards && (
+				<PackageCardGrid
+					items={section.cards}
+					themeSprings={themeSprings}
+				/>
 			)}
 			{section.table && renderTable(section.table, themeSprings)}
 			{section.code && (

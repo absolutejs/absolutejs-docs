@@ -1,28 +1,3 @@
-export const syncPacksRegister = `\
-// One install, one register call — the pack handles its own schema,
-// permissions, readers/writers, collections, mutations, and schedules.
-import { createSyncEngine } from '@absolutejs/sync/engine';
-import { createPresencePack } from '@absolutejs/sync-pack-presence';
-
-const engine = createSyncEngine();
-engine.registerPack(
-  createPresencePack({
-    getActorId: (ctx) => ctx.session.userId,
-    scope: (ctx) => ctx.session.workspaceId,
-    heartbeatTtlSec: 30,
-    // 0.3 — typing state with a TTL inside state.typingExpiresAt.
-    typingTtlSec: 5,
-  }),
-);
-
-// The engine now exposes:
-//   - 'presence'              (collection — subscribe with { channel })
-//   - 'presence:heartbeat'    (mutation)
-//   - 'presence:cursor'       (mutation — patches state.cursor)
-//   - 'presence:typing'       (mutation — patches state.typing + .typingExpiresAt)
-//   - 'presence:leave'        (mutation)
-//   - 'presence:cleanup'      (cron-fired schedule)`;
-
 export const syncPacksAuthor = `\
 // Anatomy of a pack — same shape as createSyncEngine's options, plus
 // ownership metadata for conflict detection.
@@ -59,31 +34,6 @@ export const createMyPack = (config: MyPackConfig): SyncPack => {
     schedules: [defineSchedule({ name: 'my:tick' } as any)],
   });
 };`;
-
-export const syncPacksFactoryPattern = `\
-// Every published pack ships as a FACTORY, not a static record. The
-// factory takes the host's namespacing + auth shape and returns a
-// SyncPack. This is why two packs can both want a 'users' table without
-// conflict — the prefix scopes the names; the engine never rewrites them.
-export type MyPackConfig<Ctx> = {
-  // Owns-tables prefix; also applied to collection/mutation/schedule names.
-  prefix?: string;
-
-  // The ONLY contract the pack assumes about app ctx.
-  getActorId?: (ctx: Ctx) => string | undefined;
-
-  // Optional tenant / workspace scope.
-  scope?: (ctx: Ctx) => string | null;
-
-  // Pack-specific config goes here (TTL, cron, retries, ...).
-  heartbeatTtlSec?: number;
-};
-
-// Hosts run two instances of the same pack on one engine via prefix:
-engine.registerPack(createPresencePack({ prefix: 'docs_', /* ... */ }));
-engine.registerPack(createPresencePack({ prefix: 'chat_', /* ... */ }));
-// Tables: docs_presence + chat_presence — no collision.`;
-
 export const syncPacksComposition = `\
 // Composition rule: packs read each other's collections, packs MUST NOT
 // call each other's mutations. Cross-pack data flows through the change
@@ -129,7 +79,29 @@ engine.registerPack(
 
 // A doc-pack handler that called \`presence:heartbeat\` directly would
 // couple the two packs at runtime — the lock-in shape we avoid.`;
+export const syncPacksFactoryPattern = `\
+// Every published pack ships as a FACTORY, not a static record. The
+// factory takes the host's namespacing + auth shape and returns a
+// SyncPack. This is why two packs can both want a 'users' table without
+// conflict — the prefix scopes the names; the engine never rewrites them.
+export type MyPackConfig<Ctx> = {
+  // Owns-tables prefix; also applied to collection/mutation/schedule names.
+  prefix?: string;
 
+  // The ONLY contract the pack assumes about app ctx.
+  getActorId?: (ctx: Ctx) => string | undefined;
+
+  // Optional tenant / workspace scope.
+  scope?: (ctx: Ctx) => string | null;
+
+  // Pack-specific config goes here (TTL, cron, retries, ...).
+  heartbeatTtlSec?: number;
+};
+
+// Hosts run two instances of the same pack on one engine via prefix:
+engine.registerPack(createPresencePack({ prefix: 'docs_', /* ... */ }));
+engine.registerPack(createPresencePack({ prefix: 'chat_', /* ... */ }));
+// Tables: docs_presence + chat_presence — no collision.`;
 export const syncPacksFavoritesPin = `\
 // Pack feature evolution stays inside the pack's npm semver — the
 // engine doesn't need to know about new mutations. Example: favorites 0.2
@@ -158,3 +130,27 @@ type FavoriteRow = {
   createdAt: number;
   pinnedAt: number | null;   // NEW
 };`;
+export const syncPacksRegister = `\
+// One install, one register call — the pack handles its own schema,
+// permissions, readers/writers, collections, mutations, and schedules.
+import { createSyncEngine } from '@absolutejs/sync/engine';
+import { createPresencePack } from '@absolutejs/sync-pack-presence';
+
+const engine = createSyncEngine();
+engine.registerPack(
+  createPresencePack({
+    getActorId: (ctx) => ctx.session.userId,
+    scope: (ctx) => ctx.session.workspaceId,
+    heartbeatTtlSec: 30,
+    // 0.3 — typing state with a TTL inside state.typingExpiresAt.
+    typingTtlSec: 5,
+  }),
+);
+
+// The engine now exposes:
+//   - 'presence'              (collection — subscribe with { channel })
+//   - 'presence:heartbeat'    (mutation)
+//   - 'presence:cursor'       (mutation — patches state.cursor)
+//   - 'presence:typing'       (mutation — patches state.typing + .typingExpiresAt)
+//   - 'presence:leave'        (mutation)
+//   - 'presence:cleanup'      (cron-fired schedule)`;

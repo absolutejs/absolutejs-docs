@@ -30,6 +30,7 @@ import { ragPackageData } from '../../../data/documentation/packages/rag';
 import { renownPackageData } from '../../../data/documentation/packages/renown';
 import { replayPackageData } from '../../../data/documentation/packages/replay';
 import { rulesPackageData } from '../../../data/documentation/packages/rules';
+import { studioPackageData } from '../../../data/documentation/packages/studio';
 import { tourPackageData } from '../../../data/documentation/packages/tour';
 import { vscodeExtensionPackageData } from '../../../data/documentation/packages/vscodeExtension';
 import { vueComposablesPackageData } from '../../../data/documentation/packages/vueComposables';
@@ -69,6 +70,7 @@ export const RagPackageView = createPackageView(ragPackageData);
 export const RenownPackageView = createPackageView(renownPackageData);
 export const ReplayPackageView = createPackageView(replayPackageData);
 export const RulesPackageView = createPackageView(rulesPackageData);
+export const StudioPackageView = createPackageView(studioPackageData);
 export const TourPackageView = createPackageView(tourPackageData);
 export const VscodeExtensionPackageView = createPackageView(
 	vscodeExtensionPackageData

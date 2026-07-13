@@ -34,6 +34,7 @@ import { ragPackageData } from './rag';
 import { renownPackageData } from './renown';
 import { replayPackageData } from './replay';
 import { rulesPackageData } from './rules';
+import { studioPackageData } from './studio';
 import { tourPackageData } from './tour';
 import { vscodeExtensionPackageData } from './vscodeExtension';
 import { vueComposablesPackageData } from './vueComposables';
@@ -256,6 +257,7 @@ export const packageCatalog: PackageCatalogEntry[] = [
 		version: '0.11.9',
 		view: 'eslint'
 	},
+	toEntry(studioPackageData, 'studio-overview'),
 	toEntry(vscodeExtensionPackageData, 'vscode-extension-overview'),
 	toEntry(renownPackageData, 'renown-overview'),
 	toEntry(edenPackageData, 'eden-overview')

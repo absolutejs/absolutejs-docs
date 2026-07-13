@@ -23,6 +23,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -170,13 +171,12 @@ export const NetworkingPluginView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The plugin logs connection information when the server
-						starts:
+						starts. The <code>Network</code> line only appears when
+						the server is exposed with <code>--host</code>:
 					</p>
-					<PrismPlus
-						codeString={networkingLogging}
-						language="text"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
+					<TerminalFrame
+						output={networkingLogging}
+						title="absolute dev"
 					/>
 				</section>
 
