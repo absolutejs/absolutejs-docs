@@ -1,3 +1,15 @@
+export const angularAppProviders = `\
+// src/angular/appProviders.ts
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import type { EnvironmentProviders, Provider } from '@angular/core';
+
+// Global DI every Angular page on this server gets at SSR + client bootstrap.
+// Per-page additions (router, APP_BASE_HREF) are auto-wired by the build,
+// so keep this file focused on cross-cutting concerns: http, error
+// handlers, interceptors, locale, app-wide services.
+export const appProviders: ReadonlyArray<Provider | EnvironmentProviders> = [
+  provideHttpClient(withFetch())
+];`;
 export const angularBuild = `\
 // absolute.config.ts
 import { defineConfig } from '@absolutejs/absolute';
@@ -15,54 +27,6 @@ export default defineConfig({
   // module — single \`@angular/core\` instance for page + providers.
   angular: { providers: appProviders }
 });`;
-export const angularAppProviders = `\
-// src/angular/appProviders.ts
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import type { EnvironmentProviders, Provider } from '@angular/core';
-
-// Global DI every Angular page on this server gets at SSR + client bootstrap.
-// Per-page additions (router, APP_BASE_HREF) are auto-wired by the build,
-// so keep this file focused on cross-cutting concerns: http, error
-// handlers, interceptors, locale, app-wide services.
-export const appProviders: ReadonlyArray<Provider | EnvironmentProviders> = [
-  provideHttpClient(withFetch())
-];`;
-export const angularPageWithRoutes = `\
-// src/angular/portal/portal.ts
-import { Component } from '@angular/core';
-import { RouterOutlet, type Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard';
-import { SettingsComponent } from './settings/settings';
-
-// Top-level export — same pattern Angular itself uses in app.routes.ts.
-// AbsoluteJS detects this export at build time and auto-wires
-// provideRouter(routes, withComponentInputBinding(), withViewTransitions())
-// into the page's bootstrap providers.
-export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'settings', component: SettingsComponent }
-];
-
-@Component({
-  selector: 'portal-page',
-  standalone: true,
-  imports: [RouterOutlet],
-  template: '<router-outlet />'
-})
-export class PortalComponent {}`;
-export const angularSimplePage = `\
-// src/angular/about/about.ts
-// No routes, no providers exports — just a standalone @Component.
-// The framework still wires up the global \`appProviders\` from the config.
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'about-page',
-  standalone: true,
-  template: '<h1>About AbsoluteJS</h1>'
-})
-export class AboutComponent {}`;
 export const angularClientScripts = `\
 // For dynamic client-side behavior, use registerClientScript
 import { registerClientScript } from '@absolutejs/absolute';
@@ -238,6 +202,30 @@ new Elysia()
       props: { products }
     })
   )`;
+export const angularPageWithRoutes = `\
+// src/angular/portal/portal.ts
+import { Component } from '@angular/core';
+import { RouterOutlet, type Routes } from '@angular/router';
+import { DashboardComponent } from './dashboard/dashboard';
+import { SettingsComponent } from './settings/settings';
+
+// Top-level export — same pattern Angular itself uses in app.routes.ts.
+// AbsoluteJS detects this export at build time and auto-wires
+// provideRouter(routes, withComponentInputBinding(), withViewTransitions())
+// into the page's bootstrap providers.
+export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'settings', component: SettingsComponent }
+];
+
+@Component({
+  selector: 'portal-page',
+  standalone: true,
+  imports: [RouterOutlet],
+  template: '<router-outlet />'
+})
+export class PortalComponent {}`;
 export const angularProviderModel = `\
 // src/angular/admin/admin.ts
 // Page modules are pure Angular. No \`export const providers\`, no
@@ -286,6 +274,18 @@ export const accountResolver: ResolveFn<Account> = () =>
 
     return account;
   });`;
+export const angularSimplePage = `\
+// src/angular/about/about.ts
+// No routes, no providers exports — just a standalone @Component.
+// The framework still wires up the global \`appProviders\` from the config.
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'about-page',
+  standalone: true,
+  template: '<h1>About AbsoluteJS</h1>'
+})
+export class AboutComponent {}`;
 export const angularTypeSafety = `\
 // Types flow from your server to Angular components via props
 // The page handler enforces type safety at the boundary
@@ -342,33 +342,6 @@ export const page = defineAngularPage<SettingsProps>({
     props: { user, preferences }
   });
 })`;
-export const angularZonelessTriggers = `\
-// AbsoluteJS bootstraps Angular with provideZonelessChangeDetection().
-// Change detection runs ONLY when one of these happens:
-//
-//   1. A signal you read in a template is updated         (signal.set / .update)
-//   2. A template DOM event fires                         ((click), (input), ...)
-//   3. AsyncPipe receives an emission                     ({{ obs$ | async }})
-//   4. cdr.markForCheck() / cdr.detectChanges() is called (manual escape hatch)
-//   5. HttpClient (and a few other built-ins) settle      (PendingTasks tracker)
-//
-// Plain property assignment in an await/setTimeout/subscribe callback does
-// NOT tick CD. The value changes; the template does not re-evaluate.
-
-@Component({ /* ... */ })
-export class ProfileComponent {
-  // Broken in zoneless mode: setting plainLoading after await never updates UI.
-  plainLoading = false;
-
-  // Correct: the signal triggers CD on its consumers automatically.
-  loading = signal(false);
-
-  async load() {
-    this.loading.set(true);
-    await this.profileService.fetch();
-    this.loading.set(false);
-  }
-}`;
 export const angularUsePageContext = `\
 import { usePageContext } from '@absolutejs/absolute/angular';
 import { Component } from '@angular/core';
@@ -389,21 +362,6 @@ export class DashboardComponent {
   // One generic, no \`as\` cast at the call site. The composable owns the
   // single cast from REQUEST_CONTEXT's \`unknown\` value type to T.
   readonly ctx = usePageContext<Context>();
-}`;
-export const angularUseTimers = `\
-import { useTimers } from '@absolutejs/absolute/angular';
-import { Component, signal } from '@angular/core';
-
-@Component({ /* ... */ })
-export class FlashMessage {
-  private timers = useTimers();
-  visible = signal(false);
-
-  show() {
-    this.visible.set(true);
-    // Auto-cleared on component destroy. Signals tick CD in the callback.
-    this.timers.setTimeout(() => this.visible.set(false), 3000);
-  }
 }`;
 export const angularUseResource = `\
 import { useResource } from '@absolutejs/absolute/angular';
@@ -464,6 +422,21 @@ export class HeaderComponent {
     );
   }
 }`;
+export const angularUseTimers = `\
+import { useTimers } from '@absolutejs/absolute/angular';
+import { Component, signal } from '@angular/core';
+
+@Component({ /* ... */ })
+export class FlashMessage {
+  private timers = useTimers();
+  visible = signal(false);
+
+  show() {
+    this.visible.set(true);
+    // Auto-cleared on component destroy. Signals tick CD in the callback.
+    this.timers.setTimeout(() => this.visible.set(false), 3000);
+  }
+}`;
 export const angularViewTransitions = `\
 // CSS-only changes: stylesheet is hot-swapped instantly : no re-bootstrap
 
@@ -478,3 +451,30 @@ export const angularViewTransitions = `\
 // The user never sees empty or default state : only before and after.
 // Form inputs, scroll positions, and component state all survive.
 // Without View Transitions API support, it falls back gracefully.`;
+export const angularZonelessTriggers = `\
+// AbsoluteJS bootstraps Angular with provideZonelessChangeDetection().
+// Change detection runs ONLY when one of these happens:
+//
+//   1. A signal you read in a template is updated         (signal.set / .update)
+//   2. A template DOM event fires                         ((click), (input), ...)
+//   3. AsyncPipe receives an emission                     ({{ obs$ | async }})
+//   4. cdr.markForCheck() / cdr.detectChanges() is called (manual escape hatch)
+//   5. HttpClient (and a few other built-ins) settle      (PendingTasks tracker)
+//
+// Plain property assignment in an await/setTimeout/subscribe callback does
+// NOT tick CD. The value changes; the template does not re-evaluate.
+
+@Component({ /* ... */ })
+export class ProfileComponent {
+  // Broken in zoneless mode: setting plainLoading after await never updates UI.
+  plainLoading = false;
+
+  // Correct: the signal triggers CD on its consumers automatically.
+  loading = signal(false);
+
+  async load() {
+    this.loading.set(true);
+    await this.profileService.fetch();
+    this.loading.set(false);
+  }
+}`;

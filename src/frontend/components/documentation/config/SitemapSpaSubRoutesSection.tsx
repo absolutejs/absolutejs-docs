@@ -29,11 +29,11 @@ export const SitemapSpaSubRoutesSection = ({ themeSprings }: ThemeProps) => (
 		</AnchorHeading>
 		<p style={paragraphSpacedStyle}>
 			Single-page apps mounted under a wildcard Elysia route — like{' '}
-			<code>app.get('/portal/*', ...)</code> — host many client-side
-			URLs that the server never registers individually. AbsoluteJS
-			discovers those URLs by statically reading your page module's
-			framework router config and emits one sitemap entry per
-			non-dynamic leaf, prefixed by the mount path.
+			<code>app.get('/portal/*', ...)</code> — host many client-side URLs
+			that the server never registers individually. AbsoluteJS discovers
+			those URLs by statically reading your page module's framework router
+			config and emits one sitemap entry per non-dynamic leaf, prefixed by
+			the mount path.
 		</p>
 		<PrismPlus
 			codeString={sitemapWildcardElysiaRoute}
@@ -42,23 +42,22 @@ export const SitemapSpaSubRoutesSection = ({ themeSprings }: ThemeProps) => (
 			themeSprings={themeSprings}
 		/>
 		<p style={paragraphSpacedStyle}>
-			The mount path comes from each framework's idiomatic
-			base-URL slot. The route list comes from the same router config
-			your app uses to navigate at runtime — there's no second source
-			of truth to maintain.
+			The mount path comes from each framework's idiomatic base-URL slot.
+			The route list comes from the same router config your app uses to
+			navigate at runtime — there's no second source of truth to maintain.
 		</p>
 		<ul style={listStyle}>
 			<li style={listItemStyle}>
 				<strong style={strongStyle}>Dynamic segments</strong> (
-				<code>:id</code>, <code>**</code>, <code>*</code>) are
-				skipped automatically. Use the <code>routes</code> callback in
-				the sitemap config to enumerate parameterised URLs from a
-				database or CMS.
+				<code>:id</code>, <code>**</code>, <code>*</code>) are skipped
+				automatically. Use the <code>routes</code> callback in the
+				sitemap config to enumerate parameterised URLs from a database
+				or CMS.
 			</li>
 			<li style={listItemStyle}>
-				<strong style={strongStyle}>Per-sub-route opt-out</strong> :
-				set <code>sitemap: 'exclude'</code> on a single Route inside
-				the SPA config (slot name varies by framework — see below).
+				<strong style={strongStyle}>Per-sub-route opt-out</strong> : set{' '}
+				<code>sitemap: 'exclude'</code> on a single Route inside the SPA
+				config (slot name varies by framework — see below).
 			</li>
 			<li style={listItemStyle}>
 				<strong style={strongStyle}>Nested routes</strong> work too;
@@ -76,10 +75,10 @@ export const SitemapSpaSubRoutesSection = ({ themeSprings }: ThemeProps) => (
 		</AnchorHeading>
 		<p style={paragraphSpacedStyle}>
 			Mount path comes from the page module's{' '}
-			<code>{'{ provide: APP_BASE_HREF, useValue: \'/portal/\' }'}</code>
+			<code>{"{ provide: APP_BASE_HREF, useValue: '/portal/' }"}</code>
 			provider. Routes come from the first argument to{' '}
-			<code>provideRouter(...)</code>. Per-route opt-out uses the
-			built-in <code>Route.data</code> slot.
+			<code>provideRouter(...)</code>. Per-route opt-out uses the built-in{' '}
+			<code>Route.data</code> slot.
 		</p>
 		<PrismPlus
 			codeString={sitemapSpaAngular}
@@ -99,9 +98,8 @@ export const SitemapSpaSubRoutesSection = ({ themeSprings }: ThemeProps) => (
 		<p style={paragraphSpacedStyle}>
 			Mount path comes from the <code>basename</code> option of{' '}
 			<code>createBrowserRouter</code>. Routes come from the first
-			argument. Per-route opt-out uses{' '}
-			<code>Route.handle</code> (React Router's free-form metadata
-			slot).
+			argument. Per-route opt-out uses <code>Route.handle</code> (React
+			Router's free-form metadata slot).
 		</p>
 		<PrismPlus
 			codeString={sitemapSpaReact}
@@ -121,8 +119,8 @@ export const SitemapSpaSubRoutesSection = ({ themeSprings }: ThemeProps) => (
 		<p style={paragraphSpacedStyle}>
 			Mount path comes from the argument to{' '}
 			<code>createWebHistory('/portal/')</code>. Routes come from the{' '}
-			<code>routes</code> option of <code>createRouter</code>.
-			Per-route opt-out uses <code>Route.meta</code>.
+			<code>routes</code> option of <code>createRouter</code>. Per-route
+			opt-out uses <code>Route.meta</code>.
 		</p>
 		<PrismPlus
 			codeString={sitemapSpaVue}
@@ -141,8 +139,8 @@ export const SitemapSpaSubRoutesSection = ({ themeSprings }: ThemeProps) => (
 		</AnchorHeading>
 		<p style={paragraphSpacedStyle}>
 			Mount path comes from the <code>basepath</code> attribute on
-			AbsoluteJS's <code>&lt;Router&gt;</code> component. Routes come
-			from child <code>&lt;Route path="..."&gt;</code> tags.
+			AbsoluteJS's <code>&lt;Router&gt;</code> component. Routes come from
+			child <code>&lt;Route path="..."&gt;</code> tags.
 		</p>
 		<PrismPlus
 			codeString={sitemapSpaSvelte}
@@ -155,10 +153,9 @@ export const SitemapSpaSubRoutesSection = ({ themeSprings }: ThemeProps) => (
 			<strong style={strongStyle}>Caveat</strong> : analysis is
 			source-level. Routes built by a runtime function (
 			<code>const routes = computeRoutes(env)</code>) or a base path
-			pulled from a variable (
-			<code>useValue: getBasePath()</code>) can't be read statically —
-			fall back to <code>sitemap.routes</code> in the config to supply
-			those URLs by hand.
+			pulled from a variable (<code>useValue: getBasePath()</code>) can't
+			be read statically — fall back to <code>sitemap.routes</code> in the
+			config to supply those URLs by hand.
 		</p>
 	</section>
 );

@@ -49,17 +49,21 @@ export const AuthObservabilityView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="auth-observability" style={h1Style(isMobileOrTablet)}>
+					<h1
+						id="auth-observability"
+						style={h1Style(isMobileOrTablet)}
+					>
 						Observability
 					</h1>
 					<p style={paragraphLargeStyle}>
-						OpenTelemetry instrumentation shipped in <code>0.35.0</code>.
-						OTel is the CNCF vendor-neutral observability standard
-						(OpenTracing + OpenCensus merger) — distinct from product
-						analytics. Install <code>@opentelemetry/api</code> and an
-						exporter; every authorize, callback, token, MFA challenge,
-						webhook delivery, and FGA check shows up in your tracing
-						backend with no other config.
+						OpenTelemetry instrumentation shipped in{' '}
+						<code>0.35.0</code>. OTel is the CNCF vendor-neutral
+						observability standard (OpenTracing + OpenCensus merger)
+						— distinct from product analytics. Install{' '}
+						<code>@opentelemetry/api</code> and an exporter; every
+						authorize, callback, token, MFA challenge, webhook
+						delivery, and FGA check shows up in your tracing backend
+						with no other config.
 					</p>
 				</animated.div>
 
@@ -75,8 +79,9 @@ export const AuthObservabilityView = ({
 					<p style={paragraphSpacedStyle}>
 						Spans carry attributes like <code>auth.client_id</code>,{' '}
 						<code>auth.user_sub</code>, <code>auth.scopes</code>,{' '}
-						<code>auth.grant_type</code>. Works with any OTLP-compatible
-						backend: Jaeger, Tempo, Honeycomb, Datadog, Grafana, Lightstep.
+						<code>auth.grant_type</code>. Works with any
+						OTLP-compatible backend: Jaeger, Tempo, Honeycomb,
+						Datadog, Grafana, Lightstep.
 					</p>
 					<PrismPlus
 						codeString={otelWireup}
@@ -96,10 +101,10 @@ export const AuthObservabilityView = ({
 						Zero cost when unused
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>@opentelemetry/api</code> is an optional peer dependency
-						loaded via dynamic import. Consumers who don&apos;t install it
-						pay nothing at module load — the span calls short-circuit
-						before the package is resolved.
+						<code>@opentelemetry/api</code> is an optional peer
+						dependency loaded via dynamic import. Consumers who
+						don&apos;t install it pay nothing at module load — the
+						span calls short-circuit before the package is resolved.
 					</p>
 					<PrismPlus
 						codeString={zeroCost}

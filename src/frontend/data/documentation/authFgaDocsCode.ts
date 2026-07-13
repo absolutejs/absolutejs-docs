@@ -1,3 +1,14 @@
+export const fgaCache = `\
+import { createFgaEngine, createInMemoryCheckCache } from '@absolutejs/auth';
+
+// Memoize check() with a TTL cache. Writes (writeWarrant/deleteWarrant) clear it
+// on this instance; other instances see staleness up to ttlMs — supply a shared
+// (e.g. Redis-backed) FgaCache for those.
+const fga = createFgaEngine({
+  schema,
+  warrantStore,
+  cache: createInMemoryCheckCache({ ttlMs: 5000, maxEntries: 10000 })
+});`;
 export const fgaCheck = `\
 // Write relationships (warrants), then check or query — the schema's inheritance
 // does the rest, so you don't write a warrant per permission.
@@ -31,17 +42,6 @@ const viewers = await fga.listSubjects({
   resourceType: 'document',
   resourceId: 'doc1',
   relation: 'viewer'
-});`;
-export const fgaCache = `\
-import { createFgaEngine, createInMemoryCheckCache } from '@absolutejs/auth';
-
-// Memoize check() with a TTL cache. Writes (writeWarrant/deleteWarrant) clear it
-// on this instance; other instances see staleness up to ttlMs — supply a shared
-// (e.g. Redis-backed) FgaCache for those.
-const fga = createFgaEngine({
-  schema,
-  warrantStore,
-  cache: createInMemoryCheckCache({ ttlMs: 5000, maxEntries: 10000 })
 });`;
 export const fgaReverse = `\
 // Reverse query — which documents can alice view? (the inverse of check)

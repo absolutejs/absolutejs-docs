@@ -1,19 +1,3 @@
-export const rateLimitQuickStart = `\
-import { Elysia } from 'elysia';
-import { rateLimit, gcra } from '@absolutejs/rate-limit';
-
-new Elysia()
-  .use(rateLimit({
-    // GCRA — the algorithm Stripe uses. Exact, O(1) memory per key,
-    // no boundary effects. Burst of 5, sustained 10 req/s.
-    algorithm: gcra({ requestsPerPeriod: 10, periodMs: 1000, burst: 5 }),
-    // 'ip' uses extractIp() with the trustedProxies + ipv6Prefix below.
-    key: 'ip',
-    trustedProxies: 1, // honor one CDN/LB hop of X-Forwarded-For
-  }))
-  .get('/', () => 'ok')
-  .listen(3000);`;
-
 export const rateLimitAlgorithms = `\
 // GCRA — default. Exact, BigInt nanosecond TAT, no float drift.
 import { gcra } from '@absolutejs/rate-limit';
@@ -36,7 +20,6 @@ combined({
     gcra({ requestsPerPeriod: 10_000, periodMs: 86_400_000           }),
   ],
 });`;
-
 export const rateLimitCost = `\
 new Elysia().use(rateLimit({
   algorithm: gcra({ requestsPerPeriod: 100, periodMs: 60_000, burst: 20 }),
@@ -68,7 +51,6 @@ new Elysia().use(rateLimit({
     ok: false, retryAfterSec: info.decision.retryAfterSec,
   }), { status: 429, headers: { 'Content-Type': 'application/json' } }),
 }));`;
-
 export const rateLimitHeaders = `\
 # IETF draft-09 (default — headers: 'standard')
 RateLimit: limit=20, remaining=18, reset=15
@@ -83,7 +65,6 @@ Retry-After: 7
 
 # Or 'both' to emit both — useful during a transition.
 # 'false' suppresses everything except Retry-After.`;
-
 export const rateLimitIpModes = `\
 // trustedProxies — IPv6 /64 — CDN-aware
 import { extractIp } from '@absolutejs/rate-limit/core';
@@ -105,7 +86,6 @@ extractIp({ ipv6Prefix: 128, ... }); // disable grouping
 
 // Honors cf-connecting-ip, fly-client-ip, true-client-ip, x-real-ip when
 // XFF is missing and a proxy is trusted.`;
-
 export const rateLimitNonHttp = `\
 // Use the algorithms directly outside HTTP — WebSocket message rate-limit,
 // queue consumer throttle, AI call quotas. Import from /core to skip the
@@ -128,3 +108,18 @@ const remaining = aiLimiter.peek(store, userId, Date.now()).remaining;
 
 // reset() = admin clear.
 aiLimiter.reset(store, userId);`;
+export const rateLimitQuickStart = `\
+import { Elysia } from 'elysia';
+import { rateLimit, gcra } from '@absolutejs/rate-limit';
+
+new Elysia()
+  .use(rateLimit({
+    // GCRA — the algorithm Stripe uses. Exact, O(1) memory per key,
+    // no boundary effects. Burst of 5, sustained 10 req/s.
+    algorithm: gcra({ requestsPerPeriod: 10, periodMs: 1000, burst: 5 }),
+    // 'ip' uses extractIp() with the trustedProxies + ipv6Prefix below.
+    key: 'ip',
+    trustedProxies: 1, // honor one CDN/LB hop of X-Forwarded-For
+  }))
+  .get('/', () => 'ok')
+  .listen(3000);`;

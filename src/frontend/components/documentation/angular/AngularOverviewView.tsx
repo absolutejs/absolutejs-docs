@@ -136,19 +136,19 @@ export const AngularOverviewView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						Write the providers as a real typed value (not a
-						string path). TypeScript catches a missing import or
-						renamed binding at compile time, and the framework
-						AST-parses <code>absolute.config.ts</code> at build
-						time to find the import path of the binding referenced
-						here, then bakes a matching import + an{' '}
-						<code>export const providers = [...]</code>{' '}
-						declaration directly into every page&apos;s compiled
-						server output. Per-page additions like{' '}
+						Write the providers as a real typed value (not a string
+						path). TypeScript catches a missing import or renamed
+						binding at compile time, and the framework AST-parses{' '}
+						<code>absolute.config.ts</code> at build time to find
+						the import path of the binding referenced here, then
+						bakes a matching import + an{' '}
+						<code>export const providers = [...]</code> declaration
+						directly into every page&apos;s compiled server output.
+						Per-page additions like{' '}
 						<code>provideRouter(routes)</code> and{' '}
-						<code>APP_BASE_HREF</code> are auto-wired by the
-						build from page-level signals &mdash; you never write
-						either yourself. See{' '}
+						<code>APP_BASE_HREF</code> are auto-wired by the build
+						from page-level signals &mdash; you never write either
+						yourself. See{' '}
 						<a href="#provider-model">Provider Model</a> and{' '}
 						<a href="#routing">Routing</a> for the full auto-wire
 						pipeline.
@@ -175,21 +175,22 @@ export const AngularOverviewView = ({
 						<code>provideZonelessChangeDetection()</code>. There is
 						no opt-out: <code>zone.js</code> is never loaded into
 						the client bundle, never patches the browser&apos;s
-						async primitives, and never auto-ticks change
-						detection. This produces smaller bundles and aligns
-						with Angular&apos;s long-term direction, but it changes
-						what triggers a re-render.
+						async primitives, and never auto-ticks change detection.
+						This produces smaller bundles and aligns with
+						Angular&apos;s long-term direction, but it changes what
+						triggers a re-render.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						In a zoneless app, change detection runs only in
-						response to <strong style={strongStyle}>explicit</strong>{' '}
-						triggers. Mutating a plain class property inside an{' '}
-						<code>await</code>, <code>setTimeout</code>,{' '}
-						RxJS <code>.subscribe</code> callback, or other async
-						source updates the value but does <em>not</em> tell
-						Angular to re-evaluate the template. The most reliable
-						way to make state reactive is to store it in a{' '}
-						<code>signal()</code>:
+						response to{' '}
+						<strong style={strongStyle}>explicit</strong> triggers.
+						Mutating a plain class property inside an{' '}
+						<code>await</code>, <code>setTimeout</code>, RxJS{' '}
+						<code>.subscribe</code> callback, or other async source
+						updates the value but does <em>not</em> tell Angular to
+						re-evaluate the template. The most reliable way to make
+						state reactive is to store it in a <code>signal()</code>
+						:
 					</p>
 					<PrismPlus
 						codeString={angularZonelessTriggers}
@@ -199,11 +200,10 @@ export const AngularOverviewView = ({
 					/>
 					<p style={paragraphSpacedStyle}>
 						Two-way <code>[(ngModel)]</code> bindings and template
-						event handlers like <code>(click)</code> are handled
-						for you &mdash; Angular installs its own listener
-						wrappers that tick CD when those fire. The
-						gotcha-prone surfaces are{' '}
-						<code>await</code>/<code>then</code>, raw{' '}
+						event handlers like <code>(click)</code> are handled for
+						you &mdash; Angular installs its own listener wrappers
+						that tick CD when those fire. The gotcha-prone surfaces
+						are <code>await</code>/<code>then</code>, raw{' '}
 						<code>setTimeout</code>, and observables you subscribe
 						to manually. The composables in the next section cover
 						those.
@@ -223,31 +223,27 @@ export const AngularOverviewView = ({
 						AbsoluteJS ships a small set of zoneless-safe
 						composables from{' '}
 						<code>@absolutejs/absolute/angular</code>. They cover
-						the three patterns that most often leak state or fail
-						to re-render in a zoneless app: timers, async data
+						the three patterns that most often leak state or fail to
+						re-render in a zoneless app: timers, async data
 						fetching, and Observable subscriptions. Each must be
 						called inside an Angular injection context (component
 						constructor, field initializer, or{' '}
 						<code>runInInjectionContext</code>).
 					</p>
 					<p style={paragraphSpacedStyle}>
-						<code>usePageContext&lt;T&gt;()</code> &mdash;
-						typed accessor for the per-request payload the
-						backend handler passed via{' '}
-						<code>requestContext</code>. AbsoluteJS hydrates
-						the value into Angular&apos;s standard{' '}
+						<code>usePageContext&lt;T&gt;()</code> &mdash; typed
+						accessor for the per-request payload the backend handler
+						passed via <code>requestContext</code>. AbsoluteJS
+						hydrates the value into Angular&apos;s standard{' '}
 						<code>REQUEST_CONTEXT</code> token on both SSR and
 						client bootstrap, so the object{' '}
 						<code>usePageContext()</code> returns is identical
 						across phases. The page declares its own{' '}
-						<code>Context</code> type near the component and
-						passes it as the generic argument; the same type
-						parameterises{' '}
-						<code>
-							handleAngularPageRequest&lt;Context&gt;()
-						</code>{' '}
-						in the backend, so the contract is enforced at the
-						call site and there is no per-page cast.
+						<code>Context</code> type near the component and passes
+						it as the generic argument; the same type parameterises{' '}
+						<code>handleAngularPageRequest&lt;Context&gt;()</code>{' '}
+						in the backend, so the contract is enforced at the call
+						site and there is no per-page cast.
 					</p>
 					<PrismPlus
 						codeString={angularUsePageContext}
@@ -260,8 +256,8 @@ export const AngularOverviewView = ({
 						<code>setTimeout</code> / <code>setInterval</code> with
 						automatic cleanup on destroy. Use it instead of raw{' '}
 						<code>setTimeout</code> so timers never outlive the
-						component that scheduled them, and pair it with
-						signals if the callback drives the template.
+						component that scheduled them, and pair it with signals
+						if the callback drives the template.
 					</p>
 					<PrismPlus
 						codeString={angularUseTimers}
@@ -298,8 +294,8 @@ export const AngularOverviewView = ({
 						<code>refresh()</code> from <code>ngOnInit</code>. That
 						keeps <code>loading()</code> <code>true</code> on first
 						paint so the template renders the spinner branch
-						immediately, with no blank-frame flash between mount
-						and the first fetch. The other values are{' '}
+						immediately, with no blank-frame flash between mount and
+						the first fetch. The other values are{' '}
 						<code>{`'immediate'`}</code> (the default &mdash; fire
 						the fetcher at construction) and <code>{`'idle'`}</code>{' '}
 						(dormant until <code>refresh()</code> or{' '}
@@ -317,12 +313,11 @@ export const AngularOverviewView = ({
 						shared cache, request deduplication, automatic refetch
 						on focus or reconnect, query invalidation by key,
 						optimistic updates with rollback, or paginated/infinite
-						queries, install{' '}
-						<code>@tanstack/angular-query</code> alongside this
-						composable. Use <code>useResource</code> for one-off
-						fetches and trivial admin screens; reach for TanStack
-						Query when the data layer is shared across pages or
-						needs cache semantics.
+						queries, install <code>@tanstack/angular-query</code>{' '}
+						alongside this composable. Use <code>useResource</code>{' '}
+						for one-off fetches and trivial admin screens; reach for
+						TanStack Query when the data layer is shared across
+						pages or needs cache semantics.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						<code>useSubscription()</code> &mdash; wraps{' '}
@@ -338,16 +333,15 @@ export const AngularOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>inject(DestroyRef)</code> is only legal in an
 						Angular injection context (constructor, field
-						initializer,{' '}
-						<code>runInInjectionContext</code>), so a call from{' '}
-						<code>ngOnInit</code> or any other lifecycle hook
-						can&apos;t automatically capture the host&apos;s{' '}
+						initializer, <code>runInInjectionContext</code>), so a
+						call from <code>ngOnInit</code> or any other lifecycle
+						hook can&apos;t automatically capture the host&apos;s{' '}
 						<code>DestroyRef</code>. When that happens{' '}
 						<code>useSubscription</code> falls back to a plain
 						subscription (the caller owns teardown) and logs a
 						one-time warning. The cleanest fix is to capture{' '}
-						<code>DestroyRef</code> once in a field initializer
-						and pass it through:
+						<code>DestroyRef</code> once in a field initializer and
+						pass it through:
 					</p>
 					<PrismPlus
 						codeString={angularUseSubscription}
@@ -437,9 +431,7 @@ export const AngularOverviewView = ({
 						page declares its own <code>Context</code> type next to
 						the component and passes it as the generic; the same
 						type parameterises{' '}
-						<code>
-							handleAngularPageRequest&lt;Context&gt;()
-						</code>{' '}
+						<code>handleAngularPageRequest&lt;Context&gt;()</code>{' '}
 						on the backend, so the contract is enforced at the call
 						site:
 					</p>
@@ -462,23 +454,20 @@ export const AngularOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						AbsoluteJS owns the framework providers needed for SSR,
-						hydration, request tokens, sanitization, zoneless
-						change detection, transfer cache, and server-safe
-						animation handling. Application providers come from
-						one place &mdash; the{' '}
-						<code>angular.providers</code> array in{' '}
+						hydration, request tokens, sanitization, zoneless change
+						detection, transfer cache, and server-safe animation
+						handling. Application providers come from one place
+						&mdash; the <code>angular.providers</code> array in{' '}
 						<code>absolute.config.ts</code>. Page modules do{' '}
 						<strong style={strongStyle}>not</strong> export a{' '}
 						<code>providers</code> array of their own.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						The build runs an AST scan before any framework
-						compile: it walks the project from your server
-						entrypoint, finds every{' '}
-						<code>handleAngularPageRequest({'{...}'})</code>{' '}
-						call, then injects the providers declaration
-						directly into each page&apos;s compiled server
-						output:
+						The build runs an AST scan before any framework compile:
+						it walks the project from your server entrypoint, finds
+						every <code>handleAngularPageRequest({'{...}'})</code>{' '}
+						call, then injects the providers declaration directly
+						into each page&apos;s compiled server output:
 					</p>
 					<p style={paragraphSpacedStyle}>
 						<code>
@@ -493,39 +482,36 @@ export const AngularOverviewView = ({
 						The <code>appProviders</code> import resolves to the
 						path the build extracted from{' '}
 						<code>absolute.config.ts</code>;{' '}
-						<code>provideRouter(routes, ...)</code> is appended
-						only when the page exports a{' '}
-						<code>routes</code> array (see{' '}
+						<code>provideRouter(routes, ...)</code> is appended only
+						when the page exports a <code>routes</code> array (see{' '}
 						<a href="#routing">Routing</a>), and the{' '}
-						<code>APP_BASE_HREF</code> entry is included only
-						when the Elysia mount is a sub-router pattern (
+						<code>APP_BASE_HREF</code> entry is included only when
+						the Elysia mount is a sub-router pattern (
 						<code>.get(&apos;/admin/*&apos;, ...)</code> &rarr;{' '}
 						<code>&apos;/admin/&apos;</code>). Because the
 						declaration lives in the page module itself, the
-						page&apos;s server bundle and the client wrapper
-						both read the same <code>providers</code> export off
-						the same module &mdash; one{' '}
-						<code>@angular/core</code> instance, no runtime
-						providers indirection.
+						page&apos;s server bundle and the client wrapper both
+						read the same <code>providers</code> export off the same
+						module &mdash; one <code>@angular/core</code> instance,
+						no runtime providers indirection.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						For request-specific data, inject{' '}
-						<code>REQUEST</code>, <code>REQUEST_CONTEXT</code>, or{' '}
+						For request-specific data, inject <code>REQUEST</code>,{' '}
+						<code>REQUEST_CONTEXT</code>, or{' '}
 						<code>RESPONSE_INIT</code> from your service or
 						resolver, or read the typed payload with{' '}
 						<code>usePageContext&lt;T&gt;()</code>. Angular
 						route-level <code>providers</code> inside{' '}
-						<code>provideRouter</code> route definitions continue
-						to work normally for token values that should be
-						scoped to one matched route subtree.
+						<code>provideRouter</code> route definitions continue to
+						work normally for token values that should be scoped to
+						one matched route subtree.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Lazy routes using <code>loadComponent</code> also work
 						during SSR, including imports from installed packages.
 						The package must be importable from the server runtime
 						environment; if a package is only available to the
-						browser bundle, SSR cannot resolve that route
-						component.
+						browser bundle, SSR cannot resolve that route component.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						If an Angular route guard redirects during SSR by
@@ -565,8 +551,8 @@ export const AngularOverviewView = ({
 							provideRouter(routes, withComponentInputBinding(),
 							withViewTransitions())
 						</code>{' '}
-						into the providers literal appended to that
-						page&apos;s compiled server output.
+						into the providers literal appended to that page&apos;s
+						compiled server output.
 					</p>
 					<PrismPlus
 						codeString={angularPageWithRoutes}
@@ -579,12 +565,12 @@ export const AngularOverviewView = ({
 						handler call&apos;s Elysia mount path at build time.{' '}
 						<code>.get(&apos;/portal/*&apos;, ...)</code> bakes{' '}
 						<code>{`{ provide: APP_BASE_HREF, useValue: '/portal/' }`}</code>{' '}
-						into the page&apos;s injected providers; root mounts
-						(<code>/</code>, single-segment routes) leave the
-						framework default (<code>/</code>) in place. You
-						never write that provider by hand &mdash; renaming a
-						mount in the Elysia chain doesn&apos;t require
-						touching the Angular page.
+						into the page&apos;s injected providers; root mounts (
+						<code>/</code>, single-segment routes) leave the
+						framework default (<code>/</code>) in place. You never
+						write that provider by hand &mdash; renaming a mount in
+						the Elysia chain doesn&apos;t require touching the
+						Angular page.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Pages without sub-routes need nothing extra. Omit the{' '}

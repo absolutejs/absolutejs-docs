@@ -23,10 +23,10 @@ export const SitemapPerPageMetadataSection = ({ themeSprings }: ThemeProps) => (
 		</AnchorHeading>
 		<p style={paragraphSpacedStyle}>
 			Every framework's page-handler input accepts an optional{' '}
-			<code>sitemap</code> field. AbsoluteJS reads it statically from
-			the handler source at registration time and applies it to the
-			sitemap entries produced from that route — no extra config file
-			to keep in sync, no runtime cost in the handler itself.
+			<code>sitemap</code> field. AbsoluteJS reads it statically from the
+			handler source at registration time and applies it to the sitemap
+			entries produced from that route — no extra config file to keep in
+			sync, no runtime cost in the handler itself.
 		</p>
 		<PrismPlus
 			codeString={sitemapPerPageMetadata}
@@ -35,10 +35,10 @@ export const SitemapPerPageMetadataSection = ({ themeSprings }: ThemeProps) => (
 			themeSprings={themeSprings}
 		/>
 		<p style={paragraphSpacedStyle}>
-			For a wildcard SPA route like <code>/portal/*</code>, the
-			metadata applies to every SPA sub-route emitted from that mount
-			point. To target a specific sub-route inside an SPA, use the
-			framework's per-route metadata slot — see{' '}
+			For a wildcard SPA route like <code>/portal/*</code>, the metadata
+			applies to every SPA sub-route emitted from that mount point. To
+			target a specific sub-route inside an SPA, use the framework's
+			per-route metadata slot — see{' '}
 			<a href="#spa-sub-routes">SPA Sub-Routes</a>.
 		</p>
 		<p style={paragraphSpacedStyle}>
@@ -57,15 +57,13 @@ export const SitemapPerPageMetadataSection = ({ themeSprings }: ThemeProps) => (
 				<code>defaultPriority</code> in the config
 			</li>
 			<li style={listItemStyle}>
-				Built-in defaults (<code>weekly</code> /{' '}
-				<code>0.8</code>)
+				Built-in defaults (<code>weekly</code> / <code>0.8</code>)
 			</li>
 		</ul>
 		<p style={paragraphSpacedStyle}>
-			<strong style={strongStyle}>Caveat</strong> : values must be
-			literal strings and numbers — the field is read by inspecting
-			the handler's source text, not by invoking the handler. A
-			computed value like{' '}
+			<strong style={strongStyle}>Caveat</strong> : values must be literal
+			strings and numbers — the field is read by inspecting the handler's
+			source text, not by invoking the handler. A computed value like{' '}
 			<code>sitemap: getMetadata()</code> won't be picked up; use{' '}
 			<code>sitemap.overrides</code> in the config for those cases.
 		</p>

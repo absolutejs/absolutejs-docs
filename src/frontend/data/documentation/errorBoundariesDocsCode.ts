@@ -10,6 +10,16 @@ export default defineRenderErrorPage(({ name, message, stack }) => \`<!DOCTYPE h
     \${stack ? \`<pre style="white-space: pre-wrap; opacity: 0.7;">\${stack}</pre>\` : ''}
   </body>
 </html>\`);`;
+export const errorComponentHtml = `\
+<!-- drop in any pages dir, e.g. src/frontend/react/pages/error.html -->
+<!DOCTYPE html>
+<html>
+  <body style="padding: 2rem; font-family: system-ui;">
+    <h1>{{name}}: Something went wrong</h1>
+    <p>{{message}}</p>
+    <pre style="white-space: pre-wrap; opacity: 0.7;">{{stack}}</pre>
+  </body>
+</html>`;
 export const errorComponentReact = `\
 // src/frontend/react/pages/error.tsx
 import type { ErrorPageProps } from '@absolutejs/absolute';
@@ -57,16 +67,6 @@ defineProps<ErrorPageProps>();
     </pre>
   </div>
 </template>`;
-export const errorComponentHtml = `\
-<!-- drop in any pages dir, e.g. src/frontend/react/pages/error.html -->
-<!DOCTYPE html>
-<html>
-  <body style="padding: 2rem; font-family: system-ui;">
-    <h1>{{name}}: Something went wrong</h1>
-    <p>{{message}}</p>
-    <pre style="white-space: pre-wrap; opacity: 0.7;">{{stack}}</pre>
-  </body>
-</html>`;
 export const errorConventionBasic = `\
 src/frontend/react/pages/
   Home.tsx
@@ -83,17 +83,6 @@ Error Fallback Chain (highest to lowest priority):
 2. Framework default error    →  error.tsx       (for all pages in that framework)
 3. Universal HTML fallback    →  error.html      (any framework, token-replaced)
 4. Generic SSR error page     →  ssrErrorPage()  (built-in last resort)`;
-export const notFoundReact = `\
-// src/frontend/react/pages/not-found.tsx
-export const NotFound = () => {
-  return (
-    <div style={{ padding: '2rem', fontFamily: 'system-ui', textAlign: 'center' }}>
-      <h1>404</h1>
-      <p>The page you're looking for doesn't exist.</p>
-      <a href="/">Go home</a>
-    </div>
-  );
-};`;
 export const notFoundAngular = `\
 // src/frontend/angular/pages/not-found.ts
 import { defineRenderNotFoundPage } from '@absolutejs/absolute';
@@ -106,6 +95,17 @@ export default defineRenderNotFoundPage(() => \`<!DOCTYPE html>
     <a href="/">Go home</a>
   </body>
 </html>\`);`;
+export const notFoundReact = `\
+// src/frontend/react/pages/not-found.tsx
+export const NotFound = () => {
+  return (
+    <div style={{ padding: '2rem', fontFamily: 'system-ui', textAlign: 'center' }}>
+      <h1>404</h1>
+      <p>The page you're looking for doesn't exist.</p>
+      <a href="/">Go home</a>
+    </div>
+  );
+};`;
 export const pageSpecificExample = `\
 src/frontend/react/pages/
   Home.tsx              # the page component

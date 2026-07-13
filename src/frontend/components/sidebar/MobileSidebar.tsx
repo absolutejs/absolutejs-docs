@@ -2,10 +2,11 @@ import { MOBILE_SIDEBAR_LAYOUT } from '../../../constants';
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { FaTimes } from 'react-icons/fa';
 import { ThemeSprings } from '../../../types/springTypes';
-import { DocsView, isMenuDropdown } from '../../../types/types';
+import { DocsView, isMenuDropdown, isMenuHeading } from '../../../types/types';
 import { sidebarData } from '../../data/sidebarData';
 import { useSidebarSprings } from '../../hooks/springs/useSidebarSprings';
 import { SidebarDropdown } from './SidebarDropdown';
+import { SidebarHeading } from './SidebarHeading';
 import { SidebarLink } from './SidebarLink';
 
 type MobileSidebarProps = {
@@ -124,6 +125,15 @@ export const MobileSidebar = ({
 
 				<nav style={{ display: 'flex', flexDirection: 'column' }}>
 					{sidebarData.map((element, index) => {
+						if (isMenuHeading(element)) {
+							return (
+								<SidebarHeading
+									heading={element.heading}
+									key={`heading-${element.heading}`}
+									themeSprings={themeSprings}
+								/>
+							);
+						}
 						if (isMenuDropdown(element)) {
 							return (
 								<SidebarDropdown

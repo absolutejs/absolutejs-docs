@@ -56,8 +56,8 @@ export const AuthMigrationsView = ({
 						<code>0.35.0</code> ships a first-party CLI for the
 						package&apos;s Postgres tables. The schema lives in
 						Drizzle definitions; the runner enumerates them via{' '}
-						<code>getTableConfig</code> and emits idempotent DDL.
-						No drizzle-kit, no manual SQL, no schema drift between
+						<code>getTableConfig</code> and emits idempotent DDL. No
+						drizzle-kit, no manual SQL, no schema drift between
 						package versions.
 					</p>
 				</animated.div>
@@ -73,9 +73,9 @@ export const AuthMigrationsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						19 blocks of migrations covering every store the package
-						ships. Run all at once or scope to the blocks you enabled.
-						Works against Neon, Supabase, vanilla Postgres, RDS — anything
-						with a standard Postgres wire protocol.
+						ships. Run all at once or scope to the blocks you
+						enabled. Works against Neon, Supabase, vanilla Postgres,
+						RDS — anything with a standard Postgres wire protocol.
 					</p>
 					<PrismPlus
 						codeString={cliUsage}
@@ -95,11 +95,12 @@ export const AuthMigrationsView = ({
 						Programmatic runner
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The CLI is a thin wrapper over <code>runMigrations</code>.
-						Drive it from a script for test fixtures, or from your
-						server&apos;s boot path for &quot;migrate on startup&quot;
-						deployments. Future package releases append migrations
-						idempotently — re-running is safe.
+						The CLI is a thin wrapper over{' '}
+						<code>runMigrations</code>. Drive it from a script for
+						test fixtures, or from your server&apos;s boot path for
+						&quot;migrate on startup&quot; deployments. Future
+						package releases append migrations idempotently —
+						re-running is safe.
 					</p>
 					<PrismPlus
 						codeString={programmaticMigration}

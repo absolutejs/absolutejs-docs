@@ -1,44 +1,38 @@
-export const syncUnsafeHostSignature = `\
-// Without an unsafeHost map, the sandbox is hermetic — the wrapped
-// signature is still 4-arity but the 4th param's Proxy throws on every
-// access. This is BY DESIGN: a sandboxed handler with no opt-in can't
-// reach the outside world by accident.
+export const syncUnsafeHostErrors = `\
+// Failure modes are explicit.
+//
+// 1. Undeclared name. The sandbox-side Proxy lets you access any
+//    property, but the engine refuses anything not in your config:
 defineMutation({
-  name: 'safe:doWork',
+  name: 'badEscape',
   sandboxedHandler: \`async (args, ctx, actions, unsafeHost) => {
-    // unsafeHost.anything() throws "not declared" — there's no map.
-    await actions.insert('items', { ...args, status: 'done' });
-    return { ok: true };
+    return await unsafeHost.notDeclared({ x: 1 });
   }\`,
+  sandbox: { unsafeHost: { onlyThis: () => 'ok' } },
 });
-
-// Opting in is explicit. Each entry the model can call must be NAMED
-// here. The names you pick are what shows up in the handler source —
-// so name them visibly: chargeStripe, sendSlackPing, pushToSqs.
+//   → throws: "sandboxedHandler called unsafeHost.notDeclared() but
+//     it was not declared in the mutation's sandbox.unsafeHost
+//     config. Declare it (and only the host fns you intend to expose)
+//     to opt in to the escape hatch."
+//
+// 2. Host fn throws. The thrown error structured-clones across the
+//    isolate boundary and reaches the handler as a normal JS Error.
+//    Use try/catch in the sandbox source — same shape as catching a
+//    fetch failure.
 defineMutation({
   name: 'payments:checkout',
   sandboxedHandler: \`async (args, ctx, actions, unsafeHost) => {
-    const order = await actions.insert('orders', {
-      ...args, status: 'pending',
-    });
-    const receipt = await unsafeHost.chargeStripe({
-      amount: order.amount,
-      token: args.token,
-    });
-    await actions.update('orders', {
-      id: order.id, status: 'paid', receiptId: receipt.id,
-    });
-    return order;
+    try {
+      const receipt = await unsafeHost.chargeStripe(args);
+      await actions.update('orders', { id: args.orderId, status: 'paid' });
+      return { ok: true, receipt };
+    } catch (e) {
+      await actions.update('orders', { id: args.orderId, status: 'failed' });
+      return { ok: false, error: e.message };
+    }
   }\`,
-  sandbox: {
-    unsafeHost: {
-      chargeStripe: ({ amount, token }) =>
-        stripe.charges.create({ amount, source: token }),
-      // Add more as needed. Each name is a hole in the sandbox.
-    },
-  },
+  sandbox: { unsafeHost: { chargeStripe: stripeChargeFn } },
 });`;
-
 export const syncUnsafeHostName = `\
 // The name was chosen deliberately to be LOUD. The alternatives we
 // considered and rejected:
@@ -57,7 +51,6 @@ export const syncUnsafeHostName = `\
 // Three syllables in a code-review diff. Easy to grep for in CI
 // (\`grep -r 'unsafeHost\\.' src/\`). Easy to enforce a policy that
 // every entry in the unsafeHost map needs a security review.`;
-
 export const syncUnsafeHostRetry = `\
 // Retry-fires-twice pitfall. The sandbox runs inside the engine's
 // per-call retry + DB-transaction wrapper. If the handler throws AFTER
@@ -104,39 +97,43 @@ defineMutation({
 //    follow-up step (a schedule, a job, an HTTP-route side effect)
 //    that runs AFTER the mutation commits. The mutation's writes are
 //    safely atomic; the host call sits outside the transaction loop.`;
-
-export const syncUnsafeHostErrors = `\
-// Failure modes are explicit.
-//
-// 1. Undeclared name. The sandbox-side Proxy lets you access any
-//    property, but the engine refuses anything not in your config:
+export const syncUnsafeHostSignature = `\
+// Without an unsafeHost map, the sandbox is hermetic — the wrapped
+// signature is still 4-arity but the 4th param's Proxy throws on every
+// access. This is BY DESIGN: a sandboxed handler with no opt-in can't
+// reach the outside world by accident.
 defineMutation({
-  name: 'badEscape',
+  name: 'safe:doWork',
   sandboxedHandler: \`async (args, ctx, actions, unsafeHost) => {
-    return await unsafeHost.notDeclared({ x: 1 });
+    // unsafeHost.anything() throws "not declared" — there's no map.
+    await actions.insert('items', { ...args, status: 'done' });
+    return { ok: true };
   }\`,
-  sandbox: { unsafeHost: { onlyThis: () => 'ok' } },
 });
-//   → throws: "sandboxedHandler called unsafeHost.notDeclared() but
-//     it was not declared in the mutation's sandbox.unsafeHost
-//     config. Declare it (and only the host fns you intend to expose)
-//     to opt in to the escape hatch."
-//
-// 2. Host fn throws. The thrown error structured-clones across the
-//    isolate boundary and reaches the handler as a normal JS Error.
-//    Use try/catch in the sandbox source — same shape as catching a
-//    fetch failure.
+
+// Opting in is explicit. Each entry the model can call must be NAMED
+// here. The names you pick are what shows up in the handler source —
+// so name them visibly: chargeStripe, sendSlackPing, pushToSqs.
 defineMutation({
   name: 'payments:checkout',
   sandboxedHandler: \`async (args, ctx, actions, unsafeHost) => {
-    try {
-      const receipt = await unsafeHost.chargeStripe(args);
-      await actions.update('orders', { id: args.orderId, status: 'paid' });
-      return { ok: true, receipt };
-    } catch (e) {
-      await actions.update('orders', { id: args.orderId, status: 'failed' });
-      return { ok: false, error: e.message };
-    }
+    const order = await actions.insert('orders', {
+      ...args, status: 'pending',
+    });
+    const receipt = await unsafeHost.chargeStripe({
+      amount: order.amount,
+      token: args.token,
+    });
+    await actions.update('orders', {
+      id: order.id, status: 'paid', receiptId: receipt.id,
+    });
+    return order;
   }\`,
-  sandbox: { unsafeHost: { chargeStripe: stripeChargeFn } },
+  sandbox: {
+    unsafeHost: {
+      chargeStripe: ({ amount, token }) =>
+        stripe.charges.create({ amount, source: token }),
+      // Add more as needed. Each name is a hole in the sandbox.
+    },
+  },
 });`;

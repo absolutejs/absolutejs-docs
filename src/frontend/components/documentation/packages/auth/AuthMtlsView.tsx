@@ -57,9 +57,10 @@ export const AuthMtlsView = ({
 					<p style={paragraphLargeStyle}>
 						RFC 8705 mutual-TLS client authentication + cert-bound
 						access tokens, shipped in <code>0.36.0</code>. Required
-						for FAPI 2.0 baseline (open banking, healthcare, anything
-						PSD2-aligned). Pairs with the existing DPoP, JAR, PAR,
-						private_key_jwt, and dynamic client registration surfaces.
+						for FAPI 2.0 baseline (open banking, healthcare,
+						anything PSD2-aligned). Pairs with the existing DPoP,
+						JAR, PAR, private_key_jwt, and dynamic client
+						registration surfaces.
 					</p>
 				</animated.div>
 
@@ -73,12 +74,13 @@ export const AuthMtlsView = ({
 						mTLS client auth
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Your reverse proxy terminates TLS and forwards the client
-						cert via a request header. Default reader is RFC 9440&apos;s
-						<code> Client-Cert: :&lt;base64-DER&gt;:</code> shape; override
-						with <code>extractTlsClientCert</code> when your proxy
-						uses something else (nginx X-SSL-Client-Cert, AWS ALB,
-						Envoy, Caddy — all common shapes work).
+						Your reverse proxy terminates TLS and forwards the
+						client cert via a request header. Default reader is RFC
+						9440&apos;s
+						<code> Client-Cert: :&lt;base64-DER&gt;:</code> shape;
+						override with <code>extractTlsClientCert</code> when
+						your proxy uses something else (nginx X-SSL-Client-Cert,
+						AWS ALB, Envoy, Caddy — all common shapes work).
 					</p>
 					<PrismPlus
 						codeString={mtlsConfig}
@@ -98,13 +100,14 @@ export const AuthMtlsView = ({
 						Cert-bound access tokens
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						When mTLS authenticates at <code>/token</code>, the issued
-						access token&apos;s <code>cnf</code> claim gets{' '}
-						<code>x5t#S256</code> = SHA-256 of the cert DER. Resource
-						servers verify the presented cert matches the binding —
-						a stolen token is useless without the matching private
-						key. Coexists with DPoP&apos;s <code>cnf.jkt</code>; a
-						single token can be both DPoP- and cert-bound.
+						When mTLS authenticates at <code>/token</code>, the
+						issued access token&apos;s <code>cnf</code> claim gets{' '}
+						<code>x5t#S256</code> = SHA-256 of the cert DER.
+						Resource servers verify the presented cert matches the
+						binding — a stolen token is useless without the matching
+						private key. Coexists with DPoP&apos;s{' '}
+						<code>cnf.jkt</code>; a single token can be both DPoP-
+						and cert-bound.
 					</p>
 					<PrismPlus
 						codeString={certBoundTokens}
@@ -125,9 +128,9 @@ export const AuthMtlsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The OpenID discovery doc auto-advertises mTLS support
-						alongside every other token-endpoint auth method the package
-						supports. RPs that probe discovery see the FAPI-grade signal
-						set in one place.
+						alongside every other token-endpoint auth method the
+						package supports. RPs that probe discovery see the
+						FAPI-grade signal set in one place.
 					</p>
 					<PrismPlus
 						codeString={discoveryAdvert}

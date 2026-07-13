@@ -1,3 +1,40 @@
+export const syncCodeModeChain = `\
+// What the model emits — one function body, multiple host calls,
+// one returned value. The intermediate results never enter the
+// conversation context.
+const c = await comments_create({
+  resourceId: 'shared-discussion',
+  body: 'Looks great @alice!',
+});
+await comments_toggleReaction({ commentId: c.id, emoji: '🎉' });
+log('done with', c.id);
+return { commentId: c.id, body: c.body };`;
+export const syncCodeModeDemo = `\
+// Worked example in examples/sync — the React page's CodeModePanel
+// posts to /sync/code-mode/run. The server wires the host-tool
+// factory + codeModeTool inside the route handler.
+.post(
+  '/sync/code-mode/run',
+  async ({ body }) => {
+    ensureDemoUser(body.userId);   // host-side bookkeeping
+
+    const hostTools = engineMutationsAsHostTools<{ userId: string }>({
+      engine,
+      ctx: () => ({ userId: body.userId }),
+      mutations: [
+        { name: 'comments:create',         description: '...', tsSignature: '...' },
+        { name: 'comments:toggleReaction', description: '...', tsSignature: '...' },
+        { name: 'favorites:toggle',        description: '...', tsSignature: '...' },
+      ],
+    });
+    const tool = codeModeTool({ timeout: 5000, tools: hostTools });
+
+    // codeModeTool returns a JSON string; parse for the client.
+    const raw = await tool.handler({ code: body.code });
+    return typeof raw === 'string' ? JSON.parse(raw) : raw;
+  },
+  { body: t.Object({ code: t.String(), userId: t.String() }) },
+);`;
 export const syncCodeModeFactory = `\
 // @absolutejs/sync@1.10.0 — new /code-mode subpath.
 import { createSyncEngine } from '@absolutejs/sync/engine';
@@ -35,19 +72,6 @@ const hostTools = engineMutationsAsHostTools<{ userId: string }>({
 // tool called \`run_code\`; its description is the auto-generated
 // prompt listing every host fn with its TS signature.
 const aiTool = codeModeTool({ tools: hostTools });`;
-
-export const syncCodeModeChain = `\
-// What the model emits — one function body, multiple host calls,
-// one returned value. The intermediate results never enter the
-// conversation context.
-const c = await comments_create({
-  resourceId: 'shared-discussion',
-  body: 'Looks great @alice!',
-});
-await comments_toggleReaction({ commentId: c.id, emoji: '🎉' });
-log('done with', c.id);
-return { commentId: c.id, body: c.body };`;
-
 export const syncCodeModeNaming = `\
 // Engine mutation names use \`:\` (e.g. 'comments:create') because
 // they're addressing, not identifiers. The host-tool map auto-derives
@@ -69,7 +93,6 @@ export const syncCodeModeNaming = `\
 // Build-time errors surface at boot, not at the first model call:
 //   - "mutation 'never:registered' is not registered on the engine"
 //   - "duplicate host-fn name 'comments_create'"`;
-
 export const syncCodeModeSemantics = `\
 // v0.1 partial-failure semantics — READ CAREFULLY.
 //
@@ -100,7 +123,6 @@ try {
   // (A delete mutation would go here in a real app.)
   return { error: e.message, partiallyCommitted: ['comment'] };
 }`;
-
 export const syncCodeModeTransactional = `\
 // Cross-mutation atomicity in sync 1.11+. Pair the per-mutation
 // host fns with a transactional batch host fn:
@@ -128,7 +150,6 @@ const hostTools = {
   }),
 };
 const tool = codeModeTool({ tools: hostTools });`;
-
 export const syncCodeModeTransactionalChain = `\
 // What the model emits when it wants atomicity. The batch is one
 // DB transaction; any handler throwing rolls everything back.
@@ -142,30 +163,3 @@ const results = await run_transaction([
     args: { commentId: 'c-known-id', emoji: '🎉' } },
 ]);
 return { ids: results.map((row) => row.id) };`;
-
-export const syncCodeModeDemo = `\
-// Worked example in examples/sync — the React page's CodeModePanel
-// posts to /sync/code-mode/run. The server wires the host-tool
-// factory + codeModeTool inside the route handler.
-.post(
-  '/sync/code-mode/run',
-  async ({ body }) => {
-    ensureDemoUser(body.userId);   // host-side bookkeeping
-
-    const hostTools = engineMutationsAsHostTools<{ userId: string }>({
-      engine,
-      ctx: () => ({ userId: body.userId }),
-      mutations: [
-        { name: 'comments:create',         description: '...', tsSignature: '...' },
-        { name: 'comments:toggleReaction', description: '...', tsSignature: '...' },
-        { name: 'favorites:toggle',        description: '...', tsSignature: '...' },
-      ],
-    });
-    const tool = codeModeTool({ timeout: 5000, tools: hostTools });
-
-    // codeModeTool returns a JSON string; parse for the client.
-    const raw = await tool.handler({ code: body.code });
-    return typeof raw === 'string' ? JSON.parse(raw) : raw;
-  },
-  { body: t.Object({ code: t.String(), userId: t.String() }) },
-);`;

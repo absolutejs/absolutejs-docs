@@ -61,9 +61,9 @@ export const AuthAdaptiveView = ({
 					<p style={paragraphLargeStyle}>
 						Score every login by risk — new device, new country,
 						impossible travel, attempt velocity — and react: allow,
-						force a step-up, or deny. An opinionated engine that builds
-						on the step-up and MFA gates, with geo you supply (no
-						bundled GeoIP).
+						force a step-up, or deny. An opinionated engine that
+						builds on the step-up and MFA gates, with geo you supply
+						(no bundled GeoIP).
 					</p>
 				</animated.div>
 
@@ -80,10 +80,10 @@ export const AuthAdaptiveView = ({
 						Bind the known-device and login-history stores once with{' '}
 						<code>createRiskEngine</code>. Four rules ship in-box —{' '}
 						<code>new_device</code>, <code>new_country</code>,{' '}
-						<code>impossible_travel</code>, <code>velocity</code> — and
-						every rule&apos;s action and threshold is overridable. The
-						verdict is the most severe rule that fired (allow &lt;
-						step_up &lt; deny).
+						<code>impossible_travel</code>, <code>velocity</code> —
+						and every rule&apos;s action and threshold is
+						overridable. The verdict is the most severe rule that
+						fired (allow &lt; step_up &lt; deny).
 					</p>
 					<PrismPlus
 						codeString={adaptiveEngine}
@@ -103,13 +103,13 @@ export const AuthAdaptiveView = ({
 						Assess &amp; Act
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Call <code>assessRisk</code> in your login or OAuth-callback
-						handler, where the request context (device, IP, geo) is
-						available — the credentials MFA gate only sees the user, so
-						adaptive auth is consumer-invoked by design. Record the
-						attempt, then act: <code>deny</code> blocks,{' '}
-						<code>step_up</code> routes into the MFA gate,{' '}
-						<code>allow</code> proceeds.
+						Call <code>assessRisk</code> in your login or
+						OAuth-callback handler, where the request context
+						(device, IP, geo) is available — the credentials MFA
+						gate only sees the user, so adaptive auth is
+						consumer-invoked by design. Record the attempt, then
+						act: <code>deny</code> blocks, <code>step_up</code>{' '}
+						routes into the MFA gate, <code>allow</code> proceeds.
 					</p>
 					<PrismPlus
 						codeString={adaptiveLogin}
@@ -131,10 +131,10 @@ export const AuthAdaptiveView = ({
 					<p style={paragraphSpacedStyle}>
 						Once the user clears the step-up, call{' '}
 						<code>trustDevice</code> — the &quot;remember this
-						device&quot; action — so the <code>new_device</code> rule
-						stops firing for it. Device first/last-seen and the full
-						attempt history persist in the two stores (in-memory for
-						dev, Postgres/Neon for production).
+						device&quot; action — so the <code>new_device</code>{' '}
+						rule stops firing for it. Device first/last-seen and the
+						full attempt history persist in the two stores
+						(in-memory for dev, Postgres/Neon for production).
 					</p>
 					<PrismPlus
 						codeString={adaptiveTrust}
@@ -154,14 +154,15 @@ export const AuthAdaptiveView = ({
 						Weighted scoring &amp; fingerprint
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>scoreRisk</code> is an Auth0-style alternative to the
-						per-rule actions: each fired signal adds its weight and the
-						summed score maps to an action via thresholds. It adds two
-						consumer-fed signals — <code>proxy</code> and{' '}
-						<code>off_hours</code> (from <code>isProxy</code> /{' '}
-						<code>localHour</code>). <code>fingerprintDevice</code> hashes
-						client signals into a stable <code>deviceId</code> — a stronger
-						default than a User-Agent string alone.
+						<code>scoreRisk</code> is an Auth0-style alternative to
+						the per-rule actions: each fired signal adds its weight
+						and the summed score maps to an action via thresholds.
+						It adds two consumer-fed signals — <code>proxy</code>{' '}
+						and <code>off_hours</code> (from <code>isProxy</code> /{' '}
+						<code>localHour</code>). <code>fingerprintDevice</code>{' '}
+						hashes client signals into a stable{' '}
+						<code>deviceId</code> — a stronger default than a
+						User-Agent string alone.
 					</p>
 					<PrismPlus
 						codeString={adaptiveWeighted}
@@ -182,12 +183,13 @@ export const AuthAdaptiveView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>@absolutejs/auth/fingerprint-client</code> ships a
-						browser-only <code>collectDeviceFingerprint()</code> that
-						hashes canvas + AudioContext + WebGL + font enumeration +
-						screen geometry into a stable base64url id — the
-						FingerprintJS algorithm set, self-hostable, no SDK and no
-						third-party request. Pair it with the server-side{' '}
-						<code>fingerprintDevice</code> as a fallback for old clients.
+						browser-only <code>collectDeviceFingerprint()</code>{' '}
+						that hashes canvas + AudioContext + WebGL + font
+						enumeration + screen geometry into a stable base64url id
+						— the FingerprintJS algorithm set, self-hostable, no SDK
+						and no third-party request. Pair it with the server-side{' '}
+						<code>fingerprintDevice</code> as a fallback for old
+						clients.
 					</p>
 					<PrismPlus
 						codeString={adaptiveStrongFingerprint}

@@ -1,231 +1,178 @@
-import { useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import { animated } from '@react-spring/web';
-import { ThemeSprings } from '../../../types/springTypes';
 import {
-	diagramContainerStyle,
-	getColors,
-	svgContainerStyle
-} from './diagramStyles';
+	AnimatedCSSProperties,
+	ThemeSprings
+} from '../../../types/springTypes';
+import { diagramColors, diagramContainerStyle } from './diagramStyles';
 import { PropsHoverableProp } from './PropsHoverableProp';
 
 type PropsFlowDiagramProps = {
 	themeSprings: ThemeSprings;
 };
 
-export const PropsFlowDiagram = ({ themeSprings }: PropsFlowDiagramProps) => {
-	const isDark =
-		themeSprings.theme.get()?.toString().endsWith('dark') ?? true;
-	const colors = getColors(isDark);
-	const [hoveredProp, setHoveredProp] = useState<'user' | 'posts' | null>(
-		null
+type FlowCardColorKey = 'accent' | 'accentSecondary';
+
+const themedColor = (
+	themeSprings: ThemeSprings,
+	colorKey: keyof typeof diagramColors.dark
+) =>
+	themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? diagramColors.dark[colorKey]
+			: diagramColors.light[colorKey]
 	);
 
-	const svgWidth = 480;
-	const svgHeight = 160;
+const flowLayoutStyle: CSSProperties = {
+	display: 'flex',
+	flexWrap: 'wrap',
+	gap: '1rem',
+	justifyContent: 'center'
+};
+
+const flowCodeStyle: CSSProperties = {
+	fontFamily: 'JetBrains Mono, monospace',
+	fontSize: '0.8125rem',
+	lineHeight: 1.7,
+	whiteSpace: 'pre'
+};
+
+const flowCardStyle = (
+	themeSprings: ThemeSprings,
+	colorKey: FlowCardColorKey
+): AnimatedCSSProperties => ({
+	background: themedColor(themeSprings, 'background'),
+	border: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? `2px solid ${diagramColors.dark[colorKey]}`
+			: `2px solid ${diagramColors.light[colorKey]}`
+	),
+	borderRadius: '0.625rem',
+	flex: '1 1 240px',
+	maxWidth: '24rem',
+	padding: '1rem 1.25rem'
+});
+
+const flowCardTitleStyle = (
+	themeSprings: ThemeSprings,
+	colorKey: FlowCardColorKey
+): AnimatedCSSProperties => ({
+	color: themedColor(themeSprings, colorKey),
+	fontSize: '0.9375rem',
+	fontWeight: 600,
+	margin: '0 0 0.75rem'
+});
+
+const flowArrowStyle = (themeSprings: ThemeSprings): AnimatedCSSProperties => ({
+	alignSelf: 'center',
+	color: themedColor(themeSprings, 'accent'),
+	fontSize: '1.5rem',
+	fontWeight: 700
+});
+
+const mutedLineStyle = (themeSprings: ThemeSprings): AnimatedCSSProperties => ({
+	color: themedColor(themeSprings, 'textMuted')
+});
+
+const codeLineStyle = (themeSprings: ThemeSprings): AnimatedCSSProperties => ({
+	color: themedColor(themeSprings, 'text'),
+	paddingLeft: '1rem'
+});
+
+const highlightLineStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	color: themedColor(themeSprings, 'accentSecondary'),
+	fontWeight: 500,
+	paddingLeft: '1rem'
+});
+
+type HoveredProp = 'user' | 'posts' | null;
+
+type PropsArgumentLineProps = {
+	themeSprings: ThemeSprings;
+};
+
+const PropsArgumentLine = ({ themeSprings }: PropsArgumentLineProps) => {
+	const [hoveredProp, setHoveredProp] = useState<HoveredProp>(null);
 
 	return (
-		<animated.div style={diagramContainerStyle(themeSprings)}>
-			<svg
-				preserveAspectRatio="xMidYMid meet"
-				style={svgContainerStyle}
-				viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-			>
-				<defs>
-					<marker
-						fill={colors.accent}
-						id="props-arrow"
-						markerHeight={8}
-						markerWidth={8}
-						orient="auto"
-						refX={7}
-						refY={4}
-					>
-						<polygon points="0 0, 8 4, 0 8" />
-					</marker>
-				</defs>
-
-				{/* Route handler box - left */}
-				<g transform="translate(15, 10)">
-					<rect
-						fill={colors.background}
-						height={140}
-						rx={10}
-						stroke={colors.accent}
-						strokeWidth={2}
-						width={190}
-					/>
-					<text
-						fill={colors.accent}
-						fontSize={14}
-						fontWeight={600}
-						x={16}
-						y={28}
-					>
-						Route Handler
-					</text>
-					<text
-						fill={colors.textMuted}
-						fontFamily="monospace"
-						fontSize={13}
-						x={16}
-						y={55}
-					>
-						handleRequest(
-					</text>
-					<text
-						fill={colors.text}
-						fontFamily="monospace"
-						fontSize={13}
-						x={26}
-						y={75}
-					>
-						Home,
-					</text>
-					<text
-						fill={colors.text}
-						fontFamily="monospace"
-						fontSize={13}
-						x={26}
-						y={95}
-					>
-						asset(...),
-					</text>
-					<text
-						fill={colors.text}
-						fontFamily="monospace"
-						fontSize={13}
-						x={26}
-						y={115}
-					>
-						{'{ '}
-					</text>
-					<PropsHoverableProp
-						accentSecondaryColor={colors.accentSecondary}
-						backgroundColor={colors.background}
-						isHovered={hoveredProp === 'user'}
-						label="user"
-						onMouseEnter={() => setHoveredProp('user')}
-						onMouseLeave={() => setHoveredProp(null)}
-						textX={42}
-						textY={115}
-						tooltipLabel="user: User"
-						tooltipTransform="translate(42, 60)"
-						tooltipWidth={100}
-					/>
-					<text
-						fill={colors.text}
-						fontFamily="monospace"
-						fontSize={13}
-						x={76}
-						y={115}
-					>
-						,
-					</text>
-					<PropsHoverableProp
-						accentSecondaryColor={colors.accentSecondary}
-						backgroundColor={colors.background}
-						isHovered={hoveredProp === 'posts'}
-						label="posts"
-						onMouseEnter={() => setHoveredProp('posts')}
-						onMouseLeave={() => setHoveredProp(null)}
-						textX={90}
-						textY={115}
-						tooltipLabel="posts: Post[]"
-						tooltipTransform="translate(90, 60)"
-						tooltipWidth={120}
-					/>
-					<text
-						fill={colors.text}
-						fontFamily="monospace"
-						fontSize={13}
-						x={132}
-						y={115}
-					>
-						{' }'}
-					</text>
-					<text
-						fill={colors.textMuted}
-						fontFamily="monospace"
-						fontSize={13}
-						x={16}
-						y={135}
-					>
-						)
-					</text>
-				</g>
-
-				{/* Arrow */}
-				<g transform="translate(215, 80)">
-					<line
-						markerEnd="url(#props-arrow)"
-						stroke={colors.accent}
-						strokeWidth={3}
-						x1={0}
-						x2={35}
-						y1={0}
-						y2={0}
-					/>
-				</g>
-
-				{/* Component box - right */}
-				<g transform="translate(260, 10)">
-					<rect
-						fill={colors.background}
-						height={140}
-						rx={10}
-						stroke={colors.accentSecondary}
-						strokeWidth={2}
-						width={205}
-					/>
-					<text
-						fill={colors.accentSecondary}
-						fontSize={14}
-						fontWeight={600}
-						x={16}
-						y={28}
-					>
-						Component
-					</text>
-					<text
-						fill={colors.textMuted}
-						fontFamily="monospace"
-						fontSize={13}
-						x={16}
-						y={55}
-					>
-						type Props = {'{'}
-					</text>
-					<text
-						fill={colors.accentSecondary}
-						fontFamily="monospace"
-						fontSize={13}
-						fontWeight={500}
-						x={26}
-						y={75}
-					>
-						user: User
-					</text>
-					<text
-						fill={colors.accentSecondary}
-						fontFamily="monospace"
-						fontSize={13}
-						fontWeight={500}
-						x={26}
-						y={95}
-					>
-						posts: Post[]
-					</text>
-					<text
-						fill={colors.textMuted}
-						fontFamily="monospace"
-						fontSize={13}
-						x={16}
-						y={115}
-					>
-						{'}'}
-					</text>
-				</g>
-			</svg>
+		<animated.div style={codeLineStyle(themeSprings)}>
+			{'{ '}
+			<PropsHoverableProp
+				isHovered={hoveredProp === 'user'}
+				label="user"
+				onMouseEnter={() => setHoveredProp('user')}
+				onMouseLeave={() => setHoveredProp(null)}
+				themeSprings={themeSprings}
+				tooltipLabel="user: User"
+			/>
+			{', '}
+			<PropsHoverableProp
+				isHovered={hoveredProp === 'posts'}
+				label="posts"
+				onMouseEnter={() => setHoveredProp('posts')}
+				onMouseLeave={() => setHoveredProp(null)}
+				themeSprings={themeSprings}
+				tooltipLabel="posts: Post[]"
+			/>
+			{' }'}
 		</animated.div>
 	);
 };
+
+export const PropsFlowDiagram = ({ themeSprings }: PropsFlowDiagramProps) => (
+	<animated.div style={diagramContainerStyle(themeSprings)}>
+		<div style={flowLayoutStyle}>
+			<animated.div style={flowCardStyle(themeSprings, 'accent')}>
+				<animated.p style={flowCardTitleStyle(themeSprings, 'accent')}>
+					Route Handler
+				</animated.p>
+				<div style={flowCodeStyle}>
+					<animated.div style={mutedLineStyle(themeSprings)}>
+						handleRequest(
+					</animated.div>
+					<animated.div style={codeLineStyle(themeSprings)}>
+						Home,
+					</animated.div>
+					<animated.div style={codeLineStyle(themeSprings)}>
+						asset(...),
+					</animated.div>
+					<PropsArgumentLine themeSprings={themeSprings} />
+					<animated.div style={mutedLineStyle(themeSprings)}>
+						)
+					</animated.div>
+				</div>
+			</animated.div>
+			<animated.div
+				aria-hidden="true"
+				style={flowArrowStyle(themeSprings)}
+			>
+				→
+			</animated.div>
+			<animated.div
+				style={flowCardStyle(themeSprings, 'accentSecondary')}
+			>
+				<animated.p
+					style={flowCardTitleStyle(themeSprings, 'accentSecondary')}
+				>
+					Component
+				</animated.p>
+				<div style={flowCodeStyle}>
+					<animated.div style={mutedLineStyle(themeSprings)}>
+						{'type Props = {'}
+					</animated.div>
+					<animated.div style={highlightLineStyle(themeSprings)}>
+						user: User
+					</animated.div>
+					<animated.div style={highlightLineStyle(themeSprings)}>
+						posts: Post[]
+					</animated.div>
+					<animated.div style={mutedLineStyle(themeSprings)}>
+						{'}'}
+					</animated.div>
+				</div>
+			</animated.div>
+		</div>
+	</animated.div>
+);

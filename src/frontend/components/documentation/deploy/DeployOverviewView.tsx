@@ -25,6 +25,8 @@ import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
+const noop = () => undefined;
+
 const tocItems: TocItem[] = [
 	{ href: '#deploy-overview', label: 'Overview' },
 	{ href: '#quick-start', label: 'Quick Start' },
@@ -61,8 +63,8 @@ export const DeployOverviewView = ({
 						Deploy
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Generic Bun-project deploy pipeline. A{' '}
-						<code>Target</code> is anywhere you can run a command
+						A deploy pipeline for Bun projects on your own servers.
+						A <code>Target</code> is anywhere you can run a command
 						and copy a file — a DigitalOcean Droplet over SSH, a
 						Linode box, your own laptop. Two ops, four words:
 						<strong> exec and upload</strong>. Zero{' '}
@@ -83,11 +85,15 @@ export const DeployOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The default pipeline for a Bun project on Linux:
-						<code> prepare → upload → install → build → link →
-						restart → verify</code>. Releases live in{' '}
-						<code>releases/&lt;id&gt;/</code>, a <code>current</code>{' '}
-						symlink swaps atomically, <code>rollback(id)</code>{' '}
-						re-points the symlink and restarts without re-uploading.
+						<code>
+							{' '}
+							prepare → upload → install → build → link → restart
+							→ verify
+						</code>
+						. Releases live in <code>releases/&lt;id&gt;/</code>, a{' '}
+						<code>current</code> symlink swaps atomically,{' '}
+						<code>rollback(id)</code> re-points the symlink and
+						restarts without re-uploading.
 					</p>
 					<PrismPlus
 						codeString={deployQuickStart}
@@ -112,10 +118,9 @@ export const DeployOverviewView = ({
 							{`{ exec(cmd, opts?), upload(local, remote, opts?), close?() }`}
 						</code>
 						. Two are bundled. Anything else that satisfies that
-						contract is a valid target — Cloudflare Workers API,
-						Fly Machines API, AWS Fargate task-run all ship as
-						sibling packages because they don't fit the
-						exec+upload shape.
+						contract is a valid target — Cloudflare Workers API, Fly
+						Machines API, AWS Fargate task-run all ship as sibling
+						packages because they don't fit the exec+upload shape.
 					</p>
 					<PrismPlus
 						codeString={deployTargets}
@@ -167,8 +172,8 @@ export const DeployOverviewView = ({
 						runs the daemon-reload + restart dance. Anything that
 						implements <code>{`{ reload, stop?, status? }`}</code>{' '}
 						against a <code>Target</code> works — wrap PM2,
-						supervisord, runit, or{' '}
-						<code>@absolutejs/runtime</code> as needed.
+						supervisord, runit, or <code>@absolutejs/runtime</code>{' '}
+						as needed.
 					</p>
 					<PrismPlus
 						codeString={deployProcessManagers}
@@ -214,11 +219,11 @@ export const DeployOverviewView = ({
 						Per-release metadata persists as{' '}
 						<code>releases/&lt;id&gt;/.deploy-meta.json</code>:
 						commit SHA, ref, message, author, arbitrary tags.{' '}
-						<code>dryRun: true</code> logs the plan without
-						mutating the target — verify pipeline shape from CI
-						before flipping a real <code>current</code> symlink.
-						If a deploy fails on <code>verify</code>{' '}
-						(slow health check) but the release is intact on disk,{' '}
+						<code>dryRun: true</code> logs the plan without mutating
+						the target — verify pipeline shape from CI before
+						flipping a real <code>current</code> symlink. If a
+						deploy fails on <code>verify</code> (slow health check)
+						but the release is intact on disk,{' '}
 						<code>resumeReleaseId</code> restarts from the dead
 						step.
 					</p>
@@ -258,9 +263,9 @@ export const DeployOverviewView = ({
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
-				onToggle={onTocToggle ?? (() => {})}
+				items={tocItems}
+				onToggle={onTocToggle ?? noop}
 				themeSprings={themeSprings}
 			/>
 		</div>

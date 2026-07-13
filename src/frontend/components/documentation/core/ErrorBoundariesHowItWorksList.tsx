@@ -17,8 +17,8 @@ export const ErrorBoundariesHowItWorksList = () => (
 			components receive a flat <code>ErrorPageProps</code> shape (
 			<code>name</code>, <code>message</code>, optional <code>stack</code>
 			). Helper functions <code>defineRenderErrorPage</code> and{' '}
-			<code>defineRenderNotFoundPage</code> type the return as a real
-			HTML document
+			<code>defineRenderNotFoundPage</code> type the return as a real HTML
+			document
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>SSR catch</strong> : when a page throws

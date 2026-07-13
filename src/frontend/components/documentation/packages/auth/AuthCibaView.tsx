@@ -56,11 +56,12 @@ export const AuthCibaView = ({
 					</h1>
 					<p style={paragraphLargeStyle}>
 						OpenID Client-Initiated Backchannel Authentication, poll
-						mode. The user isn&apos;t at a browser — a call-center agent,
-						an ATM, a kiosk requests auth on their behalf; the user
-						approves on their second device. Banking, healthcare,
-						high-trust enterprise scenarios. Shipped in <code>0.36.0</code>{' '}
-						as part of the FAPI 2.0 baseline-ready cycle.
+						mode. The user isn&apos;t at a browser — a call-center
+						agent, an ATM, a kiosk requests auth on their behalf;
+						the user approves on their second device. Banking,
+						healthcare, high-trust enterprise scenarios. Shipped in{' '}
+						<code>0.36.0</code> as part of the FAPI 2.0
+						baseline-ready cycle.
 					</p>
 				</animated.div>
 
@@ -74,10 +75,10 @@ export const AuthCibaView = ({
 						Configure CIBA
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						You provide the user-resolver (login_hint → user) and the
-						push-notification hook. The package owns the
-						authReq lifecycle (storage, expiry, poll-rate enforcement)
-						and the new endpoints.
+						You provide the user-resolver (login_hint → user) and
+						the push-notification hook. The package owns the authReq
+						lifecycle (storage, expiry, poll-rate enforcement) and
+						the new endpoints.
 					</p>
 					<PrismPlus
 						codeString={cibaConfig}
@@ -97,11 +98,12 @@ export const AuthCibaView = ({
 						Approval UI
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Your approval screen calls <code>approveBackchannelAuth</code>{' '}
-						or <code>denyBackchannelAuth</code>. The package handles
+						Your approval screen calls{' '}
+						<code>approveBackchannelAuth</code> or{' '}
+						<code>denyBackchannelAuth</code>. The package handles
 						the rest — the polling client&apos;s next call to{' '}
-						<code>/oauth2/token</code> receives the token set (or the
-						denial) automatically.
+						<code>/oauth2/token</code> receives the token set (or
+						the denial) automatically.
 					</p>
 					<PrismPlus
 						codeString={cibaApproval}
@@ -124,8 +126,8 @@ export const AuthCibaView = ({
 						Three protocol responses the client polls through:{' '}
 						<code>authorization_pending</code> while the user
 						decides, <code>slow_down</code> if poll-rate enforcement
-						trips, then the token set on approval. Ping + push delivery
-						modes follow when a consumer asks.
+						trips, then the token set on approval. Ping + push
+						delivery modes follow when a consumer asks.
 					</p>
 					<PrismPlus
 						codeString={cibaFlow}

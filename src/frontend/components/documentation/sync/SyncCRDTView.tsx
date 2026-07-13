@@ -63,10 +63,10 @@ export const SyncCRDTView = ({
 						CRDT & Collaboration
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Conflict-free collaborative editing — declared on a
-						row field, merged server-side, surfaced on the client
-						with one hook. No clobbering, no per-keystroke round-
-						trip, no extra backend.
+						Conflict-free collaborative editing — declared on a row
+						field, merged server-side, surfaced on the client with
+						one hook. No clobbering, no per-keystroke round- trip,
+						no extra backend.
 					</p>
 				</animated.div>
 
@@ -118,11 +118,15 @@ export const SyncCRDTView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						The same hook exists for Vue (<code>useCollaborativeText</code>),
-						Svelte (<code>createCollaborativeTextStore</code>), and
-						Angular (<code>SyncCollectionService.collaborativeText</code>).
+						The same hook exists for Vue (
+						<code>useCollaborativeText</code>), Svelte (
+						<code>createCollaborativeTextStore</code>), and Angular
+						(<code>SyncCollectionService.collaborativeText</code>).
 						All four ship under{' '}
-						<code>@absolutejs/sync/{'{react,vue,svelte,angular}'}</code>.
+						<code>
+							@absolutejs/sync/{'{react,vue,svelte,angular}'}
+						</code>
+						.
 					</p>
 				</section>
 
@@ -137,9 +141,9 @@ export const SyncCRDTView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>@absolutejs/sync/crdt</code> is a small,
-						zero-dependency, isomorphic CRDT library — every type
-						is state-based (CvRDT) and JSON-serialisable, so they
-						ride the engine's change feed as row fields:
+						zero-dependency, isomorphic CRDT library — every type is
+						state-based (CvRDT) and JSON-serialisable, so they ride
+						the engine's change feed as row fields:
 					</p>
 					<PrismPlus
 						codeString={syncCrdtKit}
@@ -187,8 +191,8 @@ export const SyncCRDTView = ({
 						RGA keeps tombstones for deleted characters so
 						concurrent edits stay convergent. <code>compact</code>{' '}
 						drops the ones nothing live anchors to (visible text is
-						unchanged), and the linearizer is orphan-safe — a
-						stale client briefly referencing a compacted tombstone
+						unchanged), and the linearizer is orphan-safe — a stale
+						client briefly referencing a compacted tombstone
 						re-roots its element deterministically rather than
 						losing content.
 					</p>
@@ -234,11 +238,10 @@ export const SyncCRDTView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The in-package RGA handles offline-merge and moderate
-						collaboration. For production-scale collaborative text
-						— efficient deltas, tombstone management, interleaving
-						guarantees — the{' '}
-						<code>sync-adapters</code> repo ships three
-						battle-tested backends behind the same{' '}
+						collaboration. For production-scale collaborative text —
+						efficient deltas, tombstone management, interleaving
+						guarantees — the <code>sync-adapters</code> repo ships
+						three battle-tested backends behind the same{' '}
 						<code>TextCrdtAdapter</code> contract:
 					</p>
 					<PrismPlus
@@ -250,14 +253,11 @@ export const SyncCRDTView = ({
 				</section>
 			</div>
 			{showDesktopToc ? (
-				<TableOfContents
-					items={tocItems}
-					themeSprings={themeSprings}
-				/>
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
+				items={tocItems}
 				onToggle={onTocToggle ?? (() => {})}
 				themeSprings={themeSprings}
 			/>

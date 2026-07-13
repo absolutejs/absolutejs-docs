@@ -44,7 +44,8 @@ const PrimitivesList = () => (
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>BrowserRouter</strong>: client-side
 			router that reads from <code>window.location</code>. Used after
-			hydration for client-side navigation via <code>history.pushState</code>.
+			hydration for client-side navigation via{' '}
+			<code>history.pushState</code>.
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>Routes / Route</strong>: declarative
@@ -68,8 +69,8 @@ const RequestFlowList = () => (
 	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>request</strong> field on{' '}
-			<code>handleReactPageRequest</code> input — pass the Elysia
-			request through.
+			<code>handleReactPageRequest</code> input — pass the Elysia request
+			through.
 		</li>
 		<li style={listItemStyle}>
 			The handler reads <code>new URL(request.url).pathname</code> and
@@ -77,8 +78,8 @@ const RequestFlowList = () => (
 			pass one.
 		</li>
 		<li style={listItemStyle}>
-			Your page component receives <code>url</code> as a prop and feeds
-			it to <code>{'<StaticRouter location={url}>'}</code> for SSR.
+			Your page component receives <code>url</code> as a prop and feeds it
+			to <code>{'<StaticRouter location={url}>'}</code> for SSR.
 		</li>
 		<li style={listItemStyle}>
 			On the client, <code>url</code> is undefined (no request to derive
@@ -116,10 +117,10 @@ export const ReactSpaView = ({
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Drive client-side sub-route navigation inside a React
-						page using <code>react-router</code>. AbsoluteJS forwards
-						the request URL into the page so SSR resolves the right
-						route on every load — including refresh and deep-link
-						entry.
+						page using <code>react-router</code>. AbsoluteJS
+						forwards the request URL into the page so SSR resolves
+						the right route on every load — including refresh and
+						deep-link entry.
 					</p>
 				</animated.div>
 
@@ -202,8 +203,8 @@ export const ReactSpaView = ({
 						Page Component
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The page swaps between <code>StaticRouter</code> (server)
-						and <code>BrowserRouter</code> (client). The{' '}
+						The page swaps between <code>StaticRouter</code>{' '}
+						(server) and <code>BrowserRouter</code> (client). The{' '}
 						<code>url</code> prop is undefined on the client, which
 						is the cue to switch:
 					</p>
@@ -217,8 +218,8 @@ export const ReactSpaView = ({
 					<p style={paragraphSpacedStyle}>
 						In React Router v7, <code>BrowserRouter</code>,{' '}
 						<code>StaticRouter</code>, <code>Routes</code>,{' '}
-						<code>Route</code>, and <code>Link</code> all import from
-						the <code>react-router</code> package — not{' '}
+						<code>Route</code>, and <code>Link</code> all import
+						from the <code>react-router</code> package — not{' '}
 						<code>react-router-dom</code>, which is now a re-export
 						shim.
 					</p>

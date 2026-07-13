@@ -30,6 +30,50 @@ export default defineConfig({
     }
   }
 });`;
+export const sitemapDynamicRoutes = `\
+// absolute.config.ts : with dynamic routes
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  reactDirectory: './src/frontend',
+  publicDirectory: './public',
+  sitemap: {
+    baseUrl: 'https://mysite.com',
+
+    // Provide additional routes that can't be auto-discovered
+    // (e.g. parameterized routes like /blog/:slug).
+    routes: async () => {
+      const posts = await db.query('SELECT slug FROM posts');
+      return posts.map(p => \`/blog/\${p.slug}\`);
+    }
+  }
+});`;
+export const sitemapOutput = `\
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Top-level pages from .get() handlers -->
+  <url>
+    <loc>https://mysite.com/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://mysite.com/signin</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <!-- SPA sub-routes discovered from the page module's router config -->
+  <url>
+    <loc>https://mysite.com/portal/dashboard</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mysite.com/portal/profile</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>`;
 export const sitemapPerPageMetadata = `\
 // Backend route handler — pass an optional 'sitemap' option to
 // handle*PageRequest. AbsoluteJS reads it statically from the handler
@@ -93,6 +137,21 @@ const routes = [
 
 const router = createBrowserRouter(routes, { basename: '/portal' });
 // Emits: /portal/dashboard, /portal/profile`;
+export const sitemapSpaSvelte = `\
+<!-- Svelte page — AbsoluteJS reads <Router basepath> and child
+     <Route path> tags. -->
+<script>
+  import Router from '@absolutejs/absolute/svelte/router/Router.svelte';
+  import Route from '@absolutejs/absolute/svelte/router/Route.svelte';
+  import Dashboard from '../dashboard.svelte';
+  import Profile from '../profile.svelte';
+</script>
+
+<Router basepath="/portal">
+  <Route path="/dashboard"><Dashboard /></Route>
+  <Route path="/profile"><Profile /></Route>
+</Router>
+<!-- Emits: /portal/dashboard, /portal/profile -->`;
 export const sitemapSpaVue = `\
 // Vue page — AbsoluteJS reads the createWebHistory base and the routes
 // option passed to createRouter() at sitemap-generation time.
@@ -110,82 +169,6 @@ createRouter({
   routes
 });
 // Emits: /portal/dashboard, /portal/profile`;
-export const sitemapSpaSvelte = `\
-<!-- Svelte page — AbsoluteJS reads <Router basepath> and child
-     <Route path> tags. -->
-<script>
-  import Router from '@absolutejs/absolute/svelte/router/Router.svelte';
-  import Route from '@absolutejs/absolute/svelte/router/Route.svelte';
-  import Dashboard from '../dashboard.svelte';
-  import Profile from '../profile.svelte';
-</script>
-
-<Router basepath="/portal">
-  <Route path="/dashboard"><Dashboard /></Route>
-  <Route path="/profile"><Profile /></Route>
-</Router>
-<!-- Emits: /portal/dashboard, /portal/profile -->`;
-export const sitemapWildcardElysiaRoute = `\
-// Backend Elysia route that hosts the Angular SPA at /portal/*.
-// AbsoluteJS sees the wildcard, matches its mount path (/portal)
-// against the page module's APP_BASE_HREF (/portal/), and emits one
-// sitemap entry per non-dynamic Angular Route under that mount.
-import { handleAngularPageRequest } from '@absolutejs/absolute/angular';
-
-app.get('/portal/*', async ({ request }) =>
-  handleAngularPageRequest<typeof PortalPage>({
-    request,
-    pagePath: 'Portal',
-    indexPath: 'assets/portal/index.js',
-    sitemap: { changefreq: 'weekly', priority: 0.6 }
-  })
-);
-// The wildcard mount itself isn't emitted (it isn't a destination URL)
-// — every leaf under the page's Router config is.`;
-export const sitemapDynamicRoutes = `\
-// absolute.config.ts : with dynamic routes
-import { defineConfig } from '@absolutejs/absolute';
-
-export default defineConfig({
-  reactDirectory: './src/frontend',
-  publicDirectory: './public',
-  sitemap: {
-    baseUrl: 'https://mysite.com',
-
-    // Provide additional routes that can't be auto-discovered
-    // (e.g. parameterized routes like /blog/:slug).
-    routes: async () => {
-      const posts = await db.query('SELECT slug FROM posts');
-      return posts.map(p => \`/blog/\${p.slug}\`);
-    }
-  }
-});`;
-export const sitemapOutput = `\
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Top-level pages from .get() handlers -->
-  <url>
-    <loc>https://mysite.com/</loc>
-    <changefreq>daily</changefreq>
-    <priority>1</priority>
-  </url>
-  <url>
-    <loc>https://mysite.com/signin</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <!-- SPA sub-routes discovered from the page module's router config -->
-  <url>
-    <loc>https://mysite.com/portal/dashboard</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://mysite.com/portal/profile</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-</urlset>`;
 export const sitemapTypeReference = `\
 type SitemapConfig = {
   baseUrl?: string;
@@ -210,6 +193,23 @@ type SitemapRouteOverride = {
 // page-handler input (handleAngularPageRequest, handleReactPageRequest,
 // handleSveltePageRequest, handleVuePageRequest, handleHTMLPageRequest).
 type PageHandlerSitemapMetadata = SitemapRouteOverride;`;
+export const sitemapWildcardElysiaRoute = `\
+// Backend Elysia route that hosts the Angular SPA at /portal/*.
+// AbsoluteJS sees the wildcard, matches its mount path (/portal)
+// against the page module's APP_BASE_HREF (/portal/), and emits one
+// sitemap entry per non-dynamic Angular Route under that mount.
+import { handleAngularPageRequest } from '@absolutejs/absolute/angular';
+
+app.get('/portal/*', async ({ request }) =>
+  handleAngularPageRequest<typeof PortalPage>({
+    request,
+    pagePath: 'Portal',
+    indexPath: 'assets/portal/index.js',
+    sitemap: { changefreq: 'weekly', priority: 0.6 }
+  })
+);
+// The wildcard mount itself isn't emitted (it isn't a destination URL)
+// — every leaf under the page's Router config is.`;
 export const sitemapZeroConfig = `\
 // absolute.config.ts : sitemap is automatic
 import { defineConfig } from '@absolutejs/absolute';

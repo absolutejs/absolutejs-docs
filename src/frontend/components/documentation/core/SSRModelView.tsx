@@ -23,6 +23,7 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { SSRLifecycleDiagram } from '../../diagrams/SSRLifecycleDiagram';
 
 const tocItems: TocItem[] = [
 	{ href: '#how-ssr-works', label: 'How SSR Works' },
@@ -85,6 +86,7 @@ export const SSRModelView = ({
 						renders your component to a streamed HTML response, then
 						the client hydrates it for interactivity.
 					</p>
+					<SSRLifecycleDiagram themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

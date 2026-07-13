@@ -104,4 +104,3 @@ function PostSignInPasskeyPrompt({ client }) {
     </Banner>
   );
 }`;
-

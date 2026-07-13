@@ -1,3 +1,21 @@
+export const secretsAdapters = `\
+// Bundled adapters cover dev + test + simple prod:
+inMemoryAdapter({ initial: { K: 'v0' } });           // tests, dev
+envAdapter({ prefix: 'ABS_SECRET_' });               // process.env, prefix-scoped
+compositeAdapter([dev, env, vault]);                 // fan-out fallback
+
+// Build a custom adapter (e.g. AWS Secrets Manager) by implementing:
+const myAdapter: SecretAdapter = {
+  fetch:  async (name)         => awsSm.getSecretValue(name),
+  put:    async (name, value)  => awsSm.put(name, value),
+  rotate: async (name)         => awsSm.rotate(name),
+  remove: async (name)         => awsSm.delete(name),
+  list:   async ()             => awsSm.list(),
+};
+
+// Vendored adapters for AWS Secrets Manager, HashiCorp Vault, Doppler,
+// Infisical, GCP Secret Manager, and Azure Key Vault ship as sibling
+// packages.`;
 export const secretsQuickStart = `\
 import {
   createSecretBroker,
@@ -24,7 +42,6 @@ logger.info('charging', { tenant, fingerprint });  // safe — no plaintext
 return fetch('https://api.stripe.com/...', {
   headers: { Authorization: \`Bearer \${value}\` },
 });`;
-
 export const secretsRedact = `\
 // Whole-string redaction — replace every cached value with [REDACTED:NAME].
 // Longest values redact first so a substring of a longer secret doesn't
@@ -47,7 +64,6 @@ const broker = createSecretBroker({
   redactionEncodings: ['plain', 'base64'],
 });
 // → '[REDACTED:JWT_SIG:b64]' for the base64-encoded form`;
-
 export const secretsRotation = `\
 // onRotate fires AFTER the new value lands in the cache. Long-lived
 // connections (DB pools, AI SDK instances, WebSocket servers per-tenant)
@@ -62,7 +78,6 @@ const off = broker.onRotate('DATABASE_URL', async ({ value, fingerprint }) => {
 await broker.rotate('DATABASE_URL');
 
 off();                          // unsubscribe`;
-
 export const secretsTtlOverride = `\
 // High-blast-radius secrets refresh more often than the global default.
 const broker = createSecretBroker({
@@ -74,22 +89,3 @@ const broker = createSecretBroker({
     KILL_SWITCH_FLAG:   1_000,         // 1s — wants near-real-time
   },
 });`;
-
-export const secretsAdapters = `\
-// Bundled adapters cover dev + test + simple prod:
-inMemoryAdapter({ initial: { K: 'v0' } });           // tests, dev
-envAdapter({ prefix: 'ABS_SECRET_' });               // process.env, prefix-scoped
-compositeAdapter([dev, env, vault]);                 // fan-out fallback
-
-// Build a custom adapter (e.g. AWS Secrets Manager) by implementing:
-const myAdapter: SecretAdapter = {
-  fetch:  async (name)         => awsSm.getSecretValue(name),
-  put:    async (name, value)  => awsSm.put(name, value),
-  rotate: async (name)         => awsSm.rotate(name),
-  remove: async (name)         => awsSm.delete(name),
-  list:   async ()             => awsSm.list(),
-};
-
-// Vendored adapters for AWS Secrets Manager, HashiCorp Vault, Doppler,
-// Infisical, GCP Secret Manager, and Azure Key Vault ship as sibling
-// packages.`;

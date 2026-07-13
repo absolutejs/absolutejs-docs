@@ -23,6 +23,8 @@ import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
+const noop = () => undefined;
+
 const tocItems: TocItem[] = [
 	{ href: '#runtime-overview', label: 'Overview' },
 	{ href: '#quick-start', label: 'Quick Start' },
@@ -57,12 +59,12 @@ export const RuntimeOverviewView = ({
 						Runtime
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Multi-tenant Bun runtime substrate. Wraps{' '}
+						Run many isolated Bun apps on one host. Wraps{' '}
 						<code>Bun.spawn</code> so that "run this tenant's{' '}
 						<code>bun run start</code> inside an idle-killing,
 						metric-emitting child process" is one function call.
-						Built for PaaS providers that host many small Bun apps
-						under one host process.
+						Built for teams running many small Bun apps in
+						production on their own infrastructure.
 					</p>
 				</animated.div>
 
@@ -77,10 +79,10 @@ export const RuntimeOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>createRuntime()</code> returns a pool. The first
-						<code>ensure(key)</code> call spawns the tenant's process,
-						waits for HTTP readiness on the bound port, and returns
-						the live <code>Tenant</code> handle. Subsequent calls
-						reuse the running process; <code>touch(key)</code>
+						<code>ensure(key)</code> call spawns the tenant's
+						process, waits for HTTP readiness on the bound port, and
+						returns the live <code>Tenant</code> handle. Subsequent
+						calls reuse the running process; <code>touch(key)</code>
 						defers the idle-kill clock.
 					</p>
 					<PrismPlus
@@ -101,14 +103,15 @@ export const RuntimeOverviewView = ({
 						Hibernation
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Hibernation is <strong>idle-kill at the process layer</strong>.
-						Bun has no shipped process-level snapshot/resume primitive
-						as of 2026; when it lands, an opt-in
-						<code>hibernate: 'process-snapshot'</code> mode joins idle-kill
-						as the default. The current default trades wake latency
-						(50-200ms cold spawn) for multi-tenant economics — a thousand
-						idle tenants cost a small finite RSS, not a thousand running
-						processes.
+						Hibernation is{' '}
+						<strong>idle-kill at the process layer</strong>. Bun has
+						no shipped process-level snapshot/resume primitive as of
+						2026; when it lands, an opt-in
+						<code>hibernate: 'process-snapshot'</code> mode joins
+						idle-kill as the default. The current default trades
+						wake latency (50-200ms cold spawn) for multi-tenant
+						economics — a thousand idle tenants cost a small finite
+						RSS, not a thousand running processes.
 					</p>
 					<PrismPlus
 						codeString={runtimeHibernation}
@@ -135,8 +138,8 @@ export const RuntimeOverviewView = ({
 						<code>retryAt</code>. After <code>maxFailures</code>{' '}
 						consecutive failures, the key stays refused until{' '}
 						<code>clearBackoff(key)</code>. Without this, a broken
-						tenant thrashes the host with rapid spawn retries — exactly
-						the pattern that takes down nearby tenants.
+						tenant thrashes the host with rapid spawn retries —
+						exactly the pattern that takes down nearby tenants.
 					</p>
 					<PrismPlus
 						codeString={runtimeBackoff}
@@ -161,8 +164,8 @@ export const RuntimeOverviewView = ({
 						<code>drain()</code> refuses new <code>ensure()</code>{' '}
 						spawns while existing tenants keep running, for graceful
 						shard shutdown. Every exit transition carries a
-						structured <code>reason</code> so the meter / control
-						plane can decide whether to charge, retry, or alert.
+						structured <code>reason</code> so your metering or ops
+						tooling can decide whether to charge, retry, or alert.
 					</p>
 					<PrismPlus
 						codeString={runtimeRestartDrain}
@@ -184,8 +187,8 @@ export const RuntimeOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						On Linux, the sweeper reads{' '}
 						<code>/proc/&lt;pid&gt;/stat</code> (utime + stime) and{' '}
-						<code>/proc/&lt;pid&gt;/status</code> (VmRSS) per running
-						tenant on a configurable interval and emits{' '}
+						<code>/proc/&lt;pid&gt;/status</code> (VmRSS) per
+						running tenant on a configurable interval and emits{' '}
 						<code>{`{ type: 'observation', cpuMs, rssBytes }`}</code>{' '}
 						via <code>onMetrics</code>. This is the per-tenant data{' '}
 						<code>@absolutejs/metering</code> consumes to attribute
@@ -204,9 +207,9 @@ export const RuntimeOverviewView = ({
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
-				onToggle={onTocToggle ?? (() => {})}
+				items={tocItems}
+				onToggle={onTocToggle ?? noop}
 				themeSprings={themeSprings}
 			/>
 		</div>

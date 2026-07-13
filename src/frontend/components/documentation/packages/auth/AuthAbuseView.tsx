@@ -56,9 +56,10 @@ export const AuthAbuseView = ({
 					</h1>
 					<p style={paragraphLargeStyle}>
 						An allow / challenge / deny pipeline over IP allow-deny
-						lists, a CAPTCHA hook, and a bot classifier — the self-hosted
-						framework half of WorkOS &quot;Radar&quot; (which is
-						hosted-only). Composes with the adaptive risk engine.
+						lists, a CAPTCHA hook, and a bot classifier — the
+						self-hosted framework half of WorkOS &quot;Radar&quot;
+						(which is hosted-only). Composes with the adaptive risk
+						engine.
 					</p>
 				</animated.div>
 
@@ -72,13 +73,14 @@ export const AuthAbuseView = ({
 						The guard
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>createAbuseGuard</code> owns the decision pipeline; you
-						supply the signals: <code>ipDeny</code> / <code>ipAllow</code>{' '}
-						(exact or IPv4 CIDR), a <code>verifyCaptcha</code> wrapping
-						your provider, and a <code>classifyBot</code> (the built-in
-						UA heuristic, or your own AI-agent detector). Honest scope:
-						fingerprint-grade detection needs a data network — this is
-						the framework and hooks.
+						<code>createAbuseGuard</code> owns the decision
+						pipeline; you supply the signals: <code>ipDeny</code> /{' '}
+						<code>ipAllow</code> (exact or IPv4 CIDR), a{' '}
+						<code>verifyCaptcha</code> wrapping your provider, and a{' '}
+						<code>classifyBot</code> (the built-in UA heuristic, or
+						your own AI-agent detector). Honest scope:
+						fingerprint-grade detection needs a data network — this
+						is the framework and hooks.
 					</p>
 					<PrismPlus
 						codeString={abuseGuard}
@@ -100,10 +102,10 @@ export const AuthAbuseView = ({
 					<p style={paragraphSpacedStyle}>
 						Built-in <code>verifyTurnstile</code>,{' '}
 						<code>verifyRecaptcha</code> (with an optional v3{' '}
-						<code>minScore</code>), and <code>verifyHcaptcha</code> wrap
-						each provider&apos;s <code>siteverify</code> call (the client
-						IP is taken from the assess context). Drop one into{' '}
-						<code>verifyCaptcha</code> — no extra plumbing.
+						<code>minScore</code>), and <code>verifyHcaptcha</code>{' '}
+						wrap each provider&apos;s <code>siteverify</code> call
+						(the client IP is taken from the assess context). Drop
+						one into <code>verifyCaptcha</code> — no extra plumbing.
 					</p>
 					<PrismPlus
 						codeString={abuseCaptcha}
@@ -123,9 +125,9 @@ export const AuthAbuseView = ({
 						Wire into login
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Call <code>assess</code> at the top of register / login with
-						the request context. The result is the most severe action
-						that fired plus every reason; an allow-listed IP
+						Call <code>assess</code> at the top of register / login
+						with the request context. The result is the most severe
+						action that fired plus every reason; an allow-listed IP
 						short-circuits.
 					</p>
 					<PrismPlus

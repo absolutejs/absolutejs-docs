@@ -2,7 +2,11 @@ import { animated } from '@react-spring/web';
 import { CSSProperties, useMemo } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { ThemeSprings } from '../../../types/springTypes';
-import { isMenuDropdown, isSubmenuButton } from '../../../types/types';
+import {
+	isMenuDropdown,
+	isMenuHeading,
+	isSubmenuButton
+} from '../../../types/types';
 import { sidebarData } from '../../data/sidebarData';
 
 type NavItem = {
@@ -86,6 +90,7 @@ export const DocsNavigation = ({
 	const flattenedPages = useMemo<NavItem[]>(
 		() =>
 			sidebarData.flatMap((section) => {
+				if (isMenuHeading(section)) return [];
 				if (!isMenuDropdown(section)) {
 					return [{ id: section.id, label: section.label }];
 				}

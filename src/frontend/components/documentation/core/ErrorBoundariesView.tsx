@@ -89,9 +89,9 @@ export const ErrorBoundariesView = ({
 						AbsoluteJS uses a file convention to detect error and
 						not-found pages. During the build, it scans your pages
 						directories for files matching the convention patterns.
-						At runtime, when SSR throws an error, AbsoluteJS
-						catches it and renders the matching error convention
-						component instead of crashing.
+						At runtime, when SSR throws an error, AbsoluteJS catches
+						it and renders the matching error convention component
+						instead of crashing.
 					</p>
 					<ErrorBoundariesHowItWorksList />
 				</section>
@@ -143,9 +143,7 @@ export const ErrorBoundariesView = ({
 					<p style={paragraphSpacedStyle}>
 						The shape is{' '}
 						<code>
-							{
-								'Pick<Error, "name" | "message" | "stack">'
-							}
+							{'Pick<Error, "name" | "message" | "stack">'}
 						</code>
 						. In production <code>stack</code> is omitted; in
 						development the full stack trace is included for
@@ -164,8 +162,8 @@ export const ErrorBoundariesView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Name an error file after the page it belongs to. For
-						example, <code>Home.error.tsx</code> only activates
-						when <code>Home.tsx</code> throws. This lets you show
+						example, <code>Home.error.tsx</code> only activates when{' '}
+						<code>Home.tsx</code> throws. This lets you show
 						different error UI per page while keeping a generic
 						fallback.
 					</p>
@@ -188,8 +186,8 @@ export const ErrorBoundariesView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The <code>not-found.tsx</code> convention file handles
-						404 responses. When a request hits a route that does
-						not exist, AbsoluteJS renders this component with a 404
+						404 responses. When a request hits a route that does not
+						exist, AbsoluteJS renders this component with a 404
 						status code.
 					</p>
 					<PrismPlus
@@ -224,14 +222,13 @@ export const ErrorBoundariesView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Drop an <code>error.html</code> into <em>any</em>{' '}
-						configured framework's pages directory — no extra
-						config flag, no dedicated dir. Any framework that
-						fails to render its own error page falls through to it.
-						Tokens are replaced server-side from the thrown{' '}
+						configured framework's pages directory — no extra config
+						flag, no dedicated dir. Any framework that fails to
+						render its own error page falls through to it. Tokens
+						are replaced server-side from the thrown{' '}
 						<code>Error</code>: <code>{'{{name}}'}</code>,{' '}
-						<code>{'{{message}}'}</code>,{' '}
-						<code>{'{{stack}}'}</code> (HTML-escaped;{' '}
-						<code>stack</code> blanks in production).
+						<code>{'{{message}}'}</code>, <code>{'{{stack}}'}</code>{' '}
+						(HTML-escaped; <code>stack</code> blanks in production).
 					</p>
 					<PrismPlus
 						codeString={errorComponentHtml}
@@ -256,9 +253,8 @@ export const ErrorBoundariesView = ({
 						Fallback Chain
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						When an error occurs, AbsoluteJS resolves the error
-						page using a priority chain. The most specific match
-						wins:
+						When an error occurs, AbsoluteJS resolves the error page
+						using a priority chain. The most specific match wins:
 					</p>
 					<PrismPlus
 						codeString={errorFallbackChain}
@@ -283,10 +279,10 @@ export const ErrorBoundariesView = ({
 						Multi-Framework
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Error conventions work across all supported
-						frameworks. Each framework uses its own syntax but
-						follows the same file naming pattern and receives the
-						same flat <code>ErrorPageProps</code> shape.
+						Error conventions work across all supported frameworks.
+						Each framework uses its own syntax but follows the same
+						file naming pattern and receives the same flat{' '}
+						<code>ErrorPageProps</code> shape.
 					</p>
 					<AnchorHeading
 						id="svelte-error"

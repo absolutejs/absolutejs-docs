@@ -62,12 +62,13 @@ export const AuthVerifiableCredentialsView = ({
 					<p style={paragraphLargeStyle}>
 						<code>0.40.0</code> ships a complete SD-JWT VC stack:
 						OpenID4VCI issuer (your IdP becomes a credential issuer
-						a wallet can collect), OpenID4VP verifier (accept a wallet
-						presentation as proof-of-claim), and Bitstring Status List
-						for revocation. First OSS TypeScript auth library to ship
-						the full issue → present → verify → revoke loop. Future
-						EU eIDAS 2.0 wallets, Apple Wallet, Google Wallet, and the
-						current EUDI Wallet ecosystem all speak this protocol family.
+						a wallet can collect), OpenID4VP verifier (accept a
+						wallet presentation as proof-of-claim), and Bitstring
+						Status List for revocation. First OSS TypeScript auth
+						library to ship the full issue → present → verify →
+						revoke loop. Future EU eIDAS 2.0 wallets, Apple Wallet,
+						Google Wallet, and the current EUDI Wallet ecosystem all
+						speak this protocol family.
 					</p>
 				</animated.div>
 
@@ -82,10 +83,11 @@ export const AuthVerifiableCredentialsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Declare what credentials you offer + a resolver that
-						produces the claim bag. The package handles SD-JWT signing,
-						selective-disclosure hash math, cnf holder binding, and
-						the c_nonce ceremony. Pre-authorized_code flow only in
-						this cycle; auth-code flow follows when a consumer asks.
+						produces the claim bag. The package handles SD-JWT
+						signing, selective-disclosure hash math, cnf holder
+						binding, and the c_nonce ceremony. Pre-authorized_code
+						flow only in this cycle; auth-code flow follows when a
+						consumer asks.
 					</p>
 					<PrismPlus
 						codeString={issuerSetup}
@@ -159,10 +161,10 @@ export const AuthVerifiableCredentialsView = ({
 						Bitstring Status List (draft-ietf-oauth-status-list-12).
 						Compressed bitmap in a signed JWT, served from a stable
 						URL. Each credential references its slot via the
-						<code> status</code> claim; verifiers check the bit
-						at verify time. Re-signs on every fetch so revocations
-						land immediately. Postgres stores for offers, nonces,
-						and presentation requests all ship alongside.
+						<code> status</code> claim; verifiers check the bit at
+						verify time. Re-signs on every fetch so revocations land
+						immediately. Postgres stores for offers, nonces, and
+						presentation requests all ship alongside.
 					</p>
 					<PrismPlus
 						codeString={statusListFlow}

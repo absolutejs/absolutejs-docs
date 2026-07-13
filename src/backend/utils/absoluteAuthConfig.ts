@@ -1,7 +1,4 @@
-import {
-	defineAuthConfig,
-	instantiateUserSession
-} from '@absolutejs/auth';
+import { defineAuthConfig, instantiateUserSession } from '@absolutejs/auth';
 import { DatabaseType, User } from '../../../db/schema';
 import { handleStatusUpdate } from '../handlers/providerHandlers';
 import { createUser, getUser } from '../handlers/userHandlers';

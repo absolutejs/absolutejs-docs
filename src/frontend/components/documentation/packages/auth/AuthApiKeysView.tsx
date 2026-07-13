@@ -55,10 +55,10 @@ export const AuthApiKeysView = ({
 						API Keys &amp; M2M
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Authenticate software, not people — long-lived static API
-						keys and the OAuth2 client_credentials grant for
-						short-lived machine-to-machine tokens. Secrets are stored
-						only as hashes; one guard accepts either.
+						Authenticate software, not people — long-lived static
+						API keys and the OAuth2 client_credentials grant for
+						short-lived machine-to-machine tokens. Secrets are
+						stored only as hashes; one guard accepts either.
 					</p>
 				</animated.div>
 
@@ -72,12 +72,12 @@ export const AuthApiKeysView = ({
 						Static API Keys
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Mint a long-lived <code>sk_…</code> key bound to any owner
-						id, with string scopes and an optional expiry. Only the
-						hash is persisted; the plaintext is shown once and the
-						stored prefix lets you list keys in a UI. The package
-						gives you the helpers — you wire creation behind your own
-						admin route, exactly like SCIM tokens.
+						Mint a long-lived <code>sk_…</code> key bound to any
+						owner id, with string scopes and an optional expiry.
+						Only the hash is persisted; the plaintext is shown once
+						and the stored prefix lets you list keys in a UI. The
+						package gives you the helpers — you wire creation behind
+						your own admin route, exactly like SCIM tokens.
 					</p>
 					<PrismPlus
 						codeString={staticApiKeys}
@@ -97,14 +97,15 @@ export const AuthApiKeysView = ({
 						Guarding Requests
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>resolveApiPrincipal</code> reads the credential from{' '}
-						<code>Authorization: Bearer</code> or the{' '}
+						<code>resolveApiPrincipal</code> reads the credential
+						from <code>Authorization: Bearer</code> or the{' '}
 						<code>X-API-Key</code> header and routes it by prefix to
-						the right store, returning a single <code>ApiPrincipal</code>{' '}
-						(its <code>kind</code>, <code>ownerId</code>, and{' '}
-						<code>scopes</code>) regardless of whether a static key or
-						an access token was presented. <code>hasScopes</code>{' '}
-						enforces AND-scope checks.
+						the right store, returning a single{' '}
+						<code>ApiPrincipal</code> (its <code>kind</code>,{' '}
+						<code>ownerId</code>, and <code>scopes</code>)
+						regardless of whether a static key or an access token
+						was presented. <code>hasScopes</code> enforces AND-scope
+						checks.
 					</p>
 					<PrismPlus
 						codeString={apiKeyGuard}
@@ -124,14 +125,14 @@ export const AuthApiKeysView = ({
 						Client Credentials (M2M)
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						For the OAuth2 client_credentials grant, register a client
-						(public <code>cid_…</code> + one-time <code>cs_…</code>{' '}
-						secret) and let it trade those for a short-lived{' '}
-						<code>at_…</code> access token at{' '}
-						<code>/oauth2/token</code>. Tokens are opaque and stored by
-						hash with an expiry, so they remain revocable — no JWKS to
-						publish. Credentials may arrive in the body or as an HTTP
-						Basic header.
+						For the OAuth2 client_credentials grant, register a
+						client (public <code>cid_…</code> + one-time{' '}
+						<code>cs_…</code> secret) and let it trade those for a
+						short-lived <code>at_…</code> access token at{' '}
+						<code>/oauth2/token</code>. Tokens are opaque and stored
+						by hash with an expiry, so they remain revocable — no
+						JWKS to publish. Credentials may arrive in the body or
+						as an HTTP Basic header.
 					</p>
 					<PrismPlus
 						codeString={clientCredentials}

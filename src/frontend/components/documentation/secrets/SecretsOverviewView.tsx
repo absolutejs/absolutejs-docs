@@ -23,6 +23,8 @@ import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
+const noop = () => undefined;
+
 const tocItems: TocItem[] = [
 	{ href: '#secrets-overview', label: 'Overview' },
 	{ href: '#quick-start', label: 'Quick Start' },
@@ -63,7 +65,7 @@ export const SecretsOverviewView = ({
 						known secrets out of arbitrary text BEFORE it reaches
 						any log sink, and rotate through the adapter on demand.
 						Pure host-side — plaintext never crosses the sandbox
-						boundary into customer code.
+						boundary into tenant code.
 					</p>
 				</animated.div>
 
@@ -112,8 +114,7 @@ export const SecretsOverviewView = ({
 						lookback buffer. Drop it into a log forwarder so
 						plaintext never reaches the sink. Opt in to{' '}
 						<code>redactionEncodings: ['plain', 'base64']</code> to
-						also catch base64-encoded forms inside JWTs and
-						cookies.
+						also catch base64-encoded forms inside JWTs and cookies.
 					</p>
 					<PrismPlus
 						codeString={secretsRedact}
@@ -186,9 +187,9 @@ export const SecretsOverviewView = ({
 						v0.1.0 bundles three adapters covering dev, test, and
 						simple prod. AWS Secrets Manager, HashiCorp Vault,
 						Doppler, Infisical, GCP Secret Manager, and Azure Key
-						Vault adapters ship as sibling packages — they're
-						where the real auth surface lives, so they don't belong
-						in the core.
+						Vault adapters ship as sibling packages — they're where
+						the real auth surface lives, so they don't belong in the
+						core.
 					</p>
 					<PrismPlus
 						codeString={secretsAdapters}
@@ -202,9 +203,9 @@ export const SecretsOverviewView = ({
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
-				onToggle={onTocToggle ?? (() => {})}
+				items={tocItems}
+				onToggle={onTocToggle ?? noop}
 				themeSprings={themeSprings}
 			/>
 		</div>

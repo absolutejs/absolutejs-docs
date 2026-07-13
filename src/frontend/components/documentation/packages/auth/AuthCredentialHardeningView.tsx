@@ -61,8 +61,8 @@ export const AuthCredentialHardeningView = ({
 						Credential Hardening
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Block junk emails at sign-up, and catch passwords that show
-						up in a breach after the account already exists.
+						Block junk emails at sign-up, and catch passwords that
+						show up in a breach after the account already exists.
 					</p>
 				</animated.div>
 
@@ -77,10 +77,10 @@ export const AuthCredentialHardeningView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>validateEmailDeliverability</code> checks format,
-						blocks disposable domains (a starter list ships built-in;
-						extend it), and optionally confirms the domain has MX
-						records. <code>isDisposableEmail</code> is exposed on its own
-						too.
+						blocks disposable domains (a starter list ships
+						built-in; extend it), and optionally confirms the domain
+						has MX records. <code>isDisposableEmail</code> is
+						exposed on its own too.
 					</p>
 					<PrismPlus
 						codeString={emailValidation}
@@ -100,17 +100,18 @@ export const AuthCredentialHardeningView = ({
 						Compromised credentials
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Sign-up already blocks breached passwords (the credentials
-						policy&apos;s <code>checkBreaches</code>). The login-time check
-						is the half of Auth0 &quot;Credential Guard&quot; a self-hosted
-						library can do: catch a password that was fine at sign-up but
-						later leaked, and prompt a reset. Fails open on a HIBP outage.
+						Sign-up already blocks breached passwords (the
+						credentials policy&apos;s <code>checkBreaches</code>).
+						The login-time check is the half of Auth0
+						&quot;Credential Guard&quot; a self-hosted library can
+						do: catch a password that was fine at sign-up but later
+						leaked, and prompt a reset. Fails open on a HIBP outage.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						Turnkey: set <code>checkBreachesOnLogin: true</code> on the
-						credentials config. A successful login then carries{' '}
-						<code>passwordCompromised</code> in its response (it never
-						blocks — the user is already authenticated).
+						Turnkey: set <code>checkBreachesOnLogin: true</code> on
+						the credentials config. A successful login then carries{' '}
+						<code>passwordCompromised</code> in its response (it
+						never blocks — the user is already authenticated).
 					</p>
 					<PrismPlus
 						codeString={breachCheckOnLogin}
@@ -119,8 +120,8 @@ export const AuthCredentialHardeningView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						Or call <code>isPasswordCompromised</code> yourself for full
-						control over the response:
+						Or call <code>isPasswordCompromised</code> yourself for
+						full control over the response:
 					</p>
 					<PrismPlus
 						codeString={compromisedCredential}
@@ -140,12 +141,12 @@ export const AuthCredentialHardeningView = ({
 						Background breach re-scan
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>0.37.0</code> adds <code>runEmailBreachScan</code> —
-						the email counterpart to the login-time password check.
-						Walks your user population in cursor-paged batches against
-						HIBP&apos;s <code>breachedaccount</code> API. Wire it up
-						as a cron and notify users whose addresses show up in new
-						breaches.
+						<code>0.37.0</code> adds <code>runEmailBreachScan</code>{' '}
+						— the email counterpart to the login-time password
+						check. Walks your user population in cursor-paged
+						batches against HIBP&apos;s <code>breachedaccount</code>{' '}
+						API. Wire it up as a cron and notify users whose
+						addresses show up in new breaches.
 					</p>
 					<PrismPlus
 						codeString={backgroundEmailScan}
@@ -165,14 +166,14 @@ export const AuthCredentialHardeningView = ({
 						Prune inactive users
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The other half of <code>0.37.0</code>&apos;s background ops:{' '}
-						<code>pruneInactiveUsers</code> is a pure orchestrator
-						that walks a paged user population, identifies anyone
-						past the threshold, and lets you decide what
-						&quot;prune&quot; means via the <code>onDelete</code>{' '}
-						hook (soft-delete, hard-delete, disable + notify).{' '}
-						<code>dryRun: true</code> reports candidates without
-						touching anything.
+						The other half of <code>0.37.0</code>&apos;s background
+						ops: <code>pruneInactiveUsers</code> is a pure
+						orchestrator that walks a paged user population,
+						identifies anyone past the threshold, and lets you
+						decide what &quot;prune&quot; means via the{' '}
+						<code>onDelete</code> hook (soft-delete, hard-delete,
+						disable + notify). <code>dryRun: true</code> reports
+						candidates without touching anything.
 					</p>
 					<PrismPlus
 						codeString={pruneInactiveUsersExample}

@@ -20,9 +20,9 @@ export const ErrorBoundariesConventionFilesList = () => (
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>error.html</strong> : universal HTML
-			fallback shared across frameworks. Tokens{' '}
-			<code>{'{{name}}'}</code>, <code>{'{{message}}'}</code>, and{' '}
-			<code>{'{{stack}}'}</code> are replaced server-side
+			fallback shared across frameworks. Tokens <code>{'{{name}}'}</code>,{' '}
+			<code>{'{{message}}'}</code>, and <code>{'{{stack}}'}</code> are
+			replaced server-side
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>not-found.html</strong> : universal 404

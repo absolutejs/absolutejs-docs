@@ -1,3 +1,78 @@
+export const syncCrdt = `\
+import { rgaText } from '@absolutejs/sync/crdt';
+
+// Server — declare a field as a CRDT; the engine merges on write instead of
+// overwriting, and auto-registers a "doc:merge" mutation for the client.
+engine.registerCrdt('doc', { body: rgaText });
+
+// Client — useCollaborativeText reads/writes that field. Open the same row
+// in two tabs and type at once: edits merge with no clobbering.
+import { useCollaborativeText } from '@absolutejs/sync/react';
+
+const Editor = () => {
+  const doc = useCollaborativeText({
+    url: 'ws://localhost:3000/sync/ws',
+    collection: 'doc',
+    field: 'body',
+    id: 'shared',
+  });
+
+  return (
+    <textarea
+      value={doc.text}
+      onChange={(event) => doc.setText(event.target.value)}
+    />
+  );
+};`;
+export const syncCrdtBackends = `\
+// Swap the in-package RGA for a production CRDT — same call sites:
+import { yjsText } from '@absolutejs/sync-yjs';
+// or
+import { automergeText } from '@absolutejs/sync-automerge';
+import { loroText } from '@absolutejs/sync-loro';
+
+engine.registerCrdt('doc', { body: yjsText });
+
+const doc = useCollaborativeText({
+  url, collection: 'doc', field: 'body', id: 'shared',
+  create: createYjsText,  // <- the only client change
+});`;
+export const syncPermissions = `\
+import { definePermissions } from '@absolutejs/sync/engine';
+
+const engine = createSyncEngine({
+  permissions: definePermissions({
+    tasks: {
+      // Row-level read filter applied to every diff the engine emits.
+      read: (row, ctx) => row.userId === ctx.userId,
+      // Write gate runs before insert/update/delete; deny rolls the txn back.
+      write: (ctx) => ctx.role !== 'viewer',
+    },
+  }),
+});`;
+export const syncQuickStartClient = `\
+import { useSyncCollection } from '@absolutejs/sync/react';
+
+const Tasks = () => {
+  const { data, mutate } = useSyncCollection({
+    url: 'ws://localhost:3000/sync/ws',
+    collection: 'tasks',
+  });
+
+  return (
+    <ul>
+      {data.map((task) => <li key={task.id}>{task.title}</li>)}
+      <button onClick={() => mutate({
+        name: 'addTask',
+        args: { title: 'New task' },
+        optimistic: (draft) => draft.set({
+          id: crypto.randomUUID(),
+          title: 'New task',
+        }),
+      })}>Add</button>
+    </ul>
+  );
+};`;
 export const syncQuickStartServer = `\
 import { Elysia } from 'elysia';
 import { syncSocket } from '@absolutejs/sync';
@@ -31,72 +106,17 @@ engine.registerMutation(defineMutation({
 }));
 
 new Elysia().use(syncSocket({ engine })).listen(3000);`;
+export const syncScheduled = `\
+import { defineSchedule } from '@absolutejs/sync/engine';
+import { scheduled } from '@absolutejs/sync/scheduled';
 
-export const syncQuickStartClient = `\
-import { useSyncCollection } from '@absolutejs/sync/react';
+engine.registerSchedule(defineSchedule({
+  name: 'nightly-summary',
+  pattern: '0 0 3 * * *',          // 6-field cron, seconds first
+  run: ({ actions }) => actions.insert('reports', { /* ... */ }),
+}));
 
-const Tasks = () => {
-  const { data, mutate } = useSyncCollection({
-    url: 'ws://localhost:3000/sync/ws',
-    collection: 'tasks',
-  });
-
-  return (
-    <ul>
-      {data.map((task) => <li key={task.id}>{task.title}</li>)}
-      <button onClick={() => mutate({
-        name: 'addTask',
-        args: { title: 'New task' },
-        optimistic: (draft) => draft.set({
-          id: crypto.randomUUID(),
-          title: 'New task',
-        }),
-      })}>Add</button>
-    </ul>
-  );
-};`;
-
-export const syncCrdt = `\
-import { rgaText } from '@absolutejs/sync/crdt';
-
-// Server — declare a field as a CRDT; the engine merges on write instead of
-// overwriting, and auto-registers a "doc:merge" mutation for the client.
-engine.registerCrdt('doc', { body: rgaText });
-
-// Client — useCollaborativeText reads/writes that field. Open the same row
-// in two tabs and type at once: edits merge with no clobbering.
-import { useCollaborativeText } from '@absolutejs/sync/react';
-
-const Editor = () => {
-  const doc = useCollaborativeText({
-    url: 'ws://localhost:3000/sync/ws',
-    collection: 'doc',
-    field: 'body',
-    id: 'shared',
-  });
-
-  return (
-    <textarea
-      value={doc.text}
-      onChange={(event) => doc.setText(event.target.value)}
-    />
-  );
-};`;
-
-export const syncPermissions = `\
-import { definePermissions } from '@absolutejs/sync/engine';
-
-const engine = createSyncEngine({
-  permissions: definePermissions({
-    tasks: {
-      // Row-level read filter applied to every diff the engine emits.
-      read: (row, ctx) => row.userId === ctx.userId,
-      // Write gate runs before insert/update/delete; deny rolls the txn back.
-      write: (ctx) => ctx.role !== 'viewer',
-    },
-  }),
-});`;
-
+new Elysia().use(syncSocket({ engine })).use(scheduled({ engine }));`;
 export const syncSearch = `\
 import { createTextIndex, defineSearchCollection } from '@absolutejs/sync/engine';
 
@@ -118,30 +138,4 @@ const hits = useSyncCollection({
   collection: 'taskSearch',
   params: 'urgent',
   url,
-});`;
-
-export const syncScheduled = `\
-import { defineSchedule } from '@absolutejs/sync/engine';
-import { scheduled } from '@absolutejs/sync/scheduled';
-
-engine.registerSchedule(defineSchedule({
-  name: 'nightly-summary',
-  pattern: '0 0 3 * * *',          // 6-field cron, seconds first
-  run: ({ actions }) => actions.insert('reports', { /* ... */ }),
-}));
-
-new Elysia().use(syncSocket({ engine })).use(scheduled({ engine }));`;
-
-export const syncCrdtBackends = `\
-// Swap the in-package RGA for a production CRDT — same call sites:
-import { yjsText } from '@absolutejs/sync-yjs';
-// or
-import { automergeText } from '@absolutejs/sync-automerge';
-import { loroText } from '@absolutejs/sync-loro';
-
-engine.registerCrdt('doc', { body: yjsText });
-
-const doc = useCollaborativeText({
-  url, collection: 'doc', field: 'body', id: 'shared',
-  create: createYjsText,  // <- the only client change
 });`;

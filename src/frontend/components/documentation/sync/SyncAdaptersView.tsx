@@ -54,17 +54,14 @@ export const SyncAdaptersView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1
-						id="sync-adapters"
-						style={h1Style(isMobileOrTablet)}
-					>
+					<h1 id="sync-adapters" style={h1Style(isMobileOrTablet)}>
 						CRDT Adapters
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Production CRDT backends — Yjs, Automerge, Loro —
-						behind the same <code>TextCrdtAdapter</code> contract
-						as the in-package <code>rgaText</code>. Swap one in
-						and every call site stays the same.
+						Production CRDT backends — Yjs, Automerge, Loro — behind
+						the same <code>TextCrdtAdapter</code> contract as the
+						in-package <code>rgaText</code>. Swap one in and every
+						call site stays the same.
 					</p>
 				</animated.div>
 
@@ -83,11 +80,10 @@ export const SyncAdaptersView = ({
 						moderate collaboration. Production-scale collaborative
 						text wants the things mature CRDT libraries solve:
 						efficient binary deltas, tombstone management,
-						interleaving guarantees. The{' '}
-						<code>sync-adapters</code> repo houses first-party-
-						maintained wrappers around the staples so the core
-						stays dependency-free and you only install the backend
-						you actually use.
+						interleaving guarantees. The <code>sync-adapters</code>{' '}
+						repo houses first-party- maintained wrappers around the
+						staples so the core stays dependency-free and you only
+						install the backend you actually use.
 					</p>
 				</section>
 
@@ -101,11 +97,11 @@ export const SyncAdaptersView = ({
 						The contract — one shape for every backend
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Every backend (including the first-party RGA)
-						implements <code>TextCrdtAdapter&lt;State&gt;</code>.
-						The client controller and server engine only ever talk
-						to that contract, which is why swapping one in is a
-						one-line change on each side:
+						Every backend (including the first-party RGA) implements{' '}
+						<code>TextCrdtAdapter&lt;State&gt;</code>. The client
+						controller and server engine only ever talk to that
+						contract, which is why swapping one in is a one-line
+						change on each side:
 					</p>
 					<PrismPlus
 						codeString={syncAdaptersContract}
@@ -126,10 +122,10 @@ export const SyncAdaptersView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The most widely-used collaborative CRDT in the web
-						ecosystem. The adapter wraps Yjs's{' '}
-						<code>Y.Text</code>, serialises state as a base64 Yjs
-						update, and implements <code>takeDelta</code> via
-						state vectors for true delta uploads:
+						ecosystem. The adapter wraps Yjs's <code>Y.Text</code>,
+						serialises state as a base64 Yjs update, and implements{' '}
+						<code>takeDelta</code> via state vectors for true delta
+						uploads:
 					</p>
 					<PrismPlus
 						codeString={syncAdaptersYjs}
@@ -150,8 +146,8 @@ export const SyncAdaptersView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						A mature, battle-tested CRDT. The adapter wraps an
-						Automerge doc with a single <code>text</code> field
-						and serialises state as a base64 Automerge document.
+						Automerge doc with a single <code>text</code> field and
+						serialises state as a base64 Automerge document.
 					</p>
 					<PrismPlus
 						codeString={syncAdaptersAutomerge}
@@ -184,14 +180,11 @@ export const SyncAdaptersView = ({
 				</section>
 			</div>
 			{showDesktopToc ? (
-				<TableOfContents
-					items={tocItems}
-					themeSprings={themeSprings}
-				/>
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
+				items={tocItems}
 				onToggle={onTocToggle ?? (() => {})}
 				themeSprings={themeSprings}
 			/>

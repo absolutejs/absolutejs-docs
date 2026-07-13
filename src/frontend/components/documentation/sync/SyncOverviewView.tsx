@@ -72,9 +72,9 @@ export const SyncOverviewView = ({
 						backend.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						For the operator surface (point-in-time replay,
-						tenant migration primitives, hash-chain audit, OTel
-						across the substrate), see{' '}
+						For the operator surface (point-in-time replay, tenant
+						migration primitives, hash-chain audit, OTel across the
+						substrate), see{' '}
 						<a href="/documentation/substrate-audit">
 							Substrate complete (G1–G7)
 						</a>
@@ -125,9 +125,9 @@ export const SyncOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Sync is a <strong>library</strong>, not a hosted
-						backend. It runs inside your Elysia server, talks to
-						the database you already have (Postgres, MySQL, SQLite
-						via Drizzle or Prisma), and ships its own transport:
+						backend. It runs inside your Elysia server, talks to the
+						database you already have (Postgres, MySQL, SQLite via
+						Drizzle or Prisma), and ships its own transport:
 					</p>
 					<ul
 						style={{
@@ -143,8 +143,8 @@ export const SyncOverviewView = ({
 						</li>
 						<li>
 							<strong>ORM auto-reactivity</strong> — Drizzle and
-							Prisma adapters derive topics from a query, so
-							reads and writes line up automatically.
+							Prisma adapters derive topics from a query, so reads
+							and writes line up automatically.
 						</li>
 						<li>
 							<strong>Live collections</strong> — row-level{' '}
@@ -153,9 +153,9 @@ export const SyncOverviewView = ({
 							queue, and a local-first IndexedDB cache.
 						</li>
 						<li>
-							<strong>Operator graph</strong> — incremental
-							joins, aggregations, and top-N ordering as
-							composable operators.
+							<strong>Operator graph</strong> — incremental joins,
+							aggregations, and top-N ordering as composable
+							operators.
 						</li>
 					</ul>
 				</section>
@@ -171,11 +171,11 @@ export const SyncOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Declare any row field as a CRDT and the engine merges
-						concurrent writes server-side instead of overwriting.
-						A client hook reads/writes the field with no
-						per-keystroke server round-trip — the local replica
-						holds the live text and uploads only the delta ops
-						(O(edit), not O(doc)).
+						concurrent writes server-side instead of overwriting. A
+						client hook reads/writes the field with no per-keystroke
+						server round-trip — the local replica holds the live
+						text and uploads only the delta ops (O(edit), not
+						O(doc)).
 					</p>
 					<PrismPlus
 						codeString={syncCrdt}
@@ -204,10 +204,10 @@ export const SyncOverviewView = ({
 						Permissions & Schema
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Row-level reads and writes are gated declaratively:
-						the read rule filters every diff the engine emits, and
-						the write rule runs against the committed row before
-						the mutation touches your store (a deny rolls the
+						Row-level reads and writes are gated declaratively: the
+						read rule filters every diff the engine emits, and the
+						write rule runs against the committed row before the
+						mutation touches your store (a deny rolls the
 						transaction back).
 					</p>
 					<PrismPlus
@@ -218,8 +218,8 @@ export const SyncOverviewView = ({
 					/>
 					<p style={paragraphSpacedStyle}>
 						The companion <code>defineSchema</code> + the{' '}
-						<code>field</code> kit validate every write (a bad
-						write throws <code>SchemaError</code>), and{' '}
+						<code>field</code> kit validate every write (a bad write
+						throws <code>SchemaError</code>), and{' '}
 						<code>migrate</code> lazily upcasts rows on read — no
 						database migration step required.
 					</p>
@@ -235,8 +235,8 @@ export const SyncOverviewView = ({
 						Live Search
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						A search collection keeps a server-side BM25 (or
-						vector) index current from the same change feed. The
+						A search collection keeps a server-side BM25 (or vector)
+						index current from the same change feed. The
 						subscription's params <em>are</em> the query — the
 						ranked top-K streams back as a normal collection,
 						re-ranked as rows change.
@@ -261,10 +261,9 @@ export const SyncOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						Cron-pattern server jobs whose writes go live through
 						the change feed — no polling, no separate scheduler
-						service. Wired through the{' '}
-						<code>scheduled</code> Elysia plugin (an optional
-						subpath so consumers without it pull no cron
-						dependency).
+						service. Wired through the <code>scheduled</code> Elysia
+						plugin (an optional subpath so consumers without it pull
+						no cron dependency).
 					</p>
 					<PrismPlus
 						codeString={syncScheduled}
@@ -286,12 +285,12 @@ export const SyncOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						The in-package CRDT is great for offline-merge and
 						moderate collaboration. For production-scale
-						collaborative text, swap in a battle-tested backend
-						from the <code>sync-adapters</code> repo —{' '}
+						collaborative text, swap in a battle-tested backend from
+						the <code>sync-adapters</code> repo —{' '}
 						<code>@absolutejs/sync-yjs</code>,{' '}
 						<code>@absolutejs/sync-automerge</code>, or{' '}
-						<code>@absolutejs/sync-loro</code> — all behind the
-						same <code>TextCrdtAdapter</code> contract:
+						<code>@absolutejs/sync-loro</code> — all behind the same{' '}
+						<code>TextCrdtAdapter</code> contract:
 					</p>
 					<PrismPlus
 						codeString={syncCrdtBackends}
@@ -312,15 +311,17 @@ export const SyncOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Idiomatic bindings live at{' '}
-						<code>@absolutejs/sync/{'{react, vue, svelte, angular}'}</code>.
-						Each ships <code>useSyncCollection</code> /{' '}
+						<code>
+							@absolutejs/sync/{'{react, vue, svelte, angular}'}
+						</code>
+						. Each ships <code>useSyncCollection</code> /{' '}
 						<code>createSyncCollectionStore</code> /{' '}
 						<code>SyncCollectionService.connect</code> for live
 						collections, plus a matching{' '}
 						<code>useCollaborativeText</code> /{' '}
 						<code>createCollaborativeTextStore</code> /{' '}
-						<code>SyncCollectionService.collaborativeText</code>{' '}
-						for CRDT fields.
+						<code>SyncCollectionService.collaborativeText</code> for
+						CRDT fields.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						All four hook surfaces are SSR-safe and return the same
@@ -330,14 +331,11 @@ export const SyncOverviewView = ({
 				</section>
 			</div>
 			{showDesktopToc ? (
-				<TableOfContents
-					items={tocItems}
-					themeSprings={themeSprings}
-				/>
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
+				items={tocItems}
 				onToggle={onTocToggle ?? (() => {})}
 				themeSprings={themeSprings}
 			/>

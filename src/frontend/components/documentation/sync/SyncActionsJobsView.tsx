@@ -2,11 +2,9 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
 	syncActionsMutations,
-	syncJobsConvexMap,
 	syncJobsDefine,
 	syncJobsEnqueue
 } from '../../../data/documentation/syncActionsJobsDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	mainContentStyle,
@@ -19,9 +17,12 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { ComparisonRow, ComparisonTable } from '../../utils/ComparisonTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+
+const noop = () => undefined;
 
 const tocItems: TocItem[] = [
 	{ href: '#sync-actions', label: 'Actions, jobs & schedules' },
@@ -31,13 +32,65 @@ const tocItems: TocItem[] = [
 	{ href: '#convex-map', label: 'Map to Convex primitives' }
 ];
 
+const convexMapRows: ComparisonRow[] = [
+	{
+		feature: 'Define an action',
+		note: 'Emitted changes buffer via actions.change and commit as one applyChangeBatch on resolve.',
+		values: [
+			'defineAction(handler)',
+			'defineMutation — the async handler IS the action'
+		]
+	},
+	{
+		feature: 'Call from the client',
+		values: [
+			'useAction(api.foo, args)',
+			"syncStore.mutate('foo', args) via treaty<typeof app>"
+		]
+	},
+	{
+		feature: 'Immediate follow-up work',
+		values: [
+			'ctx.scheduler.runAfter(0, internal.x)',
+			"app.queue.enqueue('x', args) from the mutation handler"
+		]
+	},
+	{
+		feature: 'Delayed one-shots',
+		values: [
+			'ctx.scheduler.runAfter(ms, internal.x)',
+			"app.queue.enqueue('x', args, { runAt })"
+		]
+	},
+	{
+		feature: 'Cron triggers',
+		values: [
+			'Cron definitions',
+			'engine.registerSchedule + @elysiajs/cron (via the scheduled plugin)'
+		]
+	},
+	{
+		feature: 'Durable, retried background jobs',
+		values: [
+			'Workpool (durable, retried, deduped)',
+			'@absolutejs/queue — typed registry, exponentialBackoff, dead-letter, in-memory + Postgres stores'
+		]
+	},
+	{
+		feature: 'Action calls a mutation',
+		values: [
+			'ctx.runMutation from an action',
+			'Job handler calls engine.runMutation(...) directly'
+		]
+	}
+];
+
 export const SyncActionsJobsView = ({
 	themeSprings,
 	tocOpen,
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -53,10 +106,7 @@ export const SyncActionsJobsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1
-						id="sync-actions"
-						style={h1Style(isMobileOrTablet)}
-					>
+					<h1 id="sync-actions" style={h1Style(isMobileOrTablet)}>
 						Actions, jobs & schedules
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -88,10 +138,10 @@ export const SyncActionsJobsView = ({
 						anything — call HTTP, stream from an AI provider, send
 						an email — and emit changes back to live tables via{' '}
 						<code>actions.change/insert/update/delete</code>. The
-						engine buffers those emitted changes and commits them
-						as one <code>applyChangeBatch</code> only AFTER the
-						handler resolves; if the handler throws, the buffered
-						changes don't fan out. One concept, both behaviours:
+						engine buffers those emitted changes and commits them as
+						one <code>applyChangeBatch</code> only AFTER the handler
+						resolves; if the handler throws, the buffered changes
+						don't fan out. One concept, both behaviours:
 					</p>
 					<PrismPlus
 						codeString={syncActionsMutations}
@@ -137,8 +187,8 @@ export const SyncActionsJobsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						A mutation can enqueue durable follow-up work, a
-						scheduled cron can fan out a batch of jobs, and any
-						HTTP route can enqueue too. Job handlers can run sync
+						scheduled cron can fan out a batch of jobs, and any HTTP
+						route can enqueue too. Job handlers can run sync
 						mutations to write back to live tables — so the
 						subscriber a user has open sees the result the moment
 						the worker finishes.
@@ -164,24 +214,21 @@ export const SyncActionsJobsView = ({
 						A direct translation table for teams comparing the two
 						stacks. Different machinery, equivalent capability:
 					</p>
-					<PrismPlus
-						codeString={syncJobsConvexMap}
-						language="markdown"
-						showLineNumbers={false}
+					<ComparisonTable
+						columns={['Convex', 'AbsoluteJS Sync']}
+						firstColumnLabel="Capability"
+						rows={convexMapRows}
 						themeSprings={themeSprings}
 					/>
 				</section>
 			</div>
 			{showDesktopToc ? (
-				<TableOfContents
-					items={tocItems}
-					themeSprings={themeSprings}
-				/>
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
-				onToggle={onTocToggle ?? (() => {})}
+				items={tocItems}
+				onToggle={onTocToggle ?? noop}
 				themeSprings={themeSprings}
 			/>
 		</div>

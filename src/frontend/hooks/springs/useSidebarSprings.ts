@@ -1,6 +1,6 @@
 import { JSON_VIEWER_LAYOUT } from '../../../constants';
 import { useSprings } from '@react-spring/web';
-import { DocsView, isMenuDropdown } from '../../../types/types';
+import { DocsView, isMenuDropdown, isMenuHeading } from '../../../types/types';
 import { sidebarData } from '../../data/sidebarData';
 import { primaryColor } from '../../styles/colors';
 
@@ -18,6 +18,11 @@ export const useSidebarSprings = (view: DocsView) => {
 		selectedIndex
 	} = sidebarData.reduce<Acc>(
 		(acc, item) => {
+			if (isMenuHeading(item)) {
+				acc.counts.push(0);
+
+				return acc;
+			}
 			if (isMenuDropdown(item)) {
 				const count = item.buttons.length;
 				const idx = item.buttons.findIndex(

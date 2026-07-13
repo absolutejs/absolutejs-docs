@@ -1,9 +1,10 @@
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../types/springTypes';
-import { DocsView, isMenuDropdown } from '../../../types/types';
+import { DocsView, isMenuDropdown, isMenuHeading } from '../../../types/types';
 import { sidebarData } from '../../data/sidebarData';
 import { useSidebarSprings } from '../../hooks/springs/useSidebarSprings';
 import { SidebarDropdown } from './SidebarDropdown';
+import { SidebarHeading } from './SidebarHeading';
 import { SidebarLink } from './SidebarLink';
 
 type SidebarProps = {
@@ -37,6 +38,15 @@ export const Sidebar = ({
 			}}
 		>
 			{sidebarData.map((element, index) => {
+				if (isMenuHeading(element)) {
+					return (
+						<SidebarHeading
+							heading={element.heading}
+							key={`heading-${element.heading}`}
+							themeSprings={themeSprings}
+						/>
+					);
+				}
 				if (isMenuDropdown(element)) {
 					return (
 						<SidebarDropdown

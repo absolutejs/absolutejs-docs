@@ -1,3 +1,45 @@
+export const routerDrain = `\
+// drainShard(id) excludes a shard from new routing without marking it
+// broken. Existing acquires keep running. For planned shard rotation:
+router.drainShard('engine-1');
+// Wait for the runtime to report 0 active tenants on that shard, then:
+router.removeShard('engine-1');
+
+// markUnhealthy(id) is the failure variant — tenants rehash to a
+// healthy shard immediately.  markHealthy(id) clears BOTH states.`;
+export const routerLimits = `\
+// Per-tenant connection cap counted via acquire() / release().
+// When reached, route() returns { decision: 'capped' }.
+const router = createRouter({
+  shards,
+  perTenantConnectionCap: 100,
+  perTenantRateLimit: { tokens: 100, refillPerSecond: 10 },
+
+  // Per-route limits layered on top — atomic two-bucket commit. A failed
+  // route bucket does NOT consume the tenant bucket.
+  perRouteRateLimits: {
+    upload: { tokens: 5, refillPerSecond: 0.083 },     // 5/min
+  },
+});
+
+router.route({ tenantId: 'acme', route: 'upload' });
+// → { decision: 'rate-limited', emptiedBucket: 'upload' } after 5 calls`;
+export const routerMeterAllow = `\
+import { createMeter } from '@absolutejs/metering';
+import { createRouter } from '@absolutejs/router';
+
+const meter = createMeter({ /* ... */ });
+
+// The allow hook is the meter+router wire-up in one line.
+const router = createRouter({
+  shards,
+  allow: meter.allow,   // refuse routes for over-quota tenants at the edge
+  load: (id) => roster.load(id),
+});
+
+// route() now returns { decision: 'denied', shard: null } when meter.allow
+// returns false. The gateway can surface a 'quota exceeded' page without
+// paying for the upstream hop.`;
 export const routerQuickStart = `\
 import { createRouter } from '@absolutejs/router';
 
@@ -18,7 +60,16 @@ if (decision.decision !== 'allow') {
 }
 const handle = router.acquire(tenantId);
 // ...proxy WS frames to decision.shard.url; call handle.release() on close.`;
+export const routerSnapshot = `\
+// Preserve rate-limit tokens across edge restarts. Without this, a deploy
+// hands every tenant a fresh full bucket — instant rate-limit bypass for
+// anyone watching the deploy times.
+const snap = router.snapshot();
+await Bun.write('/var/lib/router/state.json', JSON.stringify(snap));
 
+// On edge restart:
+const restored = createRouter({ /* ... same config ... */ });
+restored.restore(JSON.parse(await Bun.file('/var/lib/router/state.json').text()));`;
 export const routerStrategies = `\
 // jump (default) — Lamping & Veach 2014. O(log n), no memory, exactly
 // 1/N keys move when shards are added at the tail.  Ignores weight.
@@ -41,59 +92,3 @@ createRouter({
   shards,
   hashStrategy: (key, shards) => fnv1a32(key) % shards.length,
 });`;
-
-export const routerDrain = `\
-// drainShard(id) excludes a shard from new routing without marking it
-// broken. Existing acquires keep running. For planned shard rotation:
-router.drainShard('engine-1');
-// Wait for the runtime to report 0 active tenants on that shard, then:
-router.removeShard('engine-1');
-
-// markUnhealthy(id) is the failure variant — tenants rehash to a
-// healthy shard immediately.  markHealthy(id) clears BOTH states.`;
-
-export const routerLimits = `\
-// Per-tenant connection cap counted via acquire() / release().
-// When reached, route() returns { decision: 'capped' }.
-const router = createRouter({
-  shards,
-  perTenantConnectionCap: 100,
-  perTenantRateLimit: { tokens: 100, refillPerSecond: 10 },
-
-  // Per-route limits layered on top — atomic two-bucket commit. A failed
-  // route bucket does NOT consume the tenant bucket.
-  perRouteRateLimits: {
-    upload: { tokens: 5, refillPerSecond: 0.083 },     // 5/min
-  },
-});
-
-router.route({ tenantId: 'acme', route: 'upload' });
-// → { decision: 'rate-limited', emptiedBucket: 'upload' } after 5 calls`;
-
-export const routerMeterAllow = `\
-import { createMeter } from '@absolutejs/metering';
-import { createRouter } from '@absolutejs/router';
-
-const meter = createMeter({ /* ... */ });
-
-// The allow hook is the meter+router wire-up in one line.
-const router = createRouter({
-  shards,
-  allow: meter.allow,   // refuse routes for over-quota tenants at the edge
-  load: (id) => roster.load(id),
-});
-
-// route() now returns { decision: 'denied', shard: null } when meter.allow
-// returns false. The gateway can surface a 'quota exceeded' page without
-// paying for the upstream hop.`;
-
-export const routerSnapshot = `\
-// Preserve rate-limit tokens across edge restarts. Without this, a deploy
-// hands every tenant a fresh full bucket — instant rate-limit bypass for
-// anyone watching the deploy times.
-const snap = router.snapshot();
-await Bun.write('/var/lib/router/state.json', JSON.stringify(snap));
-
-// On edge restart:
-const restored = createRouter({ /* ... same config ... */ });
-restored.restore(JSON.parse(await Bun.file('/var/lib/router/state.json').text()));`;

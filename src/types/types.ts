@@ -36,13 +36,22 @@ export type MenuButton<V extends string = DocsView> = {
 	buttons?: MenuButton<V>[];
 };
 
+export type MenuHeading = {
+	heading: string;
+};
+
 export type MenuItem<V extends string = DocsView> =
 	| MenuDropdown<V>
-	| MenuButton<V>;
+	| MenuButton<V>
+	| MenuHeading;
 
 export const isMenuDropdown = <V extends string>(
 	element: MenuItem<V>
-): element is MenuDropdown<V> => 'buttons' in element;
+): element is MenuDropdown<V> => 'buttons' in element && !('id' in element);
+
+export const isMenuHeading = <V extends string>(
+	element: MenuItem<V>
+): element is MenuHeading => 'heading' in element;
 
 export const isSubmenuButton = <V extends string>(
 	button: MenuButton<V>

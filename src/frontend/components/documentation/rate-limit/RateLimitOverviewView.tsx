@@ -58,7 +58,10 @@ export const RateLimitOverviewView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="rate-limit-overview" style={h1Style(isMobileOrTablet)}>
+					<h1
+						id="rate-limit-overview"
+						style={h1Style(isMobileOrTablet)}
+					>
 						Rate Limit
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -99,8 +102,7 @@ export const RateLimitOverviewView = ({
 						<code>Retry-After</code> + the IETF{' '}
 						<code>RateLimit-*</code> headers. The remaining count
 						stays current on the <code>200</code> responses too — so
-						clients can throttle themselves before they get
-						refused.
+						clients can throttle themselves before they get refused.
 					</p>
 				</section>
 
@@ -136,19 +138,20 @@ export const RateLimitOverviewView = ({
 						}}
 					>
 						<li>
-							<strong>GCRA</strong> — exact, BigInt nanosecond TAT,
-							one number of state per key, no boundary effects. The
-							default.
+							<strong>GCRA</strong> — exact, BigInt nanosecond
+							TAT, one number of state per key, no boundary
+							effects. The default.
 						</li>
 						<li>
-							<strong>Token bucket</strong> — classic. Allows brief
-							bursts at refill boundaries. Pick this when you want
-							"fill the bucket, fire it all at once" semantics.
+							<strong>Token bucket</strong> — classic. Allows
+							brief bursts at refill boundaries. Pick this when
+							you want "fill the bucket, fire it all at once"
+							semantics.
 						</li>
 						<li>
 							<strong>Sliding window</strong> — counter
-							approximation. Easy to explain on a status page ("you
-							have N requests left in the last M seconds").
+							approximation. Easy to explain on a status page
+							("you have N requests left in the last M seconds").
 						</li>
 						<li>
 							<strong>Combined</strong> — composes any number of
@@ -170,11 +173,12 @@ export const RateLimitOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Heavy endpoints charge more than cheap ones with a{' '}
-						<code>cost</code> function. The bucket goes into overdraft
-						on a cost-N hit (you wait it off — same as Stripe's
-						metered approach). Key derivation is a string preset (
-						<code>'ip'</code> or <code>'authorization'</code>) or a
-						function. <code>skip</code> bypasses the limit entirely;{' '}
+						<code>cost</code> function. The bucket goes into
+						overdraft on a cost-N hit (you wait it off — same as
+						Stripe's metered approach). Key derivation is a string
+						preset (<code>'ip'</code> or{' '}
+						<code>'authorization'</code>) or a function.{' '}
+						<code>skip</code> bypasses the limit entirely;{' '}
 						<code>onAllow</code> and <code>onLimit</code> are
 						symmetric hooks for metrics + custom responses.
 					</p>
@@ -244,10 +248,11 @@ export const RateLimitOverviewView = ({
 						IPv6 addresses are grouped by their <code>/64</code>{' '}
 						prefix by default — one user's RIR allocation gets one
 						quota, not one quota per device. Configurable via{' '}
-						<code>ipv6Prefix</code>. CDN headers
-						(<code>cf-connecting-ip</code>, <code>fly-client-ip</code>,
-						<code> true-client-ip</code>, <code>x-real-ip</code>) are
-						honored when XFF is missing and a proxy is trusted.
+						<code>ipv6Prefix</code>. CDN headers (
+						<code>cf-connecting-ip</code>,{' '}
+						<code>fly-client-ip</code>,<code> true-client-ip</code>,{' '}
+						<code>x-real-ip</code>) are honored when XFF is missing
+						and a proxy is trusted.
 					</p>
 					<PrismPlus
 						codeString={rateLimitIpModes}
@@ -270,10 +275,10 @@ export const RateLimitOverviewView = ({
 						The algorithms + store are exported separately at{' '}
 						<code>@absolutejs/rate-limit/core</code> with no Elysia
 						dependency. Use them directly for WebSocket-message
-						rate-limiting, queue-consumer throttling, AI-call
-						quotas — anywhere you need exact rate enforcement
-						without HTTP. Each algorithm exposes <code>peek()</code>{' '}
-						for status-page read-only inspection and{' '}
+						rate-limiting, queue-consumer throttling, AI-call quotas
+						— anywhere you need exact rate enforcement without HTTP.
+						Each algorithm exposes <code>peek()</code> for
+						status-page read-only inspection and{' '}
 						<code>reset()</code> for admin clears.
 					</p>
 					<PrismPlus
@@ -288,8 +293,8 @@ export const RateLimitOverviewView = ({
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
+				items={tocItems}
 				onToggle={onTocToggle ?? (() => {})}
 				themeSprings={themeSprings}
 			/>

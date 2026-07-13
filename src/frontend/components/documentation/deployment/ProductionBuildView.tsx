@@ -97,11 +97,11 @@ export const ProductionBuildView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						When a build feels slow, run{' '}
-						<code>absolute build --profile</code> to see where the time
-						goes. It prints the slowest phases and a per-framework
-						rollup, so you can tell whether a single framework&apos;s
-						compile or a particular bundle is the bottleneck before
-						you start optimizing.
+						<code>absolute build --profile</code> to see where the
+						time goes. It prints the slowest phases and a
+						per-framework rollup, so you can tell whether a single
+						framework&apos;s compile or a particular bundle is the
+						bottleneck before you start optimizing.
 					</p>
 					<PrismPlus
 						codeString={buildProfile}

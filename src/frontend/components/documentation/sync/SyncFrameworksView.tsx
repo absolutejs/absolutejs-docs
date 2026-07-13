@@ -55,18 +55,14 @@ export const SyncFrameworksView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1
-						id="sync-frameworks"
-						style={h1Style(isMobileOrTablet)}
-					>
+					<h1 id="sync-frameworks" style={h1Style(isMobileOrTablet)}>
 						Framework Hooks
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Idiomatic bindings for React, Vue, Svelte, and Angular —
 						all SSR-safe, all returning the same shape, so swapping
-						frameworks in a multi-stack app doesn't change your
-						data layer. There's a plain framework-agnostic client
-						too.
+						frameworks in a multi-stack app doesn't change your data
+						layer. There's a plain framework-agnostic client too.
 					</p>
 				</animated.div>
 
@@ -173,10 +169,9 @@ export const SyncFrameworksView = ({
 						Plain client — <code>@absolutejs/sync/client</code>
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Every framework binding is a thin wrapper over the
-						same framework-agnostic client. Use it directly when
-						you don't want a framework binding, or to build your
-						own:
+						Every framework binding is a thin wrapper over the same
+						framework-agnostic client. Use it directly when you
+						don't want a framework binding, or to build your own:
 					</p>
 					<PrismPlus
 						codeString={syncFrameworksClient}
@@ -187,14 +182,11 @@ export const SyncFrameworksView = ({
 				</section>
 			</div>
 			{showDesktopToc ? (
-				<TableOfContents
-					items={tocItems}
-					themeSprings={themeSprings}
-				/>
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
+				items={tocItems}
 				onToggle={onTocToggle ?? (() => {})}
 				themeSprings={themeSprings}
 			/>

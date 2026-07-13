@@ -51,12 +51,16 @@ export const AuthMultiSessionView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="auth-multi-session" style={h1Style(isMobileOrTablet)}>
+					<h1
+						id="auth-multi-session"
+						style={h1Style(isMobileOrTablet)}
+					>
 						Multi-session &amp; Guest
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Keep several accounts logged in at once with a switcher, and
-						mint guest sessions that upgrade to a real account on sign-up.
+						Keep several accounts logged in at once with a switcher,
+						and mint guest sessions that upgrade to a real account
+						on sign-up.
 					</p>
 				</animated.div>
 
@@ -98,9 +102,9 @@ export const AuthMultiSessionView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>createAnonymousSession</code> flags the session{' '}
 						<code>anonymous</code> (detect it with{' '}
-						<code>isAnonymousSession</code>) for trials or a pre-sign-up
-						cart. Upgrading is just a normal login — read the guest
-						session first to migrate its data.
+						<code>isAnonymousSession</code>) for trials or a
+						pre-sign-up cart. Upgrading is just a normal login —
+						read the guest session first to migrate its data.
 					</p>
 					<PrismPlus
 						codeString={guestSession}
@@ -121,16 +125,17 @@ export const AuthMultiSessionView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The <code>user</code> that <code>protectRoute</code> and{' '}
-						<code>userStatus</code> hand you is the snapshot serialized
-						into the session at login — it is <strong>not</strong>{' '}
-						re-read from your user table per request. A change made{' '}
-						<em>after</em> login (a role grant, a ban, a tier change)
-						stays invisible to that user&apos;s live sessions, so
-						role-gated routes keep returning <code>403</code> even
-						though the row is correct. Call{' '}
-						<code>refreshUserSessions</code> from your own mutator after
-						the write to push the fresh <code>user</code> into every
-						active session for that user.
+						<code>userStatus</code> hand you is the snapshot
+						serialized into the session at login — it is{' '}
+						<strong>not</strong> re-read from your user table per
+						request. A change made <em>after</em> login (a role
+						grant, a ban, a tier change) stays invisible to that
+						user&apos;s live sessions, so role-gated routes keep
+						returning <code>403</code> even though the row is
+						correct. Call <code>refreshUserSessions</code> from your
+						own mutator after the write to push the fresh{' '}
+						<code>user</code> into every active session for that
+						user.
 					</p>
 					<PrismPlus
 						codeString={refreshSessionUser}

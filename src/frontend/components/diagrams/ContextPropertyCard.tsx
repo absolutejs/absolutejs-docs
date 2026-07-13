@@ -1,69 +1,97 @@
-import { CONTEXT_PROPERTY_CARD_LAYOUT } from '../../../constants';
+import { animated } from '@react-spring/web';
+import {
+	AnimatedCSSProperties,
+	ThemeSprings
+} from '../../../types/springTypes';
+import { diagramColors } from './diagramStyles';
+
+export type ContextPropertyColorKey =
+	| 'accent'
+	| 'accentSecondary'
+	| 'accentTertiary';
 
 type ContextPropertyCardProps = {
-	cardHeight: number;
-	cardWidth: number;
 	codeExample: string;
-	color: string;
+	colorKey: ContextPropertyColorKey;
 	descriptionLines: Array<string>;
-	textColor: string;
-	textMutedColor: string;
+	themeSprings: ThemeSprings;
 	title: string;
-	transform?: string;
 };
 
+const cardStyle = (
+	themeSprings: ThemeSprings,
+	colorKey: ContextPropertyColorKey
+): AnimatedCSSProperties => ({
+	background: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? `${diagramColors.dark[colorKey]}1F`
+			: `${diagramColors.light[colorKey]}1F`
+	),
+	borderRadius: '0.5rem',
+	display: 'flex',
+	flexDirection: 'column',
+	gap: '0.375rem',
+	padding: '0.875rem 1rem'
+});
+
+const cardTitleStyle = (
+	themeSprings: ThemeSprings,
+	colorKey: ContextPropertyColorKey
+): AnimatedCSSProperties => ({
+	color: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? diagramColors.dark[colorKey]
+			: diagramColors.light[colorKey]
+	),
+	fontFamily: 'JetBrains Mono, monospace',
+	fontSize: '0.875rem',
+	fontWeight: 700,
+	margin: 0
+});
+
+const cardDescriptionStyle = (
+	themeSprings: ThemeSprings
+): AnimatedCSSProperties => ({
+	color: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? diagramColors.dark.textMuted
+			: diagramColors.light.textMuted
+	),
+	flex: 1,
+	fontSize: '0.75rem',
+	lineHeight: 1.5,
+	margin: 0
+});
+
+const cardCodeStyle = (themeSprings: ThemeSprings): AnimatedCSSProperties => ({
+	color: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? diagramColors.dark.text
+			: diagramColors.light.text
+	),
+	display: 'block',
+	fontFamily: 'JetBrains Mono, monospace',
+	fontSize: '0.75rem',
+	overflowX: 'auto',
+	whiteSpace: 'nowrap'
+});
+
 export const ContextPropertyCard = ({
-	cardHeight,
-	cardWidth,
 	codeExample,
-	color,
+	colorKey,
 	descriptionLines,
-	textColor,
-	textMutedColor,
-	title,
-	transform
+	themeSprings,
+	title
 }: ContextPropertyCardProps) => (
-	<g transform={transform}>
-		<rect
-			fill={color}
-			height={cardHeight}
-			opacity={0.12}
-			rx={8}
-			width={cardWidth}
-		/>
-		<text
-			fill={color}
-			fontFamily="monospace"
-			fontSize={14}
-			fontWeight={700}
-			x={15}
-			y={26}
-		>
+	<animated.div style={cardStyle(themeSprings, colorKey)}>
+		<animated.p style={cardTitleStyle(themeSprings, colorKey)}>
 			{title}
-		</text>
-		{descriptionLines.map((line, lineIndex) => (
-			<text
-				fill={textMutedColor}
-				fontSize={9}
-				key={line}
-				x={15}
-				y={
-					CONTEXT_PROPERTY_CARD_LAYOUT.descriptionLineStartY +
-					lineIndex *
-						CONTEXT_PROPERTY_CARD_LAYOUT.descriptionLineYStep
-				}
-			>
-				{line}
-			</text>
-		))}
-		<text
-			fill={textColor}
-			fontFamily="monospace"
-			fontSize={10}
-			x={15}
-			y={122}
-		>
+		</animated.p>
+		<animated.p style={cardDescriptionStyle(themeSprings)}>
+			{descriptionLines.join(' ')}
+		</animated.p>
+		<animated.code style={cardCodeStyle(themeSprings)}>
 			{codeExample}
-		</text>
-	</g>
+		</animated.code>
+	</animated.div>
 );

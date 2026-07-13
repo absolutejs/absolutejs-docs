@@ -57,8 +57,8 @@ export const AuthComplianceView = ({
 						Audit, Compliance &amp; Webhooks
 					</h1>
 					<p style={paragraphLargeStyle}>
-						The SOC 2 / GDPR tail: an append-only audit trail with PII
-						redaction, self-service session management, data
+						The SOC 2 / GDPR tail: an append-only audit trail with
+						PII redaction, self-service session management, data
 						export/erasure, field encryption, and signed outbound
 						webhooks.
 					</p>
@@ -74,10 +74,10 @@ export const AuthComplianceView = ({
 						Audit Logging
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						An AuditSink (in-memory or Postgres) receives structured,
-						append-only events from every flow. Redaction runs before
-						any sink sees an event, dropping or pseudonymizing PII
-						while keeping events correlatable.
+						An AuditSink (in-memory or Postgres) receives
+						structured, append-only events from every flow.
+						Redaction runs before any sink sees an event, dropping
+						or pseudonymizing PII while keeping events correlatable.
 					</p>
 					<PrismPlus
 						codeString={auditSetup}
@@ -99,7 +99,8 @@ export const AuthComplianceView = ({
 					<p style={paragraphSpacedStyle}>
 						Let users list and revoke their own active sessions, and
 						revoke all of a user&apos;s sessions on password reset.
-						Requires an authSessionStore that can enumerate sessions.
+						Requires an authSessionStore that can enumerate
+						sessions.
 					</p>
 					<PrismPlus
 						codeString={sessionsSetup}
@@ -119,11 +120,11 @@ export const AuthComplianceView = ({
 						GDPR Compliance
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Self-service right-to-access (export) and right-to-erasure
-						(delete) routes, delegated to your hooks — erasure also
-						revokes the user&apos;s sessions and clears the cookie.
-						createSecretCipher binds an AES-GCM key for encrypting
-						sensitive fields at rest.
+						Self-service right-to-access (export) and
+						right-to-erasure (delete) routes, delegated to your
+						hooks — erasure also revokes the user&apos;s sessions
+						and clears the cookie. createSecretCipher binds an
+						AES-GCM key for encrypting sensitive fields at rest.
 					</p>
 					<PrismPlus
 						codeString={complianceSetup}

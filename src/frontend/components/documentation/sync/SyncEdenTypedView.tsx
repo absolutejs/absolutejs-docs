@@ -55,20 +55,18 @@ export const SyncEdenTypedView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1
-						id="sync-eden"
-						style={h1Style(isMobileOrTablet)}
-					>
+					<h1 id="sync-eden" style={h1Style(isMobileOrTablet)}>
 						End-to-end types
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Sync's typed surface rides Elysia's Eden + TypeBox stack —
-						no codegen step. Routes you declare with{' '}
-						<code>hydrateRoute</code> / <code>mutateRoute</code> become
-						the typed entry points; <code>treaty&lt;typeof app&gt;</code>{' '}
-						gives a fully-typed client that <code>syncStore</code>{' '}
-						consumes for optimism + reconnect + offline. Row and result
-						types flow end-to-end from the route signatures.
+						Sync's typed surface rides Elysia's Eden + TypeBox stack
+						— no codegen step. Routes you declare with{' '}
+						<code>hydrateRoute</code> / <code>mutateRoute</code>{' '}
+						become the typed entry points;{' '}
+						<code>treaty&lt;typeof app&gt;</code> gives a
+						fully-typed client that <code>syncStore</code> consumes
+						for optimism + reconnect + offline. Row and result types
+						flow end-to-end from the route signatures.
 					</p>
 				</animated.div>
 
@@ -83,11 +81,11 @@ export const SyncEdenTypedView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The guiding decision behind the typed sync surface:{' '}
-						<em>don't build a parallel type system</em> — lean all the
-						way into Eden + TypeBox. Eden already solves typed
-						transport + validation; the sync engine only owns what Eden
-						can't: the stateful client (local cache, diffs, optimistic
-						writes, offline).
+						<em>don't build a parallel type system</em> — lean all
+						the way into Eden + TypeBox. Eden already solves typed
+						transport + validation; the sync engine only owns what
+						Eden can't: the stateful client (local cache, diffs,
+						optimistic writes, offline).
 					</p>
 					<PrismPlus
 						codeString={syncEdenLayering}
@@ -109,12 +107,14 @@ export const SyncEdenTypedView = ({
 					<p style={paragraphSpacedStyle}>
 						Hydrate and mutate are normal Elysia routes. The{' '}
 						<code>hydrateRoute</code> / <code>mutateRoute</code>{' '}
-						helpers turn a typed collection or mutation definition into
-						a route handler whose <strong>return type carries the row
-						or result type</strong>, so{' '}
-						<code>treaty&lt;typeof app&gt;()</code> infers it on the
-						client. TypeBox (<code>t</code>, re-exported by Elysia)
-						validates and types the <code>query</code> /{' '}
+						helpers turn a typed collection or mutation definition
+						into a route handler whose{' '}
+						<strong>
+							return type carries the row or result type
+						</strong>
+						, so <code>treaty&lt;typeof app&gt;()</code> infers it
+						on the client. TypeBox (<code>t</code>, re-exported by
+						Elysia) validates and types the <code>query</code> /{' '}
 						<code>body</code>:
 					</p>
 					<PrismPlus
@@ -125,12 +125,12 @@ export const SyncEdenTypedView = ({
 					/>
 					<p style={paragraphSpacedStyle}>
 						<strong>Why explicit routes, not a builder:</strong>{' '}
-						TypeScript can't infer route types from a runtime loop over
-						definitions. The only way to get Eden types without
-						reimplementing Elysia's route-chaining generics (fragile,
-						version-coupled) is real chained routes. They're also a
-						feature — per-route guards, rate limits, and{' '}
-						<code>derive</code> all work because they{' '}
+						TypeScript can't infer route types from a runtime loop
+						over definitions. The only way to get Eden types without
+						reimplementing Elysia's route-chaining generics
+						(fragile, version-coupled) is real chained routes.
+						They're also a feature — per-route guards, rate limits,
+						and <code>derive</code> all work because they{' '}
 						<em>are</em> Elysia routes.
 					</p>
 				</section>
@@ -145,9 +145,9 @@ export const SyncEdenTypedView = ({
 						Client — literally Eden + a generic store
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>syncStore</code> is generic: the row type is inferred
-						from <code>hydrate</code>'s return, mutate args + result
-						from <code>mutate</code>'s signature. No{' '}
+						<code>syncStore</code> is generic: the row type is
+						inferred from <code>hydrate</code>'s return, mutate args
+						+ result from <code>mutate</code>'s signature. No{' '}
 						<code>&lt;T&gt;</code>, no parallel schema, no custom
 						inference:
 					</p>
@@ -171,12 +171,12 @@ export const SyncEdenTypedView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>@absolutejs/absolute</code> auto-mounts{' '}
 						<code>@elysiajs/openapi</code> in dev by default. Every
-						Elysia route you declared — including the sync hydrate and
-						mutate routes — shows up at <code>/openapi</code> with the
-						Scalar UI, with its TypeBox schemas surfaced as
+						Elysia route you declared — including the sync hydrate
+						and mutate routes — shows up at <code>/openapi</code>{' '}
+						with the Scalar UI, with its TypeBox schemas surfaced as
 						parameters and response types. Visit{' '}
-						<code>http://localhost:3000/openapi</code> and explore it
-						without any extra wiring. Opt in for production via{' '}
+						<code>http://localhost:3000/openapi</code> and explore
+						it without any extra wiring. Opt in for production via{' '}
 						<code>absolute.config.ts</code>:
 					</p>
 					<PrismPlus
@@ -194,7 +194,8 @@ export const SyncEdenTypedView = ({
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						Optimism, offline, reconnect — what the store does for you
+						Optimism, offline, reconnect — what the store does for
+						you
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						All the stateful client work — optimistic overlays,
@@ -211,24 +212,24 @@ export const SyncEdenTypedView = ({
 					/>
 					<p style={paragraphSpacedStyle}>
 						If <code>useSyncCollection</code> from the{' '}
-						<a href="/documentation/sync-frameworks">Framework Hooks</a>{' '}
+						<a href="/documentation/sync-frameworks">
+							Framework Hooks
+						</a>{' '}
 						section is the batteries-included quickstart,{' '}
-						<code>syncStore</code> + <code>treaty&lt;typeof app&gt;</code>{' '}
-						is the path for projects that want end-to-end types and
-						control over how Eden is wired. Both rest on the same
-						engine and WebSocket protocol.
+						<code>syncStore</code> +{' '}
+						<code>treaty&lt;typeof app&gt;</code> is the path for
+						projects that want end-to-end types and control over how
+						Eden is wired. Both rest on the same engine and
+						WebSocket protocol.
 					</p>
 				</section>
 			</div>
 			{showDesktopToc ? (
-				<TableOfContents
-					items={tocItems}
-					themeSprings={themeSprings}
-				/>
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
+				items={tocItems}
 				onToggle={onTocToggle ?? (() => {})}
 				themeSprings={themeSprings}
 			/>

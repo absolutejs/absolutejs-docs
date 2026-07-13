@@ -28,6 +28,7 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { MiddlewareChainDiagram } from '../../diagrams/MiddlewareChainDiagram';
 import { LifecycleHooksList } from './LifecycleHooksList';
 import { MiddlewareComparisonGrid } from './MiddlewareComparisonGrid';
 import { ScopingLevelsList } from './ScopingLevelsList';
@@ -116,6 +117,7 @@ export const MiddlewareView = ({
 						order. Understanding where each hook runs helps you pick
 						the right one for the job.
 					</p>
+					<MiddlewareChainDiagram themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={lifecycleOverview}
 						language="typescript"

@@ -93,8 +93,8 @@ export const SyncWeHeardYouView = ({
 						Silent reconnect data loss
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The single most-cited bug class in this space.
-						Supabase Realtime{' '}
+						The single most-cited bug class in this space. Supabase
+						Realtime{' '}
 						<a
 							href="https://github.com/orgs/supabase/discussions/5641"
 							rel="noopener noreferrer"
@@ -121,9 +121,9 @@ export const SyncWeHeardYouView = ({
 						>
 							August 2025 reliability sprint
 						</a>{' '}
-						fixed multiple related drops after 1.0 GA. Firebase
-						RTDB had a publicly-reported 13-hour outage on a
-						customer's main product.
+						fixed multiple related drops after 1.0 GA. Firebase RTDB
+						had a publicly-reported 13-hour outage on a customer's
+						main product.
 					</p>
 					<PrismPlus
 						codeString={syncWeHeardYouReconnect}
@@ -152,8 +152,8 @@ export const SyncWeHeardYouView = ({
 						</a>{' '}
 						(36 👍, 13 🚀) is the #1 user-voted feature request:
 						include trees / joins. PowerSync rewrote their entire
-						query model into "Sync Streams" specifically because
-						the old DSL couldn't express joins. Convex has no JOIN
+						query model into "Sync Streams" specifically because the
+						old DSL couldn't express joins. Convex has no JOIN
 						operator at all; hand-coded joins in JS get ugly fast.
 						Firestore's eternal "no joins, no aggregations" gripe
 						pushes users off it.
@@ -220,8 +220,8 @@ export const SyncWeHeardYouView = ({
 						has been open since Feb 2023 asking for production
 						self-host; the official answer is "let us know, we'd
 						love to partner" (i.e. nope). PowerSync needs its own
-						Go/Node service. ElectricSQL needs a proxy in front
-						for auth.
+						Go/Node service. ElectricSQL needs a proxy in front for
+						auth.
 					</p>
 					<PrismPlus
 						codeString={syncWeHeardYouSelfHost}
@@ -251,17 +251,17 @@ export const SyncWeHeardYouView = ({
 						}}
 					>
 						<li>
-							<strong>Convex per-developer pricing</strong>:
-							"I don't like to pay extra fees simply because I
-							have a new intern joining the team."
+							<strong>Convex per-developer pricing</strong>: "I
+							don't like to pay extra fees simply because I have a
+							new intern joining the team."
 						</li>
 						<li>
 							<strong>Liveblocks MAU</strong>: "Every user that
 							triggers the SDK in a calendar month counts...
-							thousands of occasional reviewers can push costs
-							far beyond the budget for core editors." Prices
-							doubled on year-1 renewal in multiple cited
-							customer testimonials.
+							thousands of occasional reviewers can push costs far
+							beyond the budget for core editors." Prices doubled
+							on year-1 renewal in multiple cited customer
+							testimonials.
 						</li>
 						<li>
 							<strong>Cloudflare D1</strong>: a $5/month account
@@ -273,8 +273,8 @@ export const SyncWeHeardYouView = ({
 							>
 								$4,868 invoice
 							</a>{' '}
-							from two buggy workers in January 2026. No
-							circuit breaker.
+							from two buggy workers in January 2026. No circuit
+							breaker.
 						</li>
 						<li>
 							<strong>Firebase</strong>: HN reports of "$70k bill
@@ -308,15 +308,15 @@ export const SyncWeHeardYouView = ({
 						No sandboxed user-supplied mutations
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						This one is a feature gap rather than a complaint —
-						but it's stark. <strong>None</strong> of Convex, Zero,
-						InstantDB, PowerSync, RxDB, Liveblocks, ElectricSQL,
-						or TanStack DB ships a way to safely run mutation
-						logic supplied by a tenant, an AI agent, or a plugin
-						author. Convex actions, Zero custom mutators, and
-						Replicache mutators are all server-trusted code. If
-						you want a multi-tenant PaaS where customers write
-						their own logic, you build the sandbox yourself.
+						This one is a feature gap rather than a complaint — but
+						it's stark. <strong>None</strong> of Convex, Zero,
+						InstantDB, PowerSync, RxDB, Liveblocks, ElectricSQL, or
+						TanStack DB ships a way to safely run mutation logic
+						supplied by a tenant, an AI agent, or a plugin author.
+						Convex actions, Zero custom mutators, and Replicache
+						mutators are all server-trusted code. If you want a
+						multi-tenant PaaS where customers write their own logic,
+						you build the sandbox yourself.
 					</p>
 					<PrismPlus
 						codeString={syncWeHeardYouSandbox}
@@ -344,20 +344,18 @@ export const SyncWeHeardYouView = ({
 						Permissions thrash
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Zero deprecated its RLS-based permissions API in
-						release 0.23 and rewrote to "synced queries" + custom
-						mutators — <strong>two complete rewrites in &lt;18
-						months</strong>. Users who built on the old API had
-						to rebuild. Convex team's own admission (HN
-						discussion):{' '}
+						Zero deprecated its RLS-based permissions API in release
+						0.23 and rewrote to "synced queries" + custom mutators —{' '}
+						<strong>two complete rewrites in &lt;18 months</strong>.
+						Users who built on the old API had to rebuild. Convex
+						team's own admission (HN discussion):{' '}
 						<em>
-							"Auth story isn't as streamlined as for Firebase
-							or Supabase if you don't want to use Clerk or
-							Auth0."
+							"Auth story isn't as streamlined as for Firebase or
+							Supabase if you don't want to use Clerk or Auth0."
 						</em>{' '}
-						InstantDB plans to push CEL down to SQL predicates
-						as "future work" — today permissions evaluate
-						post-query on the result set.
+						InstantDB plans to push CEL down to SQL predicates as
+						"future work" — today permissions evaluate post-query on
+						the result set.
 					</p>
 					<PrismPlus
 						codeString={syncWeHeardYouPermissions}
@@ -377,13 +375,12 @@ export const SyncWeHeardYouView = ({
 						CRDT collab without hosting lock-in
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Liveblocks ships Yjs — but hosted-only, billed per
-						MAU, with the SDK review noting Yjs integration
-						breakage on framework upgrades (liveblocks #2099 broke
-						multi-window sync; #2973 caused Lexical desync; #3394
-						breaks Tiptap undo). Zero has "last-update-wins" as
-						the observed conflict behavior with{' '}
-						<em>no documented strategy</em>.
+						Liveblocks ships Yjs — but hosted-only, billed per MAU,
+						with the SDK review noting Yjs integration breakage on
+						framework upgrades (liveblocks #2099 broke multi-window
+						sync; #2973 caused Lexical desync; #3394 breaks Tiptap
+						undo). Zero has "last-update-wins" as the observed
+						conflict behavior with <em>no documented strategy</em>.
 					</p>
 					<PrismPlus
 						codeString={syncWeHeardYouCrdt}
@@ -411,10 +408,10 @@ export const SyncWeHeardYouView = ({
 						>
 							does NOT include real-time presence
 						</a>
-						; apps that need cursors or "who's online" with Zero
-						run additional infrastructure. Liveblocks ships
-						presence — as a separate billable product on top of
-						its storage one.
+						; apps that need cursors or "who's online" with Zero run
+						additional infrastructure. Liveblocks ships presence —
+						as a separate billable product on top of its storage
+						one.
 					</p>
 					<PrismPlus
 						codeString={syncWeHeardYouPresence}
@@ -442,10 +439,10 @@ export const SyncWeHeardYouView = ({
 						>
 							Liveblocks SDK review (Oct 2025)
 						</a>
-						: "Vue and Svelte examples wrap the low-level client
-						but lack first-class hooks or components. Angular and
-						plain JavaScript require even more scaffolding." AbsoluteJS
-						is not React-only: the broader framework surface covers
+						: "Vue and Svelte examples wrap the low-level client but
+						lack first-class hooks or components. Angular and plain
+						JavaScript require even more scaffolding." AbsoluteJS is
+						not React-only: the broader framework surface covers
 						React, Vue, HTML, HTMX, Angular, and Ember.
 					</p>
 					<PrismPlus
@@ -469,8 +466,8 @@ export const SyncWeHeardYouView = ({
 						Liveblocks doesn't ship them. RxDB doesn't. PowerSync
 						doesn't. ElectricSQL doesn't. If you want cron-like
 						behavior next to your sync engine, you bolt on a
-						separate worker process. Convex has them — Convex
-						users like that.
+						separate worker process. Convex has them — Convex users
+						like that.
 					</p>
 					<PrismPlus
 						codeString={syncWeHeardYouScheduled}
@@ -503,22 +500,23 @@ export const SyncWeHeardYouView = ({
 							<strong>
 								Per-tenant metrics as a system collection
 							</strong>{' '}
-							— sandbox runs already record{' '}
-							<code>cpuMs</code> / <code>heapBytes</code>; we'll
-							surface them as a queryable collection so you
-							can build per-tenant dashboards in sync itself.
+							— sandbox runs already record <code>cpuMs</code> /{' '}
+							<code>heapBytes</code>; we'll surface them as a
+							queryable collection so you can build per-tenant
+							dashboards in sync itself.
 						</li>
 						<li>
-							<strong><code>bridgeFetch</code></strong> —
-							credential-brokered HTTP from inside the sandbox.
+							<strong>
+								<code>bridgeFetch</code>
+							</strong>{' '}
+							— credential-brokered HTTP from inside the sandbox.
 							Auth headers attached on the host side; secrets
 							never enter JSC.
 						</li>
 						<li>
-							<strong>Pause/resume isolates</strong> — match
-							the E2B / Sprites / Anthropic primitive of
-							persistent agent state without ephemeral
-							churn.
+							<strong>Pause/resume isolates</strong> — match the
+							E2B / Sprites / Anthropic primitive of persistent
+							agent state without ephemeral churn.
 						</li>
 						<li>
 							<strong>Hosted absolutejs Cloud</strong> — the
@@ -536,12 +534,11 @@ export const SyncWeHeardYouView = ({
 							<code>@absolutejs/ai@0.0.12</code>
 						</a>{' '}
 						added <code>codeModeTool</code> &mdash; the typed-API
-						version of <code>codeExecutionTool</code>. Expose N
-						host tools as typed TS signatures; the model emits
-						ONE function chaining them; ~80% token reduction on
-						multi-tool turns (Cloudflare Dynamic Workers'
-						pattern). Sub-tool results stay out of the model's
-						context.
+						version of <code>codeExecutionTool</code>. Expose N host
+						tools as typed TS signatures; the model emits ONE
+						function chaining them; ~80% token reduction on
+						multi-tool turns (Cloudflare Dynamic Workers' pattern).
+						Sub-tool results stay out of the model's context.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Hit us with anything we missed. Issues at{' '}
@@ -557,14 +554,11 @@ export const SyncWeHeardYouView = ({
 				</section>
 			</div>
 			{showDesktopToc ? (
-				<TableOfContents
-					items={tocItems}
-					themeSprings={themeSprings}
-				/>
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
+				items={tocItems}
 				onToggle={onTocToggle ?? (() => {})}
 				themeSprings={themeSprings}
 			/>

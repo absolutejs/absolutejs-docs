@@ -46,8 +46,7 @@ const PrimitivesList = () => (
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>RouterLink / RouterView</strong>:
-			vue-router's components for navigation and the active-route
-			outlet.
+			vue-router's components for navigation and the active-route outlet.
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>useRouter / useRoute</strong>:
@@ -57,9 +56,9 @@ const PrimitivesList = () => (
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>setupApp</strong>: AbsoluteJS-specific
 			hook your page module exports. The handler invokes it between{' '}
-			<code>createSSRApp()</code> and{' '}
-			<code>renderToWebStream()</code> — the only window where
-			vue-router can be installed and resolved before SSR starts.
+			<code>createSSRApp()</code> and <code>renderToWebStream()</code> —
+			the only window where vue-router can be installed and resolved
+			before SSR starts.
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>applyVueRouterRedirect</strong>:
@@ -95,8 +94,7 @@ const RedirectFlowList = () => (
 		<li style={listItemStyle}>
 			After <code>await router.isReady()</code>, vue-router's{' '}
 			<code>currentRoute.value.fullPath</code> reflects every guard,
-			redirect rule, and{' '}
-			<code>{'next(\'/foo\')'}</code> call.
+			redirect rule, and <code>{"next('/foo')"}</code> call.
 		</li>
 		<li style={listItemStyle}>
 			If the resolved path differs from the requested URL, a redirect
@@ -163,10 +161,13 @@ export const VueSpaView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						vue-router's SSR contract is strict:{' '}
-						<code>app.use(router); router.push(url); await router.isReady();</code>{' '}
+						<code>
+							app.use(router); router.push(url); await
+							router.isReady();
+						</code>{' '}
 						all have to run between <code>createSSRApp()</code> and{' '}
-						<code>renderToWebStream()</code>. AbsoluteJS pages export
-						a <code>setupApp</code> function that the handler
+						<code>renderToWebStream()</code>. AbsoluteJS pages
+						export a <code>setupApp</code> function that the handler
 						invokes at exactly that point — that's the entire
 						contract for wiring vue-router into AbsoluteJS SSR.
 					</p>
@@ -247,10 +248,9 @@ export const VueSpaView = ({
 						}}
 					>
 						<strong style={strongStyle}>Important:</strong>{' '}
-						<code>await router.isReady()</code> on{' '}
-						<em>both</em> server and client. Awaiting only on the
-						server causes a hydration mismatch — the active-link
-						class on{' '}
+						<code>await router.isReady()</code> on <em>both</em>{' '}
+						server and client. Awaiting only on the server causes a
+						hydration mismatch — the active-link class on{' '}
 						<code>{'<RouterLink>'}</code> flickers on the first
 						render before the client router resolves.
 					</p>
@@ -293,8 +293,8 @@ export const VueSpaView = ({
 						<code>beforeEach</code> guards (return a string or
 						route-object), <code>redirect</code> rules on a route,
 						and manual <code>router.push()</code> from inside a
-						guard. To turn any of these into an HTTP 302 during
-						SSR, call the AbsoluteJS-shipped helper:
+						guard. To turn any of these into an HTTP 302 during SSR,
+						call the AbsoluteJS-shipped helper:
 					</p>
 					<PrismPlus
 						codeString={vueRedirectHelper}

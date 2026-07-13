@@ -360,9 +360,9 @@ export const CitraView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						ID tokens are verified in-house against the issuer&apos;s
-						JWKS (RS256 / ES256) via WebCrypto — no extra crypto
-						dependency:
+						ID tokens are verified in-house against the
+						issuer&apos;s JWKS (RS256 / ES256) via WebCrypto — no
+						extra crypto dependency:
 					</p>
 					<PrismPlus
 						codeString={verifyIdToken}

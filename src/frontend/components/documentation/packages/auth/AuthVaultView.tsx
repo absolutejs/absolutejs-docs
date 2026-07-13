@@ -56,10 +56,11 @@ export const AuthVaultView = ({
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Managed encrypted-blob storage on top of{' '}
-						<code>createSecretCipher</code>. The small-managed-product
-						version of WorkOS Vault: store/retrieve sensitive values
-						(Stripe customer ids, Notion tokens, …) per owner with
-						AES-GCM at rest and turnkey key rotation.
+						<code>createSecretCipher</code>. The
+						small-managed-product version of WorkOS Vault:
+						store/retrieve sensitive values (Stripe customer ids,
+						Notion tokens, …) per owner with AES-GCM at rest and
+						turnkey key rotation.
 					</p>
 				</animated.div>
 
@@ -76,8 +77,9 @@ export const AuthVaultView = ({
 						<code>createVault</code> pairs a cipher with a store and
 						returns <code>put</code> / <code>get</code> /{' '}
 						<code>list</code> / <code>delete</code> scoped to an{' '}
-						<code>ownerId</code> (typically a userId). The ciphertext
-						lives in the store; the key lives in your env.
+						<code>ownerId</code> (typically a userId). The
+						ciphertext lives in the store; the key lives in your
+						env.
 					</p>
 					<PrismPlus
 						codeString={vaultUsage}
@@ -98,13 +100,14 @@ export const AuthVaultView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>createFederatedTokenStore</code> +{' '}
-						<code>getOrRefreshFederatedTokens</code> wrap the vault into
-						Auth0&apos;s &quot;Token Vault&quot;: stash a user&apos;s
-						third-party OAuth tokens (Google Drive, Slack, GitHub) so
-						background jobs and AI agents can call those APIs as the
-						user, with automatic refresh ~30s before expiry. The package
-						never bundles a provider list; you bring the citra{' '}
-						<code>providerInstance</code> you already use for sign-in.
+						<code>getOrRefreshFederatedTokens</code> wrap the vault
+						into Auth0&apos;s &quot;Token Vault&quot;: stash a
+						user&apos;s third-party OAuth tokens (Google Drive,
+						Slack, GitHub) so background jobs and AI agents can call
+						those APIs as the user, with automatic refresh ~30s
+						before expiry. The package never bundles a provider
+						list; you bring the citra <code>providerInstance</code>{' '}
+						you already use for sign-in.
 					</p>
 					<PrismPlus
 						codeString={vaultFederatedTokens}
@@ -125,8 +128,8 @@ export const AuthVaultView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>rotateVaultKey</code> re-encrypts every entry from{' '}
-						<code>oldKey</code> to <code>newKey</code>, then you swap
-						your env to <code>newKey</code>. Same shape as{' '}
+						<code>oldKey</code> to <code>newKey</code>, then you
+						swap your env to <code>newKey</code>. Same shape as{' '}
 						<code>rotateMfaEncryptionKey</code>; run from a script.
 					</p>
 					<PrismPlus

@@ -50,10 +50,12 @@ const tocItems: TocItem[] = [
 const WhyShippedList = () => (
 	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
 		<li style={listItemStyle}>
-			<strong style={strongStyle}>Svelte has no first-party router.</strong>{' '}
-			SvelteKit is a meta-framework, not a router — and it owns the
-			whole app. AbsoluteJS users want a router that drops into a
-			single page, not a runtime that takes over.
+			<strong style={strongStyle}>
+				Svelte has no first-party router.
+			</strong>{' '}
+			SvelteKit is a meta-framework, not a router — and it owns the whole
+			app. AbsoluteJS users want a router that drops into a single page,
+			not a runtime that takes over.
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>
@@ -65,9 +67,7 @@ const WhyShippedList = () => (
 			sidesteps the entire problem.
 		</li>
 		<li style={listItemStyle}>
-			<strong style={strongStyle}>
-				API names align with SvelteKit
-			</strong>{' '}
+			<strong style={strongStyle}>API names align with SvelteKit</strong>{' '}
 			where there's an analog (<code>goto</code>, <code>page</code>,{' '}
 			<code>pushState</code>, <code>replaceState</code>) so users
 			migrating from SvelteKit don't relearn the primitives.
@@ -78,21 +78,20 @@ const WhyShippedList = () => (
 const RouterPropsList = () => (
 	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
 		<li style={listItemStyle}>
-			<strong style={strongStyle}>url</strong>: SSR URL passthrough.
-			On the server, the page handler auto-injects the request
-			pathname into props (see Page Handler section below). On the
-			client, omit it — the router reads <code>window.location</code>{' '}
-			directly.
+			<strong style={strongStyle}>url</strong>: SSR URL passthrough. On
+			the server, the page handler auto-injects the request pathname into
+			props (see Page Handler section below). On the client, omit it — the
+			router reads <code>window.location</code> directly.
 		</li>
 		<li style={listItemStyle}>
-			<strong style={strongStyle}>basepath</strong>: optional URL
-			prefix the router operates under. Stacks with parent{' '}
+			<strong style={strongStyle}>basepath</strong>: optional URL prefix
+			the router operates under. Stacks with parent{' '}
 			<code>{'<Router basepath>'}</code> blocks for nested routers.
 		</li>
 		<li style={listItemStyle}>
-			<strong style={strongStyle}>mode</strong>:{' '}
-			<code>'history'</code> (default, clean URLs) or{' '}
-			<code>'hash'</code> (<code>/#/path</code>, for static deploys).
+			<strong style={strongStyle}>mode</strong>: <code>'history'</code>{' '}
+			(default, clean URLs) or <code>'hash'</code> (<code>/#/path</code>,
+			for static deploys).
 		</li>
 	</ul>
 );
@@ -106,8 +105,8 @@ const RoutePropsList = () => (
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>content</strong>: a Svelte 5 snippet.
-			Receives a <code>params</code> argument typed from the path
-			literal — no annotation needed.
+			Receives a <code>params</code> argument typed from the path literal
+			— no annotation needed.
 		</li>
 	</ul>
 );
@@ -122,36 +121,32 @@ const MatchPriorityList = () => (
 			Then most static segments (<code>/a/b/:c</code> beats{' '}
 			<code>/a/:b/:c</code>).
 		</li>
-		<li style={listItemStyle}>
-			Then declaration order (tie-breaker).
-		</li>
+		<li style={listItemStyle}>Then declaration order (tie-breaker).</li>
 	</ul>
 );
 
 const LinkPropsList = () => (
 	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
 		<li style={listItemStyle}>
-			<strong style={strongStyle}>to</strong>: destination URL
-			(relative or absolute).
+			<strong style={strongStyle}>to</strong>: destination URL (relative
+			or absolute).
 		</li>
 		<li style={listItemStyle}>
-			<strong style={strongStyle}>prefetch</strong>:{' '}
-			<code>'hover'</code> (default), <code>'viewport'</code>, or{' '}
-			<code>'none'</code>.
+			<strong style={strongStyle}>prefetch</strong>: <code>'hover'</code>{' '}
+			(default), <code>'viewport'</code>, or <code>'none'</code>.
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>replaceState</strong>: use{' '}
-			<code>history.replaceState</code> instead of{' '}
-			<code>pushState</code>.
+			<code>history.replaceState</code> instead of <code>pushState</code>.
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>noScroll</strong>,{' '}
-			<strong style={strongStyle}>keepFocus</strong>: pass-through to
-			the underlying <code>goto()</code>.
+			<strong style={strongStyle}>keepFocus</strong>: pass-through to the
+			underlying <code>goto()</code>.
 		</li>
 		<li style={listItemStyle}>
-			All standard <code>{'<a>'}</code> attributes pass through
-			(<code>class</code>, <code>aria-*</code>, etc.).
+			All standard <code>{'<a>'}</code> attributes pass through (
+			<code>class</code>, <code>aria-*</code>, etc.).
 		</li>
 	</ul>
 );
@@ -163,13 +158,13 @@ const LinkBehaviorList = () => (
 			<code>goto()</code>.
 		</li>
 		<li style={listItemStyle}>
-			External URLs, <code>target="_blank"</code>,{' '}
-			<code>download</code>, modifier-key clicks (Ctrl/Cmd/Shift): fall
-			through to browser default. No interception.
+			External URLs, <code>target="_blank"</code>, <code>download</code>,
+			modifier-key clicks (Ctrl/Cmd/Shift): fall through to browser
+			default. No interception.
 		</li>
 		<li style={listItemStyle}>
-			No JS available: the rendered <code>{'<a href>'}</code> still
-			works as a normal link. Progressive enhancement by default.
+			No JS available: the rendered <code>{'<a href>'}</code> still works
+			as a normal link. Progressive enhancement by default.
 		</li>
 	</ul>
 );
@@ -204,8 +199,8 @@ export const SvelteSpaView = ({
 						Drive client-side sub-route navigation inside a Svelte
 						page using the AbsoluteJS-shipped router. Unlike React,
 						Vue, and Angular — which have battle-tested third-party
-						or first-party routers — Svelte's ecosystem doesn't
-						have a canonical answer, so AbsoluteJS ships one as a
+						or first-party routers — Svelte's ecosystem doesn't have
+						a canonical answer, so AbsoluteJS ships one as a
 						sub-export.
 					</p>
 				</animated.div>
@@ -343,11 +338,11 @@ export const SvelteSpaView = ({
 						{'<Route>'}
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Declarative path matcher. Renders its <code>content</code>{' '}
-						snippet at its own DOM location when active — so a
-						<code>{'<Route>'}</code> nested inside a layout{' '}
-						<code>{'<section>'}</code> renders inside that section,
-						not at the router's root.
+						Declarative path matcher. Renders its{' '}
+						<code>content</code> snippet at its own DOM location
+						when active — so a<code>{'<Route>'}</code> nested inside
+						a layout <code>{'<section>'}</code> renders inside that
+						section, not at the router's root.
 					</p>
 					<RoutePropsList />
 					<p
@@ -423,8 +418,8 @@ export const SvelteSpaView = ({
 					<p style={paragraphSpacedStyle}>
 						Reactive route state. Mirrors SvelteKit's{' '}
 						<code>page</code> from <code>$app/state</code> — same
-						shape, same property names, so SvelteKit code that
-						reads <code>page.url.pathname</code> ports over without
+						shape, same property names, so SvelteKit code that reads{' '}
+						<code>page.url.pathname</code> ports over without
 						changes.
 					</p>
 					<PrismPlus
@@ -477,8 +472,9 @@ export const SvelteSpaView = ({
 						Hash Mode
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Opt-in via <code>{'<Router mode="hash">'}</code>. Matches
-						against <code>window.location.hash</code> instead of
+						Opt-in via <code>{'<Router mode="hash">'}</code>.
+						Matches against <code>window.location.hash</code>{' '}
+						instead of
 						<code>pathname</code>. Useful for static deploys where
 						the host can't be configured to wildcard-route to a
 						single HTML file:

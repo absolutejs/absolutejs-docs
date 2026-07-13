@@ -2,12 +2,9 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
 	syncGraphBuilder,
-	syncGraphComparison,
 	syncGraphProblem,
-	syncGraphSolution,
-	syncGraphWhen
+	syncGraphSolution
 } from '../../../data/documentation/syncGraphDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	mainContentStyle,
@@ -20,9 +17,13 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { Callout } from '../../utils/Callout';
+import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+
+const noop = () => undefined;
 
 const tocItems: TocItem[] = [
 	{ href: '#sync-graph', label: 'Operator-graph queries' },
@@ -33,13 +34,58 @@ const tocItems: TocItem[] = [
 	{ href: '#numbers', label: 'Head-to-head numbers' }
 ];
 
+const benchmarkColumns = [
+	'Path',
+	'Live-update p50 (100k rows)',
+	'Engine cost shape'
+];
+
+const benchmarkRows: DocsTableCell[][] = [
+	[{ code: 'db.all + JS filter' }, '~580 ms', 'O(table size) per change'],
+	[
+		{ code: 'defineGraphCollection' },
+		'~42 ms — a 13.8× speedup',
+		'O(diff) per change'
+	]
+];
+
+const GraphCollectionUseCases = () => (
+	<ul style={{ margin: 0, paddingLeft: '1.1rem' }}>
+		<li>
+			filtered subscriptions over big tables (
+			<code>where assignee = $me</code>)
+		</li>
+		<li>
+			top-N + ORDER BY (<code>limit 50 ORDER BY priority desc</code>)
+		</li>
+		<li>
+			joins (<code>orders</code> + their <code>orderItems</code>)
+		</li>
+		<li>
+			aggregations (<code>groupBy</code> + sum/count)
+		</li>
+		<li>
+			any case where you'd otherwise re-read the table and filter in JS
+		</li>
+	</ul>
+);
+
+const ReactiveQueryUseCases = () => (
+	<ul style={{ margin: 0, paddingLeft: '1.1rem' }}>
+		<li>the query genuinely depends on every row (e.g. a global count)</li>
+		<li>
+			the table is small enough that O(table) is cheap (&lt; ~1k rows)
+		</li>
+		<li>the query is one-off / not subscribed to under load</li>
+	</ul>
+);
+
 export const SyncGraphCollectionsView = ({
 	themeSprings,
 	tocOpen,
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -55,20 +101,19 @@ export const SyncGraphCollectionsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1
-						id="sync-graph"
-						style={h1Style(isMobileOrTablet)}
-					>
+					<h1 id="sync-graph" style={h1Style(isMobileOrTablet)}>
 						Operator-graph queries
 					</h1>
 					<p style={paragraphLargeStyle}>
 						<code>defineGraphCollection</code> is the path for
 						ranged subscriptions over big tables. A declarative
-						builder (<code>query(source).filter(...).orderBy(...)</code>){' '}
-						compiles into an incremental operator graph: the source's{' '}
-						<code>hydrate</code> pushes filters to SQL, and incremental
-						changes flow through only the operators they touch — so
-						live-update latency stays bounded as the table grows.
+						builder (
+						<code>query(source).filter(...).orderBy(...)</code>){' '}
+						compiles into an incremental operator graph: the
+						source's <code>hydrate</code> pushes filters to SQL, and
+						incremental changes flow through only the operators they
+						touch — so live-update latency stays bounded as the
+						table grows.
 					</p>
 				</animated.div>
 
@@ -82,9 +127,9 @@ export const SyncGraphCollectionsView = ({
 						The default-path cost
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The default <code>defineReactiveQuery</code> path is fine
-						for small tables, but its body re-runs on every change to
-						the tables it read. With a naïve{' '}
+						The default <code>defineReactiveQuery</code> path is
+						fine for small tables, but its body re-runs on every
+						change to the tables it read. With a naïve{' '}
 						<code>db.all('tasks').filter(...)</code>, that's O(table
 						size) per change — bench-measured at ~580 ms live-update
 						latency at 100k rows:
@@ -104,7 +149,8 @@ export const SyncGraphCollectionsView = ({
 						style={gradientHeadingStyle(themeSprings)}
 						themeSprings={themeSprings}
 					>
-						<code>defineGraphCollection</code> — bounded live updates
+						<code>defineGraphCollection</code> — bounded live
+						updates
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The graph collection compiles your{' '}
@@ -123,11 +169,14 @@ export const SyncGraphCollectionsView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						<strong>The 13.8× win at 100k rows</strong> isn't magic —
-						the engine simply stops re-scanning the whole table.
-						Cold-subscribe also improves (~2.7× at 100k) because the
-						initial snapshot is the filtered SQL result, not the whole
-						table.
+						<strong>The 13.8× win at 100k rows</strong> isn't magic
+						— the engine simply stops re-scanning the whole table.
+						Live-update p50 drops to ~42 ms, bounded and independent
+						of table size: the operator graph routes the changed row
+						through this subscriber's pipeline; the other 99,800+
+						rows aren't touched. Cold-subscribe also improves (~2.7×
+						at 100k) because the initial snapshot is the filtered
+						SQL result, not the whole table.
 					</p>
 				</section>
 
@@ -155,9 +204,11 @@ export const SyncGraphCollectionsView = ({
 						Joins and aggregations are equally incremental — adding
 						one <code>orderItem</code> updates the matching{' '}
 						<code>order</code>'s row in the result, not every order.
-						See <code>JoinOptions</code> / <code>GroupByOptions</code>{' '}
-						/ <code>OrderByQueryOptions</code> in{' '}
-						<code>@absolutejs/sync/engine</code> for the full surface.
+						See <code>JoinOptions</code> /{' '}
+						<code>GroupByOptions</code> /{' '}
+						<code>OrderByQueryOptions</code> in{' '}
+						<code>@absolutejs/sync/engine</code> for the full
+						surface.
 					</p>
 				</section>
 
@@ -170,12 +221,24 @@ export const SyncGraphCollectionsView = ({
 					>
 						When to reach for it
 					</AnchorHeading>
-					<PrismPlus
-						codeString={syncGraphWhen}
-						language="markdown"
-						showLineNumbers={false}
+					<p style={paragraphSpacedStyle}>
+						Use it when the query body would otherwise be O(table
+						size) on every change:
+					</p>
+					<Callout
 						themeSprings={themeSprings}
-					/>
+						title="Reach for defineGraphCollection when"
+						variant="success"
+					>
+						<GraphCollectionUseCases />
+					</Callout>
+					<Callout
+						themeSprings={themeSprings}
+						title="Stick with defineReactiveQuery when"
+						variant="note"
+					>
+						<ReactiveQueryUseCases />
+					</Callout>
 				</section>
 
 				<section style={sectionStyle}>
@@ -189,8 +252,8 @@ export const SyncGraphCollectionsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Same workload, same engine, same hardware — only the
-						query path differs. Full distribution +
-						cold-subscribe numbers in{' '}
+						query path differs. Full distribution + cold-subscribe
+						numbers in{' '}
 						<a
 							href="https://github.com/absolutejs/benchmarks/blob/main/sync/RESULTS.md"
 							rel="noopener noreferrer"
@@ -200,24 +263,24 @@ export const SyncGraphCollectionsView = ({
 						</a>
 						:
 					</p>
-					<PrismPlus
-						codeString={syncGraphComparison}
-						language="markdown"
-						showLineNumbers={false}
+					<DocsTable
+						columns={benchmarkColumns}
+						rows={benchmarkRows}
 						themeSprings={themeSprings}
 					/>
+					<p style={paragraphSpacedStyle}>
+						The bench scripts live in absolutejs/benchmarks under{' '}
+						<code>sync/scripts/reactive/</code>.
+					</p>
 				</section>
 			</div>
 			{showDesktopToc ? (
-				<TableOfContents
-					items={tocItems}
-					themeSprings={themeSprings}
-				/>
+				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
-				onToggle={onTocToggle ?? (() => {})}
+				items={tocItems}
+				onToggle={onTocToggle ?? noop}
 				themeSprings={themeSprings}
 			/>
 		</div>

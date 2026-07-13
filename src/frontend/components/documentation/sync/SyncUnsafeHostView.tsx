@@ -61,19 +61,18 @@ export const SyncUnsafeHostView = ({
 					</h1>
 					<p style={paragraphLargeStyle}>
 						<code>@absolutejs/sync@1.12.0</code> adds an opt-in
-						escape hatch on{' '}
-						<code>sandboxedHandler</code>. By default, a
-						sandboxed mutation is hermetic — it can read{' '}
+						escape hatch on <code>sandboxedHandler</code>. By
+						default, a sandboxed mutation is hermetic — it can read{' '}
 						<code>args</code> and <code>ctx</code> and call{' '}
-						<code>actions.*</code>, nothing else. When a
-						handler explicitly needs to reach a third-party
-						API, queue, mailer, or any other side effect that
-						lives on the host, you declare those host
-						functions in <code>sandbox.unsafeHost</code> and
-						the engine exposes them to the sandbox-side
+						<code>actions.*</code>, nothing else. When a handler
+						explicitly needs to reach a third-party API, queue,
+						mailer, or any other side effect that lives on the host,
+						you declare those host functions in{' '}
+						<code>sandbox.unsafeHost</code> and the engine exposes
+						them to the sandbox-side
 						<code>unsafeHost</code> Proxy. The name is loud on
-						purpose: every appearance in source code says
-						"this leaves the safe-deterministic surface."
+						purpose: every appearance in source code says "this
+						leaves the safe-deterministic surface."
 					</p>
 				</animated.div>
 
@@ -95,22 +94,20 @@ export const SyncUnsafeHostView = ({
 						>
 							<code>examples/sync</code>
 						</a>{' '}
-						app's React page renders an{' '}
-						<code>UnsafeHostPanel</code> with a form that
-						fires a sandboxed <code>audit:emit</code>{' '}
-						mutation. The handler runs inside isolated-jsc,
-						reaches through to{' '}
-						<code>unsafeHost.shipToWebhook</code> (a stand-in
-						for a real outbound integration), and writes the
-						resulting record through{' '}
-						<code>actions.insert('audit_log', …)</code>. The
-						panel reads two signals: the live{' '}
-						<code>audit_log</code> collection (proving the
-						transactional write committed) and a host-side
-						counter exposed at{' '}
-						<code>/sync/audit/webhook-calls</code> (proving
-						the host fn fired). The Playwright test asserts
-						both effects landed.
+						app's React page renders an <code>UnsafeHostPanel</code>{' '}
+						with a form that fires a sandboxed{' '}
+						<code>audit:emit</code> mutation. The handler runs
+						inside isolated-jsc, reaches through to{' '}
+						<code>unsafeHost.shipToWebhook</code> (a stand-in for a
+						real outbound integration), and writes the resulting
+						record through{' '}
+						<code>actions.insert('audit_log', …)</code>. The panel
+						reads two signals: the live <code>audit_log</code>{' '}
+						collection (proving the transactional write committed)
+						and a host-side counter exposed at{' '}
+						<code>/sync/audit/webhook-calls</code> (proving the host
+						fn fired). The Playwright test asserts both effects
+						landed.
 					</p>
 				</section>
 
@@ -124,45 +121,41 @@ export const SyncUnsafeHostView = ({
 						When to reach for it
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Convex calls these "actions" — non-deterministic
-						entry points that can talk to the outside world.
-						Sync's escape hatch is the same trade with a
-						different shape: instead of a separate mutation
-						kind, the same{' '}
+						Convex calls these "actions" — non-deterministic entry
+						points that can talk to the outside world. Sync's escape
+						hatch is the same trade with a different shape: instead
+						of a separate mutation kind, the same{' '}
 						<code>sandboxedHandler</code> can interleave
-						deterministic writes (via <code>actions.*</code>,
-						which the engine batches and rolls back on retry)
-						with explicit host calls (via{' '}
-						<code>unsafeHost.*</code>, which it does not).
-						Use it when:
+						deterministic writes (via <code>actions.*</code>, which
+						the engine batches and rolls back on retry) with
+						explicit host calls (via <code>unsafeHost.*</code>,
+						which it does not). Use it when:
 					</p>
 					<ul style={paragraphSpacedStyle}>
 						<li>
-							You need to charge a card, send an email,
-							push to a queue, or otherwise touch the
-							outside world during a mutation.
+							You need to charge a card, send an email, push to a
+							queue, or otherwise touch the outside world during a
+							mutation.
 						</li>
 						<li>
-							The host call has an idempotency story you
-							can pass through (Stripe's{' '}
-							<code>Idempotency-Key</code>, SQS's{' '}
-							<code>MessageDeduplicationId</code>, a
-							row-keyed upsert), OR you've turned off
-							retries on the mutation.
+							The host call has an idempotency story you can pass
+							through (Stripe's <code>Idempotency-Key</code>,
+							SQS's <code>MessageDeduplicationId</code>, a
+							row-keyed upsert), OR you've turned off retries on
+							the mutation.
 						</li>
 						<li>
-							The work belongs inside the mutation's call
-							graph — the model or the API caller should
-							see one operation, not a chain of two.
+							The work belongs inside the mutation's call graph —
+							the model or the API caller should see one
+							operation, not a chain of two.
 						</li>
 					</ul>
 					<p style={paragraphSpacedStyle}>
-						If the host call shouldn't run on retry at all,
-						model it as a follow-up step (a schedule, a
-						webhook, an HTTP-route side effect after the
-						mutation commits). The escape hatch is for
-						"inside the same call graph and we know what
-						we're doing" — not for "I needed I/O and
+						If the host call shouldn't run on retry at all, model it
+						as a follow-up step (a schedule, a webhook, an
+						HTTP-route side effect after the mutation commits). The
+						escape hatch is for "inside the same call graph and we
+						know what we're doing" — not for "I needed I/O and
 						sandboxedHandler was inconvenient."
 					</p>
 				</section>
@@ -178,13 +171,12 @@ export const SyncUnsafeHostView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The wrapped handler signature is now{' '}
-						<code>(args, ctx, actions, unsafeHost)</code>.
-						Existing handlers ignore the 4th param; the
-						change is fully backwards-compatible. Without an{' '}
-						<code>unsafeHost</code> map the Proxy throws on
-						every access, so a handler that "didn't know it
-						was hermetic" can't accidentally pierce the
-						sandbox.
+						<code>(args, ctx, actions, unsafeHost)</code>. Existing
+						handlers ignore the 4th param; the change is fully
+						backwards-compatible. Without an <code>unsafeHost</code>{' '}
+						map the Proxy throws on every access, so a handler that
+						"didn't know it was hermetic" can't accidentally pierce
+						the sandbox.
 					</p>
 					<PrismPlus
 						codeString={syncUnsafeHostSignature}
@@ -204,12 +196,12 @@ export const SyncUnsafeHostView = ({
 						Why the loud name
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>unsafeHost</code> is deliberately loud.
-						Every appearance in source tells the reader two
-						things at once: this call leaves the sandbox,
-						and the deterministic-mutation guarantees stop
-						here. Grep-friendly for CI, conspicuous in
-						review diffs, hard to mistake for a safe primitive.
+						<code>unsafeHost</code> is deliberately loud. Every
+						appearance in source tells the reader two things at
+						once: this call leaves the sandbox, and the
+						deterministic-mutation guarantees stop here.
+						Grep-friendly for CI, conspicuous in review diffs, hard
+						to mistake for a safe primitive.
 					</p>
 					<PrismPlus
 						codeString={syncUnsafeHostName}
@@ -229,20 +221,18 @@ export const SyncUnsafeHostView = ({
 						The retry pitfall
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The engine's per-mutation retry wrapper sits
-						OUTSIDE the sandbox. If the handler throws after
-						an <code>unsafeHost</code> call has already
-						happened, and the engine retries, the host fn
-						fires again. The mutation's writes are
-						transactional — they rolled back. The host fn's
-						side effect is not.
+						The engine's per-mutation retry wrapper sits OUTSIDE the
+						sandbox. If the handler throws after an{' '}
+						<code>unsafeHost</code> call has already happened, and
+						the engine retries, the host fn fires again. The
+						mutation's writes are transactional — they rolled back.
+						The host fn's side effect is not.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						Three escapes, in order of preference: make the
-						host fn idempotent at the protocol layer; turn
-						off retries on the mutation; or move the host
-						call to a follow-up step that runs after the
-						mutation commits.
+						Three escapes, in order of preference: make the host fn
+						idempotent at the protocol layer; turn off retries on
+						the mutation; or move the host call to a follow-up step
+						that runs after the mutation commits.
 					</p>
 					<PrismPlus
 						codeString={syncUnsafeHostRetry}
@@ -262,12 +252,11 @@ export const SyncUnsafeHostView = ({
 						Failure modes
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Two failure paths are visible and both are
-						actionable. Calling a host fn that wasn't
-						declared throws a typo-friendly error with the
-						name in it; a host fn that throws propagates the
-						error into the sandbox as a normal JS{' '}
-						<code>Error</code> the handler can{' '}
+						Two failure paths are visible and both are actionable.
+						Calling a host fn that wasn't declared throws a
+						typo-friendly error with the name in it; a host fn that
+						throws propagates the error into the sandbox as a normal
+						JS <code>Error</code> the handler can{' '}
 						<code>try / catch</code>.
 					</p>
 					<PrismPlus
@@ -282,8 +271,8 @@ export const SyncUnsafeHostView = ({
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
+				items={tocItems}
 				onToggle={onTocToggle ?? (() => {})}
 				themeSprings={themeSprings}
 			/>

@@ -126,12 +126,13 @@ export const AbsoluteAuthView = ({
 					<p style={paragraphSpacedStyle}>
 						getUser is the one required hook, and it carries its
 						weight: it resolves your app user from a session subject
-						and is the single source of truth for your User type. The
-						type is inferred from what getUser returns — so you rarely
-						need a &lt;User&gt; argument — and every other user-typed
-						callback (createUser, getUserByEmail, onCallbackSuccess) is
-						checked against that same shape. A user that doesn&apos;t
-						line up is a compile error, not a runtime surprise.
+						and is the single source of truth for your User type.
+						The type is inferred from what getUser returns — so you
+						rarely need a &lt;User&gt; argument — and every other
+						user-typed callback (createUser, getUserByEmail,
+						onCallbackSuccess) is checked against that same shape. A
+						user that doesn&apos;t line up is a compile error, not a
+						runtime surprise.
 					</p>
 				</section>
 

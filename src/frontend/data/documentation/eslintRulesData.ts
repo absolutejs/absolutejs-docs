@@ -650,7 +650,7 @@ const dbPath = join(projectRoot, 'app.sqlite'); // anchored to the app root`,
 			},
 			{
 				code: `// Bundler-safe asset reference — rewritten at build time
-const worker = new URL('./worker.js', import.meta.url);
+const worker = new URL${''}('./worker.js', import.meta.url);
 
 const mode = import.meta.env.MODE; // not a filesystem path
 const base = process.cwd();        // also fine`
@@ -658,7 +658,7 @@ const base = process.cwd();        // also fine`
 		],
 		details: [
 			'Disallows deriving filesystem paths from a module’s own location: `import.meta.dir`, `import.meta.dirname`, `import.meta.filename`, and `fileURLToPath(import.meta.url)`. These resolve relative to the current file — your `src/` tree under `absolute dev`, but the bundled `dist/` under `absolute start` — so module-relative runtime and data paths silently break in production, and only there, since dev runs from source.',
-			'Anchor runtime paths to `projectRoot` from `@absolutejs/absolute` (or `process.cwd()`) instead. The bundler-safe `new URL("./asset", import.meta.url)` asset form is explicitly allowed, as are bare `import.meta.url` and `import.meta.env`.',
+			'Anchor runtime paths to `projectRoot` from `@absolutejs/absolute` (or `process.cwd()`) instead. The bundler-safe asset form — `new URL` with a literal path and `import.meta.url` — is explicitly allowed, as are bare `import.meta.url` and `import.meta.env`.',
 			'This targets application server code. A library that locates its own shipped assets is a legitimate exception — `projectRoot` points at the consuming app, not the package — so disable the rule for those files via an override.'
 		],
 		fixable: false,

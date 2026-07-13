@@ -64,8 +64,8 @@ export const AuthAuditIntegrityView = ({
 					<p style={paragraphLargeStyle}>
 						Hash-chain the audit log so any modified, removed, or
 						reordered entry is detectable — something WorkOS&apos;s
-						audit product doesn&apos;t offer — and stream every event to
-						your SIEM.
+						audit product doesn&apos;t offer — and stream every
+						event to your SIEM.
 					</p>
 				</animated.div>
 
@@ -79,11 +79,12 @@ export const AuthAuditIntegrityView = ({
 						Tamper-evident chain
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>createTamperEvidentSink</code> wraps any audit sink
-						and hash-chains each event to the one before it (HMAC-SHA256
-						with a secret, so an attacker who can write rows still
-						can&apos;t forge the chain). The link is stored under{' '}
-						<code>metadata.__integrity</code> — no schema change.
+						<code>createTamperEvidentSink</code> wraps any audit
+						sink and hash-chains each event to the one before it
+						(HMAC-SHA256 with a secret, so an attacker who can write
+						rows still can&apos;t forge the chain). The link is
+						stored under <code>metadata.__integrity</code> — no
+						schema change.
 					</p>
 					<PrismPlus
 						codeString={auditTamperEvident}
@@ -104,15 +105,15 @@ export const AuthAuditIntegrityView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						A single in-process chain can&apos;t span concurrent
-						instances or survive a redeploy. So the chain is keyed per{' '}
-						<code>writerId</code> — by default a fresh random id per
-						process, so every instance and deploy is a self-contained
-						chain that never forks another writer&apos;s.{' '}
-						<code>verifyAuditChain</code> groups by <code>writerId</code>{' '}
-						and verifies each independently. A single-writer deployment
-						can pass a stable <code>writerId</code> (with{' '}
-						<code>loadWriterHead</code>) to keep one continuous chain
-						across restarts.
+						instances or survive a redeploy. So the chain is keyed
+						per <code>writerId</code> — by default a fresh random id
+						per process, so every instance and deploy is a
+						self-contained chain that never forks another
+						writer&apos;s. <code>verifyAuditChain</code> groups by{' '}
+						<code>writerId</code> and verifies each independently. A
+						single-writer deployment can pass a stable{' '}
+						<code>writerId</code> (with <code>loadWriterHead</code>)
+						to keep one continuous chain across restarts.
 					</p>
 					<PrismPlus
 						codeString={auditSharding}
@@ -132,10 +133,10 @@ export const AuthAuditIntegrityView = ({
 						Verify the chain
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>verifyAuditChain</code> walks the events oldest-first,
-						recomputes each link, and returns the index of the first
-						break — deterministic even after a jsonb round-trip reorders
-						keys.
+						<code>verifyAuditChain</code> walks the events
+						oldest-first, recomputes each link, and returns the
+						index of the first break — deterministic even after a
+						jsonb round-trip reorders keys.
 					</p>
 					<PrismPlus
 						codeString={auditVerify}
@@ -155,11 +156,12 @@ export const AuthAuditIntegrityView = ({
 						Retention &amp; CSV export
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>exportAuditCsv</code> renders events to RFC-4180 CSV (the
-						parity piece to WorkOS&apos;s CSV export), and{' '}
-						<code>auditStore.prune(before)</code> enforces a retention
-						window by deleting older events. Pruning necessarily drops the
-						tamper-evidence of the removed rows.
+						<code>exportAuditCsv</code> renders events to RFC-4180
+						CSV (the parity piece to WorkOS&apos;s CSV export), and{' '}
+						<code>auditStore.prune(before)</code> enforces a
+						retention window by deleting older events. Pruning
+						necessarily drops the tamper-evidence of the removed
+						rows.
 					</p>
 					<PrismPlus
 						codeString={auditRetention}
@@ -181,8 +183,8 @@ export const AuthAuditIntegrityView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>createSiemLogStream</code> forwards every event to
 						Datadog, Splunk HEC, or any HTTP collector — the parity
-						piece to WorkOS Log Streams. Best-effort and isolated per
-						endpoint.
+						piece to WorkOS Log Streams. Best-effort and isolated
+						per endpoint.
 					</p>
 					<PrismPlus
 						codeString={auditSiem}

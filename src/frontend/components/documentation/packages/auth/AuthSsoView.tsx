@@ -69,8 +69,8 @@ export const AuthSsoView = ({
 					<p style={paragraphLargeStyle}>
 						Per-organization SAML &amp; OIDC single sign-on, SCIM
 						directory sync, and a headless admin portal so a
-						customer&apos;s IT can self-configure — the WorkOS model,
-						in-house and dependency-light.
+						customer&apos;s IT can self-configure — the WorkOS
+						model, in-house and dependency-light.
 					</p>
 				</animated.div>
 
@@ -86,9 +86,9 @@ export const AuthSsoView = ({
 					<p style={paragraphSpacedStyle}>
 						Each organization connects its IdP once via an
 						SSOConnectionStore (in-memory, Postgres, or Neon). The
-						verified identity is handed to your getSsoUser hook, which
-						maps it to your user — minting the same session as every
-						other flow.
+						verified identity is handed to your getSsoUser hook,
+						which maps it to your user — minting the same session as
+						every other flow.
 					</p>
 					<PrismPlus
 						codeString={ssoConnections}
@@ -109,9 +109,9 @@ export const AuthSsoView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Discovery-driven: store only the issuer and client
-						credentials. The id_token is verified in-house against the
-						issuer&apos;s JWKS (RS256/ES256), with no extra crypto
-						dependency.
+						credentials. The id_token is verified in-house against
+						the issuer&apos;s JWKS (RS256/ES256), with no extra
+						crypto dependency.
 					</p>
 					<PrismPlus
 						codeString={ssoOidc}
@@ -131,10 +131,10 @@ export const AuthSsoView = ({
 						SAML
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						SAML support sits behind a dependency-light SamlAdapter you
-						supply (wrapping a vetted XML-DSig library). The package
-						owns route wiring, cookies, and session minting; your
-						adapter owns the XML and signature validation.
+						SAML support sits behind a dependency-light SamlAdapter
+						you supply (wrapping a vetted XML-DSig library). The
+						package owns route wiring, cookies, and session minting;
+						your adapter owns the XML and signature validation.
 					</p>
 					<PrismPlus
 						codeString={ssoSaml}
@@ -154,14 +154,15 @@ export const AuthSsoView = ({
 						SAML IdP role
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						The inverse of the SP role: your app issues SAML assertions
-						to legacy SaaS RPs (Salesforce, Workday, Concur — anything
-						older than OIDC). Register each relying party in the{' '}
+						The inverse of the SP role: your app issues SAML
+						assertions to legacy SaaS RPs (Salesforce, Workday,
+						Concur — anything older than OIDC). Register each
+						relying party in the{' '}
 						<code>samlServiceProviderStore</code>; mount{' '}
 						<code>samlIdpRoutes</code> with a{' '}
 						<code>SamlIdpAdapter</code> that wraps the same vetted
-						XML-DSig library the SP role uses. Both SP-initiated (via
-						AuthnRequest) and IdP-initiated SSO are supported.
+						XML-DSig library the SP role uses. Both SP-initiated
+						(via AuthnRequest) and IdP-initiated SSO are supported.
 					</p>
 					<PrismPlus
 						codeString={ssoSamlIdp}
@@ -183,9 +184,9 @@ export const AuthSsoView = ({
 					<p style={paragraphSpacedStyle}>
 						Home-realm discovery routes a user to their org&apos;s
 						connection by email domain. SAML Single Logout is fully
-						signed on both sides — SP-initiated logout sends a signed
-						LogoutRequest, and the /slo endpoint completes or replies
-						to IdP-initiated logout.
+						signed on both sides — SP-initiated logout sends a
+						signed LogoutRequest, and the /slo endpoint completes or
+						replies to IdP-initiated logout.
 					</p>
 					<PrismPlus
 						codeString={ssoDiscovery}
@@ -207,8 +208,8 @@ export const AuthSsoView = ({
 					<p style={paragraphSpacedStyle}>
 						Auto-provision users (and optionally groups) from Okta /
 						Azure AD. The package owns the SCIM 2.0 protocol and
-						per-org bearer-token auth; you map resources to your user
-						store through hooks.
+						per-org bearer-token auth; you map resources to your
+						user store through hooks.
 					</p>
 					<PrismPlus
 						codeString={scimSetup}
@@ -217,12 +218,13 @@ export const AuthSsoView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						<code>0.38.0</code> added the required SCIM 2.0 discovery
-						endpoints (<code>/Schemas</code>, <code>/Schemas/:id</code>,{' '}
-						<code>/ResourceTypes</code>, <code>/ResourceTypes/:id</code>){' '}
-						that Okta and Azure AD probe during connection setup — they
-						work automatically with the core User + Group schemas, and
-						extend through <code>customAttributes.schemas</code>.
+						<code>0.38.0</code> added the required SCIM 2.0
+						discovery endpoints (<code>/Schemas</code>,{' '}
+						<code>/Schemas/:id</code>, <code>/ResourceTypes</code>,{' '}
+						<code>/ResourceTypes/:id</code>) that Okta and Azure AD
+						probe during connection setup — they work automatically
+						with the core User + Group schemas, and extend through{' '}
+						<code>customAttributes.schemas</code>.
 					</p>
 				</section>
 
@@ -237,15 +239,16 @@ export const AuthSsoView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>defineScimAttributeMap</code> handles the Okta
-						admin&apos;s eternal pain: declarative bidirectional mapping
-						between an enterprise extension URI&apos;s claims (e.g.
+						admin&apos;s eternal pain: declarative bidirectional
+						mapping between an enterprise extension URI&apos;s
+						claims (e.g.
 						<code> manager</code>, <code>department</code>) and your
 						custom fields (<code>reporting_to</code>, etc.). The
-						package threads inbound JSON through <code>fromScim</code>{' '}
-						and surfaces it on <code>input.custom</code>;{' '}
-						<code>toScim</code> flows the other way. The declared
-						schemas show up automatically in <code>/Schemas</code> +{' '}
-						<code>/ResourceTypes</code>.
+						package threads inbound JSON through{' '}
+						<code>fromScim</code> and surfaces it on{' '}
+						<code>input.custom</code>; <code>toScim</code> flows the
+						other way. The declared schemas show up automatically in{' '}
+						<code>/Schemas</code> + <code>/ResourceTypes</code>.
 					</p>
 					<PrismPlus
 						codeString={scimAttributeMapping}
@@ -265,11 +268,12 @@ export const AuthSsoView = ({
 						SCIM Group Diff
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>diffScimGroupMembers</code> is a small set-diff helper
-						for <code>onScimGroupReplace</code> — compute{' '}
-						<code>{'{added, removed}'}</code> deltas against your existing
-						membership table without rolling your own loop. Keyed by{' '}
-						<code>member.value</code> (the user&apos;s SCIM id).
+						<code>diffScimGroupMembers</code> is a small set-diff
+						helper for <code>onScimGroupReplace</code> — compute{' '}
+						<code>{'{added, removed}'}</code> deltas against your
+						existing membership table without rolling your own loop.
+						Keyed by <code>member.value</code> (the user&apos;s SCIM
+						id).
 					</p>
 					<PrismPlus
 						codeString={scimGroupDelta}
@@ -289,11 +293,12 @@ export const AuthSsoView = ({
 						Admin Portal
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Mint a scoped, time-boxed setup link so a customer&apos;s
-						IT admin self-configures their SSO/SCIM connection. The
-						contract is JSON, so the portal page can be built in any
-						framework; connections take effect immediately because the
-						portal writes through the same stores.
+						Mint a scoped, time-boxed setup link so a
+						customer&apos;s IT admin self-configures their SSO/SCIM
+						connection. The contract is JSON, so the portal page can
+						be built in any framework; connections take effect
+						immediately because the portal writes through the same
+						stores.
 					</p>
 					<PrismPlus
 						codeString={portalSetup}

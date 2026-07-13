@@ -25,9 +25,9 @@ export const SitemapHowItWorksSection = ({ themeSprings }: ThemeProps) => (
 		<ul style={listStyle}>
 			<li style={listItemStyle}>
 				<strong style={strongStyle}>Discovers page routes</strong> :
-				walks every <code>GET</code> route registered on your Elysia
-				app and inspects each handler's source for a call to one of
-				the <code>handle*PageRequest</code> helpers (
+				walks every <code>GET</code> route registered on your Elysia app
+				and inspects each handler's source for a call to one of the{' '}
+				<code>handle*PageRequest</code> helpers (
 				<code>handleAngularPageRequest</code>,{' '}
 				<code>handleReactPageRequest</code>, etc.).
 			</li>
@@ -42,10 +42,10 @@ export const SitemapHowItWorksSection = ({ themeSprings }: ThemeProps) => (
 				non-dynamic, non-redirect leaf.
 			</li>
 			<li style={listItemStyle}>
-				<strong style={strongStyle}>Reads per-page metadata</strong>{' '}
-				: extracts any literal <code>{'sitemap: { ... }'}</code> option
-				you pass to a <code>handle*PageRequest</code> call and
-				applies it to that route's sitemap entries.
+				<strong style={strongStyle}>Reads per-page metadata</strong> :
+				extracts any literal <code>{'sitemap: { ... }'}</code> option
+				you pass to a <code>handle*PageRequest</code> call and applies
+				it to that route's sitemap entries.
 			</li>
 			<li style={listItemStyle}>
 				<strong style={strongStyle}>Filters non-emittable URLs</strong>{' '}
@@ -56,16 +56,16 @@ export const SitemapHowItWorksSection = ({ themeSprings }: ThemeProps) => (
 			</li>
 			<li style={listItemStyle}>
 				<strong style={strongStyle}>Writes sitemap.xml</strong> :
-				generates the XML and writes it to the build directory where
-				the static file server picks it up.
+				generates the XML and writes it to the build directory where the
+				static file server picks it up.
 			</li>
 		</ul>
 		<p style={paragraphSpacedStyle}>
-			This runs in the background and does not block server startup.
-			The sitemap is available at <code>/sitemap.xml</code> as soon as
-			generation completes. Everything happens via static source
-			analysis — no user code is invoked, no synthetic requests are
-			made, no framework bootstrap runs.
+			This runs in the background and does not block server startup. The
+			sitemap is available at <code>/sitemap.xml</code> as soon as
+			generation completes. Everything happens via static source analysis
+			— no user code is invoked, no synthetic requests are made, no
+			framework bootstrap runs.
 		</p>
 	</section>
 );

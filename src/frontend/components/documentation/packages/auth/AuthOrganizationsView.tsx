@@ -55,14 +55,17 @@ export const AuthOrganizationsView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="auth-organizations" style={h1Style(isMobileOrTablet)}>
+					<h1
+						id="auth-organizations"
+						style={h1Style(isMobileOrTablet)}
+					>
 						Organizations &amp; RBAC
 					</h1>
 					<p style={paragraphLargeStyle}>
-						First-class multi-tenancy: organizations, memberships, and
-						email invitations, plus org-scoped roles and a turnkey
-						permission check. This is the tenant spine the SSO, SCIM,
-						and authorization blocks hang off.
+						First-class multi-tenancy: organizations, memberships,
+						and email invitations, plus org-scoped roles and a
+						turnkey permission check. This is the tenant spine the
+						SSO, SCIM, and authorization blocks hang off.
 					</p>
 				</animated.div>
 
@@ -78,8 +81,8 @@ export const AuthOrganizationsView = ({
 					<p style={paragraphSpacedStyle}>
 						The organizations block adds an Organization entity and
 						user-to-org memberships, backed by one cohesive
-						OrganizationStore (in-memory, Postgres, or Neon). Creating
-						an org makes the caller its owner.
+						OrganizationStore (in-memory, Postgres, or Neon).
+						Creating an org makes the caller its owner.
 					</p>
 					<PrismPlus
 						codeString={organizationsSetup}
@@ -101,9 +104,9 @@ export const AuthOrganizationsView = ({
 					<p style={paragraphSpacedStyle}>
 						Invite teammates by email with a single-use,
 						hashed-at-rest token (the plaintext is returned once for
-						your email link). Accepting turns the invite into an active
-						membership. The whole flow is also exposed as pure
-						operations.
+						your email link). Accepting turns the invite into an
+						active membership. The whole flow is also exposed as
+						pure operations.
 					</p>
 					<PrismPlus
 						codeString={invitations}
@@ -123,11 +126,11 @@ export const AuthOrganizationsView = ({
 						JIT / domain assignment
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>autoAssignOrgsByEmail</code> auto-joins every new user to
-						the orgs their email domain maps to — call it from your
-						OAuth-callback or register hook. Idempotent (skips orgs the
-						user already belongs to); returns the orgs newly added, so you
-						can audit-log them.
+						<code>autoAssignOrgsByEmail</code> auto-joins every new
+						user to the orgs their email domain maps to — call it
+						from your OAuth-callback or register hook. Idempotent
+						(skips orgs the user already belongs to); returns the
+						orgs newly added, so you can audit-log them.
 					</p>
 					<PrismPlus
 						codeString={orgsJit}
@@ -148,10 +151,10 @@ export const AuthOrganizationsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Define org-scoped (or global) roles as slugs mapped to
-						permission slugs. createMembershipPermissionResolver turns
-						a member&apos;s roles into a ready-made hasPermission hook,
-						so RBAC is plug-and-play — the package stays
-						schema-agnostic.
+						permission slugs. createMembershipPermissionResolver
+						turns a member&apos;s roles into a ready-made
+						hasPermission hook, so RBAC is plug-and-play — the
+						package stays schema-agnostic.
 					</p>
 					<PrismPlus
 						codeString={rolesResolver}

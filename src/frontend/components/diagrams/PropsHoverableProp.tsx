@@ -1,105 +1,84 @@
-import { PROPS_HOVERABLE_PROP_LAYOUT } from '../../../constants';
+import { animated } from '@react-spring/web';
+import { CSSProperties } from 'react';
+import {
+	AnimatedCSSProperties,
+	ThemeSprings
+} from '../../../types/springTypes';
+import { diagramColors } from './diagramStyles';
 
 type PropsHoverablePropProps = {
-	accentSecondaryColor: string;
-	backgroundColor: string;
 	isHovered: boolean;
 	label: string;
 	onMouseEnter: () => void;
 	onMouseLeave: () => void;
-	textX: number;
-	textY: number;
+	themeSprings: ThemeSprings;
 	tooltipLabel: string;
-	tooltipTransform: string;
-	tooltipWidth: number;
 };
 
+const wrapperStyle: CSSProperties = {
+	cursor: 'pointer',
+	display: 'inline-block',
+	position: 'relative'
+};
+
+const themedAccentSecondary = (themeSprings: ThemeSprings) =>
+	themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? diagramColors.dark.accentSecondary
+			: diagramColors.light.accentSecondary
+	);
+
+const labelStyle = (themeSprings: ThemeSprings): AnimatedCSSProperties => ({
+	color: themedAccentSecondary(themeSprings),
+	fontWeight: 600,
+	textDecorationLine: 'underline',
+	textDecorationStyle: 'dotted',
+	textUnderlineOffset: '3px'
+});
+
+const tooltipStyle = (themeSprings: ThemeSprings): AnimatedCSSProperties => ({
+	background: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? diagramColors.dark.background
+			: diagramColors.light.background
+	),
+	border: themeSprings.theme.to((theme) =>
+		theme.endsWith('dark')
+			? `1.5px solid ${diagramColors.dark.accentSecondary}`
+			: `1.5px solid ${diagramColors.light.accentSecondary}`
+	),
+	borderRadius: '0.375rem',
+	bottom: 'calc(100% + 0.375rem)',
+	color: themedAccentSecondary(themeSprings),
+	fontFamily: 'JetBrains Mono, monospace',
+	fontSize: '0.8125rem',
+	fontWeight: 500,
+	left: '50%',
+	padding: '0.25rem 0.625rem',
+	position: 'absolute',
+	transform: 'translateX(-50%)',
+	whiteSpace: 'nowrap',
+	zIndex: 1
+});
+
 export const PropsHoverableProp = ({
-	accentSecondaryColor,
-	backgroundColor,
 	isHovered,
 	label,
 	onMouseEnter,
 	onMouseLeave,
-	textX,
-	textY,
-	tooltipLabel,
-	tooltipTransform,
-	tooltipWidth
+	themeSprings,
+	tooltipLabel
 }: PropsHoverablePropProps) => (
-	<g
+	<span
 		onMouseEnter={onMouseEnter}
 		onMouseLeave={onMouseLeave}
-		style={{ cursor: 'pointer' }}
+		style={wrapperStyle}
 	>
-		<rect
-			fill="transparent"
-			height={20}
-			width={
-				label.length *
-					PROPS_HOVERABLE_PROP_LAYOUT.hitAreaCharacterWidth +
-				PROPS_HOVERABLE_PROP_LAYOUT.hitAreaPaddingWidth
-			}
-			x={textX}
-			y={textY - PROPS_HOVERABLE_PROP_LAYOUT.hitAreaOffsetY}
-		/>
-		<text
-			fill={accentSecondaryColor}
-			fontFamily="monospace"
-			fontSize={13}
-			fontWeight={600}
-			x={textX}
-			y={textY}
-		>
-			{label}
-		</text>
+		<animated.span style={labelStyle(themeSprings)}>{label}</animated.span>
 		{isHovered && (
-			<PropsHoverTooltip
-				accentSecondaryColor={accentSecondaryColor}
-				backgroundColor={backgroundColor}
-				label={tooltipLabel}
-				tooltipTransform={tooltipTransform}
-				tooltipWidth={tooltipWidth}
-			/>
+			<animated.span role="tooltip" style={tooltipStyle(themeSprings)}>
+				{tooltipLabel}
+			</animated.span>
 		)}
-	</g>
-);
-
-type PropsHoverTooltipProps = {
-	accentSecondaryColor: string;
-	backgroundColor: string;
-	label: string;
-	tooltipTransform: string;
-	tooltipWidth: number;
-};
-
-const PropsHoverTooltip = ({
-	accentSecondaryColor,
-	backgroundColor,
-	label,
-	tooltipTransform,
-	tooltipWidth
-}: PropsHoverTooltipProps) => (
-	<g transform={tooltipTransform}>
-		<rect
-			fill={backgroundColor}
-			height={34}
-			rx={5}
-			stroke={accentSecondaryColor}
-			strokeWidth={1.5}
-			width={tooltipWidth}
-			x={-PROPS_HOVERABLE_PROP_LAYOUT.tooltipOffsetX}
-			y={0}
-		/>
-		<text
-			fill={accentSecondaryColor}
-			fontFamily="monospace"
-			fontSize={14}
-			fontWeight={500}
-			x={5}
-			y={22}
-		>
-			{label}
-		</text>
-	</g>
+	</span>
 );

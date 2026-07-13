@@ -1,9 +1,4 @@
-export const syncActionsMutations = `// Sync mutations ARE actions: async handlers can do arbitrary work
-// (HTTP calls, AI streaming, email sends), and emit changes to live
-// tables via \`actions.change\`. The engine commits buffered changes
-// as one applyChangeBatch only AFTER the handler resolves — so if
-// the handler throws, the emitted changes don't fan out.
-engine.registerMutation(
+export const syncActionsMutations = `engine.registerMutation(
   defineMutation({
     name: 'summariseTicket',
     handler: async (args: { id: string }, ctx, actions) => {
@@ -110,26 +105,3 @@ await app.queue.enqueue(
   { url: 'https://example.com/hook', body: { event: 'order.placed' } },
   { runAt: new Date(Date.now() + 30 * 60_000) }
 );`;
-
-export const syncJobsConvexMap = `# Map to Convex's primitives
-
-  Convex                                  | sync
-  ────────────────────────────────────────|─────────────────────────────────────
-  defineAction(handler)                   | defineMutation handler IS an action
-                                          | (async, can do anything, emits
-                                          | changes via actions.change buffered
-                                          | into one applyChangeBatch on resolve)
-  useAction(api.foo, args)                | syncStore.mutate('foo', args) via
-                                          | treaty<typeof app>
-  ctx.scheduler.runAfter(0, internal.x)   | mutation handler calls
-                                          | app.queue.enqueue('x', args)
-  ctx.scheduler.runAfter(ms, internal.x)  | app.queue.enqueue('x', args,
-                                          | { runAt: ... })
-  Cron triggers                           | engine.registerSchedule +
-                                          | @elysiajs/cron (via the scheduled
-                                          | plugin)
-  Workpool (durable, retried, deduped)    | @absolutejs/queue (typed registry,
-                                          | exponentialBackoff, dead-letter,
-                                          | in-memory + Postgres stores)
-  Action calls a mutation                 | Job handler calls
-                                          | engine.runMutation(...) directly`;

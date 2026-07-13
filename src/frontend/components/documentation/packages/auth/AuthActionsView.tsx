@@ -49,10 +49,10 @@ export const AuthActionsView = ({
 						Actions Pipeline
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Auth0 Actions / Better Auth plugins from raw primitives — an
-						ordered, composable middleware over the auth lifecycle, built
-						from the same callable shapes as everything else in this
-						package.
+						Auth0 Actions / Better Auth plugins from raw primitives
+						— an ordered, composable middleware over the auth
+						lifecycle, built from the same callable shapes as
+						everything else in this package.
 					</p>
 				</animated.div>
 
@@ -66,15 +66,23 @@ export const AuthActionsView = ({
 						Composable pipeline
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>createActionPipeline</code> runs registered actions in
-						order for a given event. Each action returns{' '}
-						<code>{'{ kind: '}&apos;pass&apos;{' }'}</code>,{' '}
-						<code>{'{ kind: '}&apos;deny&apos;, reason{' }'}</code>, or{' '}
-						<code>{'{ kind: '}&apos;redirect&apos;, url{' }'}</code> — the
-						first non-pass short-circuits the chain. Actions can target a
-						single event or a list of events. Wire it into your existing
-						lifecycle hooks; it doesn&apos;t replace hooks, it composes on
-						top of them.
+						<code>createActionPipeline</code> runs registered
+						actions in order for a given event. Each action returns{' '}
+						<code>
+							{'{ kind: '}&apos;pass&apos;{' }'}
+						</code>
+						,{' '}
+						<code>
+							{'{ kind: '}&apos;deny&apos;, reason{' }'}
+						</code>
+						, or{' '}
+						<code>
+							{'{ kind: '}&apos;redirect&apos;, url{' }'}
+						</code>{' '}
+						— the first non-pass short-circuits the chain. Actions
+						can target a single event or a list of events. Wire it
+						into your existing lifecycle hooks; it doesn&apos;t
+						replace hooks, it composes on top of them.
 					</p>
 					<PrismPlus
 						codeString={actionsPipeline}

@@ -24,6 +24,8 @@ import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
+const noop = () => undefined;
+
 const tocItems: TocItem[] = [
 	{ href: '#router-overview', label: 'Overview' },
 	{ href: '#quick-start', label: 'Quick Start' },
@@ -59,13 +61,14 @@ export const RouterOverviewView = ({
 						Router
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Multi-tenant connection routing primitive. Sits between
-						an incoming request / WS upgrade and N backend
-						processes; decides which shard owns the tenant, whether
-						the tenant is over its rate limit, whether the tenant is
-						over its connection cap, and whether the chosen shard is
-						healthy and not draining. Pure logic — wire it into
-						whatever HTTP/WS layer you have.
+						Per-tenant connection routing for the gateway in front
+						of your Bun backends. Sits between an incoming request /
+						WS upgrade and N backend processes; decides which shard
+						owns the tenant, whether the tenant is over its rate
+						limit, whether the tenant is over its connection cap,
+						and whether the chosen shard is healthy and not
+						draining. Pure logic — wire it into whatever HTTP/WS
+						layer you have.
 					</p>
 				</animated.div>
 
@@ -81,11 +84,11 @@ export const RouterOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>route()</code> returns{' '}
 						<code>{`{ decision, shard, emptiedBucket? }`}</code>{' '}
-						where decision is one of{' '}
-						<code>allow</code> / <code>rate-limited</code> /{' '}
-						<code>capped</code> / <code>no-shards</code> /{' '}
-						<code>denied</code>. The gateway forwards bytes to{' '}
-						<code>shard.url</code> on allow; everything else is a 4xx.
+						where decision is one of <code>allow</code> /{' '}
+						<code>rate-limited</code> / <code>capped</code> /{' '}
+						<code>no-shards</code> / <code>denied</code>. The
+						gateway forwards bytes to <code>shard.url</code> on
+						allow; everything else is a 4xx.
 					</p>
 					<PrismPlus
 						codeString={routerQuickStart}
@@ -106,14 +109,13 @@ export const RouterOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Default is <strong>jump-consistent-hash</strong>{' '}
-						(Lamping &amp; Veach 2014) — O(log n), no memory, exactly
-						1/N keys move on a shard-add at the tail.{' '}
+						(Lamping &amp; Veach 2014) — O(log n), no memory,
+						exactly 1/N keys move on a shard-add at the tail.{' '}
 						<strong>Rendezvous</strong> (HRW) supports per-shard
 						weights for heterogeneous engine sizes AND a per-call{' '}
 						<code>load(shardId)</code> hook to bias AWAY from hot
 						shards. Both strategies are sticky — the same tenant
-						always lands on the same shard until membership
-						changes.
+						always lands on the same shard until membership changes.
 					</p>
 					<PrismPlus
 						codeString={routerStrategies}
@@ -162,12 +164,13 @@ export const RouterOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>perTenantConnectionCap</code> counts active
 						connections via <code>acquire()</code> /{' '}
-						<code>release()</code>; over the cap, <code>route()</code>{' '}
-						returns <code>capped</code>. The token-bucket{' '}
-						<code>perTenantRateLimit</code> gates per-call;{' '}
-						<code>perRouteRateLimits</code> layers a SECOND bucket
-						per named route with atomic two-bucket commit (a failed
-						route bucket does NOT consume the tenant bucket).
+						<code>release()</code>; over the cap,{' '}
+						<code>route()</code> returns <code>capped</code>. The
+						token-bucket <code>perTenantRateLimit</code> gates
+						per-call; <code>perRouteRateLimits</code> layers a
+						SECOND bucket per named route with atomic two-bucket
+						commit (a failed route bucket does NOT consume the
+						tenant bucket).
 					</p>
 					<PrismPlus
 						codeString={routerLimits}
@@ -190,10 +193,9 @@ export const RouterOverviewView = ({
 						The <code>allow: (tenantId) =&gt; boolean</code> hook is
 						the meter+router wire-up in one line:{' '}
 						<code>allow: meter.allow</code>. When the meter has
-						tripped a tenant, the router returns{' '}
-						<code>denied</code> at the edge — the gateway can
-						surface "quota exceeded" without paying for the upstream
-						hop.
+						tripped a tenant, the router returns <code>denied</code>{' '}
+						at the edge — the gateway can surface "quota exceeded"
+						without paying for the upstream hop.
 					</p>
 					<PrismPlus
 						codeString={routerMeterAllow}
@@ -213,10 +215,10 @@ export const RouterOverviewView = ({
 						Snapshot & Restore
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Preserve rate-limit tokens across edge restarts.
-						Without this, a deploy hands every tenant a fresh full
-						bucket — instant rate-limit bypass for anyone watching
-						the deploy times.
+						Preserve rate-limit tokens across edge restarts. Without
+						this, a deploy hands every tenant a fresh full bucket —
+						instant rate-limit bypass for anyone watching the deploy
+						times.
 					</p>
 					<PrismPlus
 						codeString={routerSnapshot}
@@ -230,9 +232,9 @@ export const RouterOverviewView = ({
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
-				onToggle={onTocToggle ?? (() => {})}
+				items={tocItems}
+				onToggle={onTocToggle ?? noop}
 				themeSprings={themeSprings}
 			/>
 		</div>

@@ -1,0 +1,78 @@
+import { audiencePackageData } from '../../../data/documentation/packages/audience';
+import { autoscalerPackageData } from '../../../data/documentation/packages/autoscaler';
+import { beaconPackageData } from '../../../data/documentation/packages/beacon';
+import { billingPackageData } from '../../../data/documentation/packages/billing';
+import { blobPackageData } from '../../../data/documentation/packages/blob';
+import { commercePackageData } from '../../../data/documentation/packages/commerce';
+import { compliancePackageData } from '../../../data/documentation/packages/compliance';
+import { crmPackageData } from '../../../data/documentation/packages/crm';
+import { demoPackageData } from '../../../data/documentation/packages/demo';
+import { discoverPackageData } from '../../../data/documentation/packages/discover';
+import { edenPackageData } from '../../../data/documentation/packages/eden';
+import { emailPackageData } from '../../../data/documentation/packages/email';
+import { engagementPackageData } from '../../../data/documentation/packages/engagement';
+import { enrichPackageData } from '../../../data/documentation/packages/enrich';
+import { errorsPackageData } from '../../../data/documentation/packages/errors';
+import { healthPackageData } from '../../../data/documentation/packages/health';
+import { linkedProvidersPackageData } from '../../../data/documentation/packages/linkedProviders';
+import { logsPackageData } from '../../../data/documentation/packages/logsPackage';
+import { manifestPackageData } from '../../../data/documentation/packages/manifest';
+import { mcpPackageData } from '../../../data/documentation/packages/mcp';
+import { mediaPackageData } from '../../../data/documentation/packages/media';
+import { meetingPackageData } from '../../../data/documentation/packages/meeting';
+import { metricsPackageData } from '../../../data/documentation/packages/metrics';
+import { onchainPackageData } from '../../../data/documentation/packages/onchain';
+import { opsCliPackageData } from '../../../data/documentation/packages/opsCli';
+import { outcomesPackageData } from '../../../data/documentation/packages/outcomes';
+import { partnershipPackageData } from '../../../data/documentation/packages/partnership';
+import { pwaPackageData } from '../../../data/documentation/packages/pwa';
+import { ragPackageData } from '../../../data/documentation/packages/rag';
+import { renownPackageData } from '../../../data/documentation/packages/renown';
+import { replayPackageData } from '../../../data/documentation/packages/replay';
+import { rulesPackageData } from '../../../data/documentation/packages/rules';
+import { tourPackageData } from '../../../data/documentation/packages/tour';
+import { vscodeExtensionPackageData } from '../../../data/documentation/packages/vscodeExtension';
+import { vueComposablesPackageData } from '../../../data/documentation/packages/vueComposables';
+import { createPackageView } from './PackageOverviewTemplate';
+
+export const AudiencePackageView = createPackageView(audiencePackageData);
+export const AutoscalerPackageView = createPackageView(autoscalerPackageData);
+export const BeaconPackageView = createPackageView(beaconPackageData);
+export const BillingPackageView = createPackageView(billingPackageData);
+export const BlobPackageView = createPackageView(blobPackageData);
+export const CommercePackageView = createPackageView(commercePackageData);
+export const CompliancePackageView = createPackageView(compliancePackageData);
+export const CrmPackageView = createPackageView(crmPackageData);
+export const DemoPackageView = createPackageView(demoPackageData);
+export const DiscoverPackageView = createPackageView(discoverPackageData);
+export const EdenPackageView = createPackageView(edenPackageData);
+export const EmailPackageView = createPackageView(emailPackageData);
+export const EngagementPackageView = createPackageView(engagementPackageData);
+export const EnrichPackageView = createPackageView(enrichPackageData);
+export const ErrorsPackageView = createPackageView(errorsPackageData);
+export const HealthPackageView = createPackageView(healthPackageData);
+export const LinkedProvidersPackageView = createPackageView(
+	linkedProvidersPackageData
+);
+export const LogsPackageView = createPackageView(logsPackageData);
+export const ManifestPackageView = createPackageView(manifestPackageData);
+export const McpPackageView = createPackageView(mcpPackageData);
+export const MediaPackageView = createPackageView(mediaPackageData);
+export const MeetingPackageView = createPackageView(meetingPackageData);
+export const MetricsPackageView = createPackageView(metricsPackageData);
+export const OnchainPackageView = createPackageView(onchainPackageData);
+export const OpsCliPackageView = createPackageView(opsCliPackageData);
+export const OutcomesPackageView = createPackageView(outcomesPackageData);
+export const PartnershipPackageView = createPackageView(partnershipPackageData);
+export const PwaPackageView = createPackageView(pwaPackageData);
+export const RagPackageView = createPackageView(ragPackageData);
+export const RenownPackageView = createPackageView(renownPackageData);
+export const ReplayPackageView = createPackageView(replayPackageData);
+export const RulesPackageView = createPackageView(rulesPackageData);
+export const TourPackageView = createPackageView(tourPackageData);
+export const VscodeExtensionPackageView = createPackageView(
+	vscodeExtensionPackageData
+);
+export const VueComposablesPackageView = createPackageView(
+	vueComposablesPackageData
+);

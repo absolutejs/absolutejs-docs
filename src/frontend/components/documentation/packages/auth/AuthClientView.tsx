@@ -57,12 +57,12 @@ export const AuthClientView = ({
 						Client SDK &amp; Hooks
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Primitives, not components. A framework-agnostic client (
-						<code>createAuthClient</code>) over every endpoint plus thin
-						React hooks (<code>./react</code>) — your forms, your
-						styling, your decisions. HTMX is the special case (declarative
-						server fragments); everything else gets the client + a hook /
-						composable.
+						Primitives, not components. A framework-agnostic client
+						(<code>createAuthClient</code>) over every endpoint plus
+						thin React hooks (<code>./react</code>) — your forms,
+						your styling, your decisions. HTMX is the special case
+						(declarative server fragments); everything else gets the
+						client + a hook / composable.
 					</p>
 				</animated.div>
 
@@ -76,9 +76,9 @@ export const AuthClientView = ({
 						createAuthClient
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Every method returns <code>{'{ data, error }'}</code> so you
-						branch without try/catch. Routes are configurable (override
-						the ones you mounted on a custom path) and{' '}
+						Every method returns <code>{'{ data, error }'}</code> so
+						you branch without try/catch. Routes are configurable
+						(override the ones you mounted on a custom path) and{' '}
 						<code>fetch</code> is injectable for tests. Same-origin
 						cookies are sent by default.
 					</p>
@@ -102,13 +102,17 @@ export const AuthClientView = ({
 					<p style={paragraphSpacedStyle}>
 						The <code>@absolutejs/auth/react</code> sub-export ships
 						thin hooks over the client:{' '}
-						<code>{'{ isPending, data, error, mutate, reset }'}</code>{' '}
+						<code>
+							{'{ isPending, data, error, mutate, reset }'}
+						</code>{' '}
 						(mutations) or{' '}
-						<code>{'{ isPending, data, error, refetch, revoke }'}</code>{' '}
+						<code>
+							{'{ isPending, data, error, refetch, revoke }'}
+						</code>{' '}
 						(<code>useSessions</code>). React is an optional peer
 						dependency — install it if you use the hooks. Vue
-						composables, Solid signals, and Svelte stores will land as
-						sibling sub-exports wrapping the same client.
+						composables, Solid signals, and Svelte stores will land
+						as sibling sub-exports wrapping the same client.
 					</p>
 					<PrismPlus
 						codeString={reactHooks}
@@ -128,12 +132,14 @@ export const AuthClientView = ({
 						Passkey autofill
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>0.37.0</code> ships <code>usePasskeyAutofill</code>{' '}
-						across React, Vue, Solid, and Svelte. Mount it on the sign-in
-						page and the browser surfaces the user&apos;s saved passkeys
-						in its autofill dropdown — one tap signs them in.{' '}
-						<code>@simplewebauthn/browser</code> is an optional peer dep
-						loaded via dynamic import; non-passkey consumers pay nothing.
+						<code>0.37.0</code> ships{' '}
+						<code>usePasskeyAutofill</code> across React, Vue,
+						Solid, and Svelte. Mount it on the sign-in page and the
+						browser surfaces the user&apos;s saved passkeys in its
+						autofill dropdown — one tap signs them in.{' '}
+						<code>@simplewebauthn/browser</code> is an optional peer
+						dep loaded via dynamic import; non-passkey consumers pay
+						nothing.
 					</p>
 					<PrismPlus
 						codeString={passkeyAutofill}
@@ -155,9 +161,9 @@ export const AuthClientView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>useUpgradeToPasskey</code> queries whether the
 						signed-in user has any passkeys yet and exposes a{' '}
-						<code>shouldPrompt</code> flag — true iff they have none.
-						Wire it to a post-sign-in CTA so password users see a
-						&quot;save a passkey to this device?&quot; prompt.
+						<code>shouldPrompt</code> flag — true iff they have
+						none. Wire it to a post-sign-in CTA so password users
+						see a &quot;save a passkey to this device?&quot; prompt.
 					</p>
 					<PrismPlus
 						codeString={upgradeToPasskey}

@@ -38,9 +38,9 @@ const PrimitivesList = () => (
 	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>provideRouter(routes)</strong>: from{' '}
-			<code>@angular/router</code>. Returns a provider that the
-			AbsoluteJS handler installs at bootstrap. Export it as{' '}
-			<code>providers</code> from your page module.
+			<code>@angular/router</code>. Returns a provider that the AbsoluteJS
+			handler installs at bootstrap. Export it as <code>providers</code>{' '}
+			from your page module.
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>RouterOutlet</strong>: standalone
@@ -49,18 +49,17 @@ const PrimitivesList = () => (
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>RouterLink / RouterLinkActive</strong>:
-			navigation directives. <code>routerLinkActive</code> applies a
-			class when its route matches; combine with{' '}
+			navigation directives. <code>routerLinkActive</code> applies a class
+			when its route matches; combine with{' '}
 			<code>{'[routerLinkActiveOptions]="{ exact: true }"'}</code> for
 			exact-match links.
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>Router (injected)</strong>: programmatic
 			navigation. <code>inject(Router)</code> at field-initializer time
-			gives you the router instance —{' '}
-			<code>router.navigate(['/x'])</code>,{' '}
-			<code>router.events.subscribe(...)</code>,{' '}
-			<code>router.url</code>, etc.
+			gives you the router instance — <code>router.navigate(['/x'])</code>
+			, <code>router.events.subscribe(...)</code>, <code>router.url</code>
+			, etc.
 		</li>
 		<li style={listItemStyle}>
 			<strong style={strongStyle}>Routes</strong>: type for the array of{' '}
@@ -94,19 +93,19 @@ const RedirectMechanicsList = () => (
 			redirect.
 		</li>
 		<li style={listItemStyle}>
-			Internally Angular emits a <code>NavigationCancel</code> event
-			with code <code>Redirect</code>, immediately followed by a{' '}
+			Internally Angular emits a <code>NavigationCancel</code> event with
+			code <code>Redirect</code>, immediately followed by a{' '}
 			<code>NavigationStart</code> for the redirect target.
 		</li>
 		<li style={listItemStyle}>
 			AbsoluteJS subscribes to <code>router.events</code> via an{' '}
-			<code>ENVIRONMENT_INITIALIZER</code> and watches for that pair.
-			When detected, it sets <code>responseInit.status = 302</code> and{' '}
+			<code>ENVIRONMENT_INITIALIZER</code> and watches for that pair. When
+			detected, it sets <code>responseInit.status = 302</code> and{' '}
 			<code>Location</code> on the outbound response.
 		</li>
 		<li style={listItemStyle}>
-			The handler returns the redirect response instead of rendering
-			HTML for the redirected route.
+			The handler returns the redirect response instead of rendering HTML
+			for the redirected route.
 		</li>
 	</ul>
 );

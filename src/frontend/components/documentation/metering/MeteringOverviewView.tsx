@@ -22,6 +22,8 @@ import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
+const noop = () => undefined;
+
 const tocItems: TocItem[] = [
 	{ href: '#metering-overview', label: 'Overview' },
 	{ href: '#quick-start', label: 'Quick Start' },
@@ -51,7 +53,10 @@ export const MeteringOverviewView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="metering-overview" style={h1Style(isMobileOrTablet)}>
+					<h1
+						id="metering-overview"
+						style={h1Style(isMobileOrTablet)}
+					>
 						Metering
 					</h1>
 					<p style={paragraphLargeStyle}>
@@ -102,11 +107,11 @@ export const MeteringOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Cumulative budgets stick until <code>reset()</code> —
-						good for "you've used up your free-tier CPU-seconds
-						this month." Rolling-window budgets re-close automatically
-						as events drain — good for "errors in the last 5
-						minutes." Both can apply to the same tenant; the breaker
-						trips if any rule fires.
+						good for "you've used up your free-tier CPU-seconds this
+						month." Rolling-window budgets re-close automatically as
+						events drain — good for "errors in the last 5 minutes."
+						Both can apply to the same tenant; the breaker trips if
+						any rule fires.
 					</p>
 					<PrismPlus
 						codeString={meteringRolling}
@@ -131,10 +136,10 @@ export const MeteringOverviewView = ({
 						<code>dispose()</code> the meter awaits every sink's{' '}
 						<code>flush</code> in order, then every{' '}
 						<code>close</code>. A throwing flush is logged and
-						swallowed; later sinks still flush. That posture is
-						what batched adapters (Stripe Metered, Influx,
-						ClickHouse) need to not drop the last few events on a
-						shard shutdown.
+						swallowed; later sinks still flush. That posture is what
+						batched adapters (Stripe Metered, Influx, ClickHouse)
+						need to not drop the last few events on a shard
+						shutdown.
 					</p>
 					<PrismPlus
 						codeString={meteringSinks}
@@ -154,13 +159,13 @@ export const MeteringOverviewView = ({
 						Snapshot & Restore
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Serializable point-in-time state. The control plane
-						writes a snapshot to disk before a shard reboot and
-						restores it after — the bill doesn't reset to zero. The
-						snapshot captures usage, tripped state, rolling-window
-						state, AND the last-observation cpuMs baseline so the
-						next observation charges a delta (not the cumulative-
-						since-process-start value).
+						Serializable point-in-time state. Write a snapshot to
+						disk before a shard reboot and restore it after — the
+						bill doesn't reset to zero. The snapshot captures usage,
+						tripped state, rolling-window state, AND the
+						last-observation cpuMs baseline so the next observation
+						charges a delta (not the cumulative- since-process-start
+						value).
 					</p>
 					<PrismPlus
 						codeString={meteringSnapshot}
@@ -174,9 +179,9 @@ export const MeteringOverviewView = ({
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />
 			) : null}
 			<MobileTableOfContents
-				items={tocItems}
 				isOpen={tocOpen ?? false}
-				onToggle={onTocToggle ?? (() => {})}
+				items={tocItems}
+				onToggle={onTocToggle ?? noop}
 				themeSprings={themeSprings}
 			/>
 		</div>

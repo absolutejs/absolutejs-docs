@@ -49,13 +49,16 @@ export const AuthImpersonationView = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
-					<h1 id="auth-impersonation" style={h1Style(isMobileOrTablet)}>
+					<h1
+						id="auth-impersonation"
+						style={h1Style(isMobileOrTablet)}
+					>
 						Admin Impersonation
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Scoped, audited &quot;log in as user&quot; for support and
-						ops. Short-lived, step-up-gated, fully audit-logged, with a
-						one-click return to the admin&apos;s own session.
+						Scoped, audited &quot;log in as user&quot; for support
+						and ops. Short-lived, step-up-gated, fully audit-logged,
+						with a one-click return to the admin&apos;s own session.
 					</p>
 				</animated.div>
 
@@ -69,10 +72,11 @@ export const AuthImpersonationView = ({
 						Start (audited, step-up)
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>startImpersonation</code> mints a short-lived session
-						for the target, stamped with an <code>impersonator</code>{' '}
-						(RFC 8693 actor semantics: who, and a required reason),
-						captures the admin&apos;s session to return to, and emits an{' '}
+						<code>startImpersonation</code> mints a short-lived
+						session for the target, stamped with an{' '}
+						<code>impersonator</code> (RFC 8693 actor semantics:
+						who, and a required reason), captures the admin&apos;s
+						session to return to, and emits an{' '}
 						<code>impersonation_started</code> event. Gate it behind
 						your admin auth and a step-up — it&apos;s privileged.
 					</p>
@@ -97,8 +101,8 @@ export const AuthImpersonationView = ({
 						<code>endImpersonation</code> restores the admin&apos;s
 						original session (or clears the cookie) and emits{' '}
 						<code>impersonation_ended</code>.{' '}
-						<code>isImpersonating</code> flags any impersonated session
-						so your UI can show a banner.
+						<code>isImpersonating</code> flags any impersonated
+						session so your UI can show a banner.
 					</p>
 					<PrismPlus
 						codeString={impersonationEnd}
