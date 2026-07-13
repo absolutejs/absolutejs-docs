@@ -43,7 +43,6 @@ import { DockerView } from '../components/documentation/deployment/DockerView';
 import { HostingView } from '../components/documentation/deployment/HostingView';
 import { ProductionBuildView } from '../components/documentation/deployment/ProductionBuildView';
 import { StaticGenerationView } from '../components/documentation/deployment/StaticGenerationView';
-import { ExamplesRecipesView } from '../components/documentation/examples/ExamplesRecipesView';
 import { InstallationView } from '../components/documentation/getting-started/InstallationView';
 import { QuickstartView } from '../components/documentation/getting-started/QuickstartView';
 import { Overview } from '../components/documentation/overview/OverviewView';
@@ -338,7 +337,6 @@ export const docsViews = definePortalViews({
 	'eslint-sort-exports': EslintRuleView,
 	'eslint-sort-keys-fixable': EslintRuleView,
 	'eslint-spring-naming-convention': EslintRuleView,
-	'examples-recipes': ExamplesRecipesView,
 	frameworks: FrameworksView,
 	generate: GenerateView,
 	'head-meta-tags': HeadMetaTagsView,
@@ -647,7 +645,6 @@ export const sidebarCategories: SidebarCategory[] = [
 					{ id: 'docker', label: 'Docker' }
 				]
 			},
-			{ id: 'examples-recipes', label: 'Examples & Recipes' },
 			{
 				label: 'Reference',
 				pages: [
