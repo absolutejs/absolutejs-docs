@@ -1,18 +1,14 @@
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../types/springTypes';
-import { DocsView, isMenuDropdown, isMenuHeading } from '../../../types/types';
-import { sidebarData } from '../../data/sidebarData';
-import { useSidebarSprings } from '../../hooks/springs/useSidebarSprings';
-import { SidebarDropdown } from './SidebarDropdown';
-import { SidebarHeading } from './SidebarHeading';
-import { SidebarLink } from './SidebarLink';
+import { DocsView } from '../../../types/types';
+import { SidebarNav } from './SidebarNav';
 
 type SidebarProps = {
 	view: DocsView;
 	themeSprings: ThemeSprings;
 	navigateToView: (newView: DocsView) => void;
 	openSections: Set<string>;
-	onToggleSection: (label: string) => void;
+	onToggleSection: (key: string) => void;
 };
 
 export const Sidebar = ({
@@ -21,74 +17,26 @@ export const Sidebar = ({
 	navigateToView,
 	openSections,
 	onToggleSection
-}: SidebarProps) => {
-	const { linksSprings, linksApi, startIndexForDropdown } =
-		useSidebarSprings(view);
-
-	return (
-		<animated.aside
-			style={{
-				borderColor: themeSprings.themeTertiary,
-				borderRight: '1px solid',
-				flexShrink: 0,
-				height: '100%',
-				maxHeight: '100%',
-				overflowY: 'auto',
-				padding: '1rem 0.75rem'
-			}}
-		>
-			{sidebarData.map((element, index) => {
-				if (isMenuHeading(element)) {
-					return (
-						<SidebarHeading
-							heading={element.heading}
-							key={`heading-${element.heading}`}
-							themeSprings={themeSprings}
-						/>
-					);
-				}
-				if (isMenuDropdown(element)) {
-					return (
-						<SidebarDropdown
-							buttons={element.buttons}
-							icon={element.icon}
-							isOpen={openSections.has(element.label)}
-							key={element.label}
-							label={element.label}
-							linksApi={linksApi}
-							linksSprings={linksSprings}
-							navigateToView={navigateToView}
-							onToggle={() => onToggleSection(element.label)}
-							onToggleSection={onToggleSection}
-							openSections={openSections}
-							startIndex={startIndexForDropdown(index)}
-							themeSprings={themeSprings}
-							view={view}
-						/>
-					);
-				}
-
-				const linkSprings = linksSprings[index];
-				if (linkSprings === undefined) {
-					throw new Error(
-						'Internal index error in Sidebar component'
-					);
-				}
-
-				return (
-					<SidebarLink
-						icon={element.icon}
-						id={element.id}
-						index={-1}
-						key={element.label}
-						label={element.label}
-						linksApi={linksApi}
-						navigateToView={navigateToView}
-						themeSprings={themeSprings}
-						view={view}
-					/>
-				);
-			})}
-		</animated.aside>
-	);
-};
+}: SidebarProps) => (
+	<animated.aside
+		style={{
+			borderRight: themeSprings.themeTertiary.to(
+				(color) => `1px solid ${color}`
+			),
+			flexShrink: 0,
+			height: '100%',
+			maxHeight: '100%',
+			overflowY: 'auto',
+			padding: '1.1rem 0.9rem',
+			width: '256px'
+		}}
+	>
+		<SidebarNav
+			navigateToView={navigateToView}
+			onToggleSection={onToggleSection}
+			openSections={openSections}
+			themeSprings={themeSprings}
+			view={view}
+		/>
+	</animated.aside>
+);

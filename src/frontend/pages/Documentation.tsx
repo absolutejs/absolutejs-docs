@@ -1,12 +1,17 @@
 import { animated, useSpring } from '@react-spring/web';
 import { useState } from 'react';
-import { DocsView, isMenuDropdown, isSubmenuButton } from '../../types/types';
+import {
+	DocsView,
+	isExpandableEntry,
+	SidebarEntry,
+	sidebarEntryKey
+} from '../../types/types';
 import { isValidViewId } from '../../types/typeGuards';
 import { Navbar } from '../components/navbar/Navbar';
 import { AuroraBackground } from '../components/utils/AuroraBackground';
 import { Head } from '../components/page/Head';
 import { SidebarSection } from '../components/sidebar/SidebarSection';
-import { docsViews, sidebarData } from '../data/sidebarData';
+import { docsViews, sidebarCategories } from '../data/sidebarData';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
@@ -19,23 +24,25 @@ type DocumentationProps = {
 	initialView: DocsView;
 };
 
+const entryContainsView = (entry: SidebarEntry, view: DocsView) =>
+	isExpandableEntry(entry)
+		? entry.pages.some((page) => page.id === view)
+		: entry.id === view;
+
 const findOpenKeysForView = (view: DocsView) => {
-	for (const section of sidebarData) {
-		if (!isMenuDropdown(section)) continue;
-		const match = section.buttons.find(
-			(button) =>
-				button.id === view ||
-				(isSubmenuButton(button) &&
-					button.buttons.some((child) => child.id === view))
-		);
-		if (!match) continue;
-		const keys = [section.label];
-		if (isSubmenuButton(match)) keys.push(match.id);
+	const category = sidebarCategories.find((candidate) =>
+		candidate.entries.some((entry) => entryContainsView(entry, view))
+	);
+	if (!category) return [];
 
-		return keys;
-	}
+	const entry = category.entries.find(
+		(candidate) =>
+			isExpandableEntry(candidate) && entryContainsView(candidate, view)
+	);
 
-	return [];
+	return entry
+		? [category.label, sidebarEntryKey(category.label, entry)]
+		: [category.label];
 };
 
 export const Documentation = ({
@@ -51,7 +58,7 @@ export const Documentation = ({
 	const isMobileOrTablet = isMobile || isTablet;
 
 	const [openSections, setOpenSections] = useState<Set<string>>(
-		() => new Set(findOpenKeysForView(initialView))
+		() => new Set(['Framework', ...findOpenKeysForView(initialView)])
 	);
 
 	const [sidebarSpring, sidebarSpringApi] = useSpring(() => ({

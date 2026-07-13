@@ -1,6 +1,5 @@
 import { AnimatedProps } from '@react-spring/web';
 import { CSSProperties } from 'react';
-import { useSidebarSprings } from '../frontend/hooks/springs/useSidebarSprings';
 import { useTheme } from '../frontend/hooks/useTheme';
 
 export type AnimatedCSSProperties = AnimatedProps<CSSProperties>;
@@ -19,8 +18,3 @@ export type DocsViewProps = ThemeProps & {
 	onTocToggle?: () => void;
 	isMobileOrTablet?: boolean;
 };
-
-export type SidebarLinksSprings = ReturnType<
-	typeof useSidebarSprings
->['linksSprings'];
-export type SidebarLinksApi = ReturnType<typeof useSidebarSprings>['linksApi'];

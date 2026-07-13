@@ -1,68 +1,4 @@
-import { animated } from '@react-spring/web';
-import {
-	FaAddressBook,
-	FaBook,
-	FaBoxOpen,
-	FaBrain,
-	FaBug,
-	FaBullhorn,
-	FaBullseye,
-	FaCalculator,
-	FaChartBar,
-	FaChartLine,
-	FaChartPie,
-	FaCheckCircle,
-	FaClipboardCheck,
-	FaClipboardList,
-	FaCloudUploadAlt,
-	FaCode,
-	FaCog,
-	FaCube,
-	FaCubes,
-	FaDatabase,
-	FaDesktop,
-	FaEnvelope,
-	FaEthereum,
-	FaExchangeAlt,
-	FaExpandArrowsAlt,
-	FaFileInvoiceDollar,
-	FaHandshake,
-	FaHeartbeat,
-	FaKey,
-	FaLayerGroup,
-	FaLightbulb,
-	FaLink,
-	FaListAlt,
-	FaLock,
-	FaMagic,
-	FaMapSigns,
-	FaMicrochip,
-	FaMicrophone,
-	FaMobileAlt,
-	FaPaintBrush,
-	FaPaperPlane,
-	FaPlug,
-	FaPuzzlePiece,
-	FaRandom,
-	FaRobot,
-	FaRocket,
-	FaSearch,
-	FaServer,
-	FaShip,
-	FaShoppingCart,
-	FaStream,
-	FaSync,
-	FaTachometerAlt,
-	FaTasks,
-	FaTerminal,
-	FaTrophy,
-	FaUserPlus,
-	FaUsers,
-	FaUserShield,
-	FaVideo,
-	FaVuejs
-} from 'react-icons/fa';
-import { MenuItem } from '../../types/types';
+import { SidebarCategory } from '../../types/types';
 import { AnalyzeView } from '../components/documentation/cli/AnalyzeView';
 import { ApiView } from '../components/documentation/cli/ApiView';
 import { CompileView } from '../components/documentation/cli/CompileView';
@@ -540,690 +476,604 @@ export const docsViews = definePortalViews({
 	'vue-spa': VueSpaView
 });
 
-export const sidebarData: MenuItem[] = [
-	{ heading: 'Framework' },
+export const sidebarCategories: SidebarCategory[] = [
 	{
-		icon: animated(FaBook),
-		id: 'overview',
-		label: 'Overview'
-	},
-	{
-		buttons: [
-			{ id: 'installation', label: 'Installation' },
-			{ id: 'quickstart', label: 'Quickstart' }
-		],
-		icon: animated(FaRocket),
-		label: 'Getting Started'
-	},
-	{
-		buttons: [
-			{ id: 'ssr-model', label: 'SSR Model' },
-			{ id: 'build-and-manifest', label: 'Build & Manifest' },
-			{ id: 'routing-and-handlers', label: 'Routing & Handlers' },
-			{ id: 'type-safety', label: 'Type Safety' },
-			{ id: 'islands', label: 'Islands' },
-			{ id: 'error-boundaries', label: 'Error Boundaries' },
-			{ id: 'loading-states', label: 'Loading States' },
-			{ id: 'out-of-order-streaming', label: 'Out-of-Order Streaming' }
-		],
-		icon: animated(FaLayerGroup),
-		label: 'Core Concepts'
-	},
-	{
-		buttons: [
-			{ id: 'dev', label: 'Dev' },
-			{ id: 'start', label: 'Start' },
-			{ id: 'compile', label: 'Compile' },
-			{ id: 'generate', label: 'Generate' },
-			{ id: 'frameworks', label: 'Add / Remove' },
-			{ id: 'config', label: 'Config' },
-			{ id: 'db', label: 'Database' },
-			{ id: 'ls', label: 'Build output' },
-			{ id: 'analyze', label: 'Analyze' },
-			{ id: 'routes', label: 'Routes' },
-			{ id: 'api', label: 'API' },
-			{ id: 'ps', label: 'Processes' },
-			{ id: 'mem', label: 'Memory' },
-			{ id: 'logs', label: 'Logs' },
-			{ id: 'inspect', label: 'Inspect' },
-			{ id: 'islands-cli', label: 'Islands' },
-			{ id: 'doctor', label: 'Doctor' },
-			{ id: 'env', label: 'Env' },
-			{ id: 'eslint-prettier', label: 'ESLint & Prettier' },
-			{ id: 'typecheck', label: 'Typecheck' },
-			{ id: 'mkcert', label: 'Mkcert' },
-			{ id: 'telemetry', label: 'Telemetry' },
-			{ id: 'info', label: 'Info' }
-		],
-		icon: animated(FaTerminal),
-		label: 'CLI'
-	},
-	{
-		buttons: [
-			{ id: 'react-overview', label: 'Overview' },
-			{ id: 'react-components', label: 'Components' },
-			{ id: 'react-hooks', label: 'Hooks' },
-			{ id: 'react-spa', label: 'SPA' },
-			{ id: 'react-islands', label: 'Islands' },
-			{ id: 'react-ai', label: 'AI' }
-		],
-		icon: animated(FaCubes),
-		label: 'React'
-	},
-	{
-		buttons: [
-			{ id: 'svelte-overview', label: 'Overview' },
-			{ id: 'svelte-components', label: 'Components' },
-			{ id: 'svelte-spa', label: 'SPA' },
-			{ id: 'svelte-islands', label: 'Islands' },
-			{ id: 'svelte-ai', label: 'AI' }
-		],
-		icon: animated(FaCubes),
-		label: 'Svelte'
-	},
-	{
-		buttons: [
-			{ id: 'vue-overview', label: 'Overview' },
-			{ id: 'vue-components', label: 'Components' },
-			{ id: 'vue-spa', label: 'SPA' },
-			{ id: 'vue-islands', label: 'Islands' },
-			{ id: 'vue-ai', label: 'AI' }
-		],
-		icon: animated(FaCubes),
-		label: 'Vue'
-	},
-	{
-		buttons: [
-			{ id: 'angular-overview', label: 'Overview' },
-			{ id: 'angular-components', label: 'Components' },
-			{ id: 'angular-spa', label: 'SPA' },
-			{ id: 'angular-islands', label: 'Islands' },
-			{ id: 'angular-ai', label: 'AI' }
-		],
-		icon: animated(FaCubes),
-		label: 'Angular'
-	},
-	{
-		buttons: [
-			{ id: 'html-overview', label: 'Overview' },
-			{ id: 'html-image-optimization', label: 'Image Optimization' },
-			{ id: 'html-islands', label: 'Islands' },
-			{ id: 'html-ai', label: 'AI' }
-		],
-		icon: animated(FaCubes),
-		label: 'HTML'
-	},
-	{
-		buttons: [
-			{ id: 'htmx-overview', label: 'Overview' },
-			{ id: 'htmx-islands', label: 'Islands' },
-			{ id: 'htmx-ai', label: 'AI' }
-		],
-		icon: animated(FaCubes),
-		label: 'HTMX'
-	},
-	{
-		buttons: [
-			{ id: 'elysia-integration', label: 'Overview' },
-			{ id: 'elysia-plugin-composition', label: 'Plugin Composition' },
-			{ id: 'eden-treaty-performance', label: 'Type Performance' },
-			{ id: 'elysia-validation', label: 'Validation' },
-			{ id: 'elysia-cors', label: 'CORS' },
-			{ id: 'cron-jobs', label: 'Cron Jobs' },
-			{ id: 'middleware', label: 'Middleware' },
-			{ id: 'networking-plugin', label: 'Networking Plugin' },
-			{ id: 'dev-tunnel', label: 'Dev Tunnel' }
-		],
-		icon: animated(FaServer),
-		label: 'Elysia Integration'
-	},
-	{
-		buttons: [
-			{ id: 'data-fetching', label: 'Data Fetching' },
-			{ id: 'server-state', label: 'Server State' }
-		],
-		icon: animated(FaDatabase),
-		label: 'Data & State'
-	},
-	{
-		buttons: [
-			{ id: 'environment-variables', label: 'Environment Variables' },
-			{ id: 'bun-build-options', label: 'Bun Build Options' },
-			{ id: 'tailwind-css', label: 'Tailwind CSS' },
-			{ id: 'head-meta-tags', label: 'Head & Meta Tags' },
-			{ id: 'image-optimization', label: 'Image Optimization' },
-			{ id: 'sitemap', label: 'Sitemap' },
-			{ id: 'assets', label: 'Assets' },
-			{ id: 'static-generation', label: 'Static Generation' }
-		],
-		icon: animated(FaCog),
-		label: 'Configuration'
-	},
-	{
-		buttons: [
-			{ id: 'production-build', label: 'Production Build' },
-			{ id: 'hosting', label: 'Hosting' },
-			{ id: 'docker', label: 'Docker' }
-		],
-		icon: animated(FaCloudUploadAlt),
-		label: 'Deployment'
-	},
-	{
-		buttons: [{ id: 'examples-recipes', label: 'Examples & Recipes' }],
-		icon: animated(FaLightbulb),
-		label: 'Examples'
-	},
-	{
-		buttons: [
-			{ id: 'page-handlers', label: 'Page Handlers' },
-			{ id: 'types', label: 'Types' }
-		],
-		icon: animated(FaCode),
-		label: 'Reference'
-	},
-	{ heading: 'Packages' },
-	{
-		icon: animated(FaPuzzlePiece),
-		id: 'packages',
-		label: 'All Packages'
-	},
-	{ heading: 'Auth & Identity' },
-	{
-		buttons: [
-			{ id: 'absolute-auth', label: 'Overview' },
-			{ id: 'auth-credentials', label: 'Credentials & MFA' },
-			{ id: 'auth-mfa', label: 'Multi-Factor Auth' },
-			{ id: 'auth-sso', label: 'Enterprise SSO & SCIM' },
-			{ id: 'auth-organizations', label: 'Organizations & RBAC' },
-			{ id: 'auth-apikeys', label: 'API Keys & M2M' },
-			{ id: 'auth-adaptive', label: 'Adaptive Auth' },
-			{ id: 'auth-oidc-provider', label: 'OAuth2 / OIDC Provider' },
-			{ id: 'auth-fga', label: 'Fine-Grained Authz' },
-			{ id: 'auth-impersonation', label: 'Admin Impersonation' },
-			{ id: 'auth-abuse', label: 'Bot & Abuse Protection' },
-			{ id: 'auth-audit-integrity', label: 'Tamper-evident Audit' },
-			{ id: 'auth-multi-session', label: 'Multi-session & Guest' },
+		entries: [
+			{ id: 'overview', label: 'Overview' },
 			{
-				id: 'auth-credential-hardening',
-				label: 'Credential Hardening'
-			},
-			{ id: 'auth-passwordless', label: 'Passwordless & Passkeys' },
-			{
-				id: 'auth-compliance',
-				label: 'Audit, Compliance & Webhooks'
-			},
-			{ id: 'auth-actions', label: 'Actions Pipeline' },
-			{ id: 'auth-vault', label: 'Vault' },
-			{ id: 'auth-plugins', label: 'First-party Plugins' },
-			{ id: 'auth-client', label: 'Client SDK & Hooks' },
-			{
-				id: 'auth-verifiable-credentials',
-				label: 'Verifiable Credentials'
-			},
-			{ id: 'auth-ciba', label: 'CIBA (Backchannel Auth)' },
-			{ id: 'auth-mtls', label: 'mTLS & Cert-Bound Tokens' },
-			{ id: 'auth-observability', label: 'Observability' },
-			{ id: 'auth-migrations', label: 'Database Migrations' }
-		],
-		icon: animated(FaUserShield),
-		label: 'Absolute Auth'
-	},
-	{
-		icon: animated(FaKey),
-		id: 'citra',
-		label: 'Citra'
-	},
-	{
-		icon: animated(FaLink),
-		id: 'linked-providers-overview',
-		label: 'Linked Providers'
-	},
-	{
-		icon: animated(FaClipboardCheck),
-		id: 'compliance-overview',
-		label: 'Compliance'
-	},
-	{ heading: 'Data & Sync' },
-	{
-		buttons: [
-			{ id: 'sync-overview', label: 'Overview' },
-			{ id: 'sync-eden', label: 'End-to-end Types' },
-			{ id: 'sync-graph', label: 'Operator-graph Queries' },
-			{ id: 'sync-actions', label: 'Actions, Jobs & Schedules' },
-			{ id: 'sync-crdt', label: 'CRDT & Collaboration' },
-			{ id: 'sync-sandbox', label: 'Sandboxed Mutations' },
-			{ id: 'sync-frameworks', label: 'Framework Hooks' },
-			{ id: 'sync-adapters', label: 'CRDT Adapters' },
-			{ id: 'sync-packs', label: 'Sync Packs' },
-			{ id: 'sync-code-mode', label: 'Code Mode for Mutations' },
-			{ id: 'sync-unsafe-host', label: 'unsafeHost Escape Hatch' },
-			{ id: 'cluster-bus-overview', label: 'Cluster Bus' },
-			{ id: 'sync-launch', label: 'Release Notes' },
-			{ id: 'sync-vs-convex', label: 'vs Convex' },
-			{ id: 'sync-vs-firebase', label: 'vs Firebase' },
-			{ id: 'sync-we-heard-you', label: 'We Heard You' }
-		],
-		icon: animated(FaSync),
-		label: 'Sync'
-	},
-	{
-		buttons: [
-			{ id: 'queue-overview', label: 'Overview' },
-			{ id: 'queue-jobs', label: 'Jobs & Scheduling' },
-			{ id: 'queue-operations', label: 'Operations' }
-		],
-		icon: animated(FaTasks),
-		label: 'Queue'
-	},
-	{
-		icon: animated(FaBoxOpen),
-		id: 'blob-overview',
-		label: 'Blob'
-	},
-	{ heading: 'AI' },
-	{
-		buttons: [
-			{ id: 'ai-overview', label: 'Overview' },
-			{ id: 'ai-providers', label: 'Providers' },
-			{ id: 'ai-plugin', label: 'Plugin' },
-			{ id: 'ai-tools', label: 'Tools' },
-			{ id: 'ai-streaming', label: 'Streaming & Protocol' }
-		],
-		icon: animated(FaRobot),
-		label: 'AI'
-	},
-	{
-		buttons: [
-			{ id: 'rag-overview', label: 'Overview' },
-			{ id: 'rag-ingestion', label: 'Ingestion & Chunking' },
-			{ id: 'rag-retrieval', label: 'Retrieval & Adapters' },
-			{ id: 'rag-quality', label: 'Quality & Governance' },
-			{ id: 'rag-frameworks', label: 'Frameworks & Chat' }
-		],
-		icon: animated(FaBrain),
-		label: 'RAG'
-	},
-	{
-		buttons: [
-			{ id: 'mcp-overview', label: 'Overview' },
-			{ id: 'mcp-endpoints', label: 'Endpoints & Transport' },
-			{ id: 'mcp-capabilities', label: 'Guards, Prompts & Resources' },
-			{ id: 'mcp-feedback', label: 'Feedback & Elicitation' }
-		],
-		icon: animated(FaPlug),
-		label: 'MCP'
-	},
-	{
-		icon: animated(FaListAlt),
-		id: 'manifest-overview',
-		label: 'Manifest'
-	},
-	{
-		icon: animated(FaMagic),
-		id: 'rules-overview',
-		label: 'Rules'
-	},
-	{
-		icon: animated(FaBullseye),
-		id: 'outcomes-overview',
-		label: 'Outcomes'
-	},
-	{ heading: 'Voice & Media' },
-	{
-		buttons: [
-			{ id: 'voice', label: 'Overview' },
-			{ id: 'voice-ecosystem', label: 'Ecosystem' },
-			{ id: 'voice-comparison', label: 'Comparison' },
-			{ id: 'voice-runtime', label: 'Runtime' },
-			{ id: 'voice-adapters', label: 'Adapters' },
-			{ id: 'voice-adapter-contracts', label: 'Adapter Contracts' },
-			{ id: 'voice-route-surfaces', label: 'Route Surfaces' },
-			{ id: 'voice-assistants-tools', label: 'Assistants & Tools' },
-			{ id: 'voice-telephony', label: 'Telephony' },
-			{ id: 'voice-ops-proof', label: 'Ops & Proof' },
-			{ id: 'voice-client-frameworks', label: 'Client & Frameworks' },
-			{ id: 'voice-tester', label: 'Tester' },
-			{ id: 'voice-tester-scenarios', label: 'Tester Scenarios' },
-			{ id: 'voice-tester-discord', label: 'Discord Testing' },
-			{ id: 'voice-storage-testing', label: 'Storage & Testing' },
-			{ id: 'voice-api-reference', label: 'API Reference' }
-		],
-		icon: animated(FaMicrophone),
-		label: 'Voice'
-	},
-	{
-		icon: animated(FaVideo),
-		id: 'media-overview',
-		label: 'Media'
-	},
-	{
-		icon: animated(FaUsers),
-		id: 'meeting-overview',
-		label: 'Meeting'
-	},
-	{ heading: 'Platform & Infra' },
-	{
-		icon: animated(FaShip),
-		id: 'platform-overview',
-		label: 'Platform Tools'
-	},
-	{
-		icon: animated(FaMicrochip),
-		id: 'runtime-overview',
-		label: 'Runtime'
-	},
-	{
-		icon: animated(FaRandom),
-		id: 'router-overview',
-		label: 'Router'
-	},
-	{
-		icon: animated(FaCloudUploadAlt),
-		id: 'deploy-overview',
-		label: 'Deploy'
-	},
-	{
-		icon: animated(FaLock),
-		id: 'secrets-overview',
-		label: 'Secrets'
-	},
-	{
-		icon: animated(FaCalculator),
-		id: 'metering-overview',
-		label: 'Metering'
-	},
-	{
-		icon: animated(FaFileInvoiceDollar),
-		id: 'billing-overview',
-		label: 'Billing'
-	},
-	{
-		icon: animated(FaExpandArrowsAlt),
-		id: 'autoscaler-overview',
-		label: 'Autoscaler'
-	},
-	{
-		icon: animated(FaHeartbeat),
-		id: 'health-overview',
-		label: 'Health'
-	},
-	{
-		icon: animated(FaTerminal),
-		id: 'cli-overview',
-		label: 'Ops CLI'
-	},
-	{
-		buttons: [
-			{ id: 'isolated-jsc', label: 'Overview' },
-			{ id: 'isolated-jsc-bun', label: 'For Bun' },
-			{ id: 'isolated-jsc-hibernation', label: 'Pool Hibernation' }
-		],
-		icon: animated(FaCube),
-		label: 'isolated-jsc'
-	},
-	{
-		icon: animated(FaTachometerAlt),
-		id: 'rate-limit-overview',
-		label: 'Rate Limit'
-	},
-	{ heading: 'Observability' },
-	{
-		icon: animated(FaChartLine),
-		id: 'telemetry-overview',
-		label: 'Telemetry'
-	},
-	{
-		icon: animated(FaChartBar),
-		id: 'metrics-overview',
-		label: 'Metrics'
-	},
-	{
-		icon: animated(FaStream),
-		id: 'logs-overview',
-		label: 'Logs'
-	},
-	{
-		buttons: [
-			{ id: 'error-pipeline', label: 'Pipeline Overview' },
-			{ id: 'errors-overview', label: 'Errors' },
-			{ id: 'beacon-overview', label: 'Beacon' },
-			{ id: 'replay-overview', label: 'Replay' }
-		],
-		icon: animated(FaBug),
-		label: 'Error Pipeline'
-	},
-	{
-		icon: animated(FaClipboardList),
-		id: 'audit-overview',
-		label: 'Audit'
-	},
-	{ heading: 'Messaging' },
-	{
-		icon: animated(FaPaperPlane),
-		id: 'dispatch-overview',
-		label: 'Dispatch'
-	},
-	{
-		icon: animated(FaEnvelope),
-		id: 'email-overview',
-		label: 'Email'
-	},
-	{ heading: 'Commerce & Growth' },
-	{
-		icon: animated(FaShoppingCart),
-		id: 'commerce-overview',
-		label: 'Commerce'
-	},
-	{
-		icon: animated(FaAddressBook),
-		id: 'crm-overview',
-		label: 'CRM'
-	},
-	{
-		icon: animated(FaSearch),
-		id: 'discover-overview',
-		label: 'Discover'
-	},
-	{
-		icon: animated(FaUserPlus),
-		id: 'enrich-overview',
-		label: 'Enrich'
-	},
-	{
-		icon: animated(FaBullhorn),
-		id: 'audience-overview',
-		label: 'Audience'
-	},
-	{
-		icon: animated(FaHandshake),
-		id: 'partnership-overview',
-		label: 'Partnership'
-	},
-	{
-		icon: animated(FaChartPie),
-		id: 'engagement-overview',
-		label: 'Engagement'
-	},
-	{ heading: 'Frontend & UX' },
-	{
-		icon: animated(FaMobileAlt),
-		id: 'pwa-overview',
-		label: 'PWA'
-	},
-	{
-		buttons: [
-			{ id: 'tour-overview', label: 'Overview' },
-			{ id: 'tour-actions', label: 'Actions & Demo Data' },
-			{ id: 'tour-branching', label: 'Branching & Events' },
-			{ id: 'tour-checklist', label: 'Checklist & Hotspots' }
-		],
-		icon: animated(FaMapSigns),
-		label: 'Tour'
-	},
-	{
-		icon: animated(FaLayerGroup),
-		id: 'scoped-state',
-		label: 'Scoped State'
-	},
-	{
-		icon: animated(FaVuejs),
-		id: 'vue-composables-overview',
-		label: 'Vue Composables'
-	},
-	{
-		buttons: [
-			{ id: 'demo-overview', label: 'Overview' },
-			{ id: 'demo-browser', label: 'Browser & Desktop' },
-			{ id: 'demo-recording', label: 'Recording & Voiceover' }
-		],
-		icon: animated(FaDesktop),
-		label: 'Demo'
-	},
-	{ heading: 'On-chain' },
-	{
-		icon: animated(FaEthereum),
-		id: 'onchain-overview',
-		label: 'Onchain'
-	},
-	{ heading: 'Dev Tools' },
-	{
-		icon: animated(FaRocket),
-		id: 'create-absolutejs',
-		label: 'Create AbsoluteJS'
-	},
-	{
-		icon: animated(FaPaintBrush),
-		id: 'studio-overview',
-		label: 'Studio'
-	},
-	{
-		buttons: [
-			{ id: 'eslint', label: 'Overview' },
-			{
-				id: 'eslint-angular-one-feature-per-file',
-				label: 'angular-one-feature-per-file'
+				label: 'Getting Started',
+				pages: [
+					{ id: 'installation', label: 'Installation' },
+					{ id: 'quickstart', label: 'Quickstart' }
+				]
 			},
 			{
-				id: 'eslint-explicit-object-types',
-				label: 'explicit-object-types'
+				label: 'Core Concepts',
+				pages: [
+					{ id: 'ssr-model', label: 'SSR Model' },
+					{ id: 'build-and-manifest', label: 'Build & Manifest' },
+					{
+						id: 'routing-and-handlers',
+						label: 'Routing & Handlers'
+					},
+					{ id: 'type-safety', label: 'Type Safety' },
+					{ id: 'islands', label: 'Islands' },
+					{ id: 'error-boundaries', label: 'Error Boundaries' },
+					{ id: 'loading-states', label: 'Loading States' },
+					{
+						id: 'out-of-order-streaming',
+						label: 'Out-of-Order Streaming'
+					}
+				]
 			},
 			{
-				id: 'eslint-inline-style-limit',
-				label: 'inline-style-limit'
+				label: 'CLI',
+				pages: [
+					{ id: 'dev', label: 'Dev' },
+					{ id: 'start', label: 'Start' },
+					{ id: 'compile', label: 'Compile' },
+					{ id: 'generate', label: 'Generate' },
+					{ id: 'frameworks', label: 'Add / Remove' },
+					{ id: 'config', label: 'Config' },
+					{ id: 'db', label: 'Database' },
+					{ id: 'ls', label: 'Build output' },
+					{ id: 'analyze', label: 'Analyze' },
+					{ id: 'routes', label: 'Routes' },
+					{ id: 'api', label: 'API' },
+					{ id: 'ps', label: 'Processes' },
+					{ id: 'mem', label: 'Memory' },
+					{ id: 'logs', label: 'Logs' },
+					{ id: 'inspect', label: 'Inspect' },
+					{ id: 'islands-cli', label: 'Islands' },
+					{ id: 'doctor', label: 'Doctor' },
+					{ id: 'env', label: 'Env' },
+					{ id: 'eslint-prettier', label: 'ESLint & Prettier' },
+					{ id: 'typecheck', label: 'Typecheck' },
+					{ id: 'mkcert', label: 'Mkcert' },
+					{ id: 'telemetry', label: 'Telemetry' },
+					{ id: 'info', label: 'Info' }
+				]
 			},
 			{
-				id: 'eslint-localize-react-props',
-				label: 'localize-react-props'
+				label: 'React',
+				pages: [
+					{ id: 'react-overview', label: 'Overview' },
+					{ id: 'react-components', label: 'Components' },
+					{ id: 'react-hooks', label: 'Hooks' },
+					{ id: 'react-spa', label: 'SPA' },
+					{ id: 'react-islands', label: 'Islands' },
+					{ id: 'react-ai', label: 'AI' }
+				]
 			},
 			{
-				id: 'eslint-max-depth-extended',
-				label: 'max-depth-extended'
+				label: 'Svelte',
+				pages: [
+					{ id: 'svelte-overview', label: 'Overview' },
+					{ id: 'svelte-components', label: 'Components' },
+					{ id: 'svelte-spa', label: 'SPA' },
+					{ id: 'svelte-islands', label: 'Islands' },
+					{ id: 'svelte-ai', label: 'AI' }
+				]
 			},
 			{
-				id: 'eslint-max-jsxnesting',
-				label: 'max-jsxnesting'
+				label: 'Vue',
+				pages: [
+					{ id: 'vue-overview', label: 'Overview' },
+					{ id: 'vue-components', label: 'Components' },
+					{ id: 'vue-spa', label: 'SPA' },
+					{ id: 'vue-islands', label: 'Islands' },
+					{ id: 'vue-ai', label: 'AI' }
+				]
 			},
 			{
-				id: 'eslint-min-var-length',
-				label: 'min-var-length'
+				label: 'Angular',
+				pages: [
+					{ id: 'angular-overview', label: 'Overview' },
+					{ id: 'angular-components', label: 'Components' },
+					{ id: 'angular-spa', label: 'SPA' },
+					{ id: 'angular-islands', label: 'Islands' },
+					{ id: 'angular-ai', label: 'AI' }
+				]
 			},
 			{
-				id: 'eslint-no-button-navigation',
-				label: 'no-button-navigation'
+				label: 'HTML',
+				pages: [
+					{ id: 'html-overview', label: 'Overview' },
+					{
+						id: 'html-image-optimization',
+						label: 'Image Optimization'
+					},
+					{ id: 'html-islands', label: 'Islands' },
+					{ id: 'html-ai', label: 'AI' }
+				]
 			},
 			{
-				id: 'eslint-no-explicit-return-type',
-				label: 'no-explicit-return-type'
+				label: 'HTMX',
+				pages: [
+					{ id: 'htmx-overview', label: 'Overview' },
+					{ id: 'htmx-islands', label: 'Islands' },
+					{ id: 'htmx-ai', label: 'AI' }
+				]
 			},
 			{
-				id: 'eslint-no-import-meta-path',
-				label: 'no-import-meta-path'
+				label: 'Elysia Integration',
+				pages: [
+					{ id: 'elysia-integration', label: 'Overview' },
+					{
+						id: 'elysia-plugin-composition',
+						label: 'Plugin Composition'
+					},
+					{
+						id: 'eden-treaty-performance',
+						label: 'Type Performance'
+					},
+					{ id: 'elysia-validation', label: 'Validation' },
+					{ id: 'elysia-cors', label: 'CORS' },
+					{ id: 'cron-jobs', label: 'Cron Jobs' },
+					{ id: 'middleware', label: 'Middleware' },
+					{ id: 'networking-plugin', label: 'Networking Plugin' },
+					{ id: 'dev-tunnel', label: 'Dev Tunnel' },
+					{ id: 'eden-overview', label: 'Eden Errors' }
+				]
 			},
 			{
-				id: 'eslint-no-inline-object-types',
-				label: 'no-inline-object-types'
+				label: 'Data & State',
+				pages: [
+					{ id: 'data-fetching', label: 'Data Fetching' },
+					{ id: 'server-state', label: 'Server State' }
+				]
 			},
 			{
-				id: 'eslint-no-multi-style-objects',
-				label: 'no-multi-style-objects'
+				label: 'Configuration',
+				pages: [
+					{
+						id: 'environment-variables',
+						label: 'Environment Variables'
+					},
+					{ id: 'bun-build-options', label: 'Bun Build Options' },
+					{ id: 'tailwind-css', label: 'Tailwind CSS' },
+					{ id: 'head-meta-tags', label: 'Head & Meta Tags' },
+					{ id: 'image-optimization', label: 'Image Optimization' },
+					{ id: 'sitemap', label: 'Sitemap' },
+					{ id: 'assets', label: 'Assets' },
+					{ id: 'static-generation', label: 'Static Generation' }
+				]
 			},
 			{
-				id: 'eslint-no-nested-jsx-return',
-				label: 'no-nested-jsx-return'
+				label: 'Deployment',
+				pages: [
+					{ id: 'production-build', label: 'Production Build' },
+					{ id: 'hosting', label: 'Hosting' },
+					{ id: 'docker', label: 'Docker' }
+				]
 			},
+			{ id: 'examples-recipes', label: 'Examples & Recipes' },
 			{
-				id: 'eslint-no-nondeterministic-render',
-				label: 'no-nondeterministic-render'
-			},
-			{
-				id: 'eslint-no-or-none-component',
-				label: 'no-or-none-component'
-			},
-			{
-				id: 'eslint-no-redundant-type-annotation',
-				label: 'no-redundant-type-annotation'
-			},
-			{
-				id: 'eslint-no-transition-cssproperties',
-				label: 'no-transition-cssproperties'
-			},
-			{
-				id: 'eslint-no-trivial-alias',
-				label: 'no-trivial-alias'
-			},
-			{
-				id: 'eslint-no-unnecessary-div',
-				label: 'no-unnecessary-div'
-			},
-			{
-				id: 'eslint-no-unnecessary-key',
-				label: 'no-unnecessary-key'
-			},
-			{
-				id: 'eslint-no-useless-catch',
-				label: 'no-useless-catch'
-			},
-			{
-				id: 'eslint-no-useless-function',
-				label: 'no-useless-function'
-			},
-			{
-				id: 'eslint-prefer-inline-exports',
-				label: 'prefer-inline-exports'
-			},
-			{
-				id: 'eslint-seperate-style-files',
-				label: 'seperate-style-files'
-			},
-			{
-				id: 'eslint-sort-exports',
-				label: 'sort-exports'
-			},
-			{
-				id: 'eslint-sort-keys-fixable',
-				label: 'sort-keys-fixable'
-			},
-			{
-				id: 'eslint-spring-naming-convention',
-				label: 'spring-naming-convention'
+				label: 'Reference',
+				pages: [
+					{ id: 'page-handlers', label: 'Page Handlers' },
+					{ id: 'types', label: 'Types' }
+				]
 			}
 		],
-		icon: animated(FaCheckCircle),
-		label: 'ESLint'
+		label: 'Framework'
 	},
 	{
-		icon: animated(FaCode),
-		id: 'vscode-extension-overview',
-		label: 'VS Code Extension'
+		entries: [
+			{
+				label: 'Absolute Auth',
+				pages: [
+					{ id: 'absolute-auth', label: 'Overview' },
+					{ id: 'auth-credentials', label: 'Credentials & MFA' },
+					{ id: 'auth-mfa', label: 'Multi-Factor Auth' },
+					{ id: 'auth-sso', label: 'Enterprise SSO & SCIM' },
+					{
+						id: 'auth-organizations',
+						label: 'Organizations & RBAC'
+					},
+					{ id: 'auth-apikeys', label: 'API Keys & M2M' },
+					{ id: 'auth-adaptive', label: 'Adaptive Auth' },
+					{
+						id: 'auth-oidc-provider',
+						label: 'OAuth2 / OIDC Provider'
+					},
+					{ id: 'auth-fga', label: 'Fine-Grained Authz' },
+					{ id: 'auth-impersonation', label: 'Admin Impersonation' },
+					{ id: 'auth-abuse', label: 'Bot & Abuse Protection' },
+					{
+						id: 'auth-audit-integrity',
+						label: 'Tamper-evident Audit'
+					},
+					{
+						id: 'auth-multi-session',
+						label: 'Multi-session & Guest'
+					},
+					{
+						id: 'auth-credential-hardening',
+						label: 'Credential Hardening'
+					},
+					{
+						id: 'auth-passwordless',
+						label: 'Passwordless & Passkeys'
+					},
+					{
+						id: 'auth-compliance',
+						label: 'Audit, Compliance & Webhooks'
+					},
+					{ id: 'auth-actions', label: 'Actions Pipeline' },
+					{ id: 'auth-vault', label: 'Vault' },
+					{ id: 'auth-plugins', label: 'First-party Plugins' },
+					{ id: 'auth-client', label: 'Client SDK & Hooks' },
+					{
+						id: 'auth-verifiable-credentials',
+						label: 'Verifiable Credentials'
+					},
+					{ id: 'auth-ciba', label: 'CIBA (Backchannel Auth)' },
+					{ id: 'auth-mtls', label: 'mTLS & Cert-Bound Tokens' },
+					{ id: 'auth-observability', label: 'Observability' },
+					{ id: 'auth-migrations', label: 'Database Migrations' }
+				],
+				status: 'beta'
+			},
+			{ id: 'citra', label: 'Citra', status: 'beta' },
+			{
+				id: 'linked-providers-overview',
+				label: 'Linked Providers',
+				status: 'alpha'
+			},
+			{ id: 'compliance-overview', label: 'Compliance', status: 'beta' }
+		],
+		label: 'Auth & Identity'
 	},
 	{
-		icon: animated(FaTrophy),
-		id: 'renown-overview',
-		label: 'Renown'
+		entries: [
+			{
+				label: 'Sync',
+				pages: [
+					{ id: 'sync-overview', label: 'Overview' },
+					{ id: 'sync-eden', label: 'End-to-end Types' },
+					{ id: 'sync-graph', label: 'Operator-graph Queries' },
+					{ id: 'sync-actions', label: 'Actions, Jobs & Schedules' },
+					{ id: 'sync-crdt', label: 'CRDT & Collaboration' },
+					{ id: 'sync-sandbox', label: 'Sandboxed Mutations' },
+					{ id: 'sync-frameworks', label: 'Framework Hooks' },
+					{ id: 'sync-adapters', label: 'CRDT Adapters' },
+					{ id: 'sync-packs', label: 'Sync Packs' },
+					{ id: 'sync-code-mode', label: 'Code Mode for Mutations' },
+					{
+						id: 'sync-unsafe-host',
+						label: 'unsafeHost Escape Hatch'
+					},
+					{ id: 'cluster-bus-overview', label: 'Cluster Bus' },
+					{ id: 'sync-launch', label: 'Release Notes' },
+					{ id: 'sync-vs-convex', label: 'vs Convex' },
+					{ id: 'sync-vs-firebase', label: 'vs Firebase' },
+					{ id: 'sync-we-heard-you', label: 'We Heard You' }
+				]
+			},
+			{
+				label: 'Queue',
+				pages: [
+					{ id: 'queue-overview', label: 'Overview' },
+					{ id: 'queue-jobs', label: 'Jobs & Scheduling' },
+					{ id: 'queue-operations', label: 'Operations' }
+				],
+				status: 'beta'
+			},
+			{ id: 'blob-overview', label: 'Blob', status: 'beta' }
+		],
+		label: 'Data & Sync'
 	},
 	{
-		icon: animated(FaExchangeAlt),
-		id: 'eden-overview',
-		label: 'Eden'
+		entries: [
+			{
+				label: 'AI Runtime',
+				pages: [
+					{ id: 'ai-overview', label: 'Overview' },
+					{ id: 'ai-providers', label: 'Providers' },
+					{ id: 'ai-plugin', label: 'Plugin' },
+					{ id: 'ai-tools', label: 'Tools' },
+					{ id: 'ai-streaming', label: 'Streaming & Protocol' }
+				],
+				status: 'beta'
+			},
+			{
+				label: 'RAG',
+				pages: [
+					{ id: 'rag-overview', label: 'Overview' },
+					{ id: 'rag-ingestion', label: 'Ingestion & Chunking' },
+					{ id: 'rag-retrieval', label: 'Retrieval & Adapters' },
+					{ id: 'rag-quality', label: 'Quality & Governance' },
+					{ id: 'rag-frameworks', label: 'Frameworks & Chat' }
+				],
+				status: 'beta'
+			},
+			{
+				label: 'MCP',
+				pages: [
+					{ id: 'mcp-overview', label: 'Overview' },
+					{ id: 'mcp-endpoints', label: 'Endpoints & Transport' },
+					{
+						id: 'mcp-capabilities',
+						label: 'Guards, Prompts & Resources'
+					},
+					{ id: 'mcp-feedback', label: 'Feedback & Elicitation' }
+				],
+				status: 'beta'
+			},
+			{ id: 'manifest-overview', label: 'Manifest', status: 'beta' },
+			{ id: 'rules-overview', label: 'Rules', status: 'alpha' },
+			{ id: 'outcomes-overview', label: 'Outcomes', status: 'beta' }
+		],
+		label: 'AI & Agents'
+	},
+	{
+		entries: [
+			{
+				label: 'Voice',
+				pages: [
+					{ id: 'voice', label: 'Overview' },
+					{ id: 'voice-ecosystem', label: 'Ecosystem' },
+					{ id: 'voice-comparison', label: 'Comparison' },
+					{ id: 'voice-runtime', label: 'Runtime' },
+					{ id: 'voice-adapters', label: 'Adapters' },
+					{
+						id: 'voice-adapter-contracts',
+						label: 'Adapter Contracts'
+					},
+					{ id: 'voice-route-surfaces', label: 'Route Surfaces' },
+					{
+						id: 'voice-assistants-tools',
+						label: 'Assistants & Tools'
+					},
+					{ id: 'voice-telephony', label: 'Telephony' },
+					{ id: 'voice-ops-proof', label: 'Ops & Proof' },
+					{
+						id: 'voice-client-frameworks',
+						label: 'Client & Frameworks'
+					},
+					{ id: 'voice-tester', label: 'Tester' },
+					{ id: 'voice-tester-scenarios', label: 'Tester Scenarios' },
+					{ id: 'voice-tester-discord', label: 'Discord Testing' },
+					{ id: 'voice-storage-testing', label: 'Storage & Testing' },
+					{ id: 'voice-api-reference', label: 'API Reference' }
+				],
+				status: 'beta'
+			},
+			{ id: 'media-overview', label: 'Media', status: 'beta' },
+			{ id: 'meeting-overview', label: 'Meeting', status: 'beta' }
+		],
+		label: 'Voice & Media'
+	},
+	{
+		entries: [
+			{ id: 'platform-overview', label: 'Platform Tools' },
+			{ id: 'runtime-overview', label: 'Runtime', status: 'beta' },
+			{ id: 'router-overview', label: 'Router', status: 'beta' },
+			{ id: 'deploy-overview', label: 'Deploy', status: 'beta' },
+			{ id: 'secrets-overview', label: 'Secrets', status: 'beta' },
+			{ id: 'metering-overview', label: 'Metering', status: 'beta' },
+			{ id: 'billing-overview', label: 'Billing', status: 'beta' },
+			{
+				id: 'autoscaler-overview',
+				label: 'Autoscaler',
+				status: 'beta'
+			},
+			{ id: 'health-overview', label: 'Health', status: 'beta' },
+			{ id: 'cli-overview', label: 'Ops CLI', status: 'beta' },
+			{
+				label: 'isolated-jsc',
+				pages: [
+					{ id: 'isolated-jsc', label: 'Overview' },
+					{ id: 'isolated-jsc-bun', label: 'For Bun' },
+					{
+						id: 'isolated-jsc-hibernation',
+						label: 'Pool Hibernation'
+					}
+				],
+				status: 'beta'
+			},
+			{
+				id: 'rate-limit-overview',
+				label: 'Rate Limit',
+				status: 'beta'
+			}
+		],
+		label: 'Platform & Infra'
+	},
+	{
+		entries: [
+			{
+				label: 'Error Pipeline',
+				pages: [
+					{ id: 'error-pipeline', label: 'Pipeline Overview' },
+					{ id: 'errors-overview', label: 'Errors' },
+					{ id: 'beacon-overview', label: 'Beacon' },
+					{ id: 'replay-overview', label: 'Replay' }
+				]
+			},
+			{ id: 'telemetry-overview', label: 'Telemetry', status: 'beta' },
+			{ id: 'metrics-overview', label: 'Metrics', status: 'beta' },
+			{ id: 'logs-overview', label: 'Logs', status: 'beta' },
+			{ id: 'audit-overview', label: 'Audit', status: 'alpha' }
+		],
+		label: 'Observability'
+	},
+	{
+		entries: [
+			{ id: 'commerce-overview', label: 'Commerce', status: 'beta' },
+			{ id: 'crm-overview', label: 'CRM', status: 'alpha' },
+			{ id: 'discover-overview', label: 'Discover', status: 'alpha' },
+			{ id: 'enrich-overview', label: 'Enrich', status: 'beta' },
+			{ id: 'audience-overview', label: 'Audience', status: 'alpha' },
+			{
+				id: 'partnership-overview',
+				label: 'Partnership',
+				status: 'alpha'
+			},
+			{
+				id: 'engagement-overview',
+				label: 'Engagement',
+				status: 'alpha'
+			},
+			{ id: 'dispatch-overview', label: 'Dispatch', status: 'alpha' },
+			{ id: 'email-overview', label: 'Email', status: 'alpha' },
+			{ id: 'onchain-overview', label: 'Onchain', status: 'alpha' }
+		],
+		label: 'Commerce & Growth'
+	},
+	{
+		entries: [
+			{ id: 'pwa-overview', label: 'PWA', status: 'beta' },
+			{
+				label: 'Tour',
+				pages: [
+					{ id: 'tour-overview', label: 'Overview' },
+					{ id: 'tour-actions', label: 'Actions & Demo Data' },
+					{ id: 'tour-branching', label: 'Branching & Events' },
+					{ id: 'tour-checklist', label: 'Checklist & Hotspots' }
+				],
+				status: 'beta'
+			},
+			{ id: 'scoped-state', label: 'Scoped State', status: 'beta' },
+			{
+				id: 'vue-composables-overview',
+				label: 'Vue Composables',
+				status: 'beta'
+			},
+			{
+				label: 'Demo',
+				pages: [
+					{ id: 'demo-overview', label: 'Overview' },
+					{ id: 'demo-browser', label: 'Browser & Desktop' },
+					{ id: 'demo-recording', label: 'Recording & Voiceover' }
+				],
+				status: 'beta'
+			}
+		],
+		label: 'Frontend & UX'
+	},
+	{
+		entries: [
+			{
+				id: 'create-absolutejs',
+				label: 'Create AbsoluteJS',
+				status: 'beta'
+			},
+			{ id: 'studio-overview', label: 'Studio', status: 'alpha' },
+			{
+				label: 'ESLint',
+				pages: [
+					{ id: 'eslint', label: 'Overview' },
+					{
+						id: 'eslint-angular-one-feature-per-file',
+						label: 'angular-one-feature-per-file'
+					},
+					{
+						id: 'eslint-explicit-object-types',
+						label: 'explicit-object-types'
+					},
+					{
+						id: 'eslint-inline-style-limit',
+						label: 'inline-style-limit'
+					},
+					{
+						id: 'eslint-localize-react-props',
+						label: 'localize-react-props'
+					},
+					{
+						id: 'eslint-max-depth-extended',
+						label: 'max-depth-extended'
+					},
+					{ id: 'eslint-max-jsxnesting', label: 'max-jsxnesting' },
+					{ id: 'eslint-min-var-length', label: 'min-var-length' },
+					{
+						id: 'eslint-no-button-navigation',
+						label: 'no-button-navigation'
+					},
+					{
+						id: 'eslint-no-explicit-return-type',
+						label: 'no-explicit-return-type'
+					},
+					{
+						id: 'eslint-no-import-meta-path',
+						label: 'no-import-meta-path'
+					},
+					{
+						id: 'eslint-no-inline-object-types',
+						label: 'no-inline-object-types'
+					},
+					{
+						id: 'eslint-no-multi-style-objects',
+						label: 'no-multi-style-objects'
+					},
+					{
+						id: 'eslint-no-nested-jsx-return',
+						label: 'no-nested-jsx-return'
+					},
+					{
+						id: 'eslint-no-nondeterministic-render',
+						label: 'no-nondeterministic-render'
+					},
+					{
+						id: 'eslint-no-or-none-component',
+						label: 'no-or-none-component'
+					},
+					{
+						id: 'eslint-no-redundant-type-annotation',
+						label: 'no-redundant-type-annotation'
+					},
+					{
+						id: 'eslint-no-transition-cssproperties',
+						label: 'no-transition-cssproperties'
+					},
+					{
+						id: 'eslint-no-trivial-alias',
+						label: 'no-trivial-alias'
+					},
+					{
+						id: 'eslint-no-unnecessary-div',
+						label: 'no-unnecessary-div'
+					},
+					{
+						id: 'eslint-no-unnecessary-key',
+						label: 'no-unnecessary-key'
+					},
+					{
+						id: 'eslint-no-useless-catch',
+						label: 'no-useless-catch'
+					},
+					{
+						id: 'eslint-no-useless-function',
+						label: 'no-useless-function'
+					},
+					{
+						id: 'eslint-prefer-inline-exports',
+						label: 'prefer-inline-exports'
+					},
+					{
+						id: 'eslint-seperate-style-files',
+						label: 'seperate-style-files'
+					},
+					{ id: 'eslint-sort-exports', label: 'sort-exports' },
+					{
+						id: 'eslint-sort-keys-fixable',
+						label: 'sort-keys-fixable'
+					},
+					{
+						id: 'eslint-spring-naming-convention',
+						label: 'spring-naming-convention'
+					}
+				],
+				status: 'beta'
+			},
+			{
+				id: 'vscode-extension-overview',
+				label: 'VS Code Extension',
+				status: 'alpha'
+			},
+			{ id: 'renown-overview', label: 'Renown', status: 'beta' }
+		],
+		label: 'Dev Tools'
 	}
 ];

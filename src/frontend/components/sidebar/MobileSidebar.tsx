@@ -2,12 +2,8 @@ import { MOBILE_SIDEBAR_LAYOUT } from '../../../constants';
 import { animated, SpringRef, SpringValue } from '@react-spring/web';
 import { FaTimes } from 'react-icons/fa';
 import { ThemeSprings } from '../../../types/springTypes';
-import { DocsView, isMenuDropdown, isMenuHeading } from '../../../types/types';
-import { sidebarData } from '../../data/sidebarData';
-import { useSidebarSprings } from '../../hooks/springs/useSidebarSprings';
-import { SidebarDropdown } from './SidebarDropdown';
-import { SidebarHeading } from './SidebarHeading';
-import { SidebarLink } from './SidebarLink';
+import { DocsView } from '../../../types/types';
+import { SidebarNav } from './SidebarNav';
 
 type MobileSidebarProps = {
 	spring: {
@@ -19,7 +15,7 @@ type MobileSidebarProps = {
 	themeSprings: ThemeSprings;
 	navigateToView: (newView: DocsView) => void;
 	openSections: Set<string>;
-	onToggleSection: (label: string) => void;
+	onToggleSection: (key: string) => void;
 };
 
 export const MobileSidebar = ({
@@ -31,19 +27,11 @@ export const MobileSidebar = ({
 	openSections,
 	onToggleSection
 }: MobileSidebarProps) => {
-	const { linksSprings, linksApi, startIndexForDropdown } =
-		useSidebarSprings(view);
-
 	const handleClose = () => {
 		void springApi.start({
 			overlayOpacity: 0,
 			transform: 'translateX(-100%)'
 		});
-	};
-
-	const handleNavigate = (newView: DocsView) => {
-		navigateToView(newView);
-		handleClose();
 	};
 
 	return (
@@ -74,13 +62,13 @@ export const MobileSidebar = ({
 					flexDirection: 'column',
 					height: '100%',
 					left: 0,
-					maxWidth: '280px',
+					maxWidth: '300px',
 					overflowY: 'auto',
 					padding: '1rem',
 					position: 'fixed',
 					top: 0,
 					transform: spring.transform,
-					width: '80%',
+					width: '84%',
 					zIndex: 10000
 				}}
 			>
@@ -122,63 +110,16 @@ export const MobileSidebar = ({
 						<FaTimes />
 					</animated.button>
 				</animated.div>
-
-				<nav style={{ display: 'flex', flexDirection: 'column' }}>
-					{sidebarData.map((element, index) => {
-						if (isMenuHeading(element)) {
-							return (
-								<SidebarHeading
-									heading={element.heading}
-									key={`heading-${element.heading}`}
-									themeSprings={themeSprings}
-								/>
-							);
-						}
-						if (isMenuDropdown(element)) {
-							return (
-								<SidebarDropdown
-									buttons={element.buttons}
-									icon={element.icon}
-									isOpen={openSections.has(element.label)}
-									key={element.label}
-									label={element.label}
-									linksApi={linksApi}
-									linksSprings={linksSprings}
-									navigateToView={handleNavigate}
-									onToggle={() =>
-										onToggleSection(element.label)
-									}
-									onToggleSection={onToggleSection}
-									openSections={openSections}
-									startIndex={startIndexForDropdown(index)}
-									themeSprings={themeSprings}
-									view={view}
-								/>
-							);
-						}
-
-						const linkSprings = linksSprings[index];
-						if (linkSprings === undefined) {
-							throw new Error(
-								'Internal index error in MobileSidebar component'
-							);
-						}
-
-						return (
-							<SidebarLink
-								icon={element.icon}
-								id={element.id}
-								index={-1}
-								key={element.label}
-								label={element.label}
-								linksApi={linksApi}
-								navigateToView={handleNavigate}
-								themeSprings={themeSprings}
-								view={view}
-							/>
-						);
-					})}
-				</nav>
+				<SidebarNav
+					navigateToView={(newView: DocsView) => {
+						navigateToView(newView);
+						handleClose();
+					}}
+					onToggleSection={onToggleSection}
+					openSections={openSections}
+					themeSprings={themeSprings}
+					view={view}
+				/>
 			</animated.aside>
 		</>
 	);
