@@ -3,7 +3,7 @@ import { PackageDocData } from '../../../../types/packageDocs';
 export const manifestPackageData: PackageDocData = {
 	category: 'AI',
 	description:
-		'The AbsoluteJS package manifest contract: every @absolutejs/* package exports a typed manifest from its ./manifest subpath describing its settings schema, env requirements, adapter slots, wiring recipes, and AI tools. This package is the contract those manifests are written against, plus the bridges that turn any manifest into an AI tool map for @absolutejs/ai or a remote MCP tool registry for @absolutejs/mcp. TypeBox schemas are the single source of truth, so the same schema types the handler at compile time and is handed verbatim to AI providers and MCP at runtime.',
+		'The AbsoluteJS package manifest contract: every @absolutejs/* package exports a typed manifest from its ./manifest subpath describing its settings schema, env requirements, adapter slots, wiring recipes, and guarded AI tools. This package is the contract those manifests are written against, plus fail-closed bridges that turn a contract-v2 manifest into an AI tool map for @absolutejs/ai or a remote MCP tool registry for @absolutejs/mcp. TypeBox schemas are the single source of truth, so the same schema types the handler at compile time and is handed verbatim to AI providers and MCP at runtime.',
 	features: [
 		{
 			description:
@@ -17,7 +17,7 @@ export const manifestPackageData: PackageDocData = {
 		},
 		{
 			description:
-				'toAIToolMap and toMcpToolRegistry validate every call’s input against the tool schema before the handler runs and fail closed: tools missing a runtime binding or an ungranted capability are omitted entirely.',
+				'toAIToolMap and toMcpToolRegistry validate every call’s input and require a host authorization enforcer before the handler runs. Contract-v1 tools, unguarded tools, missing runtimes, and ungranted capabilities are omitted entirely.',
 			title: 'AI and MCP bridges'
 		},
 		{
@@ -71,7 +71,7 @@ import type { Dispatcher, DispatcherOptions } from './types';
 const tool = toolFactory<Dispatcher>();
 
 export const manifest = defineManifest<DispatcherOptions, Dispatcher>()({
-	contract: 1,
+	contract: 2,
 	identity: {
 		category: 'messaging',
 		name: '@absolutejs/dispatch',
@@ -95,7 +95,16 @@ export const manifest = defineManifest<DispatcherOptions, Dispatcher>()({
 	},
 	tools: {
 		send_email: tool.runtime({
-			annotations: { openWorldHint: true },
+			annotations: { idempotentHint: true, openWorldHint: true },
+			authorization: {
+				approval: 'policy',
+				audience: 'authenticated',
+				destinationFields: ['to'],
+				effects: ['send', 'external-network'],
+				idempotency: { mode: 'host' },
+				requiredScopes: ['messaging:send'],
+				reversible: false
+			},
 			description: 'Send a transactional email.',
 			handler: async (input, dispatcher) => {
 				const result = await dispatcher.email(input);
@@ -138,18 +147,27 @@ export const manifest = defineManifest<DispatcherOptions, Dispatcher>()({
 const result = await loadManifest('@absolutejs/dispatch');
 if (!result.ok) throw new Error(result.details);
 
+const enforce = async (request, execute) => {
+	await agency.authorizeAndLease(request);
+	const result = await execute();
+	await agency.recordReceipt(request, result);
+
+	return result;
+};
+
 // AI tool loop (@absolutejs/ai)
-const tools = toAIToolMap(result.manifest, { runtime: dispatcher });
+const tools = toAIToolMap(result.manifest, { enforce, runtime: dispatcher });
 
 // Remote MCP server (@absolutejs/mcp)
 new Elysia().use(
 	mcpServer({
 		path: '/mcp',
-		tools: () => toMcpToolRegistry(result.manifest, { runtime: dispatcher })
+		tools: () =>
+			toMcpToolRegistry(result.manifest, { enforce, runtime: dispatcher })
 	})
 );`,
 			description:
-				'Load any installed manifest and bridge it into an AI tool map or a remote MCP tool registry.',
+				'Load a guarded manifest and bridge it only through the host authorization, lease, and receipt boundary.',
 			heading: 'Consuming Manifests',
 			language: 'typescript'
 		}
@@ -157,5 +175,5 @@ new Elysia().use(
 	status: 'beta',
 	tagline:
 		'Typed manifest contract for @absolutejs/* packages, with bridges that turn any manifest into an AI tool map or remote MCP tool registry.',
-	version: '0.1.0'
+	version: '0.4.0'
 };
