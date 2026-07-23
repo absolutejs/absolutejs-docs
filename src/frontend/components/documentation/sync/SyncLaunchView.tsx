@@ -275,10 +275,10 @@ const releaseEntries: VersionTimelineEntry[] = [
 	},
 	{
 		description:
-			'Housekeeping patch — npm support metadata added to the package manifest. Current release.',
+			'Compatibility patch — Drizzle integrations require drizzle-orm 1.0.0-rc.4 or newer on the 1.x line, with the app owning the single runtime. Current release.',
 		highlight: true,
 		title: 'Current release',
-		version: '2.2.1'
+		version: '2.9.1'
 	}
 ];
 
@@ -331,13 +331,18 @@ export const SyncLaunchView = ({
 					</h1>
 					<p style={paragraphLargeStyle}>
 						<code>@absolutejs/sync</code> is at{' '}
-						<strong>2.2.1</strong>. The 1.0 release froze the public
+						<strong>2.9.1</strong>. The 1.0 release froze the public
 						API across every subpath; the 1.x line layered on the
 						sandbox, sync packs, Code Mode, cluster cursors,
 						backpressure, tracing, point-in-time replay, and tenant
 						migration; the 2.x line opened with the move to the
-						drizzle-orm 1.0 RC peer line. Every entry below is
-						summarized from the package changelog.
+						drizzle-orm 1.0 RC peer line. Sync 2.9.1 requires{' '}
+						<code>drizzle-orm &gt;=1.0.0-rc.4 &lt;2</code>.
+						Applications install the current RC exactly and own the
+						single Drizzle runtime; libraries declare that range as
+						a peer. This remains a forward feature until Drizzle 1.0
+						is stable. Every entry below summarizes the package
+						releases.
 					</p>
 				</animated.div>
 
@@ -382,7 +387,7 @@ export const SyncLaunchView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The full arc from the 1.0 API freeze to the current
-						2.2.1 release — patch releases fold into the feature
+						2.9.1 release — patch releases fold into the feature
 						they belong to. Highlighted pills mark the launch, the
 						2.x major, and the current version.
 					</p>

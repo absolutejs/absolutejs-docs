@@ -1,6 +1,6 @@
 import { providerOptions } from '@absolutejs/auth';
 import { createProvider } from '../../src/backend/handlers/providerHandlers';
-import { schema } from '../schema';
+import { relations, schema } from '../schema';
 import { env, exit, stderr, stdout } from 'node:process';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
@@ -10,7 +10,7 @@ if (!env.DATABASE_URL) {
 }
 
 const sql = neon(env.DATABASE_URL);
-const db = drizzle(sql, { schema });
+const db = drizzle({ client: sql, relations });
 
 const existingProviders = await db.select().from(schema.providers).execute();
 const existingProviderNames = new Set(

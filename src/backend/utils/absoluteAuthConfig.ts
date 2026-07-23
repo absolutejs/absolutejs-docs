@@ -1,12 +1,13 @@
 import { defineAuthConfig, instantiateUserSession } from '@absolutejs/auth';
 import { DatabaseType, User } from '../../../db/schema';
 import { handleStatusUpdate } from '../handlers/providerHandlers';
-import { createUser, getUser } from '../handlers/userHandlers';
+import { createUser, getDBUser, getUser } from '../handlers/userHandlers';
 import { providersConfiguration } from './providersConfiguration';
 
 export const absoluteAuthConfig = (db: DatabaseType) =>
 	defineAuthConfig<User>({
 		providersConfiguration: providersConfiguration,
+		getUser: async (sub) => (await getDBUser({ authSub: sub, db })) ?? null,
 		onCallbackError: async ({ error, authProvider }) => {
 			await handleStatusUpdate({
 				authProvider,

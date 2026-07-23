@@ -3,16 +3,14 @@ import { auth } from '@absolutejs/auth';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { Elysia } from 'elysia';
-import { schema, User } from '../../db/schema';
+import { relations, User } from '../../db/schema';
 import { providerPlugin } from './plugins/providerPlugin';
 import { telemetryPlugin } from './plugins/telemetryPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 import { pagesPlugin } from './plugins/pagesPlugin';
 
 const sql = neon(getEnv('DATABASE_URL'));
-const db = drizzle(sql, {
-	schema
-});
+const db = drizzle({ client: sql, relations });
 
 const { absolutejs, manifest } = await prepare();
 

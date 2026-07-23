@@ -7,6 +7,7 @@ import {
 	timestamp,
 	varchar
 } from 'drizzle-orm/pg-core';
+import { defineRelations } from 'drizzle-orm';
 import { PROVIDER_STATUSES } from '../src/constants';
 import { ProviderOption } from '@absolutejs/auth';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
@@ -60,8 +61,9 @@ export const schema = {
 	users
 };
 
-export type SchemaType = typeof schema;
-export type DatabaseType = NeonHttpDatabase<SchemaType>;
+export const relations = defineRelations(schema);
+
+export type DatabaseType = NeonHttpDatabase<typeof relations>;
 
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;

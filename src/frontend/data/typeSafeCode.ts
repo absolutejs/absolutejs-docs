@@ -4,12 +4,12 @@ import { Home } from '../frontend/pages/Home';
 import { Elysia } from 'elysia';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { schema, User } from '../../db/schema';
+import { relations, schema, User } from '../../db/schema';
 
 const { absolutejs, manifest } = await prepare();
 
 const sql = neon(getEnv('DATABASE_URL'))
-const db = drizzle(sql, { schema });
+const db = drizzle({ client: sql, relations });
 
 const server = new Elysia()
     .use(absolutejs)
@@ -26,7 +26,8 @@ const server = new Elysia()
     .use(networking);
 
 export type Server = typeof server;`;
-export const databaseCode = `import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
+export const databaseCode = `import { defineRelations } from 'drizzle-orm';
+import { NeonHttpDatabase } from 'drizzle-orm/neon-http';
 import { pgTable, varchar, timestamp, jsonb } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
@@ -42,8 +43,8 @@ export const schema = {
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 
-export type SchemaType = typeof schema;
-export type DatabaseType = NeonHttpDatabase<SchemaType>;`;
+export const relations = defineRelations(schema);
+export type DatabaseType = NeonHttpDatabase<typeof relations>;`;
 export const frontendCode = `import { server } from '../eden/treaty';
 import { Head } from '../components/page/Head';
 import { bodyDefault, htmlDefault, mainDefault } from '../styles';

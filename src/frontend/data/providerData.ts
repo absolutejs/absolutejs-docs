@@ -8,7 +8,7 @@ export type ProviderInfo = {
 	createNewCredentialsUrl: string;
 };
 
-type ProviderData = Record<Lowercase<ProviderOption>, ProviderInfo>;
+type ProviderData = Record<ProviderOption, ProviderInfo>;
 
 export type ProviderKey = keyof ProviderData;
 
@@ -86,6 +86,13 @@ export const providerData: ProviderData = {
 			'https://aps.autodesk.com/hubs/@personal/applications/',
 		name: 'Autodesk',
 		primaryColor: '#000000'
+	},
+	azureadb2c: {
+		createNewCredentialsUrl: 'https://portal.azure.com',
+		logoUrl: '/assets/svg/Microsoft-Entra-ID-color-icon.svg',
+		manageCredentialsUrl: 'https://portal.azure.com',
+		name: 'Azure AD B2C',
+		primaryColor: 'rgb(0, 120, 212)'
 	},
 	battlenet: {
 		createNewCredentialsUrl: 'https://develop.battle.net/access/clients',
@@ -331,6 +338,15 @@ export const providerData: ProviderData = {
 			'https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps',
 		name: 'Microsoft Entra ID',
 		primaryColor: '#000000'
+	},
+	microsoftentraexternalid: {
+		createNewCredentialsUrl:
+			'https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade',
+		logoUrl: '/assets/svg/Microsoft-Entra-ID-color-icon.svg',
+		manageCredentialsUrl:
+			'https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade',
+		name: 'Microsoft Entra External ID',
+		primaryColor: '#0078D4'
 	},
 	monday: {
 		createNewCredentialsUrl: 'https://developer.monday.com/apps',

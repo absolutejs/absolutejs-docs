@@ -75,7 +75,7 @@ export const packageCatalog: PackageCatalogEntry[] = [
 		npmName: '@absolutejs/sync',
 		tagline:
 			'Reactive-push sync with write-behind caching, CRDT collaboration, and end-to-end types for Elysia.',
-		version: '2.2.1',
+		version: '2.9.1',
 		view: 'sync-overview'
 	},
 	{
