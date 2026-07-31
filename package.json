@@ -25,7 +25,7 @@
 		"db:push": "drizzle-kit push"
 	},
 	"dependencies": {
-		"@absolutejs/absolute": "0.19.0-beta.1122",
+		"@absolutejs/absolute": "0.19.0-beta.1123",
 		"@absolutejs/auth": "0.56.17",
 		"@absolutejs/blog": "0.1.0",
 		"@elysiajs/eden": "1.4.9",
