@@ -90,16 +90,19 @@ export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
 					type="application/ld+json"
 				/>
 				<style>{citraArticleStyles}</style>
-				<div
-					aria-hidden="true"
-					className="reading-progress"
-					style={{ width: `${progress * PERCENT}%` }}
-				/>
-				<Navbar
-					setTheme={setTheme}
-					themeSprings={themeSprings}
-					user={user}
-				/>
+				<div className="blog-sticky-header">
+					<Navbar
+						setTheme={setTheme}
+						themeSprings={themeSprings}
+						user={user}
+					/>
+					<div aria-hidden="true" className="reading-progress-track">
+						<div
+							className="reading-progress"
+							style={{ width: `${progress * PERCENT}%` }}
+						/>
+					</div>
+				</div>
 				<main ref={articleRef}>
 					<CitraArticleContent
 						post={post}

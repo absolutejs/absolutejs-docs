@@ -100,15 +100,33 @@ export const CitraArticleContent = ({
 					</div>
 				</div>
 				<nav className="article-toc" aria-label="In this article">
-					<span>In this article</span>
-					<a href="#argument">The application problem</a>
-					<a href="#model">The model</a>
-					<a href="#withings">The hard case</a>
-					<a href="#types">Type safety</a>
-					<a href="#oidc">OIDC discovery</a>
-					<a href="#identity">Identity mapping</a>
-					<a href="#custom">Custom providers</a>
-					<a href="#history">Where Citra came from</a>
+					<p>In this article</p>
+					<ol>
+						<li>
+							<a href="#argument">The application problem</a>
+						</li>
+						<li>
+							<a href="#model">The model</a>
+						</li>
+						<li>
+							<a href="#withings">The hard case</a>
+						</li>
+						<li>
+							<a href="#types">Type safety</a>
+						</li>
+						<li>
+							<a href="#oidc">OIDC discovery</a>
+						</li>
+						<li>
+							<a href="#identity">Identity mapping</a>
+						</li>
+						<li>
+							<a href="#custom">Custom providers</a>
+						</li>
+						<li>
+							<a href="#history">Where Citra came from</a>
+						</li>
+					</ol>
 				</nav>
 				<div className="stats" aria-label="Citra at a glance">
 					<div className="stat">
