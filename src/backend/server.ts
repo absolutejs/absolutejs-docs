@@ -1,6 +1,5 @@
 import { getEnv, networking, prepare } from '@absolutejs/absolute';
 import { auth } from '@absolutejs/auth';
-import { blogFeeds } from '@absolutejs/blog/elysia';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { Elysia } from 'elysia';
@@ -15,6 +14,14 @@ const sql = neon(getEnv('DATABASE_URL'));
 const db = drizzle({ client: sql, relations });
 
 const { absolutejs, manifest } = await prepare();
+const feeds = blog.feeds();
+const feedResponse = (body: string, contentType: string) =>
+	new Response(body, {
+		headers: {
+			'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600',
+			'Content-Type': `${contentType}; charset=utf-8`
+		}
+	});
 
 // @absolutejs/auth grew enough OAuth2/OIDC/SSO/credentials/etc. routes since 0.22
 // that inlining its plugin into the Elysia .use() chain blows TS's union budget
@@ -26,7 +33,13 @@ const authPlugin = authPluginRich as unknown as Elysia;
 
 const builtApp = new Elysia()
 	.use(absolutejs)
-	.use(blogFeeds(blog, blog.site.feed.paths))
+	.get('/blog/rss.xml', () => feedResponse(feeds.rss, 'application/rss+xml'))
+	.get('/blog/atom.xml', () =>
+		feedResponse(feeds.atom, 'application/atom+xml')
+	)
+	.get('/blog/feed.json', () =>
+		feedResponse(feeds.json, 'application/feed+json')
+	)
 	.use(providerPlugin(db))
 	.use(authPlugin)
 	.use(telemetryPlugin(db))
