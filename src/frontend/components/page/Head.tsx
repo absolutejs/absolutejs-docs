@@ -1,18 +1,20 @@
 import { styleReset } from '../../styles/styles';
 
 type HeadProps = {
+	description?: string;
 	title?: string;
 	icon?: string;
 };
 
 export const Head = ({
+	description = 'AbsoluteJS Documentation',
 	title = 'AbsoluteJS',
 	icon = '/assets/favicon.ico'
 }: HeadProps) => (
 	<head>
 		<meta charSet="utf-8" />
 		<title>{title}</title>
-		<meta content="AbsoluteJS Documentation" name="description" />
+		<meta content={description} name="description" />
 		<meta content="width=device-width, initial-scale=1" name="viewport" />
 		<link href={icon} rel="icon" />
 		<link

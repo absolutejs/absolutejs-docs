@@ -135,8 +135,8 @@ export const CitraView = ({
 	const isMobile = isSizeOrLess('sm');
 	const showDesktopToc = !isMobileOrTablet;
 
-	const providers = Object.values(providerData);
-	const providersCount = providers.length;
+	const citraProviders = Object.values(providerData);
+	const providersCount = citraProviders.length;
 
 	return (
 		<div
@@ -394,7 +394,7 @@ export const CitraView = ({
 							marginTop: '1rem'
 						}}
 					>
-						{providers.map((provider) => (
+						{citraProviders.map((provider) => (
 							<CitraCard
 								key={provider.name}
 								logoUrl={provider.logoUrl}

@@ -1,0 +1,76 @@
+import { Head } from '@absolutejs/absolute/react/components';
+import { useReadingProgress, useReadingTime } from '@absolutejs/blog/react';
+import { useRef } from 'react';
+import { User } from '../../../db/schema';
+import { blog } from '../../shared/blog';
+import { CitraArticleContent } from '../components/blog/CitraArticleContent';
+import { Navbar } from '../components/navbar/Navbar';
+import { ThemeMode, useTheme } from '../hooks/useTheme';
+import { citraArticleStyles } from '../styles/citraArticleStyles';
+
+const PERCENT = 100;
+
+type BlogPostProps = {
+	slug: string;
+	theme: ThemeMode | undefined;
+	user: User | null;
+};
+
+export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
+	const post = blog.get(slug);
+	if (post === undefined) {
+		throw new Error(`Unknown blog post "${slug}"`);
+	}
+
+	const [themeSprings, setTheme] = useTheme(theme);
+	const articleRef = useRef<HTMLElement>(null);
+	const progress = useReadingProgress(articleRef);
+	const readingTime = useReadingTime(articleRef);
+	const metadata = blog.head(post);
+	const { jsonLd, ...headMetadata } = metadata;
+
+	return (
+		<html lang="en">
+			<Head
+				{...headMetadata}
+				icon="/assets/favicon.ico"
+				meta={[
+					...metadata.meta,
+					{ content: '#171a17', name: 'theme-color' }
+				]}
+			/>
+			<body className="citra-blog-document">
+				<script
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify({
+							'@context': 'https://schema.org',
+							...jsonLd
+						})
+					}}
+					type="application/ld+json"
+				/>
+				<style>{citraArticleStyles}</style>
+				<div
+					aria-hidden="true"
+					className="reading-progress"
+					style={{ width: `${progress * PERCENT}%` }}
+				/>
+				<Navbar
+					setTheme={setTheme}
+					themeSprings={themeSprings}
+					user={user}
+				/>
+				<main ref={articleRef}>
+					<CitraArticleContent
+						post={post}
+						readingTime={readingTime}
+					/>
+				</main>
+				<footer className="site-footer">
+					<span>Citra · OAuth2 for TypeScript</span>
+					<span>78 provider configurations, one request engine.</span>
+				</footer>
+			</body>
+		</html>
+	);
+};

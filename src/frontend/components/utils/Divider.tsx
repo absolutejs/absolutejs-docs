@@ -1,4 +1,3 @@
-import { isNonEmptyString } from '../../../types/typeGuards';
 import {
 	separatorStyle,
 	separatorLineStyle,
@@ -19,7 +18,7 @@ export const Divider = ({ color, text, height }: DividerProps) => (
 				height: height
 			})}
 		/>
-		{isNonEmptyString(text) && (
+		{typeof text === 'string' && text.trim() !== '' && (
 			<span style={separatorTextStyle}>{text}</span>
 		)}
 		<div

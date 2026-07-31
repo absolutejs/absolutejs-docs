@@ -9,6 +9,7 @@ import {
 } from '@absolutejs/auth';
 import { AuthTesting } from '../../frontend/pages/AuthTesting';
 import { Blog } from '../../frontend/pages/Blog';
+import { BlogPost } from '../../frontend/pages/BlogPost';
 import { Documentation } from '../../frontend/pages/Documentation';
 import { Home } from '../../frontend/pages/Home';
 import { Profile } from '../../frontend/pages/Profile';
@@ -19,14 +20,33 @@ import {
 	pageCookie,
 	telemetryViewEnum
 } from '../../types/typebox';
+import { blog } from '../../shared/blog';
 
 const whitelistedAdmins =
 	getEnv('ADMIN_SUBS')
 		?.split(',')
 		.map((adminSub) => adminSub.trim()) ?? [];
 
+const feeds = blog.feeds();
+const feedResponse = (body: string, contentType: string) =>
+	new Response(body, {
+		headers: {
+			'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600',
+			'Content-Type': `${contentType}; charset=utf-8`
+		}
+	});
+
 export const pagesPlugin = (manifest: Record<string, string>) =>
 	new Elysia()
+		.get('/blog/rss.xml', () =>
+			feedResponse(feeds.rss, 'application/rss+xml')
+		)
+		.get('/blog/atom.xml', () =>
+			feedResponse(feeds.atom, 'application/atom+xml')
+		)
+		.get('/blog/feed.json', () =>
+			feedResponse(feeds.json, 'application/feed+json')
+		)
 		.guard({
 			cookie: pageCookie
 		})
@@ -90,6 +110,41 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 						user
 					}
 				});
+			}
+		)
+		.get(
+			'/blog/:slug',
+			async ({
+				params: { slug },
+				cookie: { theme, user_session_id },
+				store: { session },
+				status
+			}) => {
+				if (blog.get(slug) === undefined) {
+					return status('Not Found', 'Blog post not found');
+				}
+
+				const { user, error } = await getStatus<User>(
+					session,
+					user_session_id
+				);
+
+				if (error) {
+					return status(error.code, error.message);
+				}
+
+				return handleReactPageRequest({
+					index: asset(manifest, 'BlogPostIndex'),
+					Page: BlogPost,
+					props: {
+						slug,
+						theme: theme?.value,
+						user
+					}
+				});
+			},
+			{
+				params: t.Object({ slug: t.String() })
 			}
 		)
 		.get('/profile', ({ cookie: { theme }, protectRoute, redirect }) =>
