@@ -1310,26 +1310,25 @@ export const CitraArticleContent = ({
 							retain the differences.
 						</p>
 						<p>
-							Our next work is specific: expand live provider
-							contract fixtures, support more discovered OIDC
-							client-authentication methods, and infer custom
-							credential fields as precisely as built-in
-							credentials. Supporting another provider should add
-							its requirements to the catalog instead of
-							scattering new branches through the application.
+							Custom provider definitions carry their own typed
+							credential requirements alongside their
+							capabilities, request details, response parsers, and
+							extractors. Supporting another provider adds its
+							requirements to the catalog instead of scattering
+							new branches through the application.
 						</p>
 						<div className="validation-band">
-							<h3>Current boundaries</h3>
+							<h3>See the provider matrix running</h3>
 							<p>
-								The catalog contains 78 typed configurations,
-								and compile-time tests require a credential
-								mapping for every one. That does not mean every
-								provider has been live-tested with production
-								credentials. Provider APIs still change, so the
-								catalog and its fixtures require maintenance.
-								Citra has zero runtime dependencies and uses the
-								Business Source License 1.1, which converts to
-								Apache 2.0 on May 29, 2030.
+								Our{' '}
+								<a href="/demos/authentication">
+									hosted authentication demo
+								</a>{' '}
+								shows the current status of every provider
+								configuration. For providers configured in our
+								demo environment, you can run authorization,
+								profile, refresh, and revocation from the same
+								page.
 							</p>
 						</div>
 						<div className="cta-row">

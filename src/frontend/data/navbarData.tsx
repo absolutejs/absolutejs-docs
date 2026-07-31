@@ -10,14 +10,8 @@ export const navbarData: NavbarElement[] = [
 		label: 'Packages'
 	},
 	{
-		href: '/testing',
-		label: 'Testing',
-		links: [
-			{
-				href: '/testing/authentication',
-				label: 'Authentication'
-			}
-		]
+		href: '/demos',
+		label: 'Demos'
 	},
 	{
 		href: '/blog',

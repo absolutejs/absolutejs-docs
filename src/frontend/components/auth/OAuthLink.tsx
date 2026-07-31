@@ -20,7 +20,7 @@ type OAuthLinkProps = {
 export const OAuthLink = ({ mode, provider, themeSprings }: OAuthLinkProps) => {
 	const defaultData: ProviderInfo = {
 		createNewCredentialsUrl: '/oauth2/credentials/create',
-		logoUrl: '/assets/svg/todo-put-file.svg',
+		logoUrl: '/assets/svg/provider-placeholder.svg',
 		manageCredentialsUrl: '/oauth2/credentials',
 		name: 'other provider',
 		primaryColor: 'lightgray'

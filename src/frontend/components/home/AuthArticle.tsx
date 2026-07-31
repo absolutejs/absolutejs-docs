@@ -23,13 +23,13 @@ export const AuthArticle = ({ themeSprings }: ThemeProps) => (
 			lock-in.
 		</animated.p>
 		<animated.a
-			href="/testing/authentication"
+			href="/demos/authentication"
 			style={buttonStyle({
 				backgroundColor: themeSprings.themePrimary,
 				color: themeSprings.contrastPrimary
 			})}
 		>
-			Test the OAuth2 Providers
+			Explore the OAuth2 Demo
 		</animated.a>
 	</animated.article>
 );

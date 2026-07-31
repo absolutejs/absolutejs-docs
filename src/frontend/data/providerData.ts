@@ -30,7 +30,6 @@ export const providerData: ProviderData = {
 		name: 'Amazon Cognito',
 		primaryColor: '#DD344C'
 	},
-
 	anilist: {
 		createNewCredentialsUrl: 'https://anilist.co/settings/developer',
 		logoUrl: '/assets/svg/anilist-logo.svg',
@@ -125,7 +124,7 @@ export const providerData: ProviderData = {
 	},
 	calendly: {
 		createNewCredentialsUrl: 'https://developer.calendly.com/console/apps',
-		logoUrl: '/assets/svg/todo-put-file.svg',
+		logoUrl: '/assets/svg/provider-placeholder.svg',
 		manageCredentialsUrl: 'https://developer.calendly.com/console/apps',
 		name: 'Calendly',
 		primaryColor: '#006BFF'
@@ -330,15 +329,6 @@ export const providerData: ProviderData = {
 		name: 'Mercado Pago',
 		primaryColor: '#00B1EA'
 	},
-	microsoftentraid: {
-		createNewCredentialsUrl:
-			'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/CreateApplicationBlade/quickStartType~/null/isMSAApp',
-		logoUrl: '/assets/svg/Microsoft-Entra-ID-color-icon.svg',
-		manageCredentialsUrl:
-			'https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps',
-		name: 'Microsoft Entra ID',
-		primaryColor: '#000000'
-	},
 	microsoftentraexternalid: {
 		createNewCredentialsUrl:
 			'https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade',
@@ -347,6 +337,15 @@ export const providerData: ProviderData = {
 			'https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade',
 		name: 'Microsoft Entra External ID',
 		primaryColor: '#0078D4'
+	},
+	microsoftentraid: {
+		createNewCredentialsUrl:
+			'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/CreateApplicationBlade/quickStartType~/null/isMSAApp',
+		logoUrl: '/assets/svg/Microsoft-Entra-ID-color-icon.svg',
+		manageCredentialsUrl:
+			'https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps',
+		name: 'Microsoft Entra ID',
+		primaryColor: '#000000'
 	},
 	monday: {
 		createNewCredentialsUrl: 'https://developer.monday.com/apps',
@@ -385,7 +384,7 @@ export const providerData: ProviderData = {
 	},
 	onspark: {
 		createNewCredentialsUrl: 'https://onspark.com',
-		logoUrl: '/assets/svg/todo-put-file.svg',
+		logoUrl: '/assets/svg/provider-placeholder.svg',
 		manageCredentialsUrl: 'https://onspark.com',
 		name: 'onSpark',
 		primaryColor: '#000000'

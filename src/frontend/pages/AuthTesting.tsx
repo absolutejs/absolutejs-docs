@@ -30,7 +30,10 @@ export const AuthTesting = ({
 
 	return (
 		<html lang="en" style={htmlDefault}>
-			<Head />
+			<Head
+				description="Explore the Citra and AbsoluteJS authentication provider matrix and run live OAuth flows."
+				title="Authentication Demo | AbsoluteJS"
+			/>
 			<animated.body
 				style={{ ...bodyDefault(themeSprings), position: 'relative' }}
 			>

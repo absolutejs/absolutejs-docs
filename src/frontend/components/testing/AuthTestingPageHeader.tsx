@@ -21,7 +21,7 @@ export const AuthTestingPageHeader = ({ themeSprings }: ThemeProps) => (
 				textTransform: 'uppercase'
 			}}
 		>
-			Citra & Absolute-Auth
+			Citra + @absolutejs/auth
 		</animated.p>
 		<animated.h1
 			style={{
@@ -44,7 +44,7 @@ export const AuthTestingPageHeader = ({ themeSprings }: ThemeProps) => (
 			>
 				{providerOptions.length}
 			</animated.span>{' '}
-			Supported Providers
+			Provider Configurations
 		</animated.h1>
 		<animated.p
 			style={{
@@ -57,8 +57,9 @@ export const AuthTestingPageHeader = ({ themeSprings }: ThemeProps) => (
 				maxWidth: '600px'
 			}}
 		>
-			Validate OAuth flows in real-time. Each provider below can be tested
-			for authorization, profile fetching, token refresh, and revocation.
+			See the current status of every provider. Configured providers can
+			run authorization, profile fetching, token refresh, and revocation
+			right here.
 		</animated.p>
 	</header>
 );

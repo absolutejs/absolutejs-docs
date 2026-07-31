@@ -11,6 +11,7 @@ import { AuthTesting } from '../../frontend/pages/AuthTesting';
 import { Blog } from '../../frontend/pages/Blog';
 import { BlogPost } from '../../frontend/pages/BlogPost';
 import { Documentation } from '../../frontend/pages/Documentation';
+import { Demos } from '../../frontend/pages/Demos';
 import { Home } from '../../frontend/pages/Home';
 import { Profile } from '../../frontend/pages/Profile';
 import { Signup } from '../../frontend/pages/Signup';
@@ -175,7 +176,33 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 			}
 		)
 		.get(
-			'/testing/authentication',
+			'/demos',
+			async ({
+				cookie: { theme, user_session_id },
+				store: { session },
+				status
+			}) => {
+				const { user, error } = await getStatus<User>(
+					session,
+					user_session_id
+				);
+
+				if (error) {
+					return status(error.code, error.message);
+				}
+
+				return handleReactPageRequest({
+					index: asset(manifest, 'DemosIndex'),
+					Page: Demos,
+					props: {
+						theme: theme?.value,
+						user
+					}
+				});
+			}
+		)
+		.get(
+			'/demos/authentication',
 			async ({
 				cookie: { theme, user_session_id },
 				query,
@@ -205,6 +232,19 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 					}
 				});
 			},
+			{
+				query: t.Object({ provider: t.Optional(t.String()) })
+			}
+		)
+		.get('/testing', ({ redirect }) => redirect('/demos'))
+		.get(
+			'/testing/authentication',
+			({ query, redirect }) =>
+				redirect(
+					query.provider
+						? `/demos/authentication?provider=${encodeURIComponent(query.provider)}`
+						: '/demos/authentication'
+				),
 			{
 				query: t.Object({ provider: t.Optional(t.String()) })
 			}

@@ -245,7 +245,7 @@ export const AuthModal = ({
 				{!isAuthorized && (
 					<pre style={boxStyle(primaryColor, isMobile)}>
 						<code style={{ opacity: 0.7 }}>
-							Authorize with this provider to begin testing.
+							Authorize with this provider to begin the demo.
 						</code>
 					</pre>
 				)}
