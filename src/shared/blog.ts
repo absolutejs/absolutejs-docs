@@ -13,7 +13,7 @@ export const whyCitraPost = definePost({
 	description:
 		'Why Citra treats OAuth provider differences as typed configuration instead of a reason to abandon the abstraction.',
 	publishedAt: '2026-07-31',
-	slug: 'why-citra-typed-oauth',
+	slug: 'why-citra',
 	sourceUrl: 'https://github.com/absolutejs/citra',
 	tags: ['Citra', 'OAuth', 'TypeScript'],
 	title: 'Why Citra: A Complete OAuth Library Built to Last'

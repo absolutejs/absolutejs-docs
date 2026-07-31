@@ -278,10 +278,10 @@ export const citraArticleStyles = `
 				max-width: 1050px;
 				margin: 0;
 				font-family: var(--serif);
-				font-size: clamp(4rem, 8vw, 8.6rem);
+				font-size: clamp(3.6rem, 7vw, 7.2rem);
 				font-weight: 400;
 				letter-spacing: -0.075em;
-				line-height: 0.82;
+				line-height: 0.88;
 			}
 
 			h1 em {
@@ -481,6 +481,25 @@ export const citraArticleStyles = `
 				content: '“';
 			}
 
+			.argument-facts::before {
+				content: none;
+			}
+
+			.argument-facts h3 {
+				margin: 0 0 18px;
+				font-family: var(--serif);
+				font-size: 1.8rem;
+				font-weight: 400;
+				letter-spacing: -0.03em;
+			}
+
+			.argument-facts p {
+				margin: 0;
+				color: var(--muted);
+				font-size: 1rem;
+				line-height: 1.7;
+			}
+
 			blockquote {
 				margin: 0;
 				font-family: var(--serif);
@@ -525,6 +544,24 @@ export const citraArticleStyles = `
 				border-left: 4px solid var(--accent);
 				color: var(--ink);
 				font-weight: 750;
+			}
+
+			.argument-context {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1px;
+				margin-top: 56px;
+				border: 1px solid var(--line);
+				background: var(--line);
+			}
+
+			.argument-context p {
+				margin: 0;
+				padding: 28px;
+				background: var(--paper);
+				color: var(--muted);
+				font-size: 0.95rem;
+				line-height: 1.7;
 			}
 
 			.definition-demo {
@@ -1566,6 +1603,7 @@ export const citraArticleStyles = `
 
 				.hero-inner,
 				.exchange,
+				.argument-context,
 				.request-map,
 				.type-grid,
 				.definition-demo,
@@ -1661,7 +1699,7 @@ export const citraArticleStyles = `
 				}
 
 				h1 {
-					font-size: clamp(3.55rem, 18vw, 6rem);
+					font-size: clamp(3rem, 14vw, 5rem);
 				}
 
 				.hero,

@@ -83,11 +83,10 @@ export const CitraArticleContent = ({
 								src="/assets/png/citra-logo.png"
 								alt="Citra"
 							/>
-							<p className="eyebrow">The OAuth layer we wanted</p>
+							<p className="eyebrow">Why Citra</p>
 						</div>
 						<h1 id="page-title">
-							OAuth providers disagree. Our app{' '}
-							<em>doesn’t have to.</em>
+							A Complete OAuth Library <em>Built to Last</em>
 						</h1>
 						<p className="hero-summary">
 							We built Citra because one auth layer should be able
@@ -157,15 +156,16 @@ export const CitraArticleContent = ({
 						</p>
 
 						<div className="exchange">
-							<figure className="quote-card">
-								<blockquote>
-									The provider is dynamic. The contract should
-									still be precise.
-								</blockquote>
-								<footer>
-									The requirement from our application
-								</footer>
-							</figure>
+							<div className="quote-card argument-facts">
+								<h3>What the auth layer knows</h3>
+								<p>
+									A provider name, an optional named client,
+									callback data, and session state arrive at
+									runtime. That is enough to choose the
+									client, not enough to erase its
+									capabilities.
+								</p>
+							</div>
 							<div className="counterpoint">
 								<h3>
 									A shared engine does not require a flattened
@@ -180,10 +180,35 @@ export const CitraArticleContent = ({
 									client type and provider definition.
 								</p>
 								<p className="thesis">
-									The same literal configuration controls the
-									HTTP request and the TypeScript surface.
+									Provider definitions drive HTTP behavior and
+									capability methods. A
+									provider-to-credentials map gives each
+									built-in its constructor type.
 								</p>
 							</div>
+						</div>
+
+						<div className="argument-context">
+							<p>
+								We reached this design while using Arctic inside{' '}
+								<code>absolutejs/auth</code>. The auth package
+								needed one callback and session flow for a
+								provider selected at runtime. Its Arctic adapter
+								grew a class registry, PKCE detection, and a
+								second provider catalog just to recover
+								information the OAuth layer did not expose. The
+								full history is below.
+							</p>
+							<p>
+								The strongest case for one wrapper per provider
+								is that provider differences remain explicit. We
+								agree with that goal. The cost is that
+								construction, capability checks, profile
+								requests, and response normalization move into
+								every application adapter. Citra keeps the
+								differences explicit as typed definitions and
+								lets a shared engine execute them.
+							</p>
 						</div>
 					</div>
 				</section>
@@ -191,7 +216,10 @@ export const CitraArticleContent = ({
 				<section className="section" id="model">
 					<div className="section-inner">
 						<p className="section-label">Provider definitions</p>
-						<h2>One definition drives the request and its type.</h2>
+						<h2>
+							One provider model drives requests, capabilities,
+							and credentials.
+						</h2>
 						<p className="lede">
 							A provider definition is executable configuration.
 							The request engine reads it at runtime. Capability
@@ -213,7 +241,7 @@ export const CitraArticleContent = ({
 								</div>
 								<ArticleCode
 									html={
-										'withings: {\n  <span class="token-comment">// changes the returned client type</span>\n  isRefreshable: <span class="token-keyword">true</span>,\n  scopeRequired: <span class="token-keyword">true</span>,\n\n  <span class="token-comment">// changes authorization URL construction</span>\n  scopeDelimiter: <span class="token-string">\',\'</span>,\n\n  <span class="token-comment">// normalizes a nonstandard response</span>\n  accessTokenPath: [<span class="token-string">\'body\'</span>, <span class="token-string">\'access_token\'</span>],\n\n  revocationRequest: {\n    authIn: <span class="token-string">\'body\'</span>,\n    inputType: <span class="token-string">\'number\'</span>,\n    tokenParamName: <span class="token-string">\'userid\'</span>,\n    body: config =&gt;\n      <span class="token-function">getWithingsSignatureParams</span>(config, <span class="token-string">\'revoke\'</span>)\n  },\n\n  tokenRequest: {\n    authIn: <span class="token-string">\'body\'</span>,\n    encoding: <span class="token-string">\'application/x-www-form-urlencoded\'</span>,\n    url: <span class="token-string">\'https://wbsapi.withings.net/v2/oauth2\'</span>\n  },\n\n  subject: [<span class="token-string">\'userid\'</span>],\n  subjectBySource: {\n    tokenResponse: [<span class="token-string">\'body\'</span>, <span class="token-string">\'userid\'</span>]\n  },\n  subjectType: <span class="token-string">\'number\'</span>\n}'
+										'withings: {\n  <span class="token-comment">// changes the returned client type</span>\n  isRefreshable: <span class="token-keyword">true</span>,\n  scopeRequired: <span class="token-keyword">true</span>,\n\n  <span class="token-comment">// changes authorization URL construction</span>\n  scopeDelimiter: <span class="token-string">\',\'</span>,\n\n  <span class="token-comment">// normalizes a nonstandard response</span>\n  accessTokenPath: [<span class="token-string">\'body\'</span>, <span class="token-string">\'access_token\'</span>],\n\n  revocationRequest: {\n    authIn: <span class="token-string">\'body\'</span>,\n    inputSource: <span class="token-string">\'subject\'</span>,\n    inputType: <span class="token-string">\'number\'</span>,\n    tokenParamName: <span class="token-string">\'userid\'</span>,\n    body: config =&gt;\n      <span class="token-function">getWithingsSignatureParams</span>(config, <span class="token-string">\'revoke\'</span>),\n    validateResponse: <span class="token-function">assertWithingsSuccess</span>\n  },\n\n  tokenRequest: {\n    authIn: <span class="token-string">\'body\'</span>,\n    encoding: <span class="token-string">\'application/x-www-form-urlencoded\'</span>,\n    url: <span class="token-string">\'https://wbsapi.withings.net/v2/oauth2\'</span>\n  },\n\n  subject: [<span class="token-string">\'userid\'</span>],\n  subjectBySource: {\n    tokenResponse: [<span class="token-string">\'body\'</span>, <span class="token-string">\'userid\'</span>]\n  },\n  subjectType: <span class="token-string">\'number\'</span>\n}'
 									}
 								/>
 							</div>
@@ -287,10 +315,14 @@ export const CitraArticleContent = ({
 									UserInfo request in this configuration.
 								</p>
 								<p>
-									The revocation input changes too:{' '}
-									<code>revokeToken()</code> accepts a number
-									for Withings and a token string for standard
-									revocation endpoints.
+									The revocation input changes too. The
+									definition selects <code>subject</code>, the
+									shared resolver checks that it is a number,
+									and <code>revokeToken()</code> receives the
+									Withings <code>userid</code>. Standard
+									endpoints default to the access token, while
+									providers such as Reddit select the refresh
+									token.
 								</p>
 							</div>
 
@@ -416,7 +448,7 @@ export const CitraArticleContent = ({
 								<p className="section-label">
 									Useful in every callback
 								</p>
-								<h3>Small pieces we should not rewrite.</h3>
+								<h3>Utilities used throughout the callback.</h3>
 							</div>
 							<article>
 								<code>generateState()</code>
@@ -672,7 +704,7 @@ export const CitraArticleContent = ({
 								</div>
 								<ArticleCode
 									html={
-										'<span class="token-keyword">function</span> <span class="token-function">revokeIfSupported</span>&lt;P <span class="token-keyword">extends</span> ProviderOption&gt;(\n  provider: P,\n  client: BaseOAuth2Client&lt;P&gt;,\n  input: RevocationInputForProvider&lt;P&gt;\n) {\n  <span class="token-keyword">if</span> (<span class="token-function">isRevocableOAuth2Client</span>(provider, client)) {\n    <span class="token-keyword">return</span> client.<span class="token-function">revokeToken</span>(input);\n  }\n}\n\n<span class="token-comment">// the guard checks the client method at runtime too</span>'
+										'<span class="token-keyword">function</span> <span class="token-function">disconnectIfSupported</span>(\n  client: OAuth2Client&lt;ProviderOption&gt;,\n  session: RevocationInputContext\n) {\n  <span class="token-keyword">if</span> (<span class="token-function">isRevocableOAuth2Client</span>(client)) {\n    <span class="token-keyword">const</span> input =\n      client.<span class="token-function">resolveRevocationInput</span>(session);\n\n    <span class="token-keyword">return</span> client.<span class="token-function">revokeToken</span>(input);\n  }\n}\n\n<span class="token-comment">// works for built-in and custom clients selected at runtime</span>'
 									}
 								/>
 							</div>
@@ -722,7 +754,7 @@ export const CitraArticleContent = ({
 									</p>
 								</article>
 								<article>
-									<h3>PKCE by construction</h3>
+									<h3>PKCE inputs are required</h3>
 									<p>
 										Authorization and code exchange require
 										a verifier. S256 is built in, and
@@ -962,12 +994,11 @@ export const CitraArticleContent = ({
 								branches.
 							</h3>
 							<p>
-								This is the part we care about most. We do not
-								keep a GitHub branch, an Etsy branch, and a
-								GoHighLevel branch in our auth layer. Generic
-								code reads the provider mapping and runs the
-								same extractor. When we add a provider, we map
-								its response once.
+								We do not keep a GitHub branch, an Etsy branch,
+								and a GoHighLevel branch in our auth layer.
+								Generic code reads the provider mapping and runs
+								the same extractor. When we add a provider, we
+								map its response once.
 							</p>
 						</div>
 					</div>
@@ -1273,16 +1304,15 @@ export const CitraArticleContent = ({
 						<div className="validation-band">
 							<h3>Current boundaries</h3>
 							<p>
-								Citra 0.29.9 is pre-1.0. The catalog contains 78
-								typed configurations, and compile-time tests
-								require a credential mapping for every one. That
-								does not mean every provider has been
-								live-tested with production credentials.
-								Provider APIs still change, so the catalog and
-								its fixtures require maintenance. Citra has zero
-								runtime dependencies and uses the Business
-								Source License 1.1, which converts to Apache 2.0
-								on May 29, 2030.
+								The catalog contains 78 typed configurations,
+								and compile-time tests require a credential
+								mapping for every one. That does not mean every
+								provider has been live-tested with production
+								credentials. Provider APIs still change, so the
+								catalog and its fixtures require maintenance.
+								Citra has zero runtime dependencies and uses the
+								Business Source License 1.1, which converts to
+								Apache 2.0 on May 29, 2030.
 							</p>
 						</div>
 						<div className="cta-row">
@@ -1372,7 +1402,7 @@ export const CitraArticleContent = ({
 							</a>{' '}
 							and the{' '}
 							<a
-								href="https://github.com/absolutejs/absolute-auth/blob/main/src/providers/clients.ts"
+								href="https://github.com/absolutejs/absolute-auth/blob/4f151bb/src/providers/clients.ts"
 								target="_blank"
 								rel="noreferrer"
 							>
@@ -1395,7 +1425,7 @@ export const CitraArticleContent = ({
 						</li>
 						<li>
 							<a
-								href="https://github.com/absolutejs/citra/blob/v0.29.9/src/providers.ts"
+								href="https://github.com/absolutejs/citra/blob/d91e7a3/src/providers.ts"
 								target="_blank"
 								rel="noreferrer"
 							>
@@ -1403,7 +1433,7 @@ export const CitraArticleContent = ({
 							</a>{' '}
 							and{' '}
 							<a
-								href="https://github.com/absolutejs/citra/blob/v0.29.9/src/types.ts"
+								href="https://github.com/absolutejs/citra/blob/d91e7a3/src/types.ts"
 								target="_blank"
 								rel="noreferrer"
 							>
