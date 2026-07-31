@@ -15,13 +15,13 @@ export const HamburgerHeader = ({
 		style={{
 			alignItems: 'center',
 			backgroundColor: themeSprings.themePrimary,
-			boxShadow: `0px 4px 14px rgba(0, 0, 0, 0.1)`,
+			borderBottom: '1px solid rgba(128, 128, 128, 0.14)',
+			boxShadow: '0 4px 14px rgba(0, 0, 0, 0.08)',
 			display: 'flex',
 			justifyContent: 'space-between',
 			left: 0,
-			maxHeight: '100px',
-			padding: '1.1rem',
-			position: 'absolute',
+			padding: '1rem 1.25rem',
+			position: 'fixed',
 			top: 0,
 			width: '100%'
 		}}
@@ -37,12 +37,23 @@ export const HamburgerHeader = ({
 		>
 			AbsoluteJS
 		</a>
-		<FaTimes
+		<button
+			aria-label="Close navigation menu"
 			onClick={onClose}
 			style={{
+				alignItems: 'center',
+				background: 'transparent',
+				border: 'none',
+				color: 'inherit',
 				cursor: 'pointer',
-				fontSize: '34px'
+				display: 'flex',
+				height: '2.75rem',
+				justifyContent: 'center',
+				padding: 0,
+				width: '2.75rem'
 			}}
-		/>
+		>
+			<FaTimes size={28} />
+		</button>
 	</animated.div>
 );

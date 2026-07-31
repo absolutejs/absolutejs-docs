@@ -1,5 +1,5 @@
-import { animated, SpringRef, SpringValue } from '@react-spring/web';
-import { useState } from 'react';
+import { animated, SpringValue } from '@react-spring/web';
+import { useEffect, useState } from 'react';
 import { FaDiscord, FaGithub } from 'react-icons/fa';
 import { User } from '../../../../db/schema';
 import { ThemeSprings } from '../../../types/springTypes';
@@ -13,49 +13,74 @@ import { HamburgerHeader } from './HamburgerHeader';
 import { HamburgerUserButtons } from './HamburgerUserButtons';
 
 type HamburgerMenuProps = {
-	spring: { transform: SpringValue<string> };
-	springApi: SpringRef<{ transform: string }>;
+	isOpen: boolean;
+	onClose: () => void;
+	spring: {
+		opacity: SpringValue<number>;
+		transform: SpringValue<string>;
+	};
 	user: User | null;
 	themeSprings: ThemeSprings;
 };
 
 export const HamburgerMenu = ({
+	isOpen,
+	onClose,
 	spring,
-	springApi,
 	user,
 	themeSprings
 }: HamburgerMenuProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
+	useEffect(() => {
+		if (!isOpen) return undefined;
+
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') onClose();
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	}, [isOpen, onClose]);
+
 	return (
 		<animated.div
+			aria-hidden={!isOpen}
+			aria-label="Mobile navigation"
 			style={{
-				background: themeSprings.themeSecondary,
+				backgroundColor: themeSprings.themeSecondary,
+				boxShadow: '-12px 0 40px rgba(0, 0, 0, 0.18)',
 				display: 'flex',
 				flexDirection: 'column',
-				height: '100%',
+				inset: 0,
 				justifyContent: 'flex-start',
-				padding: '20px',
+				minHeight: '100dvh',
+				opacity: spring.opacity,
+				overflowX: 'hidden',
+				overflowY: 'auto',
+				overscrollBehavior: 'contain',
+				pointerEvents: spring.opacity.to((value) =>
+					value > 0 ? 'auto' : 'none'
+				),
 				position: 'fixed',
-				right: 0,
-				top: 0,
 				transform: spring.transform,
-				width: '100%',
+				transformOrigin: 'top right',
+				visibility: spring.opacity.to((value) =>
+					value > 0 ? 'visible' : 'hidden'
+				),
+				width: '100vw',
 				zIndex: 10000
 			}}
 		>
-			<HamburgerHeader
-				onClose={() =>
-					void springApi.start({ transform: 'translateX(100%)' })
-				}
-				themeSprings={themeSprings}
-			/>
+			<HamburgerHeader onClose={onClose} themeSprings={themeSprings} />
 
 			<nav
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
-					marginTop: '100px',
+					marginTop: '76px',
+					padding: '1.5rem 1.25rem 2rem',
 					width: '100%'
 				}}
 			>
