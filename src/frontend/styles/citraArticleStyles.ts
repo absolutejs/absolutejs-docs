@@ -1,4 +1,4 @@
-export const citraArticleStyles = String.raw`
+export const citraArticleStyles = `
 :root {
 				--ink: #171a17;
 				--paper: #f4f0e6;
