@@ -10,7 +10,7 @@ export const citraArticleStyles = `
 				--accent-soft: rgba(99, 102, 241, 0.1);
 				--accent-surface: #eef2ff;
 				--danger: #b93822;
-				--dark-panel: #0e100e;
+				--dark-panel: #111113;
 				--dark-panel-ink: #f7f3e9;
 				--muted: #666b63;
 				--line: rgba(23, 26, 23, 0.18);
@@ -132,10 +132,9 @@ export const citraArticleStyles = `
 			.article-toc {
 				position: relative;
 				z-index: 1;
-				display: flex;
-				flex-wrap: wrap;
-				gap: 12px 22px;
-				align-items: center;
+				display: grid;
+				grid-template-columns: 122px repeat(4, minmax(0, 1fr));
+				gap: 0;
 				width: min(100%, 1240px);
 				margin: 38px auto 0;
 				padding: 16px 0;
@@ -148,18 +147,28 @@ export const citraArticleStyles = `
 			}
 
 			.article-toc span {
-				margin-right: 8px;
-				padding: 7px 9px;
+				display: flex;
+				grid-row: 1 / 3;
+				align-items: center;
+				padding: 12px;
 				background: var(--accent);
 				color: #ffffff;
 				font-weight: 800;
 			}
 
 			.article-toc a {
+				display: flex;
+				align-items: center;
+				padding: 10px 14px;
+				border-left: 1px solid var(--line);
 				color: var(--muted);
 				font-weight: 700;
 				text-decoration-thickness: 1px;
 				text-underline-offset: 4px;
+			}
+
+			.article-toc a:nth-of-type(n + 5) {
+				border-top: 1px solid var(--line);
 			}
 
 			.hero {
@@ -324,7 +333,7 @@ export const citraArticleStyles = `
 
 			.stats {
 				display: grid;
-				grid-template-columns: repeat(3, 1fr);
+				grid-template-columns: repeat(2, 1fr);
 				width: min(100% - 40px, 1240px);
 				margin: 44px auto 0;
 				border: 1px solid var(--ink);
@@ -605,7 +614,7 @@ export const citraArticleStyles = `
 				display: grid;
 				grid-template-columns: repeat(3, 1fr);
 				gap: 1px;
-				margin-top: 70px;
+				margin-top: 28px;
 				border: 1px solid var(--ink);
 				background: var(--ink);
 			}
@@ -616,8 +625,8 @@ export const citraArticleStyles = `
 			}
 
 			.quirk-intro {
-				grid-row: span 2;
-				background: var(--accent-surface);
+				max-width: 680px;
+				margin-top: 70px;
 				color: var(--ink);
 			}
 
@@ -630,12 +639,12 @@ export const citraArticleStyles = `
 				line-height: 1.1;
 			}
 
-			.quirk-ledger article strong,
-			.quirk-ledger article code {
+			.quirk-ledger article > strong,
+			.quirk-ledger article > code {
 				display: block;
 			}
 
-			.quirk-ledger article strong {
+			.quirk-ledger article > strong {
 				margin-bottom: 12px;
 			}
 
@@ -748,7 +757,7 @@ export const citraArticleStyles = `
 			.type-code {
 				overflow: hidden;
 				border: 1px solid var(--ink);
-				background: #1d211e;
+				background: var(--dark-panel);
 				color: #f7f3e9;
 				box-shadow: -12px 12px 0 var(--orange);
 			}
@@ -856,7 +865,7 @@ export const citraArticleStyles = `
 			.compiler-card {
 				overflow: hidden;
 				border: 1px solid var(--ink);
-				background: #1d211e;
+				background: var(--dark-panel);
 				color: #f7f3e9;
 			}
 
@@ -1305,7 +1314,7 @@ export const citraArticleStyles = `
 				min-width: 280px;
 				min-height: 50px;
 				border: 1px solid rgba(244, 240, 230, 0.5);
-				background: #0e100e;
+				background: var(--dark-panel);
 				color: var(--dark-panel-ink);
 				text-align: left;
 			}
@@ -1462,6 +1471,19 @@ export const citraArticleStyles = `
 					gap: 58px;
 				}
 
+				.article-toc {
+					grid-template-columns: repeat(2, minmax(0, 1fr));
+				}
+
+				.article-toc span {
+					grid-column: 1 / -1;
+					grid-row: auto;
+				}
+
+				.article-toc a:nth-of-type(n + 3) {
+					border-top: 1px solid var(--line);
+				}
+
 				.code-window {
 					max-width: 640px;
 				}
@@ -1472,11 +1494,6 @@ export const citraArticleStyles = `
 
 				.quirk-ledger {
 					grid-template-columns: 1fr 1fr;
-				}
-
-				.quirk-intro {
-					grid-column: 1 / -1;
-					grid-row: auto;
 				}
 
 				.daily-tools {
@@ -1507,12 +1524,19 @@ export const citraArticleStyles = `
 				}
 
 				.article-toc {
-					gap: 10px 16px;
+					grid-template-columns: 1fr;
 				}
 
 				.article-toc span {
-					width: 100%;
-					margin: 0;
+					grid-column: auto;
+				}
+
+				.article-toc a {
+					border-left: 0;
+				}
+
+				.article-toc a:nth-of-type(n + 2) {
+					border-top: 1px solid var(--line);
 				}
 
 				h1 {

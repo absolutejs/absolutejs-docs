@@ -119,10 +119,6 @@ export const CitraArticleContent = ({
 						<strong>1</strong>
 						<span>Shared implementation</span>
 					</div>
-					<div className="stat">
-						<strong>0</strong>
-						<span>Provider client classes</span>
-					</div>
 				</div>
 			</section>
 
@@ -327,16 +323,16 @@ export const CitraArticleContent = ({
 							</dl>
 						</div>
 
+						<div className="quirk-intro">
+							<span className="mini-kicker">
+								The same request model
+							</span>
+							<h3>
+								We added these extension points because
+								providers needed them.
+							</h3>
+						</div>
 						<div className="quirk-ledger">
-							<div className="quirk-intro">
-								<span className="mini-kicker">
-									The same request model
-								</span>
-								<h3>
-									We added these extension points because
-									providers needed them.
-								</h3>
-							</div>
 							<article>
 								<strong>HubSpot</strong>
 								<code>profileRequest.authIn: 'path'</code>
