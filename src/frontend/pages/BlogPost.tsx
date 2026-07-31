@@ -20,6 +20,10 @@ type BlogPostProps = {
 };
 
 type ArticleThemeStyle = AnimatedCSSProperties & {
+	'--accent': FluidValue<string>;
+	'--accent-soft': FluidValue<string>;
+	'--accent-surface': FluidValue<string>;
+	'--danger': FluidValue<string>;
 	'--ink': FluidValue<string>;
 	'--line': FluidValue<string>;
 	'--muted': FluidValue<string>;
@@ -40,6 +44,20 @@ export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
 	const metadata = blog.head(post);
 	const { jsonLd, ...headMetadata } = metadata;
 	const articleThemeStyle: ArticleThemeStyle = {
+		'--accent': themeSprings.theme.to((mode) =>
+			mode.endsWith('dark') ? '#a5b4fc' : '#4f46e5'
+		),
+		'--accent-soft': themeSprings.theme.to((mode) =>
+			mode.endsWith('dark')
+				? 'rgba(99, 102, 241, 0.16)'
+				: 'rgba(99, 102, 241, 0.10)'
+		),
+		'--accent-surface': themeSprings.theme.to((mode) =>
+			mode.endsWith('dark') ? '#25253f' : '#eef2ff'
+		),
+		'--danger': themeSprings.theme.to((mode) =>
+			mode.endsWith('dark') ? '#ff9b81' : '#b93822'
+		),
 		'--ink': themeSprings.contrastPrimary,
 		'--line': themeSprings.contrastPrimary.to(
 			(color) => `color-mix(in srgb, ${color} 18%, transparent)`

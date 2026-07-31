@@ -6,11 +6,10 @@ export const citraArticleStyles = `
 				--lime: #cbf43c;
 				--orange: #ff714b;
 				--mint: #a9e6cb;
-				--accent-ink: #171a17;
-				--accent-paper: #fffaf0;
-				--accent-paper-deep: #e6dfcf;
-				--accent-muted: #666b63;
-				--accent-line: rgba(23, 26, 23, 0.18);
+				--accent: #4f46e5;
+				--accent-soft: rgba(99, 102, 241, 0.1);
+				--accent-surface: #eef2ff;
+				--danger: #b93822;
 				--dark-panel: #0e100e;
 				--dark-panel-ink: #f7f3e9;
 				--muted: #666b63;
@@ -52,7 +51,7 @@ export const citraArticleStyles = `
 			}
 
 			::selection {
-				background: var(--lime);
+				background: var(--accent-soft);
 				color: var(--ink);
 			}
 
@@ -63,7 +62,7 @@ export const citraArticleStyles = `
 				left: 0;
 				width: 0;
 				height: 4px;
-				background: var(--orange);
+				background: var(--accent);
 			}
 
 			.article-meta {
@@ -151,8 +150,8 @@ export const citraArticleStyles = `
 			.article-toc span {
 				margin-right: 8px;
 				padding: 7px 9px;
-				background: var(--orange);
-				color: var(--accent-ink);
+				background: var(--accent);
+				color: #ffffff;
 				font-weight: 800;
 			}
 
@@ -191,11 +190,7 @@ export const citraArticleStyles = `
 			.hero-inner {
 				position: relative;
 				z-index: 1;
-				display: grid;
-				grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
-				gap: 72px;
-				align-items: end;
-				width: min(100%, 1240px);
+				width: min(100%, 1100px);
 				margin: 72px auto 0;
 			}
 
@@ -235,7 +230,7 @@ export const citraArticleStyles = `
 			}
 
 			h1 {
-				max-width: 900px;
+				max-width: 1050px;
 				margin: 0;
 				font-family: var(--serif);
 				font-size: clamp(4rem, 8vw, 8.6rem);
@@ -250,7 +245,7 @@ export const citraArticleStyles = `
 			}
 
 			.hero-summary {
-				max-width: 710px;
+				max-width: 760px;
 				margin: 42px 0 0;
 				font-size: clamp(1.15rem, 2vw, 1.55rem);
 				letter-spacing: -0.025em;
@@ -264,7 +259,7 @@ export const citraArticleStyles = `
 			.code-window {
 				border: 1px solid var(--dark-panel);
 				background: var(--dark-panel);
-				box-shadow: 14px 14px 0 var(--lime);
+				box-shadow: 10px 10px 0 var(--accent);
 				color: var(--dark-panel-ink);
 			}
 
@@ -409,12 +404,12 @@ export const citraArticleStyles = `
 			}
 
 			.argument {
-				background: var(--dark-panel);
-				color: var(--dark-panel-ink);
+				background: var(--paper-deep);
+				color: var(--ink);
 			}
 
 			.argument .section-label {
-				color: var(--lime);
+				color: var(--accent);
 			}
 
 			.exchange {
@@ -427,8 +422,8 @@ export const citraArticleStyles = `
 			.quote-card {
 				position: relative;
 				padding: 40px;
-				border: 1px solid rgba(244, 240, 230, 0.3);
-				background: rgba(244, 240, 230, 0.04);
+				border: 1px solid var(--line);
+				background: var(--paper);
 			}
 
 			.quote-card::before {
@@ -451,7 +446,7 @@ export const citraArticleStyles = `
 
 			.quote-card footer {
 				margin-top: 28px;
-				color: #aeb2aa;
+				color: var(--muted);
 				font-family: var(--mono);
 				font-size: 0.7rem;
 				line-height: 1.5;
@@ -475,15 +470,15 @@ export const citraArticleStyles = `
 
 			.counterpoint p {
 				margin: 0 0 20px;
-				color: #c9cbc5;
+				color: var(--muted);
 				font-size: 1.02rem;
 				line-height: 1.7;
 			}
 
 			.counterpoint .thesis {
 				padding-left: 20px;
-				border-left: 4px solid var(--lime);
-				color: var(--paper);
+				border-left: 4px solid var(--accent);
+				color: var(--ink);
 				font-weight: 750;
 			}
 
@@ -496,7 +491,7 @@ export const citraArticleStyles = `
 			}
 
 			.definition-code {
-				box-shadow: -12px 12px 0 var(--lime);
+				box-shadow: -10px 10px 0 var(--accent);
 			}
 
 			.definition-copy {
@@ -522,7 +517,7 @@ export const citraArticleStyles = `
 			}
 
 			.definition-copy p code {
-				color: #a92d17;
+				color: var(--danger);
 				font-size: 0.86em;
 			}
 
@@ -545,7 +540,7 @@ export const citraArticleStyles = `
 
 			.request-explanation p {
 				margin: 0 0 22px;
-				color: #464b44;
+				color: var(--muted);
 				line-height: 1.7;
 			}
 
@@ -553,8 +548,8 @@ export const citraArticleStyles = `
 				display: inline-block;
 				margin-bottom: 18px;
 				padding: 7px 10px;
-				background: var(--orange);
-				color: var(--accent-ink);
+				background: var(--accent-surface);
+				color: var(--accent);
 				font-family: var(--mono);
 				font-size: 0.66rem;
 				font-weight: 800;
@@ -597,12 +592,13 @@ export const citraArticleStyles = `
 			}
 
 			.request-row dd strong {
-				color: #bd3d21;
+				color: var(--danger);
 			}
 
 			.request-row:last-child {
-				background: var(--lime);
-				color: var(--accent-ink);
+				border-color: var(--accent);
+				background: var(--accent-surface);
+				color: var(--ink);
 			}
 
 			.quirk-ledger {
@@ -621,8 +617,8 @@ export const citraArticleStyles = `
 
 			.quirk-intro {
 				grid-row: span 2;
-				background: var(--orange);
-				color: var(--accent-ink);
+				background: var(--accent-surface);
+				color: var(--ink);
 			}
 
 			.quirk-intro h3 {
@@ -645,7 +641,7 @@ export const citraArticleStyles = `
 
 			.quirk-ledger article code {
 				margin-bottom: 14px;
-				color: #a92d17;
+				color: var(--danger);
 				font-family: var(--mono);
 				font-size: 0.68rem;
 				line-height: 1.45;
@@ -674,8 +670,8 @@ export const citraArticleStyles = `
 
 			.daily-tools-intro {
 				grid-row: span 2;
-				background: var(--mint);
-				color: var(--accent-ink);
+				background: var(--accent-surface);
+				color: var(--ink);
 			}
 
 			.daily-tools-intro h3 {
@@ -695,7 +691,7 @@ export const citraArticleStyles = `
 			}
 
 			.daily-tools article > code {
-				color: #a92d17;
+				color: var(--danger);
 				font-family: var(--mono);
 			}
 
@@ -806,8 +802,9 @@ export const citraArticleStyles = `
 			.validation-band {
 				margin-top: 84px;
 				padding: 34px 38px;
-				border: 1px solid var(--ink);
-				background: var(--orange);
+				border: 1px solid var(--accent);
+				background: var(--accent-surface);
+				color: var(--ink);
 			}
 
 			.validation-band h3 {
@@ -880,19 +877,8 @@ export const citraArticleStyles = `
 				border-top: 1px solid var(--ink);
 			}
 
-			.oidc-section,
-			.identity-section,
-			.custom {
-				--ink: var(--accent-ink);
-				--line: var(--accent-line);
-				--muted: var(--accent-muted);
-				--paper: var(--accent-paper);
-				--paper-deep: var(--accent-paper-deep);
-				color: var(--accent-ink);
-			}
-
 			.oidc-section {
-				background: #dfe9ff;
+				background: var(--paper-deep);
 			}
 
 			.oidc-demo {
@@ -904,7 +890,7 @@ export const citraArticleStyles = `
 			}
 
 			.oidc-demo > .type-code {
-				box-shadow: -12px 12px 0 #7596e8;
+				box-shadow: -10px 10px 0 var(--accent);
 			}
 
 			.oidc-facts {
@@ -930,7 +916,7 @@ export const citraArticleStyles = `
 
 			.oidc-facts article p {
 				margin: 0;
-				color: #47515f;
+				color: var(--muted);
 				font-size: 0.8rem;
 				line-height: 1.55;
 			}
@@ -946,7 +932,7 @@ export const citraArticleStyles = `
 			}
 
 			.identity-section {
-				background: var(--mint);
+				background: var(--paper);
 			}
 
 			.identity-stage {
@@ -983,7 +969,7 @@ export const citraArticleStyles = `
 			}
 
 			.provider-path .arrow {
-				color: var(--orange);
+				color: var(--accent);
 				font-size: 1.2rem;
 				font-weight: 800;
 				text-align: center;
@@ -1005,13 +991,13 @@ export const citraArticleStyles = `
 				padding: 28px;
 				border: 1px solid var(--ink);
 				background: var(--dark-panel);
-				box-shadow: 12px 12px 0 var(--orange);
+				box-shadow: 10px 10px 0 var(--accent);
 				color: var(--dark-panel-ink);
 			}
 
 			.identity-engine .engine-label {
 				margin-bottom: 28px;
-				color: var(--lime);
+				color: #a5b4fc;
 				font-family: var(--mono);
 				font-size: 0.68rem;
 				font-weight: 700;
@@ -1048,15 +1034,15 @@ export const citraArticleStyles = `
 			.canonical-result {
 				margin-top: auto;
 				padding: 16px 18px;
-				border: 1px solid var(--lime);
-				background: rgba(203, 244, 60, 0.08);
+				border: 1px solid #a5b4fc;
+				background: rgba(99, 102, 241, 0.12);
 				font-family: var(--mono);
 				font-size: 0.75rem;
 				line-height: 1.6;
 			}
 
 			.canonical-result span {
-				color: var(--lime);
+				color: #a5b4fc;
 			}
 
 			.identity-fields {
@@ -1071,8 +1057,8 @@ export const citraArticleStyles = `
 			.identity-caveat {
 				margin: 38px 0 0;
 				padding: 20px 24px;
-				border-left: 5px solid var(--orange);
-				background: rgba(244, 240, 230, 0.72);
+				border-left: 5px solid var(--accent);
+				background: var(--paper-deep);
 				font-size: 0.9rem;
 				line-height: 1.65;
 			}
@@ -1086,7 +1072,7 @@ export const citraArticleStyles = `
 			.identity-field code {
 				display: block;
 				margin-bottom: 10px;
-				color: #b23821;
+				color: var(--danger);
 				font-family: var(--mono);
 				font-size: 0.68rem;
 				font-weight: 700;
@@ -1122,7 +1108,7 @@ export const citraArticleStyles = `
 			}
 
 			.custom {
-				background: var(--lime);
+				background: var(--paper-deep);
 			}
 
 			.custom .lede {
@@ -1133,7 +1119,7 @@ export const citraArticleStyles = `
 				margin-top: 60px;
 				border: 1px solid var(--ink);
 				background: var(--paper);
-				box-shadow: 14px 14px 0 var(--ink);
+				box-shadow: 10px 10px 0 var(--accent);
 			}
 
 			.custom-code .window-bar {
@@ -1149,19 +1135,19 @@ export const citraArticleStyles = `
 			}
 
 			.custom-code .token-keyword {
-				color: #a92d17;
+				color: var(--danger);
 			}
 
 			.custom-code .token-function {
-				color: #275e4c;
+				color: var(--accent);
 			}
 
 			.custom-code .token-string {
-				color: #4e5f16;
+				color: var(--accent);
 			}
 
 			.custom-code .token-comment {
-				color: #777b72;
+				color: var(--muted);
 			}
 
 			.custom-proof {
@@ -1178,7 +1164,7 @@ export const citraArticleStyles = `
 				margin-top: 24px;
 				padding: 18px 20px;
 				border: 1px solid var(--ink);
-				background: rgba(244, 240, 230, 0.65);
+				background: var(--paper);
 				color: var(--ink);
 				font-size: 0.85rem;
 			}
@@ -1252,7 +1238,7 @@ export const citraArticleStyles = `
 
 			.history-event p {
 				margin: 0;
-				color: #4e534c;
+				color: var(--muted);
 				font-size: 0.9rem;
 				line-height: 1.6;
 			}
@@ -1268,9 +1254,9 @@ export const citraArticleStyles = `
 			.history-today {
 				margin-top: 48px;
 				padding: 28px 32px;
-				border: 1px solid var(--ink);
-				background: var(--lime);
-				color: var(--accent-ink);
+				border: 1px solid var(--accent);
+				background: var(--accent-surface);
+				color: var(--ink);
 				font-family: var(--serif);
 				font-size: clamp(1.45rem, 2.8vw, 2.25rem);
 				letter-spacing: -0.035em;
@@ -1279,8 +1265,8 @@ export const citraArticleStyles = `
 			}
 
 			.verdict {
-				background: var(--dark-panel);
-				color: var(--dark-panel-ink);
+				background: var(--paper);
+				color: var(--ink);
 				text-align: center;
 			}
 
@@ -1291,7 +1277,7 @@ export const citraArticleStyles = `
 			}
 
 			.verdict .section-label {
-				color: var(--orange);
+				color: var(--accent);
 			}
 
 			.verdict h2 {
@@ -1301,7 +1287,7 @@ export const citraArticleStyles = `
 			.verdict p {
 				max-width: 750px;
 				margin: 36px auto 0;
-				color: #c9cbc5;
+				color: var(--muted);
 				font-size: 1.15rem;
 				line-height: 1.7;
 			}
@@ -1320,6 +1306,7 @@ export const citraArticleStyles = `
 				min-height: 50px;
 				border: 1px solid rgba(244, 240, 230, 0.5);
 				background: #0e100e;
+				color: var(--dark-panel-ink);
 				text-align: left;
 			}
 
@@ -1334,7 +1321,7 @@ export const citraArticleStyles = `
 			}
 
 			.command-prompt {
-				color: var(--lime);
+				color: #a5b4fc;
 				user-select: none;
 			}
 
@@ -1363,8 +1350,8 @@ export const citraArticleStyles = `
 			}
 
 			.copy-command.copied {
-				background: var(--lime);
-				color: var(--ink);
+				background: #a5b4fc;
+				color: var(--dark-panel);
 			}
 
 			.copy-command svg {
@@ -1383,7 +1370,7 @@ export const citraArticleStyles = `
 				justify-content: center;
 				min-height: 50px;
 				padding: 0 20px;
-				border: 1px solid var(--paper);
+				border: 1px solid var(--ink);
 				font-family: var(--mono);
 				font-size: 0.72rem;
 				font-weight: 800;
@@ -1394,9 +1381,9 @@ export const citraArticleStyles = `
 
 			.sources {
 				padding: 46px 20px;
-				border-top: 1px solid rgba(244, 240, 230, 0.15);
-				background: var(--dark-panel);
-				color: #8f948b;
+				border-top: 1px solid var(--line);
+				background: var(--paper-deep);
+				color: var(--muted);
 			}
 
 			.sources-inner {
@@ -1426,7 +1413,7 @@ export const citraArticleStyles = `
 			}
 
 			.sources a {
-				color: #c4c8bf;
+				color: var(--ink);
 				text-underline-offset: 3px;
 			}
 
@@ -1435,8 +1422,8 @@ export const citraArticleStyles = `
 				align-items: center;
 				justify-content: space-between;
 				padding: 24px max(20px, calc((100% - 1120px) / 2));
-				background: var(--dark-panel);
-				color: var(--dark-panel-ink);
+				background: var(--paper-deep);
+				color: var(--ink);
 				font-family: var(--mono);
 				font-size: 0.68rem;
 				letter-spacing: 0.05em;
@@ -1444,7 +1431,7 @@ export const citraArticleStyles = `
 			}
 
 			.site-footer span:last-child {
-				color: var(--lime);
+				color: var(--accent);
 			}
 
 			@media (max-width: 900px) {

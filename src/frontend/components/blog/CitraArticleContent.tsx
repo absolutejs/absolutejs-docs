@@ -98,24 +98,6 @@ export const CitraArticleContent = ({
 							client class.
 						</p>
 					</div>
-					<div
-						className="code-window"
-						aria-label="Citra usage example"
-					>
-						<div className="window-bar">
-							<span className="dots" aria-hidden="true">
-								<i></i>
-								<i></i>
-								<i></i>
-							</span>
-							<span>oauth.ts</span>
-						</div>
-						<ArticleCode
-							html={
-								'<span class="token-keyword">const</span> client = <span class="token-keyword">await</span> <span class="token-function">createOAuth2Client</span>(\n  <span class="token-string">\'withings\'</span>,\n  {\n    clientId,\n    clientSecret,\n    redirectUri\n  }\n);\n\n<span class="token-keyword">await</span> client.<span class="token-function">createAuthorizationUrl</span>({\n  state,\n  scope: [<span class="token-string">\'user.metrics\'</span>],\n  <span class="token-comment">// scope is required and comma-encoded</span>\n});\n\n<span class="token-keyword">const</span> tokens =\n  <span class="token-keyword">await</span> client.<span class="token-function">validateAuthorizationCode</span>({ code });\n<span class="token-comment">// Withings returns userid beside its nested token.</span>\n<span class="token-keyword">const</span> userId = <span class="token-function">extractPropFromIdentity</span>(\n  tokens,\n  [<span class="token-string">\'body\'</span>, <span class="token-string">\'userid\'</span>],\n  <span class="token-string">\'number\'</span>\n);\n<span class="token-keyword">await</span> client.<span class="token-function">revokeToken</span>(userId);\n<span class="token-comment">// ^ number required; a token string is a type error.</span>'
-							}
-						/>
-					</div>
 				</div>
 				<nav className="article-toc" aria-label="In this article">
 					<span>In this article</span>
