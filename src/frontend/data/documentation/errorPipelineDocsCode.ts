@@ -36,7 +36,7 @@ try {
 }`;
 export const errorPipelineServer = `\
 import { Elysia } from 'elysia';
-import { ingestPlugin } from '@absolutejs/errors/ingest';
+import { errorsPlugin } from '@absolutejs/errors/elysia';
 import { createPostgresIssueStore } from '@absolutejs/errors-postgres';
 import postgres from 'postgres';
 
@@ -46,12 +46,15 @@ const store = createPostgresIssueStore({ sql }); // lazy, auto-created schema
 // POST /ingest: Schema-validate the untrusted body, push into the
 // coalescing buffer, answer 202 immediately. A drainer flushes every
 // ~500ms — ONE recordCoalesced upsert per (project, fingerprint) group.
-const ingest = await ingestPlugin({
-  store,
-  onIssue: (result) => {
-    // Fires ONLY on a new issue or a regression — the page-someone hook.
-    if (result.isNew || result.isRegression) notify(result.issue);
+const errors = errorsPlugin({
+  server: false,
+  ingest: {
+    store,
+    onIssue: (result) => {
+      // Fires ONLY on a new issue or regression — the page-someone hook.
+      if (result.isNew || result.isRegression) notify(result.issue);
+    },
   },
 });
 
-new Elysia().use(ingest).listen(3000);`;
+new Elysia().use(errors).listen(3000);`;

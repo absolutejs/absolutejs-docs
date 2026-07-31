@@ -272,7 +272,7 @@ export const ErrorPipelineView = ({
 						Wiring It Together
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Server-side, <code>ingestPlugin</code> mounts the{' '}
+						Server-side, <code>errorsPlugin</code> mounts the{' '}
 						<code>POST /ingest</code> route and starts the drainer
 						on one Elysia plugin. Swap{' '}
 						<code>createMemoryIssueStore()</code> (dev, tests,
