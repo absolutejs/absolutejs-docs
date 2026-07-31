@@ -39,13 +39,11 @@ export const CitraArticleContent = ({
 			<section className="hero" aria-labelledby="page-title">
 				<div className="article-meta">
 					<div className="author-lockup">
-						<img
-							className="absolute-logo"
-							src="/assets/png/absolutejs-logo.png"
-							alt="AbsoluteJS"
-						/>
 						<div>
-							<strong>{post.author.name}</strong>
+							<span className="byline-label">Written by</span>
+							<strong>
+								<a href={post.author.url}>{post.author.name}</a>
+							</strong>
 							<span>{post.author.role}</span>
 						</div>
 					</div>
@@ -79,7 +77,14 @@ export const CitraArticleContent = ({
 
 				<div className="hero-inner">
 					<div>
-						<p className="eyebrow">The OAuth layer we wanted</p>
+						<div className="citra-lockup">
+							<img
+								className="citra-logo"
+								src="/assets/png/citra-logo.png"
+								alt="Citra"
+							/>
+							<p className="eyebrow">The OAuth layer we wanted</p>
+						</div>
 						<h1 id="page-title">
 							OAuth providers disagree. Our app{' '}
 							<em>doesn’t have to.</em>

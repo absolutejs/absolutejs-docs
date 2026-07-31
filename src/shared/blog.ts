@@ -1,16 +1,15 @@
 import { createBlog, defineAuthor, definePost } from '@absolutejs/blog';
 
-export const absoluteJSEngineering = defineAuthor({
-	avatarUrl: '/assets/png/absolutejs-logo.png',
-	id: 'absolutejs-engineering',
-	kind: 'organization',
-	name: 'AbsoluteJS',
-	role: 'Citra engineering',
-	url: 'https://absolutejs.com'
+export const alexKahn = defineAuthor({
+	id: 'alex-kahn',
+	kind: 'person',
+	name: 'Alex Kahn',
+	role: 'Creator of Citra',
+	url: 'https://github.com/alexkahndev'
 });
 
 export const whyCitraPost = definePost({
-	author: absoluteJSEngineering,
+	author: alexKahn,
 	description:
 		'Why Citra treats OAuth provider differences as typed configuration instead of a reason to abandon the abstraction.',
 	publishedAt: '2026-07-31',

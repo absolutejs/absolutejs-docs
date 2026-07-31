@@ -6,6 +6,13 @@ export const citraArticleStyles = `
 				--lime: #cbf43c;
 				--orange: #ff714b;
 				--mint: #a9e6cb;
+				--accent-ink: #171a17;
+				--accent-paper: #fffaf0;
+				--accent-paper-deep: #e6dfcf;
+				--accent-muted: #666b63;
+				--accent-line: rgba(23, 26, 23, 0.18);
+				--dark-panel: #0e100e;
+				--dark-panel-ink: #f7f3e9;
 				--muted: #666b63;
 				--line: rgba(23, 26, 23, 0.18);
 				--serif: Georgia, 'Times New Roman', serif;
@@ -60,6 +67,8 @@ export const citraArticleStyles = `
 			}
 
 			.article-meta {
+				position: relative;
+				z-index: 1;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
@@ -71,15 +80,11 @@ export const citraArticleStyles = `
 			}
 
 			.author-lockup {
-				display: flex;
-				gap: 14px;
-				align-items: center;
+				line-height: 1.25;
 			}
 
-			.absolute-logo {
-				width: auto;
-				height: 54px;
-				filter: drop-shadow(2px 3px 0 rgba(23, 26, 23, 0.16));
+			.byline-label {
+				margin-bottom: 5px;
 			}
 
 			.author-lockup strong,
@@ -88,8 +93,13 @@ export const citraArticleStyles = `
 			}
 
 			.author-lockup strong {
-				font-size: 0.9rem;
+				font-size: 1rem;
 				letter-spacing: -0.02em;
+			}
+
+			.author-lockup strong a {
+				text-decoration-thickness: 1px;
+				text-underline-offset: 3px;
 			}
 
 			.author-lockup span,
@@ -121,6 +131,8 @@ export const citraArticleStyles = `
 			}
 
 			.article-toc {
+				position: relative;
+				z-index: 1;
 				display: flex;
 				flex-wrap: wrap;
 				gap: 12px 22px;
@@ -140,6 +152,7 @@ export const citraArticleStyles = `
 				margin-right: 8px;
 				padding: 7px 9px;
 				background: var(--orange);
+				color: var(--accent-ink);
 				font-weight: 800;
 			}
 
@@ -152,12 +165,14 @@ export const citraArticleStyles = `
 
 			.hero {
 				position: relative;
+				isolation: isolate;
 				overflow: hidden;
 				padding: 54px 20px 72px;
 			}
 
 			.hero::before {
 				position: absolute;
+				z-index: 0;
 				top: -210px;
 				right: -170px;
 				width: 520px;
@@ -175,6 +190,7 @@ export const citraArticleStyles = `
 
 			.hero-inner {
 				position: relative;
+				z-index: 1;
 				display: grid;
 				grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
 				gap: 72px;
@@ -183,11 +199,27 @@ export const citraArticleStyles = `
 				margin: 72px auto 0;
 			}
 
+			.citra-lockup {
+				display: flex;
+				gap: 18px;
+				align-items: center;
+				margin-bottom: 26px;
+			}
+
+			.citra-logo {
+				width: 58px;
+				height: 87px;
+				border: 1px solid var(--line);
+				border-radius: 14px;
+				box-shadow: 6px 6px 0 var(--orange);
+				object-fit: cover;
+			}
+
 			.eyebrow {
 				display: flex;
 				gap: 12px;
 				align-items: center;
-				margin: 0 0 26px;
+				margin: 0;
 				font-family: var(--mono);
 				font-size: 0.76rem;
 				font-weight: 700;
@@ -230,10 +262,10 @@ export const citraArticleStyles = `
 			}
 
 			.code-window {
-				border: 1px solid var(--ink);
-				background: var(--ink);
+				border: 1px solid var(--dark-panel);
+				background: var(--dark-panel);
 				box-shadow: 14px 14px 0 var(--lime);
-				color: #f7f3e9;
+				color: var(--dark-panel-ink);
 			}
 
 			.window-bar {
@@ -377,8 +409,8 @@ export const citraArticleStyles = `
 			}
 
 			.argument {
-				background: var(--ink);
-				color: var(--paper);
+				background: var(--dark-panel);
+				color: var(--dark-panel-ink);
 			}
 
 			.argument .section-label {
@@ -495,7 +527,7 @@ export const citraArticleStyles = `
 			}
 
 			.withings {
-				background: #e8e2d3;
+				background: var(--paper-deep);
 			}
 
 			.request-map {
@@ -522,6 +554,7 @@ export const citraArticleStyles = `
 				margin-bottom: 18px;
 				padding: 7px 10px;
 				background: var(--orange);
+				color: var(--accent-ink);
 				font-family: var(--mono);
 				font-size: 0.66rem;
 				font-weight: 800;
@@ -569,6 +602,7 @@ export const citraArticleStyles = `
 
 			.request-row:last-child {
 				background: var(--lime);
+				color: var(--accent-ink);
 			}
 
 			.quirk-ledger {
@@ -588,6 +622,7 @@ export const citraArticleStyles = `
 			.quirk-intro {
 				grid-row: span 2;
 				background: var(--orange);
+				color: var(--accent-ink);
 			}
 
 			.quirk-intro h3 {
@@ -634,12 +669,13 @@ export const citraArticleStyles = `
 
 			.daily-tools > * {
 				padding: 26px;
-				background: #fffaf0;
+				background: var(--paper);
 			}
 
 			.daily-tools-intro {
 				grid-row: span 2;
 				background: var(--mint);
+				color: var(--accent-ink);
 			}
 
 			.daily-tools-intro h3 {
@@ -671,7 +707,7 @@ export const citraArticleStyles = `
 			}
 
 			.type-section {
-				background: #fffaf0;
+				background: var(--paper);
 			}
 
 			.type-grid {
@@ -844,6 +880,17 @@ export const citraArticleStyles = `
 				border-top: 1px solid var(--ink);
 			}
 
+			.oidc-section,
+			.identity-section,
+			.custom {
+				--ink: var(--accent-ink);
+				--line: var(--accent-line);
+				--muted: var(--accent-muted);
+				--paper: var(--accent-paper);
+				--paper-deep: var(--accent-paper-deep);
+				color: var(--accent-ink);
+			}
+
 			.oidc-section {
 				background: #dfe9ff;
 			}
@@ -957,9 +1004,9 @@ export const citraArticleStyles = `
 				flex-direction: column;
 				padding: 28px;
 				border: 1px solid var(--ink);
-				background: var(--ink);
+				background: var(--dark-panel);
 				box-shadow: 12px 12px 0 var(--orange);
-				color: var(--paper);
+				color: var(--dark-panel-ink);
 			}
 
 			.identity-engine .engine-label {
@@ -1223,6 +1270,7 @@ export const citraArticleStyles = `
 				padding: 28px 32px;
 				border: 1px solid var(--ink);
 				background: var(--lime);
+				color: var(--accent-ink);
 				font-family: var(--serif);
 				font-size: clamp(1.45rem, 2.8vw, 2.25rem);
 				letter-spacing: -0.035em;
@@ -1231,8 +1279,8 @@ export const citraArticleStyles = `
 			}
 
 			.verdict {
-				background: var(--ink);
-				color: var(--paper);
+				background: var(--dark-panel);
+				color: var(--dark-panel-ink);
 				text-align: center;
 			}
 
@@ -1347,7 +1395,7 @@ export const citraArticleStyles = `
 			.sources {
 				padding: 46px 20px;
 				border-top: 1px solid rgba(244, 240, 230, 0.15);
-				background: var(--ink);
+				background: var(--dark-panel);
 				color: #8f948b;
 			}
 
@@ -1387,8 +1435,8 @@ export const citraArticleStyles = `
 				align-items: center;
 				justify-content: space-between;
 				padding: 24px max(20px, calc((100% - 1120px) / 2));
-				background: var(--ink);
-				color: var(--paper);
+				background: var(--dark-panel);
+				color: var(--dark-panel-ink);
 				font-family: var(--mono);
 				font-size: 0.68rem;
 				letter-spacing: 0.05em;
@@ -1457,16 +1505,18 @@ export const citraArticleStyles = `
 			@media (max-width: 620px) {
 				.article-meta {
 					align-items: flex-start;
+					flex-direction: column;
+					gap: 18px;
 				}
 
 				.article-meta-actions {
-					align-items: flex-end;
-					flex-direction: column;
-					gap: 10px;
+					align-items: center;
+					justify-content: space-between;
+					width: 100%;
 				}
 
 				.article-details {
-					text-align: right;
+					text-align: left;
 				}
 
 				.article-toc {

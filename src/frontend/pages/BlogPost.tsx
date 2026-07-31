@@ -1,7 +1,10 @@
 import { Head } from '@absolutejs/absolute/react/components';
 import { useReadingProgress, useReadingTime } from '@absolutejs/blog/react';
+import type { FluidValue } from '@react-spring/shared';
+import { animated } from '@react-spring/web';
 import { useRef } from 'react';
 import { User } from '../../../db/schema';
+import { AnimatedCSSProperties } from '../../types/springTypes';
 import { blog } from '../../shared/blog';
 import { CitraArticleContent } from '../components/blog/CitraArticleContent';
 import { Navbar } from '../components/navbar/Navbar';
@@ -16,6 +19,14 @@ type BlogPostProps = {
 	user: User | null;
 };
 
+type ArticleThemeStyle = AnimatedCSSProperties & {
+	'--ink': FluidValue<string>;
+	'--line': FluidValue<string>;
+	'--muted': FluidValue<string>;
+	'--paper': FluidValue<string>;
+	'--paper-deep': FluidValue<string>;
+};
+
 export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
 	const post = blog.get(slug);
 	if (post === undefined) {
@@ -28,18 +39,29 @@ export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
 	const readingTime = useReadingTime(articleRef);
 	const metadata = blog.head(post);
 	const { jsonLd, ...headMetadata } = metadata;
+	const articleThemeStyle: ArticleThemeStyle = {
+		'--ink': themeSprings.contrastPrimary,
+		'--line': themeSprings.contrastPrimary.to(
+			(color) => `color-mix(in srgb, ${color} 18%, transparent)`
+		),
+		'--muted': themeSprings.contrastPrimary.to(
+			(color) => `color-mix(in srgb, ${color} 62%, transparent)`
+		),
+		'--paper': themeSprings.themeSecondary,
+		'--paper-deep': themeSprings.themeTertiary
+	};
 
 	return (
 		<html lang="en">
 			<Head
 				{...headMetadata}
 				icon="/assets/favicon.ico"
-				meta={[
-					...metadata.meta,
-					{ content: '#171a17', name: 'theme-color' }
-				]}
+				meta={metadata.meta}
 			/>
-			<body className="citra-blog-document">
+			<animated.body
+				className="citra-blog-document"
+				style={articleThemeStyle}
+			>
 				<script
 					dangerouslySetInnerHTML={{
 						__html: JSON.stringify({
@@ -70,7 +92,7 @@ export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
 					<span>Citra · OAuth2 for TypeScript</span>
 					<span>78 provider configurations, one request engine.</span>
 				</footer>
-			</body>
+			</animated.body>
 		</html>
 	);
 };
