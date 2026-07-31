@@ -1031,7 +1031,7 @@ export const CitraArticleContent = ({
 							</div>
 							<ArticleCode
 								html={
-									'<span class="token-keyword">const</span> acme = <span class="token-function">defineProvider</span>({\n  authorizationUrl: <span class="token-string">\'https://acme.test/oauth/authorize\'</span>,\n  isOIDC: <span class="token-keyword">true</span>,\n  isRefreshable: <span class="token-keyword">true</span>,\n  PKCEMethod: <span class="token-string">\'S256\'</span>,\n  scopeRequired: <span class="token-keyword">true</span>,\n  subject: [<span class="token-string">\'sub\'</span>],\n  subjectType: <span class="token-string">\'string\'</span>,\n  profileRequest: {\n    url: <span class="token-string">\'https://acme.test/oauth/userinfo\'</span>,\n    method: <span class="token-string">\'GET\'</span>,\n    authIn: <span class="token-string">\'header\'</span>,\n    encoding: <span class="token-string">\'application/json\'</span>\n  },\n  tokenRequest: {\n    url: <span class="token-string">\'https://acme.test/oauth/token\'</span>,\n    authIn: <span class="token-string">\'body\'</span>,\n    encoding: <span class="token-string">\'application/x-www-form-urlencoded\'</span>\n  }\n});\n\n<span class="token-keyword">const</span> client = <span class="token-keyword">await</span> <span class="token-function">createCustomOAuth2Client</span>(acme, credentials);\n<span class="token-keyword">await</span> client.<span class="token-function">refreshAccessToken</span>(refreshToken);'
+									'<span class="token-keyword">type</span> AcmeCredentials = {\n  clientId: <span class="token-keyword">string</span>;\n  clientSecret: <span class="token-keyword">string</span>;\n  redirectUri: <span class="token-keyword">string</span>;\n  tenantId: <span class="token-keyword">string</span>;\n};\n\n<span class="token-keyword">const</span> acme = <span class="token-function">defineProvider</span>&lt;AcmeCredentials&gt;()({\n  authorizationUrl: ({ tenantId }) =&gt;\n    <span class="token-string">`https://${tenantId}.acme.test/oauth/authorize`</span>,\n  isOIDC: <span class="token-keyword">true</span>,\n  isRefreshable: <span class="token-keyword">true</span>,\n  PKCEMethod: <span class="token-string">\'S256\'</span>,\n  scopeRequired: <span class="token-keyword">true</span>,\n  subject: [<span class="token-string">\'sub\'</span>],\n  subjectType: <span class="token-string">\'string\'</span>,\n  profileRequest: {\n    url: ({ tenantId }) =&gt;\n      <span class="token-string">`https://${tenantId}.acme.test/oauth/userinfo`</span>,\n    method: <span class="token-string">\'GET\'</span>,\n    authIn: <span class="token-string">\'header\'</span>,\n    encoding: <span class="token-string">\'application/json\'</span>\n  },\n  tokenRequest: {\n    url: ({ tenantId }) =&gt;\n      <span class="token-string">`https://${tenantId}.acme.test/oauth/token`</span>,\n    authIn: <span class="token-string">\'body\'</span>,\n    encoding: <span class="token-string">\'application/x-www-form-urlencoded\'</span>\n  }\n});\n\n<span class="token-keyword">const</span> client = <span class="token-keyword">await</span> <span class="token-function">createCustomOAuth2Client</span>(acme, {\n  clientId, clientSecret, redirectUri, tenantId\n});\n\n<span class="token-keyword">await</span> client.<span class="token-function">refreshAccessToken</span>(refreshToken);'
 								}
 							/>
 						</div>
@@ -1042,8 +1042,8 @@ export const CitraArticleContent = ({
 									Inferred from the literal
 								</p>
 								<h3>
-									This literal produces a refreshable client
-									with required PKCE and scopes.
+									The definition infers capabilities and
+									carries its exact credentials.
 								</h3>
 								<p>
 									Those facts come from{' '}
@@ -1054,15 +1054,32 @@ export const CitraArticleContent = ({
 									sync.
 								</p>
 								<p className="custom-limit">
-									One limit remains: extra credential fields
-									unique to a custom provider are not inferred
-									today. Custom definitions get capability
-									inference, but built-in{' '}
-									<code>CredentialsMap</code> entries still
-									provide the stronger constructor types.
+									<code>
+										defineProvider&lt;AcmeCredentials&gt;()
+									</code>{' '}
+									types every credential-dependent URL,
+									header, body, and client-secret factory. The
+									same type is then required by{' '}
+									<code>createCustomOAuth2Client()</code>, so
+									missing, mistyped, and undeclared custom
+									fields fail before construction.
 								</p>
 							</div>
 							<div className="custom-errors">
+								<div className="compiler-card">
+									<ArticleCode
+										html={
+											'<span class="token-function">createCustomOAuth2Client</span>(acme, {\n  clientId,\n  clientSecret,\n  redirectUri\n});'
+										}
+									/>
+									<div className="diagnostic">
+										<strong>Type error · TS2345</strong>
+										<p>
+											Property 'tenantId' is missing but
+											required in type 'AcmeCredentials'.
+										</p>
+									</div>
+								</div>
 								<div className="compiler-card">
 									<ArticleCode
 										html={
@@ -1425,7 +1442,7 @@ export const CitraArticleContent = ({
 						</li>
 						<li>
 							<a
-								href="https://github.com/absolutejs/citra/blob/d91e7a3/src/providers.ts"
+								href="https://github.com/absolutejs/citra/blob/3d84df9/src/providers.ts"
 								target="_blank"
 								rel="noreferrer"
 							>
@@ -1433,7 +1450,7 @@ export const CitraArticleContent = ({
 							</a>{' '}
 							and{' '}
 							<a
-								href="https://github.com/absolutejs/citra/blob/d91e7a3/src/types.ts"
+								href="https://github.com/absolutejs/citra/blob/3d84df9/src/types.ts"
 								target="_blank"
 								rel="noreferrer"
 							>
