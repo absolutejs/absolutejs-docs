@@ -1,5 +1,6 @@
 import { getEnv, networking, prepare } from '@absolutejs/absolute';
 import { auth } from '@absolutejs/auth';
+import { blogFeeds } from '@absolutejs/blog/elysia';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { Elysia } from 'elysia';
@@ -8,6 +9,7 @@ import { providerPlugin } from './plugins/providerPlugin';
 import { telemetryPlugin } from './plugins/telemetryPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 import { pagesPlugin } from './plugins/pagesPlugin';
+import { blog } from '../shared/blog';
 
 const sql = neon(getEnv('DATABASE_URL'));
 const db = drizzle({ client: sql, relations });
@@ -24,6 +26,7 @@ const authPlugin = authPluginRich as unknown as Elysia;
 
 const builtApp = new Elysia()
 	.use(absolutejs)
+	.use(blogFeeds(blog, blog.site.feed.paths))
 	.use(providerPlugin(db))
 	.use(authPlugin)
 	.use(telemetryPlugin(db))

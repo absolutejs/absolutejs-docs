@@ -27,26 +27,8 @@ const whitelistedAdmins =
 		?.split(',')
 		.map((adminSub) => adminSub.trim()) ?? [];
 
-const feeds = blog.feeds();
-const feedResponse = (body: string, contentType: string) =>
-	new Response(body, {
-		headers: {
-			'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600',
-			'Content-Type': `${contentType}; charset=utf-8`
-		}
-	});
-
 export const pagesPlugin = (manifest: Record<string, string>) =>
 	new Elysia()
-		.get('/blog/rss.xml', () =>
-			feedResponse(feeds.rss, 'application/rss+xml')
-		)
-		.get('/blog/atom.xml', () =>
-			feedResponse(feeds.atom, 'application/atom+xml')
-		)
-		.get('/blog/feed.json', () =>
-			feedResponse(feeds.json, 'application/feed+json')
-		)
 		.guard({
 			cookie: pageCookie
 		})

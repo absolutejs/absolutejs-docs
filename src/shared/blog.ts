@@ -17,7 +17,7 @@ export const whyCitraPost = definePost({
 	slug: 'why-citra-typed-oauth',
 	sourceUrl: 'https://github.com/absolutejs/citra',
 	tags: ['Citra', 'OAuth', 'TypeScript'],
-	title: 'Why Citra: Typed OAuth Without Provider Classes'
+	title: 'Why Citra: A Complete OAuth Library Built to Last'
 });
 
 export const blog = createBlog({

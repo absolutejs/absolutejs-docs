@@ -89,9 +89,13 @@ jobs:
             mv compiled-server.new compiled-server
             chown docs:docs compiled-server && chmod 755 compiled-server
             systemctl start docs && sleep 5
-            A=\$(systemctl is-active docs); C=\$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:3001 || echo 000)
-            echo \"active=\$A app=\$C (backup compiled-server.bak-\$TS)\"
-            if [ \"\$A\" != active ] || [ \"\$C\" != 200 ]; then
+            A=\$(systemctl is-active docs)
+            C=\$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:3001 || echo 000)
+            RSS=\$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:3001/blog/rss.xml || echo 000)
+            ATOM=\$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:3001/blog/atom.xml || echo 000)
+            JSON=\$(curl -sS -m 15 -o /dev/null -w '%{http_code}' http://127.0.0.1:3001/blog/feed.json || echo 000)
+            echo \"active=\$A app=\$C rss=\$RSS atom=\$ATOM json=\$JSON (backup compiled-server.bak-\$TS)\"
+            if [ \"\$A\" != active ] || [ \"\$C\" != 200 ] || [ \"\$RSS\" != 200 ] || [ \"\$ATOM\" != 200 ] || [ \"\$JSON\" != 200 ]; then
               echo '!!! SMOKE FAILED — rolling back !!!'
               if [ -f \"compiled-server.bak-\$TS\" ]; then systemctl stop docs; cp -a \"compiled-server.bak-\$TS\" compiled-server; systemctl start docs; sleep 4; fi
               echo \"rolled back: active=\$(systemctl is-active docs)\"; exit 1

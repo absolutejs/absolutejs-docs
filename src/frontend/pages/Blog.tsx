@@ -11,6 +11,7 @@ import {
 	featureCard,
 	heroSubtitleStyle,
 	heroTitleStyle,
+	linkContainerStyle,
 	primaryButtonStyle
 } from '../styles/homeStyles';
 import { bodyDefault, htmlDefault, mainDefault } from '../styles/styles';
@@ -92,6 +93,33 @@ export const Blog = ({ user, theme }: BlogProps) => {
 								Engineering notes, design decisions, and lessons
 								from building the AbsoluteJS ecosystem.
 							</animated.p>
+							<nav
+								aria-label="Subscribe to the blog"
+								style={{
+									display: 'flex',
+									flexWrap: 'wrap',
+									gap: '0.75rem',
+									justifyContent: 'center'
+								}}
+							>
+								{[
+									['RSS', blog.site.feed.paths.rss],
+									['Atom', blog.site.feed.paths.atom],
+									['JSON Feed', blog.site.feed.paths.json]
+								].map(([label, href]) => (
+									<animated.a
+										href={href}
+										key={href}
+										style={{
+											...linkContainerStyle(themeSprings),
+											fontSize: '0.875rem',
+											padding: '0.6rem 1rem'
+										}}
+									>
+										{label}
+									</animated.a>
+								))}
+							</nav>
 						</header>
 
 						<section aria-labelledby="latest-posts">
