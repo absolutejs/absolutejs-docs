@@ -1223,6 +1223,77 @@ export const citraArticleStyles = `
 				background: var(--paper-deep);
 			}
 
+			.history .lede a {
+				text-underline-offset: 4px;
+			}
+
+			.history-context {
+				display: grid;
+				grid-template-columns: 0.9fr 1.1fr;
+				gap: 1px;
+				margin-top: 64px;
+				border: 1px solid var(--ink);
+				background: var(--ink);
+			}
+
+			.history-context > div {
+				padding: 34px;
+				background: var(--paper);
+			}
+
+			.history-context h3 {
+				margin: 12px 0 22px;
+				font-family: var(--serif);
+				font-size: clamp(1.8rem, 3vw, 2.7rem);
+				font-weight: 400;
+				letter-spacing: -0.045em;
+				line-height: 1.05;
+			}
+
+			.history-context-copy p {
+				margin: 0;
+				color: var(--muted);
+				font-size: 0.95rem;
+				line-height: 1.7;
+			}
+
+			.history-context-copy p + p {
+				margin-top: 18px;
+			}
+
+			.history-friction dl {
+				margin: 18px 0 0;
+			}
+
+			.history-friction dl > div {
+				display: grid;
+				grid-template-columns: 108px 1fr;
+				gap: 20px;
+				padding: 16px 0;
+				border-top: 1px solid var(--line);
+			}
+
+			.history-friction dt {
+				color: var(--accent);
+				font-family: var(--mono);
+				font-size: 0.7rem;
+				font-weight: 800;
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+			}
+
+			.history-friction dd {
+				margin: 0;
+				color: var(--muted);
+				font-size: 0.86rem;
+				line-height: 1.55;
+			}
+
+			.history-friction code {
+				color: var(--ink);
+				font-size: 0.8em;
+			}
+
 			.history-timeline {
 				position: relative;
 				display: grid;
@@ -1294,6 +1365,15 @@ export const citraArticleStyles = `
 
 			.history-event a {
 				text-underline-offset: 3px;
+			}
+
+			.history-maintenance {
+				max-width: 820px;
+				margin: 36px auto 0;
+				color: var(--muted);
+				font-size: 0.9rem;
+				line-height: 1.65;
+				text-align: center;
 			}
 
 			.history-today {
@@ -1507,6 +1587,10 @@ export const citraArticleStyles = `
 					gap: 58px;
 				}
 
+				.history-context {
+					grid-template-columns: 1fr;
+				}
+
 				.article-toc ol {
 					grid-template-columns: repeat(2, minmax(0, 1fr));
 				}
@@ -1542,6 +1626,15 @@ export const citraArticleStyles = `
 			}
 
 			@media (max-width: 620px) {
+				.history-context > div {
+					padding: 26px 22px;
+				}
+
+				.history-friction dl > div {
+					grid-template-columns: 1fr;
+					gap: 7px;
+				}
+
 				.article-meta {
 					align-items: flex-start;
 					flex-direction: column;

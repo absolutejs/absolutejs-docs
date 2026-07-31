@@ -1074,18 +1074,94 @@ export const CitraArticleContent = ({
 					<div className="section-inner">
 						<p className="section-label">Where Citra came from</p>
 						<h2>
-							A missing ID token exposed a bigger design question.
+							We needed OAuth to fit inside a complete auth
+							system.
 						</h2>
 						<p className="lede">
-							The project started with a practical problem. We
-							needed one dependable integration layer for
-							providers that expose different slices of OAuth.
+							Citra did not begin as an abstract argument about
+							provider design. It began while we were building{' '}
+							<a
+								href="https://github.com/absolutejs/absolute-auth"
+								target="_blank"
+								rel="noreferrer"
+							>
+								absolutejs/auth
+							</a>
+							, where OAuth is one part of a larger authentication
+							system.
 						</p>
+
+						<div className="history-context">
+							<div className="history-context-copy">
+								<span className="mini-kicker">
+									What we were actually building
+								</span>
+								<h3>
+									One provider selected at runtime, one auth
+									flow for the application.
+								</h3>
+								<p>
+									The auth package owned routes, state and
+									PKCE cookies, callbacks, sessions, user
+									lookup, refresh, revocation, and redirects.
+									A route or stored session selected the
+									provider. The same orchestration then had to
+									work for every configured provider.
+								</p>
+								<p>
+									Elysia hosted those HTTP routes, but it was
+									not the source of the problem. Any
+									generalized auth system reaches the same
+									boundary once provider selection becomes
+									data instead of a hardcoded import.
+								</p>
+							</div>
+							<div className="history-friction">
+								<span className="mini-kicker">
+									What the Arctic adapter accumulated
+								</span>
+								<dl>
+									<div>
+										<dt>Construction</dt>
+										<dd>
+											A manual registry of every provider
+											class and a suppressed type error
+											around the dynamic constructor.
+										</dd>
+									</div>
+									<div>
+										<dt>PKCE</dt>
+										<dd>
+											Function source converted to text
+											and searched for a{' '}
+											<code>codeVerifier</code> parameter.
+										</dd>
+									</div>
+									<div>
+										<dt>Identity</dt>
+										<dd>
+											Try to decode an ID token, catch its
+											absence, then fall back to a profile
+											request.
+										</dd>
+									</div>
+									<div>
+										<dt>UserInfo</dt>
+										<dd>
+											A separate 322-line catalog
+											describing profile endpoints,
+											methods, headers, bodies, and token
+											placement.
+										</dd>
+									</div>
+								</dl>
+							</div>
+						</div>
 
 						<div className="history-timeline">
 							<section className="history-event">
 								<span className="history-date">April 2025</span>
-								<h3>The ordinary case threw an exception</h3>
+								<h3>The mismatch became explicit</h3>
 								<p>
 									In{' '}
 									<a
@@ -1095,39 +1171,40 @@ export const CitraArticleContent = ({
 									>
 										Arctic issue #299
 									</a>
-									, we pointed out that <code>idToken()</code>{' '}
-									threw when a token response omitted{' '}
-									<code>id_token</code>. That absence can be
-									valid when a flow did not use OpenID
-									Connect, so our shared layer could not treat
-									it as exceptional every time.
+									, we showed the callback from
+									absolutejs/auth. <code>idToken()</code>{' '}
+									threw when a non-OIDC response omitted{' '}
+									<code>id_token</code>, forcing a normal
+									branch through exception handling. Arctic's
+									response was that its clients were not
+									designed to be passed around or used through
+									a shared interface.
 								</p>
 							</section>
 							<section className="history-event">
-								<span className="history-date">
-									The disagreement
-								</span>
-								<h3>Should provider clients interchange?</h3>
+								<span className="history-date">May 2025</span>
+								<h3>The OAuth boundary became Citra</h3>
 								<p>
-									Arctic’s answer was no: providers omit
-									features, violate specifications, and need
-									flexible individual behavior. Consumers who
-									needed a shared interface were expected to
-									wrap each provider client themselves.
+									We began replacing the class registry and
+									application-owned profile catalog with one
+									client driven by provider definitions. As
+									Citra matured, PKCE, request placement,
+									response paths, identity extraction,
+									refresh, and revocation became facts the
+									OAuth layer could expose directly.
 								</p>
 							</section>
 							<section className="history-event">
-								<span className="history-date">
-									Citra’s answer
-								</span>
-								<h3>Make differences typed data</h3>
+								<span className="history-date">Today</span>
+								<h3>The larger system is the proof</h3>
 								<p>
-									Citra moved endpoints, capabilities, request
-									placement, encoding, identity paths, and
-									provider quirks into literal configuration.
-									One engine reads that data at runtime while
-									conditional types derive the client
-									contract.
+									absolutejs/auth now accepts typed built-in
+									or custom provider configuration, resolves
+									the selected client, and runs it through
+									common authorization, callback, profile,
+									refresh, and revocation routes. Auth owns
+									the application workflow. Citra owns
+									provider-aware OAuth.
 								</p>
 							</section>
 							<section className="history-event">
@@ -1151,22 +1228,24 @@ export const CitraArticleContent = ({
 									type, and leave wire details in provider
 									configuration.
 								</p>
-								<p>
-									Configuration does not stop providers from
-									changing their APIs. Contract fixtures and
-									catalog maintenance still matter. What it
-									changes is where that work happens and how
-									much application code it can disturb.
-								</p>
 							</section>
 						</div>
 
+						<p className="history-maintenance">
+							Configuration does not stop providers from changing
+							their APIs. Contract fixtures and catalog
+							maintenance still matter. What it changes is where
+							that work happens and how much application code it
+							can disturb.
+						</p>
+
 						<p className="history-today">
-							That disagreement gave us a concrete test: can one
-							engine represent 78 provider configurations without
-							pretending they have the same capabilities? Citra
-							does it with typed configuration, custom providers,
-							OIDC discovery, and identity mapping.
+							absolutejs/auth is one demanding consumer, not the
+							boundary of the idea. It can remain an Elysia auth
+							system because Citra remains a framework-neutral
+							OAuth layer: 78 provider configurations, one engine,
+							and no requirement that another application organize
+							its routes or sessions the same way.
 						</p>
 					</div>
 				</section>
@@ -1274,6 +1353,33 @@ export const CitraArticleContent = ({
 							</a>
 							: the original interchangeability discussion from
 							April 2025.
+						</li>
+						<li>
+							<a
+								href="https://github.com/absolutejs/absolute-auth/tree/c75f96a"
+								target="_blank"
+								rel="noreferrer"
+							>
+								The Arctic-era absolutejs/auth source
+							</a>{' '}
+							and its{' '}
+							<a
+								href="https://github.com/absolutejs/absolute-auth/commit/4b8aa12"
+								target="_blank"
+								rel="noreferrer"
+							>
+								first Citra migration
+							</a>{' '}
+							and the{' '}
+							<a
+								href="https://github.com/absolutejs/absolute-auth/blob/main/src/providers/clients.ts"
+								target="_blank"
+								rel="noreferrer"
+							>
+								current provider integration
+							</a>
+							: the implementation history behind the origin
+							section.
 						</li>
 						<li>
 							<a
