@@ -73,13 +73,16 @@ expect(sent[0].subject).toBe('hi');
 email.clear();
 expect(email.inspect()).toHaveLength(0);`;
 export const dispatchTwilio = `import {
+  createPostgresTwilioIdempotencyStore,
   createTwilioAdapter,
   createTwilioWebhookHandler,
+  inspectTwilioMessagingReadiness,
 } from '@absolutejs/dispatch-twilio';
 import { Twilio } from 'twilio';
 
 const sms = createTwilioAdapter({
   client: new Twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN),
+  idempotencyStore: createPostgresTwilioIdempotencyStore(postgres),
   messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
   statusCallbackUrl: 'https://example.com/webhooks/twilio/messaging',
   validityPeriod: 300,
@@ -87,8 +90,27 @@ const sms = createTwilioAdapter({
 
 const webhook = createTwilioWebhookHandler({
   authToken: process.env.TWILIO_TOKEN,
+  expectedAccountSid: process.env.TWILIO_SID,
+  expectedMessagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+  publicUrl: 'https://example.com/webhooks/twilio/messaging',
   store: durableLifecycleStore,
   onEvent: event => lifecycle.record(event),
 });
 
-app.post('/webhooks/twilio/messaging', ({ request }) => webhook(request));`;
+app.post('/webhooks/twilio/messaging', ({ request }) => webhook(request));
+
+const readiness = await inspectTwilioMessagingReadiness({
+  client,
+  expectedAccountSid: process.env.TWILIO_SID,
+  inboundWebhookUrl: 'https://example.com/webhooks/twilio/inbound',
+  messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+  requiresUsA2PRegistration: true,
+  statusCallbackUrl: 'https://example.com/webhooks/twilio/messaging',
+  store: durableLifecycleStore,
+  assertions: {
+    consentEvidenceStored: true,
+    optOutConfigured: true,
+    privacyPolicyPublished: true,
+    termsPublished: true,
+  },
+});`;

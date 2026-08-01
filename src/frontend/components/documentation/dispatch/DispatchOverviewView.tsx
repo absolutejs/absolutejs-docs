@@ -54,7 +54,7 @@ const channelCards: ChannelCardData[] = [
 	},
 	{
 		call: 'dispatch.sms(message)',
-		fields: 'to, body, from?, tenant?, metadata?',
+		fields: 'to, body?, channel?, mediaUrls?, template?, sendAt?, idempotencyKey?, from?, tenant?, metadata?',
 		title: 'SMS'
 	},
 	{
@@ -143,9 +143,9 @@ const vendorAdapterRows: DocsTableCell[][] = [
 	],
 	[
 		{ code: '@absolutejs/dispatch-twilio' },
-		'0.1.0',
-		'SMS',
-		'Production Messaging Service sending, signed delivery and consent webhooks, retry-safe lifecycle persistence, and readiness checks.'
+		'0.2.1',
+		'SMS / MMS / WhatsApp',
+		'Rich Messaging Service sending, signed delivery, inbound, and consent webhooks, durable idempotency/lifecycle stores, tenant routing, and API-inspected readiness.'
 	]
 ];
 
@@ -452,13 +452,23 @@ export const DispatchOverviewView = ({
 						Twilio
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Production SMS through a required Twilio Messaging
-						Service and HTTPS status callback. The signed webhook
-						handler normalizes delivery states plus Advanced Opt-Out{' '}
-						<code>STOP</code>, <code>START</code>, and{' '}
-						<code>HELP</code> events. Its atomic lifecycle-store
-						contract deduplicates retries and rejects stale status
-						transitions.
+						Use <code>@absolutejs/dispatch-twilio</code> for
+						application-authored SMS alerts, MMS, WhatsApp, and
+						Twilio Content templates. Use{' '}
+						<code>@absolutejs/auth-twilio</code> for Verify-managed
+						OTP, MFA, recovery, and step-up challenges. Twilio voice
+						calls and Media Streams remain in{' '}
+						<code>@absolutejs/voice</code>; they are not messaging
+						or auth adapters.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Messaging requires a Twilio Messaging Service and HTTPS
+						status callback. The signed webhook handler normalizes
+						delivery states, ordinary inbound replies and media,
+						plus Advanced Opt-Out <code>STOP</code>,{' '}
+						<code>START</code>, and <code>HELP</code> events. Its
+						atomic lifecycle-store contract deduplicates retries and
+						rejects stale status transitions.
 					</p>
 					<PrismPlus
 						codeString={dispatchTwilio}
@@ -471,11 +481,11 @@ export const DispatchOverviewView = ({
 						title="Production readiness"
 						variant="note"
 					>
-						The readiness report checks durable webhook storage and
-						operator assertions for carrier approval, consent
-						evidence, opt-out configuration, privacy policy, and
-						messaging terms. Its scope is explicitly operational,
-						not legal certification.
+						The readiness report inspects the real account/service
+						binding, callbacks, sender pool, and optional US A2P
+						attachment. Consent evidence, opt-out testing, privacy,
+						and messaging terms remain operator assertions. Its
+						scope is operational, not legal certification.
 					</Callout>
 				</section>
 
