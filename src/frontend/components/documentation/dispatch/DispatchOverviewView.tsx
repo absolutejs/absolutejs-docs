@@ -143,9 +143,9 @@ const vendorAdapterRows: DocsTableCell[][] = [
 	],
 	[
 		{ code: '@absolutejs/dispatch-twilio' },
-		'0.0.1',
+		'0.1.0',
 		'SMS',
-		'createTwilioAdapter — single-number or Messaging Service routing; the Message SID becomes the result id.'
+		'Production Messaging Service sending, signed delivery and consent webhooks, retry-safe lifecycle persistence, and readiness checks.'
 	]
 ];
 
@@ -452,13 +452,13 @@ export const DispatchOverviewView = ({
 						Twilio
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						SMS via single-number routing or a Messaging Service
-						SID, with sender precedence <code>message.from</code>{' '}
-						{'>'} <code>defaultFrom</code> {'>'}{' '}
-						<code>messagingServiceSid</code> — if none resolves, the
-						adapter throws. Pass <code>statusCallback</code> to
-						thread Twilio's delivery webhooks through every send to
-						your own ingest URL.
+						Production SMS through a required Twilio Messaging
+						Service and HTTPS status callback. The signed webhook
+						handler normalizes delivery states plus Advanced Opt-Out{' '}
+						<code>STOP</code>, <code>START</code>, and{' '}
+						<code>HELP</code> events. Its atomic lifecycle-store
+						contract deduplicates retries and rejects stale status
+						transitions.
 					</p>
 					<PrismPlus
 						codeString={dispatchTwilio}
@@ -468,13 +468,14 @@ export const DispatchOverviewView = ({
 					/>
 					<Callout
 						themeSprings={themeSprings}
-						title="Bulk-send error normalization"
+						title="Production readiness"
 						variant="note"
 					>
-						Twilio can return <code>errorCode != null</code> in an
-						otherwise-successful response body (rare but real). The
-						adapter throws in that case, so the dispatcher's failed
-						counter and audit failure event still fire.
+						The readiness report checks durable webhook storage and
+						operator assertions for carrier approval, consent
+						evidence, opt-out configuration, privacy policy, and
+						messaging terms. Its scope is explicitly operational,
+						not legal certification.
 					</Callout>
 				</section>
 

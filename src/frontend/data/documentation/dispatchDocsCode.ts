@@ -72,12 +72,23 @@ expect(sent[0].subject).toBe('hi');
 // Between tests:
 email.clear();
 expect(email.inspect()).toHaveLength(0);`;
-export const dispatchTwilio = `import { createTwilioAdapter } from '@absolutejs/dispatch-twilio';
-import twilio from 'twilio';
+export const dispatchTwilio = `import {
+  createTwilioAdapter,
+  createTwilioWebhookHandler,
+} from '@absolutejs/dispatch-twilio';
+import { Twilio } from 'twilio';
 
 const sms = createTwilioAdapter({
-  client: twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN),
-  defaultFrom: '+15555550100',       // OR
-  messagingServiceSid: 'MGxxxxxxxx', // OR — at least one required
-  statusCallback: 'https://example.com/twilio/status',
-});`;
+  client: new Twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN),
+  messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+  statusCallbackUrl: 'https://example.com/webhooks/twilio/messaging',
+  validityPeriod: 300,
+});
+
+const webhook = createTwilioWebhookHandler({
+  authToken: process.env.TWILIO_TOKEN,
+  store: durableLifecycleStore,
+  onEvent: event => lifecycle.record(event),
+});
+
+app.post('/webhooks/twilio/messaging', ({ request }) => webhook(request));`;
