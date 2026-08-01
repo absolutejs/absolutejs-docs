@@ -2,7 +2,10 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import {
 	dispatchChannelUsage,
+	dispatchAws,
+	dispatchInfobip,
 	dispatchPostmark,
+	dispatchPushLifecycle,
 	dispatchQuickStart,
 	dispatchSinch,
 	dispatchTelnyx,
@@ -35,6 +38,9 @@ const noop = () => undefined;
 const tocItems: TocItem[] = [
 	{ href: '#dispatch-overview', label: 'Overview' },
 	{ href: '#quick-start', label: 'Quick Start' },
+	{ href: '#push-lifecycle', label: 'Push lifecycle' },
+	{ href: '#aws', label: 'AWS' },
+	{ href: '#infobip', label: 'Infobip' },
 	{ href: '#channels', label: 'Channels' },
 	{ href: '#adapters', label: 'Adapters' },
 	{ href: '#observability', label: 'Observability' },
@@ -65,7 +71,7 @@ const channelCards: ChannelCardData[] = [
 	},
 	{
 		call: 'dispatch.push(message)',
-		fields: 'to, title?, body, data?, tenant?, metadata?',
+		fields: 'to, title?, body, data?, actions?, badge?, deepLink?, sound?, idempotencyKey?, tenant?, metadata?',
 		title: 'Push'
 	}
 ];
@@ -137,49 +143,67 @@ const dispatcherOptionRows: DocsTableCell[][] = [
 const vendorAdapterRows: DocsTableCell[][] = [
 	[
 		{ code: '@absolutejs/dispatch-resend' },
-		'0.0.1',
+		'0.7.0',
 		'Email',
 		'createResendAdapter — takes your Resend client; the Resend message id becomes the result id.'
 	],
 	[
 		{ code: '@absolutejs/dispatch-postmark' },
-		'0.0.1',
+		'0.1.0',
 		'Email',
 		'createPostmarkAdapter — transactional + broadcast streams; the MessageID becomes the result id.'
 	],
 	[
 		{ code: '@absolutejs/dispatch-apns' },
-		'0.1.0',
+		'0.2.0',
 		'Apple push',
 		'HTTP/2 APNs delivery with ES256 provider-token rotation, alert/background modes, payload validation, and normalized provider errors.'
 	],
 	[
 		{ code: '@absolutejs/dispatch-fcm' },
-		'0.1.0',
+		'0.2.0',
 		'Android / Apple / web push',
 		'FCM HTTP v1 delivery with Application Default Credentials, short-lived OAuth tokens, token/topic/condition targets, and platform payloads.'
 	],
 	[
+		{ code: '@absolutejs/dispatch-push-postgres' },
+		'0.1.0',
+		'Push lifecycle storage',
+		'Tenant-isolated device registry plus fenced, indeterminate-safe fanout claims on PostgreSQL.'
+	],
+	[
+		{ code: '@absolutejs/dispatch-aws-end-user-messaging' },
+		'0.1.0',
+		'SMS / MMS / RCS / WhatsApp',
+		'AWS SDK v3, phone-pool RCS fallback, Protect fraud controls, Notify templates, event ingress, readiness, and registration workflows.'
+	],
+	[
+		{ code: '@absolutejs/dispatch-infobip' },
+		'0.1.0',
+		'Global carrier / conversational messaging',
+		'Messages API validation, portable rich content, scheduling, authenticated durable callbacks, and US brand/campaign/number operations.'
+	],
+	[
 		{ code: '@absolutejs/dispatch-telnyx' },
-		'0.2.0',
+		'0.3.0',
 		'SMS / MMS / RCS',
 		'Direct rich RCS, capability checks, SMS/MMS fallback, Ed25519 webhooks, scheduling, carrier registration, and shared atomic reliability.'
 	],
 	[
 		{ code: '@absolutejs/dispatch-twilio' },
-		'0.6.0',
+		'0.7.0',
 		'SMS / MMS / RCS / WhatsApp',
 		'Rich Messaging Service sending, signed delivery, inbound, and consent webhooks, durable idempotency/lifecycle stores, tenant routing, and API-inspected readiness.'
 	],
 	[
 		{ code: '@absolutejs/dispatch-vonage' },
-		'0.1.0',
+		'0.2.0',
 		'SMS / MMS / RCS / WhatsApp / Viber / Messenger',
 		'Ordered native failover, rich RCS, capability checks and revocation, signed JWT webhooks, durable reliability, tenant routing, and 10DLC workflows.'
 	],
 	[
 		{ code: '@absolutejs/dispatch-sinch' },
-		'0.2.0',
+		'0.3.0',
 		'SMS / MMS / RCS / WhatsApp / social messaging',
 		'Conversation API channel-priority fallback, rich transcoding, fast durable HMAC intake, capability lookup, tenant routing, and concrete OAuth 10DLC/toll-free operations.'
 	]
@@ -284,6 +308,90 @@ export const DispatchOverviewView = ({
 					</p>
 					<PrismPlus
 						codeString={dispatchQuickStart}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="push-lifecycle"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Push lifecycle
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>createPushLifecycle()</code> adds the shared layer
+						above APNs and FCM: tenant-safe device registration,
+						user/device/topic targeting, multi-tenant adapter
+						resolution, bounded retries and concurrency,
+						invalid-token retirement, and portable badges, sounds,
+						actions, and deep links. PostgreSQL persistence keeps
+						registrations durable and uses fenced claims so
+						ambiguous sends become
+						<code>indeterminate</code> instead of double-delivering.
+					</p>
+					<PrismPlus
+						codeString={dispatchPushLifecycle}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="aws"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						AWS End User Messaging
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The AWS adapter uses SDK v3 and workload IAM for SMS,
+						MMS, plain or rich RCS, managed Notify templates, and
+						WhatsApp. Use one phone pool per consented use case: a
+						pool containing an approved RCS agent and SMS identity
+						gives AWS-managed RCS fallback without application-side
+						duplicate routing. Readiness checks cover the pool,
+						event configuration set, and Protect fraud controls;
+						registration helpers drive AWS's dynamic regulatory
+						forms.
+					</p>
+					<PrismPlus
+						codeString={dispatchAws}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="infobip"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Infobip
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Infobip's Messages API provides one global surface for
+						SMS, MMS, RCS, WhatsApp, Viber, Apple Messages for
+						Business, Instagram, LINE, and Messenger. The adapter
+						can validate the exact request before sending, maps
+						portable rich content, and stores authenticated delivery
+						callbacks before effects run. Operations cover 10DLC
+						brands and campaigns plus number resource requests.
+						Provider failover details must be supplied and validated
+						for the channels enabled on the account.
+					</p>
+					<PrismPlus
+						codeString={dispatchInfobip}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -622,11 +730,10 @@ export const DispatchOverviewView = ({
 						The adapter resolves app-scoped social identities
 						explicitly, verifies HMAC callbacks over the exact raw
 						body, persists callbacks atomically with stable retry
-						identifiers, and
-						normalizes delivery, inbound, choice, capability,
-						provider opt-in/out, WhatsApp preference, and SMS
-						STOP/START events. Operational helpers cover live
-						app/webhook readiness, asynchronous channel
+						identifiers, and normalizes delivery, inbound, choice,
+						capability, provider opt-in/out, WhatsApp preference,
+						and SMS STOP/START events. Operational helpers cover
+						live app/webhook readiness, asynchronous channel
 						capabilities, plus a concrete OAuth client for 10DLC,
 						number linking, and toll-free verification. HTTP intake
 						returns after durable storage; consent and application

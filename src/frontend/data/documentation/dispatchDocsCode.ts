@@ -2,7 +2,7 @@
  * Code samples for the @absolutejs/dispatch docs page. Dispatch is a
  * provider-agnostic outbound dispatcher for Bun + Elysia — email, messaging,
  * and push behind one typed interface, with vendor adapter packages
- * for Resend, Postmark, Sinch, Telnyx, Twilio, and Vonage.
+ * for Resend, Postmark, AWS, Infobip, Sinch, Telnyx, Twilio, and Vonage.
  */
 
 export const dispatchChannelUsage = `// Every channel call returns a DispatchResult you can correlate
@@ -53,6 +53,113 @@ await dispatch.email({
   to: 'user@example.com',
   subject: 'Welcome',
   text: 'Hi there!',
+});`;
+export const dispatchPushLifecycle = `import { createPushLifecycle } from '@absolutejs/dispatch';
+import {
+  createPostgresPushFanoutClaimStore,
+  createPostgresPushSubscriptionStore,
+} from '@absolutejs/dispatch-push-postgres';
+import {
+  createPostgresIdempotentOperationStore,
+  createPostgresTransactionRunner,
+} from '@absolutejs/reliability';
+
+const runner = createPostgresTransactionRunner(postgresPool);
+const push = createPushLifecycle({
+  adapterFor: ({ platform, tenant }) => resolveTenantPushAdapter(tenant, platform),
+  claimStore: createPostgresPushFanoutClaimStore(
+    createPostgresIdempotentOperationStore(runner),
+  ),
+  store: createPostgresPushSubscriptionStore(transactionRunner),
+});
+
+await push.register({
+  deviceId: 'iphone-15',
+  platform: 'apns',
+  tenant: 'acme',
+  token,
+  topics: ['incidents'],
+  userId: 'user-42',
+});
+
+await push.send(
+  { tenant: 'acme', topic: 'incidents' },
+  {
+    body: 'Database latency is elevated.',
+    deepLink: 'absolute://incidents/42',
+    idempotencyKey: 'incident-42:opened',
+    sound: 'default',
+    title: 'Production alert',
+  },
+);`;
+export const dispatchAws = `import { PinpointSMSVoiceV2Client } from '@aws-sdk/client-pinpoint-sms-voice-v2';
+import { SocialMessagingClient } from '@aws-sdk/client-socialmessaging';
+import { createDispatcher } from '@absolutejs/dispatch';
+import {
+  createAwsEndUserMessagingAdapter,
+  inspectAwsEndUserMessagingReadiness,
+} from '@absolutejs/dispatch-aws-end-user-messaging';
+
+const client = new PinpointSMSVoiceV2Client({ region: process.env.AWS_REGION });
+const messaging = createAwsEndUserMessagingAdapter({
+  client,
+  configurationSetName: 'pro-alert-events',
+  messageType: 'TRANSACTIONAL',
+  originationIdentity: process.env.AWS_EUM_ALERT_POOL_ARN,
+  protectConfigurationId: process.env.AWS_EUM_PROTECT_ID,
+  socialClient: new SocialMessagingClient({ region: process.env.AWS_REGION }),
+  whatsappPhoneNumberId: process.env.AWS_WHATSAPP_PHONE_NUMBER_ID,
+});
+
+const dispatch = createDispatcher({ messaging });
+await dispatch.messaging({
+  content: { kind: 'text', text: 'Database latency is elevated.' },
+  consent: { programId: 'pro-alerts', purpose: 'incident-alerts' },
+  idempotencyKey: 'incident-42:recipient-7',
+  to: { address: '+12025550100', transport: 'rcs' },
+});
+
+await inspectAwsEndUserMessagingReadiness({
+  client,
+  configurationSetName: 'pro-alert-events',
+  originationIdentity: process.env.AWS_EUM_ALERT_POOL_ARN,
+  protectConfigurationId: process.env.AWS_EUM_PROTECT_ID,
+});`;
+export const dispatchInfobip = `import { createDispatcher } from '@absolutejs/dispatch';
+import {
+  createInfobipAdapter,
+  createInfobipWebhookHandler,
+  createPostgresTransactionRunner,
+  createPostgresWebhookInboxStore,
+  drainInfobipWebhookInbox,
+} from '@absolutejs/dispatch-infobip';
+
+const inbox = createPostgresWebhookInboxStore(
+  createPostgresTransactionRunner(postgresPool),
+);
+const messaging = createInfobipAdapter({
+  apiKey: process.env.INFOBIP_API_KEY,
+  baseUrl: process.env.INFOBIP_BASE_URL,
+  defaultSenders: { sms: process.env.INFOBIP_SMS_SENDER },
+  deliveryWebhookUrl: 'https://example.com/webhooks/infobip',
+  validateBeforeSend: true,
+});
+const webhook = createInfobipWebhookHandler({
+  inbox,
+  verify: headers => verifyInfobipGatewayAuthorization(headers),
+});
+app.post('/webhooks/infobip', ({ request }) => webhook(request));
+
+await drainInfobipWebhookInbox({
+  inbox,
+  onEvent: event => lifecycle.record(event),
+});
+
+const dispatch = createDispatcher({ messaging });
+await dispatch.messaging({
+  content: { kind: 'text', text: 'Database latency is elevated.' },
+  consent: { programId: 'pro-alerts', purpose: 'incident-alerts' },
+  to: { address: '+12025550100', transport: 'sms' },
 });`;
 export const dispatchSinch = `import { createDispatcher } from '@absolutejs/dispatch';
 import {
