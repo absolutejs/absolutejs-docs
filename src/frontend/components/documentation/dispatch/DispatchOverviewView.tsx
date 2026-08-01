@@ -148,6 +148,18 @@ const vendorAdapterRows: DocsTableCell[][] = [
 		'createPostmarkAdapter — transactional + broadcast streams; the MessageID becomes the result id.'
 	],
 	[
+		{ code: '@absolutejs/dispatch-apns' },
+		'0.1.0',
+		'Apple push',
+		'HTTP/2 APNs delivery with ES256 provider-token rotation, alert/background modes, payload validation, and normalized provider errors.'
+	],
+	[
+		{ code: '@absolutejs/dispatch-fcm' },
+		'0.1.0',
+		'Android / Apple / web push',
+		'FCM HTTP v1 delivery with Application Default Credentials, short-lived OAuth tokens, token/topic/condition targets, and platform payloads.'
+	],
+	[
 		{ code: '@absolutejs/dispatch-telnyx' },
 		'0.2.0',
 		'SMS / MMS / RCS',
@@ -167,9 +179,9 @@ const vendorAdapterRows: DocsTableCell[][] = [
 	],
 	[
 		{ code: '@absolutejs/dispatch-sinch' },
-		'0.1.0',
+		'0.2.0',
 		'SMS / MMS / RCS / WhatsApp / social messaging',
-		'Conversation API channel-priority fallback, rich transcoding, HMAC callbacks, durable reliability, capability lookup, tenant routing, 10DLC, and toll-free workflows.'
+		'Conversation API channel-priority fallback, rich transcoding, fast durable HMAC intake, capability lookup, tenant routing, and concrete OAuth 10DLC/toll-free operations.'
 	]
 ];
 
@@ -609,12 +621,16 @@ export const DispatchOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						The adapter resolves app-scoped social identities
 						explicitly, verifies HMAC callbacks over the exact raw
-						body, persists callback nonces atomically, and
+						body, persists callbacks atomically with stable retry
+						identifiers, and
 						normalizes delivery, inbound, choice, capability,
 						provider opt-in/out, WhatsApp preference, and SMS
 						STOP/START events. Operational helpers cover live
 						app/webhook readiness, asynchronous channel
-						capabilities, 10DLC, and toll-free verification.
+						capabilities, plus a concrete OAuth client for 10DLC,
+						number linking, and toll-free verification. HTTP intake
+						returns after durable storage; consent and application
+						effects run through the retryable drain.
 					</p>
 					<PrismPlus
 						codeString={dispatchSinch}

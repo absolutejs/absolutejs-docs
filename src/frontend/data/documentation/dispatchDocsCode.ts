@@ -61,7 +61,12 @@ import {
   createPostgresWebhookInboxStore,
   createSinchAdapter,
   createSinchWebhookHandler,
+  drainSinchWebhookInbox,
 } from '@absolutejs/dispatch-sinch';
+import {
+  createMessagingConsentLedger,
+  createPostgresMessagingConsentStore,
+} from '@absolutejs/compliance';
 import { SinchClient } from '@sinch/sdk-core';
 
 const client = new SinchClient({
@@ -71,6 +76,10 @@ const client = new SinchClient({
   projectId: process.env.SINCH_PROJECT_ID!,
 });
 const runner = createPostgresTransactionRunner(postgresPool);
+const inbox = createPostgresWebhookInboxStore(runner);
+const consentLedger = createMessagingConsentLedger({
+  store: createPostgresMessagingConsentStore(postgresPool),
+});
 const messaging = createSinchAdapter({
   appId: process.env.SINCH_APP_ID!,
   client,
@@ -78,17 +87,22 @@ const messaging = createSinchAdapter({
   projectId: process.env.SINCH_PROJECT_ID!,
   resolveRecipientIdentity: ({ address, transport }) =>
     transport === 'messenger' ? lookupMessengerPsid(address) : address,
-  webhookUrl: 'https://example.com/webhooks/sinch/account-a',
 });
 
 const webhook = createSinchWebhookHandler({
-  handler: event => lifecycle.record(event),
-  inbox: createPostgresWebhookInboxStore(runner),
+  inbox,
   resolveAccount: accountKey => sinchWebhookAccount(accountKey),
   resolveAccountKey: ({ url }) => new URL(url).pathname.split('/').at(-1)!,
-  resolveConsentScopes: event => programsForNumber(event.from),
 });
 app.post('/webhooks/sinch/:accountKey', ({ request }) => webhook(request));
+
+// Run from a worker. Intake returns 202 before these retryable effects run.
+await drainSinchWebhookInbox({
+  consentLedger,
+  handler: event => lifecycle.record(event),
+  inbox,
+  resolveConsentScopes: event => programsForNumber(event.from),
+});
 
 const dispatch = createDispatcher({ messaging });
 await dispatch.messaging({
