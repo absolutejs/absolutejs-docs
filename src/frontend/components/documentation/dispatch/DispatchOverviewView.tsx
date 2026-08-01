@@ -6,7 +6,8 @@ import {
 	dispatchQuickStart,
 	dispatchTelnyx,
 	dispatchTesting,
-	dispatchTwilio
+	dispatchTwilio,
+	dispatchVonage
 } from '../../../data/documentation/dispatchDocsCode';
 import {
 	h1Style,
@@ -39,6 +40,7 @@ const tocItems: TocItem[] = [
 	{ href: '#postmark', label: 'Postmark' },
 	{ href: '#telnyx', label: 'Telnyx' },
 	{ href: '#twilio', label: 'Twilio' },
+	{ href: '#vonage', label: 'Vonage' },
 	{ href: '#testing', label: 'Testing' }
 ];
 
@@ -145,15 +147,21 @@ const vendorAdapterRows: DocsTableCell[][] = [
 	],
 	[
 		{ code: '@absolutejs/dispatch-telnyx' },
-		'0.1.0',
+		'0.2.0',
 		'SMS / MMS / RCS',
 		'Direct rich RCS, capability checks, SMS/MMS fallback, Ed25519 webhooks, scheduling, carrier registration, and shared atomic reliability.'
 	],
 	[
 		{ code: '@absolutejs/dispatch-twilio' },
-		'0.5.0',
+		'0.6.0',
 		'SMS / MMS / RCS / WhatsApp',
 		'Rich Messaging Service sending, signed delivery, inbound, and consent webhooks, durable idempotency/lifecycle stores, tenant routing, and API-inspected readiness.'
+	],
+	[
+		{ code: '@absolutejs/dispatch-vonage' },
+		'0.1.0',
+		'SMS / MMS / RCS / WhatsApp / Viber / Messenger',
+		'Ordered native failover, rich RCS, capability checks and revocation, signed JWT webhooks, durable reliability, tenant routing, and 10DLC workflows.'
 	]
 ];
 
@@ -538,6 +546,39 @@ export const DispatchOverviewView = ({
 						operator responsibilities. Reports are operational, not
 						legal certification.
 					</Callout>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="vonage"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Vonage
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Use <code>@absolutejs/dispatch-vonage</code> for SMS,
+						MMS, RCS, WhatsApp, Viber, and Messenger through the
+						Messages API. The adapter supports ordered
+						provider-native failover, rich RCS cards and actions,
+						WhatsApp templates, multi-account tenant routing, and
+						scoped atomic idempotency.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Signed JWT webhooks are validated against the exact raw
+						body and normalized into shared delivery, inbound,
+						interaction, and STOP/START consent events. Operational
+						helpers cover application readiness, complete 10DLC
+						brand/campaign/number workflows, RCS device capabilities
+						and revocation, and WhatsApp read receipts.
+					</p>
+					<PrismPlus
+						codeString={dispatchVonage}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>

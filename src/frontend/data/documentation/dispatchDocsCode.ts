@@ -2,7 +2,7 @@
  * Code samples for the @absolutejs/dispatch docs page. Dispatch is a
  * provider-agnostic outbound dispatcher for Bun + Elysia — email, messaging,
  * and push behind one typed interface, with vendor adapter packages
- * for Resend, Postmark, Telnyx, and Twilio.
+ * for Resend, Postmark, Telnyx, Twilio, and Vonage.
  */
 
 export const dispatchChannelUsage = `// Every channel call returns a DispatchResult you can correlate
@@ -201,4 +201,46 @@ const readiness = await inspectTwilioMessagingReadiness({
     privacyPolicyPublished: true,
     termsPublished: true,
   },
+});`;
+
+export const dispatchVonage = `import { createDispatcher } from '@absolutejs/dispatch';
+import {
+  createPostgresIdempotentOperationStore,
+  createPostgresTransactionRunner,
+  createPostgresWebhookInboxStore,
+  createVonageAdapter,
+  createVonageWebhookHandler,
+} from '@absolutejs/dispatch-vonage';
+import { Vonage } from '@vonage/server-sdk';
+
+const client = new Vonage({
+  applicationId: process.env.VONAGE_APPLICATION_ID!,
+  privateKey: process.env.VONAGE_PRIVATE_KEY!,
+});
+const runner = createPostgresTransactionRunner(postgresPool);
+const messaging = createVonageAdapter({
+  apiKey: process.env.VONAGE_API_KEY!,
+  client,
+  defaultFrom: {
+    rcs: process.env.VONAGE_RCS_AGENT_ID!,
+    sms: process.env.VONAGE_SMS_NUMBER!,
+  },
+  idempotencyStore: createPostgresIdempotentOperationStore(runner),
+});
+
+const webhook = createVonageWebhookHandler({
+  handler: event => lifecycle.record(event),
+  inbox: createPostgresWebhookInboxStore(runner),
+  resolveAccount: apiKey => vonageWebhookAccount(apiKey),
+  resolveConsentScopes: event => programsForNumber(event.from),
+});
+app.post('/webhooks/vonage', ({ request }) => webhook(request));
+
+const dispatch = createDispatcher({ messaging });
+await dispatch.messaging({
+  content: { kind: 'text', text: 'Database latency is elevated.' },
+  consent: { programId: 'pro-alerts', purpose: 'incident-alerts' },
+  fallbacks: [{ transport: 'sms' }],
+  idempotencyKey: 'incident-42:recipient-7',
+  to: { address: '+12025550100', transport: 'rcs' },
 });`;
