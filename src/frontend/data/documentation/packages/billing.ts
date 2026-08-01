@@ -3,7 +3,7 @@ import { PackageDocData } from '../../../../types/packageDocs';
 export const billingPackageData: PackageDocData = {
 	category: 'Platform & Infra',
 	description:
-		'Turns metered usage into invoices without float drift or vendor lock-in. createPlan declares a priced product — flat base fee, per-dimension unit prices, graduated tiers, free allowances — and computeInvoice is a pure function from a usage snapshot to line items and a total, all in integer micros. It pairs with @absolutejs/metering for usage collection and keeps the Stripe or QuickBooks push in separate adapters, so previewing an upcoming invoice, re-pricing a past period, or dry-running a plan change is a plain function call.',
+		'Turns metered usage into invoices without float drift or vendor lock-in. createPlan declares a priced product — flat base fee, per-dimension unit prices, graduated tiers, free allowances — and computeInvoice is a pure function from a usage snapshot to line items and a total, all in integer micros. It pairs with @absolutejs/metering for usage collection and leaves Stripe, QuickBooks, or another invoicing integration to the host, so previewing an upcoming invoice, re-pricing a past period, or dry-running a plan change is a plain function call.',
 	features: [
 		{
 			description:
@@ -45,8 +45,8 @@ export const billingPackageData: PackageDocData = {
 	name: 'Billing',
 	notes: [
 		{
-			body: 'This package is the cost model only. Pushing the computed invoice to Stripe, QuickBooks, or a PDF generator happens in @absolutejs/billing-adapters/* — keeping the pricing math pure and testable.',
-			title: 'Sinks live in adapters',
+			body: 'This package is the cost model only. Your host application pushes the computed invoice to Stripe, QuickBooks, an internal billing engine, or a PDF generator, keeping the pricing math pure and testable.',
+			title: 'Host-owned invoicing',
 			variant: 'info'
 		},
 		{
@@ -120,6 +120,6 @@ const plan = createPlan({
 	],
 	status: 'beta',
 	tagline:
-		'Pure-function usage billing for Bun apps — declare a priced plan, compute invoices in integer micros, push to Stripe via adapters.',
+		'Pure-function usage billing for Bun apps — declare a priced plan and compute host-portable invoices in integer micros.',
 	version: '0.2.1'
 };

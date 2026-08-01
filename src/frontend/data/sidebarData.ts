@@ -22,6 +22,7 @@ import { RoutesView } from '../components/documentation/cli/RoutesView';
 import { StartView } from '../components/documentation/cli/StartView';
 import { TelemetryView } from '../components/documentation/cli/TelemetryView';
 import { TypecheckView } from '../components/documentation/cli/TypecheckView';
+import { CliReferenceView } from '../components/documentation/cli/CliReferenceView';
 import { AssetsView } from '../components/documentation/config/AssetsView';
 import { BunBuildOptionsView } from '../components/documentation/config/BunBuildOptionsView';
 import { EnvironmentVariablesView } from '../components/documentation/config/EnvironmentVariablesView';
@@ -34,6 +35,7 @@ import { ErrorBoundariesView } from '../components/documentation/core/ErrorBound
 import { IslandsView } from '../components/documentation/core/IslandsView';
 import { LoadingStatesView } from '../components/documentation/core/LoadingStatesView';
 import { OutOfOrderStreamingView } from '../components/documentation/core/OutOfOrderStreamingView';
+import { PackageExportsView } from '../components/documentation/core/PackageExportsView';
 import { RoutingHandlersView } from '../components/documentation/core/RoutingHandlersView';
 import { SSRModelView } from '../components/documentation/core/SSRModelView';
 import { TypeSafetyView } from '../components/documentation/core/TypeSafetyView';
@@ -274,6 +276,7 @@ export const docsViews = definePortalViews({
 	'bun-build-options': BunBuildOptionsView,
 	citra: CitraView,
 	'cli-overview': OpsCliPackageView,
+	'cli-reference': CliReferenceView,
 	'cluster-bus-overview': ClusterBusView,
 	'commerce-overview': CommercePackageView,
 	compile: CompileView,
@@ -380,6 +383,7 @@ export const docsViews = definePortalViews({
 	'out-of-order-streaming': OutOfOrderStreamingView,
 	'outcomes-overview': OutcomesPackageView,
 	overview: Overview,
+	'package-exports': PackageExportsView,
 	packages: PackagesCatalogView,
 	'page-handlers': PageHandlersView,
 	'partnership-overview': PartnershipPackageView,
@@ -489,6 +493,7 @@ export const sidebarCategories: SidebarCategory[] = [
 				label: 'Core Concepts',
 				pages: [
 					{ id: 'ssr-model', label: 'SSR Model' },
+					{ id: 'package-exports', label: 'Package Exports' },
 					{ id: 'build-and-manifest', label: 'Build & Manifest' },
 					{
 						id: 'routing-and-handlers',
@@ -507,6 +512,7 @@ export const sidebarCategories: SidebarCategory[] = [
 			{
 				label: 'CLI',
 				pages: [
+					{ id: 'cli-reference', label: 'Command Reference' },
 					{ id: 'dev', label: 'Dev' },
 					{ id: 'start', label: 'Start' },
 					{ id: 'compile', label: 'Compile' },

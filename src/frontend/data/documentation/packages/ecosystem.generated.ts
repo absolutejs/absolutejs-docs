@@ -2010,7 +2010,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 	{
 		category: 'Voice & Media',
 		description:
-			'AI-driven automated tester for @absolutejs/voice services — simulates a caller end-to-end (Twilio Media Stream protocol or real Twilio outbound), drives the conversation with TTS + STT + LLM. Built for the AbsoluteJS AI Studio.',
+			'AI-driven automated tester for @absolutejs/voice services — simulates a caller end-to-end (Twilio Media Stream protocol or real Twilio outbound), drives the conversation with TTS + STT + LLM. Built for the hosted AbsoluteJS.ai Studio.',
 		directory: 'voice-tester',
 		kind: 'package',
 		name: 'Voice Tester',
@@ -2118,7 +2118,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'Independent durable transparency witness with rollback, equivocation, key-rotation, and HTTP service primitives for AbsoluteJS vulnerability evidence.',
 				name: '@absolutejs/vulnerabilities-witness',
 				private: false,
-				version: '0.4.3'
+				version: '0.4.4'
 			},
 			{
 				description:

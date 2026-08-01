@@ -26,6 +26,7 @@ import { DocsTable } from '../../utils/DocsTable';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { synchronizePackageDocData } from '../../../data/documentation/packages/ecosystemVersions';
 
 const statusColors: Record<PackageStatus, string> = {
 	alpha: '#F59E0B',
@@ -157,18 +158,19 @@ export const PackageOverviewTemplate = ({
 	themeSprings,
 	tocOpen
 }: PackageOverviewTemplateProps) => {
-	const heroId = slugify(`${data.name}-overview`);
+	const currentData = synchronizePackageDocData(data);
+	const heroId = slugify(`${currentData.name}-overview`);
 	const tocItems: TocItem[] = [
 		{ href: `#${heroId}`, label: 'Overview' },
 		{ href: '#installation', label: 'Installation' },
-		...(data.features.length > 0
+		...(currentData.features.length > 0
 			? [{ href: '#features', label: 'Features' }]
 			: []),
-		...data.samples.map((sample) => ({
+		...currentData.samples.map((sample) => ({
 			href: `#${slugify(sample.heading)}`,
 			label: sample.heading
 		})),
-		...(data.adapterGroups ?? []).map((group) => ({
+		...(currentData.adapterGroups ?? []).map((group) => ({
 			href: `#${slugify(group.heading)}`,
 			label: group.heading
 		}))
@@ -187,14 +189,16 @@ export const PackageOverviewTemplate = ({
 		>
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<PackageHero
-					data={data}
+					data={currentData}
 					heroId={heroId}
 					isMobileOrTablet={isMobileOrTablet}
 					themeSprings={themeSprings}
 				/>
 
 				<section style={sectionStyle}>
-					<p style={paragraphSpacedStyle}>{data.description}</p>
+					<p style={paragraphSpacedStyle}>
+						{currentData.description}
+					</p>
 					<AnchorHeading
 						id="installation"
 						level="h2"
@@ -204,14 +208,14 @@ export const PackageOverviewTemplate = ({
 						Installation
 					</AnchorHeading>
 					<PrismPlus
-						codeString={data.installCommand}
+						codeString={currentData.installCommand}
 						language="bash"
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
 				</section>
 
-				{data.features.length > 0 ? (
+				{currentData.features.length > 0 ? (
 					<section style={sectionStyle}>
 						<AnchorHeading
 							id="features"
@@ -231,7 +235,7 @@ export const PackageOverviewTemplate = ({
 								marginTop: '1rem'
 							}}
 						>
-							{data.features.map((feature) => (
+							{currentData.features.map((feature) => (
 								<PackageFeatureCard
 									feature={feature}
 									key={feature.title}
@@ -242,7 +246,7 @@ export const PackageOverviewTemplate = ({
 					</section>
 				) : null}
 
-				{data.samples.map((sample) => (
+				{currentData.samples.map((sample) => (
 					<section key={sample.heading} style={sectionStyle}>
 						<AnchorHeading
 							id={slugify(sample.heading)}
@@ -262,7 +266,7 @@ export const PackageOverviewTemplate = ({
 					</section>
 				))}
 
-				{(data.adapterGroups ?? []).map((group) => (
+				{(currentData.adapterGroups ?? []).map((group) => (
 					<section key={group.heading} style={sectionStyle}>
 						<AnchorHeading
 							id={slugify(group.heading)}
@@ -281,7 +285,7 @@ export const PackageOverviewTemplate = ({
 					</section>
 				))}
 
-				{(data.notes ?? []).map((note) => (
+				{(currentData.notes ?? []).map((note) => (
 					<Callout
 						key={note.title}
 						themeSprings={themeSprings}
@@ -292,7 +296,7 @@ export const PackageOverviewTemplate = ({
 					</Callout>
 				))}
 
-				{data.links && data.links.length > 0 ? (
+				{currentData.links && currentData.links.length > 0 ? (
 					<div
 						style={{
 							display: 'flex',
@@ -301,7 +305,7 @@ export const PackageOverviewTemplate = ({
 							marginTop: '0.5rem'
 						}}
 					>
-						{data.links.map((link) => (
+						{currentData.links.map((link) => (
 							<animated.a
 								href={link.href}
 								key={link.href}

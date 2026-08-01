@@ -2,6 +2,7 @@ import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
+import { currentPackageVersion } from '../../../data/documentation/packages/ecosystemVersions';
 import {
 	h1Style,
 	mainContentStyle,
@@ -44,7 +45,7 @@ const platformPackages: PlatformPackage[] = [
 			'Run many isolated Bun apps on one host — spawn-or-reuse child processes with idle-kill, spawn back-off, and per-process CPU + RSS metrics.',
 		name: 'Runtime',
 		npm: '@absolutejs/runtime',
-		version: '0.3.0',
+		version: currentPackageVersion('@absolutejs/runtime', '0.3.0'),
 		viewId: 'runtime-overview'
 	},
 	{
@@ -52,7 +53,7 @@ const platformPackages: PlatformPackage[] = [
 			'Route requests and WebSocket connections across backend shards — consistent hashing, per-tenant connection caps and rate limits, healthy-shard skip.',
 		name: 'Router',
 		npm: '@absolutejs/router',
-		version: '0.3.0',
+		version: currentPackageVersion('@absolutejs/router', '0.3.0'),
 		viewId: 'router-overview'
 	},
 	{
@@ -60,7 +61,7 @@ const platformPackages: PlatformPackage[] = [
 			'Ship releases to any box you can exec + upload to — atomic symlink swap, release history, rollback, and a pluggable step pipeline.',
 		name: 'Deploy',
 		npm: '@absolutejs/deploy',
-		version: '0.10.0',
+		version: currentPackageVersion('@absolutejs/deploy', '0.10.0'),
 		viewId: 'deploy-overview'
 	},
 	{
@@ -68,7 +69,7 @@ const platformPackages: PlatformPackage[] = [
 			'Broker credentials host-side — pluggable adapters, safe-to-log fingerprints, rotation, and redaction before text reaches a log sink.',
 		name: 'Secrets',
 		npm: '@absolutejs/secrets',
-		version: '0.5.0',
+		version: currentPackageVersion('@absolutejs/secrets', '0.5.0'),
 		viewId: 'secrets-overview'
 	},
 	{
@@ -76,7 +77,7 @@ const platformPackages: PlatformPackage[] = [
 			'Attribute CPU, egress, and request cost per tenant, and trip a circuit breaker the moment a budget dimension is exceeded.',
 		name: 'Metering',
 		npm: '@absolutejs/metering',
-		version: '0.1.0',
+		version: currentPackageVersion('@absolutejs/metering', '0.1.0'),
 		viewId: 'metering-overview'
 	},
 	{
@@ -84,7 +85,7 @@ const platformPackages: PlatformPackage[] = [
 			'Turn a metering usage snapshot into invoice line items — plans, graduated tiers, free allowances, all in integer micros so float drift is impossible.',
 		name: 'Billing',
 		npm: '@absolutejs/billing',
-		version: '0.2.1',
+		version: currentPackageVersion('@absolutejs/billing', '0.2.1'),
 		viewId: 'billing-overview'
 	},
 	{
@@ -92,7 +93,7 @@ const platformPackages: PlatformPackage[] = [
 			'Evaluate pluggable signals (CPU, queue depth, latency) against a declarative policy and drive your own actuator to spawn, drain, or terminate instances.',
 		name: 'Autoscaler',
 		npm: '@absolutejs/autoscaler',
-		version: '0.1.0',
+		version: currentPackageVersion('@absolutejs/autoscaler', '0.1.0'),
 		viewId: 'autoscaler-overview'
 	},
 	{
@@ -100,7 +101,7 @@ const platformPackages: PlatformPackage[] = [
 			'Expose /healthz and /readyz from composable named checks — per-check timeouts, worst-of-any status, and a standard JSON envelope.',
 		name: 'Health',
 		npm: '@absolutejs/health',
-		version: '0.1.0',
+		version: currentPackageVersion('@absolutejs/health', '0.1.0'),
 		viewId: 'health-overview'
 	},
 	{
@@ -108,7 +109,7 @@ const platformPackages: PlatformPackage[] = [
 			'Config-file-driven secrets / env / deploy verbs at the terminal — the ops sibling to the absolute framework CLI.',
 		name: 'Ops CLI',
 		npm: '@absolutejs/cli',
-		version: '0.1.0',
+		version: currentPackageVersion('@absolutejs/cli', '0.1.0'),
 		viewId: 'cli-overview'
 	},
 	{
@@ -116,7 +117,7 @@ const platformPackages: PlatformPackage[] = [
 			'Heap-isolated JavaScriptCore sandbox for running untrusted code in Bun, with an isolated-vm-shaped API, hard memory limits, and timeouts.',
 		name: 'isolated-jsc',
 		npm: '@absolutejs/isolated-jsc',
-		version: '0.11.0',
+		version: currentPackageVersion('@absolutejs/isolated-jsc', '0.11.0'),
 		viewId: 'isolated-jsc'
 	}
 ];

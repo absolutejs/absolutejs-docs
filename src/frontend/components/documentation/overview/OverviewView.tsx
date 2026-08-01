@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web';
+import { providers } from '@absolutejs/auth/providers';
 import { FaAngular, FaHtml5, FaReact, FaVuejs } from 'react-icons/fa';
 import { SiHtmx, SiSvelte } from 'react-icons/si';
 import { DocsViewProps } from '../../../../types/springTypes';
@@ -63,6 +64,8 @@ type NextStepItem = {
 	label: string;
 	text: string;
 };
+
+const authProviderCount = Object.keys(providers).length;
 
 const keyFeatureCards: OverviewCardItem[] = [
 	{
@@ -151,7 +154,7 @@ const hmrCards: OverviewCardItem[] = [
 
 const ecosystemCards: OverviewCardItem[] = [
 	{
-		body: 'Drop-in OAuth authentication supporting 66+ providers including Google, GitHub, Discord, and Apple. Handles PKCE, OpenID Connect, token refresh, and session management. Integrates with Elysia as a plugin: one .use() call to protect your routes.',
+		body: `Drop-in OAuth authentication supporting ${authProviderCount} providers including Google, GitHub, Discord, and Apple. Handles PKCE, OpenID Connect, token refresh, and session management. Integrates with Elysia as a plugin: one .use() call to protect your routes.`,
 		title: '@absolutejs/auth'
 	},
 	{
@@ -164,7 +167,7 @@ const ecosystemCards: OverviewCardItem[] = [
 	},
 	{
 		body: '20+ custom lint rules designed for AbsoluteJS projects. Catches common SSR mistakes like inline prop types, unnecessary divs, deeply nested JSX, and short variable names. Ships with Prettier and Biome support out of the box.',
-		title: '@absolutejs/eslint'
+		title: 'eslint-plugin-absolute'
 	},
 	{
 		body: 'Project scaffolding CLI that sets up your directory structure, installs dependencies, configures TypeScript, and wires up your chosen frontend framework and database. One command to go from nothing to a running app.',
@@ -328,10 +331,10 @@ export const Overview = ({
 					</p>
 					<p style={paragraphSpacedStyle}>
 						AbsoluteJS isn&apos;t just a renderer. It ships with
-						OAuth authentication for 66+ providers, a visual page
-						builder, scoped per-user server state, an opinionated
-						ESLint config, and a project CLI. Everything you need to
-						go from idea to production.
+						OAuth authentication for {authProviderCount} providers,
+						the hosted AbsoluteJS.ai Studio, scoped per-user server
+						state, an opinionated ESLint config, and a project CLI.
+						Everything you need to go from idea to production.
 					</p>
 				</section>
 

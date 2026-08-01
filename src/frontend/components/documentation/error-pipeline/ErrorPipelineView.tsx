@@ -1,5 +1,6 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
+import { synchronizePackageCards } from '../../../data/documentation/packages/ecosystemVersions';
 import {
 	errorPipelineBrowser,
 	errorPipelineServer
@@ -17,7 +18,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
-import { PackageCard, PackageCardGrid } from '../../utils/PackageCardGrid';
+import { PackageCardGrid } from '../../utils/PackageCardGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { StepFlow, StepFlowStep } from '../../utils/StepFlow';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -78,7 +79,7 @@ const pipelineSteps: StepFlowStep[] = [
 	}
 ];
 
-const pipelinePackages: PackageCard[] = [
+const pipelinePackages = synchronizePackageCards([
 	{
 		badge: 'server',
 		description:
@@ -111,7 +112,7 @@ const pipelinePackages: PackageCard[] = [
 		packageName: '@absolutejs/errors-postgres',
 		version: '0.0.3'
 	}
-];
+]);
 
 type RelatedLink = {
 	label: string;

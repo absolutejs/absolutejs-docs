@@ -79,50 +79,68 @@ new Elysia()
     const product = await getProduct(params.id);
     const relatedProducts = await getRelatedProducts(product.categoryId);
 
-    return handleVuePageRequest(
-      asset(manifest, 'Products'),   // Compiled page for SSR
-      asset(manifest, 'ProductsIndex'),  // Compiled index for hydration
-      generateHeadElement({                 // Head tags
+    return handleVuePageRequest({
+      headTag: generateHeadElement({
         title: \`\${product.name} | My Store\`,
         meta: [
           { name: 'description', content: product.description }
         ]
       }),
-      { product, relatedProducts }          // Type-safe props
-    );
+      indexPath: asset(manifest, 'ProductsIndex'),
+      pagePath: asset(manifest, 'Products'),
+      props: { product, relatedProducts }
+    });
   })`;
 export const vueImports = `\
 import { asset, generateHeadElement } from '@absolutejs/absolute';
 import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
 import { handleVuePageRequest } from '@absolutejs/absolute/vue';
-import SvelteExample from './svelte/pages/SvelteExample.svelte';
 import { vueImports } from './vueImporter';
 
 export const server = new Elysia()
   .get('/svelte', async () =>
-    handleSveltePageRequest(
-      SvelteExample,
-      asset(manifest, 'SvelteExample'),
-      asset(manifest, 'SvelteExampleIndex'),
-      {
+    handleSveltePageRequest({
+      indexPath: asset(manifest, 'SvelteExampleIndex'),
+      pagePath: asset(manifest, 'SvelteExample'),
+      props: {
         cssPath: asset(manifest, 'SvelteExampleCSS'),
         initialCount: 0
       }
-    )
+    })
   )
   .get('/vue', () =>
-    handleVuePageRequest(
-      vueImports.VueExample,
-      asset(manifest, 'VueExample'),
-      asset(manifest, 'VueExampleIndex'),
-      generateHeadElement({
+    handleVuePageRequest({
+      Page: vueImports.VueExample,
+      headTag: generateHeadElement({
         cssPath: asset(manifest, 'VueExampleCSS'),
         title: 'AbsoluteJS + Vue'
       }),
-      { initialCount: 0 }
-    )
+      indexPath: asset(manifest, 'VueExampleIndex'),
+      pagePath: asset(manifest, 'VueExample'),
+      props: { initialCount: 0 }
+    })
   )
 ;`;
+export const vueResource = `\
+<script setup lang="ts">
+import { useResource } from '@absolutejs/absolute/vue';
+
+const profile = useResource((signal) =>
+  fetch('/api/profile', { signal }).then((response) => response.json())
+);
+
+const rename = async (name: string) => {
+  const updated = await saveProfile({ name });
+  profile.mutate(updated);
+};
+</script>
+
+<template>
+  <Spinner v-if="profile.loading.value" />
+  <ErrorMessage v-else-if="profile.error.value" />
+  <ProfileCard v-else :profile="profile.data.value" @rename="rename" />
+  <button @click="profile.refresh()">Refresh</button>
+</template>`;
 export const vueTypeSafety = `\
 // Vue 3 with TypeScript provides complete type safety
 // defineProps<T>() ensures compile-time type checking

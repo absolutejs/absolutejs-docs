@@ -2,6 +2,7 @@
 import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import { DocsViewProps } from '../../../../types/springTypes';
+import { synchronizePackageCards } from '../../../data/documentation/packages/ecosystemVersions';
 import { DocsNavigation } from '../DocsNavigation';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -332,7 +333,7 @@ const routeSurfaces: Array<[string, string]> = [
 	['turnQuality', 'Turn quality report routes.']
 ];
 
-const adapterPackages: PackageCard[] = [
+const adapterPackages = synchronizePackageCards([
 	{
 		badge: 'STT',
 		description:
@@ -469,7 +470,7 @@ const adapterPackages: PackageCard[] = [
 		packageName: '@absolutejs/voice-speechmatics',
 		version: '0.0.1-beta.2'
 	}
-];
+]);
 
 const adapterCapabilityMatrix: PackageCard[] = [
 	{

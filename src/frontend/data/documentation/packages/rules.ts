@@ -45,7 +45,7 @@ export const rulesPackageData: PackageDocData = {
 	name: 'Rules',
 	notes: [
 		{
-			body: 'This is a 0.0.x release extracted for the AbsoluteJS AI Studio; the vocabulary and engine APIs may change before 0.1. Pin an exact version.',
+			body: 'This is an early release used by the hosted AbsoluteJS.ai Studio; pin an exact version while the vocabulary and engine APIs continue to mature.',
 			title: 'Alpha API',
 			variant: 'warning'
 		},

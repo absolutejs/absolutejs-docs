@@ -62,11 +62,11 @@ new Elysia()
     const stats = await getStats(user.id);
 
     // Both the page and index use asset() to get the compiled paths
-    return handleSveltePageRequest(
-      asset(manifest, 'Dashboard'),   // Compiled page for SSR
-      asset(manifest, 'DashboardIndex'),  // Compiled index for hydration
-      { user, stats }
-    );
+    return handleSveltePageRequest({
+      indexPath: asset(manifest, 'DashboardIndex'),
+      pagePath: asset(manifest, 'Dashboard'),
+      props: { user, stats }
+    });
   })`;
 export const svelteTypeSafetyServer = `\
 // backend/server.ts
@@ -83,11 +83,11 @@ new Elysia()
     const stats = await getStats(user.id);
 
     // TypeScript error if props don't match DashboardProps!
-    return handleSveltePageRequest(
-      asset(manifest, 'DashboardPage'),
-      asset(manifest, 'DashboardIndex'),
-      { user, stats }
-    );
+    return handleSveltePageRequest({
+      indexPath: asset(manifest, 'DashboardIndex'),
+      pagePath: asset(manifest, 'DashboardPage'),
+      props: { user, stats }
+    });
   })`;
 export const svelteTypeSafetyTypes = `\
 // db/schema.ts

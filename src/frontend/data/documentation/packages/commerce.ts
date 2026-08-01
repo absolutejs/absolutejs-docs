@@ -9,6 +9,12 @@ export const commercePackageData: PackageDocData = {
 			items: [
 				{
 					description:
+						'CustomCat print-on-demand fulfillment adapter for @absolutejs/commerce',
+					name: '@absolutejs/commerce-customcat',
+					version: '0.6.20-beta.2'
+				},
+				{
+					description:
 						'EasyPost shipping adapter for @absolutejs/commerce',
 					name: '@absolutejs/commerce-easypost',
 					version: '0.16.0-beta.0'
@@ -30,32 +36,32 @@ export const commercePackageData: PackageDocData = {
 	],
 	category: 'Commerce & Growth',
 	description:
-		'Provider-agnostic commerce primitives (cart, orders, fulfillment, shipping) so every shop is not rebuilding checkout plumbing from scratch. The host package holds the agnostic logic and adapter contracts; provider implementations such as Stripe, EasyPost, and Resend live in the commerce-adapters monorepo. Apps program against contracts like ShippingProvider and PaymentProvider, then plug in whichever carrier or processor account they already use.',
+		'Provider-agnostic commerce primitives for multi-store catalogs, storefront merchandising, trusted server-side cart resolution, payments, fulfillment, order aftercare, decoration previews, and production packets. The host package owns the domain logic and adapter contracts; CustomCat, EasyPost, Resend, and Stripe integrations live in the commerce-adapters monorepo.',
 	features: [
 		{
 			description:
-				'Apps program against the carrier-agnostic ShippingProvider contract; an adapter like @absolutejs/commerce-easypost implements it, including buyCheapestLabel across rates.',
-			title: 'Shipping contract'
+				'Canonical supplier products and variants stay separate from tenant-specific listings, collections, pricing, artwork, customization rules, and publication state.',
+			title: 'Multi-store catalogs'
 		},
 		{
 			description:
-				'A PaymentProvider contract with a Stripe adapter covers checkout, server-side re-pricing, and webhook fulfillment.',
-			title: 'Payment contract'
+				'The server resolves browser cart identities against ready storefront projections, rechecks policy and availability, and calculates canonical pricing before checkout.',
+			title: 'Trusted checkout boundary'
 		},
 		{
 			description:
-				'Branded transactional email rides the same adapter pattern, with a Resend adapter shipped in the adapters monorepo.',
-			title: 'Transactional email'
+				'Tenant-fenced provider installations, idempotent checkout intents, signed and deduplicated webhooks, durable receipts, refunds, and quarantine-safe retries.',
+			title: 'Payments and evidence'
 		},
 		{
 			description:
-				'Cart and pricing primitives (variants, options, quantity breaks, setup fees) plus order lifecycle and a production-stage state machine, lifted from real AbsoluteJS shops.',
-			title: 'Cart and orders'
+				'Leased fulfillment jobs, provider reconciliation, guest-safe order access, lifecycle notifications, cancellation coordination, and return or dispute cases.',
+			title: 'Fulfillment and aftercare'
 		},
 		{
 			description:
-				'Discount-code engine and B2B quote-to-deposit-to-fulfill flows are part of the same host-package surface.',
-			title: 'Discounts and quotes'
+				'Product-photo and optional 3D decoration previews share placement geometry with production specifications and printable work orders.',
+			title: 'Decoration and production'
 		}
 	],
 	installCommand: 'bun add @absolutejs/commerce',
@@ -72,7 +78,7 @@ export const commercePackageData: PackageDocData = {
 	name: 'Commerce',
 	notes: [
 		{
-			body: 'The shipping contract is the first stable slice; cart, order lifecycle, payments, discounts, and B2B quotes are being lifted from real AbsoluteJS shops against the same adapter pattern.',
+			body: 'Commerce is still beta. Its catalog, checkout, payments, fulfillment, order, aftercare, evidence, and decoration surfaces are shipping together and may continue to evolve before a stable release.',
 			title: 'Beta surface',
 			variant: 'warning'
 		},
@@ -102,6 +108,6 @@ const label = await shipping.buyCheapestLabel({ from, to, parcel });
 	],
 	status: 'beta',
 	tagline:
-		'Provider-agnostic cart, order, fulfillment, and shipping primitives with Stripe, EasyPost, and Resend adapters.',
+		'Provider-agnostic catalogs, checkout, payments, fulfillment, and aftercare with CustomCat, EasyPost, Resend, and Stripe adapters.',
 	version: '0.22.0-beta.0'
 };

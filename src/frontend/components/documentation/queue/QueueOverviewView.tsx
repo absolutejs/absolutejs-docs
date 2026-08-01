@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { ReactNode } from 'react';
 import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
+import { currentPackageVersion } from '../../../data/documentation/packages/ecosystemVersions';
 import {
 	queuePostgresAdapter,
 	queueQuickStart,
@@ -91,28 +92,28 @@ const bundledStores: BundledStoreRow[] = [
 			'Tests and single-process apps. snapshot()/restore() round-trips state so the host can persist on SIGTERM and rehydrate on restart.',
 		factory: 'createInMemoryJobStore',
 		pkg: '@absolutejs/queue',
-		version: '0.3.0'
+		version: currentPackageVersion('@absolutejs/queue', '0.3.0')
 	},
 	{
 		bestFor:
 			'The production default — Drizzle + postgres.js against the Postgres you already run, with atomic multi-worker claims via FOR UPDATE SKIP LOCKED.',
 		factory: 'createPostgresJobStore',
 		pkg: '@absolutejs/queue-postgres',
-		version: '0.1.0'
+		version: currentPackageVersion('@absolutejs/queue-postgres', '0.1.0')
 	},
 	{
 		bestFor:
 			"Neon serverless Postgres — same store over Neon's WebSocket Pool driver, since claimDue needs real transactions and row-level locks.",
 		factory: 'createNeonJobStore',
 		pkg: '@absolutejs/queue-postgres',
-		version: '0.1.0'
+		version: currentPackageVersion('@absolutejs/queue-postgres', '0.1.0')
 	},
 	{
 		bestFor:
 			'High-throughput, low-latency claims — atomic Lua scripts keep the critical section to one round-trip.',
 		factory: 'createRedisJobStore',
 		pkg: '@absolutejs/queue-redis',
-		version: '0.0.1'
+		version: currentPackageVersion('@absolutejs/queue-redis', '0.0.1')
 	}
 ];
 

@@ -1,5 +1,6 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
+import { synchronizePackageCards } from '../../../data/documentation/packages/ecosystemVersions';
 import {
 	syncPacksAuthor,
 	syncPacksComposition,
@@ -21,7 +22,7 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
-import { PackageCard, PackageCardGrid } from '../../utils/PackageCardGrid';
+import { PackageCardGrid } from '../../utils/PackageCardGrid';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const noop = () => undefined;
@@ -36,7 +37,7 @@ const tocItems: TocItem[] = [
 	{ href: '#author', label: 'Authoring a pack' }
 ];
 
-const packItems: PackageCard[] = [
+const packItems = synchronizePackageCards([
 	{
 		description:
 			'Per-channel live presence with heartbeat-driven membership, TTL cleanup, plus cursor and typing state patches. Typing carries its own deadline in state.typingExpiresAt, so stalled typists clear without a server pass.',
@@ -94,7 +95,7 @@ const packItems: PackageCard[] = [
 		packageName: '@absolutejs/sync-pack-utils',
 		version: '0.1.1'
 	}
-];
+]);
 
 export const SyncPacksView = ({
 	themeSprings,

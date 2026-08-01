@@ -235,6 +235,9 @@ const titleCase = (value: string) =>
 		.map((part) => part.charAt(0).toUpperCase() + part.slice(1))
 		.join(' ');
 
+const normalizeDescription = (value: string) =>
+	value.replaceAll('AbsoluteJS AI Studio', 'hosted AbsoluteJS.ai Studio');
+
 const kindFor = (collection: boolean, packageName: string | null) => {
 	if (collection) return 'monorepo';
 	if (packageName) return 'package';
@@ -264,9 +267,9 @@ const projects = readdirSync(workspaceDirectory)
 			.map(readPackage)
 			.filter(Boolean)
 			.map((subpackage) => ({
-				description:
-					subpackage.description ??
-					'No package description provided.',
+				description: normalizeDescription(
+					subpackage.description ?? 'No package description provided.'
+				),
 				name: subpackage.name ?? 'Unnamed package',
 				private: subpackage.private === true,
 				version: subpackage.version ?? null
@@ -283,10 +286,11 @@ const projects = readdirSync(workspaceDirectory)
 
 		return {
 			category: categoryByDirectory[directory] ?? 'Dev Tools',
-			description:
+			description: normalizeDescription(
 				packageData?.description ??
-				descriptionByDirectory[directory] ??
-				`${titleCase(directory)} repository in the AbsoluteJS workspace.`,
+					descriptionByDirectory[directory] ??
+					`${titleCase(directory)} repository in the AbsoluteJS workspace.`
+			),
 			directory,
 			kind: kindFor(collection, packageName),
 			name: nameFor(directory, packageName),

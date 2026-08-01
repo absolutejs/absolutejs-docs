@@ -201,11 +201,6 @@ const GapsCards = ({
 	themeSprings
 }: CardGridSectionProps) => (
 	<div style={cardGridStyle(isMobileOrTablet)}>
-		<FeatureCard themeSprings={themeSprings} title="Managed deployment">
-			Convex is a hosted product. Sync is a library; the absolutejs hosted
-			PaaS is planned (and <code>isolated-jsc</code> was built to power
-			its sandbox slot).
-		</FeatureCard>
 		<FeatureCard themeSprings={themeSprings} title="Strict determinism">
 			Convex enforces it; sync trusts you (unless you opt into{' '}
 			<code>sandboxedHandler</code>, where the sandbox enforces resource
@@ -762,8 +757,9 @@ export const SyncVsConvexView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Honest list of where Convex is ahead and we haven't
-						caught up. These are roadmap items, not artifacts of
-						being new — closing them will take real work.
+						caught up. The sync library remains self-hostable, while
+						the AbsoluteJS.ai platform provides the hosted product
+						experience.
 					</p>
 					<GapsCards
 						isMobileOrTablet={isMobileOrTablet}

@@ -7,7 +7,8 @@ import {
 	vueComponent,
 	vueGenerateHead,
 	vueHandler,
-	vueImports
+	vueImports,
+	vueResource
 } from '../../../data/documentation/vueDocsCode';
 import {
 	h1Style,
@@ -32,6 +33,7 @@ const tocItems: TocItem[] = [
 	{ href: '#page-handler', label: 'Page Handler' },
 	{ href: '#generate-head', label: 'Generate Head' },
 	{ href: '#vue-components', label: 'Components' },
+	{ href: '#vue-resource', label: 'Async Resources' },
 	{ href: '#vue-imports', label: 'Vue Imports' }
 ];
 
@@ -99,6 +101,31 @@ export const VueOverviewView = ({
 					<PrismPlus
 						codeString={vueBuild}
 						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="vue-resource"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Async Resources
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>useResource()</code> provides component-scoped
+						async state with loading and error refs,
+						abort-on-unmount, refresh, cancellation, and optimistic
+						mutation. Choose a shared cache such as TanStack Query
+						or <code>@absolutejs/sync</code> when data must survive
+						navigation or be shared across components.
+					</p>
+					<PrismPlus
+						codeString={vueResource}
+						language="vue"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
@@ -192,7 +219,7 @@ export const VueOverviewView = ({
 						When using Vue and Svelte in the same project,
 						TypeScript may have conflicts between <code>.vue</code>{' '}
 						and <code>.svelte</code> file type definitions. Import
-						all Vue components in a seperate file and export that
+						all Vue components in a separate file and export that
 						object to avoid these conflicts.
 					</p>
 					<PrismPlus

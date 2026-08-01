@@ -118,8 +118,8 @@ export const syncVsConvexMatrixRows: ComparisonRow[] = [
 	},
 	{
 		feature: 'Hosting model',
-		note: 'managed PaaS planned (uses isolated-jsc)',
-		values: ['managed only', 'self-host']
+		note: 'hosted through AbsoluteJS.ai or self-host the library',
+		values: ['managed only', 'hosted or self-host']
 	}
 ];
 export const syncVsConvexMigrateVerbs = `// ── on the source ──

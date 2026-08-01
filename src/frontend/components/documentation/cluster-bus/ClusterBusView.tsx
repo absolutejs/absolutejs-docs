@@ -1,6 +1,7 @@
 import { animated } from '@react-spring/web';
 import { ReactNode } from 'react';
 import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
+import { currentPackageVersion } from '../../../data/documentation/packages/ecosystemVersions';
 import {
 	clusterBusInterface,
 	clusterBusPgQuickStart,
@@ -104,14 +105,14 @@ const busAdapters: BusAdapterRow[] = [
 			'Horizontal scale on the Postgres you already run — no extra infrastructure. An overflow spill table handles payloads above the 8KB NOTIFY cap.',
 		pkg: '@absolutejs/sync-bus-pg',
 		transport: 'Postgres LISTEN/NOTIFY',
-		version: '0.1.2'
+		version: currentPackageVersion('@absolutejs/sync-bus-pg', '0.1.2')
 	},
 	{
 		description:
 			'Faster fan-out and a native geo-replication story on managed Redis. Works with any Redis client (ioredis, node-redis, …) via a narrow interface.',
 		pkg: '@absolutejs/sync-bus-redis',
 		transport: 'Redis PUBLISH/SUBSCRIBE',
-		version: '0.0.1'
+		version: currentPackageVersion('@absolutejs/sync-bus-redis', '0.0.1')
 	}
 ];
 

@@ -50,7 +50,7 @@ export const logsPackageData: PackageDocData = {
 	name: 'Logs',
 	notes: [
 		{
-			body: 'logger.metrics() returns per-level counts, write totals and per-sink error counts; a dedicated @absolutejs/metrics/logs collector subpath is planned for the next release.',
+			body: 'logger.metrics() returns per-level counts, write totals, and per-sink error counts. Expose that shape as Prometheus metrics with the shipped @absolutejs/metrics/logs collector.',
 			title: 'Metrics surface',
 			variant: 'info'
 		},

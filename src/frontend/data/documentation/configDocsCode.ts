@@ -268,18 +268,18 @@ export const headSvelte = `\
   </body>
 </html>`;
 export const headVue = `\
-// Vue uses handleVuePageRequest's headTag parameter
+// Vue uses handleVuePageRequest's headTag option
 .get('/products/:id', async ({ params }) => {
   const product = await getProduct(params.id);
 
-  return handleVuePageRequest(
-    ProductPage,
-    pagePath,
+  return handleVuePageRequest({
+    Page: ProductPage,
+    headTag: \`<head><title>\${product.name} | My Store</title>
+     <meta name="description" content="\${product.description}" /></head>\`,
     indexPath,
-    \`<title>\${product.name} | My Store</title>
-     <meta name="description" content="\${product.description}" />\`,
-    { product }
-  );
+    pagePath,
+    props: { product }
+  });
 })`;
 export const minimalConfig = `\
 // absolute.config.ts: minimal example

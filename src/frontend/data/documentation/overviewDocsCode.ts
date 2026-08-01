@@ -2,10 +2,10 @@ export const ecosystemOverview = `\
 # The AbsoluteJS ecosystem
 @absolutejs/absolute     # Core framework : SSR, HMR, bundling
 @absolutejs/auth         # 66+ OAuth providers, session management, PKCE
-@absolutejs/eslint       # 20+ opinionated lint rules
+eslint-plugin-absolute  # AbsoluteJS lint rules and recommended configs
 elysia-scoped-state      # Per-user server state (great for HTMX)
 create-absolutejs        # Project scaffolding CLI
-absolute-studio          # Visual page builder : no code required`;
+AbsoluteJS.ai Studio     # Hosted visual app builder on the platform`;
 export const hmrExample = `\
 # HMR works across all frameworks out of the box
 # Edit a React component → instant update, state preserved

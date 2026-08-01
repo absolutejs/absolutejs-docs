@@ -45,7 +45,7 @@ export const emailPackageData: PackageDocData = {
 	name: 'Email',
 	notes: [
 		{
-			body: '@absolutejs/email is 0.0.x — client options and normalized message shapes may change between releases while the adapters harden against real provider traffic.',
+			body: '@absolutejs/email is pre-1.0 — client options and normalized message shapes may change between minor releases while the adapters harden against real provider traffic.',
 			title: 'Early alpha',
 			variant: 'warning'
 		}

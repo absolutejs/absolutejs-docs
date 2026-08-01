@@ -1,7 +1,14 @@
+import { currentPackageVersion } from './packages/ecosystemVersions';
+
 type TerminalSession = {
 	command: string;
 	output: string;
 };
+
+const absoluteVersion = currentPackageVersion(
+	'@absolutejs/absolute',
+	'0.19.0-beta'
+);
 
 export const addAuthCommand = `\
 # Scaffold the code wiring for an @absolutejs/auth feature
@@ -118,7 +125,7 @@ absolute config --config ./absolute.config.ts`;
 export const configOutput: TerminalSession = {
 	command: 'absolute config',
 	output: `\
-  ABSOLUTEJS v0.19.0-beta.1051  ready in 283ms
+  ABSOLUTEJS v${absoluteVersion}  ready in 283ms
 
   ➜  Local:   https://config.absolute.localhost:4099/
 
@@ -166,8 +173,8 @@ export const doctorOutput: TerminalSession = {
 	command: 'absolute doctor',
 	output: `\
   ✓ Bun runtime           v1.3.14
-  ✓ @absolutejs/absolute  v0.19.0-beta.1038
-  ✓ Native binary         v0.19.0-beta.1008
+  ✓ @absolutejs/absolute  v${absoluteVersion}
+  ✓ Native binary         v${absoluteVersion}
   ✓ Config                absolute.config.ts loaded
   ✓ react pages           ./src/frontend/react
   ✓ vue pages             ./src/frontend/vue
@@ -253,7 +260,7 @@ export const htmxOutput: TerminalSession = {
 export const infoOutput: TerminalSession = {
 	command: 'absolute info',
 	output: `\
-  AbsoluteJS v0.19.0-beta.174
+  AbsoluteJS v${absoluteVersion}
   Bun v1.3.11
   Platform: linux x64
   Node: v22.0.0`
