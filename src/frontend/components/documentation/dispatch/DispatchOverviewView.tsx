@@ -4,6 +4,7 @@ import {
 	dispatchChannelUsage,
 	dispatchPostmark,
 	dispatchQuickStart,
+	dispatchTelnyx,
 	dispatchTesting,
 	dispatchTwilio
 } from '../../../data/documentation/dispatchDocsCode';
@@ -36,6 +37,7 @@ const tocItems: TocItem[] = [
 	{ href: '#adapters', label: 'Adapters' },
 	{ href: '#observability', label: 'Observability' },
 	{ href: '#postmark', label: 'Postmark' },
+	{ href: '#telnyx', label: 'Telnyx' },
 	{ href: '#twilio', label: 'Twilio' },
 	{ href: '#testing', label: 'Testing' }
 ];
@@ -53,9 +55,9 @@ const channelCards: ChannelCardData[] = [
 		title: 'Email'
 	},
 	{
-		call: 'dispatch.sms(message)',
-		fields: 'to, body?, channel?, mediaUrls?, template?, sendAt?, idempotencyKey?, from?, tenant?, metadata?',
-		title: 'SMS'
+		call: 'dispatch.messaging(message)',
+		fields: 'to, content, fallbacks?, sendAt?, idempotencyKey?, consent?, from?, tenant?, extensions?',
+		title: 'Messaging'
 	},
 	{
 		call: 'dispatch.push(message)',
@@ -107,12 +109,12 @@ const ChannelCard = ({
 
 const dispatcherOptionRows: DocsTableCell[][] = [
 	[
-		{ code: 'email / sms / push' },
+		{ code: 'email / messaging / push' },
 		'One optional adapter per channel. Only the channels you configure become callable.'
 	],
 	[
 		{ code: 'defaultFrom' },
-		'Fallback sender per channel ({ email?, sms? }) when a message omits from.'
+		'Fallback sender per channel ({ email?, messaging? }) when a message omits from.'
 	],
 	[
 		{ code: 'audit' },
@@ -142,28 +144,36 @@ const vendorAdapterRows: DocsTableCell[][] = [
 		'createPostmarkAdapter — transactional + broadcast streams; the MessageID becomes the result id.'
 	],
 	[
+		{ code: '@absolutejs/dispatch-telnyx' },
+		'0.1.0',
+		'SMS / MMS / RCS',
+		'Direct rich RCS, capability checks, SMS/MMS fallback, Ed25519 webhooks, scheduling, carrier registration, and shared atomic reliability.'
+	],
+	[
 		{ code: '@absolutejs/dispatch-twilio' },
-		'0.2.1',
-		'SMS / MMS / WhatsApp',
+		'0.5.0',
+		'SMS / MMS / RCS / WhatsApp',
 		'Rich Messaging Service sending, signed delivery, inbound, and consent webhooks, durable idempotency/lifecycle stores, tenant routing, and API-inspected readiness.'
 	]
 ];
 
 const builtInAdapterRows: DocsTableCell[][] = [
 	[
-		{ code: 'memoryEmailAdapter / memorySmsAdapter / memoryPushAdapter' },
+		{
+			code: 'memoryEmailAdapter / memoryMessagingAdapter / memoryPushAdapter'
+		},
 		'In-process FIFO buffer (default 1000 messages). Call .inspect() to read a copy, .clear() to reset between tests.'
 	],
 	[
 		{
-			code: 'consoleEmailAdapter / consoleSmsAdapter / consolePushAdapter'
+			code: 'consoleEmailAdapter / consoleMessagingAdapter / consolePushAdapter'
 		},
 		'Prints the message as JSON to stdout and returns immediately. Handy for local dev without a vendor account.'
 	]
 ];
 
 const spanAttributeRows: DocsTableCell[][] = [
-	[{ code: 'dispatch.channel' }, "'email' | 'sms' | 'push'"],
+	[{ code: 'dispatch.channel' }, "'email' | 'messaging' | 'push'"],
 	[
 		{ code: 'dispatch.provider' },
 		"Adapter name — 'resend', 'postmark', 'twilio', …"
@@ -184,7 +194,7 @@ const metricsCounterRows: DocsTableCell[][] = [
 	[{ code: 'failed' }, 'Cumulative failed sends across every channel.'],
 	[
 		{ code: 'byChannel' },
-		'Per-channel { sent, failed } breakdown for email, sms, and push.'
+		'Per-channel { sent, failed } breakdown for email, messaging, and push.'
 	]
 ];
 
@@ -217,10 +227,11 @@ export const DispatchOverviewView = ({
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Provider-agnostic outbound dispatcher for Bun + Elysia —
-						send email, SMS, and push through one typed interface.
-						Swap Resend, Postmark, or Twilio without touching call
-						sites, test with the bundled in-memory adapters, and get
-						OpenTelemetry spans and audit events on every send.
+						send email, carrier/rich messaging, and push through one
+						typed interface. Swap Resend, Postmark, Telnyx, or
+						Twilio without touching call sites, test with the
+						bundled in-memory adapters, and get OpenTelemetry spans
+						and audit events on every send.
 					</p>
 				</animated.div>
 
@@ -237,7 +248,7 @@ export const DispatchOverviewView = ({
 						<code>createDispatcher()</code> takes one optional
 						adapter per channel. Each channel becomes a top-level
 						callable — <code>dispatch.email(message)</code>,{' '}
-						<code>dispatch.sms(message)</code>,{' '}
+						<code>dispatch.messaging(message)</code>,{' '}
 						<code>dispatch.push(message)</code>. Calling a channel
 						you didn't configure throws{' '}
 						<code>DispatchUnsupportedError</code>, so the omission
@@ -369,7 +380,7 @@ export const DispatchOverviewView = ({
 					<p style={paragraphSpacedStyle}>
 						Every send is wrapped in a single OpenTelemetry span —{' '}
 						<code>dispatch.email.send</code>,{' '}
-						<code>dispatch.sms.send</code>, or{' '}
+						<code>dispatch.messaging.send</code>, or{' '}
 						<code>dispatch.push.send</code> — carrying these
 						attributes:
 					</p>
@@ -440,6 +451,40 @@ export const DispatchOverviewView = ({
 						propagate, so the dispatcher's <code>onError</code> hook
 						and span error capture kick in.
 					</p>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="telnyx"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Telnyx
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Use <code>@absolutejs/dispatch-telnyx</code> for SMS,
+						MMS, and direct rich RCS. It maps portable cards and
+						actions to Telnyx RCS, supports explicit SMS/MMS
+						fallback routes and recipient capability checks, and
+						uses the shared atomic reliability package for scoped
+						idempotency and durable webhook recovery.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						The webhook handler verifies Telnyx Ed25519 signatures
+						over the raw request, supports bounded public-key
+						rotation, normalizes delivery and interactive inbound
+						events, and can apply STOP/START events to every
+						resolved consent program. Registration and readiness
+						helpers cover 10DLC, toll-free, Messaging Profile
+						binding, and explicit RCS approval.
+					</p>
+					<PrismPlus
+						codeString={dispatchTelnyx}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>

@@ -1,15 +1,15 @@
 /**
  * Code samples for the @absolutejs/dispatch docs page. Dispatch is a
- * provider-agnostic outbound dispatcher for Bun + Elysia — email, SMS,
+ * provider-agnostic outbound dispatcher for Bun + Elysia — email, messaging,
  * and push behind one typed interface, with vendor adapter packages
- * for Resend, Postmark, and Twilio.
+ * for Resend, Postmark, Telnyx, and Twilio.
  */
 
 export const dispatchChannelUsage = `// Every channel call returns a DispatchResult you can correlate
 // with the vendor's delivery webhook later.
-const result = await dispatch.sms({
-  to: '+15555550123',
-  body: 'Your code is 424242',
+const result = await dispatch.messaging({
+  content: { kind: 'text', text: 'Your code is 424242' },
+  to: { address: '+15555550123', transport: 'sms' },
   tenant: 'acme',                    // propagates to spans + audit
   metadata: { campaign: 'signup' },  // open record adapters interpret
 });
@@ -48,11 +48,57 @@ const dispatch = createDispatcher({
   defaultFrom: { email: 'Example <noreply@example.com>' },
 });
 
-// Each channel is called directly — dispatch.email(...), dispatch.sms(...).
+// Each channel is called directly — dispatch.email(...), dispatch.messaging(...).
 await dispatch.email({
   to: 'user@example.com',
   subject: 'Welcome',
   text: 'Hi there!',
+});`;
+export const dispatchTelnyx = `import { createDispatcher } from '@absolutejs/dispatch';
+import {
+  createPostgresIdempotentOperationStore,
+  createPostgresTransactionRunner,
+  createPostgresWebhookInboxStore,
+  createTelnyxAdapter,
+  createTelnyxWebhookHandler,
+} from '@absolutejs/dispatch-telnyx';
+import { Telnyx } from 'telnyx';
+
+const client = new Telnyx({ apiKey: process.env.TELNYX_API_KEY });
+const runner = createPostgresTransactionRunner(postgresPool);
+const messaging = createTelnyxAdapter({
+  accountId: process.env.TELNYX_ORGANIZATION_ID,
+  client,
+  idempotencyStore: createPostgresIdempotentOperationStore(runner),
+  messagingProfileId: process.env.TELNYX_MESSAGING_PROFILE_ID,
+  rcsAgentId: process.env.TELNYX_RCS_AGENT_ID,
+  webhookUrl: 'https://example.com/webhooks/telnyx',
+});
+
+const telnyxWebhook = createTelnyxWebhookHandler({
+  handler: event => lifecycle.record(event),
+  inbox: createPostgresWebhookInboxStore(runner),
+  resolveAccount: organizationId => telnyxWebhookAccount(organizationId),
+  resolveConsentScopes: event => programsForNumber(event.from),
+});
+app.post('/webhooks/telnyx', ({ request }) => telnyxWebhook(request));
+
+const dispatch = createDispatcher({ messaging });
+await dispatch.messaging({
+  content: {
+    kind: 'rich',
+    title: 'Production alert',
+    text: 'Database latency is elevated.',
+    actions: [{
+      kind: 'url',
+      label: 'Open incident',
+      url: 'https://example.com/incidents/42',
+    }],
+  },
+  consent: { programId: 'pro-alerts', purpose: 'incident-alerts' },
+  fallbacks: [{ transport: 'sms' }],
+  idempotencyKey: 'incident-42:recipient-7',
+  to: { address: '+12025550100', transport: 'rcs' },
 });`;
 export const dispatchTesting = `import { createDispatcher, memoryEmailAdapter } from '@absolutejs/dispatch';
 
@@ -91,7 +137,8 @@ const client = new Twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 const consent = createMessagingConsentLedger({
   store: createPostgresMessagingConsentStore(postgres),
 });
-const sms = createTwilioAdapter({
+const messaging = createTwilioAdapter({
+  accountSid: process.env.TWILIO_SID,
   client,
   idempotencyStore: createPostgresTwilioIdempotencyStore(postgres),
   messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
@@ -100,21 +147,15 @@ const sms = createTwilioAdapter({
 });
 
 const webhook = createTwilioWebhookHandler({
-  authToken: process.env.TWILIO_TOKEN,
-  expectedAccountSid: process.env.TWILIO_SID,
-  expectedMessagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+  resolveAccount: accountSid => twilioWebhookAccount(accountSid),
   publicUrl: 'https://example.com/webhooks/twilio/messaging',
-  store: durableLifecycleStore,
-  consent: {
-    ledger: consent,
-    resolveScope: event => ({
-      recipient: event.from,
-      senderId: 'acme',
-      tenant: 'tenant-a',
-      topic: 'incident-alerts',
-      transport: 'sms',
-    }),
-  },
+  lifecycleStore: durableLifecycleStore,
+  consentLedger: consent,
+  resolveScopes: event => [{
+    programId: 'acme-alerts',
+    purpose: 'incident-alerts',
+    tenant: 'tenant-a',
+  }],
   onEvent: event => lifecycle.record(event),
 });
 
@@ -122,25 +163,27 @@ app.post('/webhooks/twilio/messaging', ({ request }) => webhook(request));
 
 const dispatch = createDispatcher({
   policies: [createMessagingConsentDispatchPolicy({ ledger: consent })],
-  sms,
+  messaging,
 });
 
-await dispatch.sms({
-  body: 'Service health has degraded.',
-  channel: 'rcs',
-  consent: { senderId: 'acme', topic: 'incident-alerts' },
-  rcs: { fallbackFrom: '+12025550199' },
+await dispatch.messaging({
+  content: { kind: 'text', text: 'Service health has degraded.' },
+  consent: { programId: 'acme-alerts', purpose: 'incident-alerts' },
+  fallbacks: [{
+    from: { address: '+12025550199', transport: 'sms' },
+    transport: 'sms',
+  }],
   tenant: 'tenant-a',
-  to: '+12025550100',
+  to: { address: '+12025550100', transport: 'rcs' },
 });
 
 const registration = createTwilioComplianceManager(client);
 const registrationStatus = await registration.inspect({
+  kind: 'a2p',
   customerProfileSid,
   brandRegistrationSid,
   messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
   campaignSid,
-  tollfreeVerificationSid,
 });
 
 const readiness = await inspectTwilioMessagingReadiness({
