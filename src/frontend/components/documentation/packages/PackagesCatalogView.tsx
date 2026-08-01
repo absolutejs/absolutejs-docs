@@ -42,7 +42,7 @@ const slugify = (value: string) =>
 
 const matchesQuery = (entry: PackageCatalogEntry, query: string) => {
 	const haystack =
-		`${entry.name} ${entry.npmName} ${entry.tagline}`.toLowerCase();
+		`${entry.name} ${entry.npmName ?? ''} ${entry.sourceDirectory} ${entry.kind} ${entry.tagline}`.toLowerCase();
 
 	return query
 		.toLowerCase()
@@ -54,6 +54,13 @@ type CatalogCardProps = {
 	entry: PackageCatalogEntry;
 	onNavigate: (pageId: string) => void;
 	themeSprings: ThemeSprings;
+};
+
+const catalogBadge = (entry: PackageCatalogEntry) => {
+	if (entry.version) return `v${entry.version}`;
+	if (entry.kind === 'monorepo') return `${entry.subpackageCount} packages`;
+
+	return 'workspace';
 };
 
 const CatalogCard = ({ entry, onNavigate, themeSprings }: CatalogCardProps) => (
@@ -90,7 +97,7 @@ const CatalogCard = ({ entry, onNavigate, themeSprings }: CatalogCardProps) => (
 					fontWeight: 600
 				}}
 			>
-				v{entry.version}
+				{catalogBadge(entry)}
 			</span>
 		</div>
 		<code
@@ -101,7 +108,7 @@ const CatalogCard = ({ entry, onNavigate, themeSprings }: CatalogCardProps) => (
 				marginBottom: '0.6rem'
 			}}
 		>
-			{entry.npmName}
+			{entry.npmName ?? `~/abs/${entry.sourceDirectory}`}
 		</code>
 		<animated.p
 			style={{
@@ -188,12 +195,11 @@ export const PackagesCatalogView = ({
 						Packages
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Every published AbsoluteJS package — {''}
-						{packageCatalog.length} standalone tools that work with
-						Bun and Elysia. Each one is independently versioned and
-						usable on its own; together they cover auth, data sync,
-						AI, voice, production infrastructure, observability, and
-						growth.
+						The complete AbsoluteJS workspace:{' '}
+						{packageCatalog.length} packages, monorepos,
+						applications, extensions, examples, fixtures, and
+						internal tools. Open a monorepo to see every package it
+						publishes independently.
 					</p>
 					<CatalogSearch
 						onQueryChange={setQuery}
@@ -233,7 +239,7 @@ export const PackagesCatalogView = ({
 								{entries.map((entry) => (
 									<CatalogCard
 										entry={entry}
-										key={entry.npmName}
+										key={entry.sourceDirectory}
 										onNavigate={onNavigate}
 										themeSprings={themeSprings}
 									/>

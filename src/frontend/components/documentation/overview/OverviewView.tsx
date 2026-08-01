@@ -78,8 +78,8 @@ const keyFeatureCards: OverviewCardItem[] = [
 		title: 'End-to-End Type Safety'
 	},
 	{
-		body: 'A visual page builder with drag-and-drop blocks, live preview, and asset management: no code required.',
-		title: 'Absolute Studio'
+		body: 'Build, preview, and manage AbsoluteJS applications through Studio on the hosted AbsoluteJS.ai platform.',
+		title: 'AbsoluteJS.ai Studio'
 	}
 ];
 
@@ -155,8 +155,8 @@ const ecosystemCards: OverviewCardItem[] = [
 		title: '@absolutejs/auth'
 	},
 	{
-		body: 'A visual page builder that runs alongside your dev server. Drag-and-drop blocks for headings, text, images, columns, and more. Edit styles visually, manage assets, and preview changes live: then drop into the Monaco code editor when you need full control.',
-		title: 'Absolute Studio'
+		body: 'The hosted AbsoluteJS.ai platform includes Studio for visually building, previewing, and managing AbsoluteJS applications without distributing Studio as a standalone package.',
+		title: 'AbsoluteJS.ai Studio'
 	},
 	{
 		body: "Per-user server state that's isolated between visitors. Each user gets their own store keyed to their session: perfect for HTMX apps where the server manages UI state. Supports a preserve option to survive page navigations and a reset to clear state.",

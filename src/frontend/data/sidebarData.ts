@@ -52,6 +52,7 @@ import { IsolatedJscBunPositioningView } from '../components/documentation/packa
 import { IsolatedJscHibernationView } from '../components/documentation/packages/IsolatedJscHibernationView';
 import { IsolatedJscProofPackView } from '../components/documentation/packages/IsolatedJscProofPackView';
 import { PackagesCatalogView } from '../components/documentation/packages/PackagesCatalogView';
+import { ecosystemProjectViews } from '../components/documentation/packages/EcosystemProjectOverviewView';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import {
 	VoiceAdapterContractsView,
@@ -104,7 +105,6 @@ import {
 	RenownPackageView,
 	ReplayPackageView,
 	RulesPackageView,
-	StudioPackageView,
 	TourPackageView,
 	VscodeExtensionPackageView,
 	VueComposablesPackageView
@@ -417,7 +417,6 @@ export const docsViews = definePortalViews({
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
-	'studio-overview': StudioPackageView,
 	'substrate-audit': PlatformOverviewView,
 	'svelte-ai': SvelteAIView,
 	'svelte-components': SvelteComponentsView,
@@ -471,7 +470,8 @@ export const docsViews = definePortalViews({
 	'vue-composables-overview': VueComposablesPackageView,
 	'vue-islands': VueIslandsView,
 	'vue-overview': VueOverviewView,
-	'vue-spa': VueSpaView
+	'vue-spa': VueSpaView,
+	...ecosystemProjectViews
 });
 
 export const sidebarCategories: SidebarCategory[] = [
@@ -957,7 +957,6 @@ export const sidebarCategories: SidebarCategory[] = [
 				label: 'Create AbsoluteJS',
 				status: 'beta'
 			},
-			{ id: 'studio-overview', label: 'Studio', status: 'alpha' },
 			{
 				label: 'ESLint',
 				pages: [

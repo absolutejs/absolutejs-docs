@@ -48,10 +48,14 @@ export type PackageLink = {
 
 export type PackageCatalogEntry = {
 	category: PackageCategory;
+	kind: 'monorepo' | 'package' | 'repository';
 	name: string;
-	npmName: string;
+	npmName: string | null;
+	private: boolean;
+	sourceDirectory: string;
+	subpackageCount: number;
 	tagline: string;
-	version: string;
+	version: string | null;
 	view: string;
 };
 

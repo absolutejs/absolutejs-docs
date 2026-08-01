@@ -111,7 +111,11 @@ const PackageHero = ({
 		</h1>
 		<div style={badgeRowStyle}>
 			<code style={tableCodeStyle}>{data.npmName}</code>
-			<span style={pillStyle('#6366F1')}>v{data.version}</span>
+			<span style={pillStyle('#6366F1')}>
+				{data.version === 'workspace'
+					? 'workspace'
+					: `v${data.version}`}
+			</span>
 			<span style={pillStyle(statusColors[data.status])}>
 				{data.status}
 			</span>
