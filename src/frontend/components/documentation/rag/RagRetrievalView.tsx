@@ -1,5 +1,6 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
+import { synchronizePackageCards } from '../../../data/documentation/packages/ecosystemVersions';
 import {
 	ragRetrievalAdapters,
 	ragRetrievalHybrid,
@@ -21,7 +22,7 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
-import { PackageCard, PackageCardGrid } from '../../utils/PackageCardGrid';
+import { PackageCardGrid } from '../../utils/PackageCardGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -151,7 +152,7 @@ const rerankerRows: DocsTableCell[][] = [
 	]
 ];
 
-const storeCards: PackageCard[] = [
+const storeCards = synchronizePackageCards([
 	{
 		badge: 'built in',
 		description:
@@ -171,23 +172,23 @@ const storeCards: PackageCard[] = [
 			'pgvector-native store: vector(n) column, cosine / l2 / inner_product, hnsw or ivfflat indexes.',
 		name: 'Postgres',
 		packageName: '@absolutejs/rag-postgres',
-		version: '0.0.7'
+		version: '0.0.12'
 	},
 	{
 		description:
 			'Embedded store on bun:sqlite. JSON fallback everywhere; native vec0 acceleration via platform packages.',
 		name: 'SQLite',
 		packageName: '@absolutejs/rag-sqlite',
-		version: '0.0.7'
+		version: '0.0.12'
 	},
 	{
 		description:
 			'Serverless Pinecone indexes with filter translation, batched upserts, and index provisioning helpers.',
 		name: 'Pinecone',
 		packageName: '@absolutejs/rag-pinecone',
-		version: '0.0.7'
+		version: '0.0.13'
 	}
-];
+]);
 
 const adapterFactoryRows: DocsTableCell[][] = [
 	[

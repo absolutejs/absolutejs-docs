@@ -19,11 +19,11 @@ export const propsInjection = `\
 .get('/', async ({ cookie }) => {
   const user = await getUser(cookie);
 
-  return handleReactPageRequest(
-    Home,
-    asset(manifest, 'HomeIndex'),
-    { user } // available on server AND client
-  );
+  return handleReactPageRequest({
+    Page: Home,
+    index: asset(manifest, 'HomeIndex'),
+    props: { user } // available on server AND client
+  });
 })`;
 export const renderToStream = `\
 .get('/', () =>

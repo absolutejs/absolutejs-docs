@@ -44,12 +44,11 @@ export const streamingPageHandlerIntegration = `\
 import { handleReactPageRequest } from '@absolutejs/absolute/react';
 
 app.get('/dashboard', () =>
-  handleReactPageRequest(
-    Dashboard,
-    asset(manifest, 'DashboardIndex'),
-    undefined,
-    { collectStreamingSlots: true }
-  )
+  handleReactPageRequest({
+    Page: Dashboard,
+    collectStreamingSlots: true,
+    index: asset(manifest, 'DashboardIndex')
+  })
 );`;
 export const streamingRawFrameworkSnippet = `\
 import { StreamSlot } from '@absolutejs/absolute/vue/components';

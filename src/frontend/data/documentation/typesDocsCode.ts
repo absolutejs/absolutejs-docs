@@ -108,46 +108,40 @@ type FrameworkPageHandlerOptions = {
   collectStreamingSlots?: boolean;
 };
 
-// React page handler: import from '@absolutejs/absolute/react'
-function handleReactPageRequest<TProps extends Record<string, unknown>>(
-  Component: React.ComponentType<TProps>,
-  scriptPath: string,
-  ...params: keyof TProps extends never
-    ? [props?: TProps, options?: FrameworkPageHandlerOptions]
-    : [props: TProps, options?: FrameworkPageHandlerOptions]
-): Promise<Response>;
+// React: import from '@absolutejs/absolute/react'
+function handleReactPageRequest<TProps>(input: FrameworkPageHandlerOptions & {
+  Page: React.ComponentType<TProps>;
+  index: string;
+  props: TProps;
+  request?: Request;
+}): Promise<Response>;
 
-// Svelte page handler: import from '@absolutejs/absolute/svelte'
-function handleSveltePageRequest<TProps extends Record<string, unknown>>(
-  Component: SvelteComponent,
-  pagePath: string,
-  scriptPath: string,
-  ...params: keyof TProps extends never
-    ? [props?: TProps, options?: FrameworkPageHandlerOptions]
-    : [props: TProps, options?: FrameworkPageHandlerOptions]
-): Promise<Response>;
+// Svelte: import from '@absolutejs/absolute/svelte'
+function handleSveltePageRequest<TComponent>(input: FrameworkPageHandlerOptions & {
+  indexPath: string;
+  pagePath: string;
+  props: SveltePropsOf<TComponent>;
+  request?: Request;
+}): Promise<Response>;
 
-// Vue page handler: import from '@absolutejs/absolute/vue'
-function handleVuePageRequest<TProps extends Record<string, unknown>>(
-  Component: VueComponent,
-  pagePath: string,
-  scriptPath: string,
-  headTag?: string,
-  ...params: keyof TProps extends never
-    ? [props?: TProps, options?: FrameworkPageHandlerOptions]
-    : [props: TProps, options?: FrameworkPageHandlerOptions]
-): Promise<Response>;
-
-// Angular page handler: import from '@absolutejs/absolute/angular'
-function defineAngularPage<TProps extends Record<string, unknown>>(definition: {
-  component: Type<unknown>;
-}): AngularPageDefinition<TProps>;
-
-function handleAngularPageRequest<TPageModule>(input: {
+// Vue: import from '@absolutejs/absolute/vue'
+function handleVuePageRequest<TComponent>(input: FrameworkPageHandlerOptions & {
+  Page?: TComponent;
   pagePath: string;
   indexPath: string;
-  headTag?: string;
-  props: AngularPagePropsOf<TPageModule>;
+  headTag?: \`<head>\${string}</head>\`;
+  props: VuePropsOf<TComponent>;
+  request?: Request;
+  client?: 'auto' | 'none';
+}): Promise<Response>;
+
+// Angular: import from '@absolutejs/absolute/angular'
+function handleAngularPageRequest<TContext>(input: FrameworkPageHandlerOptions & {
+  pagePath: string;
+  indexPath: string;
+  headTag?: \`<head>\${string}</head>\`;
+  request?: Request;
+  requestContext: TContext;
 }): Promise<Response>;
 
 // HTML page handler: import from '@absolutejs/absolute'

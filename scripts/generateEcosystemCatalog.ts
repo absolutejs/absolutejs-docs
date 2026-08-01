@@ -14,6 +14,8 @@ const outputPath = resolve(
 	'../src/frontend/data/documentation/packages/ecosystem.generated.ts'
 );
 const maximumPackageDepth = 4;
+const maximumReadmeSampleLength = 4000;
+const maximumReadmeTopics = 12;
 
 const excludedDirectories = new Set([
 	'.absolutejs',
@@ -201,6 +203,126 @@ const labelByDirectory: Record<string, string> = {
 const readPackage = (path: string) =>
 	existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
 
+const readPublicExports = (packageData: Record<string, unknown> | null) => {
+	const packageName = packageData?.name;
+	const packageExports = packageData?.exports;
+	if (typeof packageName !== 'string' || !packageExports) return [];
+	if (typeof packageExports === 'string') return [packageName];
+	if (typeof packageExports !== 'object') return [];
+
+	return Object.keys(packageExports).map((entry) =>
+		entry === '.'
+			? packageName
+			: `${packageName}/${entry.replace(/^\.\//, '')}`
+	);
+};
+
+const readPackageCommands = (packageData: Record<string, unknown> | null) => {
+	const scripts = packageData?.scripts;
+	if (!scripts || typeof scripts !== 'object') return [];
+
+	return Object.entries(scripts)
+		.filter(
+			(entry): entry is [string, string] => typeof entry[1] === 'string'
+		)
+		.filter(([name]) =>
+			/^(?:build|check|dev|format|lint|start|test|typecheck)(?::|$)/.test(
+				name
+			)
+		)
+		.map(([name, command]) => ({ command, name }))
+		.sort((left, right) => left.name.localeCompare(right.name));
+};
+
+const cleanMarkdown = (value: string) =>
+	value
+		.replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+		.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+		.replace(/<[^>]+>/g, '')
+		.replace(/[`*_~]/g, '')
+		.replace(/\s+/g, ' ')
+		.trim();
+
+const readMarkdownParagraph = (lines: string[], startIndex: number) => {
+	const paragraph: string[] = [];
+	for (let lineIndex = startIndex; lineIndex < lines.length; lineIndex += 1) {
+		const line = (lines[lineIndex] ?? '').trim();
+		if (/^#{1,6}\s/.test(line)) break;
+		const skippedLine =
+			!line || /^(?:```|[-*+]\s|\d+\.\s|\||>|!\[)/.test(line);
+		if (skippedLine && paragraph.length > 0) break;
+		if (skippedLine) continue;
+		paragraph.push(line);
+	}
+
+	return cleanMarkdown(paragraph.join(' '));
+};
+
+const readReadmeTopics = (directory: string) => {
+	const readmePath = join(directory, 'README.md');
+	if (!existsSync(readmePath)) return [];
+	const lines = readFileSync(readmePath, 'utf8').split(/\r?\n/);
+	const topics: Array<{ description: string; title: string }> = [];
+	const titleIndex = lines.findIndex((line) => /^#\s+/.test(line));
+	const overviewDescription = readMarkdownParagraph(
+		lines,
+		titleIndex >= 0 ? titleIndex + 1 : 0
+	);
+	if (overviewDescription)
+		topics.push({ description: overviewDescription, title: 'Overview' });
+
+	for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+		const headingMatch = /^##\s+(.+)$/.exec(lines[lineIndex] ?? '');
+		if (!headingMatch) continue;
+		const title = cleanMarkdown(headingMatch[1] ?? '');
+		if (!title || /^license$/i.test(title)) continue;
+		const description = readMarkdownParagraph(lines, lineIndex + 1);
+		topics.push({
+			description:
+				description ||
+				`${title} is documented in the repository README.`,
+			title
+		});
+		if (topics.length >= maximumReadmeTopics) break;
+	}
+
+	return topics;
+};
+
+const readReadmeSamples = (directory: string) => {
+	const readmePath = join(directory, 'README.md');
+	if (!existsSync(readmePath)) return [];
+	const readme = readFileSync(readmePath, 'utf8');
+	const samples: Array<{
+		code: string;
+		description: string;
+		heading: string;
+		language: string;
+	}> = [];
+	for (const match of readme.matchAll(
+		/```([a-zA-Z0-9_-]*)\r?\n([\s\S]*?)```/g
+	)) {
+		const code = (match[2] ?? '').trim();
+		if (!code || code.length > maximumReadmeSampleLength) continue;
+		const declaredLanguage = (match[1] ?? '').toLowerCase();
+		let language = declaredLanguage || 'text';
+		if (declaredLanguage === 'ts' || declaredLanguage === 'tsx')
+			language = 'typescript';
+		if (declaredLanguage === 'js' || declaredLanguage === 'jsx')
+			language = 'javascript';
+		samples.push({
+			code,
+			description: 'Example from the canonical repository README.',
+			heading:
+				samples.length === 0 ? 'README Example' : 'README Example 2',
+			language
+		});
+		if (samples.length >= 2) break;
+	}
+
+	return samples;
+};
+
 const readRepository = (directory: string) => {
 	const configPath = join(directory, '.git', 'config');
 	if (!existsSync(configPath)) return null;
@@ -238,6 +360,16 @@ const titleCase = (value: string) =>
 const normalizeDescription = (value: string) =>
 	value.replaceAll('AbsoluteJS AI Studio', 'hosted AbsoluteJS.ai Studio');
 
+const documentedVersion = (
+	packageName: string | null,
+	version: string | null
+) => {
+	if (packageName === '@absolutejs/absolute' && version)
+		return version.replace(/-beta\.\d+$/, '-beta');
+
+	return version;
+};
+
 const kindFor = (collection: boolean, packageName: string | null) => {
 	if (collection) return 'monorepo';
 	if (packageName) return 'package';
@@ -264,15 +396,26 @@ const projects = readdirSync(workspaceDirectory)
 		const projectDirectory = join(workspaceDirectory, directory);
 		const packageData = readPackage(join(projectDirectory, 'package.json'));
 		const nestedPackages = findNestedPackages(projectDirectory)
-			.map(readPackage)
-			.filter(Boolean)
-			.map((subpackage) => ({
+			.map((manifestPath) => ({
+				manifestPath,
+				packageData: readPackage(manifestPath)
+			}))
+			.filter(({ packageData: nestedPackageData }) =>
+				Boolean(nestedPackageData)
+			)
+			.map(({ manifestPath, packageData: subpackage }) => ({
+				commands: readPackageCommands(subpackage),
 				description: normalizeDescription(
 					subpackage.description ?? 'No package description provided.'
 				),
 				name: subpackage.name ?? 'Unnamed package',
 				private: subpackage.private === true,
-				version: subpackage.version ?? null
+				publicExports: readPublicExports(subpackage),
+				readmeTopics: readReadmeTopics(join(manifestPath, '..')),
+				version: documentedVersion(
+					subpackage.name ?? null,
+					subpackage.version ?? null
+				)
 			}))
 			.sort((left, right) => left.name.localeCompare(right.name));
 		const declaredWorkspaces = Array.isArray(packageData?.workspaces)
@@ -286,6 +429,7 @@ const projects = readdirSync(workspaceDirectory)
 
 		return {
 			category: categoryByDirectory[directory] ?? 'Dev Tools',
+			commands: readPackageCommands(packageData),
 			description: normalizeDescription(
 				packageData?.description ??
 					descriptionByDirectory[directory] ??
@@ -296,13 +440,19 @@ const projects = readdirSync(workspaceDirectory)
 			name: nameFor(directory, packageName),
 			packageName,
 			private: packageData?.private === true || !packageData,
+			publicExports: readPublicExports(packageData),
+			readmeSamples: readReadmeSamples(projectDirectory),
+			readmeTopics: readReadmeTopics(projectDirectory),
 			repository: readRepository(projectDirectory),
 			subpackages: collection ? nestedPackages : [],
-			version: packageData?.version ?? null
+			version: documentedVersion(
+				packageName,
+				packageData?.version ?? null
+			)
 		};
 	});
 
-const source = `// Generated by scripts/generateEcosystemCatalog.ts. Do not edit by hand.\n\nimport type { PackageCategory } from '../../../../types/packageDocs';\n\nexport type EcosystemSubpackage = {\n\tdescription: string;\n\tname: string;\n\tprivate: boolean;\n\tversion: string | null;\n};\n\nexport type EcosystemProject = {\n\tcategory: PackageCategory;\n\tdescription: string;\n\tdirectory: string;\n\tkind: 'monorepo' | 'package' | 'repository';\n\tname: string;\n\tpackageName: string | null;\n\tprivate: boolean;\n\trepository: string | null;\n\tsubpackages: EcosystemSubpackage[];\n\tversion: string | null;\n};\n\nexport const ecosystemProjects: EcosystemProject[] = ${JSON.stringify(projects, null, '\t')};\n`;
+const source = `// Generated by scripts/generateEcosystemCatalog.ts. Do not edit by hand.\n\nimport type { PackageCategory } from '../../../../types/packageDocs';\n\nexport type EcosystemCommand = {\n\tcommand: string;\n\tname: string;\n};\n\nexport type EcosystemSample = {\n\tcode: string;\n\tdescription: string;\n\theading: string;\n\tlanguage: string;\n};\n\nexport type EcosystemTopic = {\n\tdescription: string;\n\ttitle: string;\n};\n\nexport type EcosystemSubpackage = {\n\tcommands: EcosystemCommand[];\n\tdescription: string;\n\tname: string;\n\tprivate: boolean;\n\tpublicExports: string[];\n\treadmeTopics: EcosystemTopic[];\n\tversion: string | null;\n};\n\nexport type EcosystemProject = {\n\tcategory: PackageCategory;\n\tcommands: EcosystemCommand[];\n\tdescription: string;\n\tdirectory: string;\n\tkind: 'monorepo' | 'package' | 'repository';\n\tname: string;\n\tpackageName: string | null;\n\tprivate: boolean;\n\tpublicExports: string[];\n\treadmeSamples: EcosystemSample[];\n\treadmeTopics: EcosystemTopic[];\n\trepository: string | null;\n\tsubpackages: EcosystemSubpackage[];\n\tversion: string | null;\n};\n\nexport const ecosystemProjects: EcosystemProject[] = ${JSON.stringify(projects, null, '\t')};\n`;
 
 const prettierOptions = await resolveConfig(outputPath);
 const formattedSource = await format(source, {

@@ -53,12 +53,14 @@ const commandRows: DocsTableCell[][] = [
 		'Scaffold a page, API plugin, or component. The g alias is also supported.'
 	],
 	[
-		{ code: 'absolute add <framework> [--no-install]' },
-		'Add framework dependencies, configuration, and a starter page.'
+		{
+			code: 'absolute add <framework|integration|auth:feature> [--no-install]'
+		},
+		'Add a framework, an OpenAPI/telemetry/CORS/JWT/cron integration, or scaffold an auth feature.'
 	],
 	[
 		{ code: 'absolute remove <framework> [--prune]' },
-		'Remove a framework from configuration; source is retained unless pruned.'
+		'Remove a framework from configuration. Source is always retained; --prune also uninstalls its dependencies.'
 	],
 	[
 		{ code: 'absolute config [--port n]' },

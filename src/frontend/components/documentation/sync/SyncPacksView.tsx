@@ -88,6 +88,13 @@ const packItems = synchronizePackageCards([
 		version: '0.1.1'
 	},
 	{
+		description:
+			'Per-actor unread and seen state, snooze that resurfaces on new activity, sticky dismiss, mute and unmute, restore, and bounded bulk triage over any host-owned resource.',
+		name: 'Triage',
+		packageName: '@absolutejs/sync-pack-triage',
+		version: '0.1.0'
+	},
+	{
 		badge: 'helper library',
 		description:
 			'Not a pack. Exports resolveActor, requireRowOwner, requireOwnerOrModerator, and createInMemoryStore — the patterns every pack repeats. New packs should import from here.',

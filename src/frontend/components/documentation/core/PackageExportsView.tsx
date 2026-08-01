@@ -84,11 +84,15 @@ const exportRows: DocsTableCell[][] = [
 	],
 	[
 		{ code: '@absolutejs/absolute/svelte/components/*.svelte' },
-		'Direct Svelte component entry points, including Island, Head, Image, JsonLd, AwaitSlot, and StreamSlot.'
+		'Direct Head, Image, JsonLd, AwaitSlot, and StreamSlot component entry points. Head, Image, and JsonLd also expose .js aliases.'
+	],
+	[
+		{ code: '@absolutejs/absolute/svelte/Island.svelte' },
+		'Direct Svelte Island component entry point; the equivalent .js alias is also exported.'
 	],
 	[
 		{ code: '@absolutejs/absolute/svelte/router/*.svelte' },
-		'Direct Svelte Link, Route, and Router component entry points.'
+		'Direct Svelte Link, Route, and Router component entry points; equivalent .js aliases are also exported.'
 	],
 	[
 		{ code: '@absolutejs/absolute/vue' },

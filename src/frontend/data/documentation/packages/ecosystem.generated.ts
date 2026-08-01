@@ -2,21 +2,45 @@
 
 import type { PackageCategory } from '../../../../types/packageDocs';
 
+export type EcosystemCommand = {
+	command: string;
+	name: string;
+};
+
+export type EcosystemSample = {
+	code: string;
+	description: string;
+	heading: string;
+	language: string;
+};
+
+export type EcosystemTopic = {
+	description: string;
+	title: string;
+};
+
 export type EcosystemSubpackage = {
+	commands: EcosystemCommand[];
 	description: string;
 	name: string;
 	private: boolean;
+	publicExports: string[];
+	readmeTopics: EcosystemTopic[];
 	version: string | null;
 };
 
 export type EcosystemProject = {
 	category: PackageCategory;
+	commands: EcosystemCommand[];
 	description: string;
 	directory: string;
 	kind: 'monorepo' | 'package' | 'repository';
 	name: string;
 	packageName: string | null;
 	private: boolean;
+	publicExports: string[];
+	readmeSamples: EcosystemSample[];
+	readmeTopics: EcosystemTopic[];
 	repository: string | null;
 	subpackages: EcosystemSubpackage[];
 	version: string | null;
@@ -25,6 +49,30 @@ export type EcosystemProject = {
 export const ecosystemProjects: EcosystemProject[] = [
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/agency --external '@absolutejs/agency/*' --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Production A2A Protocol 1.0 client and server with streaming, durable tasks, push configuration, and Agency enforcement.',
 		directory: 'a2a',
@@ -32,12 +80,92 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'A2A',
 		packageName: '@absolutejs/a2a',
 		private: false,
+		publicExports: [
+			'@absolutejs/a2a',
+			'@absolutejs/a2a/manifest',
+			'@absolutejs/a2a/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createA2aHandler, createPostgresA2aTaskStore } from "@absolutejs/a2a";\n\nconst a2a = createA2aHandler({\n  path: "/a2a",\n  agentCard: {\n    name: "Support Agent",\n    description: "Resolves customer support cases.",\n    version: "1.0.0",\n    supportedInterfaces: [\n      {\n        protocolBinding: "JSONRPC",\n        protocolVersion: "1.0",\n        url: "https://example.com/a2a",\n      },\n    ],\n    capabilities: {},\n    defaultInputModes: ["text/plain"],\n    defaultOutputModes: ["text/plain"],\n    skills: [],\n  },\n  authorize: verifyA2aBearer,\n  taskStore: createPostgresA2aTaskStore({ client }),\n  agency: { agency },\n  sendMessage: async ({ message }) => ({\n    task: await startSupportTask(message),\n  }),\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import { createMemoryA2aPushNotificationConfigStore } from "@absolutejs/a2a";\n\nconst a2a = createA2aHandler({\n  // ...the required configuration above\n  pushNotifications: {\n    store: createMemoryA2aPushNotificationConfigStore(),\n  },\n  extendedAgentCard: authenticatedCard,\n  sendStreamingMessage: async function* (request, context) {\n    yield* runAgentStream(request, context);\n  },\n  subscribeToTask: async function* (task, context) {\n    yield* subscribeToAgentTask(task, context);\n  },\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'An A2A Protocol 1.0 JSON-RPC client and server for AbsoluteJS. It implements Agent Card discovery, messages, streaming, task subscriptions, filtered and paginated task listing, push notification configuration, authenticated extended cards, explicit version and extension negotiation, and AbsoluteJS Agency enforcement.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/a2a',
 		subpackages: [],
 		version: '0.3.6'
 	},
 	{
 		category: 'Frontend & UX',
+		commands: [
+			{
+				command: 'bun run scripts/build.ts',
+				name: 'build'
+			},
+			{
+				command: './native/build.sh',
+				name: 'build:native'
+			},
+			{
+				command:
+					'TELEMETRY_OFF=1 bun run src/cli/index.ts dev example/server.ts --config example/absolute.config.ts',
+				name: 'dev'
+			},
+			{
+				command: 'bun run src/cli/index.ts prettier --write',
+				name: 'format'
+			},
+			{
+				command: 'bun run src/cli/index.ts prettier --check',
+				name: 'format:check'
+			},
+			{
+				command: 'bun run src/cli/index.ts eslint',
+				name: 'lint'
+			},
+			{
+				command:
+					'TELEMETRY_OFF=1 bun run src/cli/index.ts start example/server.ts --outdir example/dist --config example/absolute.config.ts',
+				name: 'start'
+			},
+			{
+				command: 'bun run test:unit && bun run test:integration',
+				name: 'test'
+			},
+			{
+				command:
+					'bun run scripts/shardedTests.ts tests/integration/hmr',
+				name: 'test:hmr'
+			},
+			{
+				command: 'bun run scripts/shardedTests.ts tests/integration',
+				name: 'test:integration'
+			},
+			{
+				command: 'bun test tests/unit',
+				name: 'test:unit'
+			},
+			{
+				command:
+					'bun run src/cli/index.ts typecheck --config example/absolute.config.ts',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'A fullstack meta-framework for building web applications with TypeScript',
 		directory: 'absolutejs',
@@ -45,53 +173,174 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'AbsoluteJS',
 		packageName: '@absolutejs/absolute',
 		private: false,
+		publicExports: [
+			'@absolutejs/absolute',
+			'@absolutejs/absolute/angular',
+			'@absolutejs/absolute/angular/components',
+			'@absolutejs/absolute/angular/server',
+			'@absolutejs/absolute/build',
+			'@absolutejs/absolute/client',
+			'@absolutejs/absolute/image',
+			'@absolutejs/absolute/islands',
+			'@absolutejs/absolute/react',
+			'@absolutejs/absolute/react/components',
+			'@absolutejs/absolute/react/hooks',
+			'@absolutejs/absolute/react/router',
+			'@absolutejs/absolute/react/server',
+			'@absolutejs/absolute/style-module-shim',
+			'@absolutejs/absolute/svelte',
+			'@absolutejs/absolute/svelte/components/AwaitSlot.svelte',
+			'@absolutejs/absolute/svelte/components/Head.js',
+			'@absolutejs/absolute/svelte/components/Head.svelte',
+			'@absolutejs/absolute/svelte/components/Image.js',
+			'@absolutejs/absolute/svelte/components/Image.svelte',
+			'@absolutejs/absolute/svelte/components/JsonLd.js',
+			'@absolutejs/absolute/svelte/components/JsonLd.svelte',
+			'@absolutejs/absolute/svelte/components/StreamSlot.svelte',
+			'@absolutejs/absolute/svelte/Island.js',
+			'@absolutejs/absolute/svelte/Island.svelte',
+			'@absolutejs/absolute/svelte/router',
+			'@absolutejs/absolute/svelte/router/Link.js',
+			'@absolutejs/absolute/svelte/router/Link.svelte',
+			'@absolutejs/absolute/svelte/router/Route.js',
+			'@absolutejs/absolute/svelte/router/Route.svelte',
+			'@absolutejs/absolute/svelte/router/Router.js',
+			'@absolutejs/absolute/svelte/router/Router.svelte',
+			'@absolutejs/absolute/svelte/server',
+			'@absolutejs/absolute/vue',
+			'@absolutejs/absolute/vue/components',
+			'@absolutejs/absolute/vue/components/Image.js',
+			'@absolutejs/absolute/vue/components/Image.vue',
+			'@absolutejs/absolute/vue/server'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/absolute',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: "// example/server.ts\nimport { staticPlugin } from '@elysiajs/static';\nimport { Elysia } from 'elysia';\nimport { file } from 'bun';\nimport { build } from 'absolutejs/core/build';\nimport {\n\thandleHTMLPageRequest,\n\thandleSveltePageRequest\n} from 'absolutejs/core/pageHandlers';\nimport { handleReactPageRequest } from 'absolutejs/react';\n\nimport { ReactExample } from './react/pages/ReactExample';\nimport SvelteExample from './svelte/pages/SvelteExample.svelte';\nimport { networkingPlugin } from 'absolutejs';\n\nconst manifest = await build({\n\tassetsDirectory: 'example/assets',\n\tbuildDirectory: 'example/build',\n\thtmlDirectory: 'example/html',\n\thtmxDirectory: 'example/htmx',\n\treactDirectory: 'example/react',\n\tsvelteDirectory: 'example/svelte'\n});\n\nif (!manifest) throw new Error('Manifest generation failed');\n\nlet counter = 0;\n\nexport const server = new Elysia()\n\t.use(staticPlugin({ assets: './example/build', prefix: '' }))\n\n\t// HTML\n\t.get('/', () =>\n\t\thandleHTMLPageRequest('./example/build/html/pages/HTMLExample.html')\n\t)\n\n\t// React\n\t.get('/react', () =>\n\t\thandleReactPageRequest(ReactExample, manifest['ReactExampleIndex'], {\n\t\t\ttest: 123\n\t\t})\n\t)\n\n\t// Svelte\n\t.get('/svelte', () =>\n\t\thandleSveltePageRequest(SvelteExample, manifest, { test: 456 })\n\t)\n\n\t// HTMX demo\n\t.get('/htmx', () => file('./example/build/htmx/HtmxHome.html'))\n\t.get('/htmx/increment', () => new Response(String(++counter)))\n\n\t.use(networkingPlugin)\n\t.on('error', (error) => {\n\t\tconst { request } = error;\n\t\tconsole.error(\n\t\t\t`Server error on ${request.method} ${request.url}: ${error.message}`\n\t\t);\n\t});",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Full‑stack, type‑safe batteries‑included platform that lets you server‑side render any modern front‑end—React, Svelte, plain HTML, HTMX (Vue & Angular coming)—with a single Bun‑powered build step.',
+				title: 'Overview'
+			},
+			{
+				description: '---',
+				title: 'Why Absolute JS?'
+			},
+			{
+				description: '---',
+				title: 'Requirements'
+			},
+			{
+				description: 'bun add @absolutejs/absolute',
+				title: 'Installation'
+			},
+			{
+				description:
+					"// example/server.ts import { staticPlugin } from '@elysiajs/static'; import { Elysia } from 'elysia'; import { file } from 'bun'; import { build } from 'absolutejs/core/build'; import { handleHTMLPageRequest, handleSveltePageRequest } from 'absolutejs/core/pageHandlers'; import { handleReactPageRequest } from 'absolutejs/react';",
+				title: 'Quick Start'
+			},
+			{
+				description:
+					'Absolute JS piggybacks on the Elysia plugin API. Any Elysia plugin works out of the box; Absolute adds helpers for:',
+				title: 'Plugin System'
+			},
+			{
+				description:
+					'Everything funnels through a single build() call:',
+				title: 'Configuration Philosophy'
+			},
+			{
+				description:
+					'absolute workspace dev keeps the TUI focused on service status and live service output. Full logs are also written to .absolutejs/workspace/logs/, including all.log and one file per service, so long output can be copied or searched outside the TUI:',
+				title: 'Workspace Dev Logs'
+			},
+			{
+				description: '---',
+				title: 'Roadmap'
+			},
+			{
+				description:
+					'Pull requests and issues are welcome! Whether it’s a new plugin, framework handler, or docs improvement:',
+				title: 'Contributing'
+			}
+		],
 		repository: 'https://github.com/absolutejs/absolutejs',
 		subpackages: [
 			{
+				commands: [],
 				description:
 					'Native optimizations for AbsoluteJS (darwin arm64)',
 				name: '@absolutejs/native-darwin-arm64',
 				private: false,
-				version: '0.19.0-beta.1127'
+				publicExports: [],
+				readmeTopics: [],
+				version: '0.19.0-beta.1128'
 			},
 			{
+				commands: [],
 				description: 'Native optimizations for AbsoluteJS (darwin x64)',
 				name: '@absolutejs/native-darwin-x64',
 				private: false,
-				version: '0.19.0-beta.1127'
+				publicExports: [],
+				readmeTopics: [],
+				version: '0.19.0-beta.1128'
 			},
 			{
+				commands: [],
 				description:
 					'Native optimizations for AbsoluteJS (linux arm64)',
 				name: '@absolutejs/native-linux-arm64',
 				private: false,
-				version: '0.19.0-beta.1127'
+				publicExports: [],
+				readmeTopics: [],
+				version: '0.19.0-beta.1128'
 			},
 			{
+				commands: [],
 				description: 'Native optimizations for AbsoluteJS (linux x64)',
 				name: '@absolutejs/native-linux-x64',
 				private: false,
-				version: '0.19.0-beta.1127'
+				publicExports: [],
+				readmeTopics: [],
+				version: '0.19.0-beta.1128'
 			},
 			{
+				commands: [],
 				description:
 					'Native optimizations for AbsoluteJS (windows arm64)',
 				name: '@absolutejs/native-windows-arm64',
 				private: false,
-				version: '0.19.0-beta.1127'
+				publicExports: [],
+				readmeTopics: [],
+				version: '0.19.0-beta.1128'
 			},
 			{
+				commands: [],
 				description:
 					'Native optimizations for AbsoluteJS (windows x64)',
 				name: '@absolutejs/native-windows-x64',
 				private: false,
-				version: '0.19.0-beta.1127'
+				publicExports: [],
+				readmeTopics: [],
+				version: '0.19.0-beta.1128'
 			}
 		],
-		version: '0.19.0-beta.1127'
+		version: '0.19.0-beta'
 	},
 	{
 		category: 'Dev Tools',
+		commands: [],
 		description:
 			'VS Code support for AbsoluteJS projects, starting with HTML and HTMX island authoring.',
 		directory: 'absolutejs-vscode-extension',
@@ -99,12 +348,66 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'AbsoluteJS VS Code Extension',
 		packageName: 'absolutejs-vscode',
 		private: false,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'code --install-extension /home/alexkahn/abs/absolutejs-vscode-extension/absolutejs-vscode-0.0.8.vsix',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'VS Code extension project for AbsoluteJS. It currently ships HTML and HTMX hover support for island authoring, HTMX-native streaming primitives, and style module import navigation.',
+				title: 'Overview'
+			},
+			{
+				description: 'Install the packaged .vsix file from VS Code:',
+				title: 'Install'
+			},
+			{
+				description:
+					'What it adds is documented in the repository README.',
+				title: 'What it adds'
+			},
+			{
+				description:
+					'Raw HTML editors do not read framework runtime types or TypeScript DOM declarations for custom element hover the way TSX and SFC tooling does. VS Code HTML custom data is the correct integration point for this experience.',
+				title: 'Why this exists'
+			}
+		],
 		repository: 'https://github.com/absolutejs/vscode-extension',
 		subpackages: [],
 		version: '0.0.9'
 	},
 	{
 		category: 'Auth & Identity',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Framework-neutral roles, capabilities, navigation, and security read models for AbsoluteJS site administration.',
 		directory: 'admin',
@@ -112,12 +415,61 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Admin',
 		packageName: '@absolutejs/admin',
 		private: false,
+		publicExports: [
+			'@absolutejs/admin',
+			'@absolutejs/admin/manifest',
+			'@absolutejs/admin/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import {\n  authorizeSiteAdmin,\n  capabilitiesForRole,\n  navigationForCapabilities,\n} from "@absolutejs/admin";\n\nauthorizeSiteAdmin("security", "site.security.respond");\n\nconst navigation = navigationForCapabilities(capabilitiesForRole("developer"));',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Framework-neutral contracts and policy for a standard AbsoluteJS site administration portal.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'import { authorizeSiteAdmin, capabilitiesForRole, navigationForCapabilities, } from "@absolutejs/admin";',
+				title: 'Roles'
+			}
+		],
 		repository: 'https://github.com/absolutejs/admin',
 		subpackages: [],
 		version: '0.2.0'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/authzen.ts src/manifest.ts --outdir dist --root src --sourcemap --target=bun --external drizzle-orm --external 'drizzle-orm/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Provider-agnostic AI agent authorization with policy, approvals, rejections, durable delegation, execution leases, receipts, kill switches, and signed handoffs.',
 		directory: 'agency',
@@ -125,12 +477,73 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Agency',
 		packageName: '@absolutejs/agency',
 		private: false,
+		publicExports: [
+			'@absolutejs/agency',
+			'@absolutejs/agency/authzen',
+			'@absolutejs/agency/manifest',
+			'@absolutejs/agency/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createAgency, createMemoryAgencyStore } from "@absolutejs/agency";\n\nconst agency = createAgency({\n  policy: yourPolicyDecisionPoint,\n  store: createMemoryAgencyStore(),\n});\n\nconst { action, decision } = await agency.request({\n  action: "send_email",\n  actor: {\n    agentId: "sales-agent",\n    delegationId: "delegation-123",\n    scopes: ["email:send"],\n    userId: "user-123",\n  },\n  effects: ["send", "external-network"],\n  input: { subject: "Hello", to: "buyer@example.com" },\n  resource: { id: "buyer@example.com", type: "email_recipient" },\n});\n\nif (decision.kind === "allow") {\n  const lease = await agency.issueLease(action.actionId);\n  const { receipt } = await agency.execute({\n    executor: "email-provider",\n    leaseId: lease.leaseId,\n    run: () => email.send(action.input),\n  });\n}\n\nif (decision.kind === "deny" && decision.requestable) {\n  await agency.reject({\n    actionId: action.actionId,\n    reason: "The recipient is outside the approved customer account.",\n    rejectedBy: "operator-123",\n  });\n}',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'const delegations = createAgentDelegationAuthority({\n  audience: "https://app.example",\n  store: createMemoryAgentDelegationStore(), // use PostgreSQL in production\n});\n\nconst grant = await delegations.issue({\n  audience: "https://app.example",\n  issuerAgentId: "user-agent",\n  subjectAgentId: "calendar-agent",\n  userId: "user-1",\n  scopes: ["calendar.create"],\n  effects: ["write", "external-network"],\n  resourceTypes: ["calendar"],\n  expiresAt: Date.now() + 3_600_000,\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral action authorization for AI agents.',
+				title: 'Overview'
+			},
+			{
+				description:
+					"createAgentControlPlane() inventories an agent's registrations, delegations, tasks, credential grants, allowances, mandates, leases, and other capabilities through small AgentControlSource adapters. Revocation activates a durable kill switch first, then fans out cleanup to every source. Pass the control plane to createAgency({ control, ... }); action requests, lease issuance, and execution then fail closed while the agent is disabled.",
+				title: 'Agentic control plane'
+			},
+			{
+				description:
+					"createAgentDelegationAuthority() issues durable, revocable delegation grants inside Agency. Every child must attenuate its parent's user, audience, expiry, action scopes, effects, resource boundaries, and spend ceiling; delegation depth is bounded and revocation cascades to descendants. Pass the authority as createAgency({ delegations: authority, ... }) to re-check the complete active chain when an action is requested, when its execution lease is issued, and immediately before that lease is consumed.",
+				title: 'Handoffs, simulation, and telemetry'
+			}
+		],
 		repository: 'https://github.com/absolutejs/agency',
 		subpackages: [],
 		version: '0.7.4'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/*.ts --outdir dist --root src --target=bun --sourcemap --external '@absolutejs/*' --external '@absolutejs/execution' --external '@sinclair/typebox' --external drizzle-orm --external 'drizzle-orm/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'The production-grade, provider-neutral agent stack for AbsoluteJS: auth, actions, runtime, sandboxing, trust, memory, inbox, discovery, MCP, A2A, policy, wallet limits, controls, and conformance.',
 		directory: 'agent',
@@ -138,12 +551,82 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Agent',
 		packageName: '@absolutejs/agent',
 		private: false,
+		publicExports: [
+			'@absolutejs/agent',
+			'@absolutejs/agent/a2a',
+			'@absolutejs/agent/actions',
+			'@absolutejs/agent/auth',
+			'@absolutejs/agent/arazzo',
+			'@absolutejs/agent/conformance',
+			'@absolutejs/agent/commerce',
+			'@absolutejs/agent/control',
+			'@absolutejs/agent/discovery',
+			'@absolutejs/agent/execution',
+			'@absolutejs/agent/inbox',
+			'@absolutejs/agent/mcp',
+			'@absolutejs/agent/memory',
+			'@absolutejs/agent/policy',
+			'@absolutejs/agent/runtime',
+			'@absolutejs/agent/sandbox',
+			'@absolutejs/agent/trust',
+			'@absolutejs/agent/wallet',
+			'@absolutejs/agent/webmcp',
+			'@absolutejs/agent/manifest',
+			'@absolutejs/agent/manifest.json',
+			'@absolutejs/agent/migrations'
+		],
+		readmeSamples: [
+			{
+				code: 'import { assertProductionReady, defineAgentStack } from "@absolutejs/agent";\nimport { createAgentRuntime } from "@absolutejs/agent/runtime";\nimport { createAgency } from "@absolutejs/agent/actions";\n\nconst stack = defineAgentStack([\n  { capability: "durability", instance: runtime, name: "runtime" },\n  { capability: "authorization", instance: agency, name: "actions" },\n] as const);\n\nawait assertProductionReady(stack); // fails until every production concern is wired',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'The production-grade, provider-neutral agent stack for AbsoluteJS.',
+				title: 'Overview'
+			},
+			{
+				description: 'kill switches, handoffs',
+				title: 'Stable subpaths'
+			},
+			{
+				description:
+					'createAuthAgencyDelegationAuthority() bridges the delegation already verified by Absolute Auth directly into Agency. Put an authAgencyAuthorizationDetail() in the Auth grant to bind its audience, canonical actions, effects, resource types, and optional resource IDs. Agency then re-reads that same grant before an action request, lease, and execution; there is no second grant ID or shadow state to synchronize.',
+				title: 'One authenticated delegation'
+			}
+		],
 		repository: 'https://github.com/absolutejs/agent',
 		subpackages: [],
 		version: '0.25.0'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command: "bun run --filter './*' check:package",
+				name: 'check:package'
+			},
+			{
+				command: "bun run --filter './*' format",
+				name: 'format'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Independently published modules for the AbsoluteJS agent stack.',
 		directory: 'agent-modules',
@@ -151,69 +634,434 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Agent Modules',
 		packageName: '@absolutejs/agent-modules',
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'bun install\nbun run typecheck\nbun run test\nbun run build',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Independently published modules for the @absolutejs/agent stack. This repository is their source monorepo; npm package names and independent versions remain unchanged.',
+				title: 'Overview'
+			},
+			{
+				description: 'Packages is documented in the repository README.',
+				title: 'Packages'
+			},
+			{
+				description:
+					'bun install bun run typecheck bun run test bun run build',
+				title: 'Development'
+			}
+		],
 		repository: 'https://github.com/absolutejs/agent-modules',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=bun --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Provider-neutral adversarial conformance for agent security plus A2A, MCP, Arazzo, and WebMCP standards.',
 				name: '@absolutejs/agent-conformance',
 				private: false,
+				publicExports: [
+					'@absolutejs/agent-conformance',
+					'@absolutejs/agent-conformance/manifest',
+					'@absolutejs/agent-conformance/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Provider-neutral adversarial test runners for AI agent security boundaries. Adapters expose a tiny harness; the package attacks it with replay, concurrent maximum-use races, confused-deputy identity, scope escalation, lookalike URL origins, mutated approved inputs, denied lease issuance, failed-execution replay, and task-owner isolation.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Every scenario that expects a rejection asserts on a token from the control\'s own vocabulary — "lease", "owner", "private", "host", "replay", "denied", "bound", "scope", "actor", "destination". Your implementation\'s error message has to contain it.',
+						title: 'Rejections must name their control'
+					}
+				],
 				version: '0.15.1'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/agency --external '@absolutejs/agency/*' --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Authenticated AI agent operator API, console, and bound plan-then-execute playground.',
 				name: '@absolutejs/agent-control',
 				private: false,
+				publicExports: [
+					'@absolutejs/agent-control',
+					'@absolutejs/agent-control/manifest',
+					'@absolutejs/agent-control/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"Authenticated web-standard operator API over @absolutejs/agency's control plane. It inventories every registered source, activates the durable kill switch before cleanup, reports partial source failures, restores deliberately, and uses leased idempotency records so operator retries cannot change the requested input.",
+						title: 'Overview'
+					}
+				],
 				version: '0.5.8'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Signed, searchable, provider-neutral AI agent discovery with live schemas and A2A, MCP, Arazzo, and WebMCP interfaces.',
 				name: '@absolutejs/agent-discovery',
 				private: false,
+				publicExports: [
+					'@absolutejs/agent-discovery',
+					'@absolutejs/agent-discovery/manifest',
+					'@absolutejs/agent-discovery/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Signed, searchable, provider-neutral discovery for AI agents.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'fetchAgentDocument requires an injected fetch implementation. In production, use @absolutejs/egress so DNS resolution, redirects, private networks, byte limits, and credential injection remain host-controlled. Discovery never treats publisher text as instructions or proof of authorization.',
+						title: 'Secure crawling'
+					},
+					{
+						description:
+							'createAgentRegistry verifies signatures at publication time and provides deterministic filtered search. createPostgresAgentRegistry stores the complete signed document, verification result, freshness timestamps, and a full-text index. Apply agentDiscoveryPostgresSchemaSql() through your migration system first.',
+						title: 'Registry'
+					}
+				],
 				version: '0.2.4'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Durable verified webhooks, event subscriptions, schedules, leases, retries, and dead letters for AI agent triggers.',
 				name: '@absolutejs/agent-inbox',
 				private: false,
+				publicExports: [
+					'@absolutejs/agent-inbox',
+					'@absolutejs/agent-inbox/manifest',
+					'@absolutejs/agent-inbox/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Durable inbound work for agents. Verified webhooks and event subscriptions are deduplicated by source event, encrypted through an injected codec, leased to one worker, retried with backoff, and dead-lettered after a bounded attempt count. Interval schedules materialize deterministic occurrences without Redis. Occurrences are inserted before a compare-and-swap advances the schedule, so a crash cannot lose a tick and retries collapse on the deterministic source ID.',
+						title: 'Overview'
+					}
+				],
 				version: '0.3.5'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Scoped durable provenance-aware memory with authorization, retention, erasure, encryption seams, and pluggable retrieval for AI agents.',
 				name: '@absolutejs/agent-memory',
 				private: false,
+				publicExports: [
+					'@absolutejs/agent-memory',
+					'@absolutejs/agent-memory/manifest',
+					'@absolutejs/agent-memory/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Durable, provider-neutral memory for agents with tenant/user/agent/run scopes, mandatory provenance digests, taint-compatible metadata, per-operation policy, expiration, deletion, subject erasure, optimistic versions, and idempotent writes.',
+						title: 'Overview'
+					}
+				],
 				version: '0.1.7'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/drizzle.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' --external drizzle-typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Evidence-based scoped AI agent reputation with W3C Verifiable Credentials 2.0 adapters.',
 				name: '@absolutejs/agent-reputation',
 				private: false,
+				publicExports: [
+					'@absolutejs/agent-reputation',
+					'@absolutejs/agent-reputation/drizzle',
+					'@absolutejs/agent-reputation/manifest',
+					'@absolutejs/agent-reputation/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Portable, evidence-based reputation for AI agents without a gameable universal trust score.',
+						title: 'Overview'
+					}
+				],
 				version: '0.2.3'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Durable provider-neutral AI agent runs, steps, checkpoints, budgets, leases, timers, effects, and handoffs.',
 				name: '@absolutejs/agent-runtime',
 				private: false,
+				publicExports: [
+					'@absolutejs/agent-runtime',
+					'@absolutejs/agent-runtime/manifest',
+					'@absolutejs/agent-runtime/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Durable, provider-neutral orchestration for AI agents. This package owns runs, steps, leases, budgets, checkpoints, timers, cancellation, effects, and handoffs. It does not choose a model, database driver, queue, or web framework.',
+						title: 'Overview'
+					}
+				],
 				version: '0.2.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Deny-by-default capability grants and provider-neutral HTTP, filesystem, process, and credential-safe action adapters for AI agents.',
 				name: '@absolutejs/agent-sandbox',
 				private: false,
+				publicExports: [
+					'@absolutejs/agent-sandbox',
+					'@absolutejs/agent-sandbox/manifest',
+					'@absolutejs/agent-sandbox/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Deny-by-default capability sandboxing for agent actions. Grants are scoped to one durable run and one signed agent identity, expire, carry per-capability use limits, and are verified through an issuer-agnostic callback.',
+						title: 'Overview'
+					}
+				],
 				version: '0.2.2'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Provider-neutral provenance, taint propagation, instruction/data separation, and sink policy enforcement for AI agents.',
 				name: '@absolutejs/agent-trust',
 				private: false,
+				publicExports: [
+					'@absolutejs/agent-trust',
+					'@absolutejs/agent-trust/manifest',
+					'@absolutejs/agent-trust/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Provider-neutral provenance and taint tracking for agents. Every value carries its purpose, authority, source, digest/proof, taints, parent digests, and evidence-bearing transformations.',
+						title: 'Overview'
+					}
+				],
 				version: '0.2.2'
 			}
 		],
@@ -221,6 +1069,20 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command: 'bun scripts/build.ts',
+				name: 'build'
+			},
+			{
+				command: 'bun run build && bun test',
+				name: 'check'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			}
+		],
 		description:
 			'The public, signed, searchable registry of AbsoluteJS agents.',
 		directory: 'agents',
@@ -228,12 +1090,50 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Public Agent Registry',
 		packageName: '@absolutejs/public-agent-registry',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'The public, reviewable index of agents built with AbsoluteJS or exposing an Absolute-compatible open discovery document.',
+				title: 'Overview'
+			},
+			{
+				description: '@absolutejs/agent-discovery.',
+				title: 'List an agent'
+			},
+			{
+				description:
+					'bun run sign:registry-agent reads REGISTRYAGENTSIGNINGJWK, writes only the signed envelope and public JWK, and never logs private key material. The private key is held as a GitHub Actions secret; published descriptors identify the exact key with a JWKS fragment.',
+				title: 'Rotate the registry signing key'
+			}
+		],
 		repository: 'https://github.com/absolutejs/agents',
 		subpackages: [],
 		version: '0.1.0'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					'rm -rf dist && tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run test && bun run build && bun scripts/check-package.ts',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Search verified agents and production agent-first AbsoluteJS packages from any MCP client.',
 		directory: 'agents-mcp',
@@ -241,12 +1141,71 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Agents MCP',
 		packageName: '@absolutejs/agents-mcp',
 		private: false,
+		publicExports: [
+			'@absolutejs/agents-mcp',
+			'@absolutejs/agents-mcp/manifest',
+			'@absolutejs/agents-mcp/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: '{\n  "mcpServers": {\n    "absolute-agents": {\n      "command": "npx",\n      "args": ["-y", "@absolutejs/agents-mcp"]\n    }\n  }\n}',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'json'
+			},
+			{
+				code: 'import { AgentRegistryClient, createAgentsMcpServer } from "@absolutejs/agents-mcp";\n\nconst registry = new AgentRegistryClient();\nconst results = await registry.search({ capability: "calendar", interfaceType: "a2a" });\nconst { server } = createAgentsMcpServer({ client: registry });',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'A production, read-only MCP server for finding cryptographically verified AI agents and production agent-first packages in the AbsoluteJS public registry. It gives MCP clients one installable discovery surface for agent names, capabilities, protocols, publishers, authentication metadata, and signed descriptors.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'{ "mcpServers": { "absolute-agents": { "command": "npx", "args": ["-y", "@absolutejs/agents-mcp"] } } }',
+				title: 'Run it'
+			},
+			{
+				description:
+					'Arazzo/WebMCP/HTTP/OpenAPI/WebSocket interface type, with bounded pagination.',
+				title: 'MCP surface'
+			},
+			{
+				description:
+					'import { AgentRegistryClient, createAgentsMcpServer } from "@absolutejs/agents-mcp";',
+				title: 'Library use'
+			}
+		],
 		repository: 'https://github.com/absolutejs/agents-mcp',
 		subpackages: [],
 		version: '0.2.2'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command: 'bun run scripts/build.ts',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write .',
+				name: 'format'
+			},
+			{
+				command: 'eslint . --max-warnings 0',
+				name: 'lint'
+			},
+			{
+				command: 'tsc --noEmit --project tsconfig.json',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'AI runtime, providers, streaming, and framework adapters extracted from AbsoluteJS',
 		directory: 'ai',
@@ -254,12 +1213,79 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Ai',
 		packageName: '@absolutejs/ai',
 		private: false,
+		publicExports: [
+			'@absolutejs/ai',
+			'@absolutejs/ai/client',
+			'@absolutejs/ai/react',
+			'@absolutejs/ai/vue',
+			'@absolutejs/ai/svelte',
+			'@absolutejs/ai/angular',
+			'@absolutejs/ai/anthropic',
+			'@absolutejs/ai/gemini',
+			'@absolutejs/ai/ollama',
+			'@absolutejs/ai/openai',
+			'@absolutejs/ai/openai-compatible',
+			'@absolutejs/ai/openai-responses',
+			'@absolutejs/ai/providers',
+			'@absolutejs/ai/tools',
+			'@absolutejs/ai/tools/untrusted',
+			'@absolutejs/ai/ui'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createConversationTurnQueue } from "@absolutejs/ai/client";\n\nconst queue = createConversationTurnQueue({\n  execute: async (turn, { signal }) => runTurn(turn, signal),\n});\n\nqueue.enqueue({ content: "First" });\nqueue.enqueue({ content: "Send this after the first reply" });',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Standalone AI runtime and provider package extracted from AbsoluteJS.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'aiChat() serializes turns per conversation. A member may submit follow-ups while a response is streaming: the server emits turnqueued, then turnstarted when that turn becomes active. Every framework adapter sends a stable client message ID, and its message state exposes isQueued for UI.',
+				title: 'Conversation turn queues and branches'
+			},
+			{
+				description:
+					'streamAIToSSE yields { event, data } SSE frames. By default data is pre-rendered HTML from the renderers, and the terminal status event is overloaded across completion, budget stops, and errors — a headless consumer has to sniff ai-usage vs ai-error out of the HTML to tell them apart.',
+				title: 'SSE event stream (streamAIToSSE)'
+			}
+		],
 		repository: 'https://github.com/absolutejs/ai',
 		subpackages: [],
 		version: '0.0.47'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=bun && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Typed, tenant-fenced, privacy-thresholded product and operational analytics primitives for AbsoluteJS.',
 		directory: 'analytics',
@@ -267,12 +1293,52 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Analytics',
 		packageName: '@absolutejs/analytics',
 		private: false,
+		publicExports: ['@absolutejs/analytics'],
+		readmeSamples: [
+			{
+				code: 'import {\n  aggregateAnalytics,\n  defineAnalyticsSchema,\n} from "@absolutejs/analytics";\n\nconst schema = defineAnalyticsSchema({\n  name: "route-performance",\n  dimensions: ["route", "release"],\n  dimensionNormalizers: { route: normalizeRouteTemplate },\n  measures: ["durationMs"],\n  minimumCohortSize: 10,\n});\n\nconst snapshot = aggregateAnalytics(schema, observations, {\n  groupBy: ["route", "release"],\n  quantiles: [0.5, 0.75, 0.95, 0.99],\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Typed product and operational analytics primitives for AbsoluteJS.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/analytics',
 		subpackages: [],
 		version: '0.1.1'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external yaml && tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Arazzo 1.1 workflow discovery, validation, planning, and policy-aware execution for AI agents.',
 		directory: 'arazzo',
@@ -280,12 +1346,51 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Arazzo',
 		packageName: '@absolutejs/arazzo',
 		private: false,
+		publicExports: [
+			'@absolutejs/arazzo',
+			'@absolutejs/arazzo/manifest',
+			'@absolutejs/arazzo/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { discoverArazzo, executeArazzoWorkflow } from "@absolutejs/arazzo";\n\nconst document = await discoverArazzo(\n  "https://api.example/.well-known/workflows.arazzo.yaml",\n);\n\nconst result = await executeArazzoWorkflow(document, "provisionCustomer", {\n  inputs: { email: "customer@example.com" },\n  adapter: {\n    authorize: async (resolvedAction) => agencyDecisionFor(resolvedAction),\n    executeOperation: async (resolvedAction) =>\n      openApiAdapter.execute(resolvedAction),\n  },\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral Arazzo 1.1 workflow discovery, validation, dependency planning, and policy-aware execution for AI agents.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/arazzo',
 		subpackages: [],
 		version: '0.1.3'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/drizzle.ts src/manifest.ts src/rag.ts --outdir dist --root ./src --target=bun --external @absolutejs/rag --external @sinclair/typebox --external @sinclair/typebox/value --external drizzle-orm --external 'drizzle-orm/*' --external drizzle-typebox && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit --project tsconfig.json',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Typed, versioned artifacts for AI products — schemas, lifecycle, storage, rendering, publishing, revisions, and agent tools without prescribing a database or host.',
 		directory: 'artifacts',
@@ -293,12 +1398,112 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Artifacts',
 		packageName: '@absolutejs/artifacts',
 		private: false,
+		publicExports: [
+			'@absolutejs/artifacts',
+			'@absolutejs/artifacts/manifest',
+			'@absolutejs/artifacts/manifest.json',
+			'@absolutejs/artifacts/drizzle',
+			'@absolutejs/artifacts/rag'
+		],
+		readmeSamples: [
+			{
+				code: 'import { Type } from "@sinclair/typebox";\nimport {\n  createArtifactService,\n  createMemoryArtifactAssetStore,\n  createMemoryArtifactStore,\n  defineArtifactRegistry,\n} from "@absolutejs/artifacts";\n\nconst registry = defineArtifactRegistry({\n  page: {\n    capabilities: ["archive", "edit", "preview", "publish"],\n    content: Type.Object({\n      blocks: Type.Array(\n        Type.Union([\n          Type.Object({ heading: Type.String(), type: Type.Literal("hero") }),\n          Type.Object({ body: Type.String(), type: Type.Literal("text") }),\n        ]),\n      ),\n      theme: Type.Union([Type.Literal("dark"), Type.Literal("light")]),\n    }),\n    label: "Page",\n    schemaVersion: 1,\n  },\n});\n\nconst artifacts = createArtifactService({\n  assetStore: createMemoryArtifactAssetStore(),\n  registry,\n  store: createMemoryArtifactStore(),\n});\n\nconst page = await artifacts.create("owner-123", {\n  content: {\n    blocks: [{ heading: "A real page", type: "hero" }],\n    theme: "light",\n  },\n  createdBy: "agent",\n  kind: "page",\n  provenance: { model: "your-model", tool: "create_page" },\n  title: "Launch page",\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'const history = await artifacts.listRevisions("owner-123", page.id);\nconst restored = await artifacts.restore("owner-123", page.id, 1);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description: 'The typed lifecycle for things an AI makes.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'datasets, code, images, audio, video, email, archives, and generic files',
+				title: 'What it owns'
+			},
+			{
+				description:
+					'import { Type } from "@sinclair/typebox"; import { createArtifactService, createMemoryArtifactAssetStore, createMemoryArtifactStore, defineArtifactRegistry, } from "@absolutejs/artifacts";',
+				title: 'Define kinds once'
+			},
+			{
+				description:
+					'Use the package-owned Drizzle schema on PostgreSQL, including Neon. The store atomically writes the current artifact, immutable revision, and lifecycle outbox events. It also persists per-revision indexing state and fences every artifact read and mutation by owner.',
+				title: 'Production persistence'
+			},
+			{
+				description:
+					'Use the bundled definitions directly or compose them with application-specific kinds:',
+				title: 'File-backed artifact kinds'
+			},
+			{
+				description:
+					'Generators are provider-neutral. They return validated structured content and zero or more file writes; the registry commits those outputs through the same artifact bundle lifecycle:',
+				title: 'Generation'
+			},
+			{
+				description:
+					'The optional @absolutejs/artifacts/rag entry point resolves one current or historical artifact record into the upload contract already accepted by @absolutejs/rag. Structured content is included as JSON and every attached file is included without exposing its storage URI:',
+				title: 'RAG ingestion'
+			},
+			{
+				description:
+					'Every lifecycle mutation supplies its event to the artifact store in the same call that writes the current record and immutable revision. Durable adapters should commit those rows in one database transaction, then workers can consume unprocessed events for RAG indexing, previews, notifications, scanning, or conversion.',
+				title: 'Events and retention'
+			},
+			{
+				description:
+					'Publishing is an adapter because public access is a host policy:',
+				title: 'Compose publishing and rendering'
+			},
+			{
+				description:
+					'createArtifactTools binds create, list, get, update, publish, and unpublish operations to one owner. The returned definitions use TypeBox inputs and the same { description, input, handler } shape used by @absolutejs/ai.',
+				title: 'AI tools'
+			}
+		],
 		repository: 'https://github.com/absolutejs/artifacts',
 		subpackages: [],
 		version: '0.1.3'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/cli.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run lint && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test && bun run verify-pack',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md,mjs}"',
+				name: 'format'
+			},
+			{
+				command: 'eslint . --max-warnings 0',
+				name: 'lint'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Keyless Sigstore attestation policy, provenance, signing, and verification for private CI pipelines.',
 		directory: 'attest',
@@ -306,12 +1511,71 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Attest',
 		packageName: '@absolutejs/attest',
 		private: false,
+		publicExports: [
+			'@absolutejs/attest',
+			'@absolutejs/attest/manifest',
+			'@absolutejs/attest/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import {\n  createImagePublicationCommands,\n  githubWorkflowIdentityFromEnvironment,\n} from "@absolutejs/attest";\n\nconst identity = githubWorkflowIdentityFromEnvironment(process.env);\nconst commands = createImagePublicationCommands({\n  identity,\n  imageReference:\n    "ghcr.io/acme/api@sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",\n  provenancePath: "evidence/provenance.json",\n  sbomPath: "evidence/sbom.spdx.json",\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'absolute-attest provenance evidence/provenance.json\nabsolute-attest publish-image \\\n  "$IMAGE_NAME@$IMAGE_DIGEST" \\\n  evidence/provenance.json \\\n  evidence/sbom.spdx.json \\\n  evidence/attestations.json\nabsolute-attest sign-blobs \\\n  release/release.json \\\n  release/images.env \\\n  release/sha256sums.txt\nabsolute-attest verify-blobs \\\n  release/release.json \\\n  release/images.env \\\n  release/sha256sums.txt\nabsolute-attest verify-image \\\n  "$IMAGE_NAME@$IMAGE_DIGEST"',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'sh'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Keyless software-supply-chain attestation for private CI pipelines.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Attestation happens before deployment and remains useful without a deployer. Build systems produce evidence, registries retain it, admission controls verify it, and offline release reviewers inspect it. @absolutejs/deploy may require valid evidence before activation, but it should not own the trust model.',
+				title: 'Why this is not part of @absolutejs/deploy'
+			},
+			{
+				description:
+					'import { createImagePublicationCommands, githubWorkflowIdentityFromEnvironment, } from "@absolutejs/attest";',
+				title: 'GitHub Actions identity'
+			},
+			{
+				description: 'The package exports absolute-attest for CI jobs:',
+				title: 'CLI'
+			},
+			{
+				description: 'MIT licensed.',
+				title: 'Security properties'
+			}
+		],
 		repository: 'https://github.com/absolutejs/attest',
 		subpackages: [],
 		version: '0.1.3'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --target=bun --external zod && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			"In-house audience & affinity intelligence — psychographic inference, interest/brand affinity profiles, and audience-overlap scoring from public signals, provider- and embedding-injected, so you don't pay an audience-intelligence SaaS per seat.",
 		directory: 'audience',
@@ -319,12 +1583,67 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Audience',
 		packageName: '@absolutejs/audience',
 		private: false,
+		publicExports: [
+			'@absolutejs/audience',
+			'@absolutejs/audience/manifest',
+			'@absolutejs/audience/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/audience',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'import type { AudienceContext, GenerateObject } from "@absolutejs/audience";\nimport { meteredGenerateObjectAI } from "./usage/meteredAI";\nimport { aiProvider } from "./integrations/aiProvider";\nimport { embedTexts } from "./integrations/ragStore";\n\nexport const audienceCtx = (userSub?: string | null): AudienceContext => ({\n  embed: (texts) => embedTexts(texts, "passage"),\n  generateObject: ((req) =>\n    meteredGenerateObjectAI({ ...req, provider: aiProvider, userSub })) as GenerateObject,\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'In-house audience & affinity intelligence for AbsoluteJS apps — the ownable parts of what an audience-intelligence SaaS sells, run on your own provider and embedding model.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/audience',
+				title: 'Install'
+			},
+			{
+				description:
+					'import type { AudienceContext, GenerateObject } from "@absolutejs/audience"; import { meteredGenerateObjectAI } from "./usage/meteredAI"; import { aiProvider } from "./integrations/aiProvider"; import { embedTexts } from "./integrations/ragStore";',
+				title: 'Wiring'
+			},
+			{
+				description:
+					'import { profileAffinity, affinityOverlap } from "@absolutejs/audience";',
+				title: 'Measuring audience overlap'
+			}
+		],
 		repository: 'https://github.com/absolutejs/audience',
 		subpackages: [],
 		version: '0.0.4'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --target=bun --external @absolutejs/audience && tsc --emitDeclarationOnly --project tsconfig.json',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Audiense adapter for @absolutejs/audience — implements the AudienceSource contract against the Audiense Insights API (reports, demographics, affinities, influencers, audience overlap). The premium social-graph backfill for AbsoluteJS audience intelligence.',
 		directory: 'audience-audiense',
@@ -332,12 +1651,87 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Audience Audiense Adapter',
 		packageName: '@absolutejs/audience-audiense',
 		private: false,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/audience-audiense @absolutejs/audience',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'import { audienseSource } from "@absolutejs/audience-audiense";\n\nconst audience = audienseSource({\n  clientId: process.env.AUDIENSE_CLIENT_ID!,\n  clientSecret: process.env.AUDIENSE_CLIENT_SECRET!,\n  defaultBaselineId: process.env.AUDIENSE_BASELINE_ID, // baseline to compare affinities against\n});\n\nconst reports = await audience.listAudiences?.();\nconst profile = await audience.getAudience?.(reports![0]);   // size, segments, demographics, affinities\nconst overlap = await audience.overlap?.(reportA, reportB);  // { score, sharedAffinities, method }',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Audiense adapter for @absolutejs/audience. Implements the AudienceSource contract against the Audiense Insights API — reports, demographics, influencer/brand affinities, and audience overlap — so an AbsoluteJS app can use measured audience intelligence wherever it otherwise derives it (e.g. the Trust & Fit / OPA audience-overlap signal).',
+				title: 'Overview'
+			},
+			{
+				description:
+					'bun add @absolutejs/audience-audiense @absolutejs/audience',
+				title: 'Install'
+			},
+			{
+				description:
+					'import { audienseSource } from "@absolutejs/audience-audiense";',
+				title: 'Use'
+			},
+			{
+				description:
+					'Client-credentials OAuth: POST {baseUrl}/login/token with Authorization: Basic base64(clientId:clientSecret) and granttype=clientcredentials. The returned bearer token is cached until just before it expires. Get credentials from your Audiense account (or your Audiense data-partnership contact).',
+				title: 'Auth'
+			},
+			{
+				description: 'Config is documented in the repository README.',
+				title: 'Config'
+			},
+			{
+				description:
+					"Audiense exposes no two-audience intersection endpoint at the API tier this adapter targets (it's a UI report), so overlap is computed from shared affinities (affinityItemsOverlap from @absolutejs/audience — a weighted cosine over the two affinity graphs, plus the shared items). If your data partnership grants a native intersection endpoint, swap it in at the overlap implementation.",
+				title: 'Overlap'
+			},
+			{
+				description:
+					"Response shapes are modeled from Audiense's own official client (audienseco/mcp-audiense-insights). A few field names weren't public, so the types are tolerant and the mappers degrade gracefully when a field is absent. Confirm exact field names against the live API (or your partnership feed) — the mappers are centralized in src/index.ts.",
+				title: 'Field-mapping note'
+			}
+		],
 		repository: null,
 		subpackages: [],
 		version: '0.0.1'
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/handoff --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Cross-surface audit-event substrate for the AbsoluteJS ecosystem — append-only event log with pluggable sinks, optional hash-chain tamper-evidence, and live-wire helpers that thread sync mutations, queue jobs, runtime exits, and secret rotations into one unified log.',
 		directory: 'audit',
@@ -345,12 +1739,52 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Audit',
 		packageName: '@absolutejs/audit',
 		private: false,
+		publicExports: [
+			'@absolutejs/audit',
+			'@absolutejs/audit/manifest',
+			'@absolutejs/audit/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/audit',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: "import {\n  createAudit,\n  memorySink,\n  consoleSink,\n  withIntegrity,\n  verifyChain,\n  recordRuntimeTransition,\n  recordQueueError,\n  recordSecretRotation,\n  recordSyncActivity,\n} from '@absolutejs/audit';\n\n// One sink to hold a tail in memory, one to ship JSON lines to your\n// existing log pipeline.\nconst audit = createAudit({\n  sinks: [\n    withIntegrity(memorySink({ max: 10_000 }), { secret: process.env.AUDIT_SECRET }),\n    consoleSink(),\n  ],\n});\n\n// Live-wire the substrate packages' lifecycle hooks.\nconst runtime = createRuntime({\n  onTransition: recordRuntimeTransition(audit),\n  // ...\n});\nconst worker = createQueueWorker({\n  onError: recordQueueError(audit),\n  // ...\n});\nbroker.onRotate('STRIPE_KEY', recordSecretRotation(audit));\nengine.onActivity(recordSyncActivity(audit));\n\n// Or emit directly for anything not covered by a helper.\nawait audit.append({\n  kind: 'billing.invoice.created',\n  actor: 'system',\n  target: invoice.id,\n  metadata: { amountCents: invoice.amountCents },\n});\n\n// Forensics later: detect any modification / removal / reordering.\nconst events = await sink.list?.({ since: someTimestamp });\nconst result = await verifyChain(events, process.env.AUDIT_SECRET);\nif (!result.ok) console.error(`Chain broken at index ${result.brokenAt}`);",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Cross-surface audit-event substrate for the AbsoluteJS ecosystem.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/audit',
+				title: 'Install'
+			},
+			{
+				description:
+					"import { createAudit, memorySink, consoleSink, withIntegrity, verifyChain, recordRuntimeTransition, recordQueueError, recordSecretRotation, recordSyncActivity, } from '@absolutejs/audit';",
+				title: 'The 30-second tour'
+			},
+			{
+				description: 'Design is documented in the repository README.',
+				title: 'Design'
+			}
+		],
 		repository: 'https://github.com/absolutejs/audit',
 		subpackages: [],
 		version: '0.2.3'
 	},
 	{
 		category: 'Observability',
+		commands: [],
 		description:
 			'Monorepo root for @absolutejs/audit storage adapters. Subpackages live in ./<name>/ and publish independently.',
 		directory: 'audit-adapters',
@@ -358,27 +1792,234 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Audit Adapters',
 		packageName: 'audit-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [],
 		repository: 'https://github.com/absolutejs/audit-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/audit --external @absolutejs/telemetry --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Elysia plugin emitting one structured audit event per request into @absolutejs/audit. Wires into onRequest + onAfterResponse so success AND error paths are captured. Orthogonal to @elysiajs/server-timing (perf headers) and @elysiajs/opentelemetry (sampled tracing); optionally correlates with the active OTel trace id.',
 				name: '@absolutejs/audit-elysia',
 				private: false,
+				publicExports: [
+					'@absolutejs/audit-elysia',
+					'@absolutejs/audit-elysia/manifest',
+					'@absolutejs/audit-elysia/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Elysia plugin that emits one structured audit event per HTTP request into @absolutejs/audit.',
+						title: 'Overview'
+					},
+					{
+						description: 'The Elysia ecosystem already has:',
+						title: 'Why this exists'
+					},
+					{
+						description:
+							'bun add @absolutejs/audit @absolutejs/audit-elysia elysia',
+						title: 'Install'
+					},
+					{
+						description:
+							"import { Elysia } from 'elysia'; import { createAudit, memorySink, withIntegrity } from '@absolutejs/audit'; import { auditElysia } from '@absolutejs/audit-elysia';",
+						title: 'Usage'
+					},
+					{
+						description:
+							"auditElysia({ audit, // required — the Audit handle actor?: (ctx) => string | undefined | Promise, exclude?: ({ request }) => boolean | Promise, redact?: (req) => Record | undefined, correlateOtelTraceId?: boolean, kind?: string, // default 'http.request' requestIdHeader?: string | null, // default 'x-request-id' });",
+						title: 'API'
+					},
+					{
+						description:
+							'onAfterResponse — the only Elysia lifecycle hook that fires once per request including error paths. Verified via Elysia 1.4 docs and tested with handlers that throw. onRequest is also wired (to stamp the wall- clock start), but the emission is in onAfterResponse.',
+						title: 'Which hook does it use?'
+					},
+					{
+						description:
+							"redact for now; we'll formalize once a real consumer's needs are clear.",
+						title: "What's NOT in 0.0.1"
+					}
+				],
 				version: '0.1.2'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/audit --external drizzle-orm --external 'drizzle-orm/*' --external postgres --external @neondatabase/serverless && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Postgres-backed AuditSink for @absolutejs/audit with first-class Drizzle and tagged-template adapters, native JSONB metadata, and indexed history.',
 				name: '@absolutejs/audit-postgres',
 				private: false,
+				publicExports: [
+					'@absolutejs/audit-postgres',
+					'@absolutejs/audit-postgres/manifest',
+					'@absolutejs/audit-postgres/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Postgres-backed AuditSink for @absolutejs/audit with first-class Drizzle and tagged-template adapters.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/audit @absolutejs/audit-postgres bun add postgres # OR bun add @neondatabase/serverless',
+						title: 'Install'
+					},
+					{
+						description:
+							'Usage is documented in the repository README.',
+						title: 'Usage'
+					},
+					{
+						description:
+							'The adapter creates this lazily on first append / list / prune:',
+						title: 'Schema'
+					},
+					{
+						description:
+							'const auditEvents: PgTable; const auditEventsBunSql: PgTable; const auditDrizzleSchema: { auditEvents: typeof auditEvents }; const auditBunSqlDrizzleSchema: { auditEvents: typeof auditEventsBunSql; }; const createDrizzleAuditSink: ({ db }) => AuditSink; const createBunSqlDrizzleAuditSink: ({ db }) => AuditSink; const getAuditPostgresSchemaSql: ({ table? }) => string; const auditPostgresMigrationPlan: ({ table? }) => Array; const runAuditPostgresMigrations: ({ client, table? }) => Promise;',
+						title: 'API'
+					},
+					{
+						description: 'calls skip.',
+						title: 'Behavior notes'
+					},
+					{
+						description:
+							"The Drizzle adapter's PGlite suite is self-contained:",
+						title: 'Test setup'
+					}
+				],
 				version: '0.1.4'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/audit && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'S3-compatible AuditSink for @absolutejs/audit. Buffered JSONL writes to AWS S3 / Cloudflare R2 / Backblaze B2 / MinIO. Time-sortable object keys; WORM-bucket-friendly for compliance retention.',
 				name: '@absolutejs/audit-s3',
 				private: false,
+				publicExports: [
+					'@absolutejs/audit-s3',
+					'@absolutejs/audit-s3/manifest',
+					'@absolutejs/audit-s3/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'S3-compatible AuditSink for @absolutejs/audit.',
+						title: 'Overview'
+					},
+					{
+						description:
+							"retention (SOC2, HIPAA, FedRAMP). The hash-chain in @absolutejs/audit's withIntegrity() gives tamper-evidence; WORM prevents deletion even by an admin.",
+						title: 'Why S3 for audit logs'
+					},
+					{
+						description:
+							'bun add @absolutejs/audit @absolutejs/audit-s3',
+						title: 'Install'
+					},
+					{
+						description:
+							'Usage is documented in the repository README.',
+						title: 'Usage'
+					},
+					{
+						description: 'Default keyFor produces:',
+						title: 'Object key layout'
+					},
+					{
+						description: 'Whichever fires first:',
+						title: 'Flush triggers'
+					},
+					{
+						description:
+							'Unflushed events are lost on process kill. For stricter durability, pair the S3 sink with a synchronous sink (Postgres) for critical events — S3 is the long-term archive, not the source of truth between flushes. Lower flushIntervalMs to shrink the loss window at the cost of more S3 PUTs.',
+						title: 'Crash safety'
+					},
+					{
+						description:
+							'Athena / s3 ls / DuckDB; enforce retention via S3 lifecycle policies. The sink is write-only.',
+						title: 'What this sink does NOT do'
+					},
+					{
+						description:
+							"The tamper-evident chain from withIntegrity() works across batch boundaries automatically. Each event is hashed at append time against the prior event's hash; the S3 sink only buffers + flushes — it doesn't touch the chain. To verify a chain that spans multiple S3 objects:",
+						title: 'Integrity across batches'
+					}
+				],
 				version: '0.1.1'
 			}
 		],
@@ -386,18 +2027,112 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Auth & Identity',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/server.ts src/agents/index.ts src/oidc/index.ts src/saml.ts src/webauthn.ts src/htmx/index.ts src/client/index.ts src/client/react.ts src/client/vue.ts src/client/solid.ts src/client/svelte.ts src/plugins/index.ts src/providers/index.ts src/linkedProviders/index.ts src/vault/index.ts src/manifest.ts --root src --outdir dist --sourcemap --target=bun --external elysia --external react --external vue --external solid-js --external svelte --external @opentelemetry/api --external @simplewebauthn/browser --external @simplewebauthn/server --external @node-saml/node-saml && bun build src/cli/migrate.ts --outdir dist/cli --sourcemap --target=bun --external @neondatabase/serverless --external drizzle-orm && bun build src/fingerprint-client/index.ts --outdir dist/fingerprint-client --sourcemap --target=browser && tsc --emitDeclarationOnly --project tsconfig.json && chmod +x dist/cli/migrate.js && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run lint && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'absolute prettier --write',
+				name: 'format'
+			},
+			{
+				command: 'absolute eslint',
+				name: 'lint'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'absolute typecheck',
+				name: 'typecheck'
+			}
+		],
 		description: 'An authorization library for absolutejs',
 		directory: 'auth',
 		kind: 'package',
 		name: 'Auth',
 		packageName: '@absolutejs/auth',
 		private: false,
+		publicExports: [
+			'@absolutejs/auth',
+			'@absolutejs/auth/server',
+			'@absolutejs/auth/client',
+			'@absolutejs/auth/agents',
+			'@absolutejs/auth/oidc',
+			'@absolutejs/auth/linked-providers',
+			'@absolutejs/auth/vault',
+			'@absolutejs/auth/htmx',
+			'@absolutejs/auth/fingerprint-client',
+			'@absolutejs/auth/plugins',
+			'@absolutejs/auth/providers',
+			'@absolutejs/auth/saml',
+			'@absolutejs/auth/webauthn',
+			'@absolutejs/auth/react',
+			'@absolutejs/auth/solid',
+			'@absolutejs/auth/svelte',
+			'@absolutejs/auth/vue',
+			'@absolutejs/auth/manifest',
+			'@absolutejs/auth/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'git clone https://github.com/alexkahndev/absolute-auth.git\n    cd absolute-auth',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: 'bun install',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Server applications should import the primary authentication contract from @absolutejs/auth/server. This declaration-stable entry point exposes auth, session types, route protection, provider configuration, and the other core server utilities without loading declarations for every optional Auth feature. OIDC provider integrations should likewise import signing keys, token verification, provider stores, and provider types from @absolutejs/auth/oidc. The root entry point remains available for applications that need the complete feature export surface. auth() exposes the complete reusable request context (protectRoute, requireRecentAuth, optional protectPermission, and protectAgent) while keeping its declaration bounded. Consumers that need the typed configurable route applications themselves can call createAuthApplications() from the root entry point and compose its coreRoutes, featureRoutes, and authContext applications independently.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Absolute Auth is a TypeScript-based authentication system that provides a comprehensive solution for handling user authentication in web applications. It supports multiple authentication providers and offers features such as authorization, callback handling, token refresh, token revocation, and session management.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Installation is documented in the repository README.',
+				title: 'Installation'
+			},
+			{
+				description: 'Usage is documented in the repository README.',
+				title: 'Usage'
+			},
+			{
+				description:
+					'Authentication System is documented in the repository README.',
+				title: 'Authentication System'
+			},
+			{
+				description: 'This project uses Bun and is built for Elysia.',
+				title: 'Note'
+			}
+		],
 		repository: 'https://github.com/absolutejs/absolute-auth',
 		subpackages: [],
 		version: '0.59.2'
 	},
 	{
 		category: 'Auth & Identity',
+		commands: [],
 		description:
 			'Monorepo root for @absolutejs/auth provider adapters. Subpackages live in ./<name>/ and publish independently.',
 		directory: 'auth-adapters',
@@ -405,13 +2140,73 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Auth Adapters',
 		packageName: 'auth-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Provider implementations for extension contracts owned by @absolutejs/auth.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/auth-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/auth --external '@absolutejs/auth/*' --external twilio --external 'twilio/*' --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Twilio Verify provider for @absolutejs/auth MFA challenges.',
 				name: '@absolutejs/auth-twilio',
 				private: false,
+				publicExports: [
+					'@absolutejs/auth-twilio',
+					'@absolutejs/auth-twilio/manifest',
+					'@absolutejs/auth-twilio/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Twilio Verify implementation of the auth/verification-provider contract from @absolutejs/auth. Twilio owns OTP generation, delivery, fraud evaluation, and verification status; Absolute Auth owns enrollment, MFA policy, and session promotion.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/auth @absolutejs/auth-twilio twilio',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { auth } from "@absolutejs/auth"; import { createTwilioVerificationProvider } from "@absolutejs/auth-twilio"; import { Twilio } from "twilio";',
+						title: 'Usage'
+					},
+					{
+						description:
+							'policy, audit events, and session promotion.',
+						title: 'Boundaries'
+					}
+				],
 				version: '0.3.0'
 			}
 		],
@@ -419,6 +2214,29 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --sourcemap --target=bun && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Horizontal-scaling policy substrate for the AbsoluteJS PaaS. createAutoscaler periodically evaluates pluggable signals (CPU, queue depth, latency, ...) against a declarative policy (min/max instances, scale-up/down thresholds, cooldowns) and drives a caller-supplied actuator (spawn / drain / terminate). Pure decision logic — cloud-specific actuators live in the control plane.',
 		directory: 'autoscaler',
@@ -426,12 +2244,88 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Autoscaler',
 		packageName: '@absolutejs/autoscaler',
 		private: false,
+		publicExports: ['@absolutejs/autoscaler'],
+		readmeSamples: [
+			{
+				code: 'read signals  →  combine into a score  →  compare to thresholds  →\nif past threshold & cooldown elapsed  →  ask actuator to spawn/drain\n                                          (clamped to min/max)',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'text'
+			},
+			{
+				code: 'import {\n  createAutoscaler,\n  createPolicy,\n  ratioSignal,\n} from "@absolutejs/autoscaler";\n\nconst scaler = createAutoscaler({\n  policy: createPolicy({\n    min: 1,\n    max: 20,\n    scaleUp: { threshold: 0.75, cooldownMs: 60_000, step: 1 },\n    scaleDown: { threshold: 0.3, cooldownMs: 300_000, step: 1 },\n  }),\n  signals: [\n    ratioSignal("cpu", 0.8, async () => await meter.cpuUtilization()),\n    ratioSignal("queue", 100, async () => await queue.depth(), {\n      observedKey: "depth",\n    }),\n    ratioSignal("latencyP95", 200, async () => await metrics.p95()),\n  ],\n  combine: "max", // worst pressure wins. or \'avg\', or a custom fn\n  actuator: {\n    list: () => fleet.list(),\n    spawn: () => fleet.provision(),\n    drain: (id) => loadBalancer.remove(id),\n    terminate: (id) => fleet.destroy(id),\n  },\n  audit: broker, // optional; emits autoscaler.scale.up etc.\n  intervalMs: 30_000,\n});\n\nscaler.start();\n// fires every 30s\n\nconst reviewedPlan = await scaler.evaluate();\nawait scaler.applyDecision(reviewedPlan, { maxAgeMs: 300_000 });\n// applies that exact plan only while its capacity precondition still holds\n\nconst oneShot = await scaler.step();\n// { action: \'scale-up\' | \'scale-down\' | \'hold\', score, currentCount,\n//   desiredCount, reason, readings: [...], at }',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'@absolutejs/autoscaler owns the decision half of an autoscaler. The actuator half — actually provisioning a VM, draining a pod, killing a process — lives in your control plane via an injected Actuator, so the substrate stays cloud-agnostic and runtime-agnostic.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'read signals → combine into a score → compare to thresholds → if past threshold & cooldown elapsed → ask actuator to spawn/drain (clamped to min/max)',
+				title: 'Loop'
+			},
+			{
+				description:
+					'import { createAutoscaler, createPolicy, ratioSignal, } from "@absolutejs/autoscaler";',
+				title: 'API'
+			},
+			{
+				description:
+					'A Signal is { name, read: () => SignalReading | Promise }.',
+				title: 'Signals'
+			},
+			{
+				description:
+					'elasticity: any one over-stressed dimension scales the fleet.',
+				title: 'Combine strategies'
+			},
+			{
+				description:
+					'scaleUp and scaleDown have independent cooldown timers — a fleet that just scaled up can still scale down moments later if the load drops. Default cooldownMs is 60 seconds.',
+				title: 'Cooldowns'
+			},
+			{
+				description:
+					'When an audit broker is supplied, every applied decision emits:',
+				title: 'Audit trail'
+			}
+		],
 		repository: 'https://github.com/absolutejs/autoscaler',
 		subpackages: [],
 		version: '0.2.1'
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --sourcemap --target=browser --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external web-vitals --external 'web-vitals/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Tiny, zero-dependency browser SDK for the AbsoluteJS observability stack. Captures uncaught errors + unhandled rejections, breadcrumbs (console/click/fetch/history), batches, and POSTs an envelope to @absolutejs/errors/ingest via sendBeacon/keepalive. ~2-5KB gz, no Effect in the browser; end-to-end type-safe via the shared erased envelope contract.',
 		directory: 'beacon',
@@ -439,12 +2333,63 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Beacon',
 		packageName: '@absolutejs/beacon',
 		private: false,
+		publicExports: [
+			'@absolutejs/beacon',
+			'@absolutejs/beacon/manifest',
+			'@absolutejs/beacon/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/beacon',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'import { initBeacon, captureException } from "@absolutejs/beacon";\n\ninitBeacon({\n  project: "web",\n  endpoint: "https://api.example.com/ingest",\n  release: import.meta.env.VITE_RELEASE,\n  environment: "production",\n});\n\n// Uncaught errors + unhandled rejections are captured automatically.\n// Manual capture anywhere:\ntry {\n  await checkout();\n} catch (e) {\n  captureException(e, { tags: { component: "billing" } });\n}',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Captures uncaught errors + unhandled rejections, records breadcrumbs (console / click / fetch / navigation), batches, and POSTs an envelope to @absolutejs/errors/ingest via navigator.sendBeacon / fetch keepalive.',
+				title: 'Overview'
+			},
+			{
+				description:
+					"A browser SDK loads on every page for every user, so bytes are the dominant cost. Measured: an Effect-native client is 108 KB gz; this is 2 KB gz. The client has no trust boundary — it's a dumb producer of telemetry — so the Effect/Schema rigor lives server-side in @absolutejs/errors/ingest, which validates the untrusted POST body.",
+				title: "Why it's not Effect-native (on purpose)"
+			},
+			{
+				description: 'bun add @absolutejs/beacon',
+				title: 'Install'
+			},
+			{
+				description:
+					'import { initBeacon, captureException } from "@absolutejs/beacon";',
+				title: 'Quick start'
+			},
+			{
+				description:
+					'ingest endpoint), and SPA navigations, in a ring buffer attached to each event.',
+				title: 'What it does'
+			},
+			{
+				description:
+					'createBeacon(options) => Beacon initBeacon(options) => Beacon // also sets the global singleton getBeacon() => Beacon | undefined',
+				title: 'API'
+			}
+		],
 		repository: 'https://github.com/absolutejs/beacon',
 		subpackages: [],
 		version: '0.4.4'
 	},
 	{
 		category: 'Dev Tools',
+		commands: [],
 		description:
 			'Reproducible performance and accuracy comparisons for AbsoluteJS packages.',
 		directory: 'benchmarks',
@@ -452,20 +2397,56 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Benchmarks',
 		packageName: null,
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Performance & accuracy benchmarks for the AbsoluteJS suite. Each subdirectory is a standalone project that consumes the published packages.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/benchmarks',
 		subpackages: [
 			{
+				commands: [],
 				description:
 					'Head-to-head: @absolutejs/sync vs Zero vs Convex on a shared-counter workload.',
 				name: '@absolutejs/sync-benchmarks',
 				private: true,
+				publicExports: [],
+				readmeTopics: [],
 				version: '0.0.0'
 			},
 			{
+				commands: [],
 				description:
 					'Performance & accuracy benchmarks for @absolutejs/voice (STT, TTS, duplex, telephony, sessions) vs. Vapi.',
 				name: '@absolutejs/voice-benchmarks',
 				private: true,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'Performance & accuracy benchmarks for @absolutejs/voice — STT, TTS, duplex, telephony, and session soak tests, plus head-to-head comparisons against Vapi.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun install cp .env.example .env # add provider API keys for live benchmarks',
+						title: 'Setup'
+					},
+					{
+						description:
+							'Benchmarks are exposed as bench: scripts. Examples:',
+						title: 'Running'
+					},
+					{
+						description:
+							'benchmarks/vapi-baseline.example.json is a template — copy it to benchmarks/your-vapi-metrics.json (gitignored) with your own Vapi numbers to compare against.',
+						title: 'Vapi comparison'
+					}
+				],
 				version: '0.0.0'
 			}
 		],
@@ -473,6 +2454,29 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/ledger.ts src/manifest.ts --root ./src --outdir dist --sourcemap --target=bun && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Cost-model substrate for the AbsoluteJS PaaS. createPlan declares a priced product (base fee + per-dimension unit prices + tiered / free-tier rules); computeInvoice turns a @absolutejs/metering Usage snapshot into Invoice line items in integer micros (no float drift). Pluggable invoice sinks (Stripe / etc.) live in @absolutejs/billing-adapters/*.',
 		directory: 'billing',
@@ -480,12 +2484,64 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Billing',
 		packageName: '@absolutejs/billing',
 		private: false,
+		publicExports: [
+			'@absolutejs/billing',
+			'@absolutejs/billing/manifest',
+			'@absolutejs/billing/manifest.json',
+			'@absolutejs/billing/ledger'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createPlan, computeInvoice, formatMicros } from "@absolutejs/billing";\n\nconst plan = createPlan({\n  name: "pro",\n  currency: "usd",\n  basePriceMicros: 20_000_000, // $20/mo\n  pricedDimensions: {\n    requests: { perUnitMicros: 200, freeTier: 1_000_000 },\n    cpuMs: { perUnitMicros: 50, unit: 1000, freeTier: 60_000 * 60 * 10 },\n    bytesEgress: {\n      perUnitMicros: 100,\n      unit: 1024 * 1024,\n      freeTier: 100 * 1024 * 1024,\n    },\n    hibernationGbSeconds: { perUnitMicros: 5 },\n  },\n});\n\nconst invoice = computeInvoice({\n  plan,\n  tenant: "acme",\n  period: { start, end },\n  usage, // a Usage from @absolutejs/metering\n});\n\nconsole.log(formatMicros(invoice.totalMicros, invoice.currency));\n// "27.50 USD"',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'@absolutejs/billing is the pure-function layer between @absolutejs/metering (which collects usage events) and an invoicing backend (Stripe, QuickBooks, an internal billing engine).',
+				title: 'Overview'
+			},
+			{
+				description: 'A PricedDimension is one of three:',
+				title: 'Pricing shapes'
+			},
+			{
+				description: 'The control plane needs to:',
+				title: 'Why pure?'
+			}
+		],
 		repository: 'https://github.com/absolutejs/billing',
 		subpackages: [],
 		version: '0.6.0'
 	},
 	{
 		category: 'Data & Sync',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/local.ts src/s3.ts src/aws-s3.ts src/uploadthing.ts src/inspection.ts src/manifest.ts --outdir dist --root src --sourcemap --target=bun --external @aws-sdk/client-s3 --external @aws-sdk/lib-storage --external @aws-sdk/s3-request-presigner --external uploadthing && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Object storage substrate for AbsoluteJS. One BlobStore interface with bounded streaming local and S3-compatible adapters, plus official AWS SDK wiring for multipart object storage.',
 		directory: 'blob',
@@ -493,12 +2549,97 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Blob',
 		packageName: '@absolutejs/blob',
 		private: false,
+		publicExports: [
+			'@absolutejs/blob',
+			'@absolutejs/blob/local',
+			'@absolutejs/blob/s3',
+			'@absolutejs/blob/aws-s3',
+			'@absolutejs/blob/uploadthing',
+			'@absolutejs/blob/inspection',
+			'@absolutejs/blob/manifest',
+			'@absolutejs/blob/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: "const store: BlobStore = /* localBlobStore(...) | s3BlobStore(...) */;\nawait store.put('users/42/avatar.png', body, { contentType: 'image/png' });\nconst bytes = await store.get('users/42/avatar.png');\nconst url = await store.presign('users/42/avatar.png', { ttlSeconds: 900 });",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import {\n  createClamdBlobInspector,\n  inspectStoredBlob,\n} from "@absolutejs/blob/inspection";\n\nconst inspector = createClamdBlobInspector({ host: "clamav.internal" });\nconst result = await inspectStoredBlob(blobs, inspector, {\n  filename: "evidence.pdf",\n  key: "quarantine/case/evidence.pdf",\n  maxBytes: 25 * 1024 * 1024,\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Object storage substrate for AbsoluteJS. One BlobStore interface, multiple adapters, and bounded streaming for large artifacts.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Both implement the same BlobStore interface — swap providers with one constructor change.',
+				title: 'Adapters'
+			},
+			{
+				description:
+					'Uploads that can contain customer-controlled bytes should remain under a private quarantine key until an inspector returns clean. The inspection subpath preserves the same workflow across local, UploadThing, S3, R2, and Spaces storage:',
+				title: 'Private upload inspection'
+			},
+			{
+				description:
+					'import { localBlobStore } from "@absolutejs/blob/local";',
+				title: 'Local'
+			},
+			{
+				description:
+					'import { S3Client } from "@aws-sdk/client-s3"; import { awsS3BlobStore } from "@absolutejs/blob/aws-s3";',
+				title: 'S3 (any S3-compatible service)'
+			},
+			{
+				description:
+					'type BlobStore = { readonly description: string; put: ( key: string, body: BlobBody, options?: PutOptions, ) => Promise; get: (key: string) => Promise; getStream: (key: string) => Promise | null>; head: (key: string) => Promise; delete: (key: string) => Promise; list: (options?: ListOptions) => Promise; presign: (key: string, options?: PresignOptions) => Promise; };',
+				title: 'BlobStore interface'
+			},
+			{
+				description:
+					'validateKey("users/42/avatar.png"); // ok validateKey("/etc/passwd"); // BlobError(\'INVALIDKEY\') validateKey("../escape"); // BlobError(\'INVALIDKEY\') validateKey("with\\0nul"); // BlobError(\'INVALIDKEY\')',
+				title: 'Key validation'
+			}
+		],
 		repository: 'https://github.com/absolutejs/blob',
 		subpackages: [],
 		version: '0.5.1'
 	},
 	{
 		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/elysia.ts src/react.ts src/manifest.ts --outdir dist --root ./src --sourcemap --target=browser --external react --external 'react/*' --external elysia --external 'elysia/*' --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Headless, typed blog publishing primitives for AbsoluteJS: post registries, reading metrics, SEO metadata, feeds, sitemap routes, Elysia endpoints, and React hooks without bundled UI.',
 		directory: 'blog',
@@ -506,24 +2647,190 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Blog',
 		packageName: '@absolutejs/blog',
 		private: false,
+		publicExports: [
+			'@absolutejs/blog',
+			'@absolutejs/blog/elysia',
+			'@absolutejs/blog/react',
+			'@absolutejs/blog/manifest',
+			'@absolutejs/blog/manifest.json',
+			'@absolutejs/blog/package.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createBlog, defineAuthor, definePost } from "@absolutejs/blog";\n\nconst author = defineAuthor({\n  id: "alex-kahn",\n  name: "Alex Kahn",\n  role: "AbsoluteJS",\n});\n\nconst post = definePost({\n  author,\n  description: "Why provider differences belong in typed data.",\n  publishedAt: "2026-07-31",\n  slug: "why-citra-typed-oauth",\n  tags: ["OAuth", "TypeScript", "Citra"],\n  title: "Why Citra: Typed OAuth Without Provider Classes",\n});\n\nexport const blog = createBlog({\n  posts: [post],\n  site: {\n    baseUrl: "https://absolutejs.com",\n    description: "Engineering notes from AbsoluteJS.",\n    name: "AbsoluteJS Blog",\n    publisher: {\n      name: "AbsoluteJS",\n      url: "https://absolutejs.com",\n    },\n  },\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'blog.get("why-citra-typed-oauth");\nblog.byTag("TypeScript");\nblog.relatedTo(post);\nblog.sitemapRoutes();\nblog.head(post);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Headless blog publishing for AbsoluteJS. The package owns post contracts, publication metadata, feeds, sitemap routes, and browser hooks. Your application owns every element and every style.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'import { createBlog, defineAuthor, definePost } from "@absolutejs/blog";',
+				title: 'Define a blog'
+			},
+			{
+				description:
+					'Mount all three standard feed formats with the optional Elysia plugin:',
+				title: 'Feeds'
+			},
+			{
+				description:
+					'The React subpath contains hooks, not visual components:',
+				title: 'Reading hooks'
+			}
+		],
 		repository: 'https://github.com/absolutejs/blog',
 		subpackages: [],
 		version: '0.1.0'
 	},
 	{
 		category: 'Auth & Identity',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --target=bun --external elysia && tsc --emitDeclarationOnly --project tsconfig.json',
+				name: 'build'
+			},
+			{
+				command: 'absolute prettier --write',
+				name: 'format'
+			},
+			{
+				command: 'absolute eslint',
+				name: 'lint'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command:
+					'absolute typecheck && tsc --project tsconfig.type-tests.json',
+				name: 'typecheck'
+			}
+		],
 		description: 'OAuth 2.0 library for TypeScript',
 		directory: 'citra',
 		kind: 'package',
 		name: 'Citra',
 		packageName: 'citra',
 		private: false,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'bun install citra',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: 'npm install citra',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Table of Contents is documented in the repository README.',
+				title: 'Table of Contents'
+			},
+			{
+				description:
+					'Citra is a curated collection of OAuth 2.0 provider configurations, each bundled with the correct endpoints and request details. It provides a ready-to-use foundation for integrating secure authentication into JavaScript and TypeScript applications.',
+				title: 'Introduction'
+			},
+			{
+				description:
+					'Inspired by Arctic, Citra reduces boilerplate and minimizes integration errors by enforcing a uniform configuration approach.',
+				title: 'Why Citra?'
+			},
+			{
+				description: 'bun install citra',
+				title: 'Installation'
+			},
+			{
+				description:
+					'Import Citra and create a client for your desired provider:',
+				title: 'Getting Started'
+			},
+			{
+				description:
+					'A custom provider can carry an exact credential contract. The contract types every credential-dependent URL, header, body, and client-secret factory in the definition, then becomes the required input to createCustomOAuth2Client().',
+				title: 'Custom Providers'
+			},
+			{
+				description:
+					'Generate the authorization URL from the provider metadata (including a PKCE verifier when required). You can redirect to this URL to initiate the OAuth2 flow.',
+				title: 'Building the Authorization URL'
+			},
+			{
+				description:
+					'Exchange the code, and optionally the verifier, for an OAuth2TokenResponse:',
+				title: 'Handling the Callback'
+			},
+			{
+				description:
+					'When the selected provider declares a profile request, fetchUserProfile() is present on both the client type and runtime object:',
+				title: 'Fetching the User Profile'
+			},
+			{
+				description:
+					'If supported by the provider, you can refresh and revoke tokens:',
+				title: 'Refreshing and Revoking Tokens'
+			},
+			{
+				description:
+					'Citra’s TypeScript definitions let you configure and consume OAuth2 providers with full type safety.',
+				title: 'Types'
+			},
+			{
+				description: 'Providers are grouped by special requirements:',
+				title: 'Provider Tags'
+			}
+		],
 		repository: 'https://github.com/absolutejs/citra',
 		subpackages: [],
 		version: '0.29.11'
 	},
 	{
 		category: 'Dev Tools',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/cli.ts --outdir dist --root src --sourcemap --target=bun && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Substrate CLI for the AbsoluteJS PaaS — secrets / env / deploy verbs over @absolutejs/secrets, @absolutejs/deploy, and @absolutejs/audit. Config-file driven; sibling to @absolutejs/absolute (the framework CLI).',
 		directory: 'cli',
@@ -531,12 +2838,71 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Cli',
 		packageName: '@absolutejs/cli',
 		private: false,
+		publicExports: ['@absolutejs/cli'],
+		readmeSamples: [
+			{
+				code: 'absolutejs secrets list                  list secret names + fingerprints\nabsolutejs secrets rotate STRIPE_KEY     generate + persist a new value\nabsolutejs env push prod                 push resolved env file to a stage\nabsolutejs env diff prod                 see what `env push` would change\nabsolutejs deploy rollback prod          roll back to the previous release',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'text'
+			},
+			{
+				code: 'bun add -d @absolutejs/cli',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Substrate CLI for the AbsoluteJS PaaS. Verbs over @absolutejs/secrets and @absolutejs/deploy:',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add -d @absolutejs/cli',
+				title: 'Install'
+			},
+			{
+				description:
+					'Drop one in your project root. The CLI walks up from the cwd to find it.',
+				title: 'Config — absolutejs.config.ts'
+			},
+			{
+				description: 'Commands is documented in the repository README.',
+				title: 'Commands'
+			},
+			{
+				description:
+					'Composition with the rotation loop is documented in the repository README.',
+				title: 'Composition with the rotation loop'
+			}
+		],
 		repository: 'https://github.com/absolutejs/cli',
 		subpackages: [],
 		version: '0.1.0'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --root ./src --outdir dist --sourcemap --target=bun && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Deterministic collectible sets, editions, shuffled serials, weighted traits, rarity explanations, and population reports for AbsoluteJS apps.',
 		directory: 'collectibles',
@@ -544,12 +2910,49 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Collectibles',
 		packageName: '@absolutejs/collectibles',
 		private: false,
+		publicExports: [
+			'@absolutejs/collectibles',
+			'@absolutejs/collectibles/manifest',
+			'@absolutejs/collectibles/manifest.json'
+		],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Deterministic collectible primitives for sets, subjects, editions, individual copies, weighted traits, transparent rarity, shuffled serials, and population reports.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/collectibles',
 		subpackages: [],
 		version: '0.1.2'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build ./src/index.ts ./src/drizzle/index.ts ./src/react/index.tsx ./src/manifest.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce --external '@absolutejs/commerce/*' --external @absolutejs/handoff --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' --external react --external 'react/*' --external fflate && bun build ./src/client/index.ts --outdir dist/client --target browser --format esm && bun build ./src/decoration-react/index.ts --outdir dist/decoration-react --target browser --format esm --external react --external 'react/*' --external three --external 'three/*' --external @react-three/drei --external '@react-three/drei/*' --external @react-three/fiber --external '@react-three/fiber/*' && bun build ./src/decoration-preview-react/index.tsx --outdir dist/decoration-preview-react --target browser --format esm --external react --external 'react/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{js,ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Provider-agnostic commerce primitives (cart, orders, fulfillment, shipping) for AbsoluteJS',
 		directory: 'commerce',
@@ -557,12 +2960,77 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Commerce',
 		packageName: '@absolutejs/commerce',
 		private: false,
+		publicExports: [
+			'@absolutejs/commerce',
+			'@absolutejs/commerce/client',
+			'@absolutejs/commerce/react',
+			'@absolutejs/commerce/decoration-react',
+			'@absolutejs/commerce/decoration-preview-react',
+			'@absolutejs/commerce/drizzle',
+			'@absolutejs/commerce/manifest',
+			'@absolutejs/commerce/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import {\n  findVariantByOptions,\n  listingPriceCents,\n  type CatalogSourceProvider,\n} from "@absolutejs/commerce";\n\nconst variant = findVariantByOptions(product.variants, {\n  Color: "Navy",\n  Size: "XL",\n});\nconst price = listingPriceCents(product.listing, variant);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import { ProductPhotoPreview } from "@absolutejs/commerce/decoration-preview-react";',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					"Provider-agnostic commerce primitives for AbsoluteJS apps — so every shop isn't rebuilding cart, checkout, orders, and fulfillment from scratch.",
+				title: 'Overview'
+			},
+			{
+				description:
+					'The catalog domain separates canonical supplier truth from storefront merchandising:',
+				title: 'Multi-store product catalogs'
+			},
+			{
+				description:
+					'Use the exact supplier product photograph as the default customization truth:',
+				title: 'Product decoration previews and production packets'
+			},
+			{
+				description:
+					'The first slice is the carrier-agnostic shipping interface. Apps program against ShippingProvider; a carrier adapter (e.g. @absolutejs/commerce-easypost) implements it, so a shop can plug in whatever carrier account it already uses.',
+				title: 'v0 — shipping contract'
+			},
+			{
+				description:
+					'Being lifted from real AbsoluteJS shops next, against the same adapter pattern:',
+				title: 'Roadmap'
+			}
+		],
 		repository: 'https://github.com/absolutejs/commerce',
 		subpackages: [],
 		version: '0.40.1-beta.13'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Payment, fulfillment, shipping, and transactional-email adapters for @absolutejs/commerce.',
 		directory: 'commerce-adapters',
@@ -570,34 +3038,191 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Commerce Adapters',
 		packageName: '@absolutejs/commerce-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description: 'Provider adapters for @absolutejs/commerce.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Each adapter is an independently versioned npm package (Apache-2.0). This repository is the source monorepo.',
+				title: 'Packages'
+			}
+		],
 		repository: 'https://github.com/absolutejs/commerce-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce --external '@absolutejs/commerce/*' --external @absolutejs/execution --external '@absolutejs/execution/*' --external @absolutejs/manifest --external @sinclair/typebox && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'CustomCat print-on-demand fulfillment adapter for @absolutejs/commerce',
 				name: '@absolutejs/commerce-customcat',
 				private: false,
+				publicExports: [
+					'@absolutejs/commerce-customcat',
+					'@absolutejs/commerce-customcat/manifest',
+					'@absolutejs/commerce-customcat/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'CustomCat print-on-demand fulfillment adapter for @absolutejs/commerce.',
+						title: 'Overview'
+					}
+				],
 				version: '0.6.20-beta.2'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce --external '@absolutejs/commerce/*' --external @absolutejs/manifest --external @sinclair/typebox --external @easypost/api --external '@easypost/api/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'EasyPost shipping adapter for @absolutejs/commerce',
 				name: '@absolutejs/commerce-easypost',
 				private: false,
+				publicExports: [
+					'@absolutejs/commerce-easypost',
+					'@absolutejs/commerce-easypost/manifest',
+					'@absolutejs/commerce-easypost/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'EasyPost shipping adapter for @absolutejs/commerce. Implements the ShippingProvider contract — rates, one-call cheapest-label purchase, and tracking — so a shop can buy and print real carrier labels.',
+						title: 'Overview'
+					}
+				],
 				version: '0.19.19-beta.3'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce --external '@absolutejs/commerce/*' --external @absolutejs/manifest --external @sinclair/typebox --external resend --external 'resend/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Resend transactional-email adapter for @absolutejs/commerce',
 				name: '@absolutejs/commerce-resend',
 				private: false,
+				publicExports: [
+					'@absolutejs/commerce-resend',
+					'@absolutejs/commerce-resend/manifest',
+					'@absolutejs/commerce-resend/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Resend transactional-email adapter for @absolutejs/commerce. Implements the EmailProvider contract so you can send the branded order / shipping / proof / quote emails built with renderEmail from the commerce host.',
+						title: 'Overview'
+					}
+				],
 				version: '0.19.19-beta.3'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce --external '@absolutejs/commerce/*' --external @absolutejs/manifest --external @sinclair/typebox --external stripe --external 'stripe/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Stripe payment + checkout adapter for @absolutejs/commerce',
 				name: '@absolutejs/commerce-stripe',
 				private: false,
+				publicExports: [
+					'@absolutejs/commerce-stripe',
+					'@absolutejs/commerce-stripe/manifest',
+					'@absolutejs/commerce-stripe/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Stripe payment + checkout adapter for @absolutejs/commerce. Implements the PaymentProvider contract: create embedded or hosted checkout sessions (with shipping, discounts, and automatic tax + graceful fallback), mint one-off coupons, idempotent refunds, and verify webhooks into normalized checkout and payment-dispute events. Disputes retain only provider-neutral identity, amount, reason, status, and evidence deadline for the commerce aftercare case substrate.',
+						title: 'Overview'
+					}
+				],
 				version: '0.25.1-beta.3'
 			}
 		],
@@ -605,6 +3230,30 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --sourcemap --target=bun --external @absolutejs/dispatch && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Framework-agnostic compliance substrate for the AbsoluteJS PaaS. Declarative data classification + residency + retention policies; orchestrators for retention sweeps, Subject Access Requests, right-to-erasure, and evidence bundles. Composes onto @absolutejs/audit + @absolutejs/telemetry without vendoring any specific framework (SOC2 / HIPAA / ISO 27001 / GDPR).',
 		directory: 'compliance',
@@ -612,12 +3261,54 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Compliance',
 		packageName: '@absolutejs/compliance',
 		private: false,
+		publicExports: [
+			'@absolutejs/compliance',
+			'@absolutejs/compliance/manifest',
+			'@absolutejs/compliance/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'const store = createPostgresMessagingConsentStore(postgres);\nconst consent = createMessagingConsentLedger({ audit, store });\n\nawait consent.grant(\n  {\n    recipient: "+12025550100",\n    programId: "acme-incident-alerts",\n    purpose: "incident-alerts",\n    tenant: "tenant-a",\n    transport: "sms",\n  },\n  { at: Date.now(), reference: "signup-42", source: "signup-form" },\n);\n\nconst dispatcher = createDispatcher({\n  policies: [createMessagingConsentDispatchPolicy({ ledger: consent })],\n  sms,\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'const policy = createCompliancePolicy({\n  classifications: {\n    pii: { id: "pii", retentionMs: 730 * DAY, residency: "eu" },\n    "audit-log": {\n      id: "audit-log",\n      retentionMs: Infinity,\n      erasureExempt: true, // SOX / many regulators require 7+ years\n      flags: { immutable: true },\n    },\n    operational: { id: "operational", retentionMs: 90 * DAY },\n  },\n  tenantOverrides: {\n    "gdpr-strict-tenant": { pii: { retentionMs: 90 * DAY } },\n  },\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'@absolutejs/compliance gives a control plane composable primitives. None of them know about a specific framework — SOC2, HIPAA, ISO 27001, and GDPR all map onto the same shape.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'The messaging consent ledger records immutable grant/revocation evidence at an exact tenant, program, purpose, transport, and recipient scope. Memory and Postgres stores are included. Its dispatch policy blocks messages before an adapter or provider call when evidence is missing or revoked.',
+				title: 'Messaging consent'
+			},
+			{
+				description:
+					'Primitives is documented in the repository README.',
+				title: 'Primitives'
+			},
+			{
+				description:
+					'A per-tenant override wins over the class default. GDPR-strict tenants riding a default-US-East platform get their own residency, retention, and erasure-exempt behavior without forking the policy.',
+				title: 'Tenant overrides'
+			}
+		],
 		repository: 'https://github.com/absolutejs/compliance',
 		subpackages: [],
 		version: '0.7.0'
 	},
 	{
 		category: 'Dev Tools',
+		commands: [],
 		description:
 			'Local OpenID Foundation conformance tooling used to validate standards-based identity implementations.',
 		directory: 'conformance-suite',
@@ -625,12 +3316,29 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'OpenID Conformance Suite',
 		packageName: null,
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'This is the OpenID Foundation conformance suite, which covers OpenID Connect, FAPI1-Advanced, FAPI2, FAPI-CIBA and OpenID for Identity Assurance (ekyc).',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://gitlab.com/openid/conformance-suite',
 		subpackages: [
 			{
+				commands: [
+					{
+						command: 'playwright test',
+						name: 'test:e2e'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'cts-frontend-e2e',
 				private: true,
+				publicExports: [],
+				readmeTopics: [],
 				version: '0.0.1'
 			}
 		],
@@ -638,30 +3346,168 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Dev Tools',
+		commands: [
+			{
+				command:
+					'rm -rf dist && tsc --project tsconfig.build.json && cp -R src/templates dist/templates',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run test:unit && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'bun scripts/dev.ts',
+				name: 'dev'
+			},
+			{
+				command: 'absolute prettier --write',
+				name: 'format'
+			},
+			{
+				command:
+					"absolute eslint --ignore-pattern 'absolutejs-project/**'",
+				name: 'lint'
+			},
+			{
+				command: 'cd absolutejs-project && bun dev',
+				name: 'test'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test:unit'
+			},
+			{
+				command: 'bun run tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description: 'A CLI tool to create a new AbsoluteJS project',
 		directory: 'create-absolutejs',
 		kind: 'package',
 		name: 'Create AbsoluteJS',
 		packageName: 'create-absolutejs',
 		private: false,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'bun create absolutejs my-app',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: 'npm create absolutejs my-app\nyarn create absolutejs my-app\npnpm create absolutejs my-app',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'A CLI tool to scaffold new AbsoluteJS projects quickly and effortlessly.',
+				title: 'Overview'
+			},
+			{
+				description: 'Scaffold a new project called :',
+				title: 'Usage'
+			},
+			{
+				description: 'Usage: create-absolute [project-name] [options]',
+				title: 'Options'
+			},
+			{
+				description:
+					'Choose between the default layout (pre-configured folder names) or custom, which prompts you to specify each directory name yourself:',
+				title: 'Directory Configuration'
+			},
+			{
+				description:
+					'After scaffolding, prints a detailed summary of your configuration (language, frontends, directories, etc.).',
+				title: 'Debug & LTS Flags'
+			},
+			{
+				description: 'Once the scaffold completes, you’re ready to go:',
+				title: 'Getting Started'
+			},
+			{
+				description:
+					'Contributions are welcome! Feel free to open issues or submit pull requests to improve the CLI.',
+				title: 'Contributing'
+			}
+		],
 		repository: 'https://github.com/absolutejs/create-absolutejs',
 		subpackages: [],
 		version: '0.15.7'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --root ./src --outdir dist --target=bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @hubspot/api-client --external '@hubspot/api-client/*' --external @mondaydotcomorg/api --external '@mondaydotcomorg/api/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external jsforce --external 'jsforce/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{js,ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'bun run tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description: 'Multi-vendor CRM adapter framework for AbsoluteJS',
 		directory: 'crm',
 		kind: 'package',
 		name: 'Crm',
 		packageName: '@absolutejs/crm',
 		private: false,
+		publicExports: [
+			'@absolutejs/crm',
+			'@absolutejs/crm/manifest',
+			'@absolutejs/crm/manifest.json'
+		],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Multi-vendor CRM adapter framework for the AbsoluteJS stack.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'A unified CRM contract (CRMAdapter) plus vendor adapters for the major CRMs, designed to be:',
+				title: 'What it is'
+			},
+			{
+				description:
+					'Vendor coverage roadmap is documented in the repository README.',
+				title: 'Vendor coverage roadmap'
+			},
+			{
+				description: 'Design is documented in the repository README.',
+				title: 'Design'
+			}
+		],
 		repository: 'https://github.com/absolutejs/crm',
 		subpackages: [],
 		version: '0.0.10-alpha.10'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [],
 		description:
 			'Monorepo root for @absolutejs/discover dataset adapters — open-data sources (GLEIF, SEC EDGAR, GitHub, …) normalized to the DatasetSource contract. Subpackages live in ./<name>/ and publish independently as @absolutejs/dataset-<name>.',
 		directory: 'dataset-adapters',
@@ -669,27 +3515,107 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Dataset Adapters',
 		packageName: 'dataset-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [],
 		repository: null,
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --target=bun --external @absolutejs/discover && tsc --emitDeclarationOnly --project tsconfig.json',
+						name: 'build'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					"GitHub DatasetSource adapter for @absolutejs/discover — resolve a company's GitHub org and surface its public members (founders/leads, occasionally a public email) for tech-company contact discovery.",
 				name: '@absolutejs/dataset-github',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'A @absolutejs/discover DatasetSource over the GitHub REST API — for the tech long tail SEC EDGAR misses: private startups with a GitHub org.',
+						title: 'Overview'
+					},
+					{
+						description:
+							"findCompany resolves a company to its GitHub org (by domain SLD, normalized name, then org search). findPeople lists the org's public members and surfaces only those whose bio signals leadership (founder / exec / lead) — not every engineer — with a public email when the profile exposes one (which lets the caller skip email-pattern-guessing for that person).",
+						title: "What it does — and doesn't"
+					}
+				],
 				version: '0.0.2'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --target=bun --external @absolutejs/discover && bun build scripts/snapshot.ts --outdir dist --target=bun --external @absolutejs/discover && tsc --emitDeclarationOnly --project tsconfig.json',
+						name: 'build'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'GLEIF (Global LEI) DatasetSource adapter for @absolutejs/discover — resolve a company to its official legal entity (LEI, jurisdiction, country) from open CC0 registry data.',
 				name: '@absolutejs/dataset-gleif',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'A @absolutejs/discover DatasetSource over GLEIF — the Global Legal Entity Identifier registry, published as open CC0 data.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'GLEIF is legal entities, not people, so this adapter implements findCompany only. It canonicalizes a name to its official legal entity and returns the LEI (registryId) — the key to follow up for parent/subsidiary relationships in the GLEIF graph — plus the registered country.',
+						title: "What it does — and doesn't"
+					},
+					{
+						description:
+							"For high-volume or offline use, build a local SQLite index from GLEIF's full Golden Copy dump (2.7M entities) and point the adapter at it:",
+						title: 'Offline snapshot — no rate limits, no network'
+					}
+				],
 				version: '0.0.3'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --target=bun --external @absolutejs/discover && tsc --emitDeclarationOnly --project tsconfig.json',
+						name: 'build'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'SEC EDGAR DatasetSource adapter for @absolutejs/discover — resolve a US public company (CIK) and its insiders (officers/directors via Form 3/4/5) from public-domain U.S. government filings.',
 				name: '@absolutejs/dataset-sec-edgar',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'A @absolutejs/discover DatasetSource over SEC EDGAR — public-domain U.S. government filings. Unlike most open company data, this one carries people: it implements both findCompany (CIK) and findPeople (insiders).',
+						title: 'Overview'
+					},
+					{
+						description:
+							"findPeople reads a company's recent Form 3/4/5 ownership filings and returns the insiders (officers + directors) with their titles, names de-inverted from SEC's LAST FIRST format. findCompany resolves a name to its CIK.",
+						title: "What it does — and doesn't"
+					}
+				],
 				version: '0.0.2'
 			}
 		],
@@ -697,6 +3623,29 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Dev Tools',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build ./src/index.ts ./src/playwright.ts ./src/desktop.ts ./src/recording.ts ./src/script.ts ./src/auth.ts ./src/voiceover.ts ./src/manifest.ts ./src/timeline.ts ./src/composition.ts ./src/syncPlan.ts --root src --outdir dist --target bun --external playwright --external @absolutejs/auth --external @absolutejs/sync --external @absolutejs/voice --external @absolutejs/voice-tester --external @absolutejs/ai && bun x tsc --emitDeclarationOnly --project tsconfig.json',
+				name: 'build'
+			},
+			{
+				command: 'absolute prettier --write',
+				name: 'format'
+			},
+			{
+				command: 'absolute eslint',
+				name: 'lint'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'absolute typecheck',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Automated product-demo runtime for AbsoluteJS — drives browser and desktop workflows, records the screen, adds presenter-style highlights, and coordinates AI voiceover.',
 		directory: 'demo',
@@ -704,12 +3653,102 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Demo',
 		packageName: '@absolutejs/demo',
 		private: false,
+		publicExports: [
+			'@absolutejs/demo',
+			'@absolutejs/demo/playwright',
+			'@absolutejs/demo/desktop',
+			'@absolutejs/demo/recording',
+			'@absolutejs/demo/script',
+			'@absolutejs/demo/auth',
+			'@absolutejs/demo/voiceover',
+			'@absolutejs/demo/manifest',
+			'@absolutejs/demo/timeline',
+			'@absolutejs/demo/composition',
+			'@absolutejs/demo/sync-plan'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/demo',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'bun add -d playwright',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'sh'
+			}
+		],
+		readmeTopics: [
+			{
+				description: 'Automated product-demo runtime for AbsoluteJS.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/demo',
+				title: 'Install'
+			},
+			{
+				description:
+					'import { createDemoRunner, goto, narrate, signIn, spotlight, writeDemoManifest, } from "@absolutejs/demo"; import { createDemoAuthDriver } from "@absolutejs/demo/auth"; import { createPlaywrightDemoSession, } from "@absolutejs/demo/playwright";',
+				title: 'Browser demo'
+			},
+			{
+				description:
+					'Sign-in is profile-based. Declare named credential profiles on the script and trigger them with signIn("") steps. Credentials are passed as env references ({ env: "VARNAME" }) — the runner resolves them at sign-in time, so real secrets never enter the script object, the manifest, or the recording. A missing env var throws an error naming the variable, never its value.',
+				title: 'Authentication'
+			},
+			{
+				description:
+					'Use createCommandDesktopDriver for native-app automation. On macOS, createMacDesktopDriver() can open/focus apps and send basic keystrokes via osascript; Linux and Windows can provide equivalent command factories using xdotool, wmctrl, PowerShell, or a UIA bridge.',
+				title: 'Desktop control'
+			},
+			{
+				description:
+					'createCommandRecorder wraps tools such as ffmpeg, OBS command bridges, or platform-native recorders. Browser-only demos can also use Playwright video and add the resulting path as a recording artifact.',
+				title: 'Recording'
+			},
+			{
+				description:
+					'ElevenLabs is the recommended tier for client demos — Deepgram Aura is faster and cheaper but reads more synthetic. createElevenLabsVoiceover defaults to an American voice (Rachel) and the tuned runtime settings from the Dealroom voice upgrade (elevenflashv25, stability 0.42, similarity boost 0.78, style 0.35, speaker boost on), rendering high-fidelity mp344100128 files.',
+				title: 'Voiceover'
+			},
+			{
+				description:
+					'composeDemoWithFFmpeg creates a final video artifact from the run recording and voiceover artifacts. It uses the demo timeline to offset narration against the recorded screen.',
+				title: 'Composition'
+			}
+		],
 		repository: 'https://github.com/absolutejs/demo',
 		subpackages: [],
 		version: '0.0.1-beta.0'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/releaseArtifact.ts src/infrastructure.ts src/ephemeralInfrastructure.ts src/edgeIngress.ts src/digitalocean.ts src/digitaloceanInfrastructure.ts src/digitaloceanEphemeralInfrastructure.ts src/digitaloceanIngress.ts src/gcp.ts src/gcpIngress.ts src/hetzner.ts src/hetznerInfrastructure.ts src/linode.ts src/linodeInfrastructure.ts src/vultr.ts src/vultrInfrastructure.ts src/dns.ts src/cloudflare.ts src/digitaloceanDns.ts src/hetznerDns.ts src/route53.ts src/tls.ts src/env.ts src/preview.ts src/managedPreview.ts --outdir dist --root src --sourcemap --target=bun && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Generic Bun-project deploy pipeline. A Target (localTarget / sshTarget) is anywhere you can exec + upload — DigitalOcean droplets, Linode, Hetzner, Vultr, your own boxes. Bundled pipeline: prepare → upload → install → build → link → restart → verify. Atomic symlink swap, release history, prune, hooks. SSH shells out to system ssh/rsync — zero ssh2 deps.',
 		directory: 'deploy',
@@ -717,12 +3756,126 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Deploy',
 		packageName: '@absolutejs/deploy',
 		private: false,
+		publicExports: [
+			'@absolutejs/deploy',
+			'@absolutejs/deploy/digitalocean',
+			'@absolutejs/deploy/digitalocean-infrastructure',
+			'@absolutejs/deploy/infrastructure',
+			'@absolutejs/deploy/ephemeral-infrastructure',
+			'@absolutejs/deploy/digitalocean-ephemeral-infrastructure',
+			'@absolutejs/deploy/edge-ingress',
+			'@absolutejs/deploy/release-artifact',
+			'@absolutejs/deploy/digitalocean-ingress',
+			'@absolutejs/deploy/gcp',
+			'@absolutejs/deploy/gcp-ingress',
+			'@absolutejs/deploy/hetzner',
+			'@absolutejs/deploy/hetzner-infrastructure',
+			'@absolutejs/deploy/dns',
+			'@absolutejs/deploy/cloudflare',
+			'@absolutejs/deploy/tls',
+			'@absolutejs/deploy/env',
+			'@absolutejs/deploy/linode',
+			'@absolutejs/deploy/linode-infrastructure',
+			'@absolutejs/deploy/vultr',
+			'@absolutejs/deploy/vultr-infrastructure',
+			'@absolutejs/deploy/digitalocean-dns',
+			'@absolutejs/deploy/hetzner-dns',
+			'@absolutejs/deploy/route53',
+			'@absolutejs/deploy/preview',
+			'@absolutejs/deploy/managed-preview'
+		],
+		readmeSamples: [
+			{
+				code: "import { createDigitalOceanInfrastructureProvider } from '@absolutejs/deploy/digitalocean-infrastructure';\n\nconst provider = createDigitalOceanInfrastructureProvider({\n  token: process.env.DIGITALOCEAN_TOKEN!,\n  tag: 'absolutejs-paas-node',\n  regions: [{\n    region: 'nyc3',\n    size: 's-2vcpu-4gb',\n    image: 'ubuntu-24-04-x64',\n    sshKeys: [process.env.DIGITALOCEAN_SSH_KEY!],\n    userData: process.env.ABSOLUTEJS_NODE_CLOUD_INIT,\n  }],\n  agent: { preferPrivateNetwork: true, port: 8081 },\n});\n\nawait provider.listNodes();\nawait provider.provisionNode({\n  idempotencyKey: crypto.randomUUID(),\n  name: 'absolutejs-node-01',\n});",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: "import { createDigitalOceanIngressProvider } from '@absolutejs/deploy/digitalocean-ingress';\n\nconst ingress = createDigitalOceanIngressProvider({\n  token: process.env.DIGITALOCEAN_TOKEN!,\n});\n\nawait ingress.reconcileIngress({\n  name: 'absolutejs-edge',\n  idempotencyKey: crypto.randomUUID(),\n  backends: [\n    { region: 'nyc3', resourceId: 'regional-lb-east', priority: 1 },\n    { region: 'sfo3', resourceId: 'regional-lb-west', priority: 2 },\n  ],\n  listener: {\n    port: 443,\n    protocol: 'https',\n    targetPort: 443,\n    tlsPassthrough: true,\n  },\n  healthCheck: { protocol: 'tcp', port: 443 },\n});",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Generic Bun-project deploy pipeline. A Target is anywhere you can run a command and copy a file — a DigitalOcean Droplet over SSH, a Linode box, your own laptop. Two ops, four words: exec and upload.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Control planes use the normalized InfrastructureProvider contract from @absolutejs/deploy/infrastructure. Cloud inventory and lifecycle adapters live in this package beside their deploy targets so providers never become scattered across host applications.',
+				title: 'Infrastructure providers (0.14.0)'
+			},
+			{
+				description:
+					'EdgeIngressProvider is the shared lifecycle for a public global ingress over regional edge pools. It normalizes the listener, backend health check, ordered regional failover priority, provider resource references, addresses, state, and idempotent removal. Provider resource construction stays here instead of leaking DigitalOcean or GCP APIs into a control plane.',
+				title: 'Global edge ingress (0.17.0)'
+			},
+			{
+				description:
+					'v0.0.1 surface is documented in the repository README.',
+				title: 'v0.0.1 surface'
+			},
+			{
+				description:
+					"Skip the click-through DO dashboard. digitalOceanTarget(options) looks up a droplet by name; creates it via the v2 API if absent; waits for status === 'active' + IPv4; waits for SSH; returns a Target ready to hand to createDeployer.",
+				title: '@absolutejs/deploy/digitalocean — provision-or-reuse from code (0.2.0)'
+			},
+			{
+				description:
+					'Same shape as the DigitalOcean adapter, Hetzner Cloud v1 API mappings underneath. Hetzner-specific differences: locations (nbg1 / fsn1 / hel1 / ash / hil), server types (cx22 / cpx11 / ccx13 / …), labels (key-value, not array), and public-net IPv4/IPv6 are independently toggleable.',
+				title: '@absolutejs/deploy/hetzner — provision-or-reuse from code (0.3.0)'
+			},
+			{
+				description:
+					'After provisioning a Target, point a hostname at its IP without leaving the deploy script. cloudflareProvider({ token, zoneId }) implements the shared DnsProvider contract from @absolutejs/deploy/dns.',
+				title: '@absolutejs/deploy/cloudflare — DNS automation (0.4.0)'
+			},
+			{
+				description:
+					"The last step. After provisioning a Target and pointing DNS at it, issueCertificate(...) drives the full ACME-DNS-01 flow against Let's Encrypt: account registration, new order, DNS-01 challenge via the same DnsProvider you used for DNS, polling, CSR finalize, cert download. Then installCertificateOnTarget(...) uploads the PEM files to the box.",
+				title: "@absolutejs/deploy/tls — Let's Encrypt automation (0.5.0)"
+			},
+			{
+				description:
+					'The "universal place to rotate a key across the myriad of services" loop. Composes with @absolutejs/secrets: that library handles the in-process side (resolve, rotate, redact, in-process listeners); this module handles the deploy-side (push values to remote env files, atomic swap, conditional service reload).',
+				title: '@absolutejs/deploy/env — env-file sync + secret propagation (0.7.0)'
+			},
+			{
+				description:
+					'issueCertificate is one-shot; renewCertificate is the conditional driver you wire to a cron / scheduled function. Reads the current cert PEM, parses its validTo, and either returns { renewed: false } (cheap, no network IO) or runs the full issuance flow.',
+				title: 'Renewals — renewCertificate (0.6.0)'
+			},
+			{
+				description: 'Assuming a fresh Ubuntu/Debian Droplet:',
+				title: 'DigitalOcean Droplet — first deploy (manual)'
+			},
+			{
+				description:
+					'Control planes that activate a release through a remote host agent can use the @absolutejs/deploy/release-artifact boundary instead of inventing archive and integrity handling:',
+				title: 'Streamed release artifacts'
+			}
+		],
 		repository: 'https://github.com/absolutejs/deploy',
 		subpackages: [],
 		version: '0.21.0'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --target=bun --external @absolutejs/sync && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			"In-house B2B decision-maker discovery — find the right person at a company via importable open-data adapters + LLM/web, so you don't pay PDL/Apollo per person-search.",
 		directory: 'discover',
@@ -730,12 +3883,67 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Discover',
 		packageName: '@absolutejs/discover',
 		private: false,
+		publicExports: [
+			'@absolutejs/discover',
+			'@absolutejs/discover/manifest',
+			'@absolutejs/discover/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { discoverContacts } from "@absolutejs/discover";\n\nawait discoverContacts(\n  { company: "Acme", domain: "acme.com", roleIntent: "head of partnerships" },\n  { sources: [secEdgar, gleif], search: braveSearch, extract: askClaude },\n);\n// → [{ fullName: "Jane Doe", title: "Head of Partnerships", confidence: 90,\n//      linkedinUrl: "...", source: "...", reason: "listed as partnerships lead" }]',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'type DatasetSource = {\n  name: string;\n  findPeople?: (q: DatasetQuery) => Promise<NormalizedPerson[]>;\n  findCompany?: (q: { name?; domain? }) => Promise<NormalizedCompany | null>;\n};',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Find the right person to contact at a company — the decision-maker PDL/Apollo charge per person-search for. Provider-agnostic orchestration: it consults importable dataset adapters first (free), then falls to LLM + web only when it needs more.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Open-data sources are importable adapters implementing one interface, so seeded public data is free and the paid LLM/web path is the fallback:',
+				title: 'The dataset adapter contract'
+			},
+			{
+				description:
+					'discover stays provider-agnostic — you inject the capabilities:',
+				title: 'Bring your own LLM + web'
+			}
+		],
 		repository: 'https://github.com/absolutejs/discover',
 		subpackages: [],
 		version: '0.0.9'
 	},
 	{
 		category: 'Messaging',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/telemetry --external @absolutejs/audit && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Provider-agnostic outbound dispatcher for email, carrier and rich messaging, and push notifications in the AbsoluteJS ecosystem.',
 		directory: 'dispatch',
@@ -743,12 +3951,67 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Dispatch',
 		packageName: '@absolutejs/dispatch',
 		private: false,
+		publicExports: [
+			'@absolutejs/dispatch',
+			'@absolutejs/dispatch/manifest',
+			'@absolutejs/dispatch/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/dispatch\n# Plus one or more adapter siblings:\nbun add @absolutejs/dispatch-resend       # Resend (email)\nbun add @absolutejs/dispatch-postmark     # Postmark (email)\nbun add @absolutejs/dispatch-twilio       # Twilio messaging\nbun add @absolutejs/dispatch-telnyx       # Telnyx messaging\n# ...etc',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'import { createDispatcher } from "@absolutejs/dispatch";\nimport { createResendAdapter } from "@absolutejs/dispatch-resend";\nimport { Resend } from "resend";\n\nconst resend = new Resend(process.env.RESEND_KEY!);\n\nconst dispatcher = createDispatcher({\n  email: createResendAdapter({ client: resend }),\n  defaultFrom: { email: "no-reply@acme.io" },\n});\n\nawait dispatcher.email({\n  to: "alice@example.com",\n  subject: "Welcome to Acme",\n  text: "Hi Alice, click here to verify: ...",\n  tenant: "tenant-A", // optional — propagates to OTel + audit\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-agnostic outbound message dispatcher for the AbsoluteJS ecosystem.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/dispatch',
+				title: 'Install'
+			},
+			{
+				description:
+					'import { createDispatcher } from "@absolutejs/dispatch"; import { createResendAdapter } from "@absolutejs/dispatch-resend"; import { Resend } from "resend";',
+				title: 'Usage'
+			},
+			{
+				description: 'API is documented in the repository README.',
+				title: 'API'
+			},
+			{
+				description:
+					'Substrate pattern is documented in the repository README.',
+				title: 'Substrate pattern'
+			},
+			{
+				description:
+					'These ship in core for tests + dev. Production deployments use the sibling vendor adapters.',
+				title: 'Bundled adapters'
+			},
+			{
+				description:
+					'@react-email, mjml, handlebars, or whatever you like.',
+				title: 'What this package does NOT do'
+			}
+		],
 		repository: 'https://github.com/absolutejs/dispatch',
 		subpackages: [],
 		version: '0.7.1'
 	},
 	{
 		category: 'Messaging',
+		commands: [],
 		description:
 			'Monorepo root for @absolutejs/dispatch vendor adapters. Subpackages live in ./<name>/ and publish independently.',
 		directory: 'dispatch-adapters',
@@ -756,83 +4019,620 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Dispatch Adapters',
 		packageName: 'dispatch-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [],
 		repository: 'https://github.com/absolutejs/dispatch-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Apple Push Notification service HTTP/2 PushAdapter for @absolutejs/dispatch with ES256 provider-token rotation.',
 				name: '@absolutejs/dispatch-apns',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-apns',
+					'@absolutejs/dispatch-apns/manifest',
+					'@absolutejs/dispatch-apns/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Apple Push Notification service HTTP/2 PushAdapter for @absolutejs/dispatch. It signs ES256 provider JWTs, reuses them for fifty minutes, maintains pooled HTTP/2 sessions, and never exposes the .p8 key to dispatch messages or audit metadata.',
+						title: 'Overview'
+					}
+				],
 				version: '0.2.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/manifest --external @absolutejs/reliability --external @sinclair/typebox --external @aws-sdk/client-pinpoint-sms-voice-v2 --external @aws-sdk/client-socialmessaging && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'AWS End User Messaging SMS, MMS, RCS, Notify, and WhatsApp adapter for @absolutejs/dispatch.',
 				name: '@absolutejs/dispatch-aws-end-user-messaging',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-aws-end-user-messaging',
+					'@absolutejs/dispatch-aws-end-user-messaging/manifest',
+					'@absolutejs/dispatch-aws-end-user-messaging/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'AWS End User Messaging adapter for AbsoluteJS Dispatch. It uses AWS SDK v3 and IAM credentials to send SMS, MMS, plain or rich RCS, managed Notify templates, and WhatsApp messages.',
+						title: 'Overview'
+					}
+				],
 				version: '0.1.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/manifest --external @sinclair/typebox --external google-auth-library --external 'google-auth-library/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Firebase Cloud Messaging HTTP v1 PushAdapter for @absolutejs/dispatch with ADC and short-lived OAuth token support.',
 				name: '@absolutejs/dispatch-fcm',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-fcm',
+					'@absolutejs/dispatch-fcm/manifest',
+					'@absolutejs/dispatch-fcm/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Firebase Cloud Messaging HTTP v1 PushAdapter for @absolutejs/dispatch. It uses google-auth-library Application Default Credentials by default, so access tokens remain short-lived and service-account keys do not enter message payloads or dispatch core.',
+						title: 'Overview'
+					}
+				],
 				version: '0.2.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/manifest --external @absolutejs/reliability --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Infobip Messages API omnichannel adapter for @absolutejs/dispatch with validation, webhooks, and US registration workflows.',
 				name: '@absolutejs/dispatch-infobip',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-infobip',
+					'@absolutejs/dispatch-infobip/manifest',
+					'@absolutejs/dispatch-infobip/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Infobip Messages API adapter for AbsoluteJS Dispatch. It covers SMS, MMS, RCS, WhatsApp, Viber Business Messages and Bots, Apple Messages for Business, Instagram Direct, LINE, and Messenger through one transport.',
+						title: 'Overview'
+					}
+				],
 				version: '0.1.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/manifest --external @sinclair/typebox --external postmark --external 'postmark/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					"Postmark-backed EmailAdapter for @absolutejs/dispatch. Maps EmailMessage to Postmark's sendEmail params; surfaces the MessageID as DispatchResult.id.",
 				name: '@absolutejs/dispatch-postmark',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-postmark',
+					'@absolutejs/dispatch-postmark/manifest',
+					'@absolutejs/dispatch-postmark/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Postmark-backed EmailAdapter for @absolutejs/dispatch.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/dispatch @absolutejs/dispatch-postmark postmark',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { ServerClient } from "postmark"; import { createDispatcher } from "@absolutejs/dispatch"; import { createPostmarkAdapter } from "@absolutejs/dispatch-postmark";',
+						title: 'Usage'
+					},
+					{
+						description:
+							"createPostmarkAdapter({ client, // Required — your new ServerClient(serverToken) defaultFrom?, // Required if your messages don't set from messageStream?, // Default: Postmark's transactional stream mapMetadata?, // Customize EmailMessage.metadata → Postmark Tag/Metadata })",
+						title: 'API'
+					},
+					{
+						description: "Postmark's response shape:",
+						title: 'Error mapping'
+					}
+				],
 				version: '0.1.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/manifest --external @absolutejs/reliability --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Durable PostgreSQL device registry and fenced fanout claims for @absolutejs/dispatch push lifecycle.',
 				name: '@absolutejs/dispatch-push-postgres',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-push-postgres',
+					'@absolutejs/dispatch-push-postgres/manifest',
+					'@absolutejs/dispatch-push-postgres/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Production persistence for the provider-neutral push lifecycle in @absolutejs/dispatch.',
+						title: 'Overview'
+					}
+				],
 				version: '0.1.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/execution --external '@absolutejs/execution/*' --external @absolutejs/manifest --external @sinclair/typebox --external resend --external 'resend/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Resend-backed EmailAdapter with credential-safe installed effects, signed evidence, and reference-gated query recovery.',
 				name: '@absolutejs/dispatch-resend',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-resend',
+					'@absolutejs/dispatch-resend/manifest',
+					'@absolutejs/dispatch-resend/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Resend-backed EmailAdapter for @absolutejs/dispatch.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/dispatch @absolutejs/dispatch-resend resend',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { Resend } from "resend"; import { createDispatcher } from "@absolutejs/dispatch"; import { createResendAdapter } from "@absolutejs/dispatch-resend";',
+						title: 'Usage'
+					},
+					{
+						description:
+							"createResendAdapter({ client, // Required — your new Resend(apiKey) defaultFrom?, // Required if your messages don't set from tagsFromMetadata?, // Customize metadata → Resend tags mapping })",
+						title: 'API'
+					},
+					{
+						description:
+							"Resend's { data, error } response shape becomes:",
+						title: 'Error mapping'
+					},
+					{
+						description:
+							"The effect driver adds an abseffect Resend tag containing the durable effect ID and declares its complete webhook setup: callback template, Standard Webhooks headers, supported outbound events, exact secret alias, last-verified-event health signal, and signed-event replacement rotation. Hosts can pass the exact raw request body, Standard Webhooks headers, project tenant ID, and that project's exact RESENDWEBHOOKSECRET to verifyResendEffectWebhook(). It uses Resend's SDK verifier before returning a normalized EffectEvidenceRecord; recipients, sender, subject, headers, and the raw payload are never returned for storage.",
+						title: 'Durable effect webhook evidence'
+					}
+				],
 				version: '0.7.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/compliance --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/reliability --external '@absolutejs/reliability/*' --external @absolutejs/manifest --external @sinclair/typebox --external @sinch/sdk-core --external '@sinch/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Production Sinch Conversation API adapter for AbsoluteJS with multichannel fallback, signed durable webhooks, consent, readiness, and 10DLC workflows.',
 				name: '@absolutejs/dispatch-sinch',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-sinch',
+					'@absolutejs/dispatch-sinch/manifest',
+					'@absolutejs/dispatch-sinch/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Production Sinch Conversation API messaging for @absolutejs/dispatch.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/dispatch-sinch @sinch/sdk-core',
+						title: 'Install'
+					},
+					{
+						description:
+							'KakaoTalk, LINE, and WeChat through the recommended Conversation API',
+						title: 'What it covers'
+					},
+					{
+						description:
+							'import { createDispatcher } from "@absolutejs/dispatch"; import { createSinchAdapter } from "@absolutejs/dispatch-sinch"; import { SinchClient } from "@sinch/sdk-core";',
+						title: 'Minimal sending'
+					},
+					{
+						description:
+							"createSinchRegistrationClient() uses short-lived OAuth credentials against Sinch's US Registration API and Numbers API. Pass it to createSinchRegistrationManager() to submit and inspect 10DLC brands and campaigns, qualify use cases, preserve the number's SMS service plan while linking an approved campaign, and submit toll-free verification evidence.",
+						title: 'Compliance boundary'
+					}
+				],
 				version: '0.3.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/compliance --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/reliability --external '@absolutejs/reliability/*' --external @absolutejs/manifest --external @sinclair/typebox --external telnyx --external 'telnyx/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Production Telnyx SMS, MMS, and RCS messaging for @absolutejs/dispatch with signed webhooks, consent-safe scheduling, registration workflows, and readiness checks.',
 				name: '@absolutejs/dispatch-telnyx',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-telnyx',
+					'@absolutejs/dispatch-telnyx/manifest',
+					'@absolutejs/dispatch-telnyx/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Production Telnyx SMS, MMS, and direct rich RCS for @absolutejs/dispatch. The package includes multi-account routing, atomic idempotency, Ed25519-signed webhook processing, durable inbox recovery, consent ingestion, scheduling cancellation, RCS capability checks, carrier registration helpers, and readiness diagnostics.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/dispatch@^0.5 @absolutejs/dispatch-telnyx telnyx bun add @absolutejs/compliance@^0.5 # when enforcing program consent',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { createDispatcher } from "@absolutejs/dispatch"; import { createPostgresIdempotentOperationStore, createPostgresTransactionRunner, createTelnyxAdapter, } from "@absolutejs/dispatch-telnyx"; import { Telnyx } from "telnyx";',
+						title: 'Send SMS, MMS, and RCS'
+					},
+					{
+						description:
+							'Apply IDEMPOTENTOPERATIONPOSTGRESSCHEMA and WEBHOOKINBOXPOSTGRESSCHEMA, then use a checked-out transaction runner. Idempotency is scoped by provider, organization, tenant, namespace, and key; payload reuse conflicts, fencing prevents stale completion, and ambiguous provider calls become indeterminate instead of being retried automatically.',
+						title: 'Reliability and webhooks'
+					},
+					{
+						description:
+							'Native scheduling is opt-in, limited to SMS/MMS from five minutes to five days, and prohibited for consent-scoped messages. Prefer an Absolute queue that re-evaluates consent immediately before delivery. Use createTelnyxScheduledMessageManager() to inspect or cancel native schedules.',
+						title: 'Scheduling, registration, and readiness'
+					}
+				],
 				version: '0.3.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/compliance --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/manifest --external @sinclair/typebox --external twilio --external 'twilio/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun test tests/twilioPostgres.test.ts',
+						name: 'test:postgres'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Production Twilio SMS, MMS, RCS, and WhatsApp for @absolutejs/dispatch with consent enforcement, signed webhooks, registration automation, and readiness checks.',
 				name: '@absolutejs/dispatch-twilio',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-twilio',
+					'@absolutejs/dispatch-twilio/manifest',
+					'@absolutejs/dispatch-twilio/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Production Twilio SMS, MMS, RCS, and WhatsApp for @absolutejs/dispatch, with consent enforcement, signed webhooks and Event Streams, carrier-registration helpers, bounded durable inboxes, and operational readiness checks.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/dispatch @absolutejs/dispatch-twilio twilio bun add @absolutejs/compliance # when using the shared consent ledger',
+						title: 'Install'
+					},
+					{
+						description:
+							'Every send uses a Twilio Messaging Service and a public status callback.',
+						title: 'Send alerts'
+					},
+					{
+						description:
+							'import { createMessagingConsentDispatchPolicy, createMessagingConsentLedger, createPostgresMessagingConsentStore, } from "@absolutejs/compliance"; import { createPostgresTwilioLifecycleStore, createTwilioWebhookHandler, } from "@absolutejs/dispatch-twilio";',
+						title: 'Consent and signed messaging webhooks'
+					},
+					{
+						description:
+							'createTwilioEventStreamHandler() validates the raw JSON body signature and handles CloudEvent batches. Use createPostgresTwilioEventStreamStore() after applying TWILIOEVENTSTREAMPOSTGRESSCHEMA; it provides atomic deduplication, bounded retention, optional product-specific redaction, and recovery through drainTwilioEventStreamInbox().',
+						title: 'Event Streams'
+					},
+					{
+						description:
+							'const registration = createTwilioComplianceManager(client);',
+						title: 'Carrier compliance and ISV onboarding'
+					},
+					{
+						description:
+							'const report = await inspectTwilioMessagingReadiness({ client, expectedAccountSid: accountSid, inboundWebhookUrl, messagingServiceSid, requiresUsA2PRegistration: true, requiresRcsSender: true, rcsAssertions: { senderApproved: true, advancedOptOutMitigationTested: true, }, statusCallbackUrl, store: lifecycleStore, assertions: { consentEvidenceStored: true, optOutConfigured: true, privacyPolicyPublished: true, termsPublished: true, }, });',
+						title: 'Operational readiness'
+					}
+				],
 				version: '0.7.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/compliance --external @absolutejs/dispatch --external '@absolutejs/dispatch/*' --external @absolutejs/reliability --external '@absolutejs/reliability/*' --external @absolutejs/manifest --external @sinclair/typebox --external @vonage/server-sdk --external '@vonage/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Production Vonage Messages API adapter for AbsoluteJS with multichannel failover, signed durable webhooks, consent, readiness, and 10DLC inspection.',
 				name: '@absolutejs/dispatch-vonage',
 				private: false,
+				publicExports: [
+					'@absolutejs/dispatch-vonage',
+					'@absolutejs/dispatch-vonage/manifest',
+					'@absolutejs/dispatch-vonage/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Production Vonage Messages API adapter for @absolutejs/dispatch. It supports SMS, MMS, RCS, WhatsApp, Viber, and Facebook Messenger; ordered provider-native failover; signed durable webhooks; consent ingestion; tenant routing; readiness; and 10DLC inspection.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/dispatch@^0.6 @absolutejs/dispatch-vonage @vonage/server-sdk bun add @absolutejs/compliance@^0.6 # when enforcing program consent',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { createDispatcher } from "@absolutejs/dispatch"; import { createPostgresIdempotentOperationStore, createPostgresTransactionRunner, createVonageAdapter, } from "@absolutejs/dispatch-vonage"; import { Vonage } from "@vonage/server-sdk";',
+						title: 'Send with failover'
+					},
+					{
+						description:
+							'import { createPostgresWebhookInboxStore, createVonageWebhookHandler, } from "@absolutejs/dispatch-vonage";',
+						title: 'Signed durable webhooks'
+					},
+					{
+						description:
+							'consent is re-evaluated immediately before delivery.',
+						title: 'Operational boundaries'
+					}
+				],
 				version: '0.2.0'
 			}
 		],
@@ -840,6 +4640,32 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Dev Tools',
+		commands: [
+			{
+				command: 'absolute dev',
+				name: 'dev'
+			},
+			{
+				command: 'absolute prettier --write',
+				name: 'format'
+			},
+			{
+				command: 'absolute eslint',
+				name: 'lint'
+			},
+			{
+				command: 'absolute start',
+				name: 'start'
+			},
+			{
+				command: 'echo "Error: no test specified" && exit 1',
+				name: 'test'
+			},
+			{
+				command: 'absolute typecheck',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Documentation site for AbsoluteJS and its associated packages (deployed app, not a published library).',
 		directory: 'docs',
@@ -847,12 +4673,30 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Docs',
 		packageName: '@absolutejs/docs',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [],
 		repository: 'https://github.com/absolutejs/absolutejs-docs',
 		subpackages: [],
 		version: '0.0.1'
 	},
 	{
 		category: 'Data & Sync',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --sourcemap && tsc --emitDeclarationOnly --project tsconfig.json',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			"Tiny error helpers for @absolutejs Eden Treaty clients. Unwraps Eden's { status, value } failure shape into a real Error that KEEPS the HTTP status, so call sites stop dropping it. Zero dependencies.",
 		directory: 'eden',
@@ -860,12 +4704,68 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Eden',
 		packageName: '@absolutejs/eden',
 		private: false,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'import { apiError, isPaywallError } from "@absolutejs/eden";\n\nconst { data, error } = await api.things.get();\nif (error) throw apiError(error); // a real Error that KEEPS error.status\n\n// elsewhere\ntry {\n  await loadPremiumPanel();\n} catch (e) {\n  if (isPaywallError(e)) showUpgradeNudge();\n  else showError(apiErrorMessage(e));\n}',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import {\n  normalizeOffsetPage,\n  type OffsetPage,\n} from "@absolutejs/eden";\n\nconst { limit, offset } = normalizeOffsetPage(request, {\n  defaultLimit: 25,\n  maxLimit: 100,\n});\n\nconst response: OffsetPage<User> = { data: rows, total };',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Tiny error helpers for Eden Treaty clients. Eden surfaces a failed call as { status, value } — and most call sites throw error.value, dropping the HTTP status so a 402 paywall, a 409 conflict, and a 500 all look the same downstream. This fixes that.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'{ status, value }) into an Error that keeps .status.',
+				title: 'API'
+			},
+			{
+				description:
+					'List endpoints can share one bounded request/response contract without hiding their concrete database query:',
+				title: 'Pagination'
+			}
+		],
 		repository: null,
 		subpackages: [],
 		version: '0.2.0'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Deny-by-default outbound network policy and credential-safe fetch for AI agents.',
 		directory: 'egress',
@@ -873,12 +4773,51 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Egress',
 		packageName: '@absolutejs/egress',
 		private: false,
+		publicExports: [
+			'@absolutejs/egress',
+			'@absolutejs/egress/manifest',
+			'@absolutejs/egress/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'const policy = createEgressPolicy({\n  allowedHosts: ["api.stripe.com", "*.githubusercontent.com"],\n  resolver: resolvePublicDns,\n});\n\nconst agentFetch = createEgressFetch({\n  policy,\n  transport: createPinnedHttpsTransport(),\n  credentials: ({ url }) =>\n    url.hostname === "api.stripe.com"\n      ? { authorization: `Bearer ${stripeToken}` }\n      : undefined,\n  audit: writeSecurityEvent,\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Deny-by-default outbound networking for AI agents. The package authorizes an exact HTTPS destination, resolves every address, rejects private/local/reserved networks, re-runs policy after every redirect, injects credentials only after authorization, bounds response size, and emits audit events.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/egress',
 		subpackages: [],
 		version: '0.2.0'
 	},
 	{
 		category: 'Messaging',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --target=bun --external imapflow && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{js,ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'bun run tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Provider-neutral email sync adapters for AbsoluteJS: Gmail, Microsoft Graph, and IMAP.',
 		directory: 'email',
@@ -886,12 +4825,58 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Email',
 		packageName: '@absolutejs/email',
 		private: false,
+		publicExports: [
+			'@absolutejs/email',
+			'@absolutejs/email/manifest',
+			'@absolutejs/email/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/email',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: 'import {\n  createGmailClient,\n  gmailMessagesToNormalized,\n  parseGmailPubSubWebhook,\n} from "@absolutejs/email";\n\nconst client = createGmailClient({ accessToken });\nconst { messages, cursor } = await client.listHistory({ cursor: historyId });\nconst normalized = await gmailMessagesToNormalized(client, messages, {\n  accountEmail: "member@example.com",\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral email sync adapters for AbsoluteJS applications.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/email',
+				title: 'Install'
+			},
+			{
+				description:
+					'import { createGmailClient, gmailMessagesToNormalized, parseGmailPubSubWebhook, } from "@absolutejs/email";',
+				title: 'Gmail'
+			},
+			{
+				description:
+					'import { createMicrosoftGraphEmailClient, microsoftMessagesToNormalized, } from "@absolutejs/email";',
+				title: 'Microsoft Graph'
+			},
+			{
+				description:
+					'import { fetchImapMessages } from "@absolutejs/email";',
+				title: 'IMAP'
+			}
+		],
 		repository: 'https://github.com/absolutejs/email',
 		subpackages: [],
 		version: '0.1.0'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [],
 		description:
 			'Monorepo root for @absolutejs/engagement sales-engagement adapters — enrichment + outreach activity from Apollo, Outreach, Salesloft, … normalized to the EngagementSource contract. Subpackages live in ./<name>/ and publish independently as @absolutejs/engagement-<name>.',
 		directory: 'engagement-adapters',
@@ -899,20 +4884,121 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Engagement Adapters',
 		packageName: 'engagement-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Monorepo for @absolutejs/engagement sales-engagement adapters.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Add a provider by dropping a new .// workspace that implements EngagementSource and publishes as @absolutejs/engagement- — same shape as every other adapter monorepo in the ecosystem (dataset-adapters, queue-adapters, voice-adapters, …).',
+				title: 'Packages'
+			},
+			{
+				description:
+					"The point isn't \"another enrichment vendor\" — we already have those. It's that a rep's real outreach activity lives in these platforms, and that activity is what tells you which deals to keep driving and which to let cool. Pulling it onto a unified deal timeline is the value.",
+				title: 'Why it exists'
+			}
+		],
 		repository: 'https://github.com/absolutejs/engagement-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'The EngagementSource contract + normalized types for @absolutejs/engagement sales-engagement adapters — enrichment (person/company) and outreach activity (email/LinkedIn/call touchpoints).',
 				name: '@absolutejs/engagement',
 				private: false,
+				publicExports: [
+					'@absolutejs/engagement',
+					'@absolutejs/engagement/manifest',
+					'@absolutejs/engagement/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Provider-neutral contracts for sales enrichment and outreach activity in AbsoluteJS. Applications depend on one EngagementSource; provider packages such as @absolutejs/engagement-apollo implement that contract.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'— Apollo person and company enrichment, role-based people search, and outreach activity.',
+						title: 'Providers'
+					}
+				],
 				version: '0.0.8'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/engagement --external '@absolutejs/engagement/*' --external @absolutejs/manifest --external @sinclair/typebox && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Apollo.io EngagementSource adapter for @absolutejs/engagement — person/company enrichment and outreach activity (emails sent/opened/replied) from the Apollo API.',
 				name: '@absolutejs/engagement-apollo',
 				private: false,
+				publicExports: [
+					'@absolutejs/engagement-apollo',
+					'@absolutejs/engagement-apollo/manifest',
+					'@absolutejs/engagement-apollo/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Apollo.io adapter for @absolutejs/engagement.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'All calls fail soft: a non-2xx response or an unexpected shape returns null / [] rather than throwing, so a consumer can treat the source as best-effort.',
+						title: 'Capabilities'
+					}
+				],
 				version: '0.0.8'
 			}
 		],
@@ -920,6 +5006,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --target=bun && bun build src/profile.ts --outdir dist --target=browser && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			"In-house B2B enrichment — MX/SMTP/catch-all email verification, decision-maker email finding, and keyless public-profile enrichment (avatars, logos, social handles), so you don't pay PDL/Apollo/Clearbit per lookup.",
 		directory: 'enrich',
@@ -927,12 +5028,88 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Enrich',
 		packageName: '@absolutejs/enrich',
 		private: false,
+		publicExports: [
+			'@absolutejs/enrich',
+			'@absolutejs/enrich/profile',
+			'@absolutejs/enrich/manifest',
+			'@absolutejs/enrich/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { findEmail } from "@absolutejs/enrich";\n\n// Discovery-only — no SMTP, no third-party call:\nawait findEmail({ fullName: "Jane Doe", domain: "acme.com" });\n// → { email: "jane.doe@acme.com", status: "unknown", confidence: 45, template: "first.last" }\n\n// With a verifier you bring (ZeroBounce / Hunter / your ESP):\nawait findEmail({ fullName: "Jane Doe", domain: "acme.com" }, { verifier });\n// → { email: "jane.doe@acme.com", status: "deliverable", confidence: 95, template: "first.last" }',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'type EmailVerifier = (email: string) => Promise<{ status; confidence; catchAll? }>;',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'In-house B2B email verification and discovery — the engine commercial enrichment APIs (PDL, Apollo, Hunter, Clearbit) charge per lookup. You bring the inputs (a name + a company domain); this resolves and verifies the email.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'— generates the corporate patterns (first.last, flast, …), then:',
+				title: 'What it does'
+			},
+			{
+				description:
+					'The "confirm" step is an interface, not a baked-in SMTP probe:',
+				title: "The verifier is pluggable — and that's the point"
+			},
+			{
+				description:
+					'Confidence scale is documented in the repository README.',
+				title: 'Confidence scale'
+			},
+			{
+				description:
+					"The package ships smtpVerifier() so you can self-host the confirm step, but it's deliberately not the default:",
+				title: 'The built-in SMTP verifier (smtpVerifier) is opt-in — and carries warnings'
+			},
+			{
+				description:
+					'Keyless avatar/logo derivation from identifiers you already have — no per-lookup API. Browser-safe subpath (no node: imports), so the same module runs in your backend and your frontend bundle:',
+				title: 'Public-profile enrichment (@absolutejs/enrich/profile)'
+			}
+		],
 		repository: 'https://github.com/absolutejs/enrich',
 		subpackages: [],
 		version: '0.1.4'
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/ingest.ts src/elysia.ts src/symbolicate.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/handoff --external effect --external @jridgewell/trace-mapping --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Effect-native, Sentry-equivalent exception capture for the AbsoluteJS substrate. createErrorTracker decorates @absolutejs/audit + @absolutejs/telemetry + a durable issue store; capture() returns a CaptureOutcome with per-sink delivery state + typed (Data.TaggedError) failures — errors-as-values. Plus /ingest (coalescing buffer + Schema-validated endpoint + drainer for browser beacon payloads) and /symbolicate (source-map stack rewriting). No vendor lock-in.',
 		directory: 'errors',
@@ -940,12 +5117,67 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Errors',
 		packageName: '@absolutejs/errors',
 		private: false,
+		publicExports: [
+			'@absolutejs/errors',
+			'@absolutejs/errors/ingest',
+			'@absolutejs/errors/elysia',
+			'@absolutejs/errors/symbolicate',
+			'@absolutejs/errors/manifest',
+			'@absolutejs/errors/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { Effect } from "effect";\nimport { status } from "elysia";\nimport { createErrorTracker, createMemoryIssueStore } from "@absolutejs/errors";\nimport { tracerOrNoop } from "@absolutejs/telemetry";\n\nconst errors = createErrorTracker({\n  audit: broker, // @absolutejs/audit\n  tracer: tracerOrNoop(otelProvider, "app"),\n  store: createMemoryIssueStore(), // or @absolutejs/errors-postgres\n  project: "acme",\n  release: process.env.RELEASE,\n  environment: "production",\n  onIssue: (r) => alert(r.issue), // only on new / regression\n});\n\n// Effect API (primary):\nconst outcome = await Effect.runPromise(\n  errors.capture(e, {\n    tenant,\n    target: `order_${orderId}`,\n    tags: { component: "billing" },\n  }),\n);\n\n// Promise edge (for Promise-world consumers) — identical outcome:\nconst out = await errors.captureException(e);\n\nif (out.failures.length > 0) {\n  for (const f of out.failures) {\n    switch (f._tag) {\n      case "StoreFailure":\n        retryLater(f.cause);\n        break; // f.cause: IssueStoreError\n      case "AuditSinkFailure":\n        page("audit lost", f.cause);\n        break;\n      case "TracerFailure":\n      case "OnIssueFailure":\n      case "FingerprintFailure":\n        /* tolerate */ break;\n    }\n  }\n}\nreturn status(\n  "Internal Server Error",\n  `Request failed. Reference: ${out.fingerprint}`,\n);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'createErrorTracker(options?: {\n  audit?: { append: (event) => Promise<void> | void };\n  tracer?: { startSpan?: (name) => Span };\n  store?: IssueStore;          // durable "Issues" surface\n  project?: string;            // default \'default\'\n  onIssue?: (r: IssueUpsertResult) => void | Promise<void>;  // new/regression only\n  release?: string;\n  environment?: string;\n  fingerprint?: (error: Error, context: ErrorContext) => string | Promise<string>;\n  maxRecent?: number;          // default 100\n  maxFingerprints?: number;    // default 1000\n  clock?: () => number;\n}) => ErrorTracker',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'createErrorTracker is a thin decorator over @absolutejs/audit, @absolutejs/telemetry, and a durable issue store. capture(error, context?) is an Effect — capturing an error can never itself fail — that does six things in one shot:',
+				title: 'Overview'
+			},
+			{
+				description:
+					'createErrorTracker(options?: { audit?: { append: (event) => Promise | void }; tracer?: { startSpan?: (name) => Span }; store?: IssueStore; // durable "Issues" surface project?: string; // default \'default\' onIssue?: (r: IssueUpsertResult) => void | Promise; // new/regression only release?: string; environment?: string; fingerprint?: (error: Error, context: ErrorContext) => string | Promise; maxRecent?: number; // default 100 maxFingerprints?: number; // default 1000 clock?: () => number; }) => ErrorTracker',
+				title: 'API'
+			},
+			{
+				description:
+					'@absolutejs/errors/elysia provides one server plugin with separate settings for the two error paths:',
+				title: 'Elysia server integration'
+			},
+			{
+				description:
+					'The in-process buffer is for triage; for a persistent, queryable Issues product (first-seen / last-seen / occurrence count / state / assignee / regression detection) pass a store:',
+				title: 'Durable issues (the "Issues" surface)'
+			},
+			{
+				description:
+					'The default fingerprint is a 16-hex-char prefix of SHA-1 over',
+				title: 'Fingerprinting'
+			},
+			{
+				description:
+					"counter map so an attacker who can synthesize unique errors can't blow process memory. Beyond the cap, older entries are evicted arbitrarily — the counters are approximate-by-design.",
+				title: 'Memory bounds'
+			}
+		],
 		repository: 'https://github.com/absolutejs/errors',
 		subpackages: [],
 		version: '0.7.1'
 	},
 	{
 		category: 'Observability',
+		commands: [],
 		description:
 			'Monorepo root for @absolutejs/errors issue-store adapters. Subpackages live in ./<name>/ and publish independently.',
 		directory: 'errors-adapters',
@@ -953,13 +5185,71 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Errors Adapters',
 		packageName: 'errors-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [],
 		repository: 'https://github.com/absolutejs/errors-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/errors --external drizzle-orm --external 'drizzle-orm/*' --external effect --external postgres --external @neondatabase/serverless && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Postgres-backed, Effect-native IssueStore for @absolutejs/errors with first-class Drizzle and tagged-template adapters.',
 				name: '@absolutejs/errors-postgres',
 				private: false,
+				publicExports: [
+					'@absolutejs/errors-postgres',
+					'@absolutejs/errors-postgres/manifest',
+					'@absolutejs/errors-postgres/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Postgres-backed, Effect-native IssueStore for @absolutejs/errors — the durable "Issues" surface (Sentry\'s product core), self-hosted on your own Postgres.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/errors-postgres',
+						title: 'Install'
+					},
+					{
+						description:
+							'Usage is documented in the repository README.',
+						title: 'Usage'
+					},
+					{
+						description:
+							'Every method returns an Effect with a typed IssueStoreError channel (IssueStoreSchemaError / IssueStoreQueryError / IssueStoreSerializationError) — failures are values, not throws.',
+						title: 'What it implements'
+					},
+					{
+						description:
+							'Created on first use (set ensureSchema: false to manage it via migrations). tablePrefix defaults to error → errorissues + errorevents.',
+						title: 'Schema (lazy, idempotent)'
+					}
+				],
 				version: '0.1.3'
 			}
 		],
@@ -967,18 +5257,74 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Dev Tools',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --splitting --target=bun --external eslint --external @typescript-eslint/utils --external typescript',
+				name: 'build'
+			},
+			{
+				command: 'absolutejs prettier --write',
+				name: 'format'
+			},
+			{
+				command: 'bun run build && bun run absolutejs eslint',
+				name: 'lint'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'bun run tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description: 'ESLint plugin for AbsoluteJS',
 		directory: 'eslint-plugin',
 		kind: 'package',
 		name: 'ESLint Plugin',
 		packageName: 'eslint-plugin-absolute',
 		private: false,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'new Elysia().use(auth).use(metrics);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'new Elysia().use([auth, metrics]);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'ESLint rule collection for AbsoluteJS applications and packages.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'absolute/elysia-composition-boundaries prevents a route application from being extended through a second variable such as const adminApp = publicApp.get(...). Each route surface must start from its own named new Elysia(...), install shared dependencies explicitly, and be mounted at a shallow root. This keeps TypeScript from repeatedly instantiating the accumulated server graph and preserves real sub-app types for Eden.',
+				title: 'Elysia composition boundaries'
+			},
+			{
+				description:
+					'absolute/eden-requires-react-query requires browser Eden Treaty requests to execute inside a TanStack React Query queryFn or mutationFn. The rule follows aliased React Query imports, same-file helper functions, and request closures passed through mutate or mutateAsync, without depending on application client, component, or endpoint names.',
+				title: 'Typed request boundaries'
+			}
+		],
 		repository: 'https://github.com/absolutejs/eslint-plugin-absolute',
 		subpackages: [],
 		version: '0.11.27'
 	},
 	{
 		category: 'Dev Tools',
+		commands: [],
 		description:
 			'Runnable examples demonstrating AbsoluteJS framework features and ecosystem packages.',
 		directory: 'examples',
@@ -986,121 +5332,1102 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Examples',
 		packageName: null,
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'cd voice\nbun install\nbun dev',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Each directory is a standalone example app. Pick one, cd in, bun install, bun dev.',
+				title: 'Overview'
+			},
+			{
+				description: 'cd voice bun install bun dev',
+				title: 'Running an example'
+			},
+			{
+				description:
+					'Run checks from inside the example you are changing. Most examples expose bun run typecheck; examples with browser coverage also expose bun run test. Today that includes image-optimization/, sync/, and isolated-jsc/.',
+				title: 'Checks'
+			},
+			{
+				description:
+					'These were previously twelve separate repos under the absolutejs org. They were consolidated here in May 2026 to reduce maintenance overhead. The original repos are now archived on GitHub.',
+				title: 'History'
+			}
+		],
 		repository: 'https://github.com/absolutejs/examples',
 		subpackages: [
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'playwright test',
+						name: 'test:e2e'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolute-ai-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute build',
+						name: 'build'
+					},
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-auth-example',
 				private: true,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'OAuth2 authentication with @absolutejs/auth, demonstrated across all six AbsoluteJS frontends — React, Vue, Svelte, Angular, HTML, and HTMX — backed by one Elysia server, one JSON/OAuth API, and one shared CSS file.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Every framework implements the same flows against the shared backend:',
+						title: 'What it shows'
+					},
+					{
+						description: 'bun install',
+						title: 'Run it'
+					},
+					{
+						description:
+							'Routes is documented in the repository README.',
+						title: 'Routes'
+					},
+					{
+						description:
+							'bun dev · bun start · bun run build · bun run typecheck · bun run lint · bun run format · bun db:push · bun db:studio',
+						title: 'Scripts'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute build',
+						name: 'build'
+					},
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-crm-example',
 				private: true,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'One page per framework (React / Vue / Svelte / Angular / HTML / HTMX) demonstrating the same CRM lead-capture flow against @absolutejs/crm. Backend wires a stub adapter so the example runs without real Salesforce/HubSpot credentials.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'What the example demonstrates is documented in the repository README.',
+						title: 'What the example demonstrates'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-demo-example',
 				private: true,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'Runnable product-demo proof for @absolutejs/demo.',
+						title: 'Overview'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-error-boundaries-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							"A demonstration of AbsoluteJS's convention-based error boundary system across React, Vue, Svelte, and Angular — all running in a single project with server-side rendering.",
+						title: 'Overview'
+					},
+					{
+						description:
+							'AbsoluteJS uses a file-naming convention to automatically handle errors during SSR:',
+						title: 'What This Shows'
+					},
+					{
+						description:
+							'Routes is documented in the repository README.',
+						title: 'Routes'
+					},
+					{
+						description:
+							'Getting Started is documented in the repository README.',
+						title: 'Getting Started'
+					},
+					{
+						description:
+							'How It Works is documented in the repository README.',
+						title: 'How It Works'
+					},
+					{
+						description:
+							'Tech Stack is documented in the repository README.',
+						title: 'Tech Stack'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'playwright test',
+						name: 'test'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-image-optimization-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'This project showcases the AbsoluteJS Image component across four frameworks — React, Vue, Svelte, and Angular — plus the data-optimized attribute for plain HTML and HTMX. Each demo page renders the same set of images so you can compare the developer experience and output across all six approaches.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Frameworks is documented in the repository README.',
+						title: 'Frameworks'
+					},
+					{
+						description:
+							'All four framework components share the same prop interface:',
+						title: 'Image Component Props'
+					},
+					{
+						description:
+							'For plain HTML and HTMX pages, add the data-optimized attribute to any tag. At build time AbsoluteJS will:',
+						title: 'HTML / HTMX: data-optimized'
+					},
+					{
+						description:
+							'Image optimization is configured in absolute.config.ts:',
+						title: 'Configuration'
+					},
+					{
+						description:
+							'Each framework renders the same set of examples:',
+						title: 'Demo Pages'
+					},
+					{
+						description: 'bun install bun run dev',
+						title: 'Getting Started'
+					},
+					{
+						description: 'bun run test',
+						title: 'Testing'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-island-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'An example project demonstrating the AbsoluteJS islands architecture — mix React, Svelte, Vue, Angular, HTML, and HTMX components on the same page with shared state across frameworks.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Islands architecture renders most of the page as static HTML on the server and selectively hydrates interactive "islands" on the client. Each island is a self-contained component that can be written in any supported framework and hydrated independently using one of three strategies:',
+						title: 'What Are Islands?'
+					},
+					{
+						description:
+							'What This Example Shows is documented in the repository README.',
+						title: 'What This Example Shows'
+					},
+					{
+						description:
+							'Prerequisites is documented in the repository README.',
+						title: 'Prerequisites'
+					},
+					{
+						description:
+							'Getting Started is documented in the repository README.',
+						title: 'Getting Started'
+					},
+					{
+						description:
+							'Scripts is documented in the repository README.',
+						title: 'Scripts'
+					},
+					{
+						description:
+							'src/ ├── backend/ │ ├── assets/ # Static assets (icons, images, SVGs) │ ├── plugins/ │ │ └── pagesPlugin.ts # Route definitions for each host page │ ├── server.ts # Elysia server setup │ └── vueImporter.ts # Vue SSR import helper └── frontend/ ├── angular/ # Angular island components and host page ├── client/ │ └── bootstrap.ts # Client-side island hydration bootstrap ├── html/ # Plain HTML host page ├── htmx/ # HTMX host page ├── islands/ │ ├── counterStore.ts # Shared cross-framework state store │ └── registry.ts # Central island registry (type-safe) ├── react/ # React island components and host page ├── styles/ # Global styles ├── svelte/ # Svelte island components and host page └── vue/ # Vue island components and host page',
+						title: 'Project Structure'
+					},
+					{
+						description:
+							'How It Works is documented in the repository README.',
+						title: 'How It Works'
+					},
+					{
+						description:
+							'Routes is documented in the repository README.',
+						title: 'Routes'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'playwright test',
+						name: 'test'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-isolated-jsc-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'Live demo of @absolutejs/isolated-jsc, a Bun-native sandbox for executing untrusted JavaScript with heap isolation, CPU timeouts, memory caps, brokered host capabilities, execution receipts, output limits, and an FFI backend when JavaScriptCore is available.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun install bun run dev',
+						title: 'Run it'
+					},
+					{
+						description:
+							'The example deliberately uses one-shot execution to keep each demo self-contained. A real PaaS should use createIsolatedRunner() to pool by tenant/session, precompile hot callables, and expose host powers through typed capability tools with manifests and receipts.',
+						title: 'How it works'
+					},
+					{
+						description:
+							'Backend decision guide is documented in the repository README.',
+						title: 'Backend decision guide'
+					},
+					{
+						description:
+							'Related examples is documented in the repository README.',
+						title: 'Related examples'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-out-of-order-streaming-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'An example project demonstrating the AbsoluteJS out-of-order streaming model across React, Svelte, Vue, and Angular.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Out-of-order streaming lets slow async sections stream as soon as they resolve instead of blocking everything above them in the response. Fast content arrives first, then slower stream slots patch in independently.',
+						title: 'What Is Out-of-Order Streaming?'
+					},
+					{
+						description:
+							'What This Example Shows is documented in the repository README.',
+						title: 'What This Example Shows'
+					},
+					{
+						description:
+							'Prerequisites is documented in the repository README.',
+						title: 'Prerequisites'
+					},
+					{
+						description:
+							'Getting Started is documented in the repository README.',
+						title: 'Getting Started'
+					},
+					{
+						description:
+							'Scripts is documented in the repository README.',
+						title: 'Scripts'
+					},
+					{
+						description:
+							'Each streaming page renders fast shell content immediately, then defers slower sections into independently resolving stream slots. When a section finishes, AbsoluteJS patches that slot into the response without waiting for the rest of the page.',
+						title: 'How It Works'
+					},
+					{
+						description:
+							'Routes is documented in the repository README.',
+						title: 'Routes'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-queue-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'Background jobs with @absolutejs/queue, shown across every framework AbsoluteJS supports. An in-process worker drains a typed job queue; every page — React, Vue, Svelte, Angular, HTML, or HTMX — enqueues work and polls the live status as the worker picks jobs up, retries the occasional transient failure, and marks them done.',
+						title: 'Overview'
+					},
+					{
+						description:
+							"kinds and createJobRegistry() registers their handlers. The queue Elysia plugin mounts the in-process worker (auto-starts) and decorates the context with queue.enqueue. POST /api/enqueue adds a demo.task, and GET /api/jobs returns the current job list plus per-status counts. The handler simulates work and occasionally fails the first attempt so the queue's automatic retry is visible.",
+						title: 'How it works'
+					},
+					{
+						description: 'bun install bun run dev',
+						title: 'Run'
+					},
+					{
+						description:
+							'One page per framework is documented in the repository README.',
+						title: 'One page per framework'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute workspace dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'playwright test',
+						name: 'test:e2e'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-rag-vector-example',
 				private: true,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'This demo is pinned to @absolutejs/absolute@0.19.0-beta.644 + @absolutejs/ai@0.0.2 + @absolutejs/rag@0.0.1.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Run It is documented in the repository README.',
+						title: 'Run It'
+					},
+					{
+						description:
+							'Docker is only the default local test path.',
+						title: 'Use a Hosted PostgreSQL Database'
+					},
+					{
+						description:
+							'The Pinecone backend is enabled when both PINECONEAPIKEY and PINECONEINDEXNAME are set. The package (@absolutejs/rag-pinecone) does not auto-provision indexes — create the index in the Pinecone console first.',
+						title: 'Use Pinecone'
+					},
+					{
+						description: 'Open any page:',
+						title: 'How To Test'
+					},
+					{
+						description: 'Default selected mode:',
+						title: 'Direct API Checks'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'playwright test',
+						name: 'test'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-rate-limit-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'Single-package example for @absolutejs/rate-limit. Boots an Elysia app with three rate-limiting setups:',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun install bun run dev # absolute dev — hot reload',
+						title: 'Run'
+					},
+					{
+						description: 'PORT=3000 bun run test',
+						title: 'Test'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-service-worker-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'A multi-framework demonstration of Service Worker capabilities built with AbsoluteJS. The same interactive demo is implemented in React, Vue, Svelte, Angular, and vanilla HTML — all served from a single application.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Features is documented in the repository README.',
+						title: 'Features'
+					},
+					{
+						description: 'Prerequisites: Bun',
+						title: 'Getting Started'
+					},
+					{
+						description:
+							'bun run compile # Compile server to single executable bun start # Start production server',
+						title: 'Production Build'
+					},
+					{
+						description:
+							'bun run typecheck # TypeScript type checking bun run lint # ESLint bun run format # Prettier',
+						title: 'Other Commands'
+					},
+					{
+						description:
+							'src/ ├── backend/ │ ├── server.ts # Elysia server setup │ ├── sw.ts # Service worker script │ └── plugins/ │ └── pagesPlugin.ts # Route handlers for all framework pages └── frontend/ ├── constants.ts # Shared constants (cache URLs, ping intervals) ├── react/ # React demo page & components ├── svelte/ # Svelte demo page & components ├── vue/ # Vue demo page & components ├── angular/ # Angular demo page & template ├── html/ # Vanilla HTML demo & scripts └── styles/ # Shared CSS',
+						title: 'Project Structure'
+					},
+					{
+						description:
+							'The service worker (src/backend/sw.ts) is served at /sw.js with the appropriate Service-Worker-Allowed header. It implements:',
+						title: 'How the Service Worker Works'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-spa-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							"Demonstrates intra-framework SPA navigation in AbsoluteJS using each framework's native router. The top-level route between frameworks (/react → /svelte) is a full-page MPA navigation. The sub-routes inside each framework page (/react/settings, /react/profile) are client-side SPA navigations driven by the framework's own router.",
+						title: 'Overview'
+					},
+					{
+						description: 'bun install bun run dev',
+						title: 'Run'
+					},
+					{
+						description:
+							'SPA page wires its native router. Refreshing on a sub-route renders the correct view because the request URL is forwarded to the router on the server.',
+						title: 'What to look at'
+					},
+					{
+						description:
+							"The Vue setupApp convention is new in @absolutejs/absolute@0.19.0-beta.817. Page modules export setupApp(app, { url, isServer }); AbsoluteJS calls it on both server (in pageHandler.ts, before renderToWebStream) and client (in compileVue.ts's auto-generated index, before app.mount()). This is the only way to get vue-router cooperating with SSR + hydration without forking the Vue mount path.",
+						title: 'Note on the Vue adapter'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-stylelab-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'Shows AbsoluteJS Sass, SCSS, Less, and SCSS module preprocessing across React, Svelte, Vue, Angular, HTML, and HTMX routes.',
+						title: 'Overview'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'playwright test',
+						name: 'test'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-sync-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'The @absolutejs/sync Tier 3 sync engine, shown across every framework AbsoluteJS supports. A shared task list is a live collection: each page hydrates once over a WebSocket, then the server pushes { added, removed, changed } diffs — no polling. Edits apply optimistically and reconcile when the server confirms. Open two tabs (or two frameworks) and every open client stays in sync.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'collection and addTask/toggleTask/removeTask mutations, exposed over one Elysia WebSocket via syncSocket at /sync/ws. A mutation writes the in-memory store and emits the row change; the engine turns it into a diff for every subscriber.',
+						title: 'How it works'
+					},
+					{
+						description:
+							"This example keeps mutation handlers in-process so the sync surfaces are easy to inspect. For customer-authored mutations, AI-generated transforms, or plugin code, install @absolutejs/isolated-jsc@0.8.0 and use sync's sandboxedHandler; the engine now routes those handlers through isolated-jsc's createIsolatedRunner() + tenant-script policy instead of calling them directly in the app process.",
+						title: 'Sandboxed handlers'
+					},
+					{
+						description: 'bun install bun run dev',
+						title: 'Run'
+					},
+					{
+						description:
+							'One page per framework is documented in the repository README.',
+						title: 'One page per framework'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute build',
+						name: 'build'
+					},
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-voice-example',
 				private: true,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'This is a full AbsoluteJS demo app for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'cd /alex/absolutejs-voice-example bun install DEEPGRAMAPIKEY=... ASSEMBLYAIAPIKEY=... bun run dev',
+						title: 'Run'
+					},
+					{
+						description:
+							'The example now follows the same production pattern recommended in @absolutejs/voice itself:',
+						title: 'Recommended Pattern'
+					},
+					{
+						description:
+							'Every framework page includes the same provider selector. The selected provider is sent to the voice route as ?provider=openai, ?provider=anthropic, ?provider=gemini, or ?provider=deterministic.',
+						title: 'Provider Routing And Failover'
+					},
+					{
+						description: 'A good end-to-end demo flow is:',
+						title: 'What To Demo'
+					},
+					{
+						description:
+							'Open /delivery-sinks to inspect the delivery primitive. The demo writes runtime trace exports into runtimeStorage.traceDeliveries and writes audit evidence for those exports into runtimeStorage.auditDeliveries. Production readiness consumes those same stores, so the UI proves export health without caring whether the sink is file-backed, webhook-backed, S3-backed, SQLite-backed, or Postgres-backed.',
+						title: 'Delivery Sinks'
+					},
+					{
+						description:
+							'Open /data-control to inspect the package-level compliance primitive mounted by the demo. It proves the self-hosted deployment owns its storage posture, redaction defaults, provider-key recommendations, redacted audit exports, retention dry-runs, and guarded deletion flow without depending on a hosted dashboard.',
+						title: 'Data Control'
+					},
+					{
+						description:
+							'Open /ops-recovery to inspect the package-level recovery primitive mounted by the demo. It rolls provider fallback recovery, unresolved provider failures, audit and trace delivery health, handoff delivery health, live-ops interventions, failed sessions, and latency SLOs into one operator-facing report.',
+						title: 'Ops Recovery'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'bun run vue-tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description: 'No package description provided.',
 				name: 'absolutejs-web-worker-example',
 				private: false,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'A demo project showcasing web workers across 5 frontend frameworks (React, Svelte, Vue, Angular, HTML) — all running in a single app powered by AbsoluteJS.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun install',
+						title: 'Setup'
+					},
+					{
+						description: 'bun run dev',
+						title: 'Development'
+					},
+					{
+						description: 'bun run start',
+						title: 'Production'
+					},
+					{
+						description: 'bun run compile',
+						title: 'Compile to Standalone Executable'
+					},
+					{
+						description:
+							'Pages can be pre-rendered at build time via the static config in absolute.config.ts:',
+						title: 'Static Config'
+					}
+				],
 				version: '0.0.1'
 			},
 			{
+				commands: [
+					{
+						command: 'absolute build',
+						name: 'build'
+					},
+					{
+						command: 'absolute dev',
+						name: 'dev'
+					},
+					{
+						command: 'absolute prettier --write',
+						name: 'format'
+					},
+					{
+						command: 'absolute eslint',
+						name: 'lint'
+					},
+					{
+						command: 'absolute start',
+						name: 'start'
+					},
+					{
+						command: 'absolute typecheck',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Runnable showcase for citra — authorize, callback, refresh, revoke, and fetch-profile against every supported OAuth2 provider.',
 				name: 'citra-example',
 				private: true,
+				publicExports: [],
+				readmeTopics: [
+					{
+						description:
+							'A runnable AbsoluteJS showcase for citra — the TypeScript OAuth2 client. It exercises authorize, callback, refresh, revoke, and fetch-profile flows against every supported provider.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun install bun run dev # watch mode on the example server',
+						title: 'Run'
+					},
+					{
+						description:
+							'Scripts is documented in the repository README.',
+						title: 'Scripts'
+					}
+				],
 				version: '0.0.1'
 			}
 		],
@@ -1108,6 +6435,30 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/agent-runtime --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Crash-safe external effect execution for AI agents with a transactional outbox, queue integration, reconciliation, and compensation.',
 		directory: 'execution',
@@ -1115,12 +6466,60 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Execution',
 		packageName: '@absolutejs/execution',
 		private: false,
+		publicExports: [
+			'@absolutejs/execution',
+			'@absolutejs/execution/manifest',
+			'@absolutejs/execution/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import {\n  createExecutionOutboxDispatcher,\n  createExecutionQueueHandler,\n  createPostgresEffectStore,\n  executionJobs,\n  executionPostgresSchemaSql,\n  executionTenantInventoryPostgresSchemaSql,\n} from "@absolutejs/execution";\nimport { createJobRegistry, createQueueWorker } from "@absolutejs/queue";\n\nawait sql.unsafe(executionPostgresSchemaSql());\nawait sql.unsafe(executionTenantInventoryPostgresSchemaSql());\nconst effects = createPostgresEffectStore({ client });\nconst dispatch = createExecutionOutboxDispatcher({\n  store: effects,\n  queue: queueStore,\n});\nconst registry = createJobRegistry(executionJobs).on(\n  "absolutejs.execution.effect",\n  createExecutionQueueHandler({\n    store: effects,\n    handlers: {\n      "email.send": {\n        execute: (input, { idempotencyKey, signal }) =>\n          email.send(input, { idempotencyKey, signal }),\n      },\n    },\n  }),\n);\nconst worker = createQueueWorker({ registry, store: queueStore });',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					"Crash-safe external effects for AI agents. Execution separates an agent's durable intent from the fallible provider call that fulfills it.",
+				title: 'Overview'
+			},
+			{
+				description:
+					'createEffectAdapterRegistry() is the global fail-closed boundary. Adapter descriptors declare effects, destinations, credential slots, idempotency, reconciliation, compensation, and spend authority. Activation requires a fresh certificate for the exact descriptor digest and host-verified evidence. Webhook reconciliation descriptors must also declare their relative {tenantId} callback template, raw-body signature headers, project secret alias, provider event set, health signal, and replacement or overlap rotation behavior. Query reconciliation descriptors bind their provider query to a declared credential slot and declare outcomes, polling cadence, health freshness, and rotation verification. Registration rejects incomplete or unsafe setup, and effectAdapterWebhookCallbackPath() renders a tenant-safe callback without provider-specific host branching.',
+				title: 'Certified adapters and tenant installations'
+			}
+		],
 		repository: 'https://github.com/absolutejs/execution',
 		subpackages: [],
 		version: '0.14.7'
 	},
 	{
 		category: 'Data & Sync',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/github.ts src/github-app.ts src/github-app-user.ts src/checkout.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external @sinclair/typebox/value && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Provider-neutral authenticated Git source ingestion, webhook normalization, exact-revision materialization, and provenance for Bun and AbsoluteJS.',
 		directory: 'git',
@@ -1128,12 +6527,65 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Git',
 		packageName: '@absolutejs/git',
 		private: false,
+		publicExports: [
+			'@absolutejs/git',
+			'@absolutejs/git/github',
+			'@absolutejs/git/github-app',
+			'@absolutejs/git/github-app-user',
+			'@absolutejs/git/checkout',
+			'@absolutejs/git/manifest',
+			'@absolutejs/git/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { assertGitRevisionAuthorized, gitProvenanceFor } from "@absolutejs/git";\nimport { createGitCheckout } from "@absolutejs/git/checkout";\nimport { verifyGitHubPushWebhook } from "@absolutejs/git/github";\n\nconst event = verifyGitHubPushWebhook({\n  body: rawBody,\n  headers: request.headers,\n  secret: webhookSecret,\n});\n\nassertGitRevisionAuthorized(\n  {\n    allowedRefs: ["refs/heads/main"],\n    repository: { provider: "github", fullName: "acme/site" },\n  },\n  event.revision,\n);\n\nconst checkout = await createGitCheckout({\n  credential: { token: installationToken },\n  revision: event.revision,\n});\ntry {\n  await isolatedBuild(checkout.sourceRoot, gitProvenanceFor(event));\n} finally {\n  await checkout.dispose();\n}',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Authenticated Git source ingestion for Bun control planes and AbsoluteJS.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'configuration and are never embedded in repository URLs or errors.',
+				title: 'Security boundary'
+			}
+		],
 		repository: 'https://github.com/absolutejs/git',
 		subpackages: [],
 		version: '0.5.1'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Correlation, evidence, reconciliation, and visibility primitives for work handed to external systems.',
 		directory: 'handoff',
@@ -1141,12 +6593,85 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Handoff',
 		packageName: '@absolutejs/handoff',
 		private: false,
+		publicExports: [
+			'@absolutejs/handoff',
+			'@absolutejs/handoff/manifest',
+			'@absolutejs/handoff/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/handoff',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'import {\n  handoffCorrelationFrom,\n  withHandoffCorrelation,\n} from "@absolutejs/handoff";\n\nconst metadata = withHandoffCorrelation(\n  { campaign: "summer" },\n  crypto.randomUUID(),\n);\n\n// Services with fixed metadata slots can name the slot explicitly.\nconst gatewayFields = withHandoffCorrelation(\n  { field_1: "campaign" },\n  crypto.randomUUID(),\n  "field_20",\n);\n\nconst correlationId = handoffCorrelationFrom(gatewayFields, "field_20");',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Storage-neutral correlation and evidence for work that leaves your application.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/handoff',
+				title: 'Install'
+			},
+			{
+				description:
+					'import { handoffCorrelationFrom, withHandoffCorrelation, } from "@absolutejs/handoff";',
+				title: 'Correlation'
+			},
+			{
+				description:
+					'import { summarizeHandoff } from "@absolutejs/handoff";',
+				title: 'Evidence and reconciliation'
+			},
+			{
+				description:
+					'createHandoffRecorder() accepts optional storage and observer contracts. Recording returns per-sink delivery state instead of throwing when an observability sink fails, so visibility cannot break the business operation. The recorder also exposes low-cardinality counters by source and outcome.',
+				title: 'Recording'
+			},
+			{
+				description:
+					'@absolutejs/handoff owns the shared protocol. Domain packages keep their own meaning and adapters:',
+				title: 'Package boundaries'
+			}
+		],
 		repository: 'https://github.com/absolutejs/handoff',
 		subpackages: [],
 		version: '0.1.0'
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Liveness + readiness probes for the AbsoluteJS substrate. createHealthChecker composes named checks; healthPlugin exposes /healthz (process alive?) + /readyz (can serve traffic?) with a standard JSON envelope. Per-check timeout, aggregate worst-of-any status, Cache-Control: no-store.',
 		directory: 'health',
@@ -1154,12 +6679,83 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Health',
 		packageName: '@absolutejs/health',
 		private: false,
+		publicExports: [
+			'@absolutejs/health',
+			'@absolutejs/health/manifest',
+			'@absolutejs/health/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: "import { Elysia } from 'elysia';\nimport {\n  createHealthChecker,\n  healthPlugin,\n  metricsCheck,\n  probeCheck,\n  httpCheck,\n} from '@absolutejs/health';\n\nconst checker = createHealthChecker({\n  checks: [\n    // Synthesis from a substrate package's metrics() snapshot.\n    metricsCheck('queue', () => worker.metrics(), (m) => ({\n      status: m.failed > 100 ? 'warn' : 'pass',\n      observed: { runs: m.runs, failed: m.failed },\n    })),\n\n    // Wrap an arbitrary probe.\n    probeCheck('postgres', () => pg.query('SELECT 1')),\n\n    // Downstream HTTP dependency.\n    httpCheck('otlp-collector', 'http://collector:4318/healthz', {\n      kind: 'readiness',  // run only under /readyz\n    }),\n  ],\n});\n\nconst app = new Elysia().use(await healthPlugin({ checker }));\n// GET /healthz → liveness:  200 / 503 with { status, checks, at }\n// GET /readyz  → readiness: same shape, filtered to readiness + both",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: '{\n  "status": "pass",\n  "at": 1717161600000,\n  "checks": {\n    "queue": {\n      "status": "pass",\n      "latencyMs": 1,\n      "observed": { "runs": 1057, "failed": 0 }\n    },\n    "postgres": { "status": "pass", "latencyMs": 12 }\n  }\n}',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'json'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Liveness + readiness probes for the AbsoluteJS substrate. One Elysia plugin, two endpoints, a standard JSON envelope that load balancers and Kubernetes-style orchestrators understand out of the box.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'The distinction matters: a draining instance returns readyz: fail',
+				title: 'Two endpoints, two semantics'
+			},
+			{
+				description:
+					'{ "status": "pass", "at": 1717161600000, "checks": { "queue": { "status": "pass", "latencyMs": 1, "observed": { "runs": 1057, "failed": 0 } }, "postgres": { "status": "pass", "latencyMs": 12 } } }',
+				title: 'Body shape'
+			},
+			{
+				description:
+					'LBs route on status code; humans + dashboards read the body.',
+				title: 'Status codes'
+			},
+			{
+				description:
+					'Status is the WORST of any check: fail > warn > pass. A single failing dependency fails the whole envelope — same as Kubernetes /healthz rollup behavior.',
+				title: 'Aggregation'
+			},
+			{
+				description:
+					'() => Promise. Resolves → pass; throws → fail with the error message.',
+				title: 'Check factories'
+			},
+			{
+				description:
+					"{ name: 'shutting-down', kind: 'readiness', check: () => ({ status: draining ? 'fail' : 'pass' })}",
+				title: 'Kind filtering'
+			}
+		],
 		repository: 'https://github.com/absolutejs/health',
 		subpackages: [],
 		version: '0.3.0'
 	},
 	{
 		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/vue.ts --outdir dist --root ./src --target=browser --format=esm --splitting --external vue && tsc --emitDeclarationOnly --project tsconfig.json',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Framework-agnostic keyboard shortcuts: chords, sequences, scopes and a self-describing binding registry.',
 		directory: 'hotkeys',
@@ -1167,12 +6763,82 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Hotkeys',
 		packageName: '@absolutejs/hotkeys',
 		private: false,
+		publicExports: [
+			'@absolutejs/hotkeys',
+			'@absolutejs/hotkeys/vue',
+			'@absolutejs/hotkeys/package.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/hotkeys',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: 'import { hotkeys, listenForHotkeys } from "@absolutejs/hotkeys";\n\nconst stop = listenForHotkeys();\n\nhotkeys.register("j", selectNext, { description: "Next", group: "Navigation" });\nhotkeys.register("mod+k", openPalette, { description: "Command palette" });\nhotkeys.register("g i", goToInbox, { description: "Go to inbox" });',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Keyboard shortcuts that stay honest: chords, sequences, scopes, and a registry that can describe itself — so the shortcuts-help overlay is generated from the bindings that actually exist rather than hand-maintained beside them.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'import { hotkeys, listenForHotkeys } from "@absolutejs/hotkeys";',
+				title: 'Core (no framework)'
+			},
+			{
+				description:
+					'A scope is a stack. Push one when a modal or a focused list takes over, and its bindings win over the app-wide ones until it pops.',
+				title: 'Scopes'
+			},
+			{
+				description:
+					'import { useHotkeys, useHotkeyScope } from "@absolutejs/hotkeys/vue";',
+				title: 'Vue'
+			},
+			{
+				description:
+					'import { groupedBindings } from "@absolutejs/hotkeys";',
+				title: 'Shortcuts help'
+			}
+		],
 		repository: 'https://github.com/absolutejs/hotkeys',
 		subpackages: [],
 		version: '0.1.1'
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/queue --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Durable incident delivery workers with leases, retries, escalation preparation, and operator metrics.',
 		directory: 'incidents',
@@ -1180,12 +6846,65 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Incidents',
 		packageName: '@absolutejs/incidents',
 		private: false,
+		publicExports: [
+			'@absolutejs/incidents',
+			'@absolutejs/incidents/manifest',
+			'@absolutejs/incidents/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createIncidentDeliveryWorker } from "@absolutejs/incidents";\n\nconst worker = createIncidentDeliveryWorker({\n  store: incidentDeliveryStore,\n  prepare: discoverAndEscalateIncidents,\n  deliver: (delivery, signal) =>\n    dispatchAlert(delivery.payload, {\n      idempotencyKey: delivery.idempotencyKey,\n      signal,\n    }),\n});\n\nawait worker.runOnce();\nworker.start();',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Reusable incident-delivery infrastructure for AbsoluteJS control planes. Applications retain their domain-specific incident schema and transitions; this package owns the operational machinery that should not be rewritten:',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/incidents',
 		subpackages: [],
 		version: '0.1.2'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/worker.ts src/doctor.ts --outdir dist --sourcemap --target=bun && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command:
+					'cd ../examples/isolated-jsc && bun run typecheck && PORT=3564 bun run test',
+				name: 'check:examples'
+			},
+			{
+				command:
+					'bun run typecheck && bun run build && bun run test && bun run example:agent-tool',
+				name: 'check:package'
+			},
+			{
+				command: 'bun run check:package && bun run check:examples',
+				name: 'check:release'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'ISOLATED_JSC_BACKEND=worker bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'JavaScriptCore-native sandbox for Bun — heap-isolated execution for untrusted code, isolated-vm-shaped API',
 		directory: 'isolated-jsc',
@@ -1193,12 +6912,103 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'isolated-jsc',
 		packageName: '@absolutejs/isolated-jsc',
 		private: false,
+		publicExports: ['@absolutejs/isolated-jsc'],
+		readmeSamples: [
+			{
+				code: 'import { createIsolate, Reference } from "@absolutejs/isolated-jsc";\n\nconst isolate = await createIsolate({ memoryLimit: 64 });\nconst context = await isolate.createContext();\n\nawait context.setGlobal(\n  "log",\n  new Reference((msg) => console.log("[tenant]", msg)),\n);\n\nconst script = await isolate.compileScript(\'await log("hello"); 1 + 1\');\nconst result = await script.run(context, { timeout: 500 });\n// result === 2\n\nawait isolate.dispose();',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'bun add @absolutejs/isolated-jsc',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'import { createIsolate, Reference } from "@absolutejs/isolated-jsc";',
+				title: 'Overview'
+			},
+			{
+				description:
+					"Bun has no equivalent to Node's isolated-vm. The Node library is V8-specific — it links against V8's HasCustomHostObject ABI symbol — and Bun uses JavaScriptCore, not V8. So bun install isolated-vm succeeds, then import fails with undefined symbol: HasCustomHostObject.",
+				title: 'Why this exists'
+			},
+			{
+				description:
+					'Why not Node isolated-vm? It is the right shape for Node/V8, but Bun is JavaScriptCore. isolated-jsc ports the isolate-shaped API to Bun/JSC instead of trying to load a V8 addon.',
+				title: 'Quick answers'
+			},
+			{
+				description:
+					'@absolutejs/isolated-jsc runs on two interchangeable backends behind one API:',
+				title: 'What ships today (v0.12.2)'
+			},
+			{
+				description:
+					'import { createCapabilityAuditBuffer, createCapabilityBroker, defineCapabilityTool, compileTypeScriptCallable, compileTypeScriptCallableFile, compileTypeScriptFile, createIsolate, createIsolatedRunner, policyAuditOptions, policyBrokerOptions, policyConsoleOptions, policyRunnerOptions, resolveIsolatePolicy, runIsolated, runIsolatedFile, Reference, ExternalCopy, validateContextCheckpoint, type Isolate, type Context, type Script, } from "@absolutejs/isolated-jsc";',
+				title: 'API'
+			},
+			{
+				description: 'bun add @absolutejs/isolated-jsc',
+				title: 'Install'
+			},
+			{
+				description:
+					'bunx @absolutejs/isolated-jsc bunx @absolutejs/isolated-jsc --json',
+				title: 'Doctor'
+			},
+			{
+				description:
+					'bun run example:agent-tool bun run example:checkpoint',
+				title: 'Examples'
+			},
+			{
+				description: 'bun run bench:proof',
+				title: 'Benchmarks'
+			},
+			{
+				description: 'bun install bun test',
+				title: 'Tests'
+			},
+			{
+				description: 'bun run check:release',
+				title: 'Release checks'
+			},
+			{
+				description: 'Related is documented in the repository README.',
+				title: 'Related'
+			}
+		],
 		repository: 'https://github.com/absolutejs/isolated-jsc',
 		subpackages: [],
 		version: '0.12.4'
 	},
 	{
 		category: 'Auth & Identity',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --sourcemap --target=bun && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write .',
+				name: 'format'
+			},
+			{
+				command: 'eslint . --max-warnings 0',
+				name: 'lint'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Shared linked-provider credential and resolver contracts for AbsoluteJS packages',
 		directory: 'linked-providers',
@@ -1206,12 +7016,44 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Linked Providers',
 		packageName: '@absolutejs/linked-providers',
 		private: false,
+		publicExports: ['@absolutejs/linked-providers'],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Shared linked-provider credential and resolver contracts for AbsoluteJS packages.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/linked-providers',
 		subpackages: [],
 		version: '0.0.5'
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Structured log primitive for the AbsoluteJS substrate. Levels, child loggers, sinks (console-JSON, console-pretty, memory, rotating file), optional secret redaction via @absolutejs/secrets, optional trace-id correlation via @absolutejs/telemetry. Metrics surface for @absolutejs/metrics.',
 		directory: 'logs',
@@ -1219,12 +7061,100 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Logs',
 		packageName: '@absolutejs/logs',
 		private: false,
+		publicExports: [
+			'@absolutejs/logs',
+			'@absolutejs/logs/manifest',
+			'@absolutejs/logs/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/logs',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: 'import { createLogger, consoleJsonSink, rotatingFileSink } from \'@absolutejs/logs\';\nimport { readActiveTraceId } from \'@absolutejs/telemetry\';\n\nconst log = createLogger({\n  level: \'info\',\n  fields: { service: \'api\', region: \'us-east-2\' },\n  sinks: [\n    consoleJsonSink(),\n    rotatingFileSink({ path: \'/var/log/api/app.log\', maxBytes: 10_000_000, keep: 5 }),\n  ],\n  redact: (text) => broker.redact(text),     // @absolutejs/secrets\n  readTraceId: readActiveTraceId,            // @absolutejs/telemetry\n});\n\nlog.info(\'User signed in\', { userId: \'u_42\', tenant: \'acme\' });\n// → {"at":1700000000000,"level":"info","message":"User signed in","tenant":"acme","traceId":"abc123","fields":{"service":"api","region":"us-east-2","userId":"u_42"}}\n\nconst requestLog = log.child({ requestId: req.id });\nrequestLog.warn(\'rate limit exceeded\', { remaining: 0 });\n// Same as parent, plus requestId in fields.',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Structured log primitive for the AbsoluteJS substrate. Levels, child loggers, sinks (console-JSON, console-pretty, memory, rotating file), optional secret redaction via @absolutejs/secrets, optional trace-id correlation via @absolutejs/telemetry.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/logs',
+				title: 'Install'
+			},
+			{
+				description:
+					"import { createLogger, consoleJsonSink, rotatingFileSink } from '@absolutejs/logs'; import { readActiveTraceId } from '@absolutejs/telemetry';",
+				title: 'Quick start'
+			},
+			{
+				description:
+					"trace → debug → info → warn → error → fatal. Filter at level; bump at runtime with log.setLevel('debug') (SIGUSR2-style incident triage).",
+				title: 'Levels'
+			},
+			{
+				description:
+					'Custom sinks just implement LogSink: { name?, write, flush?, close? }.',
+				title: 'Sinks'
+			},
+			{
+				description:
+					'every serialized event flows through the redactor before hitting a sink. Secrets never reach disk.',
+				title: 'Composition'
+			},
+			{
+				description:
+					'logger.metrics(); // { // logged: { trace: 0, debug: 0, info: 100, warn: 5, error: 2, fatal: 0 }, // writes: 214, // 107 events × 2 sinks // writeErrors: 0, // sinkErrors: {} // }',
+				title: 'Metrics'
+			},
+			{
+				description:
+					'returns immediately; sink writes run in the background. Use await log.flush() before shutdown.',
+				title: 'Operator notes'
+			}
+		],
 		repository: 'https://github.com/absolutejs/logs',
 		subpackages: [],
 		version: '0.2.1'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/cli.ts --outdir dist --root src --sourcemap --target=bun --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --project tsconfig.build.json",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run lint && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'eslint . --max-warnings 0',
+				name: 'lint'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'The AbsoluteJS package manifest contract. Every @absolutejs/* package exports a typed manifest (settings schema, env requirements, adapter slots, wiring recipes, AI tools) from its ./manifest subpath; this package is the contract those manifests are written against, plus bridges that turn any manifest into an AI tool map or a remote MCP tool registry.',
 		directory: 'manifest',
@@ -1232,12 +7162,83 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Manifest',
 		packageName: '@absolutejs/manifest',
 		private: false,
+		publicExports: ['@absolutejs/manifest'],
+		readmeSamples: [
+			{
+				code: 'send_email: tool.runtime({\n  authorization: {\n    approval: "policy",\n    audience: "owner",\n    destinationFields: ["to"],\n    effects: ["send", "external-network"],\n    idempotency: { mode: "host" },\n    requiredScopes: ["email:send"],\n    reversible: false,\n  },\n  // input, handler, description…\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: '// src/manifest.ts of @absolutejs/dispatch\nimport { Type } from "@sinclair/typebox";\nimport { defineManifest, toolFactory } from "@absolutejs/manifest";\nimport type { Dispatcher, DispatcherOptions } from "./types";\n\nconst tool = toolFactory<Dispatcher>();\n\nexport const manifest = defineManifest<DispatcherOptions, Dispatcher>()({\n  contract: 2,\n  identity: {\n    category: "messaging",\n    name: "@absolutejs/dispatch",\n    tagline: "Send email, texts, and push notifications from your site.",\n  },\n  settings: Type.Object({\n    defaultFrom: Type.Optional(\n      Type.Object(\n        { email: Type.Optional(Type.String({ format: "email" })) },\n        { title: "Default sender" },\n      ),\n    ),\n  }),\n  slots: {\n    email: {\n      configPath: "email",\n      contract: "dispatch/email-adapter",\n      description: "Email transport",\n      known: ["@absolutejs/dispatch-resend", "@absolutejs/dispatch-postmark"],\n    },\n  },\n  tools: {\n    send_email: tool.runtime({\n      annotations: { openWorldHint: true },\n      authorization: {\n        approval: "policy",\n        audience: "owner",\n        destinationFields: ["to"],\n        effects: ["send", "external-network"],\n        idempotency: { mode: "host" },\n        requiredScopes: ["email:send"],\n        reversible: false,\n      },\n      description: "Send a transactional email through the configured adapter.",\n      handler: async (input, dispatcher) => {\n        const result = await dispatcher.email(input);\n\n        return `sent via ${result.provider}`;\n      },\n      input: Type.Object({\n        subject: Type.String(),\n        text: Type.String(),\n        to: Type.String({ format: "email" }),\n      }),\n    }),\n  },\n  wiring: [\n    {\n      id: "default",\n      server: {\n        code: "const dispatcher = createDispatcher({ email: ${slot.email}, ...${settings} });",\n        imports: [\n          { from: "@absolutejs/dispatch", names: ["createDispatcher"] },\n        ],\n        placement: "module-scope",\n      },\n      title: "Create the dispatcher",\n    },\n  ],\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Version 0.4 makes remote tools secure by construction. Contract-2 manifests declare enough policy metadata for a host or no-code control plane to explain, approve, lease, execute, audit, and where possible compensate every action. Contract-1 manifests still load for catalog and upgrade tooling, but their tools are deliberately omitted from AI and MCP bridges.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Contract 2 adds semantic tool effects and enforcement requirements. These are policy inputs, not model hints:',
+				title: 'Agent action authorization (contract 2)'
+			},
+			{
+				description:
+					'Packages explicitly describe how a no-code host may integrate them:',
+				title: 'No-code integration role'
+			},
+			{
+				description:
+					"A TypeBox schema is simultaneously a TypeScript type (via Static<>) and a plain JSON Schema object at runtime. That makes it the single source of truth for a tool's input: the same schema types the handler at compile time and is handed verbatim to AI providers (inputschema) and MCP (inputSchema). No hand-written JSON Schema, no drift.",
+				title: 'Why TypeBox'
+			},
+			{
+				description:
+					'// src/manifest.ts of @absolutejs/dispatch import { Type } from "@sinclair/typebox"; import { defineManifest, toolFactory } from "@absolutejs/manifest"; import type { Dispatcher, DispatcherOptions } from "./types";',
+				title: 'Authoring a manifest'
+			},
+			{
+				description:
+					"import { loadManifest, toAIToolMap, toMcpToolRegistry } from '@absolutejs/manifest';",
+				title: 'Consuming manifests'
+			},
+			{
+				description:
+					"Core packages declare slots (contract: 'dispatch/email-adapter'); adapter packages declare implements entries with the same contract id. Consumers resolve them by scanning installed manifests, so publishing a new vendor adapter lights up every consumer without a core release. Reserved ids and the frozen wiring placeholder grammar live in CONTRACTS.md.",
+				title: 'Adapter slots'
+			}
+		],
 		repository: 'https://github.com/absolutejs/manifest',
 		subpackages: [],
 		version: '0.8.0'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --root ./src --outdir dist --sourcemap --target=bun --external @absolutejs/wallet --external '@absolutejs/wallet/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Provider-agnostic marketplace primitives for listings, criteria orders, auctions, trades, and atomic collectible settlement.',
 		directory: 'marketplace',
@@ -1245,12 +7246,51 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Marketplace',
 		packageName: '@absolutejs/marketplace',
 		private: false,
+		publicExports: [
+			'@absolutejs/marketplace',
+			'@absolutejs/marketplace/manifest',
+			'@absolutejs/marketplace/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { criteriaFromAsset, matchesAssetCriteria, planSaleSettlement } from "@absolutejs/marketplace";\n\nconst wanted = criteriaFromAsset(copy, "exact", 100);\nif (matchesAssetCriteria(candidate, wanted)) {\n  const plan = planSaleSettlement({\n    idempotencyKey: "sale:42",\n    assetId: candidate.id,\n    buyerAccountId: "wallet:buyer",\n    sellerAccountId: "wallet:seller",\n    platformAccountId: "wallet:platform",\n    grossCents: 2500,\n  });\n  // Apply `plan.entries` and the ownership transfer in one storage transaction.\n}',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Headless marketplace policy and settlement primitives for AbsoluteJS applications.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/marketplace',
 		subpackages: [],
 		version: '0.1.7'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --target=bun --external @absolutejs/agency --external '@absolutejs/agency/*' --external elysia && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit --project tsconfig.json',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Serve a remote Model Context Protocol endpoint (streamable HTTP, stateless) from a tool/prompt/resource registry — OAuth bearer auth, RFC 9728 discovery, and per-call guards are yours to wire, the JSON-RPC protocol is done correctly by construction.',
 		directory: 'mcp',
@@ -1258,24 +7298,156 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Mcp',
 		packageName: '@absolutejs/mcp',
 		private: false,
+		publicExports: [
+			'@absolutejs/mcp',
+			'@absolutejs/mcp/manifest',
+			'@absolutejs/mcp/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createAgency, createMemoryAgencyStore } from "@absolutejs/agency";\n\nconst agency = createAgency({ policy, store: createMemoryAgencyStore() });\n\nmcpServer<Caller>({\n  agency: {\n    enforcement: agency,\n    resolveActor: ({ caller, scopes }) => ({\n      agentId: caller.agentId,\n      delegationId: caller.delegationId,\n      scopes,\n      userId: caller.userId,\n    }),\n  },\n  // normal MCP config…\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'tasks: {\n  authorizationKey: (caller) => caller.userId,\n  shouldCreate: ({ name }) => name === "long_running_report",\n  store: createMemoryMcpTaskStore(), // use a durable shared store in production\n  ttlMs: 60 * 60 * 1000,\n}\n\ntools: () => ({\n  long_running_report: {\n    taskSupport: "optional", // "required" and "forbidden" are also supported\n    // normal tool definition…\n  },\n})',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'MCP tool discovery preserves the OpenID AuthZEN COAZ coaz marker and x-coaz-mapping JSON Schema extension end to end. Use @absolutejs/policy to validate and evaluate the mapping before dispatching an authorized tool call.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Tools carrying manifest contract 2 authorization metadata fail closed unless an agency enforcement point is configured. Every call becomes an exact-input action request; allowed calls execute through a short-lived single-use lease and produce a receipt. Requestable denials return an absolute.actiondecision payload containing the action id for an approval workflow.',
+				title: 'Agent action enforcement'
+			},
+			{
+				description:
+					'The package implements native MCP 2025-11-25 task augmentation: execution.taskSupport, client-requested task creation, tasks/get, tasks/result, authorization-bound tasks/list, and terminal-safe tasks/cancel. It also retains the older io.modelcontextprotocol/tasks SEP-2663 wire shape only when an older protocol revision is negotiated.',
+				title: 'Durable Tasks'
+			},
+			{
+				description:
+					'import { Elysia } from "elysia"; import { mcpServer, verifyBearer } from "@absolutejs/mcp"; import { verifyJwt } from "@absolutejs/auth"; // or any JWT verifier',
+				title: 'Define an endpoint'
+			},
+			{
+				description:
+					'Everything beyond tools is a hook — the package ships no opinion about billing, storage, or auditing.',
+				title: 'Guards, prompts, resources'
+			},
+			{
+				description:
+					'A connected AI client renders no UI for your server. There is no button for the user to press, so when they say "that was wrong" the only path back to you is the model relaying it. Every MCP server has this hole, and every one of them hand-rolls the same two tools.',
+				title: "Feedback: the channel a client can't give you"
+			},
+			{
+				description:
+					"A tool that can't finish without something only the user knows can ask them (elicitation/create) and wait for the answer.",
+				title: 'Elicitation: ask the user a question mid-call'
+			},
+			{
+				description:
+					'mcpServer is per-endpoint, so an admin console is the same call with a different scope, a stricter authorize (role + MFA + a kill switch, re-checked live), a rate-limit beforeCall, and an audit onCall:',
+				title: 'A second, stricter endpoint'
+			},
+			{
+				description:
+					'createMcpOAuthProvider handles the current MCP authorization flow without coupling to an identity vendor: RFC 9728 protected-resource discovery, OAuth or OIDC authorization-server discovery, Client ID Metadata Document identifiers, PKCE S256, resource indicators, refresh rotation, incremental scope challenges, and optional DPoP proofs. The host owns the user interaction and token store.',
+				title: 'OAuth-native MCP client'
+			}
+		],
 		repository: 'https://github.com/absolutejs/mcp',
 		subpackages: [],
 		version: '0.11.3'
 	},
 	{
 		category: 'Voice & Media',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --root ./src --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{js,jsx,ts,tsx,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test ./test/*.test.ts',
+				name: 'test'
+			},
+			{
+				command: 'bun run tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description: 'Realtime media primitives for AbsoluteJS',
 		directory: 'media',
 		kind: 'package',
 		name: 'Media',
 		packageName: '@absolutejs/media',
 		private: false,
+		publicExports: [
+			'@absolutejs/media',
+			'@absolutejs/media/manifest',
+			'@absolutejs/media/manifest.json'
+		],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'@absolutejs/media provides low-level realtime media primitives for AbsoluteJS packages.',
+				title: 'Overview'
+			},
+			{
+				description:
+					"What's new is documented in the repository README.",
+				title: "What's new"
+			}
+		],
 		repository: 'https://github.com/absolutejs/media',
 		subpackages: [],
 		version: '0.0.1-beta.24'
 	},
 	{
 		category: 'Voice & Media',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --root src --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{js,ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'bun run tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Meeting-bot core for AbsoluteJS — join a call (via a source adapter), transcribe it live with the voice scribe, and surface diarized turns + participants for analysis',
 		directory: 'meeting',
@@ -1283,12 +7455,48 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Meeting',
 		packageName: '@absolutejs/meeting',
 		private: false,
+		publicExports: [
+			'@absolutejs/meeting',
+			'@absolutejs/meeting/manifest',
+			'@absolutejs/meeting/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createMeeting } from "@absolutejs/meeting";\nimport { deepgram } from "@absolutejs/voice-deepgram";\nimport { createRecallMeetingSource } from "@absolutejs/meeting-recall";\n\nconst meeting = await createMeeting({\n  source: createRecallMeetingSource({\n    apiKey: process.env.RECALL_API_KEY!,\n    meetingUrl,\n    websocketUrl: process.env.RECALL_WEBSOCKET_URL!,\n  }),\n  stt: deepgram({ apiKey: process.env.DEEPGRAM_API_KEY!, diarize: true }),\n  sessionId: "deal-123",\n});\n\nmeeting.on("turn", ({ turn }) => {\n  // { speaker, text, participant? } — stream to your analyzer / UI\n});\nmeeting.on("end", ({ transcript }) => {\n  // full diarized transcript — run your deal-call analysis\n});\n\nawait meeting.start(); // bot joins the call\n// ... later: await meeting.stop()',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import { createMeetingManager } from "@absolutejs/meeting";\nimport { createRecallMeetingSourceFactory } from "@absolutejs/meeting-recall";\n\nconst meetings = createMeetingManager({\n  source: createRecallMeetingSourceFactory({\n    apiKey: process.env.RECALL_API_KEY!,\n    websocketUrl: "wss://app.example.com/meeting/audio",\n  }),\n  stt: deepgram({ apiKey: process.env.DEEPGRAM_API_KEY!, diarize: true }),\n});\n\nawait meetings.start({\n  sessionId: "deal-123",\n  target: "https://meet.google.com/abc-defg-hij",\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Meeting-bot core for AbsoluteJS. Join a call through a source adapter, transcribe it live with the @absolutejs/voice scribe, and surface diarized turns + participants for analysis (deal coaching, summaries, action items, …).',
+				title: 'Overview'
+			},
+			{
+				description:
+					'import { createMeeting } from "@absolutejs/meeting"; import { deepgram } from "@absolutejs/voice-deepgram"; import { createRecallMeetingSource } from "@absolutejs/meeting-recall";',
+				title: 'Usage'
+			},
+			{
+				description: 'getTranscript, getParticipants).',
+				title: 'API'
+			}
+		],
 		repository: 'https://github.com/absolutejs/meeting',
 		subpackages: [],
 		version: '0.0.1-beta.11'
 	},
 	{
 		category: 'Voice & Media',
+		commands: [],
 		description:
 			'Voice-source adapters that connect meeting platforms to @absolutejs/meeting.',
 		directory: 'meeting-adapters',
@@ -1296,20 +7504,163 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Meeting Adapters',
 		packageName: null,
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'meeting-adapters/\n  recall/    -> @absolutejs/meeting-recall    (Recall.ai: Meet / Zoom / Teams)   [published, needs RECALL_API_KEY]\n  discord/   -> @absolutejs/meeting-discord    (@discordjs/voice receive)          [published, needs a bot token]',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'text'
+			},
+			{
+				code: 'type MeetingSource = {\n  readonly format: AudioFormat;              // audio it emits (fed to the scribe\'s STT)\n  on(event, handler): () => void;            // "audio" | "participant" | "end" | "error"\n  start(): Promise<void>;                    // join the call\n  stop(reason?): Promise<void>;              // leave\n};',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Platform source adapters for @absolutejs/meeting. Each is its own published package under this directory (mirrors voice-adapters/). An adapter implements the MeetingSource contract — join a call and stream its audio (and, when available, the participant roster) into the meeting core, which runs the @absolutejs/voice scribe for live diarized transcription.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'joins as a bot and streams per-participant raw PCM (mono 16-bit LE @ 16 kHz) to a websocket you host; the adapter decodes it into diarized audio + participant events. Verified live against a Recall workspace (bot create / list / join lifecycle). See recall/README.md.',
+				title: 'Status'
+			}
+		],
 		repository: 'https://github.com/absolutejs/meeting-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/compile.ts ./src/manifest.ts --outdir dist --root src --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/meeting --external '@absolutejs/meeting/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @discordjs/voice --external '@discordjs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external discord.js --external 'discord.js/*' --external prism-media --external 'prism-media/*' --external '@snazzah/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Discord voice source adapter for @absolutejs/meeting — a bot joins a Discord voice channel and streams per-participant audio (speakers known, no diarization needed) into the meeting core for live transcription + analysis',
 				name: '@absolutejs/meeting-discord',
 				private: false,
+				publicExports: [
+					'@absolutejs/meeting-discord',
+					'@absolutejs/meeting-discord/compile',
+					'@absolutejs/meeting-discord/manifest',
+					'@absolutejs/meeting-discord/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'The Studio adapter uses createDiscordMeetingSourceFactory to bind the bot and guild configuration once. Each governed Meeting session supplies its voice channel id dynamically, so installation never logs in or joins a channel.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'@discordjs/voice exposes a per-user Opus stream for everyone speaking. This adapter subscribes to each, decodes Opus → PCM (48 kHz stereo) and downmixes to mono pcms16le, and emits it as audio tagged with the Discord user id.',
+						title: 'How it works'
+					},
+					{
+						description:
+							'bun add @absolutejs/meeting-discord @absolutejs/meeting @absolutejs/voice discord.js @discordjs/voice',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { createMeeting } from "@absolutejs/meeting"; import { createDiscordMeetingSource } from "@absolutejs/meeting-discord"; import { deepgram } from "@absolutejs/voice-deepgram";',
+						title: 'Usage'
+					},
+					{
+						description: 'subscribes to each speaker.',
+						title: 'API'
+					}
+				],
 				version: '0.0.1-beta.17'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --root src --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/meeting --external '@absolutejs/meeting/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Recall.ai source adapter for @absolutejs/meeting — Recall joins a Google Meet / Zoom / Teams call as a bot and streams per-participant audio into the meeting core for live transcription + analysis',
 				name: '@absolutejs/meeting-recall',
 				private: false,
+				publicExports: [
+					'@absolutejs/meeting-recall',
+					'@absolutejs/meeting-recall/manifest',
+					'@absolutejs/meeting-recall/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Recall.ai source adapter for @absolutejs/meeting. Recall joins a Google Meet / Zoom / Teams call as a bot and streams per-participant audio; this adapter turns that into the MeetingSource the meeting core consumes, so the @absolutejs/voice scribe can transcribe the call live with speaker labels.',
+						title: 'Overview'
+					},
+					{
+						description:
+							"Recall's bot dials out to a websocket you host and streams audioseparateraw events: one stream per participant, mono 16-bit little-endian PCM at 16 kHz (exactly the scribe's input format). Your server accepts that socket and forwards each frame to source.ingest(), which decodes the PCM and emits diarized audio + participant events.",
+						title: 'How it works'
+					},
+					{
+						description:
+							'bun add @absolutejs/meeting-recall @absolutejs/meeting @absolutejs/voice',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { createMeeting } from "@absolutejs/meeting"; import { createRecallMeetingSource } from "@absolutejs/meeting-recall"; import { createDeepgramStt } from "@absolutejs/voice-deepgram";',
+						title: 'Usage'
+					},
+					{
+						description:
+							'A Recall workspace lives in exactly one region and its key only works against that region\'s host. Pass region ("us-west-2" | "us-east-1" | "eu-central-1" | "ap-northeast-1") or a full baseUrl (https://us-west-2.recall.ai/api/v1). Defaults to us-west-2.',
+						title: 'Region'
+					},
+					{
+						description: 'websocketUrl.',
+						title: 'API'
+					}
+				],
 				version: '0.0.1-beta.10'
 			}
 		],
@@ -1317,6 +7668,29 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/reporter.ts src/elysia.ts src/manifest.ts --root ./src --outdir dist --sourcemap --target=bun --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Per-tenant cost-attribution + budget enforcement for multi-tenant runtimes. Consumes handlerMetrics from @absolutejs/sync and spawn/idle/exit events from @absolutejs/runtime; rolls up CPU-ms, bytes egress, hibernation-GB-seconds per tenant; trips a circuit breaker when a per-tenant budget is exceeded.',
 		directory: 'metering',
@@ -1324,12 +7698,73 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Metering',
 		packageName: '@absolutejs/metering',
 		private: false,
+		publicExports: [
+			'@absolutejs/metering',
+			'@absolutejs/metering/elysia',
+			'@absolutejs/metering/reporter',
+			'@absolutejs/metering/manifest',
+			'@absolutejs/metering/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createMeter, consoleSink } from "@absolutejs/metering";\n\nconst meter = createMeter({\n  sinks: [consoleSink, influxSink],\n  budgets: {\n    "*": { cpuMs: 60_000, requests: 10_000 }, // free-tier default\n    "acme-prod": { cpuMs: 600_000, requests: 1_000_000 }, // paid override\n  },\n  onBreach: ({ tenant, dimension, observed, limit }) => {\n    suspendAtRouter(tenant, { dimension, observed, limit });\n  },\n});\n\n// Wire it into a sync engine: sync handlerMetrics records → meter.record(...)\nsyncEngine.handlerMetrics = (record) => {\n  meter.record({\n    type: "handler",\n    tenant: currentTenantId(),\n    mutationName: record.mutationName,\n    durationMs: record.durationMs,\n    cpuMs: record.cpuMs,\n    heapBytes: record.heapBytes,\n    ok: record.ok,\n    errorName: record.errorName,\n  });\n};\n\n// And a runtime: spawn/idle-kill/exit transitions → meter.record(...)\nruntime.options.onTransition = (event) => {\n  meter.record({\n    type: "process",\n    tenant: event.key,\n    transition: event.type,\n    durationMs: event.durationMs,\n  });\n};\n\n// And @absolutejs/runtime@0.1.0\'s Linux observation events:\nruntime.options.onMetrics = (event) => {\n  if (event.type === "observation") {\n    meter.record({\n      type: "observation",\n      tenant: event.key,\n      cpuMs: event.cpuMs,\n      rssBytes: event.rssBytes,\n      at: event.at,\n    });\n  }\n};\n\n// Record one terminal AI agent run. `costMicros` is caller-calculated so model\n// pricing stays an operator policy instead of becoming stale library data.\nmeter.record({\n  type: "ai",\n  tenant: tenantId,\n  requestId,\n  provider: "anthropic",\n  model: "claude-sonnet-4-6",\n  inputTokens: finish.usage.inputTokens,\n  outputTokens: finish.usage.outputTokens,\n  cacheReadInputTokens: finish.usage.cacheReadInputTokens,\n  cacheWriteInputTokens: finish.usage.cacheWriteInputTokens,\n  durationMs: finish.durationMs,\n  turns: finish.turns,\n  costMicros,\n  ok: finish.reason === "complete",\n  stopReason: finish.reason,\n});\n\n// Inside a hosted workload, hand handler/request events to the authenticated\n// host-local collector. The PaaS injects this endpoint, token, and per-process\n// source id; no tenant id is accepted from application code.\nimport { createWorkloadMeterReporter } from "@absolutejs/metering/reporter";\nimport { workloadMeterElysia } from "@absolutejs/metering/elysia";\n\nconst reporter = createWorkloadMeterReporter({\n  endpoint: process.env.ABSOLUTE_METER_ENDPOINT!,\n  sourceId: process.env.ABSOLUTE_METER_SOURCE_ID!,\n  token: process.env.ABSOLUTE_METER_TOKEN!,\n});\nconst app = new Elysia().use(workloadMeterElysia({ reporter }));\nsyncEngine.handlerMetrics = reporter.handlerMetrics;\n\n// In your request handler, gate on the meter:\nif (!meter.allow(tenantId))\n  return new Response("Quota exceeded", { status: 429 });',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'createMeter({\n  rollingBudgets: {\n    "*": [\n      { dimension: "errors", windowMs: 5 * 60_000, limit: 50 }, // 50 errors / 5 min trips the breaker\n      { dimension: "requests", windowMs: 1 * 60_000, limit: 1_000 }, // 1k req / min rate cap\n    ],\n    "acme-prod": [\n      { dimension: "cpuMs", windowMs: 60_000, limit: 50_000 }, // 50s sandbox CPU / minute\n    ],\n  },\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Per-tenant cost-attribution + budget enforcement for multi-tenant Bun runtimes.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Surface (0.2.0) is documented in the repository README.',
+				title: 'Surface (0.2.0)'
+			},
+			{
+				description:
+					'Architectural role is documented in the repository README.',
+				title: 'Architectural role'
+			}
+		],
 		repository: 'https://github.com/absolutejs/metering',
 		subpackages: [],
 		version: '0.6.0'
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/collectors/runtime.ts src/collectors/router.ts src/collectors/egress.ts src/collectors/queue.ts src/collectors/sync.ts src/collectors/secrets.ts src/collectors/rateLimit.ts src/collectors/audit.ts src/collectors/dispatch.ts src/collectors/errors.ts src/collectors/handoff.ts src/collectors/logs.ts src/manifest.ts --outdir dist --root src --sourcemap --target=bun --external @absolutejs/handoff --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			"Prometheus / OpenMetrics exposure for the AbsoluteJS substrate. Standardizes every package's metrics() shape into MetricSample[] + a Prometheus text-format renderer + an Elysia metricsPlugin. Per-source collectors as subpaths: runtime, router, egress, queue, sync, secrets, rate-limit, audit, dispatch, errors, logs.",
 		directory: 'metrics',
@@ -1337,12 +7772,102 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Metrics',
 		packageName: '@absolutejs/metrics',
 		private: false,
+		publicExports: [
+			'@absolutejs/metrics',
+			'@absolutejs/metrics/runtime',
+			'@absolutejs/metrics/router',
+			'@absolutejs/metrics/egress',
+			'@absolutejs/metrics/queue',
+			'@absolutejs/metrics/sync',
+			'@absolutejs/metrics/secrets',
+			'@absolutejs/metrics/rate-limit',
+			'@absolutejs/metrics/audit',
+			'@absolutejs/metrics/dispatch',
+			'@absolutejs/metrics/errors',
+			'@absolutejs/metrics/handoff',
+			'@absolutejs/metrics/logs',
+			'@absolutejs/metrics/manifest',
+			'@absolutejs/metrics/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/metrics',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: "import { Elysia } from 'elysia';\nimport { createMetricsRegistry, metricsPlugin } from '@absolutejs/metrics';\nimport { runtimeCollector } from '@absolutejs/metrics/runtime';\nimport { routerCollector } from '@absolutejs/metrics/router';\nimport { egressCollector } from '@absolutejs/metrics/egress';\nimport {\n\tqueueCollector,\n\twakeSchedulerCollector\n} from '@absolutejs/metrics/queue';\nimport { syncCollector } from '@absolutejs/metrics/sync';\nimport { secretsCollector } from '@absolutejs/metrics/secrets';\nimport { auditCollector } from '@absolutejs/metrics/audit';\nimport { dispatchCollector } from '@absolutejs/metrics/dispatch';\nimport { errorsCollector } from '@absolutejs/metrics/errors';\nimport { logsCollector } from '@absolutejs/metrics/logs';\n\nconst registry = createMetricsRegistry();\nregistry.register(\n\t'runtime',\n\truntimeCollector(() => runtime.metrics())\n);\nregistry.register(\n\t'router',\n\trouterCollector(() => router.metrics())\n);\nregistry.register(\n\t'egress',\n\tegressCollector(() => egressGuard.metrics())\n);\nregistry.register(\n\t'queue',\n\tqueueCollector(() => worker.metrics())\n);\nregistry.register(\n\t'billing-wakes',\n\twakeSchedulerCollector(() => billingScheduler.metrics(), {\n\t\tlabels: { scheduler: 'billing' }\n\t})\n);\nregistry.register(\n\t'sync',\n\tsyncCollector(() => engine.metrics())\n);\nregistry.register(\n\t'secrets',\n\tsecretsCollector(() => broker.metrics())\n);\nregistry.register(\n\t'audit',\n\tauditCollector(() => audit.metrics())\n);\nregistry.register(\n\t'dispatch',\n\tdispatchCollector(() => dispatcher.metrics())\n);\nregistry.register(\n\t'errors',\n\terrorsCollector(() => tracker.metrics())\n);\nregistry.register(\n\t'logs',\n\tlogsCollector(() => logger.metrics())\n);\n\nconst app = new Elysia().use(await metricsPlugin({ registry }));\n//        GET /metrics → Prometheus text",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Prometheus / OpenMetrics exposure for the AbsoluteJS substrate. Every substrate package already exposes a typed metrics() snapshot — this package converts those snapshots into the scrape format Prometheus, VictoriaMetrics, Grafana Agent, OTLP collectors, etc. all understand.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'The substrate ships instrumentation but no exposure path. Operators wire one metricsPlugin() and every metrics() shape across the substrate becomes a scrape target — no hand-rolled /metrics per service.',
+				title: 'Why'
+			},
+			{
+				description: 'bun add @absolutejs/metrics',
+				title: 'Install'
+			},
+			{
+				description:
+					"import { Elysia } from 'elysia'; import { createMetricsRegistry, metricsPlugin } from '@absolutejs/metrics'; import { runtimeCollector } from '@absolutejs/metrics/runtime'; import { routerCollector } from '@absolutejs/metrics/router'; import { egressCollector } from '@absolutejs/metrics/egress'; import { queueCollector, wakeSchedulerCollector } from '@absolutejs/metrics/queue'; import { syncCollector } from '@absolutejs/metrics/sync'; import { secretsCollector } from '@absolutejs/metrics/secrets'; import { auditCollector } from '@absolutejs/metrics/audit'; import { dispatchCollector } from '@absolutejs/metrics/dispatch'; import { errorsCollector } from '@absolutejs/metrics/errors'; import { logsCollector } from '@absolutejs/metrics/logs';",
+				title: 'Usage'
+			},
+			{
+				description:
+					'Each substrate package gets its own subpath import:',
+				title: 'Collectors'
+			},
+			{
+				description:
+					"import { counter, gauge } from '@absolutejs/metrics';",
+				title: 'Custom metrics'
+			},
+			{
+				description:
+					"Convention: abs for substrate metrics (absruntimeactive, absqueuecompletedtotal). Your app's metrics should use so they don't collide.",
+				title: 'Naming'
+			}
+		],
 		repository: 'https://github.com/absolutejs/metrics',
 		subpackages: [],
 		version: '0.3.2'
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --root ./src --sourcemap --target=browser --external @absolutejs/beacon --external @absolutejs/replay && bun build src/elysia.ts src/manifest.ts --outdir dist --root ./src --sourcemap --target=bun --external @absolutejs/beacon --external @absolutejs/errors --external @absolutejs/handoff --external @absolutejs/manifest --external @absolutejs/replay --external @sinclair/typebox --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Managed AbsoluteJS observability: correlated browser and server errors plus privacy-masked Replay through a credential-safe Elysia relay.',
 		directory: 'observability',
@@ -1350,12 +7875,54 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Observability',
 		packageName: '@absolutejs/observability',
 		private: false,
+		publicExports: [
+			'@absolutejs/observability',
+			'@absolutejs/observability/elysia',
+			'@absolutejs/observability/manifest',
+			'@absolutejs/observability/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createManagedObservability } from "@absolutejs/observability";\n\nconst observability = createManagedObservability({\n  project: "6756f6d7-8e09-4ef9-b445-ed07092748ac",\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import { createManagedObservabilityRelayFromEnv } from "@absolutejs/observability/elysia";\n\nnew Elysia().use(createManagedObservabilityRelayFromEnv());',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Managed browser observability for AbsoluteJS applications. It composes @absolutejs/beacon and @absolutejs/replay, correlates every captured issue with its privacy-masked session tail, and sends both through a same-origin Elysia relay. The relay also composes @absolutejs/errors/elysia: thrown server exceptions, sanitized handled 5xx responses, and unexplained returned 5xx responses enter the same project-fenced issue history with a safe trace id.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/observability',
 		subpackages: [],
 		version: '0.4.3'
 	},
 	{
 		category: 'On-chain',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/adapter-kit/index.ts src/manifest.ts --root ./src --outdir dist --sourcemap --target=bun && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Gasless collectible provenance for AbsoluteJS apps: attested minting, literal editions, immutable origin ownership, and marketplace-controlled transfers.',
 		directory: 'onchain',
@@ -1363,12 +7930,49 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Onchain',
 		packageName: '@absolutejs/onchain',
 		private: false,
+		publicExports: [
+			'@absolutejs/onchain',
+			'@absolutejs/onchain/adapter-kit',
+			'@absolutejs/onchain/manifest',
+			'@absolutejs/onchain/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createOnchain, edition, localAdapter } from "@absolutejs/onchain";\n\nconst onchain = createOnchain(localAdapter({ file: "~/.myapp/ledger.json" }));\n\n// the ONLY path to ownership: earn → attest(verifiable fact) → mint(soulbound, real serial)\nconst token = await onchain.claim("user-id", {\n  seed: "wild:acme/app@abc123",            // the deterministic asset\n  fact: "github:commit:acme/app@abc123",   // the real interaction it\'s earned from\n  archetype: "wild-creature",\n  maxSupply: 1                              // ⇒ a literal 1-of-1\n});\nedition(token); // "1 of 1"\nawait onchain.inventory("user-id");         // what they\'ve earned',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Tasteful, optional on-chain provenance for AbsoluteJS apps. Let users earn gasless, seed-is-asset collectibles with real editions, immutable origin ownership, and auditable application-controlled sale, trade, gift, and recovery transfers.',
+				title: 'Overview'
+			},
+			{
+				description:
+					're-derivable forever by anyone. The on-chain record is just the seed.',
+				title: 'Principles (the whole point)'
+			},
+			{
+				description:
+					'import { createOnchain, edition, localAdapter } from "@absolutejs/onchain";',
+				title: 'Quick start (local adapter, no setup)'
+			},
+			{
+				description:
+					'Implement @absolutejs/onchain/adapter-kit: WalletProvider, Attester (the integrity gate — verify the fact, then sign), MintProvider (uniqueness + serials), and optionally RandomnessProvider (VRF for true 1-of-1 rolls). Market-capable mint providers also implement transfer and provenance. See @absolutejs/onchain-adapters.',
+				title: 'Adapter contract'
+			}
+		],
 		repository: 'https://github.com/absolutejs/onchain',
 		subpackages: [],
 		version: '0.1.2'
 	},
 	{
 		category: 'On-chain',
+		commands: [],
 		description:
 			'Real-chain adapters for @absolutejs/onchain (the core ships a local adapter for dev/off-chain).',
 		directory: 'onchain-adapters',
@@ -1376,13 +7980,49 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'On-chain Adapters',
 		packageName: '@absolutejs/onchain-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Real-chain adapters for @absolutejs/onchain. The core ships a local adapter (in-memory/file, zero setup) for dev and fully off-chain play; this monorepo holds the production providers.',
+				title: 'Overview'
+			},
+			{
+				description: 'createXAdapter(config): OnchainAdapters.',
+				title: 'Add an adapter'
+			}
+		],
 		repository: 'https://github.com/absolutejs/onchain-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --root ./src --outdir dist --sourcemap --target=bun --external @absolutejs/onchain && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Base (L2) adapter for @absolutejs/onchain: gasless soulbound seed-is-asset minting, with un-forgeable, GitHub-verified attestations.',
 				name: '@absolutejs/onchain-base',
 				private: false,
+				publicExports: [
+					'@absolutejs/onchain-base',
+					'@absolutejs/onchain-base/manifest',
+					'@absolutejs/onchain-base/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Base (L2) adapter for @absolutejs/onchain: gasless, soulbound, seed-is-asset minting with un-forgeable, GitHub-verified attestations.',
+						title: 'Overview'
+					}
+				],
 				version: '0.0.3'
 			}
 		],
@@ -1390,6 +8030,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/drizzle.ts src/manifest.ts --outdir dist --root ./src --target=bun --external drizzle-orm --external 'drizzle-orm/*' --external drizzle-typebox && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit --project tsconfig.json',
+				name: 'typecheck'
+			}
+		],
 		description:
 			"Outcome feedback loop for AI agents — typed artifact features + attribution-joined outcome stats + evidence rendering, so an agent's context (not its weights) gets measurably better per user. Experiment variants bolt on.",
 		directory: 'outcomes',
@@ -1397,12 +8056,64 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Outcomes',
 		packageName: '@absolutejs/outcomes',
 		private: false,
+		publicExports: [
+			'@absolutejs/outcomes',
+			'@absolutejs/outcomes/drizzle',
+			'@absolutejs/outcomes/manifest',
+			'@absolutejs/outcomes/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import {\n  computeOutcomeStats,\n  defineOutcomeVocabulary,\n  renderEvidence,\n} from "@absolutejs/outcomes";\n\nconst vocabulary = defineOutcomeVocabulary({\n  artifacts: {\n    outreach_email: {\n      label: "Outreach email",\n      features: {\n        subjectWords: {\n          type: "number",\n          buckets: [\n            { label: "short", max: 7 },\n            { label: "medium", max: 12 },\n          ],\n          overflowLabel: "long",\n        },\n        mode: { type: "string", values: ["outreach", "followup"] },\n        hasQuestion: { type: "boolean" },\n      },\n    },\n  },\n  outcomes: ["opened", "replied", "meeting_scheduled"],\n});\n\n// At production time: store.recordArtifact({ id: sendId, ownerId, kind, features })\n// From your signal hooks: store.recordOutcome({ artifactId: sendId, outcome: "replied", ownerId })\n\nconst rows = await store.listArtifactsWithOutcomes(\n  ownerId,\n  "outreach_email",\n  since,\n);\nconst stats = computeOutcomeStats(vocabulary, "outreach_email", rows, {\n  minSample: 10,\n});\nif (stats.ready) {\n  const memo = await yourAiCall(\n    `Distill what works:\\n${renderEvidence(stats)}`,\n  );\n  // …feed `memo` into every future draft; show `stats` in your UI.\n}',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import {\n  createDrizzleOutcomeStore,\n  outcomesDrizzleSchema,\n} from "@absolutejs/outcomes/drizzle";\n\nconst store = createDrizzleOutcomeStore({ db });',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Listed attributed artifacts retain their observation time, allowing hosts to build privacy-safe time cohorts without reaching around the store contract.',
+				title: 'Overview'
+			},
+			{
+				description:
+					"An agent produces artifacts (outreach emails, generated pages, drafts). Things happen to them (opens, replies, conversions, meetings). If you record both sides with typed features frozen at production time, the agent's context can get smarter every week — and you can show users the receipts.",
+				title: 'The idea'
+			},
+			{
+				description:
+					'The optional @absolutejs/outcomes/drizzle entry exports a typed Postgres schema and store. It works with any Drizzle PgAsyncDatabase, including a Neon-backed database, and never creates schema at application runtime:',
+				title: 'Production persistence (Drizzle + Postgres/Neon)'
+			}
+		],
 		repository: 'https://github.com/absolutejs/outcomes',
 		subpackages: [],
 		version: '0.2.4'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --target=bun --external zod && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			"In-house partnership & relationship intelligence — AI reasoning over the full partnership lifecycle (trust & fit scoring, relationship classification, connection framing, partner verification, outreach, deal structure), provider-injected so you don't pay a deal-copilot SaaS per seat.",
 		directory: 'partnership',
@@ -1410,12 +8121,81 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Partnership',
 		packageName: '@absolutejs/partnership',
 		private: false,
+		publicExports: [
+			'@absolutejs/partnership',
+			'@absolutejs/partnership/manifest',
+			'@absolutejs/partnership/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/partnership',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'import type { GenerateObject } from "@absolutejs/partnership";\nimport { meteredGenerateObjectAI } from "./usage/meteredAI";\nimport { aiProvider } from "./integrations/aiProvider";\n\nexport const partnershipCtx = (userSub?: string | null) => ({\n  generateObject: ((req) =>\n    meteredGenerateObjectAI({ ...req, provider: aiProvider, userSub })) as GenerateObject,\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					"In-house partnership & relationship intelligence for AbsoluteJS apps — AI reasoning over the partnership lifecycle, so you don't pay a deal-copilot SaaS per seat for the parts you can run yourself.",
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/partnership',
+				title: 'Install'
+			},
+			{
+				description:
+					"Bridge the package's generateObject to whatever you already use for structured generation. If you use @absolutejs/ai (directly or behind a metering wrapper), it's one line — the request shape is the subset of generateObjectAI's options the package controls, minus provider and your metering fields:",
+				title: 'Wiring (one-time)'
+			},
+			{
+				description:
+					'import { scoreTrustFit } from "@absolutejs/partnership";',
+				title: 'Primitives (Wave 1A)'
+			},
+			{
+				description:
+					"Primitives throw on a model or validation failure. Heuristic fallbacks (e.g. deriving rough Trust & Fit dimensions from a match's existing signals) are app-specific, so they stay in your wrapper — catch and degrade however your UI needs.",
+				title: 'Fallbacks'
+			}
+		],
 		repository: 'https://github.com/absolutejs/partnership',
 		subpackages: [],
 		version: '0.0.11'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/drizzle.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' --external drizzle-typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Versioned provider-neutral policy lifecycle, simulation, and AuthZEN adapter for AI agent actions.',
 		directory: 'policy',
@@ -1423,12 +8203,52 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Policy',
 		packageName: '@absolutejs/policy',
 		private: false,
+		publicExports: [
+			'@absolutejs/policy',
+			'@absolutejs/policy/drizzle',
+			'@absolutejs/policy/manifest',
+			'@absolutejs/policy/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import {\n  createDrizzlePolicyStore,\n  policyDrizzleSchema,\n} from "@absolutejs/policy/drizzle";\n\nconst policyStore = createDrizzlePolicyStore({ db });',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Immutable, provider-neutral policy lifecycle for agent actions. Drafts are validated and content-digested, versions only increase, activation atomically retires the previous version, evaluations record the exact version and digest, and simulation evaluates an unpersisted candidate without changing live policy.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/policy',
 		subpackages: [],
 		version: '0.3.1'
 	},
 	{
 		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/client.ts src/manifest.ts --root ./src --outdir dist --sourcemap --target=bun --external web-push && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Framework-agnostic PWA + Web Push primitives — web app manifest, push service worker, VAPID sender, and browser subscription glue',
 		directory: 'pwa',
@@ -1436,12 +8256,68 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Pwa',
 		packageName: '@absolutejs/pwa',
 		private: false,
+		publicExports: [
+			'@absolutejs/pwa',
+			'@absolutejs/pwa/client',
+			'@absolutejs/pwa/manifest',
+			'@absolutejs/pwa/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/pwa',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: 'import {\n  createWebAppManifest,\n  pushServiceWorker,\n  createWebPush,\n} from "@absolutejs/pwa";\n\nconst ICON = "/icons/app-512.png";\n\n// Serve as application/manifest+json at /manifest.webmanifest\nexport const manifest = createWebAppManifest({\n  name: "My App",\n  shortName: "MyApp",\n  themeColor: "#6366f1",\n  icons: [\n    { src: ICON, sizes: "192x192", type: "image/png", purpose: "any" },\n    { src: ICON, sizes: "512x512", type: "image/png", purpose: "any" },\n  ],\n});\n\n// Serve as text/javascript at /sw.js with header `Service-Worker-Allowed: /`.\n// Pass `offline` to also precache an app shell + serve a fallback page when a\n// navigation fails offline, and cache same-origin assets cache-first.\nexport const sw = pushServiceWorker({\n  icon: ICON,\n  offline: { fallback: "/offline.html", assetPrefix: "/assets/" },\n});\n\n// VAPID sender — pass empty/unset keys and it no-ops (isConfigured() === false),\n// so push degrades gracefully to your email/in-app fallback.\nconst push = createWebPush({\n  publicKey: process.env.VAPID_PUBLIC_KEY,\n  privateKey: process.env.VAPID_PRIVATE_KEY,\n  subject: "mailto:you@example.com",\n});\n\n// Fan out to a user\'s devices; prune whatever it reports gone.\nconst { gone } = await push.sendMany(subscriptions, {\n  title: "New match",\n  body: "Acme Co. just replied.",\n  url: "/inbox",\n});\nawait pruneEndpoints(gone); // your storage',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Framework-agnostic primitives for turning any app into an installable, push-capable PWA: a web app manifest, the push service worker, a VAPID Web Push sender that flags dead endpoints, and browser glue for service-worker registration + subscription.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'import { createWebAppManifest, pushServiceWorker, createWebPush, } from "@absolutejs/pwa";',
+				title: 'Server'
+			},
+			{
+				description:
+					'import { registerServiceWorker, getPushStatus, subscribeToPush, unsubscribeFromPush, } from "@absolutejs/pwa/client";',
+				title: 'Client'
+			}
+		],
 		repository: 'https://github.com/absolutejs/pwa',
 		subpackages: [],
 		version: '0.7.2'
 	},
 	{
 		category: 'Data & Sync',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'A durable, typed job queue for Elysia and the AbsoluteJS ecosystem',
 		directory: 'queue',
@@ -1449,12 +8325,71 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Queue',
 		packageName: '@absolutejs/queue',
 		private: false,
+		publicExports: [
+			'@absolutejs/queue',
+			'@absolutejs/queue/manifest',
+			'@absolutejs/queue/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/queue elysia',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: "import { Elysia } from 'elysia';\nimport {\n\tcreateInMemoryJobStore,\n\tcreateJobRegistry,\n\tdefineJobs,\n\tqueue,\n\tt\n} from '@absolutejs/queue';\n\n// Define jobs once: kind -> payload schema. Payload types are inferred from this\n// (no hand-written job map, no generics) and validated at enqueue + dequeue.\n// Build schemas with `t` from this package so they share one TypeBox instance.\nconst jobs = defineJobs({\n\t'email.send': t.Object({ to: t.String(), subject: t.String() }),\n\t'webhook.deliver': t.Object({ url: t.String(), body: t.Unknown() })\n});\n\nconst store = createInMemoryJobStore(jobs);\nconst registry = createJobRegistry(jobs)\n\t.on('email.send', async ({ to, subject }) => {\n\t\t// to: string, subject: string — inferred from the schema\n\t})\n\t.on('webhook.deliver', async ({ url, body }, { attempts }) => {\n\t\t// retried automatically; `attempts` is which try this is\n\t});\n\nconst app = new Elysia()\n\t.use(queue({ registry, store })) // in-process worker auto-starts\n\t.post('/welcome/:email', ({ params, queue }) =>\n\t\tqueue.enqueue('email.send', {\n\t\t\tsubject: 'Welcome',\n\t\t\tto: params.email\n\t\t})\n\t)\n\t.post('/notify', ({ body, queue }) =>\n\t\t// delayed one-shot: deliver the webhook in 1 hour\n\t\tqueue.enqueue(\n\t\t\t'webhook.deliver',\n\t\t\t{ body, url: 'https://example.com/hook' },\n\t\t\t{ runAt: Date.now() + 60 * 60 * 1000 }\n\t\t)\n\t)\n\t.listen(3000);",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'A durable, typed background-job queue for Elysia and the AbsoluteJS ecosystem. Persists jobs, claims them safely across workers, retries with backoff, dead-letters, and runs delayed one-shots.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/queue elysia',
+				title: 'Install'
+			},
+			{
+				description:
+					"import { Elysia } from 'elysia'; import { createInMemoryJobStore, createJobRegistry, defineJobs, queue, t } from '@absolutejs/queue';",
+				title: 'Usage'
+			},
+			{
+				description:
+					'types are inferred from TypeBox schemas (no hand-written job map, no generics), and payloads are validated at enqueue and dequeue.',
+				title: 'How it works'
+			}
+		],
 		repository: 'https://github.com/absolutejs/queue',
 		subpackages: [],
 		version: '0.7.1'
 	},
 	{
 		category: 'Data & Sync',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command:
+					'prettier --write "./*/src/**/*.{ts,json,md}" "./*/tests/**/*.ts"',
+				name: 'format'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Storage adapters for @absolutejs/queue (Postgres, Redis, and more to come)',
 		directory: 'queue-adapters',
@@ -1462,20 +8397,178 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Queue Adapters',
 		packageName: '@absolutejs/queue-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'bun install          # installs every workspace member\nbun run typecheck    # across all adapters\nbun run test         # across all adapters\nbun run build        # across all adapters',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Storage adapters for @absolutejs/queue — a private workspace monorepo. Each adapter is published as its own package and depends on @absolutejs/queue; install only the one for your backend.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Adapters share the JobStore contract from @absolutejs/queue. Keeping them in one workspace means a contract change can update every adapter in a single PR, with one CI and one bun install — while each still publishes independently so consumers pull only the backend (and its heavy deps) they actually use.',
+				title: 'Why a monorepo'
+			},
+			{
+				description:
+					'bun install # installs every workspace member bun run typecheck # across all adapters bun run test # across all adapters bun run build # across all adapters',
+				title: 'Develop'
+			}
+		],
 		repository: 'https://github.com/absolutejs/queue-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/postgresJobStore.ts src/neonJobStore.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external drizzle-orm --external postgres --external @neondatabase/serverless --external @absolutejs/queue && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command:
+							'QUEUE_TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:55444/queue_test bun test',
+						name: 'test:pg'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Postgres (Drizzle) storage adapter for @absolutejs/queue — postgres.js + Neon serverless',
 				name: '@absolutejs/queue-postgres',
 				private: false,
+				publicExports: [
+					'@absolutejs/queue-postgres',
+					'@absolutejs/queue-postgres/postgres',
+					'@absolutejs/queue-postgres/neon',
+					'@absolutejs/queue-postgres/manifest',
+					'@absolutejs/queue-postgres/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"Postgres storage adapter for @absolutejs/queue, built on Drizzle. The production JobStore: durable, with atomic multi-worker claiming via FOR UPDATE SKIP LOCKED. Ships convenience factories for both postgres.js and Neon's WebSocket driver (@neondatabase/serverless); the underlying buildPostgresJobStore accepts any Drizzle Postgres database, so other drivers (including Bun SQL and node-postgres) work too. Its portable JSONB encoding preserves payload objects across all supported drivers.",
+						title: 'Overview'
+					},
+					{
+						description:
+							'Install is documented in the repository README.',
+						title: 'Install'
+					},
+					{
+						description:
+							"import { createPostgresJobStore } from '@absolutejs/queue-postgres/postgres'; import { createJobRegistry, defineJobs, queue, t } from '@absolutejs/queue'; import postgres from 'postgres';",
+						title: 'Usage with postgres.js'
+					},
+					{
+						description:
+							"createNeonJobStore mirrors createPostgresJobStore but uses Neon's WebSocket Pool. Important: the queue's claimDue opens a transaction and selects with FOR UPDATE SKIP LOCKED. Neon's HTTP driver (drizzle-orm/neon-http) is single-statement and can't do row-level locks — use the WebSocket Pool driver here. Your app's other code can keep using the HTTP driver; they're independent.",
+						title: 'Usage with Neon (@neondatabase/serverless)'
+					},
+					{
+						description:
+							'Both factories are thin wrappers around buildPostgresJobStore(db, jobs), which accepts any PgDatabase from Drizzle. If you use drizzle-orm/node-postgres, build the db yourself and pass it in:',
+						title: 'Usage with any other Drizzle Postgres adapter'
+					},
+					{
+						description: 'claimDue runs inside a transaction:',
+						title: 'How claiming works'
+					}
+				],
 				version: '0.1.4'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/queue && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Redis-backed JobStore for @absolutejs/queue. Atomic Lua claim, sorted-set scheduling by runAt, per-job hash records. For shops running Redis instead of (or alongside) Postgres.',
 				name: '@absolutejs/queue-redis',
 				private: false,
+				publicExports: [
+					'@absolutejs/queue-redis',
+					'@absolutejs/queue-redis/manifest',
+					'@absolutejs/queue-redis/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Redis-backed JobStore for @absolutejs/queue. Sibling to @absolutejs/queue-postgres — same JobStore contract, different transport.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Both adapters implement identical JobStore shape — swap them by config.',
+						title: 'When to use Redis vs Postgres'
+					},
+					{
+						description:
+							'bun add @absolutejs/queue @absolutejs/queue-redis bun add ioredis # OR bun add redis # node-redis v4+',
+						title: 'Install'
+					},
+					{
+						description:
+							"import { Redis } from 'ioredis'; import { createJobRegistry, createQueueWorker, defineJobs, t, type JobMapFromDefinition } from '@absolutejs/queue'; import { createRedisJobStore } from '@absolutejs/queue-redis';",
+						title: 'Usage with ioredis'
+					},
+					{
+						description: "import { createClient } from 'redis';",
+						title: 'Usage with node-redis v4+'
+					},
+					{
+						description:
+							'claimDue runs a Lua script that atomically:',
+						title: 'Atomic claim via Lua'
+					},
+					{
+						description:
+							"All keys prefixed by keyPrefix (default 'absolutejs:queue:'):",
+						title: 'Storage layout'
+					},
+					{
+						description:
+							'The deferred methods need a separate maintained index (byKind: SET, byStatus: SET) which would cost a write on every status transition. v0.0.1 ships without to keep the hot path lean; 0.1.0 adds opt-in lazy indexing.',
+						title: 'v0.0.1 surface'
+					},
+					{
+						description:
+							'Redis pub/sub-style queues are subject to your Redis durability config:',
+						title: 'Crash safety'
+					}
+				],
 				version: '0.0.3'
 			}
 		],
@@ -1483,6 +8576,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command: 'bun run scripts/build.ts && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write .',
+				name: 'format'
+			},
+			{
+				command: 'eslint . --max-warnings 0',
+				name: 'lint'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit --project tsconfig.json',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Standalone RAG ingestion, sync, retrieval, evaluation, clients, and framework adapters extracted from AbsoluteJS',
 		directory: 'rag',
@@ -1490,12 +8605,52 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Rag',
 		packageName: '@absolutejs/rag',
 		private: false,
+		publicExports: [
+			'@absolutejs/rag',
+			'@absolutejs/rag/adapter-kit',
+			'@absolutejs/rag/client',
+			'@absolutejs/rag/client/ui',
+			'@absolutejs/rag/ui',
+			'@absolutejs/rag/quality',
+			'@absolutejs/rag/react',
+			'@absolutejs/rag/vue',
+			'@absolutejs/rag/svelte',
+			'@absolutejs/rag/angular',
+			'@absolutejs/rag/manifest',
+			'@absolutejs/rag/manifest.json'
+		],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Standalone RAG runtime extracted from AbsoluteJS.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/rag',
 		subpackages: [],
 		version: '0.6.2'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./*/src/**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Vector-store adapters for @absolutejs/rag (Pinecone, PostgreSQL/pgvector, SQLite)',
 		directory: 'rag-adapters',
@@ -1503,27 +8658,176 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'RAG Adapters',
 		packageName: '@absolutejs/rag-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'bun install          # installs every workspace member\nbun run typecheck    # across all adapters\nbun run test         # across all adapters\nbun run build        # across all adapters',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Vector-store adapters for @absolutejs/rag — a private workspace monorepo. Each adapter is published as its own package and depends on @absolutejs/rag; install only the one for your backend.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Adapters share the RAGVectorStore contract from @absolutejs/rag. Keeping them in one workspace means a contract change can update every adapter in a single PR, with one CI and one bun install — while each still publishes independently so consumers pull only the backend (and its heavy deps) they actually use.',
+				title: 'Why a monorepo'
+			},
+			{
+				description:
+					'bun install # installs every workspace member bun run typecheck # across all adapters bun run test # across all adapters bun run build # across all adapters',
+				title: 'Develop'
+			}
+		],
 		repository: 'https://github.com/absolutejs/rag-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/rag --external @absolutejs/rag/adapter-kit --external @absolutejs/ai --external @pinecone-database/pinecone && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Pinecone vector-store adapter for @absolutejs/rag',
 				name: '@absolutejs/rag-pinecone',
 				private: false,
+				publicExports: [
+					'@absolutejs/rag-pinecone',
+					'@absolutejs/rag-pinecone/manifest',
+					'@absolutejs/rag-pinecone/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Pinecone vector-store adapter for @absolutejs/rag. Treats Pinecone as the backend boundary: server-side filtering, native vector search, and explicit opt-in index provisioning helpers.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/rag @absolutejs/rag-pinecone @pinecone-database/pinecone',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { createPineconeRAG } from "@absolutejs/rag-pinecone";',
+						title: 'Usage'
+					}
+				],
 				version: '0.0.13'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/rag --external @absolutejs/rag/adapter-kit --external @absolutejs/ai && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'PostgreSQL (pgvector) vector-store adapter for @absolutejs/rag',
 				name: '@absolutejs/rag-postgres',
 				private: false,
+				publicExports: [
+					'@absolutejs/rag-postgres',
+					'@absolutejs/rag-postgres/manifest',
+					'@absolutejs/rag-postgres/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'PostgreSQL vector-store adapter for @absolutejs/rag, with pgvector as the first vector implementation. Native vector search, server-side filtering, and inspectable schema/migration plans.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/rag @absolutejs/rag-postgres postgres',
+						title: 'Install'
+					},
+					{
+						description:
+							"import { createPostgresRAG } from '@absolutejs/rag-postgres'; import { ragPlugin } from '@absolutejs/rag';",
+						title: 'Usage'
+					}
+				],
 				version: '0.0.12'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/rag --external @absolutejs/rag/adapter-kit --external @absolutejs/ai && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'SQLite vector-store adapter for @absolutejs/rag with optional native vec0 acceleration',
 				name: '@absolutejs/rag-sqlite',
 				private: false,
+				publicExports: [
+					'@absolutejs/rag-sqlite',
+					'@absolutejs/rag-sqlite/manifest',
+					'@absolutejs/rag-sqlite/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'SQLite vector-store adapter for @absolutejs/rag, with optional native sqlite-vec (vec0) acceleration. Falls back to the owned JSON/sqlite-table path when no native platform binary is available.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/rag @absolutejs/rag-sqlite',
+						title: 'Install'
+					},
+					{
+						description:
+							"import { createSQLiteRAG, ragPlugin } from '@absolutejs/rag-sqlite';",
+						title: 'Usage'
+					}
+				],
 				version: '0.0.12'
 			}
 		],
@@ -1531,6 +8835,29 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/elysia.ts src/core.ts src/postgres.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'First-class 2026 rate limit for Bun + Elysia. GCRA by default (exact, O(1) memory per key, no boundary effect — the algorithm Stripe uses), IETF draft-09 RateLimit-* headers, IPv6 /64 grouping, X-Forwarded-For trust modes, BigInt nanosecond TAT, pluggable store (memory LRU bundled).',
 		directory: 'rate-limit',
@@ -1538,12 +8865,79 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Rate Limit',
 		packageName: '@absolutejs/rate-limit',
 		private: false,
+		publicExports: [
+			'@absolutejs/rate-limit',
+			'@absolutejs/rate-limit/elysia',
+			'@absolutejs/rate-limit/core',
+			'@absolutejs/rate-limit/postgres',
+			'@absolutejs/rate-limit/manifest',
+			'@absolutejs/rate-limit/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: "import { Elysia } from 'elysia';\nimport { rateLimit, gcra } from '@absolutejs/rate-limit';\n\nnew Elysia()\n  .use(rateLimit({\n    algorithm: gcra({ requestsPerPeriod: 100, periodMs: 60_000, burst: 20 }),\n    key: 'ip',\n    trustedProxies: 1, // single CDN/LB hop trusted\n  }))\n  .get('/', () => 'ok')\n  .listen(3000);",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: "rateLimit({\n  algorithm: gcra({ requestsPerPeriod: 100, periodMs: 60_000, burst: 20 }),\n  store: memoryStore({ maxKeys: 100_000 }),\n\n  // key — defaults to 'ip' (uses extractIp).\n  key: 'ip',                                                   // built-in\n  // key: 'authorization',                                       // built-in\n  // key: (ctx) => ctx.request.headers.get('x-user') ?? null,    // custom\n\n  trustedProxies: 1,         // honor only the last hop of XFF (typical: 1)\n  ipv6Prefix: 64,            // group IPv6 by /64\n\n  skip: (ctx) => ctx.request.headers.get('authorization') === ADMIN_TOKEN,\n\n  headers: 'standard',       // 'standard' | 'legacy' | 'both' | false\n\n  onLimit: (ctx, info) => new Response(JSON.stringify({\n    ok: false,\n    retryAfterSec: info.decision.retryAfterSec,\n  }), { status: 429, headers: { 'Content-Type': 'application/json' } }),\n})",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'First-class, from-scratch, 2026 rate limit for Bun + Elysia. GCRA by default (the algorithm Stripe uses — exact, O(1) memory per key, no boundary effects), IETF draft-09 RateLimit- headers, IPv6 /64 grouping, X-Forwarded-For trust modes, BigInt nanosecond TAT (no float drift), pluggable store (LRU in-memory bundled).',
+				title: 'Overview'
+			},
+			{
+				description:
+					"The leader in the Elysia ecosystem is rayriffy/elysia-rate-limit. It uses a token bucket over a Map with a setInterval cleanup. That's fine, but every choice in it is from 2020. The 2026 from-scratch answers:",
+				title: 'Why not just use the existing libraries'
+			},
+			{
+				description: 'Surface is documented in the repository README.',
+				title: 'Surface'
+			},
+			{
+				description:
+					'no boundary effects, BigInt math = no drift. Burst is configurable; set burst: 0 for strict pacing.',
+				title: 'Algorithm picker'
+			}
+		],
 		repository: 'https://github.com/absolutejs/rate-limit',
 		subpackages: [],
 		version: '0.5.1'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Provider-neutral atomic inbox, transaction, and idempotent-operation primitives for AbsoluteJS.',
 		directory: 'reliability',
@@ -1551,12 +8945,57 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Reliability',
 		packageName: '@absolutejs/reliability',
 		private: false,
+		publicExports: [
+			'@absolutejs/reliability',
+			'@absolutejs/reliability/manifest',
+			'@absolutejs/reliability/manifest.json'
+		],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral reliability primitives for side-effecting integrations:',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/reliability',
 		subpackages: [],
 		version: '0.1.0'
 	},
 	{
 		category: 'Dev Tools',
+		commands: [
+			{
+				command:
+					'bun build cli/api.ts --target=node --outfile=dist/cli.mjs && chmod +x dist/cli.mjs',
+				name: 'build:cli'
+			},
+			{
+				command:
+					'bun build src/manifest.ts --outdir dist --target=node && absolute-manifest emit',
+				name: 'build:manifest'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'bun run db/test-market-trade-integration.ts',
+				name: 'test:marketplace:integration'
+			},
+			{
+				command: 'bunx tsc --noEmit',
+				name: 'typecheck'
+			},
+			{
+				command: 'bun run typecheck && bun run typecheck:web',
+				name: 'typecheck:all'
+			},
+			{
+				command: 'bunx tsc -p web/tsconfig.json --noEmit',
+				name: 'typecheck:web'
+			}
+		],
 		description:
 			'Renown — earn XP and renown for real, meritorious dev work. Editor-agnostic, with 10k achievements and competitive per-project leaderboards. By AbsoluteJS.',
 		directory: 'renown',
@@ -1564,12 +9003,83 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Renown',
 		packageName: '@absolutejs/renown',
 		private: false,
+		publicExports: [
+			'@absolutejs/renown/manifest',
+			'@absolutejs/renown/manifest.json',
+			'@absolutejs/renown/package.json'
+		],
+		readmeSamples: [
+			{
+				code: 'npm install -g @absolutejs/renown   # or: bun add -g @absolutejs/renown\nrenown link                         # link your GitHub account → get a verified score\nrenown                              # open the TUI: skills, quests, pets, leaderboard',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: 'renown install-agent all            # Claude Code / Codex hooks + tmux HUD',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'[](https://github.com/absolutejs/renown/actions/workflows/ci.yml)',
+				title: 'Overview'
+			},
+			{
+				description:
+					'npm install -g @absolutejs/renown # or: bun add -g @absolutejs/renown renown link # link your GitHub account → get a verified score renown # open the TUI: skills, quests, pets, leaderboard',
+				title: 'Quick start'
+			},
+			{
+				description:
+					"XP comes from a craft engine that scores each commit by substance (generated files / lockfiles / minified / reformat ≈ 0), with bonuses for tests/docs/new code and penalties for tiny/junk/duplicate commits and daily grinding — then a project- importance multiplier: open-source ×, GitHub stars (log scale), and contributing to someone else's repo ×. Only commits you authored count.",
+				title: "Why it's not cheese-able"
+			},
+			{
+				description:
+					'git repos emits activity heartbeats with zero editor plugins (works in VS Code, Neovim, JetBrains, anything) and detects commits. Editor plugins can POST richer heartbeats to it (WakaTime-style) later.',
+				title: 'Architecture (Bun monorepo)'
+			},
+			{
+				description:
+					'players, achievements (catalog incl. the 10k; unlockcount → rarity %), playerachievements (unlockedat → date achieved), projects, playerprojects (per-project boards). Rich local activity/recap data stays on-device; only scores and unlocks sync.',
+				title: 'Database (Drizzle + Postgres on Neon)'
+			},
+			{
+				description:
+					'DATABASEURL lives in .env (gitignored) — never commit it. Rotate the Neon password before this repo is public.',
+				title: '⚠️ Secrets'
+			},
+			{
+				description:
+					"Drop the renown Action into a repo and every push refreshes that repo's contributors' renown — their score, Co-Authored-By attribution, freshly-pulled serialized pets, and the repo's own /project leaderboard — with no manual renown sync and no secrets in the workflow. The Action reads GitHub's own context (the pusher + the authors GitHub names in the event) and asks your renown server to recompute each linked contributor from the GitHub API using the server's token: their global renown and their per-repo commits/XP (scored by the same craft engine your local CLI uses — core/craftScore.ts is shared, so CI and local scoring can't drift; the board upsert is monotonic, so CI only ever adds contributors or raises stats). Contributors who aren't on renown simply no-op, and the step never fails your build.",
+				title: 'GitHub Action — auto-sync from CI'
+			},
+			{
+				description: 'Roadmap is documented in the repository README.',
+				title: 'Roadmap'
+			}
+		],
 		repository: 'https://github.com/absolutejs/renown',
 		subpackages: [],
 		version: '0.3.5'
 	},
 	{
 		category: 'Dev Tools',
+		commands: [
+			{
+				command:
+					'bun build src/extension.ts --target=node --format=cjs --external vscode --outfile=out/extension.js',
+				name: 'build'
+			},
+			{
+				command: 'bunx tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Earn renown for real dev work — a live status bar + activity-driven sync, right in your editor. Talks to your renown server.',
 		directory: 'renown-vscode-extension',
@@ -1577,12 +9087,85 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Renown VS Code Extension',
 		packageName: 'renown-vscode',
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'git clone https://github.com/absolutejs/renown-vscode-extension\n   cd renown-vscode-extension\n   bun install && bun run build',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: 'you edit files  →  N minutes of activity in a repo  →  extension asks the server to recompute\n                                                         │\n                                   server scores your real GitHub commits (its own token,\n                                   the shared craft formula) and updates your verified renown\n                                                         │\n                          status bar + panel refresh  ·  any new 1/1 pets are celebrated',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'text'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Earn renown for real dev work — a live HUD, activity-driven sync, and your 1/1 pets, right in your editor.',
+				title: 'Overview'
+			},
+			{
+				description: '&nbsp;&nbsp;',
+				title: 'What it does'
+			},
+			{
+				description:
+					'git clone https://github.com/absolutejs/renown-vscode-extension cd renown-vscode-extension bun install && bun run build',
+				title: 'Getting started'
+			},
+			{
+				description: 'Commands is documented in the repository README.',
+				title: 'Commands'
+			},
+			{
+				description: '---',
+				title: 'Settings'
+			},
+			{
+				description:
+					'you edit files → N minutes of activity in a repo → extension asks the server to recompute │ server scores your real GitHub commits (its own token, the shared craft formula) and updates your verified renown │ status bar + panel refresh · any new 1/1 pets are celebrated',
+				title: 'How the sync works'
+			},
+			{
+				description:
+					'Requirements is documented in the repository README.',
+				title: 'Requirements'
+			}
+		],
 		repository: 'https://github.com/absolutejs/renown-vscode-extension',
 		subpackages: [],
 		version: '0.1.0'
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --sourcemap --target=browser --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external rrweb --external 'rrweb/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Session replay for the AbsoluteJS observability stack. A tiny zero-hard-dependency recorder (rrweb is an optional, lazy-loaded peer) that chunks DOM recordings and uploads them via a pluggable transport (@absolutejs/blob), privacy-masking by default. Plus chunk assembly + a framework-agnostic player. Stamps a replayId for @absolutejs/beacon to cross-link errors to the exact session.',
 		directory: 'replay',
@@ -1590,12 +9173,85 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Replay',
 		packageName: '@absolutejs/replay',
 		private: false,
+		publicExports: [
+			'@absolutejs/replay',
+			'@absolutejs/replay/manifest',
+			'@absolutejs/replay/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/replay rrweb',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'import { createRecorder } from "@absolutejs/replay";\nimport { initBeacon } from "@absolutejs/beacon";\n\nconst recorder = createRecorder({\n  project: "web",\n  release: import.meta.env.VITE_RELEASE,\n  upload: (chunk) =>\n    uploadToBlob(\n      `replays/${chunk.replayId}/${chunk.seq}.json`,\n      JSON.stringify(chunk),\n    ),\n  // privacy defaults: maskAllInputs: true, blockClass: \'rr-block\', maskTextClass: \'rr-mask\'\n});\n\n// Cross-link errors → this session:\ninitBeacon({ project: "web", getReplayId: () => recorder.replayId });\n\n// On error, flush the tail so the replay around it is stored:\nwindow.addEventListener("error", () => void recorder.flush());',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Records DOM sessions, chunks them, and uploads each chunk via a pluggable transport (wire @absolutejs/blob). Exposes a replayId so @absolutejs/beacon can stamp every error with the session — cross-linking an issue to the exact DOM replay around it. Re-assembles chunks for a framework-agnostic player.',
+				title: 'Overview'
+			},
+			{
+				description:
+					"the recorder wraps rrweb — but rrweb is an optional peer, lazy-imported only when you start recording (and fully injectable). Replay is the one heavy feature; its weight never lands on a page that isn't recording.",
+				title: 'Design'
+			},
+			{
+				description: 'bun add @absolutejs/replay rrweb',
+				title: 'Install'
+			},
+			{
+				description:
+					'import { createRecorder } from "@absolutejs/replay"; import { initBeacon } from "@absolutejs/beacon";',
+				title: 'Record'
+			},
+			{
+				description:
+					'import { assembleReplay, createReplayPlayer } from "@absolutejs/replay";',
+				title: 'Play back'
+			},
+			{
+				description:
+					'createRecorder(options) => Recorder // Recorder: { replayId, manifest(), flush(), stop() } // options: project, upload, release?, environment?, replayId?, // chunkIntervalMs? (5000), chunkMaxEvents? (200), // maskAllInputs? (true), maskAllText? (false), blockClass?, maskTextClass?, // recordCanvas?, record? (inject rrweb), onError?',
+				title: 'API'
+			}
+		],
 		repository: 'https://github.com/absolutejs/replay',
 		subpackages: [],
 		version: '0.3.1'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/bun.ts --outdir dist --sourcemap --target=bun && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Multi-tenant connection routing primitive for Bun PaaS gateways. Consistent-hash tenant→shard, per-tenant connection cap, per-tenant rate limit, healthy-shard skip. The library that goes in front of N @absolutejs/runtime instances.',
 		directory: 'router',
@@ -1603,12 +9259,78 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Router',
 		packageName: '@absolutejs/router',
 		private: false,
+		publicExports: ['@absolutejs/router', '@absolutejs/router/bun'],
+		readmeSamples: [
+			{
+				code: "import { createBunGateway } from '@absolutejs/router/bun';\n\nconst gateway = createBunGateway({\n\trouter,\n\tresolve: (request) => {\n\t\tconst hit = domainMap.resolve(request.headers.get('host') ?? '');\n\n\t\treturn hit\n\t\t\t? { route: new URL(request.url).pathname, tenantId: hit.tenantId }\n\t\t\t: null;\n\t}\n});\n\nBun.serve({ port: 3001, ...gateway });",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: "import { createRouter } from '@absolutejs/router';\n\nconst router = createRouter({\n\tshards: [\n\t\t{ id: 'engine-1', url: 'ws://10.0.0.11:3000' },\n\t\t{ id: 'engine-2', url: 'ws://10.0.0.12:3000' }\n\t],\n\thashStrategy: 'jump',\n\tperTenantConnectionCap: 100,\n\tperTenantRateLimit: { tokens: 100, refillPerSecond: 10 }\n});\n\n// In your WS upgrade handler:\nconst decision = router.route({ tenantId, channelId });\nif (decision.decision !== 'allow') {\n\treturn new Response(decision.decision, { status: 429 });\n}\nconst handle = router.acquire(tenantId);\nws.data = {\n\t...ws.data,\n\trelease: handle.release,\n\tupstream: decision.shard!.url\n};\n// ...proxy WS frames to decision.shard.url; call handle.release() on close.",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Multi-tenant connection routing primitive for Bun PaaS gateways. Sits in front of N backend processes (each a @absolutejs/runtime instance hosting a @absolutejs/sync engine for a subset of tenants) and decides — per request:',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Surface (0.1.0) is documented in the repository README.',
+				title: 'Surface (0.1.0)'
+			},
+			{
+				description:
+					'createRouter shards WITHIN a region; createRegionDirectory decides which region a tenant lives in. Sticky, deterministic assignment — weighted rendezvous over region ids by default, so every replica computes the same answer without coordination — plus an optional caller hook for latency-based placement and explicit overrides for control-plane onboarding decisions.',
+				title: 'Region-aware routing (0.4.0)'
+			},
+			{
+				description:
+					"A tenant's traffic arrives as app.acme.com (their CNAME), not as a tenant id. createDomainMap is the first lookup in the edge gateway: hostname → tenant, dependency-free and O(1)-ish (a Map for exact hosts, a Map keyed by suffix for wildcards).",
+				title: 'Custom-domain map (0.4.0)'
+			},
+			{
+				description:
+					'Architectural role is documented in the repository README.',
+				title: 'Architectural role'
+			},
+			{
+				description:
+					'What v0.0.1 does NOT include is documented in the repository README.',
+				title: 'What v0.0.1 does NOT include'
+			}
+		],
 		repository: 'https://github.com/absolutejs/router',
 		subpackages: [],
 		version: '0.5.2'
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --target=bun && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit --project tsconfig.json',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Typed standing automations ("if X do Y") for AI-agent products — a closed trigger/action vocabulary drives the validator, LLM tool schemas, and a capped, cooldown-guarded firing engine, so the agent itself can author rules without hallucinating behavior.',
 		directory: 'rules',
@@ -1616,12 +9338,65 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Rules',
 		packageName: '@absolutejs/rules',
 		private: false,
+		publicExports: [
+			'@absolutejs/rules',
+			'@absolutejs/rules/manifest',
+			'@absolutejs/rules/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import {\n  createMemoryRuleStore,\n  createRuleEngine,\n  defineRuleVocabulary,\n  ruleToolSchemas,\n  validateRuleInput,\n} from "@absolutejs/rules";\n\nconst vocabulary = defineRuleVocabulary({\n  triggers: {\n    no_reply: {\n      label: "My outreach gets no reply",\n      paramsHelp: "days (default 4)",\n      params: { days: { type: "number", min: 1, max: 30, defaultValue: 4 } },\n    },\n  },\n  actions: {\n    draft_followup: {\n      label: "Draft a follow-up for my approval",\n      paramsHelp: "none (guidance styles the copy)",\n      capability: "outbound",\n    },\n  },\n});\n\n// 1. Validate anything that wants to become a rule (AI tool, REST, forms):\nconst result = validateRuleInput(\n  vocabulary,\n  {\n    trigger: "no_reply",\n    action: "draft_followup",\n    triggerParams: { days: 45 },\n  },\n  {\n    canUseAction: (action) =>\n      memberTier !== "restricted" || "Outbound rules need a higher score.",\n    canAutoSend: () =>\n      memberTier === "trusted" || "Auto-send needs the trusted tier.",\n  },\n);\n// result.ok.triggerParams.days === 30 (clamped)\n\n// 2. Give your agent the tools (schemas only — you own the handlers):\nconst { createInput, updateInput, help } = ruleToolSchemas(vocabulary);\n\n// 3. Fire occurrences from your signal hooks / sweeps:\nconst engine = createRuleEngine({\n  vocabulary,\n  store, // your RuleStore (drizzle, memory, …)\n  executeAction: async (rule, event, { autoSend }) => {\n    // queue a draft for approval, create a task, auto-execute…\n    return autoSend ? "executed" : "drafted";\n  },\n});\n\nawait engine.fire(\n  ownerId,\n  {\n    trigger: "no_reply",\n    entityId: `noreply:${matchId}`,\n    context: "no reply from Brendan in 5 days",\n    signal: { days: 5 },\n  },\n  {\n    killSwitch: false,\n    cooldownDays: 3,\n    maxFiringsPerDay: 10,\n    maxAutoPerDay: 3,\n    canUseAction: () => true,\n    canAutoSend: () => true,\n  },\n);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Typed standing automations ("if X do Y") for AI-agent products — safe for the agent itself to author.',
+				title: 'Overview'
+			},
+			{
+				description:
+					"Letting an LLM create automations on a member's behalf is only safe if the rule language is closed. This package makes the vocabulary the contract: you define your triggers and actions once, with typed, bounded parameters, and everything derives from that single definition —",
+				title: 'The idea'
+			},
+			{
+				description:
+					'import { createMemoryRuleStore, createRuleEngine, defineRuleVocabulary, ruleToolSchemas, validateRuleInput, } from "@absolutejs/rules";',
+				title: 'Quick start'
+			}
+		],
 		repository: 'https://github.com/absolutejs/rules',
 		subpackages: [],
 		version: '0.1.0'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --sourcemap --target=bun && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Multi-tenant Bun runtime substrate for PaaS providers — spawn isolated child Bun processes per tenant, idle-kill, metric emit. The library SB-6 surfaces between isolated-jsc + sync and the hosted product downstream.',
 		directory: 'runtime',
@@ -1629,12 +9404,72 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Runtime',
 		packageName: '@absolutejs/runtime',
 		private: false,
+		publicExports: ['@absolutejs/runtime'],
+		readmeSamples: [
+			{
+				code: 'import { createRuntime } from "@absolutejs/runtime";\n\nconst runtime = createRuntime({\n  source: { kind: "directory", root: "/srv/tenants" },\n  idleAfterMs: 5 * 60 * 1000,\n  maxConcurrent: 100,\n  onMetrics: (event) => prometheus.observe(event),\n  onLog: (event) => loki.write(event),\n});\n\n// First call: spawns `bun run start` in /srv/tenants/tenant-42,\n// injects PORT, waits for readiness, returns the bound port.\nconst tenant = await runtime.ensure("tenant-42");\nawait fetch(`http://127.0.0.1:${tenant.port}/`);\n\n// Subsequent calls reuse the running process.\nruntime.touch("tenant-42"); // bump idle clock\n\nruntime.stats(); // { running, total }\nawait runtime.dispose();',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import { createRuntime, execCheckpointDriver } from "@absolutejs/runtime";\n\nconst runtime = createRuntime({\n  source: { kind: "directory", root: "/srv/tenants" },\n  checkpoint: {\n    driver: execCheckpointDriver({\n      checkpointCommand: [\n        "criu",\n        "dump",\n        "--tree",\n        "{pid}",\n        "--images-dir",\n        "{dir}",\n        "--shell-job",\n        "--tcp-established",\n      ],\n      restoreCommand: ["restore-and-print-pid.sh", "{dir}"], // must print RESTORED_PID=<n>\n      imageDir: "/var/lib/tenants/images",\n    }),\n    restoreTimeoutMs: 10_000,\n  },\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Multi-tenant Bun runtime substrate. Wraps Bun.spawn so that "run this tenant\'s bun run start inside an idle-killing, metric-emitting child process" is one function call.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Surface (0.1.0) is documented in the repository README.',
+				title: 'Surface (0.1.0)'
+			},
+			{
+				description:
+					'Architectural role is documented in the repository README.',
+				title: 'Architectural role'
+			}
+		],
 		repository: 'https://github.com/absolutejs/runtime',
 		subpackages: [],
 		version: '0.6.1'
 	},
 	{
 		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --target=bun --external elysia && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'bun run --watch example/server.ts',
+				name: 'dev'
+			},
+			{
+				command:
+					'prettier --write "./**/*.{js,jsx,ts,tsx,css,json,mjs,md,html}"',
+				name: 'format'
+			},
+			{
+				command: 'eslint ./',
+				name: 'lint'
+			},
+			{
+				command: 'echo "Error: no test specified" && exit 1',
+				name: 'test'
+			},
+			{
+				command: 'bun run tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'A state management library for Elysia, scoped to individual users.',
 		directory: 'scoped-state',
@@ -1642,12 +9477,80 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Scoped State',
 		packageName: '@absolutejs/scoped-state',
 		private: false,
+		publicExports: [
+			'@absolutejs/scoped-state',
+			'@absolutejs/scoped-state/manifest',
+			'@absolutejs/scoped-state/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: '# Bun\nbun add elysia-scoped-state\n\n# npm\nnpm install elysia-scoped-state\n\n# pnpm\npnpm add elysia-scoped-state\n\n# Yarn\nyarn add elysia-scoped-state',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			},
+			{
+				code: "import { Elysia } from 'elysia';\nimport { scopedState } from 'elysia-scoped-state';\n\nexport const server = new Elysia()\n\t.use(\n\t\tscopedState({\n\t\t\tcount: { value: 0 },\n\t\t\tuserData: { value: {}, preserve: true }\n\t\t})\n\t)\n\t.get('/', () => Bun.file('./build/pages/example.html'))\n\t.post('/api/reset?force', ({ resetScopedStore, query: { force } }) =>\n\t\tresetScopedStore(\n\t\t\tforce !== undefined && force !== 'false' && force !== '0'\n\t\t)\n\t)\n\t.get('/api/count', ({ scopedStore }) => scopedStore.count)\n\t.post('/api/increment', ({ scopedStore }) => ++scopedStore.count)\n\t.listen({ port: 3000 }, () => {\n\t\tconsole.log('Server is running on http://localhost:3000');\n\t});",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Elysia Scoped State is a plugin that provides per-user-session server-side state management in Elysia, letting you store and retrieve data tied to individual users. It’s especially useful for powering stateful HTMX interactions, but can be used for any server-side data you need to persist across requests. is documented in the repository README.',
+				title: 'Elysia Scoped State is a plugin that provides per-user-session server-side state management in Elysia, letting you store and retrieve data tied to individual users. It’s especially useful for powering stateful HTMX interactions, but can be used for any server-side data you need to persist across requests.'
+			},
+			{
+				description:
+					'Installation is documented in the repository README.',
+				title: 'Installation'
+			},
+			{
+				description:
+					'Each request is mapped to its own slice of the shared .state.scoped object, keyed by a secure usersessionid cookie set automatically on first visit.',
+				title: 'Key Features'
+			},
+			{
+				description: '---',
+				title: 'API'
+			},
+			{
+				description:
+					"import { Elysia } from 'elysia'; import { scopedState } from 'elysia-scoped-state';",
+				title: 'Example'
+			}
+		],
 		repository: 'https://github.com/absolutejs/scoped-state',
 		subpackages: [],
 		version: '0.1.4'
 	},
 	{
 		category: 'Dev Tools',
+		commands: [
+			{
+				command: 'bun run --watch src/backend/server.ts',
+				name: 'dev'
+			},
+			{
+				command:
+					'prettier --write "./**/*.{js,jsx,ts,tsx,css,json,md,mjs}"',
+				name: 'format'
+			},
+			{
+				command: 'eslint ./',
+				name: 'lint'
+			},
+			{
+				command: 'echo "Error: no test specified" && exit 1',
+				name: 'test'
+			},
+			{
+				command: 'bun run tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Internal AbsoluteJS scripts and dev utilities (e.g. Drizzle schema → DBML generation). Not a published package.',
 		directory: 'scripts',
@@ -1655,12 +9558,74 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Scripts',
 		packageName: '@absolutejs/scripts',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'This application is a server-side rendered (SSR) app using Bun, Elysia, and React. It demonstrates the power of modern JavaScript technologies for building fast, efficient, and scalable web applications.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Technologies is documented in the repository README.',
+				title: 'Technologies'
+			},
+			{
+				description:
+					"Server-side rendering (SSR) is a technique where your site's content is rendered on the web server rather than the browser. This can lead to better search engine optimization (SEO) and a higher ranking for the webpage. SSR can benefit SEO by providing fully rendered content for complete indexing, faster page loads that search engines reward in rankings, and avoiding SEO pitfalls. SSR reduces the amount of work the client's browser has to do, ensuring a faster display of the web page. This is especially beneficial for users with slower internet connections or less powerful devices.",
+				title: 'Server-Side Rendering (SSR) and Search Engine Optimization (SEO)'
+			},
+			{
+				description:
+					'React Hydration is the process of making a server-rendered React app fully interactive on the client side. When a user requests a web page, the server sends the initial HTML render, which is just static HTML content. React Hydration takes this static HTML, which was initially rendered by the server, and attaches event listeners to make it fully interactive on the client side. During hydration, React works quickly in a virtual DOM to match up the existing content with what the application renders, saving time from manipulating the DOM unnecessarily. It is this hydration that makes SSR worthwhile.',
+				title: 'React Hydration'
+			},
+			{
+				description: 'To install Bun, run the following command:',
+				title: 'Installation'
+			},
+			{
+				description:
+					'To run create-ak-app and have this full stack app ready for you, follow these steps:',
+				title: 'Running the Application'
+			},
+			{
+				description:
+					'For more information on these technologies, refer to their official documentation:',
+				title: 'References'
+			}
+		],
 		repository: 'https://github.com/absolutejs/scripts',
 		subpackages: [],
 		version: '0.0.1'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/agent.ts src/broker.ts src/manifest.ts src/rotation.ts --outdir dist --sourcemap --target=bun --external @absolutejs/agency --external '@absolutejs/agency/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Host-side secret broker for multi-tenant Bun runtimes. Pluggable adapters (env-var, in-memory, composite, encrypted-file); audit hook per resolve; safe fingerprints for logs; redact() walks known secrets out of arbitrary text before it lands in a log sink.',
 		directory: 'secrets',
@@ -1668,12 +9633,84 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Secrets',
 		packageName: '@absolutejs/secrets',
 		private: false,
+		publicExports: [
+			'@absolutejs/secrets',
+			'@absolutejs/secrets/agent',
+			'@absolutejs/secrets/broker',
+			'@absolutejs/secrets/manifest',
+			'@absolutejs/secrets/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import {\n  createCredentialOperationBroker,\n  createMemoryCredentialGrantStore,\n} from "@absolutejs/secrets/agent";\n\nconst grants = createMemoryCredentialGrantStore();\nawait grants.put({\n  agentId: "research-agent",\n  allowedOrigins: ["https://api.example.com"],\n  createdAt: Date.now(),\n  expiresAt: Date.now() + 60_000,\n  grantId: "grant_123",\n  maximumUses: 1,\n  provider: "example",\n  scopes: ["create-report"],\n  secretName: "EXAMPLE_API_KEY",\n  used: 0,\n  userId: "user_123",\n});\n\nconst operations = createCredentialOperationBroker({\n  agency,\n  providers: [\n    {\n      provider: "example",\n      operations: {\n        "create-report": ({ credential, destination, input, signal }) =>\n          fetch(new URL("/reports", destination), {\n            body: JSON.stringify(input),\n            headers: { authorization: `Bearer ${credential}` },\n            method: "POST",\n            signal,\n          }).then((response) => response.json()),\n      },\n    },\n  ],\n  secrets: broker,\n  store: grants,\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import {\n  createSecretBroker,\n  envAdapter,\n  inMemoryAdapter,\n  compositeAdapter,\n} from "@absolutejs/secrets/broker";\n\nconst broker = createSecretBroker({\n  adapter: compositeAdapter([\n    inMemoryAdapter({ initial: { TEST_KEY: "sk_test_local_value" } }),\n    envAdapter({ prefix: "ABS_SECRET_" }),\n  ]),\n  audit: (event) => observabilitySink.write(event),\n  cacheTtlMs: 60_000,\n});\n\n// In bridgeFetch.authorization():\nconst { value, fingerprint } = (await broker.resolve("STRIPE_KEY"))!;\nlogger.info("charging", { tenant, fingerprint }); // safe — no plaintext\nreturn { Authorization: `Bearer ${value}` };\n\n// In a log sink, before text leaves the host:\nconst sanitized = broker.redact(line); // [REDACTED:STRIPE_KEY] replaces plaintext\nsinkToCustomerVisibleLog(sanitized);\n\n// Rotate:\nconst next = await broker.rotate("STRIPE_KEY");\nnotifyDependents(next.fingerprint); // tell consumers a new key is in cache',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Host-side secret broker for multi-tenant Bun runtimes. Three jobs, kept narrow:',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Agents should not call resolve() and should never receive a bearer token. createCredentialOperationBroker() instead gives them bounded capabilities: an exact agent and user, provider, operation scopes, URL origins, expiry, and maximum use count. The host resolves the secret only after the grant is atomically consumed, then passes it directly to an allowlisted provider operation. Results and audit events contain digests and identifiers, never the credential.',
+				title: 'Agent credential operations'
+			},
+			{
+				description:
+					'v0.0.1 surface is documented in the repository README.',
+				title: 'v0.0.1 surface'
+			},
+			{
+				description:
+					'What v0.0.1 does NOT include is documented in the repository README.',
+				title: 'What v0.0.1 does NOT include'
+			},
+			{
+				description:
+					'Architectural role is documented in the repository README.',
+				title: 'Architectural role'
+			}
+		],
 		repository: 'https://github.com/absolutejs/secrets',
 		subpackages: [],
 		version: '0.9.6'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=bun && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Storage-neutral SLO, error-budget, burn-rate, release-gate, and incident-decision primitives for AbsoluteJS.',
 		directory: 'slo',
@@ -1681,12 +9718,46 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Slo',
 		packageName: '@absolutejs/slo',
 		private: false,
+		publicExports: ['@absolutejs/slo'],
+		readmeSamples: [
+			{
+				code: 'import { evaluateSlo, sloReleaseGate } from "@absolutejs/slo";\n\nconst evaluation = evaluateSlo(\n  {\n    id: "checkout-availability",\n    objective: 0.999,\n    windowMs: 30 * 86_400_000,\n    minimumSamples: 1_000,\n  },\n  { good: 99_950, total: 100_000, start, end },\n);\n\nconst gate = sloReleaseGate(evaluation);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Storage-neutral service-level objective decisions for AbsoluteJS.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/slo',
 		subpackages: [],
 		version: '0.1.0'
 	},
 	{
 		category: 'Data & Sync',
+		commands: [
+			{
+				command: 'bun run scripts/build.ts',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Lightweight reactive-push and write-behind-cache primitives for Elysia and the AbsoluteJS ecosystem — kill polling and keep a remote store off your hot path, without adopting a whole sync-engine backend.',
 		directory: 'sync',
@@ -1694,12 +9765,118 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Sync',
 		packageName: '@absolutejs/sync',
 		private: false,
+		publicExports: [
+			'@absolutejs/sync',
+			'@absolutejs/sync/scheduled',
+			'@absolutejs/sync/write-behind-cache',
+			'@absolutejs/sync/testing',
+			'@absolutejs/sync/code-mode',
+			'@absolutejs/sync/mcp',
+			'@absolutejs/sync/client',
+			'@absolutejs/sync/crdt',
+			'@absolutejs/sync/drizzle',
+			'@absolutejs/sync/prisma',
+			'@absolutejs/sync/engine',
+			'@absolutejs/sync/postgres',
+			'@absolutejs/sync/mysql',
+			'@absolutejs/sync/sqlite',
+			'@absolutejs/sync/tanstack-db',
+			'@absolutejs/sync/react',
+			'@absolutejs/sync/vue',
+			'@absolutejs/sync/svelte',
+			'@absolutejs/sync/angular',
+			'@absolutejs/sync/manifest',
+			'@absolutejs/sync/manifest.json',
+			'@absolutejs/sync/platform'
+		],
+		readmeSamples: [
+			{
+				code: "import { Elysia } from 'elysia';\nimport { createPlatformSyncRuntime } from '@absolutejs/sync/platform';\nimport { createCommentsPack } from '@absolutejs/sync-pack-comments';\nimport { createPostgresClusterBus } from '@absolutejs/sync-bus-pg';\n\nconst managedSync = createPlatformSyncRuntime({\n\tclusterBus: createPostgresClusterBus({ sql }),\n\tpacks: [createCommentsPack({ store: commentsStore })],\n\tresolveContext: (request) => authenticate(request)\n});\n\nawait managedSync.ready;\nnew Elysia().use(managedSync.app).listen(3000);\n\n// During graceful shutdown:\nawait managedSync.dispose();",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'bun add @absolutejs/sync',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Reactive data primitives for Elysia and the AbsoluteJS ecosystem — kill polling and keep a remote store off your hot path, on your own database and ORM (Drizzle or Prisma, any DB they support).',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Platforms can supply bounded Sync lifecycle settings without inventing their own environment parser or plugin assembly. Declare one ABSOLUTESYNCRUNTIME JSON value, then let the application register its own collections, permissions, writers, and authentication on the returned runtime:',
+				title: 'Platform-managed runtime'
+			},
+			{
+				description: 'bun add @absolutejs/sync',
+				title: 'Install'
+			},
+			{
+				description:
+					"// server import { Elysia } from 'elysia'; import { createReactiveHub, sync } from '@absolutejs/sync';",
+				title: 'Reactive push — kill the polling loop'
+			},
+			{
+				description:
+					'The adapters turn a query into the topics it touches, so reads and writes line up automatically. Same function names for both ORMs; pick the matching subpath.',
+				title: 'ORM auto-reactivity — stop hand-naming topics'
+			},
+			{
+				description:
+					'Row-level reactive results: the client holds a collection and the server pushes { added, removed, changed } diffs over a WebSocket, instead of refetching. Define a collection once (the filter powers both the DB hydrate and the incremental matcher), expose it over syncSocket, and drive changes from mutations.',
+				title: 'Live collections — the sync engine (Tier 3)'
+			},
+			{
+				description:
+					"import { createWriteBehindCache } from '@absolutejs/sync';",
+				title: 'Write-behind cache — keep a remote store off your hot path'
+			},
+			{
+				description:
+					"BYO-Postgres multi-tenancy has a sharp edge: one shard hosting 50 customers, each spawning its own PG pool, instantly exceeds a managed provider's connection limit (Supabase, Neon, RDS all cap you long before 50 × pool-size). createConnectionBroker multiplexes ONE upstream connection budget across every tenant on the shard — a global in-use cap, optional per-tenant budgets, FIFO queueing with timeouts when at cap, and idle harvesting so a burst doesn't pin connections forever. No pgbouncer sidecar to run.",
+				title: 'Connection broker — one upstream pool, many tenants'
+			},
+			{
+				description: 'API is documented in the repository README.',
+				title: 'API'
+			},
+			{
+				description:
+					'Run bun run bench/run.ts. Highlights (Bun 1.3, full results + methodology in docs/benchmarks.md):',
+				title: 'Benchmarks'
+			}
+		],
 		repository: 'https://github.com/absolutejs/sync',
 		subpackages: [],
 		version: '2.13.0'
 	},
 	{
 		category: 'Data & Sync',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./*/src/**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Cluster bus + CRDT backend adapters for @absolutejs/sync (PG-NOTIFY bus, Yjs, Automerge, Loro)',
 		directory: 'sync-adapters',
@@ -1707,41 +9884,329 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Sync Adapters',
 		packageName: '@absolutejs/sync-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'bun install          # installs every workspace member\nbun run typecheck    # across all adapters\nbun run test         # across all adapters\nbun run build        # across all adapters',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'CRDT backend adapters for @absolutejs/sync — a private workspace monorepo. Each adapter is published as its own package and implements the TextCrdtAdapter contract from @absolutejs/sync/crdt; install only the one you want.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'@absolutejs/sync ships a zero-dependency, first-party CRDT kit at @absolutejs/sync/crdt (a PN-counter, an LWW register, and an RGA collaborative-text type). That keeps the core package dependency-free and is enough for offline-merge and moderate collaboration.',
+				title: 'Why adapters'
+			},
+			{
+				description:
+					'Adapters share the TextCrdtAdapter contract from @absolutejs/sync. Keeping them in one workspace means a contract change can update every adapter in a single PR, with one CI and one bun install — while each still publishes independently so consumers pull only the backend (and its heavy deps) they actually use.',
+				title: 'Why a monorepo'
+			},
+			{
+				description:
+					'bun install # installs every workspace member bun run typecheck # across all adapters bun run test # across all adapters bun run build # across all adapters',
+				title: 'Develop'
+			}
+		],
 		repository: 'https://github.com/absolutejs/sync-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync --external @automerge/automerge && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Automerge-backed collaborative-text CRDT adapter for @absolutejs/sync',
 				name: '@absolutejs/sync-automerge',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-automerge',
+					'@absolutejs/sync-automerge/manifest',
+					'@absolutejs/sync-automerge/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"An Automerge-backed collaborative-text CRDT for @absolutejs/sync, behind the same CrdtText / TextCrdtAdapter contract as the core's zero-dependency rgaText and @absolutejs/sync-yjs.",
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/sync-automerge @automerge/automerge',
+						title: 'Install'
+					},
+					{
+						description:
+							"import { automergeText } from '@absolutejs/sync-automerge'; // ...instead of: import { rgaText } from '@absolutejs/sync/crdt';",
+						title: 'Use'
+					},
+					{
+						description:
+							'Implements TextCrdtAdapter from @absolutejs/sync/crdt: create, merge, empty, textOf. The replica argument is accepted for contract compatibility; Automerge manages actor identity internally.',
+						title: 'The contract'
+					}
+				],
 				version: '0.0.4'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync --external postgres && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Typed Postgres LISTEN/NOTIFY channel and @absolutejs/sync cluster bus — horizontal scale without standing up Redis',
 				name: '@absolutejs/sync-bus-pg',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-bus-pg',
+					'@absolutejs/sync-bus-pg/manifest',
+					'@absolutejs/sync-bus-pg/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Postgres LISTEN/NOTIFY cluster bus for @absolutejs/sync. Run sync horizontally across several Bun processes without standing up Redis or Kafka — your existing Postgres carries the cross-instance change feed.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'@absolutejs/sync ships a ClusterBus seam: an in-memory bus for single-process dev + tests, and a contract you implement against your bus of choice for production. Until now that meant writing 50 lines of LISTEN/NOTIFY plumbing yourself. This package is the first-party implementation, with the 8000-byte NOTIFY payload limit handled cleanly.',
+						title: 'Why'
+					},
+					{
+						description: 'bun add @absolutejs/sync-bus-pg postgres',
+						title: 'Install'
+					},
+					{
+						description:
+							"import postgres from 'postgres'; import { createSyncEngine } from '@absolutejs/sync/engine'; import { createPostgresClusterBus } from '@absolutejs/sync-bus-pg';",
+						title: 'Use'
+					},
+					{
+						description:
+							"createPostgresClusterBus({ sql, // your postgres client channel: 'absolutejssynccluster', // override to scope multiple engines on the same PG spill: 'overflow', // 'overflow' (default) | 'always' | 'never' listenerHealth: { // optional; these are the defaults probeIntervalMs: 15000, probeTimeoutMs: 5000 }, onError: (e) => log.warn(e) // listener-side errors });",
+						title: 'Options'
+					},
+					{
+						description:
+							'postgres.js automatically recreates its dedicated listener connection and reissues LISTEN after a disconnect. A query-pool health check cannot prove that recovery has completed, so this adapter also sends a private probe through the full pgnotify → dedicated listener path every 15 seconds.',
+						title: 'Listener health and reconnects'
+					},
+					{
+						description:
+							"Oversized messages spill to syncclusterspill. Rows aren't auto-deleted on consume (every listener on the channel needs to read them, including the publisher's own listener which fetches but doesn't double-apply via the engine's origin filter). Sweep periodically:",
+						title: 'Vacuum'
+					},
+					{
+						description:
+							'Caveats inherited from the engine seam is documented in the repository README.',
+						title: 'Caveats inherited from the engine seam'
+					}
+				],
 				version: '0.2.3'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Redis pub/sub ClusterBus for @absolutejs/sync — cross-instance fan-out via PUBLISH/SUBSCRIBE. Sibling to @absolutejs/sync-bus-pg; faster fanout, better geo-replication story. Works with any Redis client (ioredis, node-redis, etc.) via a narrow tag-template interface.',
 				name: '@absolutejs/sync-bus-redis',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-bus-redis',
+					'@absolutejs/sync-bus-redis/manifest',
+					'@absolutejs/sync-bus-redis/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Redis pub/sub ClusterBus for @absolutejs/sync. Sibling to @absolutejs/sync-bus-pg — same ClusterBus contract, different transport.',
+						title: 'Overview'
+					},
+					{
+						description:
+							"The headline tradeoff. Redis is in-memory pub/sub — a subscriber that's disconnected when a message fires misses it. For cross-instance resume past shard reboot, pair with engine.exportChangeLog() / importChangeLog() (sync 1.19.0+) regardless of which bus you use.",
+						title: 'When to use Redis vs Postgres'
+					},
+					{
+						description:
+							'bun add @absolutejs/sync @absolutejs/sync-bus-redis',
+						title: 'Install'
+					},
+					{
+						description:
+							"import { Redis } from 'ioredis'; import { createSyncEngine } from '@absolutejs/sync/engine'; import { createRedisClusterBus } from '@absolutejs/sync-bus-redis';",
+						title: 'Usage with ioredis'
+					},
+					{
+						description:
+							"import { createClient } from 'redis'; import { createRedisClusterBus } from '@absolutejs/sync-bus-redis';",
+						title: 'Usage with node-redis v4+'
+					},
+					{
+						description:
+							"createRedisClusterBus({ publisher, // RedisPublisher — publish(channel, message) subscriber, // RedisSubscriber — subscribe(channel, listener) → unsubscribe fn channel?, // default 'absolutejssynccluster' onError?, // logger for parse / delivery failures });",
+						title: 'API'
+					}
+				],
 				version: '0.1.1'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync --external loro-crdt && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Loro-backed collaborative-text CRDT adapter for @absolutejs/sync',
 				name: '@absolutejs/sync-loro',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-loro',
+					'@absolutejs/sync-loro/manifest',
+					'@absolutejs/sync-loro/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"A Loro-backed collaborative-text CRDT for @absolutejs/sync, behind the same CrdtText / TextCrdtAdapter contract as the core's zero-dependency rgaText and @absolutejs/sync-yjs.",
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/sync-loro loro-crdt',
+						title: 'Install'
+					},
+					{
+						description:
+							"import { loroText } from '@absolutejs/sync-loro'; // ...instead of: import { rgaText } from '@absolutejs/sync/crdt';",
+						title: 'Use'
+					},
+					{
+						description:
+							'Implements TextCrdtAdapter from @absolutejs/sync/crdt: create, merge, empty, textOf. The replica argument is accepted for contract compatibility; Loro assigns a peer id internally.',
+						title: 'The contract'
+					}
+				],
 				version: '0.0.4'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync --external yjs && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Yjs-backed collaborative-text CRDT adapter for @absolutejs/sync',
 				name: '@absolutejs/sync-yjs',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-yjs',
+					'@absolutejs/sync-yjs/manifest',
+					'@absolutejs/sync-yjs/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"A Yjs-backed collaborative-text CRDT for @absolutejs/sync, behind the same CrdtText / TextCrdtAdapter contract as the core's zero-dependency rgaText.",
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/sync-yjs yjs',
+						title: 'Install'
+					},
+					{
+						description:
+							"import { yjsText } from '@absolutejs/sync-yjs'; // ...instead of: import { rgaText } from '@absolutejs/sync/crdt';",
+						title: 'Use'
+					},
+					{
+						description:
+							'This package implements TextCrdtAdapter from @absolutejs/sync/crdt:',
+						title: 'The contract'
+					}
+				],
 				version: '0.1.0'
 			}
 		],
@@ -1749,6 +10214,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Data & Sync',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command:
+					'prettier --write "./*/src/**/*.{ts,json,md}" "./*/tests/**/*.ts" "./*/README.md"',
+				name: 'format'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Feature packs for @absolutejs/sync — Convex Components without the lock-in (presence, comments, scheduled-digest, ...)',
 		directory: 'sync-packs',
@@ -1756,69 +10240,590 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Sync Packs',
 		packageName: '@absolutejs/sync-packs',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Feature packs for @absolutejs/sync — a private workspace monorepo. Each pack is published as its own npm package and plugs into a SyncEngine with one engine.registerPack(...) call. See syncPacks.design.md for the API rationale.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Convex\'s "Components" model bundles schema + mutations + scheduled jobs + permissions as a reusable unit, and it\'s their stickiest moat — pulling one out means rewriting the application. Sync packs ship the same productivity as a portable unit: one npm install, one factory call. No lock-in.',
+				title: 'Why packs'
+			},
+			{
+				description:
+					"Namespacing (table prefix) and config injection (host's user table, getActorId, scope) are the pack's job — the engine does not rewrite names.",
+				title: 'Design rules (locked, do not re-debate)'
+			}
+		],
 		repository: 'https://github.com/absolutejs/sync-packs',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Threaded comments pack for @absolutejs/sync — per-resource ACL-scoped, author/moderator gates, optional CRDT bodies',
 				name: '@absolutejs/sync-pack-comments',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-pack-comments',
+					'@absolutejs/sync-pack-comments/manifest',
+					'@absolutejs/sync-pack-comments/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Threaded comments as a sync pack for @absolutejs/sync. Per-resource ACL injection, author/moderator gates, optional CRDT bodies. Plugs into a SyncEngine with one engine.registerPack(...) call.',
+						title: 'Overview'
+					},
+					{
+						description:
+							"import { createSyncEngine } from '@absolutejs/sync/engine'; import { createCommentsPack } from '@absolutejs/sync-pack-comments';",
+						title: 'Usage'
+					},
+					{
+						description:
+							'When bodyCrdt is set, the engine auto-registers a comments:merge mutation through registerCrdt — clients call that to merge CRDT body updates concurrently with regular edits.',
+						title: 'The pack exposes'
+					},
+					{
+						description:
+							'type CommentRow = { id: string; resourceId: string; parentCommentId: string | null; // null on top-level; parent id on replies authorId: string; body: string; depth: number; // 0 for top-level, parent.depth + 1 for replies createdAt: number; editedAt: number | null; };',
+						title: 'Row shape'
+					},
+					{
+						description:
+							'Default: per-instance in-memory store. To use a persistent backend (Drizzle, Postgres, …), pass a custom store:',
+						title: 'Storage'
+					},
+					{
+						description:
+							'To run two comments packs on the same engine (e.g. one per product surface), pass a prefix to each. It scopes the owned table, the collection, and the mutation names:',
+						title: 'Multiple instances'
+					},
+					{
+						description:
+							'This pack composes with the rest of your sync graph via subscriptions. A presence pack that wants to show "Alice is replying to this thread" should subscribe to comments and presence separately — it should NOT call comments: from inside its own handler. See the design doc rules in syncPacks.design.md.',
+						title: 'Composition'
+					},
+					{
+						description:
+							"Set joinUsers to additionally register a comments-with-author join collection that pairs each comment with the host's user row. The pack does NOT own the users table; it adds it to readsTables so the engine knows the dependency and your devtools see the full graph.",
+						title: 'Optional: comments-with-author join collection (0.2+)'
+					},
+					{
+						description: 'table.',
+						title: 'Planned for 0.3+'
+					}
+				],
 				version: '0.4.5'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Read-set-tracked live counters for @absolutejs/sync — define a compute function, get a reactive count derived from host tables',
 				name: '@absolutejs/sync-pack-counters',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-pack-counters',
+					'@absolutejs/sync-pack-counters/manifest',
+					'@absolutejs/sync-pack-counters/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Read-set-tracked live counters for @absolutejs/sync. Define a compute function that reads through db; the engine re-runs and pushes the new value whenever any table the compute read changes. No manual invalidation, no polling, no operator graph — just a function.',
+						title: 'Overview'
+					},
+					{
+						description:
+							"import { createSyncEngine } from '@absolutejs/sync/engine'; import { createCountersPack } from '@absolutejs/sync-pack-counters';",
+						title: 'Usage'
+					},
+					{
+						description:
+							"The pack is one big use case for sync's read-set tracking: a counter is literally \"compute a number from one or more tables, and re-emit it when those tables change.\" The engine instruments every db.all / db.get / db.where your compute makes, records the resulting dependency set, and parks the query on it. Any subsequent change to a touched table triggers a re-run; rows that didn't change don't.",
+						title: 'Why defineReactiveQuery?'
+					},
+					{
+						description:
+							"The default authorize requires the caller's ctx to expose an actor id (via getActorId, defaulting to (ctx) => ctx.userId). Per-counter authorize overrides this — return () => true for a public counter, or implement role-based gating.",
+						title: 'Permissions'
+					},
+					{
+						description:
+							"The pack owns no tables and reads no tables of its own — every counter's read-set comes from the host's registered readers. engine.inspect().packs[0] reports empty ownsTables and readsTables.",
+						title: 'What the pack ships'
+					},
+					{
+						description:
+							'Pass prefix to coexist with another counters pack instance:',
+						title: 'Multiple instances'
+					}
+				],
 				version: '0.1.5'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Scheduled per-actor digest pack for @absolutejs/sync — cron-fired, cursor-managed, transport-agnostic',
 				name: '@absolutejs/sync-pack-digest',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-pack-digest',
+					'@absolutejs/sync-pack-digest/manifest',
+					'@absolutejs/sync-pack-digest/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"Scheduled per-actor digest emails as a sync pack for @absolutejs/sync. Cron-fires a schedule that iterates the host's actor list, asks the host to build a digest payload, and dispatches it through a host-provided send adapter. The pack does NOT ship an SMTP client — you bring your own (Resend, SES, Postmark, or a CLI for tests).",
+						title: 'Overview'
+					},
+					{
+						description:
+							"import { createSyncEngine } from '@absolutejs/sync/engine'; import { createDigestPack } from '@absolutejs/sync-pack-digest';",
+						title: 'Usage'
+					},
+					{
+						description:
+							'The pack exposes is documented in the repository README.',
+						title: 'The pack exposes'
+					},
+					{
+						description:
+							'Three failure phases, each independent per actor:',
+						title: 'Failure semantics'
+					},
+					{
+						description:
+							'type DigestCursor = { id: string; // = actorId actorId: string; lastSentAt: number; // epoch ms lastSubject: string; };',
+						title: 'Cursor row'
+					},
+					{
+						description:
+							'Default: per-instance in-memory cursor store. For a persistent backend, pass a custom store:',
+						title: 'Storage'
+					},
+					{
+						description:
+							'Pass a prefix to coexist with other digest pack instances (e.g. one per product surface, with different crons / templates):',
+						title: 'Multiple instances'
+					}
+				],
 				version: '0.2.5'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Per-actor saved-resources pack for @absolutejs/sync — favorite/unfavorite/pin/list with optional join to host resources',
 				name: '@absolutejs/sync-pack-favorites',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-pack-favorites',
+					'@absolutejs/sync-pack-favorites/manifest',
+					'@absolutejs/sync-pack-favorites/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"Per-actor saved-resources pack for @absolutejs/sync. Each actor sees only their own rows; favoriting is idempotent (deterministic row id); optional join collection pairs each favorite with the host's resource row in one live subscription.",
+						title: 'Overview'
+					},
+					{
+						description:
+							"import { createSyncEngine } from '@absolutejs/sync/engine'; import { createFavoritesPack } from '@absolutejs/sync-pack-favorites';",
+						title: 'Usage'
+					},
+					{
+						description:
+							'The pack exposes is documented in the repository README.',
+						title: 'The pack exposes'
+					},
+					{
+						description:
+							'type FavoriteRow = { id: string; // ${actorId}:${resourceKind}:${resourceId} — deterministic actorId: string; resourceKind: string; // app-level: "doc" | "task" | "issue" | ... resourceId: string; createdAt: number; };',
+						title: 'Row shape'
+					},
+					{
+						description:
+							"When you set joinResources, the pack additionally registers a join collection that pairs each favorite with the host's resource row (same pattern as comments-with-author from sync-pack-comments).",
+						title: 'Optional: favorites-with-resource join'
+					},
+					{
+						description:
+							'Default: per-instance in-memory store. For a persistent backend, pass a custom store:',
+						title: 'Storage'
+					},
+					{
+						description:
+							'Pass a prefix to coexist with another favorites pack instance (e.g. a "team" set vs a "private" set):',
+						title: 'Multiple instances'
+					}
+				],
 				version: '0.2.4'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'@mention parser pack for @absolutejs/sync — extracts @usernames from a body, writes per-actor mention rows, fires an onMention hook that composes with the notifications pack',
 				name: '@absolutejs/sync-pack-mentions',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-pack-mentions',
+					'@absolutejs/sync-pack-mentions/manifest',
+					'@absolutejs/sync-pack-mentions/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'@username parser pack for @absolutejs/sync. Owns a mentions table, parses bodies for @usernames, writes per-actor mention rows, and fires an onMention hook the host wires into other packs.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Surface is documented in the repository README.',
+						title: 'Surface'
+					},
+					{
+						description:
+							"The host calls mentions:record right after its own post mutation succeeds, then onMention fires once per parsed mention. From inside the hook, the host can engine.runMutation('notifications:notify', …) to compose with @absolutejs/sync-pack-notifications.",
+						title: 'Composition pattern'
+					}
+				],
 				version: '0.1.4'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Per-actor inbox pack for @absolutejs/sync — notify, mark-read, scoped reads, optional TTL auto-archive',
 				name: '@absolutejs/sync-pack-notifications',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-pack-notifications',
+					'@absolutejs/sync-pack-notifications/manifest',
+					'@absolutejs/sync-pack-notifications/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Per-actor inbox pack for @absolutejs/sync. Each actor sees only their own rows; notify is the host-trusted insert path; markRead and markAllRead are client-callable owner-only mutations. Optional autoArchiveAfterDays deletes rows past TTL via a cron schedule.',
+						title: 'Overview'
+					},
+					{
+						description:
+							"import { createSyncEngine } from '@absolutejs/sync/engine'; import { createNotificationsPack } from '@absolutejs/sync-pack-notifications';",
+						title: 'Usage'
+					},
+					{
+						description:
+							'The pack exposes is documented in the repository README.',
+						title: 'The pack exposes'
+					},
+					{
+						description:
+							'type NotificationRow = { id: string; actorId: string; // whose inbox kind: string; // app-level tag: "mention", "reply", "system", ... title: string; body: string; href: string | null; // optional jump-to URL createdAt: number; readAt: number | null; // null = unread expiresAt: number | null; };',
+						title: 'Row shape'
+					},
+					{
+						description:
+							'Default: per-instance in-memory store. For a persistent backend pass a custom store:',
+						title: 'Storage'
+					},
+					{
+						description:
+							'Pass prefix to coexist with another notifications pack instance (e.g. a separate "system" inbox vs the regular one):',
+						title: 'Multiple instances'
+					}
+				],
 				version: '0.2.4'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Per-channel live presence pack for @absolutejs/sync — heartbeat-driven, scoped, TTL-cleaned, with cursor + typing state patches',
 				name: '@absolutejs/sync-pack-presence',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-pack-presence',
+					'@absolutejs/sync-pack-presence/manifest',
+					'@absolutejs/sync-pack-presence/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Per-channel live presence for @absolutejs/sync. Heartbeat-driven, scoped (per workspace/tenant), TTL-cleaned. Plugs into a SyncEngine with one engine.registerPack(...) call.',
+						title: 'Overview'
+					},
+					{
+						description:
+							"import { createSyncEngine } from '@absolutejs/sync/engine'; import { createPresencePack } from '@absolutejs/sync-pack-presence';",
+						title: 'Usage'
+					},
+					{
+						description:
+							'By default the pack uses an in-memory store — presence is ephemeral and almost always fine to lose on restart. To use a persistent backend (Drizzle, Postgres, Redis, …) pass a custom store:',
+						title: 'Storage'
+					},
+					{
+						description:
+							'To run two presence packs on the same engine (e.g. one per product surface), pass a prefix to each — it scopes the owned table, the collection name, the mutation names, and the schedule name:',
+						title: 'Multiple instances'
+					},
+					{
+						description:
+							'This pack composes via subscriptions, not cross-pack mutation calls. If another pack wants to react to presence changes (e.g. a typing-indicator display), it subscribes to the presence collection — it does not call presence:heartbeat from inside its own handler. That keeps packs decoupled.',
+						title: 'Composition'
+					},
+					{
+						description:
+							'createPresencePack(config) returns a plain SyncPack record:',
+						title: "What's in the SyncPack"
+					}
+				],
 				version: '0.4.3'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Per-actor triage pack for @absolutejs/sync — unread/seen, snooze that resurfaces on new activity, dismiss that sticks, and mute, over any host resource',
 				name: '@absolutejs/sync-pack-triage',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-pack-triage',
+					'@absolutejs/sync-pack-triage/manifest',
+					'@absolutejs/sync-pack-triage/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Per-actor triage state for @absolutejs/sync: unread/seen, snooze, dismiss, and mute over any resource your app already owns.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'Dismiss sticks. New activity does not resurrect something the actor put away. A "dismiss" that quietly means "hide until it changes" brings the item back at the worst possible moment, and the actor stops trusting the control. Only triage:restore undoes a dismiss.',
+						title: 'The two rules that matter'
+					},
+					{
+						description:
+							"Row ids are ${actorId}:${resourceKind}:${resourceId}, so every mutation is an idempotent upsert and a row's owner is recoverable from its key. Read and write permissions are owner-scoped and enforced against the stored row, not the client's payload.",
+						title: 'Mutations'
+					},
+					{
+						description:
+							'createTriagePack({ getActorId: (ctx) => ctx.userId, // default reads ctx.userId prefix: "team", // namespaces table, collection, mutations, schedule store: myPostgresTriageStore, // default is per-instance in-memory now: () => Date.now(), maxBulkSize: 500, wakeCron: "/5 ", // null to skip registering the sweep });',
+						title: 'Config'
+					},
+					{
+						description:
+							'{ resourceKind?, status? }. Both are optional; status is resolved with triageVisibility at the current time and without a per-row activity timestamp, because this pack owns triage state and not your activity feed. If you want activity-aware resurfacing inside a live query, join this table in your own collection and call triageVisibility there with your own timestamp.',
+						title: 'Subscription params'
+					}
+				],
 				version: '0.1.0'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/sync && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Shared helpers for @absolutejs/sync packs — resolveActor, requireRowOwner/Moderator, createInMemoryStore, and other patterns extracted from the official packs',
 				name: '@absolutejs/sync-pack-utils',
 				private: false,
+				publicExports: [
+					'@absolutejs/sync-pack-utils',
+					'@absolutejs/sync-pack-utils/manifest',
+					'@absolutejs/sync-pack-utils/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"Shared helpers for @absolutejs/sync packs. Each helper closes one repeated pattern that showed up across the six official packs (presence, comments, digest, notifications, favorites, counters). The goal: make new packs — first- or third-party — cheaper to write and consistent with what's already shipped.",
+						title: 'Overview'
+					},
+					{
+						description:
+							'API is documented in the repository README.',
+						title: 'API'
+					},
+					{
+						description: '${prefix} is fine.',
+						title: "What's intentionally not here"
+					},
+					{
+						description:
+							'Pack tests typically pair with @absolutejs/sync/testing (added in sync 1.9.2):',
+						title: 'Pairing with @absolutejs/sync/testing'
+					},
+					{
+						description:
+							'This package stays 0.x indefinitely while the ecosystem settles. When the six official packs are stable, the helpers will follow.',
+						title: 'Versioning'
+					}
+				],
 				version: '0.1.3'
 			}
 		],
@@ -1826,6 +10831,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Observability',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/otlpHttp.ts src/agent.ts --outdir dist --root src --sourcemap --target=bun --external @absolutejs/handoff && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			"Tiny shared OpenTelemetry substrate for the AbsoluteJS ecosystem. Type-replicates @opentelemetry/api's Tracer/Span shape, ships noop implementations + a tracerOrNoop helper + a zero-dep OTLP-HTTP-JSON span exporter (/otlp-http subpath), and pins ABS_ATTRS semantic conventions so spans from runtime / sync / queue / router / secrets all use the same attribute names.",
 		directory: 'telemetry',
@@ -1833,12 +10857,74 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Telemetry',
 		packageName: '@absolutejs/telemetry',
 		private: false,
+		publicExports: [
+			'@absolutejs/telemetry',
+			'@absolutejs/telemetry/otlp-http',
+			'@absolutejs/telemetry/agent'
+		],
+		readmeSamples: [
+			{
+				code: "const tracer = tracerOrNoop(options.tracerProvider, '@absolutejs/<pkg>');",
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'bun add @absolutejs/telemetry\n# Optional — only if you want real OTel spans:\nbun add @opentelemetry/api @opentelemetry/sdk-node',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'sh'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Tiny shared OpenTelemetry substrate for the AbsoluteJS substrate packages.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/telemetry',
+				title: 'Install'
+			},
+			{
+				description: 'Usage is documented in the repository README.',
+				title: 'Usage'
+			},
+			{
+				description: 'API is documented in the repository README.',
+				title: 'API'
+			}
+		],
 		repository: 'https://github.com/absolutejs/telemetry',
 		subpackages: [],
 		version: '0.2.1'
 	},
 	{
 		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --sourcemap --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external vue --external 'vue/*' --external vue-router --external 'vue-router/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Element-level, cross-page product tour engine for AbsoluteJS apps. A serializable step protocol plus a spotlight positioning engine (pixel-accurate, follows late layout shifts) and a sessionStorage-backed controller that resumes across full-page navigations. Vue + vue-router are peer dependencies.',
 		directory: 'tour',
@@ -1846,24 +10932,258 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Tour',
 		packageName: '@absolutejs/tour',
 		private: false,
+		publicExports: [
+			'@absolutejs/tour',
+			'@absolutejs/tour/manifest',
+			'@absolutejs/tour/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/tour',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'import type { Tutorial } from "@absolutejs/tour";\n\nconst tour: Tutorial = {\n  slug: "portal-intro",\n  trigger: { firstVisitOnly: true, onRoutePrefix: "/portal" },\n  steps: [\n    {\n      title: "Welcome",\n      body: "A quick tour.",\n      placement: "center",\n      route: "/dashboard",\n    },\n    {\n      title: "Your command center",\n      body: "Your single best next step is always one click here.",\n      route: "/dashboard",\n      target: \'[data-tour=\\"hero\\"]\',\n      placement: "bottom",\n    },\n    // …intake, matches, network — each navigates and spotlights a real element\n  ],\n};',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Element-level, cross-page product tour engine for AbsoluteJS apps.',
+				title: 'Overview'
+			},
+			{
+				description: 'bun add @absolutejs/tour',
+				title: 'Install'
+			},
+			{
+				description:
+					'import type { Tutorial } from "@absolutejs/tour";',
+				title: 'The protocol'
+			},
+			{
+				description:
+					'// shared controller (singleton per storage key) import { useTourController } from "@absolutejs/tour"; const tour = useTourController("myapp.tour");',
+				title: 'Wiring it up'
+			},
+			{
+				description:
+					'Steps stay serializable, so a step references actions by name; the host registers the handlers. onEnter actions run once the step is positioned (sequentially, cancelled if the step changes mid-run); onExit actions run when the step is left — cleanup/restore.',
+				title: "Step actions — demo the product, don't just point at it"
+			},
+			{
+				description:
+					'A tour must be able to show a data-backed surface (matches, pipeline) to a viewer who has no data yet — a fresh signup, an unsubscribed user — without the host paying to source anything. useTourDemo swaps in a constant, fully-typed sample dataset while the tour plays and passes the real data through untouched otherwise:',
+				title: 'Demo data — tour an empty account for free'
+			},
+			{
+				description:
+					"Pass onEvent to useSpotlight and every lifecycle moment lands in your analytics: tourstarted, stepviewed, stepcompleted, steptargetmissing, actionfailed, tourcompleted, and — the one that matters — tourskipped, carrying the exact stepIndex, stepTitle, target, and route (the screen the viewer was on when they'd had enough) plus a reason distinguishing the Skip button from Escape.",
+				title: 'Funnel events — see where viewers bail'
+			},
+			{
+				description:
+					'Conditions mirror actions: serializable refs resolved by name against a registry (useTourConditions), with element and media built in.',
+				title: 'Branching & readiness — showIf / skipIf / waitFor'
+			},
+			{
+				description:
+					"Below mobileQuery (default (max-width: 640px)) a step's mobile block overrides its target/placement/copy — or skips it where the anchor doesn't exist on small screens:",
+				title: 'Mobile variants'
+			},
+			{
+				description:
+					'cta: { label: "Try it now", actions: [{ action: "click" }] } renders a button in the card (host template: v-if="step.cta" → @click="runCta"); it runs the refs through the action registry and advances unless advance: false.',
+				title: 'CTA buttons'
+			},
+			{
+				description:
+					'useTourGate owns the auto-play decision across MANY tutorials: dismissal caps (trigger.maxDismissals, default 2 — after that, manual replay only), oncePerSession, priority when several tutorials match a page, audience showIf predicates, and role matching. State persists in localStorage.',
+				title: 'Auto-play gate — stop nagging people'
+			},
+			{
+				description:
+					'Typed tasks + completion persistence + progress math; the host renders the panel. completeForTutorial(slug) checks off tasks tied to a tutorial (wire it to the tourcompleted event).',
+				title: 'Checklist — "getting started" engine'
+			}
+		],
 		repository: 'https://github.com/absolutejs/tour',
 		subpackages: [],
 		version: '0.3.0-beta.6'
 	},
 	{
 		category: 'Voice & Media',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts ./src/client/index.ts ./src/react/index.ts ./src/vue/index.ts ./src/svelte/index.ts ./src/angular/index.ts ./src/testing/index.ts ./src/drizzle/index.ts --outdir dist --root ./src --target bun --external @absolutejs/ai --external '@absolutejs/ai/*' --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/media --external '@absolutejs/media/*' --external @angular/core --external '@angular/core/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external drizzle-orm --external 'drizzle-orm/*' --external elysia --external 'elysia/*' --external react --external 'react/*' --external vue --external 'vue/*' && bun build ./src/client/htmxBootstrap.ts --outdir dist/client --target browser --format esm && bun build ./src/embed/index.ts --outfile dist/embed/voice-widget.js --target browser --format iife --minify && bun build ./src/embed/index.ts --outdir dist/embed --target browser --format esm && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'absolute prettier --write',
+				name: 'format'
+			},
+			{
+				command: 'absolute eslint',
+				name: 'lint'
+			},
+			{
+				command:
+					'bun test ./test/local-network/*.test.ts && bun test ./test/*.test.ts',
+				name: 'test'
+			},
+			{
+				command: 'bun test ./test/live/*.test.ts',
+				name: 'test:adapters'
+			},
+			{
+				command: 'bun test ./test/live/assemblyai.live.test.ts',
+				name: 'test:assemblyai'
+			},
+			{
+				command: 'bun test ./test/live/deepgram.live.test.ts',
+				name: 'test:deepgram'
+			},
+			{
+				command: 'bun test ./test/live/elevenlabs.live.test.ts',
+				name: 'test:elevenlabs'
+			},
+			{
+				command: 'bun test ./test/live/openai.live.test.ts',
+				name: 'test:openai'
+			},
+			{
+				command: 'absolute typecheck',
+				name: 'typecheck'
+			}
+		],
 		description: 'Voice primitives and Elysia plugin for AbsoluteJS',
 		directory: 'voice',
 		kind: 'package',
 		name: 'Voice',
 		packageName: '@absolutejs/voice',
 		private: false,
+		publicExports: [
+			'@absolutejs/voice',
+			'@absolutejs/voice/client',
+			'@absolutejs/voice/react',
+			'@absolutejs/voice/vue',
+			'@absolutejs/voice/svelte',
+			'@absolutejs/voice/angular',
+			'@absolutejs/voice/drizzle',
+			'@absolutejs/voice/testing',
+			'@absolutejs/voice/embed',
+			'@absolutejs/voice/embed/voice-widget.js',
+			'@absolutejs/voice/manifest',
+			'@absolutejs/voice/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { Elysia } from "elysia";\nimport {\n  createVoiceInMemoryMonitorRegistry,\n  createVoiceLiveMonitorRoutes,\n  createVoiceMonitorRuntimeBinding,\n  voice,\n} from "@absolutejs/voice";\n\nconst monitorRegistry = createVoiceInMemoryMonitorRegistry();\n\nconst app = new Elysia()\n  .use(\n    voice({\n      path: "/voice/realtime",\n      stt: deepgram({ apiKey: process.env.DEEPGRAM_API_KEY! }),\n      tts: elevenlabs({ apiKey: process.env.ELEVENLABS_API_KEY! }),\n      onTurn: async (session, turn, api) => {\n        // your business logic\n      },\n      session: sessionStore,\n      monitor: createVoiceMonitorRuntimeBinding(monitorRegistry, {\n        audioFormat: { channels: 1, container: "raw", encoding: "pcm_s16le", sampleRateHz: 24_000 },\n      }),\n    }),\n  )\n  .use(\n    createVoiceLiveMonitorRoutes({\n      registry: monitorRegistry,\n      authenticate: async ({ request }) => await verifySupervisorJWT(request),\n    }),\n  );',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import { Elysia } from "elysia";\nimport {\n  buildVoiceMonitorPlan,\n  createVoiceInMemoryMonitorRegistry,\n  createVoiceLiveMonitorRoutes,\n  createVoiceMonitorSession,\n} from "@absolutejs/voice";\n\nconst registry = createVoiceInMemoryMonitorRegistry();\n\n// In your runtime: when a session opens, register it so supervisors can listen.\nconst record = createVoiceMonitorSession({ handle, sessionId: handle.id });\nconst deregister = registry.register(record);\n// When audio leaves the assistant, fan it out:\n//   record.emit({ at: Date.now(), chunk, format, source: \'assistant\' });\n// On call end:\n//   deregister();\n\nconst app = new Elysia()\n  .use(\n    createVoiceLiveMonitorRoutes({\n      authenticate: async ({ sessionId, route, request }) =>\n        await verifySupervisorJWT(request),\n      controlHandlers: {\n        say: async ({ message, session }) => {\n          await yourTtsRuntime.sayInSession(session.sessionId, message.text);\n          return { detail: `Said: ${message.text}`, ok: true, type: "say" };\n        },\n      },\n      htmlPath: "/voice/monitor",\n      registry,\n    }),\n  );\n\nconst plan = buildVoiceMonitorPlan({\n  baseUrl: "wss://api.example.com",\n  sessionId: handle.id,\n});\n// plan.listenUrl  → wss://api.example.com/api/voice/monitor/<sessionId>/listen\n// plan.controlUrl → wss://api.example.com/api/voice/monitor/<sessionId>/control',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'@absolutejs/voice is the self-hosted voice operations layer for AbsoluteJS.',
+				title: 'Overview'
+			},
+			{
+				description:
+					"What's new is documented in the repository README.",
+				title: "What's new"
+			},
+			{
+				description:
+					'Why AbsoluteJS Voice is documented in the repository README.',
+				title: 'Why AbsoluteJS Voice'
+			},
+			{
+				description:
+					'Pick the path that matches what you are building:',
+				title: 'Start Here'
+			},
+			{
+				description:
+					'These are the primitive-first paths a Vapi-style buyer usually needs. Each path stays inside your AbsoluteJS app; the package gives you route handlers, stores, reports, hooks, composables, services, widgets, and contracts instead of a hosted dashboard.',
+				title: 'Buyer Paths'
+			},
+			{
+				description:
+					'Capability Matrix is documented in the repository README.',
+				title: 'Capability Matrix'
+			},
+			{
+				description:
+					'Use this checklist when a buyer asks, "How do I know this replaces a hosted voice dashboard?" Each artifact is a route, report, contract, or export the app owns. The point is not screenshots; the point is reproducible proof that can live in CI, an internal admin page, or a customer-facing demo.',
+				title: 'Proof Pack'
+			},
+			{
+				description:
+					'Use createVoicePostCallAnalysisRoutes(...) when the hosted-platform feature you need is call analysis plus follow-up proof. It validates that required extracted fields exist, expected ops tasks were created, integration/webhook events delivered, and the report links back to /voice-operations/:sessionId.',
+				title: 'Post-Call Analysis Proof'
+			},
+			{
+				description:
+					'Use createVoiceGuardrailRuntime(...) when you need code-owned live enforcement for what an agent may say, what tool payloads may contain, or which transcript content should warn/redact before downstream workflow. Use createVoiceGuardrailRoutes(...) beside it when you also want JSON/Markdown proof. The primitive does not force a moderation vendor or hosted dashboard; it emits assistant.guardrail trace events from the runtime and route surfaces.',
+				title: 'Guardrails'
+			},
+			{
+				description:
+					'Use this path when you want a Vapi-style support assistant that can answer web or phone calls, look up customer context, route billing issues to a specialist, create follow-up work, and leave one debuggable call record. It is a recipe over primitives, not a support app kit.',
+				title: 'Use-Case Recipe: Support Triage'
+			},
+			{
+				description:
+					'Use this path when the assistant needs to check availability, book a slot, create a confirmation task, and prove the post-call workflow before production traffic. This is the self-hosted version of a hosted scheduling agent: your app owns the calendar tool, booking policy, storage, follow-up tasks, and call evidence.',
+				title: 'Use-Case Recipe: Appointment Scheduling'
+			},
+			{
+				description:
+					'Use this path when you need Retell/Bland-style outbound outreach without handing recipients, consent proof, attempt policy, carrier outcomes, or debugging records to a hosted campaign dashboard. The package gives you campaign primitives; your app decides who can upload recipients, when workers run, which carrier dials, and how campaign results sync back to your product.',
+				title: 'Use-Case Recipe: Campaign Outreach'
+			}
+		],
 		repository: 'https://github.com/absolutejs/voice',
 		subpackages: [],
 		version: '0.0.22-beta.665'
 	},
 	{
 		category: 'Voice & Media',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command:
+					"bun test ./test/*.test.ts && bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Speech-to-text, text-to-speech, and realtime provider adapters for @absolutejs/voice.',
 		directory: 'voice-adapters',
@@ -1871,124 +11191,1068 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Voice Adapters',
 		packageName: '@absolutejs/voice-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description: 'Provider adapters for @absolutejs/voice.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Each adapter remains an independently versioned npm package. This repository is the source monorepo.',
+				title: 'Packages'
+			}
+		],
 		repository: 'https://github.com/absolutejs/voice-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'AssemblyAI speech-to-text adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-assemblyai',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-assemblyai',
+					'@absolutejs/voice-assemblyai/manifest',
+					'@absolutejs/voice-assemblyai/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'AssemblyAI speech-to-text adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/voice @absolutejs/voice-assemblyai',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { assemblyai } from "@absolutejs/voice-assemblyai";',
+						title: 'Setup'
+					},
+					{
+						description:
+							"AssemblyAI's streaming output is immutable, so the adapter treats in-progress turns as partial updates and the terminal turn message as the final transcript for that turn.",
+						title: 'What It Maps'
+					},
+					{
+						description: 'Supported options include:',
+						title: 'Options'
+					},
+					{
+						description:
+							'Set ASSEMBLYAIAPIKEY in your runtime environment, or pass the key explicitly in the adapter config.',
+						title: 'API Key'
+					}
+				],
 				version: '0.0.19-beta.127'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Azure Speech (Cognitive Services) adapter for @absolutejs/voice — Neural TTS over REST + streaming STT over the WebSocket Unified Speech Protocol',
 				name: '@absolutejs/voice-azure',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-azure',
+					'@absolutejs/voice-azure/manifest',
+					'@absolutejs/voice-azure/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"Azure Speech (Cognitive Services) adapter for @absolutejs/voice — Neural TTS over REST plus streaming STT over Azure's WebSocket Unified Speech Protocol.",
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-azure',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { azureTTS } from "@absolutejs/voice-azure";',
+						title: 'TTS'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { azureSTT, azureTTS } from "@absolutejs/voice-azure";',
+						title: 'STT'
+					},
+					{
+						description:
+							'Roadmap is documented in the repository README.',
+						title: 'Roadmap'
+					}
+				],
 				version: '0.0.1-beta.7'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Cartesia text-to-speech adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-cartesia',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-cartesia',
+					'@absolutejs/voice-cartesia/manifest',
+					'@absolutejs/voice-cartesia/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Cartesia text-to-speech adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-cartesia',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { cartesia } from "@absolutejs/voice-cartesia";',
+						title: 'Use'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1-beta.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Deepgram speech-to-text adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-deepgram',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-deepgram',
+					'@absolutejs/voice-deepgram/manifest',
+					'@absolutejs/voice-deepgram/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"Flux sessions implement the provider-neutral session.configure(...) contract, allowing keyterms and language hints to be refreshed during a live stream. Nova sessions keep their opening configuration because Deepgram's Configure control message is a Flux capability.",
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/voice @absolutejs/voice-deepgram',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { deepgram } from "@absolutejs/voice-deepgram";',
+						title: 'Setup'
+					},
+					{
+						description:
+							'The adapter normalizes Deepgram events into the core STTAdapter contract.',
+						title: 'What It Maps'
+					},
+					{
+						description: 'Supported options include:',
+						title: 'Options'
+					},
+					{
+						description:
+							'Set DEEPGRAMAPIKEY in your runtime environment, or pass the key explicitly in the adapter config.',
+						title: 'API Key'
+					}
+				],
 				version: '0.0.20-beta.104'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'ElevenLabs text-to-speech adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-elevenlabs',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-elevenlabs',
+					'@absolutejs/voice-elevenlabs/manifest',
+					'@absolutejs/voice-elevenlabs/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'ElevenLabs text-to-speech adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/voice @absolutejs/voice-elevenlabs',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { elevenlabs } from "@absolutejs/voice-elevenlabs";',
+						title: 'Setup'
+					},
+					{
+						description:
+							'This adapter currently supports PCM output formats for compatibility with @absolutejs/voice audio events.',
+						title: 'What It Maps'
+					},
+					{
+						description: 'Supported options include:',
+						title: 'Options'
+					},
+					{
+						description:
+							'Set ELEVENLABSAPIKEY in your runtime environment, or pass the key explicitly in the adapter config.',
+						title: 'API Key'
+					}
+				],
 				version: '0.0.26'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Gemini Live realtime adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-gemini',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-gemini',
+					'@absolutejs/voice-gemini/manifest',
+					'@absolutejs/voice-gemini/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Gemini Live realtime adapter for @absolutejs/voice.',
+						title: 'Overview'
+					}
+				],
 				version: '0.0.1-beta.44'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Gladia real-time speech-to-text adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-gladia',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-gladia',
+					'@absolutejs/voice-gladia/manifest',
+					'@absolutejs/voice-gladia/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Gladia real-time speech-to-text adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-gladia',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { gladia } from "@absolutejs/voice-gladia";',
+						title: 'Use'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1-beta.5'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Google Cloud Speech-to-Text adapter for @absolutejs/voice — buffered-batch (REST) + real-time streaming (gRPC-Web over HTTP/2, no @grpc/grpc-js dep)',
 				name: '@absolutejs/voice-google-speech',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-google-speech',
+					'@absolutejs/voice-google-speech/manifest',
+					'@absolutejs/voice-google-speech/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Google Cloud Speech-to-Text adapter for @absolutejs/voice. Ships two complementary modes — pick whichever fits your latency / cost / infrastructure tradeoffs:',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-google-speech',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { googleSpeechStream } from "@absolutejs/voice-google-speech";',
+						title: 'Streaming (googleSpeechStream)'
+					},
+					{
+						description:
+							'See the existing buffered-batch section for the REST-based API key / OAuth flow. The streaming and batch exports can coexist in the same project; pick per-route.',
+						title: 'Buffered-batch (googleSpeech)'
+					},
+					{
+						description:
+							'Notes & limitations is documented in the repository README.',
+						title: 'Notes & limitations'
+					},
+					{
+						description:
+							'Roadmap is documented in the repository README.',
+						title: 'Roadmap'
+					}
+				],
 				version: '0.0.1-beta.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'LMNT text-to-speech adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-lmnt',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-lmnt',
+					'@absolutejs/voice-lmnt/manifest',
+					'@absolutejs/voice-lmnt/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'LMNT text-to-speech adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-lmnt',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { lmnt } from "@absolutejs/voice-lmnt";',
+						title: 'Use'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1-beta.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Neets text-to-speech adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-neets',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-neets',
+					'@absolutejs/voice-neets/manifest',
+					'@absolutejs/voice-neets/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Neets text-to-speech adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-neets',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { neets } from "@absolutejs/voice-neets";',
+						title: 'Use'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1-beta.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description: 'OpenAI realtime adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-openai',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-openai',
+					'@absolutejs/voice-openai/manifest',
+					'@absolutejs/voice-openai/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Input transcription log probabilities are requested by default and normalized as Transcript.tokens, with aggregate transcript confidence available for provider-neutral routing and calibration. Set inputTranscriptionLogprobs: false to omit the optional Realtime field.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/voice @absolutejs/voice-openai',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { openai } from "@absolutejs/voice-openai";',
+						title: 'Setup'
+					},
+					{
+						description:
+							'For string input, the adapter emits a local final transcript immediately and then requests an OpenAI response. For audio input, it buffers PCM audio and commits the turn after a short inactivity window.',
+						title: 'What It Maps'
+					},
+					{
+						description:
+							'OpenAI Realtime currently expects pcm16 audio at 24kHz mono for streaming audio input. This adapter enforces that requirement when you call send(audio).',
+						title: 'Input Audio Format'
+					},
+					{
+						description: 'Supported options include:',
+						title: 'Options'
+					},
+					{
+						description:
+							'Set OPENAIAPIKEY in your runtime environment, or pass the key explicitly in the adapter config.',
+						title: 'API Key'
+					}
+				],
 				version: '0.0.7-beta.45'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'OpenAI Whisper buffered-batch speech-to-text adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-openai-whisper',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-openai-whisper',
+					'@absolutejs/voice-openai-whisper/manifest',
+					'@absolutejs/voice-openai-whisper/manifest.json'
+				],
+				readmeTopics: [],
 				version: '0.0.1-beta.5'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'PlayHT text-to-speech adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-playht',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-playht',
+					'@absolutejs/voice-playht/manifest',
+					'@absolutejs/voice-playht/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'PlayHT text-to-speech adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-playht',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { playht } from "@absolutejs/voice-playht";',
+						title: 'Use'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1-beta.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Rime text-to-speech adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-rime',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-rime',
+					'@absolutejs/voice-rime/manifest',
+					'@absolutejs/voice-rime/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Rime text-to-speech adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-rime',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { rime } from "@absolutejs/voice-rime";',
+						title: 'Use'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1-beta.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Smallest AI text-to-speech adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-smallest',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-smallest',
+					'@absolutejs/voice-smallest/manifest',
+					'@absolutejs/voice-smallest/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Smallest AI text-to-speech adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-smallest',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { smallest } from "@absolutejs/voice-smallest";',
+						title: 'Use'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1-beta.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Soniox real-time speech-to-text adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-soniox',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-soniox',
+					'@absolutejs/voice-soniox/manifest',
+					'@absolutejs/voice-soniox/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Soniox real-time speech-to-text adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-soniox',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { soniox } from "@absolutejs/voice-soniox";',
+						title: 'Use'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1-beta.5'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --outdir dist --target bun --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @absolutejs/voice --external '@absolutejs/voice/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'bun run tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Speechmatics real-time speech-to-text adapter for @absolutejs/voice',
 				name: '@absolutejs/voice-speechmatics',
 				private: false,
+				publicExports: [
+					'@absolutejs/voice-speechmatics',
+					'@absolutejs/voice-speechmatics/manifest',
+					'@absolutejs/voice-speechmatics/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Speechmatics real-time speech-to-text adapter for @absolutejs/voice.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun add @absolutejs/voice-speechmatics',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { voice } from "@absolutejs/voice"; import { speechmatics } from "@absolutejs/voice-speechmatics";',
+						title: 'Use'
+					},
+					{
+						description:
+							'Options is documented in the repository README.',
+						title: 'Options'
+					},
+					{
+						description:
+							'Notes is documented in the repository README.',
+						title: 'Notes'
+					}
+				],
 				version: '0.0.1-beta.5'
 			}
 		],
@@ -1996,6 +12260,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Voice & Media',
+		commands: [],
 		description:
 			'Multilingual audio fixtures used to evaluate and regression-test voice providers.',
 		directory: 'voice-fixtures-multilingual',
@@ -2003,12 +12268,39 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Multilingual Voice Fixtures',
 		packageName: null,
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'VOICE_FIXTURE_DIR=/home/alexkahn/abs/voice-fixtures-multilingual bun run bench:multilingual',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Generated by voice/scripts/build-multilingual-corpus.ts.',
+				title: 'Overview'
+			}
+		],
 		repository: null,
 		subpackages: [],
 		version: null
 	},
 	{
 		category: 'Voice & Media',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/cli.ts src/scenarios/index.ts src/discord.ts src/googleMeet.ts --outdir dist --target node --format esm --external '@absolutejs/*' --external 'discord.js' --external '@discordjs/*' --external 'prism-media' --external 'playwright' && bun x tsc -p tsconfig.json --emitDeclarationOnly --outDir dist",
+				name: 'build'
+			},
+			{
+				command: 'bun x tsc -p tsconfig.json --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'AI-driven automated tester for @absolutejs/voice services — simulates a caller end-to-end (Twilio Media Stream protocol or real Twilio outbound), drives the conversation with TTS + STT + LLM. Built for the hosted AbsoluteJS.ai Studio.',
 		directory: 'voice-tester',
@@ -2016,12 +12308,92 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Voice Tester',
 		packageName: '@absolutejs/voice-tester',
 		private: false,
+		publicExports: [
+			'@absolutejs/voice-tester',
+			'@absolutejs/voice-tester/scenarios',
+			'@absolutejs/voice-tester/discord',
+			'@absolutejs/voice-tester/google-meet'
+		],
+		readmeSamples: [
+			{
+				code: 'bun add -d @absolutejs/voice-tester @absolutejs/ai',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			},
+			{
+				code: 'bun x @absolutejs/voice-tester \\\n  --target wss://example.com/v1/voice/phone/stream \\\n  --scenario adversarial \\\n  --duration 90 \\\n  --from +15555550100 \\\n  --to +15555550199 \\\n  --session phone:+15555550100:$(date +%s)',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'sh'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'AI-driven automated tester for voice services that speak the Twilio Media Streams protocol. Pairs with @absolutejs/voice — drives a regression scenario end-to-end against a deployed receptionist without a phone, a real Twilio call, or a human in the loop.',
+				title: 'Overview'
+			},
+			{
+				description:
+					"Opens a WebSocket directly to your voice service's /stream endpoint and acts as the caller side of a Twilio Media Stream:",
+				title: 'What it does'
+			},
+			{
+				description:
+					'bun add -d @absolutejs/voice-tester @absolutejs/ai',
+				title: 'Install'
+			},
+			{
+				description:
+					'bun x @absolutejs/voice-tester \\ --target wss://example.com/v1/voice/phone/stream \\ --scenario adversarial \\ --duration 90 \\ --from +15555550100 \\ --to +15555550199 \\ --session phone:+15555550100:$(date +%s)',
+				title: 'Quick start (CLI)'
+			},
+			{
+				description:
+					'import { runScenario } from "@absolutejs/voice-tester"; import { adversarialScenario } from "@absolutejs/voice-tester/scenarios";',
+				title: 'Quick start (API)'
+			},
+			{
+				description:
+					'Built-in scenarios is documented in the repository README.',
+				title: 'Built-in scenarios'
+			},
+			{
+				description:
+					'A scenario is a decide function that receives the rolling context and returns the next caller action:',
+				title: 'Writing your own scenario'
+			},
+			{
+				description: 'Modes is documented in the repository README.',
+				title: 'Modes'
+			},
+			{
+				description: '+-----------------------------------+',
+				title: 'Architecture'
+			}
+		],
 		repository: 'https://github.com/absolutejs/voice-tester',
 		subpackages: [],
 		version: '0.0.4-beta.5'
 	},
 	{
 		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --sourcemap --external vue && tsc --emitDeclarationOnly --project tsconfig.json',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'A few small, broadly-useful Vue composables for AbsoluteJS apps: useHydrated (SSR hydration gate), isBrowser, useDebouncedAction, and runAsyncAction (try/catch/loading/notify wrapper with an injectable notifier). Vue is a peer dependency.',
 		directory: 'vue-composables',
@@ -2029,12 +12401,58 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Vue Composables',
 		packageName: '@absolutejs/vue-composables',
 		private: false,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'import {\n  configureAsyncNotifier,\n  runAsyncAction,\n  useHydrated,\n} from "@absolutejs/vue-composables";\n\nconfigureAsyncNotifier({ success: toast.success, error: toast.error });\n\nawait runAsyncAction(() => api.save(payload), {\n  successMessage: "Saved",\n  loading: (s) => (saving.value = s),\n  onSuccess: () => emit("updated"),\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'const panel = useTemplateRef<HTMLElement>("panel");\n\nuseResizeObserver(panel, ([entry]) => {\n  if (entry) compact.value = entry.contentRect.width < 640;\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'A few small, broadly-useful Vue composables for AbsoluteJS (SSR-first) apps. Vue is a peer dependency.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/vue-composables',
 		subpackages: [],
 		version: '0.3.1'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build --root src src/index.ts src/host.ts src/sbom.ts src/intelligence-snapshot.ts src/evidence-bundle.ts src/evidence-transparency.ts src/evidence-witness.ts src/evidence-cli.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Scanner-neutral vulnerability normalization, policy gates, host inventory, and audit-ready evidence for AbsoluteJS applications.',
 		directory: 'vulnerabilities',
@@ -2042,12 +12460,84 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Vulnerabilities',
 		packageName: '@absolutejs/vulnerabilities',
 		private: false,
+		publicExports: [
+			'@absolutejs/vulnerabilities',
+			'@absolutejs/vulnerabilities/host',
+			'@absolutejs/vulnerabilities/sbom',
+			'@absolutejs/vulnerabilities/intelligence-snapshot',
+			'@absolutejs/vulnerabilities/evidence-bundle',
+			'@absolutejs/vulnerabilities/evidence-transparency',
+			'@absolutejs/vulnerabilities/evidence-witness',
+			'@absolutejs/vulnerabilities/manifest',
+			'@absolutejs/vulnerabilities/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import {\n  assertVulnerabilityPolicy,\n  createVulnerabilityEvidence,\n  summarizeGrypeReport,\n} from "@absolutejs/vulnerabilities";\n\nconst counts = summarizeGrypeReport(await Bun.file("grype.json").json());\nassertVulnerabilityPolicy(counts, {\n  maximums: { critical: 0, high: 0 },\n});\n\nconst evidence = createVulnerabilityEvidence({\n  asset: { id: imageDigest, kind: "container" },\n  scan: {\n    ...counts,\n    databaseBuiltAt: grypeDatabaseBuiltAt,\n    scannedAt: new Date().toISOString(),\n    scanner: "grype",\n  },\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import { collectDebianHostInventory } from "@absolutejs/vulnerabilities/host";\n\nconst inventory = await collectDebianHostInventory(deployTarget);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Reusable vulnerability-management primitives for AbsoluteJS applications. The package normalizes scanner output, applies explicit severity thresholds, collects Debian/Ubuntu host inventory through a deploy-compatible target, and produces evidence objects suitable for storage or compliance reporting.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'Version comparison is ecosystem-aware and explainable. Debian/Ubuntu revisions, epochs, and backport suffixes are preserved rather than reduced to upstream versions. SemVer, Go module, Python PEP 440, and NuGet versions use their native ordering rules.',
+				title: 'Version intelligence'
+			},
+			{
+				description:
+					'Feed adapters share cursor, snapshot, cache, and failure-isolation contracts. Applications can persist snapshots in their own storage while keeping provider fetching separate from policy and remediation logic.',
+				title: 'Advisory feeds'
+			}
+		],
 		repository: 'https://github.com/absolutejs/vulnerabilities',
 		subpackages: [],
 		version: '0.14.1'
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					"bun run --filter '@absolutejs/vulnerabilities-epss' build && bun run --filter '@absolutejs/vulnerabilities-kev' build && bun run --filter '@absolutejs/vulnerabilities-osv' build && bun run --filter '@absolutejs/vulnerabilities-postgres' build && bun run --filter '@absolutejs/vulnerabilities-ubuntu' build",
+				name: 'build'
+			},
+			{
+				command:
+					"bun run --filter '@absolutejs/vulnerabilities-osv' build",
+				name: 'build:osv'
+			},
+			{
+				command:
+					"bun run --filter '@absolutejs/vulnerabilities-epss' check:package && bun run --filter '@absolutejs/vulnerabilities-kev' check:package && bun run --filter '@absolutejs/vulnerabilities-osv' check:package && bun run --filter '@absolutejs/vulnerabilities-postgres' check:package && bun run --filter '@absolutejs/vulnerabilities-ubuntu' check:package",
+				name: 'check:package'
+			},
+			{
+				command: "bun run --filter './*' format",
+				name: 'format'
+			},
+			{
+				command: "bun run build:osv && bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command:
+					"bun run build:osv && bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Feed and storage adapters for @absolutejs/vulnerabilities.',
 		directory: 'vulnerabilities-adapters',
@@ -2055,41 +12545,247 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Vulnerability Adapters',
 		packageName: '@absolutejs/vulnerabilities-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'bun install\nbun run typecheck\nbun run test\nbun run build',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Feed and storage adapters for @absolutejs/vulnerabilities. Each adapter remains an independently versioned npm package; this repository is their source monorepo.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'The npm package names and version histories are unchanged by the move into this monorepo.',
+				title: 'Packages'
+			},
+			{
+				description:
+					'bun install bun run typecheck bun run test bun run build',
+				title: 'Development'
+			}
+		],
 		repository: 'https://github.com/absolutejs/vulnerabilities-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/vulnerabilities --external '@absolutejs/vulnerabilities/*' --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'FIRST EPSS probability and percentile ingestion for AbsoluteJS vulnerability prioritization.',
 				name: '@absolutejs/vulnerabilities-epss',
 				private: false,
+				publicExports: [
+					'@absolutejs/vulnerabilities-epss',
+					'@absolutejs/vulnerabilities-epss/manifest',
+					'@absolutejs/vulnerabilities-epss/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Official FIRST Exploit Prediction Scoring System ingestion for @absolutejs/vulnerabilities.',
+						title: 'Overview'
+					}
+				],
 				version: '0.1.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/vulnerabilities --external '@absolutejs/vulnerabilities/*' --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'CISA Known Exploited Vulnerabilities catalog ingestion for AbsoluteJS.',
 				name: '@absolutejs/vulnerabilities-kev',
 				private: false,
+				publicExports: [
+					'@absolutejs/vulnerabilities-kev',
+					'@absolutejs/vulnerabilities-kev/manifest',
+					'@absolutejs/vulnerabilities-kev/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Official CISA Known Exploited Vulnerabilities catalog ingestion for @absolutejs/vulnerabilities.',
+						title: 'Overview'
+					}
+				],
 				version: '0.1.6'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/vulnerabilities --external '@absolutejs/vulnerabilities/*' --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Official OSV API ingestion and advisory normalization for AbsoluteJS vulnerability management.',
 				name: '@absolutejs/vulnerabilities-osv',
 				private: false,
+				publicExports: [
+					'@absolutejs/vulnerabilities-osv',
+					'@absolutejs/vulnerabilities-osv/manifest',
+					'@absolutejs/vulnerabilities-osv/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Official OSV API ingestion for @absolutejs/vulnerabilities. The package normalizes OSV records into the shared advisory contract, preserves aliases, affected package ranges, CVSS vectors, and source provenance, and follows per-query pagination from the OSV batch API.',
+						title: 'Overview'
+					}
+				],
 				version: '0.1.8'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/vulnerabilities --external '@absolutejs/vulnerabilities/*' --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' --external postgres --external @neondatabase/serverless && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Durable Postgres feeds, findings, alert incidents, policy history, delivery queues, remediation evidence, and risk assessments for AbsoluteJS vulnerability management.',
 				name: '@absolutejs/vulnerabilities-postgres',
 				private: false,
+				publicExports: [
+					'@absolutejs/vulnerabilities-postgres',
+					'@absolutejs/vulnerabilities-postgres/manifest',
+					'@absolutejs/vulnerabilities-postgres/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Durable Postgres persistence for @absolutejs/vulnerabilities.',
+						title: 'Overview'
+					}
+				],
 				version: '0.9.3'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/vulnerabilities --external '@absolutejs/vulnerabilities/*' --external @absolutejs/vulnerabilities-osv --external '@absolutejs/vulnerabilities-osv/*' --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Canonical Ubuntu OSV advisory ingestion for AbsoluteJS vulnerability management.',
 				name: '@absolutejs/vulnerabilities-ubuntu',
 				private: false,
+				publicExports: [
+					'@absolutejs/vulnerabilities-ubuntu',
+					'@absolutejs/vulnerabilities-ubuntu/manifest',
+					'@absolutejs/vulnerabilities-ubuntu/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							"Canonical Ubuntu OSV intelligence for @absolutejs/vulnerabilities. The adapter queries exact Ubuntu ecosystems, source package names, and full Debian package versions through the official central OSV API. It preserves Canonical vendor severity, upstream CVE aliases, distro revisions, affected ranges, and links each normalized record back to Canonical's official OSV repository.",
+						title: 'Overview'
+					}
+				],
 				version: '0.1.5'
 			}
 		],
@@ -2097,6 +12793,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Platform & Infra',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command: "bun run --filter './*' check:package",
+				name: 'check:package'
+			},
+			{
+				command: "bun run --filter './*' format",
+				name: 'format'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Optional first-party modules for AbsoluteJS vulnerability management.',
 		directory: 'vulnerabilities-modules',
@@ -2104,27 +12822,166 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Vulnerability Modules',
 		packageName: '@absolutejs/vulnerabilities-modules',
 		private: true,
+		publicExports: [],
+		readmeSamples: [
+			{
+				code: 'bun install\nbun run typecheck\nbun run test\nbun run build',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'sh'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Optional first-party modules for @absolutejs/vulnerabilities. Each module remains an independently versioned npm package; this repository is their source monorepo.',
+				title: 'Overview'
+			},
+			{
+				description: 'Packages is documented in the repository README.',
+				title: 'Packages'
+			},
+			{
+				description:
+					'bun install bun run typecheck bun run test bun run build',
+				title: 'Development'
+			}
+		],
 		repository: 'https://github.com/absolutejs/vulnerabilities-modules',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/vulnerabilities --external '@absolutejs/vulnerabilities/*' --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Deterministic, evidence-backed, print-ready HTML reports for AbsoluteJS vulnerability management.',
 				name: '@absolutejs/vulnerabilities-report',
 				private: false,
+				publicExports: [
+					'@absolutejs/vulnerabilities-report',
+					'@absolutejs/vulnerabilities-report/manifest',
+					'@absolutejs/vulnerabilities-report/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Deterministic, evidence-backed security response reports for AbsoluteJS vulnerability management. The package maps reported issues to explicit determinations, remediation state, VEX evidence, exact deployment releases, and later verification without coupling the report to PAAS or a PDF engine.',
+						title: 'Overview'
+					}
+				],
 				version: '0.1.2'
 			},
 			{
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build --root src src/index.ts src/postgres.ts src/server.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/secrets --external @absolutejs/vulnerabilities --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Independent durable transparency witness with rollback, equivocation, key-rotation, and HTTP service primitives for AbsoluteJS vulnerability evidence.',
 				name: '@absolutejs/vulnerabilities-witness',
 				private: false,
+				publicExports: [
+					'@absolutejs/vulnerabilities-witness',
+					'@absolutejs/vulnerabilities-witness/postgres',
+					'@absolutejs/vulnerabilities-witness/manifest',
+					'@absolutejs/vulnerabilities-witness/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'The witness consumes @absolutejs/secrets@^0.9.2, whose Agency integration is host-owned and externalized. It never embeds a second Secrets or Agency runtime.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'The included absolute-vulnerability-witness executable uses PostgreSQL for observations and accepts these deployment secrets:',
+						title: 'Standalone service'
+					}
+				],
 				version: '0.4.4'
 			},
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/queue --external @absolutejs/vulnerabilities --external '@absolutejs/vulnerabilities/*' --external @absolutejs/vulnerabilities-epss --external @absolutejs/vulnerabilities-kev --external @absolutejs/vulnerabilities-osv --external @absolutejs/vulnerabilities-postgres --external '@absolutejs/vulnerabilities-postgres/*' --external @absolutejs/vulnerabilities-ubuntu --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Continuous feed refresh, inventory correlation, VEX, risk, remediation, leases, health, and metrics for AbsoluteJS vulnerability management.',
 				name: '@absolutejs/vulnerabilities-worker',
 				private: false,
+				publicExports: [
+					'@absolutejs/vulnerabilities-worker',
+					'@absolutejs/vulnerabilities-worker/manifest',
+					'@absolutejs/vulnerabilities-worker/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Continuous vulnerability intelligence orchestration for AbsoluteJS.',
+						title: 'Overview'
+					}
+				],
 				version: '0.2.4'
 			}
 		],
@@ -2132,6 +12989,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --root ./src --outdir dist --sourcemap --target=bun --external @absolutejs/agency --external '@absolutejs/agency/*' --external drizzle-orm --external 'drizzle-orm/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Provider-agnostic, double-entry dollar wallets with reservations, idempotent settlement, and closed-loop marketplace policy for AbsoluteJS apps.',
 		directory: 'wallet',
@@ -2139,12 +13015,51 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Wallet',
 		packageName: '@absolutejs/wallet',
 		private: false,
+		publicExports: [
+			'@absolutejs/wallet',
+			'@absolutejs/wallet/manifest',
+			'@absolutejs/wallet/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createMemoryWalletStore, createWallet } from "@absolutejs/wallet";\n\nconst wallet = createWallet(createMemoryWalletStore());\nawait wallet.createAccount("user_123");',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Closed-loop, dollar-denominated wallets for AbsoluteJS applications. Balances are integer cents, every movement is a balanced journal transaction, retries are idempotent, and bids/auctions reserve funds before settlement.',
+				title: 'Overview'
+			},
+			{
+				description:
+					'createAgentWallet grants an agent narrowly bounded spend authority: per-item, daily, weekly, and lifetime caps; merchant/category/action allowlists; expiry; refundability; and a maximum number of open reservations. Requests reserve the exact amount and produce a signed mandate bound to the merchant, cart hash, currency, amount, agent, allowance, reservation, and expiration.',
+				title: 'Agent allowances'
+			}
+		],
 		repository: 'https://github.com/absolutejs/wallet',
 		subpackages: [],
 		version: '0.9.3'
 	},
 	{
 		category: 'Commerce & Growth',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Funding and payment-provider adapters for @absolutejs/wallet.',
 		directory: 'wallet-adapters',
@@ -2152,13 +13067,54 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'Wallet Adapters',
 		packageName: '@absolutejs/wallet-adapters',
 		private: true,
+		publicExports: [],
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Provider integrations for @absolutejs/wallet. Financial policy and double-entry accounting remain in the wallet core; adapters normalize external provider events into idempotent wallet actions.',
+				title: 'Overview'
+			}
+		],
 		repository: 'https://github.com/absolutejs/wallet-adapters',
 		subpackages: [
 			{
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/manifest.ts --root ./src --outdir dist --sourcemap --target=bun --external @absolutejs/wallet --external '@absolutejs/wallet/*' --external stripe && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
 				description:
 					'Stripe Checkout funding, verified webhook normalization, refunds, and dispute actions for @absolutejs/wallet.',
 				name: '@absolutejs/wallet-stripe',
 				private: false,
+				publicExports: [
+					'@absolutejs/wallet-stripe',
+					'@absolutejs/wallet-stripe/manifest',
+					'@absolutejs/wallet-stripe/manifest.json'
+				],
+				readmeTopics: [
+					{
+						description:
+							'Stripe Checkout funding and webhook normalization for @absolutejs/wallet.',
+						title: 'Overview'
+					}
+				],
 				version: '0.4.4'
 			}
 		],
@@ -2166,6 +13122,30 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		category: 'AI',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=browser --external @absolutejs/manifest --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md,yml}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
 		description:
 			'Secure WebMCP registration, policy, audit, and test adapters for browser-native AI agent actions.',
 		directory: 'webmcp',
@@ -2173,6 +13153,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 		name: 'WebMCP',
 		packageName: '@absolutejs/webmcp',
 		private: false,
+		publicExports: [
+			'@absolutejs/webmcp',
+			'@absolutejs/webmcp/manifest',
+			'@absolutejs/webmcp/manifest.json'
+		],
+		readmeSamples: [
+			{
+				code: 'import { createWebMcpRegistry } from "@absolutejs/webmcp";\nimport { Type } from "@sinclair/typebox";\n\nconst tools = createWebMcpRegistry({\n  authorize: ({ name, input, annotations }) =>\n    agencyDecisionFor({ name, input, annotations }),\n  onAudit: (receipt) => audit.write(receipt),\n});\n\nawait tools.register({\n  name: "support.create",\n  title: "Create support ticket",\n  description: "Create a support ticket after the user confirms the request.",\n  inputSchema: Type.Object({ subject: Type.String({ maxLength: 100 }) }),\n  annotations: { readOnlyHint: false, untrustedContentHint: true },\n  execute: ({ subject }) => createTicket(subject),\n});',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example',
+				language: 'typescript'
+			},
+			{
+				code: 'import { tryCreateWebMcpRegistry } from "@absolutejs/webmcp";\n\nconst tools = tryCreateWebMcpRegistry({ authorize });\nif (tools) await tools.register(tool);',
+				description: 'Example from the canonical repository README.',
+				heading: 'README Example 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Secure, typed integration with the current WebMCP draft for browser-native AI agent actions.',
+				title: 'Overview'
+			},
+			{
+				description:
+					"createWebMcpHttpProjectionDocument() and bootstrapWebMcpHttpActions() project an authenticated application's typed HTTP actions without duplicating its domain implementation in the browser. The bootstrap accepts only origin-relative endpoints on the current trustworthy origin, sends credentials only with same-origin requests, refuses redirects, bounds documents and responses before parsing, validates every tool, and rolls back the complete registration if any tool fails. It never uses exposedTo, so cross-origin frames receive no capability by default.",
+				title: 'Same-origin HTTP actions'
+			}
+		],
 		repository: 'https://github.com/absolutejs/webmcp',
 		subpackages: [],
 		version: '0.1.5'
