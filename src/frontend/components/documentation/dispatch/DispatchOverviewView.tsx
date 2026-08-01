@@ -4,6 +4,7 @@ import {
 	dispatchChannelUsage,
 	dispatchPostmark,
 	dispatchQuickStart,
+	dispatchSinch,
 	dispatchTelnyx,
 	dispatchTesting,
 	dispatchTwilio,
@@ -41,6 +42,7 @@ const tocItems: TocItem[] = [
 	{ href: '#telnyx', label: 'Telnyx' },
 	{ href: '#twilio', label: 'Twilio' },
 	{ href: '#vonage', label: 'Vonage' },
+	{ href: '#sinch', label: 'Sinch' },
 	{ href: '#testing', label: 'Testing' }
 ];
 
@@ -162,6 +164,12 @@ const vendorAdapterRows: DocsTableCell[][] = [
 		'0.1.0',
 		'SMS / MMS / RCS / WhatsApp / Viber / Messenger',
 		'Ordered native failover, rich RCS, capability checks and revocation, signed JWT webhooks, durable reliability, tenant routing, and 10DLC workflows.'
+	],
+	[
+		{ code: '@absolutejs/dispatch-sinch' },
+		'0.1.0',
+		'SMS / MMS / RCS / WhatsApp / social messaging',
+		'Conversation API channel-priority fallback, rich transcoding, HMAC callbacks, durable reliability, capability lookup, tenant routing, 10DLC, and toll-free workflows.'
 	]
 ];
 
@@ -575,6 +583,41 @@ export const DispatchOverviewView = ({
 					</p>
 					<PrismPlus
 						codeString={dispatchVonage}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="sinch"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Sinch
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Use <code>@absolutejs/dispatch-sinch</code> with Sinch's
+						recommended Conversation API for SMS, MMS, RCS,
+						WhatsApp, Viber Business, Messenger, Instagram,
+						Telegram, KakaoTalk, LINE, and WeChat. One portable
+						message is transcoded across an ordered channel-priority
+						fallback route.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						The adapter resolves app-scoped social identities
+						explicitly, verifies HMAC callbacks over the exact raw
+						body, persists callback nonces atomically, and
+						normalizes delivery, inbound, choice, capability,
+						provider opt-in/out, WhatsApp preference, and SMS
+						STOP/START events. Operational helpers cover live
+						app/webhook readiness, asynchronous channel
+						capabilities, 10DLC, and toll-free verification.
+					</p>
+					<PrismPlus
+						codeString={dispatchSinch}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

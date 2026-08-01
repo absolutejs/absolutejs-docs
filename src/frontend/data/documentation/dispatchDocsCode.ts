@@ -2,7 +2,7 @@
  * Code samples for the @absolutejs/dispatch docs page. Dispatch is a
  * provider-agnostic outbound dispatcher for Bun + Elysia — email, messaging,
  * and push behind one typed interface, with vendor adapter packages
- * for Resend, Postmark, Telnyx, Twilio, and Vonage.
+ * for Resend, Postmark, Sinch, Telnyx, Twilio, and Vonage.
  */
 
 export const dispatchChannelUsage = `// Every channel call returns a DispatchResult you can correlate
@@ -53,6 +53,50 @@ await dispatch.email({
   to: 'user@example.com',
   subject: 'Welcome',
   text: 'Hi there!',
+});`;
+export const dispatchSinch = `import { createDispatcher } from '@absolutejs/dispatch';
+import {
+  createPostgresIdempotentOperationStore,
+  createPostgresTransactionRunner,
+  createPostgresWebhookInboxStore,
+  createSinchAdapter,
+  createSinchWebhookHandler,
+} from '@absolutejs/dispatch-sinch';
+import { SinchClient } from '@sinch/sdk-core';
+
+const client = new SinchClient({
+  conversationRegion: 'us',
+  keyId: process.env.SINCH_KEY_ID!,
+  keySecret: process.env.SINCH_KEY_SECRET!,
+  projectId: process.env.SINCH_PROJECT_ID!,
+});
+const runner = createPostgresTransactionRunner(postgresPool);
+const messaging = createSinchAdapter({
+  appId: process.env.SINCH_APP_ID!,
+  client,
+  idempotencyStore: createPostgresIdempotentOperationStore(runner),
+  projectId: process.env.SINCH_PROJECT_ID!,
+  resolveRecipientIdentity: ({ address, transport }) =>
+    transport === 'messenger' ? lookupMessengerPsid(address) : address,
+  webhookUrl: 'https://example.com/webhooks/sinch/account-a',
+});
+
+const webhook = createSinchWebhookHandler({
+  handler: event => lifecycle.record(event),
+  inbox: createPostgresWebhookInboxStore(runner),
+  resolveAccount: accountKey => sinchWebhookAccount(accountKey),
+  resolveAccountKey: ({ url }) => new URL(url).pathname.split('/').at(-1)!,
+  resolveConsentScopes: event => programsForNumber(event.from),
+});
+app.post('/webhooks/sinch/:accountKey', ({ request }) => webhook(request));
+
+const dispatch = createDispatcher({ messaging });
+await dispatch.messaging({
+  content: { kind: 'text', text: 'Database latency is elevated.' },
+  consent: { programId: 'pro-alerts', purpose: 'incident-alerts' },
+  fallbacks: [{ transport: 'sms' }],
+  idempotencyKey: 'incident-42:recipient-7',
+  to: { address: '+12025550100', transport: 'rcs' },
 });`;
 export const dispatchTelnyx = `import { createDispatcher } from '@absolutejs/dispatch';
 import {
@@ -202,7 +246,6 @@ const readiness = await inspectTwilioMessagingReadiness({
     termsPublished: true,
   },
 });`;
-
 export const dispatchVonage = `import { createDispatcher } from '@absolutejs/dispatch';
 import {
   createPostgresIdempotentOperationStore,
