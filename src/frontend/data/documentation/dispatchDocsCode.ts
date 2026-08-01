@@ -73,15 +73,26 @@ expect(sent[0].subject).toBe('hi');
 email.clear();
 expect(email.inspect()).toHaveLength(0);`;
 export const dispatchTwilio = `import {
+  createTwilioComplianceManager,
   createPostgresTwilioIdempotencyStore,
   createTwilioAdapter,
   createTwilioWebhookHandler,
   inspectTwilioMessagingReadiness,
 } from '@absolutejs/dispatch-twilio';
+import {
+  createMessagingConsentDispatchPolicy,
+  createMessagingConsentLedger,
+  createPostgresMessagingConsentStore,
+} from '@absolutejs/compliance';
+import { createDispatcher } from '@absolutejs/dispatch';
 import { Twilio } from 'twilio';
 
+const client = new Twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+const consent = createMessagingConsentLedger({
+  store: createPostgresMessagingConsentStore(postgres),
+});
 const sms = createTwilioAdapter({
-  client: new Twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN),
+  client,
   idempotencyStore: createPostgresTwilioIdempotencyStore(postgres),
   messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
   statusCallbackUrl: 'https://example.com/webhooks/twilio/messaging',
@@ -94,10 +105,43 @@ const webhook = createTwilioWebhookHandler({
   expectedMessagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
   publicUrl: 'https://example.com/webhooks/twilio/messaging',
   store: durableLifecycleStore,
+  consent: {
+    ledger: consent,
+    resolveScope: event => ({
+      recipient: event.from,
+      senderId: 'acme',
+      tenant: 'tenant-a',
+      topic: 'incident-alerts',
+      transport: 'sms',
+    }),
+  },
   onEvent: event => lifecycle.record(event),
 });
 
 app.post('/webhooks/twilio/messaging', ({ request }) => webhook(request));
+
+const dispatch = createDispatcher({
+  policies: [createMessagingConsentDispatchPolicy({ ledger: consent })],
+  sms,
+});
+
+await dispatch.sms({
+  body: 'Service health has degraded.',
+  channel: 'rcs',
+  consent: { senderId: 'acme', topic: 'incident-alerts' },
+  rcs: { fallbackFrom: '+12025550199' },
+  tenant: 'tenant-a',
+  to: '+12025550100',
+});
+
+const registration = createTwilioComplianceManager(client);
+const registrationStatus = await registration.inspect({
+  customerProfileSid,
+  brandRegistrationSid,
+  messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+  campaignSid,
+  tollfreeVerificationSid,
+});
 
 const readiness = await inspectTwilioMessagingReadiness({
   client,
@@ -105,6 +149,7 @@ const readiness = await inspectTwilioMessagingReadiness({
   inboundWebhookUrl: 'https://example.com/webhooks/twilio/inbound',
   messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
   requiresUsA2PRegistration: true,
+  requiresRcsSender: true,
   statusCallbackUrl: 'https://example.com/webhooks/twilio/messaging',
   store: durableLifecycleStore,
   assertions: {

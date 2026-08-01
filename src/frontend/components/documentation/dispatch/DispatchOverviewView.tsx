@@ -453,8 +453,8 @@ export const DispatchOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Use <code>@absolutejs/dispatch-twilio</code> for
-						application-authored SMS alerts, MMS, WhatsApp, and
-						Twilio Content templates. Use{' '}
+						application-authored SMS alerts, MMS, RCS with SMS/MMS
+						fallback, WhatsApp, and Twilio Content templates. Use{' '}
 						<code>@absolutejs/auth-twilio</code> for Verify-managed
 						OTP, MFA, recovery, and step-up challenges. Twilio voice
 						calls and Media Streams remain in{' '}
@@ -468,7 +468,10 @@ export const DispatchOverviewView = ({
 						plus Advanced Opt-Out <code>STOP</code>,{' '}
 						<code>START</code>, and <code>HELP</code> events. Its
 						atomic lifecycle-store contract deduplicates retries and
-						rejects stale status transitions.
+						rejects stale status transitions. Signed START/STOP
+						events can update the provider-neutral consent ledger,
+						whose dispatch policy blocks missing or revoked consent
+						before a provider call.
 					</p>
 					<PrismPlus
 						codeString={dispatchTwilio}
@@ -482,10 +485,13 @@ export const DispatchOverviewView = ({
 						variant="note"
 					>
 						The readiness report inspects the real account/service
-						binding, callbacks, sender pool, and optional US A2P
-						attachment. Consent evidence, opt-out testing, privacy,
-						and messaging terms remain operator assertions. Its
-						scope is operational, not legal certification.
+						binding, callbacks, sender pool, optional RCS sender,
+						and US A2P attachment. The compliance manager submits
+						A2P brand/campaign and toll-free verification requests
+						and inspects their live status. Consent evidence,
+						opt-out testing, privacy, and messaging terms remain
+						operator responsibilities. Reports are operational, not
+						legal certification.
 					</Callout>
 				</section>
 
