@@ -3,9 +3,14 @@ import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import {
 	dispatchChannelUsage,
 	dispatchAws,
+	dispatchAwsOperations,
+	dispatchConsent,
 	dispatchInfobip,
+	dispatchInfobipOperations,
+	dispatchInstall,
 	dispatchPostmark,
 	dispatchPushLifecycle,
+	dispatchPushProviders,
 	dispatchQuickStart,
 	dispatchSinch,
 	dispatchTelnyx,
@@ -37,8 +42,13 @@ const noop = () => undefined;
 
 const tocItems: TocItem[] = [
 	{ href: '#dispatch-overview', label: 'Overview' },
+	{ href: '#install', label: 'Install' },
 	{ href: '#quick-start', label: 'Quick Start' },
+	{ href: '#production-model', label: 'Production model' },
+	{ href: '#consent', label: 'Consent' },
+	{ href: '#webhook-lifecycle', label: 'Webhook lifecycle' },
 	{ href: '#push-lifecycle', label: 'Push lifecycle' },
+	{ href: '#push-providers', label: 'APNs and FCM' },
 	{ href: '#aws', label: 'AWS' },
 	{ href: '#infobip', label: 'Infobip' },
 	{ href: '#channels', label: 'Channels' },
@@ -66,7 +76,7 @@ const channelCards: ChannelCardData[] = [
 	},
 	{
 		call: 'dispatch.messaging(message)',
-		fields: 'to, content, fallbacks?, sendAt?, idempotencyKey?, consent?, from?, tenant?, extensions?',
+		fields: 'to, content, fallbacks?, sendAt?, idempotencyKey?, consent?, privacy?, from?, tenant?, extensions?, metadata?',
 		title: 'Messaging'
 	},
 	{
@@ -127,6 +137,10 @@ const dispatcherOptionRows: DocsTableCell[][] = [
 		'Fallback sender per channel ({ email?, messaging? }) when a message omits from.'
 	],
 	[
+		{ code: 'policies' },
+		'Ordered synchronous or asynchronous authorization checks that run before any adapter or provider receives the message.'
+	],
+	[
 		{ code: 'audit' },
 		'Audit writer from @absolutejs/audit — appends a sent/failed event for every send.'
 	],
@@ -137,6 +151,86 @@ const dispatcherOptionRows: DocsTableCell[][] = [
 	[
 		{ code: 'onError' },
 		'(err, channel, message) => void hook that fires on every failed send.'
+	]
+];
+
+const productionBoundaryRows: DocsTableCell[][] = [
+	[
+		{ code: '@absolutejs/dispatch' },
+		'Application-authored email, carrier/rich messaging, and push. It owns typed messages, policy evaluation, results, metrics, tracing, and audit emission.'
+	],
+	[
+		{ code: '@absolutejs/compliance' },
+		'Provider-neutral consent evidence and a pre-send policy that rejects missing or revoked recipient/program/purpose/transport scopes.'
+	],
+	[
+		{ code: '@absolutejs/reliability' },
+		'Durable webhook inboxes, checked-out PostgreSQL transactions, and fenced idempotent operations shared by provider adapters.'
+	],
+	[
+		{ code: '@absolutejs/auth-twilio' },
+		'Provider-owned OTP generation, delivery, fraud checks, and code verification through Twilio Verify. Auth owns enrollment and session promotion.'
+	],
+	[
+		{ code: '@absolutejs/voice' },
+		'Twilio voice calls and Media Streams. Voice is intentionally outside Dispatch messaging and Auth verification.'
+	]
+];
+
+const pushOutcomeRows: DocsTableCell[][] = [
+	[
+		{ code: 'delivered' },
+		'The provider accepted the send and the claim completed.'
+	],
+	[
+		{ code: 'retired' },
+		'The provider reported an invalid token; the registration was disabled.'
+	],
+	[
+		{ code: 'skipped' },
+		'A completed or in-flight fenced claim already owns this fanout item.'
+	],
+	[
+		{ code: 'failed' },
+		'A definite failure exhausted bounded retries; a fresh operation may decide whether to resend.'
+	],
+	[
+		{ code: 'indeterminate' },
+		'The provider acknowledgement was ambiguous. Reconcile it operationally; never convert it into an automatic duplicate send.'
+	]
+];
+
+const webhookLifecycleRows: DocsTableCell[][] = [
+	[
+		'1. Verify',
+		'Authenticate the exact raw request using the provider signature, JWT, HMAC, or the trusted gateway/EventBridge boundary.'
+	],
+	[
+		'2. Persist',
+		'Write the raw payload and stable provider event id to a durable WebhookInboxStore before performing application effects.'
+	],
+	[
+		'3. Acknowledge',
+		'Return 202 as soon as durable intake succeeds so slow consent, lifecycle, and application work cannot trigger provider retry storms.'
+	],
+	[
+		'4. Drain',
+		'Claim with a fencing token, normalize into delivery/inbound/consent events, apply idempotent effects in a worker, then complete or release.'
+	]
+];
+
+const messagingEventRows: DocsTableCell[][] = [
+	[
+		{ code: 'delivery' },
+		'Normalized provider status, requested/actual transport, attempt history, failure detail, carrier/economics metadata when available.'
+	],
+	[
+		{ code: 'inbound' },
+		'Typed sender/recipient endpoints, portable text/media content, and interaction payloads for replies and rich actions.'
+	],
+	[
+		{ code: 'consent' },
+		'Grant, revoke, or help intent from provider opt-in/opt-out signals; adapters can apply these to the shared consent ledger.'
 	]
 ];
 
@@ -231,8 +325,8 @@ const spanAttributeRows: DocsTableCell[][] = [
 		"Adapter name — 'resend', 'postmark', 'twilio', …"
 	],
 	[
-		{ code: 'dispatch.recipient' },
-		'message.to (CSV-joined when to is an array)'
+		{ code: 'dispatch.recipient_count' },
+		'Recipient count only; addresses and device tokens are excluded.'
 	],
 	[
 		{ code: 'dispatch.message_id' },
@@ -280,12 +374,36 @@ export const DispatchOverviewView = ({
 					<p style={paragraphLargeStyle}>
 						Provider-agnostic outbound dispatcher for Bun + Elysia —
 						send email, carrier/rich messaging, and push through one
-						typed interface. Swap Resend, Postmark, Telnyx, or
-						Twilio without touching call sites, test with the
-						bundled in-memory adapters, and get OpenTelemetry spans
-						and audit events on every send.
+						typed interface. Swap Resend, Postmark, AWS, Infobip,
+						Sinch, Telnyx, Twilio, or Vonage without touching call
+						sites, test with the bundled in-memory adapters, and get
+						OpenTelemetry spans and audit events on every send.
 					</p>
 				</animated.div>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="install"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Install
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Install the core and only the provider, persistence, and
+						policy packages your application uses. Every package is
+						a real npm release; the ecosystem does not rely on local
+						file dependencies, overrides, or publish-time workspace
+						tricks.
+					</p>
+					<PrismPlus
+						codeString={dispatchInstall}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+				</section>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
@@ -316,6 +434,105 @@ export const DispatchOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
+						id="production-model"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Production model
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The ecosystem separates authored messages, consent,
+						durability, provider-managed verification, and voice
+						into explicit contracts. This keeps OTP out of the
+						alerting layer and carrier compliance out of individual
+						call sites.
+					</p>
+					<DocsTable
+						columns={['Package', 'Responsibility']}
+						rows={productionBoundaryRows}
+						themeSprings={themeSprings}
+					/>
+					<Callout
+						themeSprings={themeSprings}
+						title="Alerts and OTP are different products"
+						variant="info"
+					>
+						Use <code>@absolutejs/dispatch-twilio</code> for copy
+						your application authors. Use{' '}
+						<code>@absolutejs/auth-twilio</code> when Twilio Verify
+						must generate and validate the secret. The Auth MFA
+						guide contains the complete Verify setup.
+					</Callout>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="consent"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Consent before delivery
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The compliance ledger keys evidence by tenant,
+						recipient, program, purpose, and every transport the
+						provider may use. The Dispatch policy performs the
+						durable lookup before the adapter runs. Signed
+						STOP/START callbacks from Twilio, Telnyx, Vonage, and
+						Sinch can update the same ledger.
+					</p>
+					<PrismPlus
+						codeString={dispatchConsent}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<Callout
+						themeSprings={themeSprings}
+						title="Registration is not consent"
+						variant="warning"
+					>
+						10DLC, toll-free, RCS, WhatsApp, and sender approval
+						make a traffic program eligible for a carrier channel.
+						They do not replace recipient-level evidence, opt-out
+						handling, privacy terms, or the application's legal
+						review.
+					</Callout>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="webhook-lifecycle"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Durable webhook lifecycle
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Messaging adapters normalize provider callbacks into one
+						event model, but durability is deliberately split from
+						HTTP intake. Use the PostgreSQL inbox and transaction
+						runner from <code>@absolutejs/reliability</code> in
+						production; the memory store is for tests and local
+						development.
+					</p>
+					<DocsTable
+						columns={['Stage', 'Requirement']}
+						rows={webhookLifecycleRows}
+						themeSprings={themeSprings}
+					/>
+					<DocsTable
+						columns={['Event kind', 'Normalized meaning']}
+						rows={messagingEventRows}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
 						id="push-lifecycle"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
@@ -336,6 +553,44 @@ export const DispatchOverviewView = ({
 					</p>
 					<PrismPlus
 						codeString={dispatchPushLifecycle}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<DocsTable
+						columns={['Fanout status', 'Meaning']}
+						rows={pushOutcomeRows}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Apply <code>PUSH_SUBSCRIPTION_POSTGRES_SCHEMA</code> and{' '}
+						<code>IDEMPOTENT_OPERATION_POSTGRES_SCHEMA</code> before
+						starting workers. Registration atomically reconciles the
+						stable tenant/platform/device identity with provider
+						token rotation, retaining the subscription identity and
+						removing superseded token records.
+					</p>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="push-providers"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						APNs and FCM
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						APNs uses short-lived ES256 provider tokens and pooled
+						HTTP/2 sessions. FCM uses HTTP v1 with Application
+						Default Credentials. Portable actions, badges, sounds,
+						and deep links are translated for both providers;
+						advanced provider objects remain available through
+						message metadata.
+					</p>
+					<PrismPlus
+						codeString={dispatchPushProviders}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -368,6 +623,21 @@ export const DispatchOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
+					<p style={paragraphSpacedStyle}>
+						Delivery events use the shared durable inbox pattern:
+						verify the deployment's authenticated AWS ingress,
+						persist the raw event before returning <code>202</code>,
+						then normalize and apply effects from a retryable
+						worker. The registration manager exposes AWS's dynamic
+						field workflow without hiding provider-specific
+						requirements.
+					</p>
+					<PrismPlus
+						codeString={dispatchAwsOperations}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -392,6 +662,21 @@ export const DispatchOverviewView = ({
 					</p>
 					<PrismPlus
 						codeString={dispatchInfobip}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Inbound messages and delivery/seen receipts normalize
+						into different event kinds. Portable media accepts
+						exactly one URL so additional parts are never silently
+						discarded; validated provider-specific payloads belong
+						under <code>extensions.infobip</code>. Use the
+						operations client for US brand, campaign, registration,
+						and number workflows.
+					</p>
+					<PrismPlus
+						codeString={dispatchInfobipOperations}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -448,7 +733,11 @@ export const DispatchOverviewView = ({
 						Every channel call resolves to a{' '}
 						<code>{'DispatchResult { at, id?, provider }'}</code> so
 						you can correlate the send with the vendor's delivery
-						webhook.
+						webhook. Messaging additionally returns requested/actual
+						transports and normalized primary/fallback attempts. The{' '}
+						<code>privacy</code> field declares address/content
+						retention preferences for adapters that expose provider
+						retention controls.
 					</p>
 					<PrismPlus
 						codeString={dispatchChannelUsage}
@@ -483,15 +772,15 @@ export const DispatchOverviewView = ({
 					/>
 					<Callout
 						themeSprings={themeSprings}
-						title="Vendor SDKs stay peer dependencies"
+						title="Provider SDK ownership is explicit"
 						variant="info"
 					>
-						Each adapter accepts a narrow <code>ClientLike</code>{' '}
-						interface instead of importing the vendor SDK, so
-						installing an adapter never pulls in{' '}
-						<code>postmark</code> or <code>twilio</code>{' '}
-						transitively. You construct the client and hand it to
-						the adapter.
+						Adapters that expect an application-owned SDK expose a
+						narrow <code>ClientLike</code> contract and declare that
+						SDK as a peer. AWS ships its exact SDK v3 command
+						clients as adapter dependencies, while Infobip uses the
+						standard fetch contract. No adapter reaches through an
+						undocumented client shape.
 					</Callout>
 					<p style={paragraphSpacedStyle}>
 						In-memory and console adapters ship with the core
@@ -542,7 +831,9 @@ export const DispatchOverviewView = ({
 						with the provider and message id in metadata,{' '}
 						<code>message.tenant</code> as the actor (
 						<code>'system'</code> when no tenant is set), and the
-						recipient as the target.
+						recipient as the target for email/messaging and a safe
+						subscription identifier for push. Raw device tokens are
+						never written to default logs, spans, or audit targets.
 					</p>
 				</section>
 

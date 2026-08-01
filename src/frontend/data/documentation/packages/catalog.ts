@@ -54,8 +54,8 @@ export const packageCatalog: PackageCatalogEntry[] = [
 		name: 'Absolute Auth',
 		npmName: '@absolutejs/auth',
 		tagline:
-			'Full-featured authentication for Elysia — OAuth, credentials, MFA, SSO, organizations, and fine-grained authorization.',
-		version: '0.53.0',
+			'Full-featured authentication for Elysia — OAuth, credentials, provider-managed verification, MFA, SSO, organizations, and fine-grained authorization.',
+		version: '0.59.2',
 		view: 'absolute-auth'
 	},
 	{
@@ -216,8 +216,8 @@ export const packageCatalog: PackageCatalogEntry[] = [
 		name: 'Dispatch',
 		npmName: '@absolutejs/dispatch',
 		tagline:
-			'Provider-agnostic outbound dispatcher for email, SMS, and push.',
-		version: '0.0.1',
+			'Provider-agnostic email, carrier/rich messaging, and production push lifecycle.',
+		version: '0.7.1',
 		view: 'dispatch-overview'
 	},
 	toEntry(emailPackageData, 'email-overview'),

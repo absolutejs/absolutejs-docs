@@ -4,7 +4,8 @@ import {
 	mfaChallengeComponent,
 	mfaChallengeReact,
 	mfaEnrollReact,
-	mfaServerSetup
+	mfaServerSetup,
+	mfaTwilioVerify
 } from '../../../../data/documentation/authMfaDocsCode';
 import {
 	h1Style,
@@ -42,7 +43,7 @@ const mfaEndpoints: Endpoint[] = [
 	{
 		description: 'Text a verification code to the phone.',
 		method: 'POST',
-		note: "Body: { phone } — returns { status: 'sent' }; mounted only when onSendSmsCode is set",
+		note: "Body: { phone } — returns { status: 'sent' }; mounted when a verificationProvider is configured",
 		path: '/auth/mfa/sms/setup'
 	},
 	{
@@ -80,6 +81,7 @@ const challengeShapeRows: DocsTableCell[][] = [
 
 const tocItems: TocItem[] = [
 	{ href: '#server-setup', label: 'Server Setup' },
+	{ href: '#twilio-verify', label: 'Twilio Verify' },
 	{ href: '#routes', label: 'Routes' },
 	{ href: '#enroll', label: 'Enrolling TOTP (React)' },
 	{ href: '#challenge', label: 'Login Challenge (React)' },
@@ -110,14 +112,17 @@ export const AuthMfaView = ({
 			<div style={mainContentStyle(isMobileOrTablet)}>
 				<animated.div style={heroGradientStyle(themeSprings)}>
 					<h1 id="auth-mfa" style={h1Style(isMobileOrTablet)}>
-						Multi-Factor Auth (TOTP)
+						Multi-Factor Auth
 					</h1>
 					<p style={paragraphLargeStyle}>
 						Native second-factor authentication for credential
 						accounts: TOTP via any authenticator app (Google
 						Authenticator, Authy, 1Password), single-use backup
-						codes, an optional SMS factor, and per-factor lockout —
-						no second auth library required.
+						codes, provider-managed phone verification, and
+						per-factor lockout — no second auth library required.
+						Twilio Verify can own OTP generation, delivery, fraud
+						evaluation, and code checking while Absolute Auth
+						retains enrollment and session policy.
 					</p>
 				</animated.div>
 
@@ -146,6 +151,54 @@ export const AuthMfaView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="twilio-verify"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Twilio Verify provider
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>@absolutejs/auth-twilio</code> implements Auth's{' '}
+						<code>verificationProvider</code> contract. The adapter
+						surface supports SMS, WhatsApp, and voice-call Verify
+						channels, purpose-specific templates, locale/rate-limit
+						inputs, and tenant-isolated account routing. The
+						built-in MFA routes shown here invoke its SMS channel;
+						custom Auth verification flows can use the other
+						channels and routing inputs. Unknown provider statuses
+						fail closed.
+					</p>
+					<PrismPlus
+						codeString={mfaTwilioVerify}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<Callout
+						themeSprings={themeSprings}
+						title="Keep Auth Verify separate from Dispatch"
+						variant="info"
+					>
+						Twilio Verify creates and checks secrets. Use{' '}
+						<code>@absolutejs/dispatch-twilio</code> only for
+						application-authored alerts, transactional messages, and
+						carrier/rich messaging workflows. The configured{' '}
+						<code>serviceTokenTtlMs</code> must match the Verify
+						Service because Twilio's start response does not expose
+						that lifetime.
+					</Callout>
+					<p style={paragraphSpacedStyle}>
+						Auth still enforces enrollment state, resend cooldown,
+						failed-attempt lockout, audit events, and session
+						promotion. Prefer Twilio API keys when constructing the
+						production SDK client, and never place direct personal
+						data in provider tags.
+					</p>
 				</section>
 
 				<section style={sectionStyle}>

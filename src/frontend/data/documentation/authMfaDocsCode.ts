@@ -98,6 +98,13 @@ async function confirmTotpEnrollment(code: string) {
 }`;
 export const mfaServerSetup = `\
 import { auth, createNeonMfaStore } from '@absolutejs/auth';
+import { createTwilioVerificationProvider } from '@absolutejs/auth-twilio';
+import { Twilio } from 'twilio';
+
+const twilio = new Twilio(
+  process.env.TWILIO_ACCOUNT_SID!,
+  process.env.TWILIO_AUTH_TOKEN!,
+);
 
 await auth<User>({
   providersConfiguration: {},
@@ -116,12 +123,39 @@ await auth<User>({
     // generateEncryptionKey() and keep it in your secret manager — set it in any real deploy.
     encryptionKey: process.env.MFA_ENCRYPTION_KEY,
     issuer: 'Acme',              // shown in the authenticator app
-    totpMaxAttempts: 5,          // 2nd-factor lockout, independent of password lockout
-    // Optional: SMS factor. Omit the block entirely for TOTP-only.
-    onSendSmsCode: ({ phone, code }) => twilio.messages.create({ to: phone, body: code })
-  }
+    totpMaxAttempts: 5           // 2nd-factor lockout, independent of password lockout
+  },
+  verificationProvider: createTwilioVerificationProvider({
+    profile: {
+      client: twilio,
+      verifyServiceSid: process.env.TWILIO_VERIFY_SERVICE_SID!,
+    },
+    // Match the token lifetime configured on the Verify Service.
+    serviceTokenTtlMs: 10 * 60 * 1000,
+  }),
 });
 
 // With credentials + mfa configured, auth() auto-wires the MFA gate: once a user has a
 // verified factor, login no longer mints a session directly — it parks the login and
 // returns { status: 'mfa_required' }, and only /auth/mfa/challenge completes it.`;
+
+export const mfaTwilioVerify = `\
+import { createTwilioVerificationProvider } from '@absolutejs/auth-twilio';
+
+const verificationProvider = createTwilioVerificationProvider({
+  profile: { client: twilio, verifyServiceSid },
+  serviceTokenTtlMs: 600_000,
+  templates: {
+    mfa_enrollment: { sms: 'HJ_ENROLLMENT_TEMPLATE' },
+    mfa_challenge: { sms: 'HJ_SMS_CHALLENGE_TEMPLATE' },
+  },
+  // Optional non-PII provider tags. Never return phone, email, or user names.
+  buildTags: ({ purpose }) => ({ purpose }),
+});
+
+await auth({
+  credentials,
+  mfa,
+  providersConfiguration: {},
+  verificationProvider,
+});`;

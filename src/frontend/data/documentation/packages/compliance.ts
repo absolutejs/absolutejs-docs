@@ -3,8 +3,13 @@ import { PackageDocData } from '../../../../types/packageDocs';
 export const compliancePackageData: PackageDocData = {
 	category: 'Auth & Identity',
 	description:
-		'Framework-agnostic compliance substrate for the AbsoluteJS PaaS: declarative data classification, residency, and retention policies plus orchestrators for retention sweeps, Subject Access Requests, right-to-erasure, and auditor evidence bundles. None of the primitives hard-code a framework — SOC2, HIPAA, ISO 27001, and GDPR all map onto the same policy shape. It composes onto @absolutejs/audit for event logging, and per-tenant overrides let GDPR-strict tenants get their own residency and retention without forking the platform policy.',
+		'Framework-agnostic compliance substrate for AbsoluteJS: durable messaging-consent evidence and pre-send enforcement alongside declarative data classification, residency, retention, Subject Access Requests, erasure, and auditor evidence bundles. It composes with @absolutejs/dispatch and @absolutejs/audit without hard-coding a provider or framework.',
 	features: [
+		{
+			description:
+				'The messaging consent ledger records grant and revocation evidence at an exact tenant, recipient, program, purpose, and transport scope; its Dispatch policy denies unauthorized sends before the provider is called.',
+			title: 'Messaging consent'
+		},
 		{
 			description:
 				'createCompliancePolicy assigns each data classification a retention window, optional residency region, erasure exemption, and an open flags bag — with per-tenant overrides.',
@@ -62,6 +67,40 @@ export const compliancePackageData: PackageDocData = {
 	],
 	npmName: '@absolutejs/compliance',
 	samples: [
+		{
+			code: `import { createDispatcher } from '@absolutejs/dispatch';
+import {
+	createMessagingConsentDispatchPolicy,
+	createMessagingConsentLedger,
+	createPostgresMessagingConsentStore
+} from '@absolutejs/compliance';
+
+const consent = createMessagingConsentLedger({
+	audit,
+	store: createPostgresMessagingConsentStore(postgres)
+});
+
+await consent.grant({
+	programId: 'acme-alerts',
+	purpose: 'incident-alerts',
+	recipient: '+12025550100',
+	tenant: 'tenant-a',
+	transport: 'sms'
+}, {
+	at: Date.now(),
+	reference: 'signup-42',
+	source: 'signup-form'
+});
+
+const dispatch = createDispatcher({
+	messaging,
+	policies: [createMessagingConsentDispatchPolicy({ ledger: consent })]
+});`,
+			description:
+				'Apply MESSAGING_CONSENT_POSTGRES_SCHEMA once. Signed provider STOP/START callbacks can update the same ledger, and every possible fallback transport must have evidence before Dispatch permits delivery.',
+			heading: 'Messaging Consent',
+			language: 'typescript'
+		},
 		{
 			code: `import {
 	createCompliancePolicy,
@@ -173,6 +212,6 @@ await runErasure({
 	],
 	status: 'beta',
 	tagline:
-		'Declarative classification, residency, and retention policies with orchestrators for sweeps, SARs, erasure, and auditor evidence.',
-	version: '0.1.0'
+		'Durable messaging consent plus classification, residency, retention, SAR, erasure, and evidence primitives.',
+	version: '0.7.0'
 };
