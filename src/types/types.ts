@@ -48,7 +48,7 @@ export const isExpandableEntry = (
 export const sidebarEntryKey = (category: string, entry: SidebarEntry) =>
 	`${category}/${entry.label}`;
 
-export type DocsView = keyof typeof docsViews;
+export type DocsView = Extract<keyof typeof docsViews, string>;
 
 export type UserFunctionProps = {
 	authProvider: string;

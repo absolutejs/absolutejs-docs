@@ -30,6 +30,7 @@ export type PackageAdapterGroup = {
 	heading: string;
 	items: {
 		description: string;
+		href?: string;
 		name: string;
 		version?: string;
 	}[];
@@ -48,10 +49,12 @@ export type PackageLink = {
 
 export type PackageCatalogEntry = {
 	category: PackageCategory;
+	guideView?: string;
 	kind: 'monorepo' | 'package' | 'repository';
 	name: string;
 	npmName: string | null;
 	private: boolean;
+	searchText: string;
 	sourceDirectory: string;
 	subpackageCount: number;
 	tagline: string;

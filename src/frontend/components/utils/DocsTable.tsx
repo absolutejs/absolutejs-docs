@@ -12,6 +12,7 @@ export type DocsTableCell =
 	| string
 	| {
 			code: string;
+			href?: string;
 			suffix?: string;
 	  };
 
@@ -29,9 +30,17 @@ const DocsTableCellContent = ({
 }) => {
 	if (typeof cell === 'string') return cell;
 
+	const code = <code style={tableCodeStyle}>{cell.code}</code>;
+
 	return (
 		<>
-			<code style={tableCodeStyle}>{cell.code}</code>
+			{cell.href ? (
+				<a href={cell.href} style={{ color: 'inherit' }}>
+					{code}
+				</a>
+			) : (
+				code
+			)}
 			{cell.suffix ? (
 				<animated.span
 					style={{

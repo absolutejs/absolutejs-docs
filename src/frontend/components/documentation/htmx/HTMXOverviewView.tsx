@@ -251,9 +251,9 @@ export const HTMXOverviewView = ({
 						When building interactive HTMX applications, you often
 						need state that's specific to each user. For example, a
 						counter button should only increment that user's count,
-						not everyone's. The <code>elysia-scoped-state</code>{' '}
-						plugin solves this by automatically managing per-user
-						sessions.
+						not everyone's. The{' '}
+						<code>@absolutejs/scoped-state</code> plugin solves this
+						by automatically managing per-user sessions.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Without scoped state, all users would share the same

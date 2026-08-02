@@ -12,6 +12,8 @@ import { AuroraBackground } from '../components/utils/AuroraBackground';
 import { Head } from '../components/page/Head';
 import { SidebarSection } from '../components/sidebar/SidebarSection';
 import { docsViews, sidebarCategories } from '../data/sidebarData';
+import { documentationMetadataFor } from '../data/documentation/documentationMetadata';
+import { packageCatalog } from '../data/documentation/packages/catalog';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
@@ -102,10 +104,76 @@ export const Documentation = ({
 	};
 
 	const ActiveView = docsViews[view];
+	const packageReference = packageCatalog.find(
+		(entry) => entry.guideView === view
+	);
+	const activeDocumentation = (
+		<div
+			style={{
+				display: 'flex',
+				flex: 1,
+				flexDirection: 'column',
+				minHeight: 0
+			}}
+		>
+			{packageReference ? (
+				<a
+					href={`/documentation/${packageReference.view}`}
+					style={{
+						background: 'rgba(99, 102, 241, 0.1)',
+						borderBottom: '1px solid rgba(99, 102, 241, 0.25)',
+						color: 'inherit',
+						fontSize: '0.85rem',
+						padding: '0.6rem 1rem',
+						textAlign: 'center'
+					}}
+				>
+					View current package exports, installation, examples,
+					commands, and repository links
+				</a>
+			) : null}
+			<ActiveView
+				currentPageId={view}
+				isMobileOrTablet={isMobileOrTablet}
+				onNavigate={(pageId: string) => {
+					if (isValidViewId(pageId)) handleNavigate(pageId);
+				}}
+				onTocToggle={toggleToc}
+				themeSprings={themeSprings}
+				tocOpen={tocOpen}
+			/>
+		</div>
+	);
+	const documentationContent = (
+		<div
+			style={{
+				display: 'flex',
+				flex: 1,
+				minHeight: 0
+			}}
+		>
+			<SidebarSection
+				isMobile={isMobile}
+				navigateToView={handleNavigate}
+				onToggleSection={handleToggleSection}
+				openSections={openSections}
+				spring={sidebarSpring}
+				springApi={sidebarSpringApi}
+				themeSprings={themeSprings}
+				toggleSidebar={toggleSidebar}
+				view={view}
+			/>
+			{activeDocumentation}
+		</div>
+	);
 
 	return (
 		<html lang="en" style={htmlDefault}>
-			<Head />
+			<Head
+				canonicalUrl={`https://absolutejs.com/documentation/${view}`}
+				description={documentationMetadataFor(view).description}
+				title={documentationMetadataFor(view).title}
+			/>
 			<animated.body
 				style={{
 					...bodyDefault(themeSprings),
@@ -124,37 +192,7 @@ export const Documentation = ({
 						alignItems: 'stretch'
 					}}
 				>
-					<div
-						style={{
-							display: 'flex',
-							flex: 1,
-							minHeight: 0
-						}}
-					>
-						<SidebarSection
-							isMobile={isMobile}
-							navigateToView={handleNavigate}
-							onToggleSection={handleToggleSection}
-							openSections={openSections}
-							spring={sidebarSpring}
-							springApi={sidebarSpringApi}
-							themeSprings={themeSprings}
-							toggleSidebar={toggleSidebar}
-							view={view}
-						/>
-						<ActiveView
-							currentPageId={view}
-							isMobileOrTablet={isMobileOrTablet}
-							onNavigate={(pageId) => {
-								if (isValidViewId(pageId)) {
-									handleNavigate(pageId);
-								}
-							}}
-							onTocToggle={toggleToc}
-							themeSprings={themeSprings}
-							tocOpen={tocOpen}
-						/>
-					</div>
+					{documentationContent}
 				</main>
 			</animated.body>
 		</html>

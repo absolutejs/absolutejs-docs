@@ -477,7 +477,10 @@ export const docsViews = definePortalViews({
 	'vue-spa': VueSpaView,
 	...ecosystemProjectViews
 });
-
+export const documentationSitemapRoutes = [
+	'/documentation',
+	...Object.keys(docsViews).map((view) => `/documentation/${view}`)
+];
 export const sidebarCategories: SidebarCategory[] = [
 	{
 		entries: [

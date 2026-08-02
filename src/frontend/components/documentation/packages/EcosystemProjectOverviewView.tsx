@@ -5,8 +5,14 @@ import type {
 } from '../../../../types/packageDocs';
 import {
 	EcosystemProject,
+	EcosystemSubpackage,
 	ecosystemProjects
 } from '../../../data/documentation/packages/ecosystem.generated';
+import { documentationViewByDirectory } from '../../../data/documentation/packages/catalog';
+import {
+	ecosystemProjectViewId,
+	ecosystemSubpackageViewId
+} from '../../../data/documentation/packages/ecosystemViewIds';
 import { createPackageView } from './PackageOverviewTemplate';
 
 const statusForVersion = (version: string | null) => {
@@ -25,6 +31,14 @@ const installCommandFor = (project: EcosystemProject) => {
 };
 
 const linksFor = (project: EcosystemProject) => [
+	...(documentationViewByDirectory[project.directory]
+		? [
+				{
+					href: `/documentation/${documentationViewByDirectory[project.directory]}`,
+					label: 'Guides'
+				}
+			]
+		: []),
 	...(project.repository
 		? [{ href: project.repository, label: 'Repository' }]
 		: []),
@@ -53,6 +67,7 @@ const adapterGroupsFor = (project: EcosystemProject) => {
 			heading: 'Workspace contents',
 			items: project.subpackages.map((subpackage) => ({
 				description: `${subpackage.private ? 'Private workspace project' : 'Public package'} — ${subpackage.description}`,
+				href: `/documentation/${ecosystemSubpackageViewId(project, subpackage)}`,
 				name: subpackage.name,
 				...(subpackage.version ? { version: subpackage.version } : {})
 			}))
@@ -130,9 +145,111 @@ const toPackageDocData = (project: EcosystemProject): PackageDocData => ({
 	version: project.version ?? 'workspace'
 });
 
+const subpackageLinksFor = (
+	project: EcosystemProject,
+	subpackage: EcosystemSubpackage
+) => [
+	...(project.repository
+		? [
+				{
+					href: `${project.repository}/tree/HEAD/${subpackage.sourcePath}`,
+					label: 'Source'
+				},
+				...(subpackage.readmeTopics.length > 0 ||
+				subpackage.readmeSamples.length > 0
+					? [
+							{
+								href: `${project.repository}/blob/HEAD/${subpackage.sourcePath}/README.md`,
+								label: 'README'
+							}
+						]
+					: [])
+			]
+		: []),
+	...(!subpackage.private
+		? [
+				{
+					href: `https://www.npmjs.com/package/${subpackage.name}`,
+					label: 'npm'
+				}
+			]
+		: []),
+	{
+		href: `/documentation/${ecosystemProjectViewId(project)}`,
+		label: `${project.name} overview`
+	}
+];
+
+const subpackageAdapterGroupsFor = (subpackage: EcosystemSubpackage) => {
+	const groups: PackageAdapterGroup[] = [];
+	if (subpackage.publicExports.length > 0) {
+		groups.push({
+			description:
+				'Supported entry points declared by this package manifest.',
+			heading: subpackage.private
+				? 'Workspace entry points'
+				: 'Public entry points',
+			items: subpackage.publicExports.map((entryPoint) => ({
+				description: 'Package entry point declared in package.json.',
+				name: entryPoint
+			}))
+		});
+	}
+	if (subpackage.commands.length > 0) {
+		groups.push({
+			description: 'Scripts declared by this package manifest.',
+			heading: 'Package commands',
+			items: subpackage.commands.map(({ command, name }) => ({
+				description: command,
+				name: `bun run ${name}`
+			}))
+		});
+	}
+
+	return groups.length > 0 ? groups : undefined;
+};
+
+const toSubpackageDocData = (
+	project: EcosystemProject,
+	subpackage: EcosystemSubpackage
+): PackageDocData => ({
+	adapterGroups: subpackageAdapterGroupsFor(subpackage),
+	category: project.category,
+	description: subpackage.description,
+	features: subpackage.readmeTopics.map((topic) => ({
+		description: topic.description,
+		title: topic.title
+	})),
+	installCommand: subpackage.private
+		? `# Private workspace project: ~/abs/${project.directory}/${subpackage.sourcePath}`
+		: `bun add ${subpackage.name}`,
+	links: subpackageLinksFor(project, subpackage),
+	name: subpackage.name,
+	notes: subpackage.private
+		? [
+				{
+					body: 'This project is maintained inside the workspace and is not published as a standalone npm package.',
+					title: 'Private workspace project',
+					variant: 'info'
+				}
+			]
+		: undefined,
+	npmName: subpackage.name,
+	samples: subpackage.readmeSamples,
+	status: statusForVersion(subpackage.version),
+	tagline: subpackage.description,
+	version: subpackage.version ?? 'workspace'
+});
+
 export const ecosystemProjectViews = Object.fromEntries(
-	ecosystemProjects.map((project) => [
-		`ecosystem-${project.directory}`,
-		createPackageView(toPackageDocData(project))
+	ecosystemProjects.flatMap((project) => [
+		[
+			ecosystemProjectViewId(project),
+			createPackageView(toPackageDocData(project))
+		],
+		...project.subpackages.map((subpackage) => [
+			ecosystemSubpackageViewId(project, subpackage),
+			createPackageView(toSubpackageDocData(project, subpackage))
+		])
 	])
 );

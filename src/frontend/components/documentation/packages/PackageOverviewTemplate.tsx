@@ -135,7 +135,11 @@ const PackageHero = ({
 
 const adapterRows = (group: PackageAdapterGroup) =>
 	group.items.map((item) => [
-		{ code: item.name, suffix: item.version ? `v${item.version}` : '' },
+		{
+			code: item.name,
+			href: item.href,
+			suffix: item.version ? `v${item.version}` : ''
+		},
 		item.description
 	]);
 
@@ -309,7 +313,11 @@ export const PackageOverviewTemplate = ({
 							<animated.a
 								href={link.href}
 								key={link.href}
-								rel="noreferrer noopener"
+								rel={
+									link.href.startsWith('/')
+										? undefined
+										: 'noreferrer noopener'
+								}
 								style={{
 									border: '1px solid rgba(99, 102, 241, 0.35)',
 									borderRadius: '0.5rem',
@@ -319,7 +327,11 @@ export const PackageOverviewTemplate = ({
 									padding: '0.5rem 1rem',
 									textDecoration: 'none'
 								}}
-								target="_blank"
+								target={
+									link.href.startsWith('/')
+										? undefined
+										: '_blank'
+								}
 							>
 								{link.label}
 							</animated.a>

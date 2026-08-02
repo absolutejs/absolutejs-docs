@@ -91,7 +91,7 @@ export const HTMLAIView = ({
 					</h1>
 					<p style={paragraphLargeStyle}>
 						The <code>createAIStream</code> function from{' '}
-						<code>@absolutejs/absolute/ai/client</code> is the
+						<code>@absolutejs/ai/client</code> is the
 						framework-agnostic AI client. It works with plain HTML,
 						HTMX, or any environment without a framework: same API
 						surface as the React, Vue, Svelte, and Angular bindings.

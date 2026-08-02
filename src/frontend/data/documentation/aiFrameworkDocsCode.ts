@@ -11,7 +11,7 @@ export const angularAIStreamReturn = `\
 }`;
 export const angularAIStreamService = `\
 import { Component, OnInit } from '@angular/core';
-import { AIStreamService } from '@absolutejs/absolute/angular/ai';
+import { AIStreamService } from '@absolutejs/ai/angular';
 
 @Component({
   selector: 'app-chat',
@@ -58,7 +58,7 @@ export class ChatComponent implements OnInit {
   }
 }`;
 export const reactAttachments = `\
-import { useAIStream } from '@absolutejs/absolute/react/ai';
+import { useAIStream } from '@absolutejs/ai/react';
 import type { AIAttachment } from '@absolutejs/absolute';
 
 const ChatWithFiles = () => {
@@ -82,7 +82,7 @@ const ChatWithFiles = () => {
   }} />;
 };`;
 export const reactProvider = `\
-import { AIStreamProvider } from '@absolutejs/absolute/react/ai';
+import { AIStreamProvider } from '@absolutejs/ai/react';
 
 // Wrap your app to share a single WebSocket connection
 export const App = ({ children }: { children: React.ReactNode }) => (
@@ -92,7 +92,7 @@ export const App = ({ children }: { children: React.ReactNode }) => (
 );
 
 // Any descendant can call useAIStream() without a path
-import { useAIStream } from '@absolutejs/absolute/react/ai';
+import { useAIStream } from '@absolutejs/ai/react';
 
 const ChatWidget = () => {
   // Uses the connection from AIStreamProvider
@@ -100,7 +100,7 @@ const ChatWidget = () => {
   // ...
 };`;
 export const reactUseAIStream = `\
-import { useAIStream } from '@absolutejs/absolute/react/ai';
+import { useAIStream } from '@absolutejs/ai/react';
 
 export const Chat = ({ conversationId }: { conversationId?: string }) => {
   const { messages, send, cancel, branch, isStreaming, error } =
@@ -158,7 +158,7 @@ export const reactUseAIStreamReturn = `\
 }`;
 export const svelteCreateAIStream = `\
 <script lang="ts">
-  import { createAIStream } from '@absolutejs/absolute/svelte/ai';
+  import { createAIStream } from '@absolutejs/ai/svelte';
 
   const ai = createAIStream('/chat');
 
@@ -200,7 +200,7 @@ export const svelteCreateAIStreamReturn = `\
   get error(): string | null;    // Reactive getter
 }`;
 export const vanillaAttachments = `\
-import { createAIStream } from '@absolutejs/absolute/ai/client';
+import { createAIStream } from '@absolutejs/ai/client';
 import type { AIAttachment } from '@absolutejs/absolute';
 
 const ai = createAIStream('/chat');
@@ -218,7 +218,7 @@ const sendWithFile = async (text: string, file: File) => {
   ai.send(text, [attachment]);
 };`;
 export const vanillaCreateAIStream = `\
-import { createAIStream } from '@absolutejs/absolute/ai/client';
+import { createAIStream } from '@absolutejs/ai/client';
 
 const ai = createAIStream('/chat');
 
@@ -256,7 +256,7 @@ export const vanillaCreateAIStreamReturn = `\
   get error(): string | null;    // Error message or null
 }`;
 export const vanillaRenderExample = `\
-import { createAIStream } from '@absolutejs/absolute/ai/client';
+import { createAIStream } from '@absolutejs/ai/client';
 import type { AIMessage } from '@absolutejs/absolute';
 
 const ai = createAIStream('/chat');
@@ -290,7 +290,7 @@ ai.subscribe(() => {
 export const vueProvide = `\
 <script setup lang="ts">
 import { provide } from 'vue';
-import { useAIStream, AIStreamKey } from '@absolutejs/absolute/vue/ai';
+import { useAIStream, AIStreamKey } from '@absolutejs/ai/vue';
 
 // Create the stream and provide it to descendants
 const ai = useAIStream('/chat');
@@ -300,14 +300,14 @@ provide(AIStreamKey, ai);
 <!-- Child component -->
 <script setup lang="ts">
 import { inject } from 'vue';
-import { AIStreamKey } from '@absolutejs/absolute/vue/ai';
+import { AIStreamKey } from '@absolutejs/ai/vue';
 
 const ai = inject(AIStreamKey)!;
 // ai.messages, ai.send, ai.cancel, etc.
 </script>`;
 export const vueUseAIStream = `\
 <script setup lang="ts">
-import { useAIStream } from '@absolutejs/absolute/vue/ai';
+import { useAIStream } from '@absolutejs/ai/vue';
 
 const { messages, send, cancel, branch, isStreaming, error } =
   useAIStream('/chat');

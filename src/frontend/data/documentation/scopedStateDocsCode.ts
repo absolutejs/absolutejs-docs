@@ -16,7 +16,7 @@ new Elysia()
 export const scopedStateHtmxExample = `\
 // Complete HTMX counter example with scoped state
 import Elysia from 'elysia';
-import { scopedState } from 'elysia-scoped-state';
+import { scopedState } from '@absolutejs/scoped-state';
 import { handleHTMXPageRequest } from '@absolutejs/absolute';
 
 new Elysia()
@@ -61,7 +61,7 @@ export const scopedStateHtmxHtml = `\
 </body>
 </html>`;
 export const scopedStateInstallation = `\
-bun add elysia-scoped-state`;
+bun add @absolutejs/scoped-state`;
 export const scopedStatePreserve = `\
 // The preserve option keeps state across page refreshes and navigation
 scopedState({
@@ -91,7 +91,7 @@ new Elysia()
   });`;
 export const scopedStateSetup = `\
 import Elysia from 'elysia';
-import { scopedState } from 'elysia-scoped-state';
+import { scopedState } from '@absolutejs/scoped-state';
 
 const app = new Elysia()
   .use(

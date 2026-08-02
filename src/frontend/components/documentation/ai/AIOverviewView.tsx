@@ -13,7 +13,8 @@ import { DocsNavigation } from '../DocsNavigation';
 import {
 	aiOverviewQuickStart,
 	aiOverviewClientReact,
-	aiImportPaths
+	aiImportPaths,
+	aiInstall
 } from '../../../data/documentation/aiDocsCode';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
@@ -110,21 +111,21 @@ const architectureLayers: Array<{
 	title: string;
 }> = [
 	{
-		code: '@absolutejs/absolute/ai',
+		code: '@absolutejs/ai',
 		description:
 			'The aiChat Elysia plugin creates WebSocket and REST endpoints, manages conversations, and orchestrates streaming with tool execution.',
 		number: '1',
 		title: 'Server Plugin'
 	},
 	{
-		code: '@absolutejs/absolute/ai/anthropic',
+		code: '@absolutejs/ai/anthropic',
 		description:
 			'Adapters for each AI service that normalize different APIs into a unified AsyncIterable<AIChunk> streaming interface.',
 		number: '2',
 		title: 'Provider Layer'
 	},
 	{
-		code: '@absolutejs/absolute/react/ai',
+		code: '@absolutejs/ai/react',
 		description:
 			'Framework-specific hooks and composables that manage WebSocket connections, auto-reconnect, and message state with a reducer pattern.',
 		number: '3',
@@ -406,6 +407,12 @@ export const AIOverviewView = ({
 						endpoint and REST routes for conversation management
 						automatically.
 					</p>
+					<PrismPlus
+						codeString={aiInstall}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={aiOverviewQuickStart}
 						language="typescript"

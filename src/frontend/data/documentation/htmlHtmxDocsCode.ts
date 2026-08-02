@@ -116,7 +116,7 @@ export const htmxScopedStateHtml = `\
 <!-- User B clicks 2 times → sees 2 (independent from User A) -->`;
 export const htmxScopedStateSetup = `\
 import Elysia from 'elysia';
-import { scopedState } from 'elysia-scoped-state';
+import { scopedState } from '@absolutejs/scoped-state';
 import { handleHTMXPageRequest } from '@absolutejs/absolute';
 
 new Elysia()

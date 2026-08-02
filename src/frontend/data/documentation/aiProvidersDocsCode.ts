@@ -1,5 +1,5 @@
 export const providerAnthropic = `\
-import { anthropic } from '@absolutejs/absolute/ai/anthropic';
+import { anthropic } from '@absolutejs/ai/anthropic';
 
 const provider = anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -21,7 +21,7 @@ import {
   mistralai,
   moonshot,
   xai,
-} from '@absolutejs/absolute/ai/providers';
+} from '@absolutejs/ai/providers';
 
 // xAI (Grok)
 const xaiProvider = xai({ apiKey: process.env.XAI_API_KEY });
@@ -48,14 +48,14 @@ const moonshotProvider = moonshot({ apiKey: process.env.MOONSHOT_API_KEY });
 // Models: kimi-k2`;
 export const providerCustom = `\
 // Use openaiCompatible() for any provider with an OpenAI-compatible API
-import { openaiCompatible } from '@absolutejs/absolute/ai/providers';
+import { openaiCompatible } from '@absolutejs/ai/providers';
 
 const myProvider = openaiCompatible({
   apiKey: process.env.MY_API_KEY,
   baseUrl: 'https://api.my-provider.com/v1',
 });`;
 export const providerGemini = `\
-import { gemini } from '@absolutejs/absolute/ai/gemini';
+import { gemini } from '@absolutejs/ai/gemini';
 
 const provider = gemini({
   apiKey: process.env.GOOGLE_API_KEY,
@@ -81,11 +81,11 @@ type AIProviderStreamParams = {
 };`;
 export const providerMulti = `\
 // Multi-provider setup with dynamic routing
-import { anthropic } from '@absolutejs/absolute/ai/anthropic';
-import { openaiResponses } from '@absolutejs/absolute/ai/openai-responses';
-import { gemini } from '@absolutejs/absolute/ai/gemini';
-import { ollama } from '@absolutejs/absolute/ai/ollama';
-import { xai, deepseek, mistralai } from '@absolutejs/absolute/ai/providers';
+import { anthropic } from '@absolutejs/ai/anthropic';
+import { openaiResponses } from '@absolutejs/ai/openai-responses';
+import { gemini } from '@absolutejs/ai/gemini';
+import { ollama } from '@absolutejs/ai/ollama';
+import { xai, deepseek, mistralai } from '@absolutejs/ai/providers';
 import { getEnv } from '@absolutejs/absolute';
 
 const getProvider = (name: string) => {
@@ -133,7 +133,7 @@ new Elysia().use(
   })
 );`;
 export const providerOllama = `\
-import { ollama } from '@absolutejs/absolute/ai/ollama';
+import { ollama } from '@absolutejs/ai/ollama';
 
 const provider = ollama({
   baseUrl: process.env.OLLAMA_URL, // defaults to http://localhost:11434
@@ -142,7 +142,7 @@ const provider = ollama({
 // Models: any model pulled locally (llama3.2, qwen3, mistral, etc.)
 // Supports: tool calling (model-dependent), free local inference`;
 export const providerOpenAI = `\
-import { openai } from '@absolutejs/absolute/ai/openai';
+import { openai } from '@absolutejs/ai/openai';
 
 const provider = openai({
   apiKey: process.env.OPENAI_API_KEY,
@@ -152,7 +152,7 @@ const provider = openai({
 // Models: gpt-4o, gpt-4o-mini, gpt-5.4, gpt-5.3
 // Supports: tool calling, vision`;
 export const providerOpenAIResponses = `\
-import { openaiResponses } from '@absolutejs/absolute/ai/openai-responses';
+import { openaiResponses } from '@absolutejs/ai/openai-responses';
 
 const provider = openaiResponses({
   apiKey: process.env.OPENAI_API_KEY,

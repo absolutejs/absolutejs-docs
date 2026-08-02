@@ -1,7 +1,7 @@
 import { PackageCatalogEntry } from '../../../../types/packageDocs';
 import { ecosystemProjects } from './ecosystem.generated';
 
-const documentationViewByDirectory: Record<string, string> = {
+export const documentationViewByDirectory: Record<string, string> = {
 	'absolutejs-vscode-extension': 'vscode-extension-overview',
 	ai: 'ai-overview',
 	audience: 'audience-overview',
@@ -60,16 +60,31 @@ const documentationViewByDirectory: Record<string, string> = {
 export const packageCatalog: PackageCatalogEntry[] = ecosystemProjects.map(
 	(project) => ({
 		category: project.category,
+		guideView: documentationViewByDirectory[project.directory],
 		kind: project.kind,
 		name: project.name,
 		npmName: project.packageName,
 		private: project.private,
+		searchText: [
+			...project.publicExports,
+			...project.readmeTopics.flatMap((topic) => [
+				topic.title,
+				topic.description
+			]),
+			...project.subpackages.flatMap((subpackage) => [
+				subpackage.name,
+				subpackage.description,
+				...subpackage.publicExports,
+				...subpackage.readmeTopics.flatMap((topic) => [
+					topic.title,
+					topic.description
+				])
+			])
+		].join(' '),
 		sourceDirectory: project.directory,
 		subpackageCount: project.subpackages.length,
 		tagline: project.description,
 		version: project.version,
-		view:
-			documentationViewByDirectory[project.directory] ??
-			`ecosystem-${project.directory}`
+		view: `ecosystem-${project.directory}`
 	})
 );

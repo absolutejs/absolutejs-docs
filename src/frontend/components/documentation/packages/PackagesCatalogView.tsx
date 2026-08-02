@@ -42,7 +42,7 @@ const slugify = (value: string) =>
 
 const matchesQuery = (entry: PackageCatalogEntry, query: string) => {
 	const haystack =
-		`${entry.name} ${entry.npmName ?? ''} ${entry.sourceDirectory} ${entry.kind} ${entry.tagline}`.toLowerCase();
+		`${entry.name} ${entry.npmName ?? ''} ${entry.sourceDirectory} ${entry.kind} ${entry.tagline} ${entry.searchText}`.toLowerCase();
 
 	return query
 		.toLowerCase()
@@ -57,8 +57,10 @@ type CatalogCardProps = {
 };
 
 const catalogBadge = (entry: PackageCatalogEntry) => {
+	if (entry.private && entry.kind !== 'monorepo') return 'private workspace';
+	if (entry.kind === 'monorepo')
+		return `${entry.subpackageCount} workspace items`;
 	if (entry.version) return `v${entry.version}`;
-	if (entry.kind === 'monorepo') return `${entry.subpackageCount} packages`;
 
 	return 'workspace';
 };
@@ -198,8 +200,8 @@ export const PackagesCatalogView = ({
 						The complete AbsoluteJS workspace:{' '}
 						{packageCatalog.length} packages, monorepos,
 						applications, extensions, examples, fixtures, and
-						internal tools. Open a monorepo to see every package it
-						publishes independently.
+						internal tools. Open a monorepo to see every public
+						package and private workspace project it contains.
 					</p>
 					<CatalogSearch
 						onQueryChange={setQuery}

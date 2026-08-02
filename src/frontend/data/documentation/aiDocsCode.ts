@@ -6,8 +6,8 @@ type AIConnectionOptions = {
   maxReconnectAttempts?: number;
 };`;
 export const aiHtmxBasic = `\
-import { aiChat } from '@absolutejs/absolute/ai';
-import { anthropic } from '@absolutejs/absolute/ai/anthropic';
+import { aiChat } from '@absolutejs/ai';
+import { anthropic } from '@absolutejs/ai/anthropic';
 
 new Elysia().use(
   aiChat({
@@ -82,11 +82,13 @@ export const aiHtmxSseResponse = `\
   <div sse-swap="status" hx-swap="innerHTML"></div>
 </div>`;
 export const aiImportPaths = `\
-import { aiChat } from '@absolutejs/absolute/ai';              // Server plugin
-import { anthropic } from '@absolutejs/absolute/ai/anthropic';  // Provider
-import { useAIStream } from '@absolutejs/absolute/react/ai';    // Client hook`;
+import { aiChat } from '@absolutejs/ai';              // Server plugin
+import { anthropic } from '@absolutejs/ai/anthropic';  // Provider
+import { useAIStream } from '@absolutejs/ai/react';    // Client hook`;
+export const aiInstall = `\
+bun add @absolutejs/ai elysia`;
 export const aiOverviewClientReact = `\
-import { useAIStream } from '@absolutejs/absolute/react/ai';
+import { useAIStream } from '@absolutejs/ai/react';
 
 export const Chat = () => {
   const { messages, send, cancel, isStreaming } = useAIStream('/chat');
@@ -104,8 +106,8 @@ export const Chat = () => {
 export const aiOverviewQuickStart = `\
 import { Elysia } from 'elysia';
 import { prepare, networking } from '@absolutejs/absolute';
-import { aiChat } from '@absolutejs/absolute/ai';
-import { anthropic } from '@absolutejs/absolute/ai/anthropic';
+import { aiChat } from '@absolutejs/ai';
+import { anthropic } from '@absolutejs/ai/anthropic';
 
 const { absolutejs, manifest } = await prepare();
 
@@ -119,8 +121,8 @@ new Elysia()
   )
   .use(networking);`;
 export const aiPluginBasicConfig = `\
-import { aiChat } from '@absolutejs/absolute/ai';
-import { anthropic } from '@absolutejs/absolute/ai/anthropic';
+import { aiChat } from '@absolutejs/ai';
+import { anthropic } from '@absolutejs/ai/anthropic';
 
 new Elysia().use(
   aiChat({
@@ -167,9 +169,9 @@ type AIChatPluginConfig = {
   ) => void;
 };`;
 export const aiPluginFullConfig = `\
-import { aiChat } from '@absolutejs/absolute/ai';
-import { anthropic } from '@absolutejs/absolute/ai/anthropic';
-import { openaiResponses } from '@absolutejs/absolute/ai/openai-responses';
+import { aiChat } from '@absolutejs/ai';
+import { anthropic } from '@absolutejs/ai/anthropic';
+import { openaiResponses } from '@absolutejs/ai/openai-responses';
 
 const getProvider = (name: string) => {
   switch (name) {
@@ -225,7 +227,7 @@ new Elysia().use(
   })
 );`;
 export const aiStoreCustom = `\
-import { aiChat } from '@absolutejs/absolute/ai';
+import { aiChat } from '@absolutejs/ai';
 import type { AIConversationStore } from '@absolutejs/absolute';
 import { Redis } from 'ioredis';
 
@@ -277,7 +279,7 @@ type AIConversationStore = {
   remove: (id: string) => Promise<void>;
 };`;
 export const aiStoreMemory = `\
-import { aiChat, createMemoryStore } from '@absolutejs/absolute/ai';
+import { aiChat, createMemoryStore } from '@absolutejs/ai';
 
 // Default : same as not passing store at all
 new Elysia().use(
@@ -496,8 +498,8 @@ type AIToolDefinition = {
 
 type AIToolMap = Record<string, AIToolDefinition>;`;
 export const aiToolsUsage = `\
-import { aiChat } from '@absolutejs/absolute/ai';
-import { anthropic } from '@absolutejs/absolute/ai/anthropic';
+import { aiChat } from '@absolutejs/ai';
+import { anthropic } from '@absolutejs/ai/anthropic';
 import { tools } from './tools';
 
 new Elysia().use(

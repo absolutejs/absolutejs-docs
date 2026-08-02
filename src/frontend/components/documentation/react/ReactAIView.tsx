@@ -60,7 +60,7 @@ export const ReactAIView = ({
 						The <code>useAIStream</code> hook and{' '}
 						<code>AIStreamProvider</code> connect your React
 						components to the AI streaming WebSocket. Import from{' '}
-						<code>@absolutejs/absolute/react/ai</code>.
+						<code>@absolutejs/ai/react</code>.
 					</p>
 				</animated.div>
 

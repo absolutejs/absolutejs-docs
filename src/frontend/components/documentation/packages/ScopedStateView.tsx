@@ -78,7 +78,7 @@ export const ScopedStateView = ({
 						requests with automatic session handling.
 					</p>
 					<animated.a
-						href="https://github.com/alexkahndev/elysia-scoped-state"
+						href="https://github.com/absolutejs/scoped-state"
 						rel="noopener noreferrer"
 						style={githubButtonStyle(themeSprings)}
 						target="_blank"

@@ -56,7 +56,7 @@ export const SvelteAIView = ({
 						The <code>createAIStream</code> function connects Svelte
 						components to the AI streaming WebSocket using reactive
 						getter properties. Import from{' '}
-						<code>@absolutejs/absolute/svelte/ai</code>.
+						<code>@absolutejs/ai/svelte</code>.
 					</p>
 				</animated.div>
 

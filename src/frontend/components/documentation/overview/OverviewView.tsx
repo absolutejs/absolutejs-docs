@@ -163,7 +163,7 @@ const ecosystemCards: OverviewCardItem[] = [
 	},
 	{
 		body: "Per-user server state that's isolated between visitors. Each user gets their own store keyed to their session: perfect for HTMX apps where the server manages UI state. Supports a preserve option to survive page navigations and a reset to clear state.",
-		title: 'elysia-scoped-state'
+		title: '@absolutejs/scoped-state'
 	},
 	{
 		body: '20+ custom lint rules designed for AbsoluteJS projects. Catches common SSR mistakes like inline prop types, unnecessary divs, deeply nested JSX, and short variable names. Ships with Prettier and Biome support out of the box.',

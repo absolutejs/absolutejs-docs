@@ -56,7 +56,7 @@ export const AngularAIView = ({
 						The <code>AIStreamService</code> injectable connects
 						Angular components to the AI streaming WebSocket using
 						Angular signals. Import from{' '}
-						<code>@absolutejs/absolute/angular/ai</code>.
+						<code>@absolutejs/ai/angular</code>.
 					</p>
 				</animated.div>
 

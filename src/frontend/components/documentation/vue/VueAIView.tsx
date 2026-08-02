@@ -57,8 +57,7 @@ export const VueAIView = ({
 					<p style={paragraphLargeStyle}>
 						The <code>useAIStream</code> composable connects Vue
 						components to the AI streaming WebSocket with reactive
-						refs. Import from{' '}
-						<code>@absolutejs/absolute/vue/ai</code>.
+						refs. Import from <code>@absolutejs/ai/vue</code>.
 					</p>
 				</animated.div>
 

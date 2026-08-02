@@ -15,6 +15,7 @@
 	"author": "Alex Kahn",
 	"scripts": {
 		"catalog:generate": "bun scripts/generateEcosystemCatalog.ts",
+		"check:docs": "bun scripts/checkDocumentationCoverage.ts",
 		"config": "absolute config",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"format": "absolute prettier --write",
