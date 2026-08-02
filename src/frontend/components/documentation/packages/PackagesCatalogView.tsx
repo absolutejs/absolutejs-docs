@@ -8,7 +8,7 @@ import {
 import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { packageCatalog } from '../../../data/documentation/packages/catalog';
 import { ecosystemProjects } from '../../../data/documentation/packages/ecosystem.generated';
-import { ecosystemSubpackageViewId } from '../../../data/documentation/packages/ecosystemViewIds';
+import { packageSubpackageViewId } from '../../../data/documentation/packages/packageRoutes';
 import {
 	h1Style,
 	mainContentStyle,
@@ -174,7 +174,7 @@ const CatalogResult = ({
 					}}
 				>
 					{matchingSubpackages.map((subpackage) => {
-						const view = ecosystemSubpackageViewId(
+						const view = packageSubpackageViewId(
 							project,
 							subpackage
 						);

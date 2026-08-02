@@ -8,11 +8,11 @@ import {
 	EcosystemSubpackage,
 	ecosystemProjects
 } from '../../../data/documentation/packages/ecosystem.generated';
-import { documentationViewByDirectory } from '../../../data/documentation/packages/catalog';
 import {
-	ecosystemProjectViewId,
-	ecosystemSubpackageViewId
-} from '../../../data/documentation/packages/ecosystemViewIds';
+	documentationViewByDirectory,
+	packageProjectViewId,
+	packageSubpackageViewId
+} from '../../../data/documentation/packages/packageRoutes';
 import { createPackageView } from './PackageOverviewTemplate';
 
 const statusForVersion = (version: string | null) => {
@@ -67,7 +67,7 @@ const adapterGroupsFor = (project: EcosystemProject) => {
 			heading: 'Workspace contents',
 			items: project.subpackages.map((subpackage) => ({
 				description: `${subpackage.private ? 'Private workspace project' : 'Public package'} — ${subpackage.description}`,
-				href: `/documentation/${ecosystemSubpackageViewId(project, subpackage)}`,
+				href: `/documentation/${packageSubpackageViewId(project, subpackage)}`,
 				name: subpackage.name,
 				...(subpackage.version ? { version: subpackage.version } : {})
 			}))
@@ -175,7 +175,7 @@ const subpackageLinksFor = (
 			]
 		: []),
 	{
-		href: `/documentation/${ecosystemProjectViewId(project)}`,
+		href: `/documentation/${packageProjectViewId(project)}`,
 		label: `${project.name} overview`
 	}
 ];
@@ -258,14 +258,18 @@ const toSubpackageDocData = (
 	};
 };
 
-export const ecosystemProjectViews = Object.fromEntries(
+export const packageReferenceViews = Object.fromEntries(
 	ecosystemProjects.flatMap((project) => [
-		[
-			ecosystemProjectViewId(project),
-			createPackageView(toPackageDocData(project))
-		],
+		...(documentationViewByDirectory[project.directory]
+			? []
+			: [
+					[
+						packageProjectViewId(project),
+						createPackageView(toPackageDocData(project))
+					]
+				]),
 		...project.subpackages.map((subpackage) => [
-			ecosystemSubpackageViewId(project, subpackage),
+			packageSubpackageViewId(project, subpackage),
 			createPackageView(toSubpackageDocData(project, subpackage))
 		])
 	])

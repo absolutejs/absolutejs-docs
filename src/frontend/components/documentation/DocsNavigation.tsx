@@ -4,6 +4,7 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { ThemeSprings } from '../../../types/springTypes';
 import { isExpandableEntry } from '../../../types/types';
 import { sidebarCategories } from '../../data/sidebarData';
+import { PackageReleaseSnapshot } from './packages/PackageReleaseSnapshot';
 
 type NavItem = {
 	id: string;
@@ -136,61 +137,67 @@ export const DocsNavigation = ({
 	};
 
 	return (
-		<div style={containerStyle}>
-			{prevPage ? (
-				<animated.a
-					href={
-						prevPage.id === 'overview'
-							? '/documentation'
-							: `/documentation/${prevPage.id}`
-					}
-					onClick={(event) => {
-						event.preventDefault();
-						handleClick(prevPage.id);
-					}}
-					style={navButtonStyle(themeSprings, 'prev')}
-				>
-					<animated.span style={directionLabelStyle}>
-						<FaArrowLeft size={12} />
-						Previous
-					</animated.span>
-					<animated.span style={pageLabelStyle(themeSprings)}>
-						{formatLabel(prevPage)}
-					</animated.span>
-				</animated.a>
-			) : (
-				<div style={{ flex: '1 1 40%', minWidth: '160px' }} />
-			)}
-
-			{nextPage ? (
-				<animated.a
-					href={
-						nextPage.id === 'overview'
-							? '/documentation'
-							: `/documentation/${nextPage.id}`
-					}
-					onClick={(event) => {
-						event.preventDefault();
-						handleClick(nextPage.id);
-					}}
-					style={navButtonStyle(themeSprings, 'next')}
-				>
-					<animated.span
-						style={{
-							...directionLabelStyle,
-							justifyContent: 'flex-end'
+		<>
+			<PackageReleaseSnapshot
+				currentPageId={currentPageId}
+				themeSprings={themeSprings}
+			/>
+			<div style={containerStyle}>
+				{prevPage ? (
+					<animated.a
+						href={
+							prevPage.id === 'overview'
+								? '/documentation'
+								: `/documentation/${prevPage.id}`
+						}
+						onClick={(event) => {
+							event.preventDefault();
+							handleClick(prevPage.id);
 						}}
+						style={navButtonStyle(themeSprings, 'prev')}
 					>
-						Next
-						<FaArrowRight size={12} />
-					</animated.span>
-					<animated.span style={pageLabelStyle(themeSprings)}>
-						{formatLabel(nextPage)}
-					</animated.span>
-				</animated.a>
-			) : (
-				<div style={{ flex: '1 1 40%', minWidth: '160px' }} />
-			)}
-		</div>
+						<animated.span style={directionLabelStyle}>
+							<FaArrowLeft size={12} />
+							Previous
+						</animated.span>
+						<animated.span style={pageLabelStyle(themeSprings)}>
+							{formatLabel(prevPage)}
+						</animated.span>
+					</animated.a>
+				) : (
+					<div style={{ flex: '1 1 40%', minWidth: '160px' }} />
+				)}
+
+				{nextPage ? (
+					<animated.a
+						href={
+							nextPage.id === 'overview'
+								? '/documentation'
+								: `/documentation/${nextPage.id}`
+						}
+						onClick={(event) => {
+							event.preventDefault();
+							handleClick(nextPage.id);
+						}}
+						style={navButtonStyle(themeSprings, 'next')}
+					>
+						<animated.span
+							style={{
+								...directionLabelStyle,
+								justifyContent: 'flex-end'
+							}}
+						>
+							Next
+							<FaArrowRight size={12} />
+						</animated.span>
+						<animated.span style={pageLabelStyle(themeSprings)}>
+							{formatLabel(nextPage)}
+						</animated.span>
+					</animated.a>
+				) : (
+					<div style={{ flex: '1 1 40%', minWidth: '160px' }} />
+				)}
+			</div>
+		</>
 	);
 };

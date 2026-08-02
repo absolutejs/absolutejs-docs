@@ -22,12 +22,32 @@ import {
 	telemetryViewEnum
 } from '../../types/typebox';
 import { blog } from '../../shared/blog';
+import { ecosystemProjects } from '../../frontend/data/documentation/packages/ecosystem.generated';
+import {
+	legacyEcosystemProjectViewId,
+	legacyEcosystemSubpackageViewId,
+	packageProjectViewId,
+	packageSubpackageViewId
+} from '../../frontend/data/documentation/packages/packageRoutes';
 
 const whitelistedAdmins =
 	getEnv('ADMIN_SUBS')
 		?.split(',')
 		.map((adminSub) => adminSub.trim()) ?? [];
 const permanentRedirectStatus = 301;
+const notFoundStatus = 404;
+const legacyDocumentationRedirects = new Map<string, string>();
+for (const project of ecosystemProjects) {
+	legacyDocumentationRedirects.set(
+		legacyEcosystemProjectViewId(project),
+		packageProjectViewId(project)
+	);
+	for (const subpackage of project.subpackages)
+		legacyDocumentationRedirects.set(
+			legacyEcosystemSubpackageViewId(project, subpackage),
+			packageSubpackageViewId(project, subpackage)
+		);
+}
 
 export const pagesPlugin = (manifest: Record<string, string>) =>
 	new Elysia()
@@ -165,6 +185,27 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 		)
 		.get('/documentation/overview', ({ redirect }) =>
 			redirect('/documentation', permanentRedirectStatus)
+		)
+		.get(
+			'/documentation/ecosystem-:legacy',
+			({ params: { legacy }, redirect, status }) => {
+				const canonicalView = legacyDocumentationRedirects.get(
+					`ecosystem-${legacy}`
+				);
+				if (!canonicalView)
+					return status(
+						notFoundStatus,
+						'Documentation page not found'
+					);
+
+				return redirect(
+					canonicalView === 'overview'
+						? '/documentation'
+						: `/documentation/${canonicalView}`,
+					permanentRedirectStatus
+				);
+			},
+			{ params: t.Object({ legacy: t.String() }) }
 		)
 		.get(
 			'/documentation/:view?',

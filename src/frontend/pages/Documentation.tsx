@@ -16,7 +16,6 @@ import {
 	documentationMetadataFor,
 	documentationStructuredDataFor
 } from '../data/documentation/documentationMetadata';
-import { packageCatalog } from '../data/documentation/packages/catalog';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
@@ -107,9 +106,6 @@ export const Documentation = ({
 	};
 
 	const ActiveView = docsViews[view];
-	const packageReference = packageCatalog.find(
-		(entry) => entry.guideView === view
-	);
 	const activeDocumentation = (
 		<div
 			style={{
@@ -119,22 +115,6 @@ export const Documentation = ({
 				minHeight: 0
 			}}
 		>
-			{packageReference ? (
-				<a
-					href={`/documentation/${packageReference.view}`}
-					style={{
-						background: 'rgba(99, 102, 241, 0.1)',
-						borderBottom: '1px solid rgba(99, 102, 241, 0.25)',
-						color: 'inherit',
-						fontSize: '0.85rem',
-						padding: '0.6rem 1rem',
-						textAlign: 'center'
-					}}
-				>
-					View current package exports, installation, examples,
-					commands, and repository links
-				</a>
-			) : null}
 			<ActiveView
 				currentPageId={view}
 				isMobileOrTablet={isMobileOrTablet}

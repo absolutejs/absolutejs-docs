@@ -9,9 +9,11 @@ import {
 import { packageCatalog } from '../src/frontend/data/documentation/packages/catalog';
 import { ecosystemProjects } from '../src/frontend/data/documentation/packages/ecosystem.generated';
 import {
-	ecosystemProjectViewId,
-	ecosystemSubpackageViewId
-} from '../src/frontend/data/documentation/packages/ecosystemViewIds';
+	legacyEcosystemProjectViewId,
+	legacyEcosystemSubpackageViewId,
+	packageProjectViewId,
+	packageSubpackageViewId
+} from '../src/frontend/data/documentation/packages/packageRoutes';
 
 const workspaceDirectory = resolve(import.meta.dir, '../..');
 const failures: string[] = [];
@@ -38,7 +40,7 @@ for (const project of ecosystemProjects) {
 	const catalogEntry = packageCatalog.find(
 		(entry) => entry.sourceDirectory === project.directory
 	);
-	const projectView = ecosystemProjectViewId(project);
+	const projectView = packageProjectViewId(project);
 	if (!catalogEntry) {
 		failures.push(`${project.directory}: missing catalog entry.`);
 		continue;
@@ -63,7 +65,7 @@ for (const project of ecosystemProjects) {
 		);
 
 	for (const subpackage of project.subpackages) {
-		const view = ecosystemSubpackageViewId(project, subpackage);
+		const view = packageSubpackageViewId(project, subpackage);
 		if (!(view in docsViews))
 			failures.push(
 				`${subpackage.name}: missing generated subpackage view ${view}.`
@@ -79,6 +81,22 @@ for (const project of ecosystemProjects) {
 				);
 		}
 	}
+}
+
+for (const view of Object.keys(docsViews)) {
+	if (view.startsWith('ecosystem-'))
+		failures.push(`${view}: legacy ecosystem route must not be canonical.`);
+}
+
+for (const project of ecosystemProjects) {
+	if (legacyEcosystemProjectViewId(project) === packageProjectViewId(project))
+		failures.push(`${project.directory}: legacy route did not migrate.`);
+	for (const subpackage of project.subpackages)
+		if (
+			legacyEcosystemSubpackageViewId(project, subpackage) ===
+			packageSubpackageViewId(project, subpackage)
+		)
+			failures.push(`${subpackage.name}: legacy route did not migrate.`);
 }
 
 const forbiddenPublicDocs = [

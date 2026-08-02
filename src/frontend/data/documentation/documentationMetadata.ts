@@ -1,9 +1,9 @@
-import { documentationViewByDirectory } from './packages/catalog';
 import { ecosystemProjects } from './packages/ecosystem.generated';
 import {
-	ecosystemProjectViewId,
-	ecosystemSubpackageViewId
-} from './packages/ecosystemViewIds';
+	documentationViewByDirectory,
+	packageProjectViewId,
+	packageSubpackageViewId
+} from './packages/packageRoutes';
 
 type DocumentationMetadata = {
 	description: string;
@@ -18,7 +18,7 @@ for (const project of ecosystemProjects) {
 		description: `Install ${packageLabel}, inspect its public exports, and use its API with source-backed AbsoluteJS examples.`,
 		title: `${packageLabel} Installation, Exports and API | AbsoluteJS`
 	};
-	metadataByView.set(ecosystemProjectViewId(project), referenceMetadata);
+	metadataByView.set(packageProjectViewId(project), referenceMetadata);
 	const guideView = documentationViewByDirectory[project.directory];
 	if (guideView)
 		metadataByView.set(guideView, {
@@ -27,7 +27,7 @@ for (const project of ecosystemProjects) {
 		});
 
 	for (const subpackage of project.subpackages) {
-		metadataByView.set(ecosystemSubpackageViewId(project, subpackage), {
+		metadataByView.set(packageSubpackageViewId(project, subpackage), {
 			description: `Install ${subpackage.name}, inspect its public exports, and use it within the ${project.name} workspace.`,
 			title: `${subpackage.name} Installation and API | AbsoluteJS`
 		});
@@ -83,14 +83,14 @@ export const documentationStructuredDataFor = (view: string) => {
 
 	const project = ecosystemProjects.find(
 		(candidate) =>
-			ecosystemProjectViewId(candidate) === view ||
+			packageProjectViewId(candidate) === view ||
 			candidate.subpackages.some(
 				(subpackage) =>
-					ecosystemSubpackageViewId(candidate, subpackage) === view
+					packageSubpackageViewId(candidate, subpackage) === view
 			)
 	);
 	if (project) {
-		if (ecosystemProjectViewId(project) === view)
+		if (packageProjectViewId(project) === view)
 			return JSON.stringify({
 				'@context': 'https://schema.org',
 				'@graph': [
@@ -109,8 +109,7 @@ export const documentationStructuredDataFor = (view: string) => {
 			});
 
 		const subpackage = project.subpackages.find(
-			(candidate) =>
-				ecosystemSubpackageViewId(project, candidate) === view
+			(candidate) => packageSubpackageViewId(project, candidate) === view
 		);
 		if (subpackage)
 			return JSON.stringify({

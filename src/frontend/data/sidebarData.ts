@@ -1,4 +1,4 @@
-import { SidebarCategory } from '../../types/types';
+import { SidebarCategory, SidebarEntry, SidebarPage } from '../../types/types';
 import { AnalyzeView } from '../components/documentation/cli/AnalyzeView';
 import { ApiView } from '../components/documentation/cli/ApiView';
 import { CompileView } from '../components/documentation/cli/CompileView';
@@ -54,7 +54,13 @@ import { IsolatedJscBunPositioningView } from '../components/documentation/packa
 import { IsolatedJscHibernationView } from '../components/documentation/packages/IsolatedJscHibernationView';
 import { IsolatedJscProofPackView } from '../components/documentation/packages/IsolatedJscProofPackView';
 import { PackagesCatalogView } from '../components/documentation/packages/PackagesCatalogView';
-import { ecosystemProjectViews } from '../components/documentation/packages/EcosystemProjectOverviewView';
+import { packageReferenceViews } from '../components/documentation/packages/EcosystemProjectOverviewView';
+import { ecosystemProjects } from './documentation/packages/ecosystem.generated';
+import {
+	documentationViewByDirectory,
+	packageProjectViewId,
+	packageSubpackageViewId
+} from './documentation/packages/packageRoutes';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import {
 	VoiceAdapterContractsView,
@@ -475,7 +481,7 @@ export const docsViews = definePortalViews({
 	'vue-islands': VueIslandsView,
 	'vue-overview': VueOverviewView,
 	'vue-spa': VueSpaView,
-	...ecosystemProjectViews
+	...packageReferenceViews
 });
 export const documentationSitemapRoutes = [
 	'/documentation',
@@ -483,6 +489,37 @@ export const documentationSitemapRoutes = [
 		.filter((view) => view !== 'overview')
 		.map((view) => `/documentation/${view}`)
 ];
+
+const packageApiSidebarEntries: SidebarEntry[] =
+	ecosystemProjects.flatMap<SidebarEntry>((project) => {
+		const publicSubpackages = project.subpackages.filter(
+			(subpackage) => !subpackage.private
+		);
+		const hasCuratedGuide = Boolean(
+			documentationViewByDirectory[project.directory]
+		);
+		if (hasCuratedGuide && publicSubpackages.length === 0) return [];
+
+		const overview: SidebarPage = {
+			id: packageProjectViewId(project),
+			label: hasCuratedGuide ? 'Guide' : 'Overview'
+		};
+		if (publicSubpackages.length === 0)
+			return [{ id: overview.id, label: project.name }];
+
+		return [
+			{
+				label: project.name,
+				pages: [
+					overview,
+					...publicSubpackages.map<SidebarPage>((subpackage) => ({
+						id: packageSubpackageViewId(project, subpackage),
+						label: subpackage.name.replace(/^@absolutejs\//, '')
+					}))
+				]
+			}
+		];
+	});
 export const sidebarCategories: SidebarCategory[] = [
 	{
 		entries: [
@@ -1082,5 +1119,9 @@ export const sidebarCategories: SidebarCategory[] = [
 			{ id: 'renown-overview', label: 'Renown', status: 'beta' }
 		],
 		label: 'Dev Tools'
+	},
+	{
+		entries: packageApiSidebarEntries,
+		label: 'Package APIs'
 	}
 ];
