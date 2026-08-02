@@ -7,6 +7,8 @@ import {
 } from '../../../../types/packageDocs';
 import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { packageCatalog } from '../../../data/documentation/packages/catalog';
+import { ecosystemProjects } from '../../../data/documentation/packages/ecosystem.generated';
+import { ecosystemSubpackageViewId } from '../../../data/documentation/packages/ecosystemViewIds';
 import {
 	h1Style,
 	mainContentStyle,
@@ -66,12 +68,18 @@ const catalogBadge = (entry: PackageCatalogEntry) => {
 };
 
 const CatalogCard = ({ entry, onNavigate, themeSprings }: CatalogCardProps) => (
-	<animated.button
-		onClick={() => onNavigate(entry.view)}
+	<animated.a
+		href={`/documentation/${entry.view}`}
+		onClick={(event) => {
+			event.preventDefault();
+			onNavigate(entry.view);
+		}}
 		style={{
 			...featureCardStyle(themeSprings),
+			color: 'inherit',
 			cursor: 'pointer',
-			textAlign: 'left'
+			textAlign: 'left',
+			textDecoration: 'none'
 		}}
 	>
 		<div
@@ -122,8 +130,78 @@ const CatalogCard = ({ entry, onNavigate, themeSprings }: CatalogCardProps) => (
 		>
 			{entry.tagline}
 		</animated.p>
-	</animated.button>
+	</animated.a>
 );
+
+type CatalogResultProps = CatalogCardProps & {
+	query: string;
+};
+
+const CatalogResult = ({
+	entry,
+	onNavigate,
+	query,
+	themeSprings
+}: CatalogResultProps) => {
+	const project = ecosystemProjects.find(
+		(candidate) => candidate.directory === entry.sourceDirectory
+	);
+	const terms = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+	const matchingSubpackages =
+		terms.length === 0
+			? []
+			: (project?.subpackages.filter((subpackage) => {
+					const searchable =
+						`${subpackage.name} ${subpackage.description} ${subpackage.publicExports.join(' ')}`.toLowerCase();
+
+					return terms.every((term) => searchable.includes(term));
+				}) ?? []);
+
+	return (
+		<div>
+			<CatalogCard
+				entry={entry}
+				onNavigate={onNavigate}
+				themeSprings={themeSprings}
+			/>
+			{project && matchingSubpackages.length > 0 ? (
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: '0.35rem',
+						padding: '0.55rem 0.75rem 0'
+					}}
+				>
+					{matchingSubpackages.map((subpackage) => {
+						const view = ecosystemSubpackageViewId(
+							project,
+							subpackage
+						);
+
+						return (
+							<a
+								href={`/documentation/${view}`}
+								key={subpackage.sourcePath}
+								onClick={(event) => {
+									event.preventDefault();
+									onNavigate(view);
+								}}
+								style={{
+									color: '#6366F1',
+									fontFamily: 'monospace',
+									fontSize: '0.78rem'
+								}}
+							>
+								{subpackage.name}
+							</a>
+						);
+					})}
+				</div>
+			) : null}
+		</div>
+	);
+};
 
 type CatalogSearchProps = {
 	onQueryChange: (query: string) => void;
@@ -239,10 +317,11 @@ export const PackagesCatalogView = ({
 								}}
 							>
 								{entries.map((entry) => (
-									<CatalogCard
+									<CatalogResult
 										entry={entry}
 										key={entry.sourceDirectory}
 										onNavigate={onNavigate}
+										query={query}
 										themeSprings={themeSprings}
 									/>
 								))}

@@ -13,18 +13,23 @@ type DocumentationMetadata = {
 const metadataByView = new Map<string, DocumentationMetadata>();
 
 for (const project of ecosystemProjects) {
-	const metadata: DocumentationMetadata = {
-		description: project.description,
-		title: `${project.name} | AbsoluteJS`
+	const packageLabel = project.packageName ?? project.name;
+	const referenceMetadata: DocumentationMetadata = {
+		description: `Install ${packageLabel}, inspect its public exports, and use its API with source-backed AbsoluteJS examples.`,
+		title: `${packageLabel} Installation, Exports and API | AbsoluteJS`
 	};
-	metadataByView.set(ecosystemProjectViewId(project), metadata);
+	metadataByView.set(ecosystemProjectViewId(project), referenceMetadata);
 	const guideView = documentationViewByDirectory[project.directory];
-	if (guideView) metadataByView.set(guideView, metadata);
+	if (guideView)
+		metadataByView.set(guideView, {
+			description: project.description,
+			title: `${project.name} Guide | AbsoluteJS`
+		});
 
 	for (const subpackage of project.subpackages) {
 		metadataByView.set(ecosystemSubpackageViewId(project, subpackage), {
-			description: subpackage.description,
-			title: `${subpackage.name} | AbsoluteJS`
+			description: `Install ${subpackage.name}, inspect its public exports, and use it within the ${project.name} workspace.`,
+			title: `${subpackage.name} Installation and API | AbsoluteJS`
 		});
 	}
 }
@@ -47,3 +52,96 @@ export const documentationMetadataFor = (view: string) =>
 		description: `AbsoluteJS documentation for ${titleCase(view)}.`,
 		title: `${titleCase(view)} | AbsoluteJS`
 	};
+
+export const documentationStructuredDataFor = (view: string) => {
+	const metadata = documentationMetadataFor(view);
+	const path = view === 'overview' ? '' : `/${view}`;
+	const url = `https://absolutejs.com/documentation${path}`;
+	const breadcrumb: Record<string, unknown> = {
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				item: 'https://absolutejs.com/',
+				name: 'AbsoluteJS',
+				position: 1
+			},
+			{
+				'@type': 'ListItem',
+				item: 'https://absolutejs.com/documentation',
+				name: 'Documentation',
+				position: 2
+			},
+			{
+				'@type': 'ListItem',
+				item: url,
+				name: metadata.title.replace(/ \| AbsoluteJS$/, ''),
+				position: 3
+			}
+		]
+	};
+
+	const project = ecosystemProjects.find(
+		(candidate) =>
+			ecosystemProjectViewId(candidate) === view ||
+			candidate.subpackages.some(
+				(subpackage) =>
+					ecosystemSubpackageViewId(candidate, subpackage) === view
+			)
+	);
+	if (project) {
+		if (ecosystemProjectViewId(project) === view)
+			return JSON.stringify({
+				'@context': 'https://schema.org',
+				'@graph': [
+					breadcrumb,
+					{
+						'@type': 'SoftwareSourceCode',
+						codeRepository: project.repository ?? undefined,
+						description: project.description,
+						name: project.packageName ?? project.name,
+						programmingLanguage: 'TypeScript',
+						runtimePlatform: 'Bun',
+						url,
+						version: project.version ?? undefined
+					}
+				]
+			});
+
+		const subpackage = project.subpackages.find(
+			(candidate) =>
+				ecosystemSubpackageViewId(project, candidate) === view
+		);
+		if (subpackage)
+			return JSON.stringify({
+				'@context': 'https://schema.org',
+				'@graph': [
+					breadcrumb,
+					{
+						'@type': 'SoftwareSourceCode',
+						codeRepository: project.repository ?? undefined,
+						description: subpackage.description,
+						name: subpackage.name,
+						programmingLanguage: 'TypeScript',
+						runtimePlatform: 'Bun',
+						url,
+						version: subpackage.version ?? undefined
+					}
+				]
+			});
+	}
+
+	return JSON.stringify({
+		'@context': 'https://schema.org',
+		'@graph': [
+			breadcrumb,
+			{
+				'@type': 'TechArticle',
+				description: metadata.description,
+				headline: metadata.title.replace(/ \| AbsoluteJS$/, ''),
+				inLanguage: 'en-US',
+				url
+			}
+		]
+	});
+};

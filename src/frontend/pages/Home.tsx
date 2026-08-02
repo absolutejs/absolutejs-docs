@@ -19,12 +19,35 @@ type HomeProps = {
 	theme: ThemeMode | undefined;
 };
 
+const homeStructuredData = JSON.stringify([
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		logo: 'https://absolutejs.com/assets/png/absolutejs-logo.png',
+		name: 'AbsoluteJS',
+		url: 'https://absolutejs.com/'
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		description:
+			'Full-stack TypeScript framework and package ecosystem for Bun and Elysia.',
+		name: 'AbsoluteJS',
+		url: 'https://absolutejs.com/'
+	}
+]);
+
 export const Home = ({ user, theme }: HomeProps) => {
 	const [themeSprings, setTheme] = useTheme(theme);
 
 	return (
 		<html lang="en" style={htmlDefault}>
-			<Head />
+			<Head
+				canonicalUrl="https://absolutejs.com/"
+				description="Build full-stack TypeScript applications on Bun and Elysia with server rendering for React, Vue, Svelte, Angular, HTML, and HTMX."
+				jsonLd={homeStructuredData}
+				title="AbsoluteJS | Full-Stack TypeScript Framework for Bun"
+			/>
 			<animated.body
 				style={{ ...bodyDefault(themeSprings), position: 'relative' }}
 			>

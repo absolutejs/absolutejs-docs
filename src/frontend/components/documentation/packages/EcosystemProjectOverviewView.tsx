@@ -212,34 +212,51 @@ const subpackageAdapterGroupsFor = (subpackage: EcosystemSubpackage) => {
 const toSubpackageDocData = (
 	project: EcosystemProject,
 	subpackage: EcosystemSubpackage
-): PackageDocData => ({
-	adapterGroups: subpackageAdapterGroupsFor(subpackage),
-	category: project.category,
-	description: subpackage.description,
-	features: subpackage.readmeTopics.map((topic) => ({
-		description: topic.description,
-		title: topic.title
-	})),
-	installCommand: subpackage.private
-		? `# Private workspace project: ~/abs/${project.directory}/${subpackage.sourcePath}`
-		: `bun add ${subpackage.name}`,
-	links: subpackageLinksFor(project, subpackage),
-	name: subpackage.name,
-	notes: subpackage.private
-		? [
-				{
-					body: 'This project is maintained inside the workspace and is not published as a standalone npm package.',
-					title: 'Private workspace project',
-					variant: 'info'
-				}
-			]
-		: undefined,
-	npmName: subpackage.name,
-	samples: subpackage.readmeSamples,
-	status: statusForVersion(subpackage.version),
-	tagline: subpackage.description,
-	version: subpackage.version ?? 'workspace'
-});
+): PackageDocData => {
+	const isNativeArtifact = subpackage.name.startsWith('@absolutejs/native-');
+	let installCommand = `bun add ${subpackage.name}`;
+	if (subpackage.private)
+		installCommand = `# Private workspace project: ~/abs/${project.directory}/${subpackage.sourcePath}`;
+	if (isNativeArtifact)
+		installCommand =
+			'# Installed automatically as an optional dependency of @absolutejs/absolute';
+	let notes: PackageDocData['notes'];
+	if (subpackage.private)
+		notes = [
+			{
+				body: 'This project is maintained inside the workspace and is not published as a standalone npm package.',
+				title: 'Private workspace project',
+				variant: 'info'
+			}
+		];
+	if (isNativeArtifact)
+		notes = [
+			{
+				body: 'Do not install this platform-specific binary directly. The @absolutejs/absolute package selects the correct optional dependency for the current operating system and CPU architecture.',
+				title: 'Automatically selected native artifact',
+				variant: 'info'
+			}
+		];
+
+	return {
+		adapterGroups: subpackageAdapterGroupsFor(subpackage),
+		category: project.category,
+		description: subpackage.description,
+		features: subpackage.readmeTopics.map((topic) => ({
+			description: topic.description,
+			title: topic.title
+		})),
+		installCommand,
+		links: subpackageLinksFor(project, subpackage),
+		name: subpackage.name,
+		notes,
+		npmName: subpackage.name,
+		samples: subpackage.readmeSamples,
+		status: statusForVersion(subpackage.version),
+		tagline: subpackage.description,
+		version: subpackage.version ?? 'workspace'
+	};
+};
 
 export const ecosystemProjectViews = Object.fromEntries(
 	ecosystemProjects.flatMap((project) => [

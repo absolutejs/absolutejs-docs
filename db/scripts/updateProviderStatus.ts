@@ -8,7 +8,7 @@ import {
 import { PROVIDER_STATUSES } from '../../src/constants';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { relations, schema, type Provider } from '../../db/schema';
+import { relations, type Provider } from '../../db/schema';
 import { updateProviderStatus } from '../../src/backend/handlers/providerHandlers';
 import { createInterface } from 'node:readline/promises';
 import { env, exit, stdin, stderr, stdout } from 'node:process';

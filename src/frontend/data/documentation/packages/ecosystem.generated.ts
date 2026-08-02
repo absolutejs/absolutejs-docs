@@ -91,19 +91,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { createA2aHandler, createPostgresA2aTaskStore } from "@absolutejs/a2a";\n\nconst a2a = createA2aHandler({\n  path: "/a2a",\n  agentCard: {\n    name: "Support Agent",\n    description: "Resolves customer support cases.",\n    version: "1.0.0",\n    supportedInterfaces: [\n      {\n        protocolBinding: "JSONRPC",\n        protocolVersion: "1.0",\n        url: "https://example.com/a2a",\n      },\n    ],\n    capabilities: {},\n    defaultInputModes: ["text/plain"],\n    defaultOutputModes: ["text/plain"],\n    skills: [],\n  },\n  authorize: verifyA2aBearer,\n  taskStore: createPostgresA2aTaskStore({ client }),\n  agency: { agency },\n  sendMessage: async ({ message }) => ({\n    task: await startSupportTask(message),\n  }),\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Security boundaries',
 				language: 'typescript'
 			},
 			{
 				code: 'import { createMemoryA2aPushNotificationConfigStore } from "@absolutejs/a2a";\n\nconst a2a = createA2aHandler({\n  // ...the required configuration above\n  pushNotifications: {\n    store: createMemoryA2aPushNotificationConfigStore(),\n  },\n  extendedAgentCard: authenticatedCard,\n  sendStreamingMessage: async function* (request, context) {\n    yield* runAgentStream(request, context);\n  },\n  subscribeToTask: async function* (task, context) {\n    yield* subscribeToAgentTask(task, context);\n  },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Optional protocol capabilities',
 				language: 'typescript'
 			},
 			{
 				code: 'const taskStore = createPostgresA2aTaskStore({ client });\n\nconst authorized = {\n  actor,\n  authorizationKey,\n  caller,\n  ok: true as const,\n  taskLabels: { clientId: actor.agentId, tenantId: tenant.id },\n};\n\nconst posture = await taskStore.listForOperator({\n  labels: { tenantId: tenant.id },\n  pageSize: 25,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Operator posture',
 				language: 'typescript'
 			}
 		],
@@ -250,37 +250,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/absolute',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'bash'
 			},
 			{
 				code: "// example/server.ts\nimport { staticPlugin } from '@elysiajs/static';\nimport { Elysia } from 'elysia';\nimport { file } from 'bun';\nimport { build } from 'absolutejs/core/build';\nimport {\n\thandleHTMLPageRequest,\n\thandleSveltePageRequest\n} from 'absolutejs/core/pageHandlers';\nimport { handleReactPageRequest } from 'absolutejs/react';\n\nimport { ReactExample } from './react/pages/ReactExample';\nimport SvelteExample from './svelte/pages/SvelteExample.svelte';\nimport { networkingPlugin } from 'absolutejs';\n\nconst manifest = await build({\n\tassetsDirectory: 'example/assets',\n\tbuildDirectory: 'example/build',\n\thtmlDirectory: 'example/html',\n\thtmxDirectory: 'example/htmx',\n\treactDirectory: 'example/react',\n\tsvelteDirectory: 'example/svelte'\n});\n\nif (!manifest) throw new Error('Manifest generation failed');\n\nlet counter = 0;\n\nexport const server = new Elysia()\n\t.use(staticPlugin({ assets: './example/build', prefix: '' }))\n\n\t// HTML\n\t.get('/', () =>\n\t\thandleHTMLPageRequest('./example/build/html/pages/HTMLExample.html')\n\t)\n\n\t// React\n\t.get('/react', () =>\n\t\thandleReactPageRequest(ReactExample, manifest['ReactExampleIndex'], {\n\t\t\ttest: 123\n\t\t})\n\t)\n\n\t// Svelte\n\t.get('/svelte', () =>\n\t\thandleSveltePageRequest(SvelteExample, manifest, { test: 456 })\n\t)\n\n\t// HTMX demo\n\t.get('/htmx', () => file('./example/build/htmx/HtmxHome.html'))\n\t.get('/htmx/increment', () => new Response(String(++counter)))\n\n\t.use(networkingPlugin)\n\t.on('error', (error) => {\n\t\tconst { request } = error;\n\t\tconsole.error(\n\t\t\t`Server error on ${request.method} ${request.url}: ${error.message}`\n\t\t);\n\t});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Quick Start',
 				language: 'typescript'
 			},
 			{
 				code: 'absolute prepare src/server.ts --outdir build\nabsolute start src/server.ts --outdir build --prebuilt',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Immutable production images',
 				language: 'bash'
 			},
 			{
 				code: "export default defineConfig({\n\tbuildDirectory: 'build',\n\timages: { cacheDirectory: '/tmp/absolutejs-image-cache' }\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Immutable production images 2',
 				language: 'typescript'
 			},
 			{
 				code: '/usr/bin/time -v bun run tsc --noEmit --incremental false',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Elysia composition contract',
 				language: 'bash'
 			},
 			{
 				code: "await build({\n\treactDirectory: 'src/react',\n\tsvelteDirectory: 'src/svelte',\n\thtmlDirectory: 'src/html',\n\thtmxDirectory: 'src/htmx',\n\tassetsDirectory: 'public/assets'\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Configuration Philosophy',
 				language: 'typescript'
 			}
 		],
@@ -422,7 +422,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'code --install-extension /home/alexkahn/abs/absolutejs-vscode-extension/absolutejs-vscode-0.0.8.vsix',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'bash'
 			}
 		],
@@ -435,11 +435,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				description: 'Install the packaged .vsix file from VS Code:',
 				title: 'Install'
-			},
-			{
-				description:
-					'What it adds is documented in the repository README.',
-				title: 'What it adds'
 			},
 			{
 				description:
@@ -493,7 +488,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import {\n  authorizeSiteAdmin,\n  capabilitiesForRole,\n  navigationForCapabilities,\n} from "@absolutejs/admin";\n\nauthorizeSiteAdmin("security", "site.security.respond");\n\nconst navigation = navigationForCapabilities(capabilitiesForRole("developer"));',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Roles',
 				language: 'typescript'
 			}
 		],
@@ -562,13 +557,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'const delegations = createAgentDelegationAuthority({\n  audience: "https://app.example",\n  store: createMemoryAgentDelegationStore(), // use PostgreSQL in production\n});\n\nconst grant = await delegations.issue({\n  audience: "https://app.example",\n  issuerAgentId: "user-agent",\n  subjectAgentId: "calendar-agent",\n  userId: "user-1",\n  scopes: ["calendar.create"],\n  effects: ["write", "external-network"],\n  resourceTypes: ["calendar"],\n  expiresAt: Date.now() + 3_600_000,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Handoffs, simulation, and telemetry',
 				language: 'typescript'
 			},
 			{
 				code: 'const store = createPostgresAgencyStore({ client: sqlClient });\nconst controlStore = createPostgresAgentControlStore({ client: sqlClient });\nconst replayStore = createPostgresHandoffReplayStore({ client: sqlClient });',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'PostgreSQL production state',
 				language: 'typescript'
 			}
 		],
@@ -714,7 +709,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun install\nbun run typecheck\nbun run test\nbun run build',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Development',
 				language: 'sh'
 			}
 		],
@@ -723,10 +718,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Independently published modules for the @absolutejs/agent stack. This repository is their source monorepo; npm package names and independent versions remain unchanged.',
 				title: 'Overview'
-			},
-			{
-				description: 'Packages is documented in the repository README.',
-				title: 'Packages'
 			},
 			{
 				description:
@@ -789,7 +780,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'fetch("https://api.example.com.evil.test")\n  -> "Unable to connect. Is the computer able to access the url?"\nfetch("https://169.254.169.254/latest")\n  -> "The operation timed out."',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Rejections must name their control',
 						language: 'text'
 					}
 				],
@@ -1297,13 +1288,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: '{\n  "mcpServers": {\n    "absolute-agents": {\n      "command": "npx",\n      "args": ["-y", "@absolutejs/agents-mcp"]\n    }\n  }\n}',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Run it',
 				language: 'json'
 			},
 			{
 				code: 'import { AgentRegistryClient, createAgentsMcpServer } from "@absolutejs/agents-mcp";\n\nconst registry = new AgentRegistryClient();\nconst results = await registry.search({ capability: "calendar", interfaceType: "a2a" });\nconst { server } = createAgentsMcpServer({ client: registry });',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Library use',
 				language: 'typescript'
 			}
 		],
@@ -1382,7 +1373,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { createConversationTurnQueue } from "@absolutejs/ai/client";\n\nconst queue = createConversationTurnQueue({\n  execute: async (turn, { signal }) => runTurn(turn, signal),\n});\n\nqueue.enqueue({ content: "First" });\nqueue.enqueue({ content: "Send this after the first reply" });',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Conversation turn queues and branches',
 				language: 'typescript'
 			}
 		],
@@ -1445,7 +1436,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import {\n  aggregateAnalytics,\n  defineAnalyticsSchema,\n} from "@absolutejs/analytics";\n\nconst schema = defineAnalyticsSchema({\n  name: "route-performance",\n  dimensions: ["route", "release"],\n  dimensionNormalizers: { route: normalizeRouteTemplate },\n  measures: ["durationMs"],\n  minimumCohortSize: 10,\n});\n\nconst snapshot = aggregateAnalytics(schema, observations, {\n  groupBy: ["route", "release"],\n  quantiles: [0.5, 0.75, 0.95, 0.99],\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Aggregate analytics',
 				language: 'typescript'
 			}
 		],
@@ -1517,7 +1508,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { discoverArazzo, executeArazzoWorkflow } from "@absolutejs/arazzo";\n\nconst document = await discoverArazzo(\n  "https://api.example/.well-known/workflows.arazzo.yaml",\n);\n\nconst result = await executeArazzoWorkflow(document, "provisionCustomer", {\n  inputs: { email: "customer@example.com" },\n  adapter: {\n    authorize: async (resolvedAction) => agencyDecisionFor(resolvedAction),\n    executeOperation: async (resolvedAction) =>\n      openApiAdapter.execute(resolvedAction),\n  },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Discovery and execution',
 				language: 'typescript'
 			}
 		],
@@ -1596,37 +1587,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { Type } from "@sinclair/typebox";\nimport {\n  createArtifactService,\n  createMemoryArtifactAssetStore,\n  createMemoryArtifactStore,\n  defineArtifactRegistry,\n} from "@absolutejs/artifacts";\n\nconst registry = defineArtifactRegistry({\n  page: {\n    capabilities: ["archive", "edit", "preview", "publish"],\n    content: Type.Object({\n      blocks: Type.Array(\n        Type.Union([\n          Type.Object({ heading: Type.String(), type: Type.Literal("hero") }),\n          Type.Object({ body: Type.String(), type: Type.Literal("text") }),\n        ]),\n      ),\n      theme: Type.Union([Type.Literal("dark"), Type.Literal("light")]),\n    }),\n    label: "Page",\n    schemaVersion: 1,\n  },\n});\n\nconst artifacts = createArtifactService({\n  assetStore: createMemoryArtifactAssetStore(),\n  registry,\n  store: createMemoryArtifactStore(),\n});\n\nconst page = await artifacts.create("owner-123", {\n  content: {\n    blocks: [{ heading: "A real page", type: "hero" }],\n    theme: "light",\n  },\n  createdBy: "agent",\n  kind: "page",\n  provenance: { model: "your-model", tool: "create_page" },\n  title: "Launch page",\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Define kinds once',
 				language: 'typescript'
 			},
 			{
 				code: 'const history = await artifacts.listRevisions("owner-123", page.id);\nconst restored = await artifacts.restore("owner-123", page.id, 1);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Define kinds once 2',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  artifactDrizzleSchema,\n  createDrizzleArtifactStore,\n} from "@absolutejs/artifacts/drizzle";\n\nconst store = createDrizzleArtifactStore({ db });',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Production persistence',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  defineArtifactRegistry,\n  standardArtifactDefinitions,\n} from "@absolutejs/artifacts";\n\nconst registry = defineArtifactRegistry({\n  ...standardArtifactDefinitions,\n  page: myPageDefinition,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'File-backed artifact kinds',
 				language: 'typescript'
 			},
 			{
 				code: 'const report = await artifacts.create("owner-123", {\n  content: { summary: "Quarterly results" },\n  createdBy: "agent",\n  kind: "document",\n  title: "Q3 report",\n});\n\nawait artifacts.attach("owner-123", report.id, {\n  data: pdfBytes,\n  mediaType: "application/pdf",\n  name: "q3-report.pdf",\n  role: "primary",\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'File-backed artifact kinds 2',
 				language: 'typescript'
 			},
 			{
 				code: 'const report = await artifacts.createBundle("owner-123", {\n  assets: [pdfOutput, docxOutput, thumbnailOutput],\n  content: { summary: "Quarterly results" },\n  createdBy: "agent",\n  kind: "document",\n  provenance: {\n    lineage: [{ relation: "generated_from", sourceId: "rag-document-123" }],\n    tool: "quarterly_report_generator",\n  },\n  title: "Q3 report",\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'File-backed artifact kinds 3',
 				language: 'typescript'
 			}
 		],
@@ -1731,13 +1722,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import {\n  createImagePublicationCommands,\n  githubWorkflowIdentityFromEnvironment,\n} from "@absolutejs/attest";\n\nconst identity = githubWorkflowIdentityFromEnvironment(process.env);\nconst commands = createImagePublicationCommands({\n  identity,\n  imageReference:\n    "ghcr.io/acme/api@sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",\n  provenancePath: "evidence/provenance.json",\n  sbomPath: "evidence/sbom.spdx.json",\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'GitHub Actions identity',
 				language: 'typescript'
 			},
 			{
 				code: 'absolute-attest provenance evidence/provenance.json\nabsolute-attest publish-image \\\n  "$IMAGE_NAME@$IMAGE_DIGEST" \\\n  evidence/provenance.json \\\n  evidence/sbom.spdx.json \\\n  evidence/attestations.json\nabsolute-attest sign-blobs \\\n  release/release.json \\\n  release/images.env \\\n  release/sha256sums.txt\nabsolute-attest verify-blobs \\\n  release/release.json \\\n  release/images.env \\\n  release/sha256sums.txt\nabsolute-attest verify-image \\\n  "$IMAGE_NAME@$IMAGE_DIGEST"',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'CLI',
 				language: 'sh'
 			}
 		],
@@ -1803,19 +1794,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/audience',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'import type { AudienceContext, GenerateObject } from "@absolutejs/audience";\nimport { meteredGenerateObjectAI } from "./usage/meteredAI";\nimport { aiProvider } from "./integrations/aiProvider";\nimport { embedTexts } from "./integrations/ragStore";\n\nexport const audienceCtx = (userSub?: string | null): AudienceContext => ({\n  embed: (texts) => embedTexts(texts, "passage"),\n  generateObject: ((req) =>\n    meteredGenerateObjectAI({ ...req, provider: aiProvider, userSub })) as GenerateObject,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Wiring',
 				language: 'typescript'
 			},
 			{
 				code: 'import { profileAffinity, affinityOverlap } from "@absolutejs/audience";\n\nconst me = await profileAffinity({ name: "Me", signals: { niche, offer } }, audienceCtx());\nconst them = await profileAffinity({ name: company, signals: { summary, industry } }, audienceCtx());\n\nconst { score, sharedTopics, rationale } = affinityOverlap(me, them);\n// score ∈ [0,1] — a *measured* overlap to use wherever you\'d otherwise\n// have an LLM guess (e.g. a Trust & Fit "audience overlap" dimension).',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Measuring audience overlap',
 				language: 'typescript'
 			}
 		],
@@ -1873,19 +1864,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/audience-audiense @absolutejs/audience',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'import { audienseSource } from "@absolutejs/audience-audiense";\n\nconst audience = audienseSource({\n  clientId: process.env.AUDIENSE_CLIENT_ID!,\n  clientSecret: process.env.AUDIENSE_CLIENT_SECRET!,\n  defaultBaselineId: process.env.AUDIENSE_BASELINE_ID, // baseline to compare affinities against\n});\n\nconst reports = await audience.listAudiences?.();\nconst profile = await audience.getAudience?.(reports![0]);   // size, segments, demographics, affinities\nconst overlap = await audience.overlap?.(reportA, reportB);  // { score, sharedAffinities, method }',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Use',
 				language: 'typescript'
 			},
 			{
 				code: 'const score = audience.overlap\n  ? (await audience.overlap(a, b)).score   // measured, from Audiense\n  : affinityOverlap(profA, profB).score;   // derived fallback (@absolutejs/audience)',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Use 2',
 				language: 'typescript'
 			}
 		],
@@ -1909,10 +1900,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Client-credentials OAuth: POST {baseUrl}/login/token with Authorization: Basic base64(clientId:clientSecret) and granttype=clientcredentials. The returned bearer token is cached until just before it expires. Get credentials from your Audiense account (or your Audiense data-partnership contact).',
 				title: 'Auth'
-			},
-			{
-				description: 'Config is documented in the repository README.',
-				title: 'Config'
 			},
 			{
 				description:
@@ -1971,37 +1958,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/audit',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: "import {\n  createAudit,\n  memorySink,\n  consoleSink,\n  withIntegrity,\n  verifyChain,\n  recordRuntimeTransition,\n  recordQueueError,\n  recordSecretRotation,\n  recordSyncActivity,\n} from '@absolutejs/audit';\n\n// One sink to hold a tail in memory, one to ship JSON lines to your\n// existing log pipeline.\nconst audit = createAudit({\n  sinks: [\n    withIntegrity(memorySink({ max: 10_000 }), { secret: process.env.AUDIT_SECRET }),\n    consoleSink(),\n  ],\n});\n\n// Live-wire the substrate packages' lifecycle hooks.\nconst runtime = createRuntime({\n  onTransition: recordRuntimeTransition(audit),\n  // ...\n});\nconst worker = createQueueWorker({\n  onError: recordQueueError(audit),\n  // ...\n});\nbroker.onRotate('STRIPE_KEY', recordSecretRotation(audit));\nengine.onActivity(recordSyncActivity(audit));\n\n// Or emit directly for anything not covered by a helper.\nawait audit.append({\n  kind: 'billing.invoice.created',\n  actor: 'system',\n  target: invoice.id,\n  metadata: { amountCents: invoice.amountCents },\n});\n\n// Forensics later: detect any modification / removal / reordering.\nconst events = await sink.list?.({ since: someTimestamp });\nconst result = await verifyChain(events, process.env.AUDIT_SECRET);\nif (!result.ok) console.error(`Chain broken at index ${result.brokenAt}`);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'The 30-second tour',
 				language: 'typescript'
 			},
 			{
 				code: 'type AuditEvent = {\n  at: number;\n  kind: string;             // open: "auth.login", "sync.insert", "runtime.exit", ...\n  actor?: string;           // userId, system component, etc.\n  target?: string;          // resourceId, tenantId, table name, etc.\n  metadata?: Record<string, unknown>;\n};',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Open-ended event shape',
 				language: 'typescript'
 			},
 			{
 				code: 'type AuditSink = {\n  append: (event: AuditEvent) => Promise<void> | void;\n  list?: (filter?: AuditEventFilter) => Promise<AuditEvent[]> | AuditEvent[];\n  prune?: (before: number) => Promise<number> | number;\n  flush?: () => Promise<void> | void;\n  close?: () => Promise<void> | void;\n  readonly name?: string;\n};',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Sinks are pluggable + composable',
 				language: 'typescript'
 			},
 			{
 				code: "const sink = withIntegrity(memorySink(), { secret: 'shared-key' });\n// Every appended event carries metadata.__integrity = { hash, previousHash, writerId }.\n\n// Later:\nconst events = await sink.list?.();\nconst result = await verifyChain(events, 'shared-key');\n// { ok: true } or { ok: false, brokenAt: <index> }",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Hash-chain integrity is a decorator',
 				language: 'typescript'
 			},
 			{
 				code: 'audit.metrics();\n// {\n//   appended: 1234,     // successful appends (all sinks succeeded)\n//   appendErrors: 2,    // appends where at least one sink threw\n//   sinkErrors: { memory: 0, console: 0, postgres: 2 }\n// }',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Metrics',
 				language: 'typescript'
 			}
 		],
@@ -2019,10 +2006,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					"import { createAudit, memorySink, consoleSink, withIntegrity, verifyChain, recordRuntimeTransition, recordQueueError, recordSecretRotation, recordSyncActivity, } from '@absolutejs/audit';",
 				title: 'The 30-second tour'
-			},
-			{
-				description: 'Design is documented in the repository README.',
-				title: 'Design'
 			}
 		],
 		repository: 'https://github.com/absolutejs/audit',
@@ -2044,7 +2027,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/audit @absolutejs/audit-elysia @absolutejs/audit-postgres',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Choose an adapter',
 				language: 'sh'
 			}
 		],
@@ -2053,10 +2036,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Production integrations for @absolutejs/audit. Install only the adapters your application needs; every package implements the core audit contracts without coupling the application to a storage or web framework.',
 				title: 'Overview'
-			},
-			{
-				description: 'Packages is documented in the repository README.',
-				title: 'Packages'
 			},
 			{
 				description:
@@ -2105,42 +2084,42 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/audit @absolutejs/audit-elysia elysia',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: "import { Elysia } from 'elysia';\nimport { createAudit, memorySink, withIntegrity } from '@absolutejs/audit';\nimport { auditElysia } from '@absolutejs/audit-elysia';\n\nconst audit = createAudit({\n  sinks: [withIntegrity(memorySink(), { secret: process.env.AUDIT_SECRET })],\n});\n\nnew Elysia()\n  .use(auditElysia({\n    audit,\n    actor: (ctx) => ctx.request.headers.get('x-user-id') ?? undefined,\n  }))\n  .get('/', () => 'ok')\n  .get('/admin', () => 'secret')\n  .listen(3000);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: "{\n  at: 1748623380000,\n  kind: 'http.request.ok',           // .ok | .client_error | .error\n  actor: 'user-42',                  // from your `actor` resolver (optional)\n  target: 'GET /admin',\n  metadata: {\n    requestId: 'a4f9...',\n    durationMs: 12,\n  }\n}",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Usage 2',
 						language: 'typescript'
 					},
 					{
 						code: "auditElysia({\n  audit,                       // required — the Audit handle\n  actor?: (ctx) => string | undefined | Promise<...>,\n  exclude?: ({ request }) => boolean | Promise<boolean>,\n  redact?: (req) => Record<string, unknown> | undefined,\n  correlateOtelTraceId?: boolean,\n  kind?: string,               // default 'http.request'\n  requestIdHeader?: string | null, // default 'x-request-id'\n});",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'API',
 						language: 'typescript'
 					},
 					{
 						code: "auditElysia({\n  audit,\n  exclude: ({ request }) =>\n    ['/healthz', '/readyz', '/metrics'].includes(new URL(request.url).pathname),\n});",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'API 2',
 						language: 'typescript'
 					},
 					{
 						code: "redact: (req) => ({\n  durationMs: req.durationMs,\n  userAgent: req.headers['user-agent'],\n  // omit anything you don't want logged\n})",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading: 'redact',
 						language: 'typescript'
 					}
 				],
@@ -2222,42 +2201,42 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/audit @absolutejs/audit-postgres\nbun add postgres        # OR\nbun add @neondatabase/serverless',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'export { auditEvents } from "@absolutejs/audit-postgres";',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Drizzle',
 						language: 'typescript'
 					},
 					{
 						code: 'import { createAudit, withIntegrity } from "@absolutejs/audit";\nimport { createDrizzleAuditSink } from "@absolutejs/audit-postgres";\n\nconst audit = createAudit({\n  sinks: [\n    withIntegrity(createDrizzleAuditSink({ db }), {\n      secret: process.env.AUDIT_SECRET,\n      writerId: "shard-A",\n    }),\n  ],\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Drizzle 2',
 						language: 'typescript'
 					},
 					{
 						code: 'export { auditEventsBunSql as auditEvents } from "@absolutejs/audit-postgres";\n\nimport { createBunSqlDrizzleAuditSink } from "@absolutejs/audit-postgres";\n\nconst sink = createBunSqlDrizzleAuditSink({ db });',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Drizzle 3',
 						language: 'typescript'
 					},
 					{
 						code: 'import { runAuditPostgresMigrations } from "@absolutejs/audit-postgres";\n\nawait runAuditPostgresMigrations({\n  client: {\n    query: (text) => sql.unsafe(text),\n  },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Drizzle 4',
 						language: 'typescript'
 					},
 					{
 						code: 'import postgres from "postgres";\nimport { createAudit, withIntegrity } from "@absolutejs/audit";\nimport { createPostgresAuditSink } from "@absolutejs/audit-postgres";\n\nconst sql = postgres(process.env.DATABASE_URL!);\n\nconst audit = createAudit({\n  sinks: [\n    withIntegrity(createPostgresAuditSink({ sql }), {\n      secret: process.env.AUDIT_SECRET,\n      writerId: "shard-A",\n    }),\n  ],\n});\n\nawait audit.append({\n  kind: "billing.invoice.created",\n  actor: "system",\n  target: invoice.id,\n  metadata: { amountCents: invoice.amountCents },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading: 'postgres.js',
 						language: 'typescript'
 					}
 				],
@@ -2271,11 +2250,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'bun add @absolutejs/audit @absolutejs/audit-postgres bun add postgres # OR bun add @neondatabase/serverless',
 						title: 'Install'
-					},
-					{
-						description:
-							'Usage is documented in the repository README.',
-						title: 'Usage'
 					},
 					{
 						description:
@@ -2339,35 +2313,35 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/audit @absolutejs/audit-s3\n# Bring whichever S3 client you already use — no SDK lock-in:\nbun add @aws-sdk/client-s3      # OR\n# (Cloudflare R2 Workers binding — no install)',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: "import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';\nimport { createAudit, withIntegrity, memorySink } from '@absolutejs/audit';\nimport { createS3AuditSink } from '@absolutejs/audit-s3';\n\nconst s3 = new S3Client({ region: 'us-east-1' });\n\nconst audit = createAudit({\n  sinks: [\n    memorySink({ max: 1000 }),                          // hot tail for queries\n    withIntegrity(                                       // tamper-evident\n      createS3AuditSink({\n        put: async (key, body, contentType) => {\n          await s3.send(new PutObjectCommand({\n            Bucket: 'my-audit-bucket',\n            Key: key,\n            Body: body,\n            ContentType: contentType,\n          }));\n        },\n        prefix: 'audit/prod/',\n        flushIntervalMs: 5_000,\n      }),\n      { secret: process.env.AUDIT_SECRET, writerId: 'shard-A' }\n    ),\n  ],\n});\n\nawait audit.append({\n  kind: 'auth.login',\n  actor: 'user-123',\n  metadata: { ip: '10.0.0.1' },\n});\n\n// On graceful shutdown:\nawait audit.close();",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'AWS SDK v3',
 						language: 'typescript'
 					},
 					{
 						code: "import { createS3AuditSink } from '@absolutejs/audit-s3';\n\nconst sink = createS3AuditSink({\n  put: async (key, body, contentType) => {\n    await env.AUDIT_BUCKET.put(key, body, { httpMetadata: { contentType } });\n  },\n});",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Cloudflare R2 (Workers)',
 						language: 'typescript'
 					},
 					{
 						code: 'audit/2026-05-30/19-42-15.123-abcd1234.jsonl',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Object key layout',
 						language: 'text'
 					},
 					{
 						code: "import { verifyChain } from '@absolutejs/audit';\n\n// Pull every JSONL object back, sort lexically (= chronologically), flatten:\nconst allEvents = orderedJsonlBodies.flatMap(body =>\n  body.split('\\n').filter(Boolean).map(line => JSON.parse(line))\n);\nconst result = await verifyChain(allEvents, secret);\n// { ok: true } or { ok: false, brokenAt: <index> }",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Integrity across batches',
 						language: 'typescript'
 					}
 				],
@@ -2386,11 +2360,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'bun add @absolutejs/audit @absolutejs/audit-s3',
 						title: 'Install'
-					},
-					{
-						description:
-							'Usage is documented in the repository README.',
-						title: 'Usage'
 					},
 					{
 						description: 'Default keyFor produces:',
@@ -2483,37 +2452,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'git clone https://github.com/absolutejs/auth.git\n    cd auth',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Steps to Install Dependencies',
 				language: 'bash'
 			},
 			{
 				code: 'bun install',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Steps to Install Dependencies 2',
 				language: 'bash'
 			},
 			{
 				code: "import { installSessionExpiryGuard } from '@absolutejs/auth/client';\n\ninstallSessionExpiryGuard({\n\tprotectedPaths: ['/v1/'],\n\tsignInPath: '/signin'\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Expired browser sessions',
 				language: 'typescript'
 			},
 			{
 				code: "import { createNodeSamlAdapter } from '@absolutejs/auth/saml';",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Optional SAML adapter',
 				language: 'typescript'
 			},
 			{
 				code: "import { createSimpleWebAuthnAdapter } from '@absolutejs/auth/webauthn';",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Optional SAML adapter 2',
 				language: 'typescript'
 			},
 			{
 				code: "import { auth } from '@absolutejs/auth/server';\nimport { createTwilioVerificationProvider } from '@absolutejs/auth-twilio';\nimport { Twilio } from 'twilio';\n\nconst authPlugin = await auth({\n\t// credentials, mfa, stores, providersConfiguration, etc.\n\tverificationProvider: createTwilioVerificationProvider({\n\t\tclient: new Twilio(\n\t\t\tprocess.env.TWILIO_ACCOUNT_SID!,\n\t\t\tprocess.env.TWILIO_AUTH_TOKEN!\n\t\t),\n\t\tverifyServiceSid: process.env.TWILIO_VERIFY_SERVICE_SID!,\n\t\tserviceTokenTtlMs: 10 * 60 * 1000\n\t})\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Provider-managed phone verification',
 				language: 'typescript'
 			}
 		],
@@ -2527,20 +2496,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Absolute Auth is a TypeScript-based authentication system that provides a comprehensive solution for handling user authentication in web applications. It supports multiple authentication providers and offers features such as authorization, callback handling, token refresh, token revocation, and session management.',
 				title: 'Overview'
-			},
-			{
-				description:
-					'Installation is documented in the repository README.',
-				title: 'Installation'
-			},
-			{
-				description: 'Usage is documented in the repository README.',
-				title: 'Usage'
-			},
-			{
-				description:
-					'Authentication System is documented in the repository README.',
-				title: 'Authentication System'
 			},
 			{
 				description: 'This project uses Bun and is built for Elysia.',
@@ -2566,7 +2521,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/auth @absolutejs/auth-twilio twilio',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			}
 		],
@@ -2623,21 +2578,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/auth @absolutejs/auth-twilio twilio',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { auth } from "@absolutejs/auth";\nimport { createTwilioVerificationProvider } from "@absolutejs/auth-twilio";\nimport { Twilio } from "twilio";\n\nconst client = new Twilio(\n  process.env.TWILIO_ACCOUNT_SID!,\n  process.env.TWILIO_AUTH_TOKEN!,\n);\n\nconst authPlugin = await auth({\n  // credentials, mfa, stores, providersConfiguration, etc.\n  verificationProvider: createTwilioVerificationProvider({\n    profile: {\n      client,\n      verifyServiceSid: process.env.TWILIO_VERIFY_SERVICE_SID!,\n    },\n    // Must match the token lifetime configured on the Verify Service.\n    serviceTokenTtlMs: 10 * 60 * 1000,\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: 'createTwilioVerificationProvider({\n  profile: { client, verifyServiceSid },\n  serviceTokenTtlMs: 600_000,\n  templates: {\n    mfa_enrollment: { sms: "HJ...", whatsapp: "HJ..." },\n    mfa_challenge: { call: "HJ...", sms: "HJ..." },\n  },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Usage 2',
 						language: 'typescript'
 					}
 				],
@@ -2706,13 +2661,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'read signals  →  combine into a score  →  compare to thresholds  →\nif past threshold & cooldown elapsed  →  ask actuator to spawn/drain\n                                          (clamped to min/max)',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Loop',
 				language: 'text'
 			},
 			{
 				code: 'import {\n  createAutoscaler,\n  createPolicy,\n  ratioSignal,\n} from "@absolutejs/autoscaler";\n\nconst scaler = createAutoscaler({\n  policy: createPolicy({\n    min: 1,\n    max: 20,\n    scaleUp: { threshold: 0.75, cooldownMs: 60_000, step: 1 },\n    scaleDown: { threshold: 0.3, cooldownMs: 300_000, step: 1 },\n  }),\n  signals: [\n    ratioSignal("cpu", 0.8, async () => await meter.cpuUtilization()),\n    ratioSignal("queue", 100, async () => await queue.depth(), {\n      observedKey: "depth",\n    }),\n    ratioSignal("latencyP95", 200, async () => await metrics.p95()),\n  ],\n  combine: "max", // worst pressure wins. or \'avg\', or a custom fn\n  actuator: {\n    list: () => fleet.list(),\n    spawn: () => fleet.provision(),\n    drain: (id) => loadBalancer.remove(id),\n    terminate: (id) => fleet.destroy(id),\n  },\n  audit: broker, // optional; emits autoscaler.scale.up etc.\n  intervalMs: 30_000,\n});\n\nscaler.start();\n// fires every 30s\n\nconst reviewedPlan = await scaler.evaluate();\nawait scaler.applyDecision(reviewedPlan, { maxAgeMs: 300_000 });\n// applies that exact plan only while its capacity precondition still holds\n\nconst oneShot = await scaler.step();\n// { action: \'scale-up\' | \'scale-down\' | \'hold\', score, currentCount,\n//   desiredCount, reason, readings: [...], at }',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'API',
 				language: 'typescript'
 			}
 		],
@@ -2799,25 +2754,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/beacon',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'import { initBeacon, captureException } from "@absolutejs/beacon";\n\ninitBeacon({\n  project: "web",\n  endpoint: "https://api.example.com/ingest",\n  release: import.meta.env.VITE_RELEASE,\n  environment: "production",\n});\n\n// Uncaught errors + unhandled rejections are captured automatically.\n// Manual capture anywhere:\ntry {\n  await checkout();\n} catch (e) {\n  captureException(e, { tags: { component: "billing" } });\n}',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Quick start',
 				language: 'typescript'
 			},
 			{
 				code: 'import { createBeacon } from "@absolutejs/beacon";\nconst beacon = createBeacon({ project: "web" });\nbeacon.setUser({ id: currentUserId });\nbeacon.captureMessage("checkout started", "info");',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Quick start 2',
 				language: 'typescript'
 			},
 			{
 				code: 'createBeacon(options) => Beacon\ninitBeacon(options)   => Beacon   // also sets the global singleton\ngetBeacon()           => Beacon | undefined\n\n// Beacon:\ncaptureException(error, { level?, traceId?, spanId?, tags?, extra? })\ncaptureMessage(message, level?)\naddBreadcrumb({ message, type?, data? })\nsetTags(tags) · setUser(user | null)\nflush() => Promise<void>          // buffered events out now\nclose() => Promise<void>          // remove listeners + final flush\n\n// Typed names for event.tags.signal in beforeSend policies:\nBEACON_SIGNAL.FETCH_FAILED\nBEACON_SIGNAL.SLOW_RESPONSE\nBEACON_SIGNAL.HTTP_5XX\nBEACON_TRACE_HEADER // "x-absolute-trace-id"\n\n// Global helpers (no-op until initBeacon): captureException, captureMessage, addBreadcrumb',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'API',
 				language: 'typescript'
 			}
 		],
@@ -2860,7 +2815,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		category: 'Dev Tools',
 		commands: [],
 		description:
-			'Reproducible performance and accuracy comparisons for AbsoluteJS packages.',
+			'Performance & accuracy benchmarks for the AbsoluteJS suite. Each subdirectory is a standalone project that consumes the published packages.',
 		directory: 'benchmarks',
 		kind: 'monorepo',
 		name: 'Benchmarks',
@@ -2901,14 +2856,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun install\ncp .env.example .env   # add provider API keys for live benchmarks',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Setup',
 						language: 'bash'
 					},
 					{
 						code: 'bun run bench:tts                 # TTS latency across providers\nbun run bench:stt all telephony   # STT accuracy on telephony fixtures\nbun run bench:duplex              # full-duplex turn-taking\nbun run bench:telephony:run       # telephony suite -> benchmark-results/',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Running',
 						language: 'bash'
 					}
 				],
@@ -3057,31 +3012,31 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import {\n  createClamdBlobInspector,\n  inspectStoredBlob,\n} from "@absolutejs/blob/inspection";\n\nconst inspector = createClamdBlobInspector({ host: "clamav.internal" });\nconst result = await inspectStoredBlob(blobs, inspector, {\n  filename: "evidence.pdf",\n  key: "quarantine/case/evidence.pdf",\n  maxBytes: 25 * 1024 * 1024,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Private upload inspection',
 				language: 'typescript'
 			},
 			{
 				code: 'import { localBlobStore } from "@absolutejs/blob/local";\n\nconst blobs = localBlobStore({ root: "./var/blobs" });\nawait blobs.put("uploads/file.pdf", body);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Local',
 				language: 'typescript'
 			},
 			{
 				code: 'import { S3Client } from "@aws-sdk/client-s3";\nimport { awsS3BlobStore } from "@absolutejs/blob/aws-s3";\n\nconst aws = new S3Client({ region: "us-east-1" });\n\nconst blobs = awsS3BlobStore({ bucket: "my-bucket", client: aws });',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'S3 (any S3-compatible service)',
 				language: 'typescript'
 			},
 			{
 				code: 'const aws = new S3Client({\n  region: "auto",\n  endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,\n  credentials: { accessKeyId, secretAccessKey },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Cloudflare R2',
 				language: 'typescript'
 			},
 			{
 				code: 'type BlobStore = {\n  readonly description: string;\n  put: (\n    key: string,\n    body: BlobBody,\n    options?: PutOptions,\n  ) => Promise<BlobObject>;\n  get: (key: string) => Promise<Uint8Array | null>;\n  getStream: (key: string) => Promise<ReadableStream<Uint8Array> | null>;\n  head: (key: string) => Promise<BlobObject | null>;\n  delete: (key: string) => Promise<void>;\n  list: (options?: ListOptions) => Promise<ListResult>;\n  presign: (key: string, options?: PresignOptions) => Promise<string>;\n};\n\ntype BlobBody = Uint8Array | string | ReadableStream<Uint8Array>;',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'BlobStore interface',
 				language: 'typescript'
 			}
 		],
@@ -3171,25 +3126,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { createBlog, defineAuthor, definePost } from "@absolutejs/blog";\n\nconst author = defineAuthor({\n  id: "alex-kahn",\n  name: "Alex Kahn",\n  role: "AbsoluteJS",\n});\n\nconst post = definePost({\n  author,\n  description: "Why provider differences belong in typed data.",\n  publishedAt: "2026-07-31",\n  slug: "why-citra-typed-oauth",\n  tags: ["OAuth", "TypeScript", "Citra"],\n  title: "Why Citra: Typed OAuth Without Provider Classes",\n});\n\nexport const blog = createBlog({\n  posts: [post],\n  site: {\n    baseUrl: "https://absolutejs.com",\n    description: "Engineering notes from AbsoluteJS.",\n    name: "AbsoluteJS Blog",\n    publisher: {\n      name: "AbsoluteJS",\n      url: "https://absolutejs.com",\n    },\n  },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Define a blog',
 				language: 'typescript'
 			},
 			{
 				code: 'blog.get("why-citra-typed-oauth");\nblog.byTag("TypeScript");\nblog.relatedTo(post);\nblog.sitemapRoutes();\nblog.head(post);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Define a blog 2',
 				language: 'typescript'
 			},
 			{
 				code: 'import { blogFeeds } from "@absolutejs/blog/elysia";\n\nnew Elysia().use(\n  blogFeeds(blog, {\n    rss: "/blog/rss.xml",\n    atom: "/blog/atom.xml",\n    json: "/blog/feed.json",\n  }),\n);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Feeds',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  useActiveHeading,\n  useReadingProgress,\n  useReadingTime,\n} from "@absolutejs/blog/react";\n\nconst articleRef = useRef<HTMLElement>(null);\nconst progress = useReadingProgress(articleRef);\nconst readingTime = useReadingTime(articleRef);\nconst activeHeading = useActiveHeading(articleRef, sectionIds);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Reading hooks',
 				language: 'typescript'
 			}
 		],
@@ -3256,49 +3211,44 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun install citra',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'bash'
 			},
 			{
 				code: 'npm install citra',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Installation 2',
 				language: 'bash'
 			},
 			{
 				code: 'yarn add citra',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Installation 3',
 				language: 'bash'
 			},
 			{
 				code: "import { createOAuth2Client } from 'citra';\n\nconst googleClient = await createOAuth2Client('google', {\n\t// defining your config directly in the function will make it type safe\n\tclientId: 'YOUR_CLIENT_ID',\n\tclientSecret: 'YOUR_CLIENT_SECRET',\n\tredirectUri: 'https://yourapp.com/auth/callback'\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Getting Started',
 				language: 'typescript'
 			},
 			{
 				code: "import { createCustomOAuth2Client, defineProvider } from 'citra';\n\ntype AcmeCredentials = {\n\tclientId: string;\n\tclientSecret: string;\n\tredirectUri: string;\n\ttenantId: string;\n};\n\nconst acme = defineProvider<AcmeCredentials>()({\n\tauthorizationUrl: ({ tenantId }) =>\n\t\t`https://${tenantId}.acme.test/oauth/authorize`,\n\tisOIDC: true,\n\tisRefreshable: true,\n\tPKCEMethod: 'S256',\n\tscopeRequired: true,\n\tsubject: ['sub'],\n\tsubjectType: 'string',\n\ttokenRequest: {\n\t\tauthIn: 'body',\n\t\tencoding: 'application/x-www-form-urlencoded',\n\t\turl: ({ tenantId }) =>\n\t\t\t`https://${tenantId}.acme.test/oauth/token`\n\t}\n});\n\nconst acmeClient = await createCustomOAuth2Client(acme, {\n\tclientId: 'YOUR_CLIENT_ID',\n\tclientSecret: 'YOUR_CLIENT_SECRET',\n\tredirectUri: 'https://yourapp.com/auth/callback',\n\ttenantId: 'north'\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Custom Providers',
 				language: 'typescript'
 			},
 			{
 				code: "import { generateState, generateCodeVerifier } from 'citra';\n\nconst currentState = generateState();\nconst codeVerifier = generateCodeVerifier();\nconst authUrl = await googleClient.createAuthorizationUrl({\n\tcodeVerifier, // type error if not provided since google is a PKCEProvider\n\tscope: ['profile', 'openid'], // type error if not provided since google is a ScopeRequiredProvider\n\tsearchParams: [\n\t\t['access_type', 'offline'],\n\t\t['prompt', 'consent']\n\t],\n\tstate: currentState\n});\n\n// store state and PKCE verifier in HttpOnly cookies so we can authenticate on callback\nconst headers = new Headers();\nheaders.set('Location', authUrl.toString());\nheaders.append(\n\t'Set-Cookie',\n\t`oauth_state=${currentState}; HttpOnly; Path=/; Secure; SameSite=Lax`\n);\nheaders.append(\n\t'Set-Cookie',\n\t`pkce_code_verifier=${codeVerifier}; HttpOnly; Path=/; Secure; SameSite=Lax`\n);\n\n// redirect to the generated authorization URL\nreturn new Response(null, {\n\tstatus: 302,\n\theaders: {\n\t\tLocation: authUrl.toString()\n\t}\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Building the Authorization URL',
 				language: 'typescript'
 			}
 		],
 		readmeTopics: [
 			{
 				description:
-					'Table of Contents is documented in the repository README.',
-				title: 'Table of Contents'
-			},
-			{
-				description:
-					'Citra is a curated collection of OAuth 2.0 provider configurations, each bundled with the correct endpoints and request details. It provides a ready-to-use foundation for integrating secure authentication into JavaScript and TypeScript applications.',
+					'Citra is a curated collection of OAuth 2.0 provider configurations, each bundled with the correct endpoints and request details. It provides a ready-to-use foundation for integrating secure authentication into JavaScript and TypeScript applications. See the complete Citra guide for installation, provider configuration, and integration patterns.',
 				title: 'Introduction'
 			},
 			{
@@ -3407,19 +3357,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add -d @absolutejs/cli',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Install',
 				language: 'bash'
 			},
 			{
 				code: 'import { defineConfig } from "@absolutejs/cli";\nimport { createSecretBroker, encryptedFileAdapter } from "@absolutejs/secrets";\nimport { hetznerTarget } from "@absolutejs/deploy/hetzner";\nimport { createDeployer } from "@absolutejs/deploy";\n\nconst adapter = encryptedFileAdapter({\n  path: "./.secrets.enc.json",\n  key: {\n    type: "passphrase",\n    passphrase: process.env.SECRETS_MASTER!,\n  },\n});\n\nconst broker = createSecretBroker({ adapter });\n\nconst prodTarget = () =>\n  hetznerTarget({\n    token: process.env.HETZNER_TOKEN!,\n    name: "api-prod-1",\n    region: "nbg1",\n    serverType: "cx22",\n    image: "ubuntu-22.04",\n    sshKeys: [process.env.HETZNER_KEY_FINGERPRINT!],\n  });\n\nexport default defineConfig({\n  secrets: broker,\n  secretAdapter: adapter,\n  deployments: [\n    {\n      name: "prod",\n      target: prodTarget,\n      remotePath: "/etc/api.env",\n      secretNames: ["DATABASE_URL", "STRIPE_KEY"],\n      extras: { NODE_ENV: "production" },\n      reload: "systemctl reload api",\n      deployer: async () =>\n        createDeployer({\n          appName: "api",\n          target: await prodTarget(),\n        }),\n    },\n  ],\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Config — absolutejs.config.ts',
 				language: 'typescript'
 			},
 			{
 				code: '# Rotate STRIPE_KEY in the broker.\nabsolutejs secrets rotate STRIPE_KEY\n\n# Push to every deployment that uses it.\nabsolutejs env push prod\nabsolutejs env push staging',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Composition with the rotation loop',
 				language: 'bash'
 			}
 		],
@@ -3437,15 +3387,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Drop one in your project root. The CLI walks up from the cwd to find it.',
 				title: 'Config — absolutejs.config.ts'
-			},
-			{
-				description: 'Commands is documented in the repository README.',
-				title: 'Commands'
-			},
-			{
-				description:
-					'Composition with the rotation loop is documented in the repository README.',
-				title: 'Composition with the rotation loop'
 			}
 		],
 		repository: 'https://github.com/absolutejs/cli',
@@ -3489,13 +3430,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/collectibles',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			},
 			{
 				code: 'import {\n  chooseWeightedEdition,\n  generateWeightedTraits,\n  printingId,\n  shuffledSerial,\n} from "@absolutejs/collectibles";\n\nconst editions = [\n  { key: "standard", label: "Standard", supply: 900, weight: 90 },\n  { key: "rare", label: "Rare", supply: 100, weight: 10 },\n] as const;\n\nconst edition = chooseWeightedEdition("subject:42", editions);\nconst printing = printingId("set-1", "subject:42", edition);\nconst serial = shuffledSerial(\n  printing,\n  1,\n  editions.find((row) => row.key === edition)!.supply,\n);\n\nconst traits = generateWeightedTraits("subject:42", [\n  {\n    key: "background",\n    options: [\n      { value: "blue", weight: 80 },\n      { value: "gold", weight: 20 },\n    ],\n  },\n]);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Deterministic editions and traits',
 				language: 'typescript'
 			}
 		],
@@ -3566,19 +3507,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import {\n  findVariantByOptions,\n  listingPriceCents,\n  type CatalogSourceProvider,\n} from "@absolutejs/commerce";\n\nconst variant = findVariantByOptions(product.variants, {\n  Color: "Navy",\n  Size: "XL",\n});\nconst price = listingPriceCents(product.listing, variant);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Multi-store product catalogs',
 				language: 'typescript'
 			},
 			{
 				code: 'import { ProductPhotoPreview } from "@absolutejs/commerce/decoration-preview-react";',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Product decoration previews and production packets',
 				language: 'typescript'
 			},
 			{
 				code: 'import type { ShippingProvider } from "@absolutejs/commerce";\nimport { createEasyPostProvider } from "@absolutejs/commerce-easypost";\n\nconst shipping: ShippingProvider = createEasyPostProvider({\n  apiKey: process.env.EASYPOST_API_KEY!,\n});\n\nconst label = await shipping.buyCheapestLabel({ from, to, parcel });\n// → { trackingNumber, labelUrl, carrier, service, amount, … }',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'v0 — shipping contract',
 				language: 'typescript'
 			}
 		],
@@ -3629,8 +3570,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'typecheck'
 			}
 		],
-		description:
-			'Payment, fulfillment, shipping, and transactional-email adapters for @absolutejs/commerce.',
+		description: 'Provider adapters for @absolutejs/commerce.',
 		directory: 'commerce-adapters',
 		kind: 'monorepo',
 		name: 'Commerce Adapters',
@@ -3641,7 +3581,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/commerce @absolutejs/commerce-stripe @absolutejs/commerce-easypost',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			}
 		],
@@ -3920,37 +3860,40 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'const store = createPostgresMessagingConsentStore(postgres);\nconst consent = createMessagingConsentLedger({ audit, store });\n\nawait consent.grant(\n  {\n    recipient: "+12025550100",\n    programId: "acme-incident-alerts",\n    purpose: "incident-alerts",\n    tenant: "tenant-a",\n    transport: "sms",\n  },\n  { at: Date.now(), reference: "signup-42", source: "signup-form" },\n);\n\nconst dispatcher = createDispatcher({\n  policies: [createMessagingConsentDispatchPolicy({ ledger: consent })],\n  sms,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Messaging consent',
 				language: 'typescript'
 			},
 			{
 				code: 'const policy = createCompliancePolicy({\n  classifications: {\n    pii: { id: "pii", retentionMs: 730 * DAY, residency: "eu" },\n    "audit-log": {\n      id: "audit-log",\n      retentionMs: Infinity,\n      erasureExempt: true, // SOX / many regulators require 7+ years\n      flags: { immutable: true },\n    },\n    operational: { id: "operational", retentionMs: 90 * DAY },\n  },\n  tenantOverrides: {\n    "gdpr-strict-tenant": { pii: { retentionMs: 90 * DAY } },\n  },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading:
+					'1. createCompliancePolicy({ classifications, tenantOverrides? })',
 				language: 'typescript'
 			},
 			{
 				code: 'guard.check({ classification: "pii", region: "us-east" });\n// throws ResidencyViolation if policy says \'eu\'\n\n// non-throwing variant\nconst v = guard.inspect({\n  classification: "pii",\n  region: "eu",\n  tenant: "acme",\n});\nif (v !== null) return new Response(v.message, { status: 451 });',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: '2. createResidencyGuard(policy)',
 				language: 'typescript'
 			},
 			{
 				code: 'const report = await runRetention({\n  policy,\n  audit: broker,\n  scanners: [\n    { classification: "audit-log", scan: auditTable.scan },\n    { classification: "pii", scan: userTable.scan },\n  ],\n  deleters: {\n    "audit-log": (rows) => auditTable.delete(rows.map((r) => r.id)),\n    pii: (rows) => userTable.delete(rows.map((r) => r.id)),\n  },\n});\n// report = { byClassification: { pii: { scanned, deleted, durationMs }, ... }, errors }',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading:
+					'3. runRetention({ policy, scanners, deleters, audit?, ... })',
 				language: 'typescript'
 			},
 			{
 				code: 'const bundle = await runSubjectAccess({\n  subject: { tenant: "acme", subjectId: "u-1" },\n  collectors: [\n    {\n      name: "profile",\n      classification: "pii",\n      collect: userTable.findBySubject,\n    },\n    {\n      name: "audit",\n      classification: "audit-log",\n      collect: auditTable.findBySubject,\n    },\n    {\n      name: "sync-packs",\n      classification: "sync-packs",\n      collect: syncPacks.findBySubject,\n    },\n  ],\n});\n\nawait runErasure({\n  policy,\n  audit: broker,\n  subject: { tenant: "acme", subjectId: "u-1" },\n  erasers: [\n    {\n      name: "profile",\n      classification: "pii",\n      erase: userTable.deleteBySubject,\n    },\n    {\n      name: "audit",\n      classification: "audit-log",\n      anonymize: auditTable.anonymizeSubject,\n    },\n  ],\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading:
+					'4. runSubjectAccess({ subject, collectors }) + runErasure({ subject, erasers, ... })',
 				language: 'typescript'
 			},
 			{
 				code: 'const bundle = await collectEvidence({\n  policy,\n  period: { start: lastQuarter, end: now },\n  sources: [\n    auditEvidenceSource(broker, { kindPrefix: "compliance." }),\n    { name: "access-log", collect: () => accessLog.dump(period) },\n    { name: "config-snapshot", collect: () => config.snapshot() },\n  ],\n});\n// Write `bundle` to disk → hand to your SOC2 / ISO / HIPAA auditor.',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: '5. collectEvidence({ policy, period, sources })',
 				language: 'typescript'
 			}
 		],
@@ -3967,11 +3910,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					'Primitives is documented in the repository README.',
-				title: 'Primitives'
-			},
-			{
-				description:
 					'A per-tenant override wins over the class default. GDPR-strict tenants riding a default-US-East platform get their own residency, retention, and erasure-exempt behavior without forking the policy.',
 				title: 'Tenant overrides'
 			}
@@ -3984,7 +3922,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		category: 'Dev Tools',
 		commands: [],
 		description:
-			'Local OpenID Foundation conformance tooling used to validate standards-based identity implementations.',
+			'This is the OpenID Foundation conformance suite, which covers OpenID Connect, FAPI1-Advanced, FAPI2, FAPI-CIBA and OpenID for Identity Assurance (ekyc).',
 		directory: 'conformance-suite',
 		kind: 'monorepo',
 		name: 'OpenID Conformance Suite',
@@ -4008,7 +3946,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'test:e2e'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'cts-frontend-e2e package in the conformance-suite workspace.',
 				name: 'cts-frontend-e2e',
 				private: true,
 				publicExports: [],
@@ -4070,37 +4009,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun create absolutejs my-app',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Usage',
 				language: 'bash'
 			},
 			{
 				code: 'npm create absolutejs my-app\nyarn create absolutejs my-app\npnpm create absolutejs my-app',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Usage 2',
 				language: 'bash'
 			},
 			{
 				code: 'bun create absolutejs my-app --skip',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Usage 3',
 				language: 'bash'
 			},
 			{
 				code: 'bun create absolutejs my-app --auth none --engine none',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Usage 4',
 				language: 'bash'
 			},
 			{
 				code: 'Usage: create-absolute [project-name] [options]',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Options',
 				language: 'text'
 			},
 			{
 				code: 'bun create absolutejs my-app --directory custom',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Directory Configuration',
 				language: 'bash'
 			}
 		],
@@ -4183,13 +4122,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/crm',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			},
 			{
 				code: 'import {\n  createInMemoryCRMSyncQueue,\n  createInMemoryCRMTokenStore,\n} from "@absolutejs/crm";\n\nconst tokenStore = createInMemoryCRMTokenStore();\nconst syncQueue = createInMemoryCRMSyncQueue();',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Quick start',
 				language: 'typescript'
 			}
 		],
@@ -4205,11 +4144,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'What it is'
 			},
 			{
-				description:
-					'Vendor coverage is documented in the repository README.',
-				title: 'Vendor coverage'
-			},
-			{
 				description: 'bun add @absolutejs/crm',
 				title: 'Installation'
 			},
@@ -4217,10 +4151,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'import { createInMemoryCRMSyncQueue, createInMemoryCRMTokenStore, } from "@absolutejs/crm";',
 				title: 'Quick start'
-			},
-			{
-				description: 'Design is documented in the repository README.',
-				title: 'Design'
 			}
 		],
 		repository: 'https://github.com/absolutejs/crm',
@@ -4242,7 +4172,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/discover @absolutejs/dataset-github @absolutejs/dataset-gleif @absolutejs/dataset-sec-edgar',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			}
 		],
@@ -4251,10 +4181,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Public-data DatasetSource implementations for @absolutejs/discover. They normalize provider-specific records behind one discovery contract so applications can combine sources without baking provider logic into ranking or enrichment code.',
 				title: 'Overview'
-			},
-			{
-				description: 'Packages is documented in the repository README.',
-				title: 'Packages'
 			},
 			{
 				description:
@@ -4334,14 +4260,16 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bunx gleif-snapshot golden-copy.zip gleif-snapshot.sqlite\n   # or: bun run node_modules/@absolutejs/dataset-gleif/dist/snapshot.js <file> [out]',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading:
+							'Offline snapshot — no rate limits, no network',
 						language: 'sh'
 					},
 					{
 						code: 'gleifSource({ snapshotPath: "gleif-snapshot.sqlite" });',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading:
+							'Offline snapshot — no rate limits, no network 2',
 						language: 'typescript'
 					}
 				],
@@ -4465,37 +4393,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/demo',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'bun add -d playwright',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Install 2',
 				language: 'sh'
 			},
 			{
 				code: 'import {\n\tcreateDemoRunner,\n\tgoto,\n\tnarrate,\n\tsignIn,\n\tspotlight,\n\twriteDemoManifest,\n} from "@absolutejs/demo";\nimport { createDemoAuthDriver } from "@absolutejs/demo/auth";\nimport {\n\tcreatePlaywrightDemoSession,\n} from "@absolutejs/demo/playwright";\n\nconst session = await createPlaywrightDemoSession({\n\theadless: false,\n\trecordVideoDir: ".demo-video",\n\tscreenshotDir: ".demo-shots",\n});\n\nconst runner = createDemoRunner({\n\tauth: createDemoAuthDriver(),\n\tbrowser: session.browserDriver,\n\tannotations: session.annotations,\n\tvoiceover: {\n\t\tspeak: async ({ text }) => {\n\t\t\tconsole.log("[voiceover]", text);\n\t\t},\n\t},\n});\n\nconst report = await runner.run({\n\tprofiles: [\n\t\t{\n\t\t\tid: "ae",\n\t\t\tkind: "absolute",\n\t\t\tbaseUrl: "http://localhost:3000",\n\t\t\temail: { env: "DEMO_EMAIL" },\n\t\t\tpassword: { env: "DEMO_PASSWORD" },\n\t\t\tafterLoginUrl: "http://localhost:3000/pipeline",\n\t\t},\n\t],\n\tid: "crm-demo",\n\ttitle: "CRM demo",\n\tsteps: [\n\t\tsignIn("ae"),\n\t\tnarrate("Here is the live pipeline view."),\n\t\tgoto("http://localhost:3000/pipeline"),\n\t\tspotlight({\n\t\t\tselector: "[data-demo=\'pipeline-total\']",\n\t\t\tlabel: "Revenue at risk",\n\t\t\tdurationMs: 1800,\n\t\t}),\n\t],\n});\n\nawait writeDemoManifest(report, ".demo-artifacts/crm-demo.manifest.json");\nconsole.log(report.status, report.artifacts);\nawait session.close();',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Browser demo',
 				language: 'typescript'
 			},
 			{
 				code: '// A third-party site you do not control:\n{\n\tid: "saucedemo",\n\tkind: "form",\n\tloginUrl: "https://www.saucedemo.com/",\n\tfields: [\n\t\t{ selector: "#user-name", value: { env: "SAUCE_USERNAME" } },\n\t\t{ selector: "#password", value: { env: "SAUCE_PASSWORD" } },\n\t],\n\tsubmitSelector: "#login-button",\n\tsuccess: { selector: ".inventory_list" },\n}',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Authentication',
 				language: 'typescript'
 			},
 			{
 				code: 'import { createDemoRunner, focusApp, openApp, wait } from "@absolutejs/demo";\nimport { createMacDesktopDriver } from "@absolutejs/demo/desktop";\n\nconst runner = createDemoRunner({\n\tdesktop: createMacDesktopDriver(),\n});\n\nawait runner.run({\n\tid: "discord-demo",\n\tsteps: [\n\t\topenApp("Discord"),\n\t\twait(1000),\n\t\tfocusApp("Discord"),\n\t],\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Desktop control',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n\tcreateElevenLabsVoiceover,\n\twithPronunciationAliases,\n\twithRenderCache,\n} from "@absolutejs/demo/voiceover";\n\n// Premium voiceover, with demo-vocabulary pronunciation fixes (onSpark,\n// AbsoluteJS, PDL, …) applied before TTS, and identical lines cached so\n// re-runs skip re-synthesis.\nconst voiceover = withRenderCache(\n\twithPronunciationAliases(\n\t\tcreateElevenLabsVoiceover({\n\t\t\tapiKey: process.env.ELEVENLABS_API_KEY!,\n\t\t\toutputDir: ".demo-voiceover",\n\t\t}),\n\t),\n\t{ cacheDir: ".demo-voiceover/cache", salt: "rachel:flash_v2_5" },\n);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Voiceover',
 				language: 'typescript'
 			}
 		],
@@ -4607,37 +4535,38 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import { createDigitalOceanInfrastructureProvider } from '@absolutejs/deploy/digitalocean-infrastructure';\n\nconst provider = createDigitalOceanInfrastructureProvider({\n  token: process.env.DIGITALOCEAN_TOKEN!,\n  tag: 'absolutejs-paas-node',\n  regions: [{\n    region: 'nyc3',\n    size: 's-2vcpu-4gb',\n    image: 'ubuntu-24-04-x64',\n    sshKeys: [process.env.DIGITALOCEAN_SSH_KEY!],\n    userData: process.env.ABSOLUTEJS_NODE_CLOUD_INIT,\n  }],\n  agent: { preferPrivateNetwork: true, port: 8081 },\n});\n\nawait provider.listNodes();\nawait provider.provisionNode({\n  idempotencyKey: crypto.randomUUID(),\n  name: 'absolutejs-node-01',\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Infrastructure providers (0.14.0)',
 				language: 'typescript'
 			},
 			{
 				code: "import { createDigitalOceanIngressProvider } from '@absolutejs/deploy/digitalocean-ingress';\n\nconst ingress = createDigitalOceanIngressProvider({\n  token: process.env.DIGITALOCEAN_TOKEN!,\n});\n\nawait ingress.reconcileIngress({\n  name: 'absolutejs-edge',\n  idempotencyKey: crypto.randomUUID(),\n  backends: [\n    { region: 'nyc3', resourceId: 'regional-lb-east', priority: 1 },\n    { region: 'sfo3', resourceId: 'regional-lb-west', priority: 2 },\n  ],\n  listener: {\n    port: 443,\n    protocol: 'https',\n    targetPort: 443,\n    tlsPassthrough: true,\n  },\n  healthCheck: { protocol: 'tcp', port: 443 },\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Global edge ingress (0.17.0)',
 				language: 'typescript'
 			},
 			{
 				code: "import {\n  createDeployer,\n  sshTarget,\n  systemdManager,\n} from '@absolutejs/deploy';\n\nconst deployer = createDeployer({\n  appName: 'my-app',\n  target: sshTarget({\n    host: 'droplet-1.example.com',\n    user: 'deploy',\n    identity: '~/.ssh/id_ed25519',\n  }),\n  source: { kind: 'directory', root: './' },\n  env: { PORT: '3000', DATABASE_URL: process.env.DATABASE_URL! },\n  processManager: systemdManager({ user: 'deploy' }),\n  verify: { kind: 'http', url: 'http://localhost:3000/health' },\n  hooks: {\n    onStepStart: ({ name, releaseId }) => console.log(`▸ ${releaseId} ${name}`),\n    onLog: (line, stream, step) => process[stream === 'stderr' ? 'stderr' : 'stdout'].write(`[${step}] ${line}\\n`),\n  },\n});\n\nconst release = await deployer.deploy();\nconsole.log(`Deployed ${release.releaseId} in ${release.durationMs}ms`);\n\nconsole.log(await deployer.status());\n\n// later — atomic rollback\nconst previous = (await deployer.listReleases()).at(-2);\nif (previous) await deployer.rollback(previous);\n\n// optional housekeeping\nawait deployer.prune({ keep: 5 });\n\n// sunset the active process through the same process-manager contract\nawait deployer.stop();\n\n// control planes can make teardown win a publish/unpublish race\nconst controller = new AbortController();\nconst pending = deployer.deploy({ signal: controller.signal });\ncontroller.abort();\nawait pending.catch(() => undefined);\nawait deployer.stop();",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Global edge ingress (0.17.0) 2',
 				language: 'typescript'
 			},
 			{
 				code: 'type Target = {\n  description: string;\n  exec(cmd: string, opts?: { cwd?; env?; timeoutMs?; onLog?; stdin? }): Promise<{ stdout; stderr; exitCode }>;\n  upload(local: string, remote: string, opts?: { exclude?; deleteOrphans? }): Promise<void>;\n  close?(): Promise<void>;\n};',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Targets',
 				language: 'typescript'
 			},
 			{
 				code: "{ kind: 'http', url: 'http://localhost:3000/health', retries: 30, intervalMs: 1000, expectStatus: 200 }\n{ kind: 'tcp',  host: 'localhost', port: 3000, retries: 30, intervalMs: 1000 }\n{ kind: 'custom', check: async (ctx) => ctx.target.exec('myhealthcheck').then((r) => r.exitCode === 0) }",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Verify',
 				language: 'typescript'
 			},
 			{
 				code: "import { createDeployer } from '@absolutejs/deploy';\nimport { digitalOceanTarget } from '@absolutejs/deploy/digitalocean';\n\nconst target = await digitalOceanTarget({\n  token: process.env.DO_TOKEN!,\n  name: 'absolutejs-prod-1',          // idempotency key\n  region: 'nyc3',\n  size: 's-1vcpu-1gb',\n  image: 'ubuntu-22-04-x64',\n  sshKeys: [process.env.DO_KEY_FINGERPRINT!],\n  tags: ['absolutejs'],\n  userData: '#!/bin/bash\\ncurl -fsSL https://bun.sh/install | bash',\n  onLog: (line) => console.log(line),\n});\n\nconsole.log(`droplet ${target.dropletId} at ${target.ipv4}`);\n\nconst deployer = createDeployer({ appName: 'my-app', target });\nawait deployer.deploy({ source: { kind: 'directory', path: './build' } });\n\n// Tear it down when you're done:\nawait target.destroy();",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading:
+					'@absolutejs/deploy/digitalocean — provision-or-reuse from code (0.2.0)',
 				language: 'typescript'
 			}
 		],
@@ -4656,11 +4585,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'EdgeIngressProvider is the shared lifecycle for a public global ingress over regional edge pools. It normalizes the listener, backend health check, ordered regional failover priority, provider resource references, addresses, state, and idempotent removal. Provider resource construction stays here instead of leaking DigitalOcean or GCP APIs into a control plane.',
 				title: 'Global edge ingress (0.17.0)'
-			},
-			{
-				description:
-					'v0.0.1 surface is documented in the repository README.',
-				title: 'v0.0.1 surface'
 			},
 			{
 				description:
@@ -4708,11 +4632,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				description: 'with app-scoped naming).',
 				title: 'What v0.9.0 does NOT include'
-			},
-			{
-				description:
-					'Architectural role is documented in the repository README.',
-				title: 'Architectural role'
 			}
 		],
 		repository: 'https://github.com/absolutejs/deploy',
@@ -4754,13 +4673,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'type DatasetSource = {\n  name: string;\n  findPeople?: (q: DatasetQuery) => Promise<NormalizedPerson[]>;\n  findCompany?: (q: { name?; domain? }) => Promise<NormalizedCompany | null>;\n};',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'The dataset adapter contract',
 				language: 'typescript'
 			},
 			{
 				code: 'type DiscoverDeps = {\n  search?: (query: string) => Promise<WebSearchResult[]>; // Brave, SerpAPI, RAG…\n  extract?: (prompt: string) => Promise<string>;          // any LLM completion\n  sources?: DatasetSource[];                               // importable adapters\n};',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Bring your own LLM + web',
 				language: 'typescript'
 			}
 		],
@@ -4822,37 +4741,38 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/dispatch\n# Plus one or more adapter siblings:\nbun add @absolutejs/dispatch-resend       # Resend (email)\nbun add @absolutejs/dispatch-postmark     # Postmark (email)\nbun add @absolutejs/dispatch-twilio       # Twilio messaging\nbun add @absolutejs/dispatch-telnyx       # Telnyx messaging\n# ...etc',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'import { createDispatcher } from "@absolutejs/dispatch";\nimport { createResendAdapter } from "@absolutejs/dispatch-resend";\nimport { Resend } from "resend";\n\nconst resend = new Resend(process.env.RESEND_KEY!);\n\nconst dispatcher = createDispatcher({\n  email: createResendAdapter({ client: resend }),\n  defaultFrom: { email: "no-reply@acme.io" },\n});\n\nawait dispatcher.email({\n  to: "alice@example.com",\n  subject: "Welcome to Acme",\n  text: "Hi Alice, click here to verify: ...",\n  tenant: "tenant-A", // optional — propagates to OTel + audit\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Usage',
 				language: 'typescript'
 			},
 			{
 				code: 'type DispatcherOptions = {\n  email?: EmailAdapter;\n  messaging?: MessagingAdapter;\n  push?: PushAdapter;\n  policies?: readonly DispatchPolicy[];\n  defaultFrom?: { email?: string; messaging?: MessagingEndpoint };\n  onError?: (error: unknown, channel: DispatchChannel, message) => void;\n  tracerProvider?: TracerProvider; // OTel\n  audit?: AuditLike; // @absolutejs/audit instance\n};',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'createDispatcher(options)',
 				language: 'typescript'
 			},
 			{
 				code: 'type EmailMessage = {\n  to: string | ReadonlyArray<string>;\n  from?: string;\n  subject: string;\n  text?: string;\n  html?: string;\n  replyTo?: string;\n  cc?: string | ReadonlyArray<string>;\n  bcc?: string | ReadonlyArray<string>;\n  headers?: Record<string, string>;\n  tenant?: string;\n  metadata?: Record<string, unknown>; // adapter-specific extras\n};\n\ntype MessagingMessage = {\n  to: { address: string; transport: "sms" | "mms" | "rcs" | "whatsapp" };\n  from?: { address: string; transport: "sms" | "mms" | "rcs" | "whatsapp" };\n  content:\n    | { kind: "text"; text: string }\n    | {\n        kind: "media";\n        mediaUrls: readonly string[];\n        text?: string;\n        subject?: string;\n      }\n    | {\n        kind: "template";\n        id: string;\n        variables?: Readonly<Record<string, string>>;\n      }\n    | {\n        kind: "rich";\n        text: string;\n        title?: string;\n        mediaUrl?: string;\n        actions?: readonly MessagingAction[];\n      };\n  fallbacks?: readonly {\n    transport: "sms" | "mms" | "whatsapp";\n    from?: MessagingEndpoint;\n    content?: MessagingContent;\n  }[];\n  sendAt?: string;\n  idempotencyKey?: string;\n  privacy?: {\n    addressRetention?: "obfuscate" | "retain";\n    contentRetention?: "discard" | "retain";\n  };\n  consent?: {\n    programId: string;\n    purpose: string;\n  };\n  extensions?: Readonly<Record<string, unknown>>;\n  tenant?: string;\n  metadata?: Record<string, unknown>;\n};\n\ntype PushMessage = {\n  to: string; // device token OR topic\n  title?: string;\n  body: string;\n  idempotencyKey?: string;\n  actions?: ReadonlyArray<{ id: string; label: string; deepLink?: string }>;\n  badge?: number;\n  deepLink?: string;\n  sound?: string;\n  data?: Record<string, unknown>;\n  tenant?: string;\n  metadata?: Record<string, unknown>;\n};',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading:
+					'dispatcher.email(message) / .messaging(message) / .push(message)',
 				language: 'typescript'
 			},
 			{
 				code: 'import { createPushLifecycle } from "@absolutejs/dispatch";\nimport {\n  createPostgresPushFanoutClaimStore,\n  createPostgresPushSubscriptionStore,\n} from "@absolutejs/dispatch-push-postgres";\n\nconst push = createPushLifecycle({\n  adapterFor: ({ platform, tenant }) => adapters.forTenant(tenant, platform),\n  claimStore: createPostgresPushFanoutClaimStore(idempotentOperations),\n  store: createPostgresPushSubscriptionStore(transactionRunner),\n});\n\nawait push.register({\n  deviceId: "iphone-15",\n  platform: "apns",\n  tenant: "acme",\n  token,\n  topics: ["incidents"],\n  userId: "user-42",\n});\n\nawait push.send(\n  { tenant: "acme", topic: "incidents" },\n  {\n    body: "Database latency is elevated",\n    deepLink: "absolute://incidents/42",\n    idempotencyKey: "incident-42:opened",\n    sound: "default",\n    title: "Production alert",\n  },\n);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Production push lifecycle',
 				language: 'typescript'
 			},
 			{
 				code: 'const dispatcher = createDispatcher({\n  policies: [messagingConsentPolicy],\n  messaging,\n});\n\nawait dispatcher.messaging({\n  content: { kind: "text", text: "Database latency is elevated" },\n  consent: { programId: "acme-alerts", purpose: "incident-alerts" },\n  to: { address: "+12025550100", transport: "sms" },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Pre-send authorization policies',
 				language: 'typescript'
 			}
 		],
@@ -4870,15 +4790,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'import { createDispatcher } from "@absolutejs/dispatch"; import { createResendAdapter } from "@absolutejs/dispatch-resend"; import { Resend } from "resend";',
 				title: 'Usage'
-			},
-			{
-				description: 'API is documented in the repository README.',
-				title: 'API'
-			},
-			{
-				description:
-					'Substrate pattern is documented in the repository README.',
-				title: 'Substrate pattern'
 			},
 			{
 				description:
@@ -4910,7 +4821,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/dispatch @absolutejs/dispatch-resend @absolutejs/dispatch-twilio',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			}
 		],
@@ -4919,20 +4830,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Provider implementations for @absolutejs/dispatch, covering email, push notifications, SMS, MMS, RCS, WhatsApp, consent workflows, registration, webhooks, and durable push fanout.',
 				title: 'Overview'
-			},
-			{
-				description: 'Email is documented in the repository README.',
-				title: 'Email'
-			},
-			{
-				description:
-					'Mobile push is documented in the repository README.',
-				title: 'Mobile push'
-			},
-			{
-				description:
-					'Omnichannel messaging is documented in the repository README.',
-				title: 'Omnichannel messaging'
 			},
 			{
 				description:
@@ -5193,35 +5090,35 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/dispatch @absolutejs/dispatch-postmark postmark',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { ServerClient } from "postmark";\nimport { createDispatcher } from "@absolutejs/dispatch";\nimport { createPostmarkAdapter } from "@absolutejs/dispatch-postmark";\n\nconst postmark = new ServerClient(process.env.POSTMARK_SERVER_TOKEN!);\n\nconst dispatcher = createDispatcher({\n  email: createPostmarkAdapter({\n    client: postmark,\n    defaultFrom: "no-reply@acme.io",\n    // Optional — defaults to Postmark\'s transactional stream.\n    // messageStream: \'broadcast\',\n  }),\n});\n\nawait dispatcher.email({\n  to: "alice@example.com",\n  subject: "Welcome to Acme",\n  text: "Click here to verify: ...",\n  // metadata.tag → Postmark Tag (single-string analytics segment);\n  // other string entries → Postmark Metadata (string→string map):\n  metadata: { tag: "onboarding", campaign: "welcome-v2" },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: "createPostmarkAdapter({\n  client,             // Required — your `new ServerClient(serverToken)`\n  defaultFrom?,       // Required if your messages don't set `from`\n  messageStream?,     // Default: Postmark's transactional stream\n  mapMetadata?,       // Customize EmailMessage.metadata → Postmark Tag/Metadata\n})",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'API',
 						language: 'typescript'
 					},
 					{
 						code: 'createPostmarkAdapter({\n  client: postmark,\n  mapMetadata: (metadata) => ({\n    Tag: typeof metadata.flow === "string" ? metadata.flow : "transactional",\n    Metadata: { tenant: String(metadata.tenant ?? "unknown") },\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'mapMetadata',
 						language: 'typescript'
 					},
 					{
 						code: '{\n  MessageID, SubmittedAt, To, ErrorCode, Message;\n}',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Error mapping',
 						language: 'typescript'
 					}
 				],
@@ -5346,28 +5243,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/dispatch @absolutejs/dispatch-resend resend',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { Resend } from "resend";\nimport { createDispatcher } from "@absolutejs/dispatch";\nimport { createResendAdapter } from "@absolutejs/dispatch-resend";\n\nconst resend = new Resend(process.env.RESEND_KEY!);\n\nconst dispatcher = createDispatcher({\n  email: createResendAdapter({\n    client: resend,\n    defaultFrom: "no-reply@acme.io",\n  }),\n});\n\nconst result = await dispatcher.email({\n  to: "alice@example.com",\n  subject: "Welcome to Acme",\n  text: "Click here to verify: ...",\n  // String metadata becomes Resend tags by default:\n  metadata: { campaign: "welcome-v2", priority: "high" },\n});\n\nconsole.log(result.id); // Resend\'s message id',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: "createResendAdapter({\n  client,         // Required — your `new Resend(apiKey)`\n  defaultFrom?,   // Required if your messages don't set `from`\n  tagsFromMetadata?,  // Customize metadata → Resend tags mapping\n})",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'API',
 						language: 'typescript'
 					},
 					{
 						code: 'createResendAdapter({\n  client: resend,\n  tagsFromMetadata: (metadata) => [\n    // Always include the tenant\n    ...(typeof metadata.tenant === "string"\n      ? [{ name: "tenant", value: metadata.tenant }]\n      : []),\n    // Drop debug-only entries\n  ],\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'tagsFromMetadata',
 						language: 'typescript'
 					}
 				],
@@ -5445,21 +5342,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/dispatch-sinch @sinch/sdk-core',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { createDispatcher } from "@absolutejs/dispatch";\nimport { createSinchAdapter } from "@absolutejs/dispatch-sinch";\nimport { SinchClient } from "@sinch/sdk-core";\n\nconst client = new SinchClient({\n  conversationRegion: "us",\n  keyId: process.env.SINCH_KEY_ID!,\n  keySecret: process.env.SINCH_KEY_SECRET!,\n  projectId: process.env.SINCH_PROJECT_ID!,\n});\n\nconst messaging = createSinchAdapter({\n  appId: process.env.SINCH_APP_ID!,\n  client,\n  projectId: process.env.SINCH_PROJECT_ID!,\n});\n\nconst dispatch = createDispatcher({ messaging });\nawait dispatch.messaging({\n  content: { kind: "text", text: "Production latency is elevated." },\n  fallbacks: [{ transport: "sms" }],\n  idempotencyKey: "incident-42:recipient-7",\n  to: { address: "+12025550100", transport: "rcs" },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Minimal sending',
 						language: 'typescript'
 					},
 					{
 						code: 'import {\n  createSinchRegistrationClient,\n  createSinchRegistrationManager,\n} from "@absolutejs/dispatch-sinch";\n\nconst registrations = createSinchRegistrationManager(\n  createSinchRegistrationClient({\n    keyId: process.env.SINCH_KEY_ID!,\n    keySecret: process.env.SINCH_KEY_SECRET!,\n  }),\n  process.env.SINCH_PROJECT_ID!,\n);',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Compliance boundary',
 						language: 'typescript'
 					}
 				],
@@ -5532,28 +5429,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/dispatch@^0.5 @absolutejs/dispatch-telnyx telnyx\nbun add @absolutejs/compliance@^0.5 # when enforcing program consent',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { createDispatcher } from "@absolutejs/dispatch";\nimport {\n  createPostgresIdempotentOperationStore,\n  createPostgresTransactionRunner,\n  createTelnyxAdapter,\n} from "@absolutejs/dispatch-telnyx";\nimport { Telnyx } from "telnyx";\n\nconst client = new Telnyx({ apiKey: process.env.TELNYX_API_KEY! });\nconst runner = createPostgresTransactionRunner(postgresPool);\n\nconst dispatcher = createDispatcher({\n  messaging: createTelnyxAdapter({\n    accountId: process.env.TELNYX_ORGANIZATION_ID!,\n    client,\n    idempotencyStore: createPostgresIdempotentOperationStore(runner),\n    messagingProfileId: process.env.TELNYX_MESSAGING_PROFILE_ID!,\n    rcsAgentId: process.env.TELNYX_RCS_AGENT_ID,\n    webhookFailoverUrl: "https://failover.example.com/webhooks/telnyx",\n    webhookUrl: "https://app.example.com/webhooks/telnyx",\n  }),\n});\n\nawait dispatcher.messaging({\n  content: { kind: "text", text: "Production database latency is elevated." },\n  consent: { programId: "pro-alerts", purpose: "incident-alerts" },\n  idempotencyKey: "incident-42:recipient-7",\n  tenant: "tenant-a",\n  to: { address: "+12025550100", transport: "sms" },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Send SMS, MMS, and RCS',
 						language: 'typescript'
 					},
 					{
 						code: 'await dispatcher.messaging({\n  content: {\n    actions: [\n      {\n        kind: "url",\n        label: "Open incident",\n        url: "https://app.example.com/incidents/42",\n      },\n    ],\n    kind: "rich",\n    mediaUrl: "https://cdn.example.com/incident.png",\n    text: "Production database latency is elevated.",\n    title: "Incident 42",\n  },\n  consent: { programId: "pro-alerts", purpose: "incident-alerts" },\n  fallbacks: [\n    {\n      content: {\n        kind: "text",\n        text: "Incident 42: https://app.example.com/incidents/42",\n      },\n      from: { address: "+12025550199", transport: "sms" },\n      transport: "sms",\n    },\n  ],\n  to: { address: "+12025550100", transport: "rcs" },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Send SMS, MMS, and RCS 2',
 						language: 'typescript'
 					},
 					{
 						code: 'import {\n  createPostgresWebhookInboxStore,\n  createTelnyxWebhookHandler,\n} from "@absolutejs/dispatch-telnyx";\n\nconst handler = createTelnyxWebhookHandler({\n  consentLedger,\n  handler: processNormalizedEvent,\n  inbox: createPostgresWebhookInboxStore(runner),\n  resolveAccount: (organizationId) => accountConfiguration(organizationId),\n  resolveConsentScopes: (event) => programsForNumber(event.from!.address),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Reliability and webhooks',
 						language: 'typescript'
 					}
 				],
@@ -5630,42 +5527,42 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/dispatch @absolutejs/dispatch-twilio twilio\nbun add @absolutejs/compliance # when using the shared consent ledger',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { createDispatcher } from "@absolutejs/dispatch";\nimport { createTwilioAdapter } from "@absolutejs/dispatch-twilio";\nimport { Twilio } from "twilio";\n\nconst accountSid = process.env.TWILIO_ACCOUNT_SID!;\nconst client = new Twilio(accountSid, process.env.TWILIO_AUTH_TOKEN!);\n\nconst dispatcher = createDispatcher({\n  messaging: createTwilioAdapter({\n    accountSid,\n    client,\n    messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID!,\n    statusCallbackUrl: "https://app.example.com/webhooks/twilio/messaging",\n    smartEncoded: true,\n    validityPeriod: 300,\n  }),\n});\n\nawait dispatcher.messaging({\n  content: { kind: "text", text: "CPU usage has exceeded 90%." },\n  consent: {\n    programId: "pro-alerts",\n    purpose: "incident-alerts",\n  },\n  privacy: {\n    addressRetention: "obfuscate",\n    contentRetention: "discard",\n  },\n  tenant: "tenant-a",\n  to: { address: "+12025550100", transport: "sms" },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Send alerts',
 						language: 'typescript'
 					},
 					{
 						code: 'await dispatcher.messaging({\n  content: { kind: "template", id: "HX0123456789abcdef0123456789abcdef" },\n  consent: {\n    programId: "pro-alerts",\n    purpose: "incident-alerts",\n  },\n  fallbacks: [\n    {\n      from: { address: "+12025550199", transport: "sms" },\n      transport: "sms",\n    },\n  ],\n  to: { address: "+12025550100", transport: "rcs" },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Send alerts 2',
 						language: 'typescript'
 					},
 					{
 						code: 'import {\n  createPostgresTwilioIdempotencyStore,\n  TWILIO_IDEMPOTENCY_POSTGRES_SCHEMA,\n} from "@absolutejs/dispatch-twilio";\n\nconst adapter = createTwilioAdapter({\n  accountSid,\n  client,\n  idempotencyStore: createPostgresTwilioIdempotencyStore(postgresPool),\n  messagingServiceSid,\n  statusCallbackUrl,\n  resolveTenant: (tenant) => tenantTwilioConfiguration(tenant),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Idempotency and tenant isolation',
 						language: 'typescript'
 					},
 					{
 						code: 'import {\n  createMessagingConsentDispatchPolicy,\n  createMessagingConsentLedger,\n  createPostgresMessagingConsentStore,\n} from "@absolutejs/compliance";\nimport {\n  createPostgresTwilioLifecycleStore,\n  createTwilioWebhookHandler,\n} from "@absolutejs/dispatch-twilio";\n\nconst consent = createMessagingConsentLedger({\n  audit,\n  store: createPostgresMessagingConsentStore(postgresPool),\n});\nconst lifecycleStore = createPostgresTwilioLifecycleStore(postgresPool);\n\nconst handleTwilioWebhook = createTwilioWebhookHandler({\n  publicUrl: "https://app.example.com/webhooks/twilio/messaging",\n  resolveAccount: (untrustedAccountSid) =>\n    accountDirectory.get(untrustedAccountSid),\n  store: lifecycleStore,\n  consent: {\n    ledger: consent,\n    resolveScopes: (event) =>\n      ["sms", "rcs"].map((transport) => ({\n        programId: "pro-alerts",\n        purpose: "incident-alerts",\n        recipient: event.from!,\n        tenant: "tenant-a",\n        transport,\n      })),\n  },\n  onEvent: async (event) => alerts.recordTwilioEvent(event),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Consent and signed messaging webhooks',
 						language: 'typescript'
 					},
 					{
 						code: 'const registration = createTwilioComplianceManager(client);\n\nconst campaign = await registration.registerA2PCampaign(messagingServiceSid, {\n  brandRegistrationSid,\n  description,\n  messageFlow,\n  messageSamples: [sampleOne, sampleTwo],\n  usAppToPersonUsecase: "ACCOUNT_NOTIFICATION",\n  hasEmbeddedLinks: false,\n  hasEmbeddedPhone: false,\n  privacyPolicyUrl,\n  termsAndConditionsUrl,\n});\n\nconst status = await registration.inspect({\n  kind: "a2p",\n  customerProfileSid,\n  brandRegistrationSid,\n  messagingServiceSid,\n  campaignSid: campaign.sid,\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading: 'Carrier compliance and ISV onboarding',
 						language: 'typescript'
 					}
 				],
@@ -5748,21 +5645,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/dispatch@^0.6 @absolutejs/dispatch-vonage @vonage/server-sdk\nbun add @absolutejs/compliance@^0.6 # when enforcing program consent',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { createDispatcher } from "@absolutejs/dispatch";\nimport {\n  createPostgresIdempotentOperationStore,\n  createPostgresTransactionRunner,\n  createVonageAdapter,\n} from "@absolutejs/dispatch-vonage";\nimport { Vonage } from "@vonage/server-sdk";\n\nconst client = new Vonage({\n  applicationId: process.env.VONAGE_APPLICATION_ID!,\n  privateKey: process.env.VONAGE_PRIVATE_KEY!,\n});\nconst runner = createPostgresTransactionRunner(postgresPool);\nconst messaging = createVonageAdapter({\n  apiKey: process.env.VONAGE_API_KEY!,\n  applicationId: process.env.VONAGE_APPLICATION_ID!,\n  client,\n  defaultFrom: {\n    rcs: process.env.VONAGE_RCS_SENDER!,\n    sms: process.env.VONAGE_SMS_SENDER!,\n  },\n  idempotencyStore: createPostgresIdempotentOperationStore(runner),\n  webhookUrl: "https://app.example.com/webhooks/vonage/messages",\n});\n\nconst dispatch = createDispatcher({ messaging });\nawait dispatch.messaging({\n  content: {\n    actions: [{ kind: "reply", label: "Acknowledge", payload: "ack:42" }],\n    kind: "rich",\n    mediaUrl: "https://cdn.example.com/incidents/42.png",\n    text: "Database latency is elevated.",\n    title: "Production incident",\n  },\n  consent: { programId: "pro-alerts", purpose: "incident-alerts" },\n  fallbacks: [\n    {\n      content: { kind: "text", text: "Database latency is elevated." },\n      transport: "sms",\n    },\n  ],\n  idempotencyKey: "incident-42:recipient-7",\n  tenant: "tenant-a",\n  to: { address: "+12025550100", transport: "rcs" },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Send with failover',
 						language: 'typescript'
 					},
 					{
 						code: 'import {\n  createPostgresWebhookInboxStore,\n  createVonageWebhookHandler,\n} from "@absolutejs/dispatch-vonage";\n\nconst webhook = createVonageWebhookHandler({\n  consentLedger,\n  handler: (event) => lifecycle.record(event),\n  inbox: createPostgresWebhookInboxStore(runner),\n  resolveAccount: (apiKey) => webhookAccount(apiKey),\n  resolveConsentScopes: (event) => programsForNumber(event.from!.address),\n});\n\napp.post("/webhooks/vonage/messages", ({ request }) => webhook(request));',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Signed durable webhooks',
 						language: 'typescript'
 					}
 				],
@@ -5843,19 +5740,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun install\nbun run dev',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Local development',
 				language: 'sh'
 			},
 			{
 				code: 'bun run catalog:generate\nbun run check:docs',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Ecosystem catalog',
 				language: 'sh'
 			},
 			{
 				code: 'bun run check:docs\nbun run typecheck\nbunx absolute build',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Validation',
 				language: 'sh'
 			}
 		],
@@ -5878,11 +5775,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'bun run check:docs bun run typecheck bunx absolute build',
 				title: 'Validation'
-			},
-			{
-				description:
-					'Architecture is documented in the repository README.',
-				title: 'Architecture'
 			}
 		],
 		repository: 'https://github.com/absolutejs/absolutejs-docs',
@@ -5924,7 +5816,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import {\n  normalizeOffsetPage,\n  type OffsetPage,\n} from "@absolutejs/eden";\n\nconst { limit, offset } = normalizeOffsetPage(request, {\n  defaultLimit: 25,\n  maxLimit: 100,\n});\n\nconst response: OffsetPage<User> = { data: rows, total };',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Pagination',
 				language: 'typescript'
 			}
 		],
@@ -5991,7 +5883,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'const policy = createEgressPolicy({\n  allowedHosts: ["api.stripe.com", "*.githubusercontent.com"],\n  resolver: resolvePublicDns,\n});\n\nconst agentFetch = createEgressFetch({\n  policy,\n  transport: createPinnedHttpsTransport(),\n  credentials: ({ url }) =>\n    url.hostname === "api.stripe.com"\n      ? { authorization: `Bearer ${stripeToken}` }\n      : undefined,\n  audit: writeSecurityEvent,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Quick start',
 				language: 'typescript'
 			}
 		],
@@ -6058,25 +5950,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/email',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'bash'
 			},
 			{
 				code: 'import {\n  createGmailClient,\n  gmailMessagesToNormalized,\n  parseGmailPubSubWebhook,\n} from "@absolutejs/email";\n\nconst client = createGmailClient({ accessToken });\nconst { messages, cursor } = await client.listHistory({ cursor: historyId });\nconst normalized = await gmailMessagesToNormalized(client, messages, {\n  accountEmail: "member@example.com",\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Gmail',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  createMicrosoftGraphEmailClient,\n  microsoftMessagesToNormalized,\n} from "@absolutejs/email";\n\nconst client = createMicrosoftGraphEmailClient({ accessToken });\nconst { messages, cursor } = await client.listDelta();\nconst normalized = microsoftMessagesToNormalized(messages, {\n  accountEmail: "member@example.com",\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Microsoft Graph',
 				language: 'typescript'
 			},
 			{
 				code: 'import { fetchImapMessages } from "@absolutejs/email";\n\nconst result = await fetchImapMessages({\n  accountEmail: "member@example.com",\n  auth: { pass: appPassword, user: "member@example.com" },\n  host: "imap.fastmail.com",\n  port: 993,\n  secure: true,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'IMAP',
 				language: 'typescript'
 			}
 		],
@@ -6294,13 +6186,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { findEmail } from "@absolutejs/enrich";\n\n// Discovery-only — no SMTP, no third-party call:\nawait findEmail({ fullName: "Jane Doe", domain: "acme.com" });\n// → { email: "jane.doe@acme.com", status: "unknown", confidence: 45, template: "first.last" }\n\n// With a verifier you bring (ZeroBounce / Hunter / your ESP):\nawait findEmail({ fullName: "Jane Doe", domain: "acme.com" }, { verifier });\n// → { email: "jane.doe@acme.com", status: "deliverable", confidence: 95, template: "first.last" }',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'What it does',
 				language: 'typescript'
 			},
 			{
 				code: 'type EmailVerifier = (email: string) => Promise<{ status; confidence; catchAll? }>;',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: "The verifier is pluggable — and that's the point",
 				language: 'typescript'
 			}
 		],
@@ -6319,11 +6211,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'The "confirm" step is an interface, not a baked-in SMTP probe:',
 				title: "The verifier is pluggable — and that's the point"
-			},
-			{
-				description:
-					'Confidence scale is documented in the repository README.',
-				title: 'Confidence scale'
 			},
 			{
 				description:
@@ -6385,37 +6272,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { Effect } from "effect";\nimport { status } from "elysia";\nimport { createErrorTracker, createMemoryIssueStore } from "@absolutejs/errors";\nimport { tracerOrNoop } from "@absolutejs/telemetry";\n\nconst errors = createErrorTracker({\n  audit: broker, // @absolutejs/audit\n  tracer: tracerOrNoop(otelProvider, "app"),\n  store: createMemoryIssueStore(), // or @absolutejs/errors-postgres\n  project: "acme",\n  release: process.env.RELEASE,\n  environment: "production",\n  onIssue: (r) => alert(r.issue), // only on new / regression\n});\n\n// Effect API (primary):\nconst outcome = await Effect.runPromise(\n  errors.capture(e, {\n    tenant,\n    target: `order_${orderId}`,\n    tags: { component: "billing" },\n  }),\n);\n\n// Promise edge (for Promise-world consumers) — identical outcome:\nconst out = await errors.captureException(e);\n\nif (out.failures.length > 0) {\n  for (const f of out.failures) {\n    switch (f._tag) {\n      case "StoreFailure":\n        retryLater(f.cause);\n        break; // f.cause: IssueStoreError\n      case "AuditSinkFailure":\n        page("audit lost", f.cause);\n        break;\n      case "TracerFailure":\n      case "OnIssueFailure":\n      case "FingerprintFailure":\n        /* tolerate */ break;\n    }\n  }\n}\nreturn status(\n  "Internal Server Error",\n  `Request failed. Reference: ${out.fingerprint}`,\n);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Errors-as-values',
 				language: 'typescript'
 			},
 			{
 				code: 'createErrorTracker(options?: {\n  audit?: { append: (event) => Promise<void> | void };\n  tracer?: { startSpan?: (name) => Span };\n  store?: IssueStore;          // durable "Issues" surface\n  project?: string;            // default \'default\'\n  onIssue?: (r: IssueUpsertResult) => void | Promise<void>;  // new/regression only\n  release?: string;\n  environment?: string;\n  fingerprint?: (error: Error, context: ErrorContext) => string | Promise<string>;\n  maxRecent?: number;          // default 100\n  maxFingerprints?: number;    // default 1000\n  clock?: () => number;\n}) => ErrorTracker',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'API',
 				language: 'typescript'
 			},
 			{
 				code: "capture(error, context?)          => Effect<CaptureOutcome, never>   // primary\ncaptureException(error, context?) => Promise<CaptureOutcome>         // Promise edge\nrecentErrors()                    => ReadonlyArray<CapturedError>\nclearRecent()                     => void\nmetrics()                         => { captured, captureErrors, byFingerprint }\nstore?                            => IssueStore\n\ntype CaptureOutcome = {\n  fingerprint: string;\n  delivered: Record<'fingerprint'|'audit'|'tracer'|'store'|'onIssue', 'ok'|'failed'|'skipped'>;\n  issue?: IssueUpsertResult;          // present iff the store delivered\n  failures: CaptureFailure[];         // typed, tagged; empty ⇒ fully delivered\n};",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'API 2',
 				language: 'typescript'
 			},
 			{
 				code: 'import { createErrorTracker, createMemoryIssueStore } from "@absolutejs/errors";\nimport { errorsPlugin, handledError } from "@absolutejs/errors/elysia";\nimport { Elysia, status } from "elysia";\n\nconst tracker = createErrorTracker({\n  store: createMemoryIssueStore(), // use the Postgres adapter in production\n});\n\nconst app = new Elysia()\n  .use(\n    errorsPlugin({\n      tracker,\n      server: {\n        context: ({ request }) => ({\n          tenant: request.headers.get("x-user-id") ?? undefined,\n        }),\n      },\n      ingest: {\n        path: "/ingest",\n        // authorize, limits, buffer, symbolication, and drain settings\n      },\n    }),\n  )\n  .get("/report", async () => {\n    try {\n      return await buildReport();\n    } catch (error) {\n      return handledError(\n        status(500, { message: "Unable to build the report." }),\n        error,\n      );\n    }\n  });',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Elysia server integration',
 				language: 'typescript'
 			},
 			{
 				code: 'import { createErrorTracker, createMemoryIssueStore } from "@absolutejs/errors";\n// or, for durability:\n// import { createPostgresIssueStore } from \'@absolutejs/errors-postgres\';\n\nconst errors = createErrorTracker({\n  project: "acme",\n  release: process.env.RELEASE,\n  store: createMemoryIssueStore(), // swap for the Postgres adapter\n  onIssue: (r) => {\n    // fires ONLY on new / regression\n    if (r.isNew || r.isRegression) alert(r.issue); // → @absolutejs/dispatch\n  },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Durable issues (the "Issues" surface)',
 				language: 'typescript'
 			},
 			{
 				code: "type IssueStore = {\n  record: (event: StoredEvent) => Effect<IssueUpsertResult, IssueStoreError>;  // required\n  listIssues?: (filter?) => Effect<IssueRecord[], IssueStoreError>;            // dashboard\n  getIssue?:  (project, fingerprint) => Effect<Option<IssueRecord>, IssueStoreError>;\n  setState?:  (project, fingerprint, 'unresolved'|'resolved'|'ignored') => Effect<void, IssueStoreError>;\n  assign?:    (project, fingerprint, assignee | null) => Effect<void, IssueStoreError>;\n  listEvents?:(project, fingerprint, limit?) => Effect<StoredEvent[], IssueStoreError>;\n};",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Durable issues (the "Issues" surface) 2',
 				language: 'typescript'
 			}
 		],
@@ -6470,7 +6357,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/errors @absolutejs/errors-postgres',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'PostgreSQL',
 				language: 'sh'
 			}
 		],
@@ -6527,42 +6414,42 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/errors-postgres\n# plus your driver + peers:\nbun add @absolutejs/errors effect postgres   # or @neondatabase/serverless',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'export { errorEvents, errorIssues } from "@absolutejs/errors-postgres";',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Drizzle',
 						language: 'typescript'
 					},
 					{
 						code: 'import { createDrizzleIssueStore } from "@absolutejs/errors-postgres";\n\nconst store = createDrizzleIssueStore({ db });',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Drizzle 2',
 						language: 'typescript'
 					},
 					{
 						code: 'import postgres from "postgres";\nimport { createErrorTracker } from "@absolutejs/errors";\nimport { createPostgresIssueStore } from "@absolutejs/errors-postgres";\n\nconst sql = postgres(process.env.DATABASE_URL!);\n\nconst errors = createErrorTracker({\n  project: "acme",\n  release: process.env.RELEASE,\n  store: createPostgresIssueStore({ sql }), // schema auto-created, lazy\n  onIssue: (r) => alert(r.issue), // only on new / regression\n});\n\nawait errors.captureException(err, { traceId, replayId });',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Tagged-template compatibility',
 						language: 'typescript'
 					},
 					{
 						code: 'import { neon } from "@neondatabase/serverless";\nconst sql = neon(process.env.DATABASE_URL!);\ncreatePostgresIssueStore({ sql });',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Tagged-template compatibility 2',
 						language: 'typescript'
 					},
 					{
 						code: 'error_issues  PK (project, fingerprint)   -- one row per grouped issue\nerror_events  bigserial id                -- append-only occurrences (jsonb tags/extra)',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading: 'Schema (lazy, idempotent)',
 						language: 'text'
 					}
 				],
@@ -6575,11 +6462,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: 'bun add @absolutejs/errors-postgres',
 						title: 'Install'
-					},
-					{
-						description:
-							'Usage is documented in the repository README.',
-						title: 'Usage'
 					},
 					{
 						description:
@@ -6634,13 +6516,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'new Elysia().use(auth).use(metrics);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Elysia composition boundaries',
 				language: 'typescript'
 			},
 			{
 				code: 'new Elysia().use([auth, metrics]);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Elysia composition boundaries 2',
 				language: 'typescript'
 			}
 		],
@@ -6669,7 +6551,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		category: 'Dev Tools',
 		commands: [],
 		description:
-			'Runnable examples demonstrating AbsoluteJS framework features and ecosystem packages.',
+			'Each directory is a standalone example app. Pick one, cd in, bun install, bun dev.',
 		directory: 'examples',
 		kind: 'monorepo',
 		name: 'Examples',
@@ -6680,7 +6562,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'cd voice\nbun install\nbun dev',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Running an example',
 				language: 'sh'
 			}
 		],
@@ -6734,12 +6616,55 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'A complete multi-framework chat application built with @absolutejs/ai. The same backend powers React, Vue, Svelte, Angular, HTML, and HTMX clients while demonstrating streaming responses, provider selection, tools, attachments, reasoning output, and conversation persistence.',
 				name: 'absolute-ai-example',
 				private: true,
 				publicExports: [],
-				readmeSamples: [],
-				readmeTopics: [],
+				readmeSamples: [
+					{
+						code: 'bun install\nbun run dev',
+						description:
+							'Example from the canonical repository README.',
+						heading: 'Run it',
+						language: 'bash'
+					},
+					{
+						code: '/          React\n/vue       Vue\n/svelte    Svelte\n/angular   Angular\n/html      HTML client\n/htmx      HTMX client',
+						description:
+							'Example from the canonical repository README.',
+						heading: 'Framework routes',
+						language: 'text'
+					},
+					{
+						code: 'bun run typecheck\nbun run lint\nbun run test:e2e',
+						description:
+							'Example from the canonical repository README.',
+						heading: 'Validate changes',
+						language: 'bash'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'A complete multi-framework chat application built with @absolutejs/ai. The same backend powers React, Vue, Svelte, Angular, HTML, and HTMX clients while demonstrating streaming responses, provider selection, tools, attachments, reasoning output, and conversation persistence.',
+						title: 'Overview'
+					},
+					{
+						description: 'bun install bun run dev',
+						title: 'Run it'
+					},
+					{
+						description:
+							'/ React /vue Vue /svelte Svelte /angular Angular /html HTML client /htmx HTMX client',
+						title: 'Framework routes'
+					},
+					{
+						description:
+							'bun run typecheck bun run lint bun run test:e2e',
+						title: 'Validate changes'
+					}
+				],
 				sourcePath: 'ai',
 				version: '0.0.1'
 			},
@@ -6770,7 +6695,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'OAuth2 authentication with @absolutejs/auth, demonstrated across all six AbsoluteJS frontends — React, Vue, Svelte, Angular, HTML, and HTMX — backed by one Elysia server, one JSON/OAuth API, and one shared CSS file.',
 				name: 'absolutejs-auth-example',
 				private: true,
 				publicExports: [],
@@ -6779,14 +6705,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun install\n\n# Configure secrets (.env): a Neon/Postgres DATABASE_URL, an\n# OAUTH2_CALLBACK_URI=http://localhost:3000/oauth2/callback, and the provider\n# client id/secret pairs you want to use (see .env.example).\nbun db:push        # provision the auth + linked-provider tables\nbun dev            # http://localhost:3000',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Run it',
 						language: 'bash'
 					},
 					{
 						code: 'PUBLIC_ORIGIN=http://localhost:3000   # used for WebAuthn rpId + OIDC issuer\nOIDC_SIGNING_KEY_JWK=                 # generated at boot if unset (logged with a warning)\nMFA_ENCRYPTION_KEY=                   # generated at boot if unset (TOTP secrets lost on reboot)\nAUDIT_INTEGRITY_SECRET=               # falls back to keyless SHA-256 chaining if unset',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Showcase env vars (optional but recommended)',
 						language: 'bash'
 					}
 				],
@@ -6804,11 +6730,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: 'bun install',
 						title: 'Run it'
-					},
-					{
-						description:
-							'Routes is documented in the repository README.',
-						title: 'Routes'
 					},
 					{
 						description:
@@ -6846,7 +6767,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'One page per framework (React / Vue / Svelte / Angular / HTML / HTMX) demonstrating the same CRM lead-capture flow against @absolutejs/crm. Backend wires a stub adapter so the example runs without real Salesforce/HubSpot credentials.',
 				name: 'absolutejs-crm-example',
 				private: true,
 				publicExports: [],
@@ -6864,11 +6786,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'One page per framework (React / Vue / Svelte / Angular / HTML / HTMX) demonstrating the same CRM lead-capture flow against @absolutejs/crm. Backend wires a stub adapter so the example runs without real Salesforce/HubSpot credentials.',
 						title: 'Overview'
-					},
-					{
-						description:
-							'What the example demonstrates is documented in the repository README.',
-						title: 'What the example demonstrates'
 					}
 				],
 				sourcePath: 'crm',
@@ -6889,7 +6806,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'Runnable product-demo proof for @absolutejs/demo.',
 				name: 'absolutejs-demo-example',
 				private: true,
 				publicExports: [],
@@ -6935,7 +6853,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					"A demonstration of AbsoluteJS's convention-based error boundary system across React, Vue, Svelte, and Angular — all running in a single project with server-side rendering.",
 				name: 'absolutejs-error-boundaries-example',
 				private: true,
 				publicExports: [],
@@ -6944,42 +6863,42 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: '# install dependencies\nnpm install\n\n# start the dev server\nnpm run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Getting Started',
 						language: 'bash'
 					},
 					{
 						code: 'export default function ErrorPage({ error }: { error: { message: string; stack?: string } }) {\n  return <div>{error.message}</div>;\n}',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Error Convention Files',
 						language: 'typescript'
 					},
 					{
 						code: '<script setup lang="ts">\nconst { error } = defineProps<{ error: { message: string; stack?: string } }>();\n</script>\n<template>\n  <div>{{ error.message }}</div>\n</template>',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Error Convention Files 2',
 						language: 'vue'
 					},
 					{
 						code: '<script lang="ts">\n  let { error }: { error: { message: string; stack?: string } } = $props();\n</script>\n<div>{error.message}</div>',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Error Convention Files 3',
 						language: 'svelte'
 					},
 					{
 						code: 'export function renderError(error: { message: string; stack?: string }): string {\n  return `<div>${error.message}</div>`;\n}',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Error Convention Files 4',
 						language: 'typescript'
 					},
 					{
 						code: 'pages/\n  ReactHome.tsx\n  ReactHome.error.tsx   ← used only when ReactHome throws\n  error.tsx             ← used for all other React pages',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading: 'Page-Specific Overrides',
 						language: 'text'
 					}
 				],
@@ -6993,26 +6912,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'AbsoluteJS uses a file-naming convention to automatically handle errors during SSR:',
 						title: 'What This Shows'
-					},
-					{
-						description:
-							'Routes is documented in the repository README.',
-						title: 'Routes'
-					},
-					{
-						description:
-							'Getting Started is documented in the repository README.',
-						title: 'Getting Started'
-					},
-					{
-						description:
-							'How It Works is documented in the repository README.',
-						title: 'How It Works'
-					},
-					{
-						description:
-							'Tech Stack is documented in the repository README.',
-						title: 'Tech Stack'
 					}
 				],
 				sourcePath: 'error-boundaries',
@@ -7045,7 +6944,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'This project showcases the AbsoluteJS Image component across four frameworks — React, Vue, Svelte, and Angular — plus the data-optimized attribute for plain HTML and HTMX. Each demo page renders the same set of images so you can compare the developer experience and output across all six approaches.',
 				name: 'absolutejs-image-optimization-example',
 				private: true,
 				publicExports: [],
@@ -7054,28 +6954,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: '<img\n  data-optimized\n  src="/assets/jpg/landscape.jpg"\n  width="1200"\n  height="800"\n  sizes="(max-width: 640px) 100vw, 340px"\n  alt="Landscape photo"\n/>',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'HTML / HTMX: data-optimized',
 						language: 'html'
 					},
 					{
 						code: 'import { defineConfig } from "@absolutejs/absolute";\n\nexport default defineConfig({\n  images: {\n    formats: ["avif", "webp"],\n  },\n\n  // Framework source directories\n  angularDirectory: "./src/frontend/angular",\n  reactDirectory: "./src/frontend/react",\n  svelteDirectory: "./src/frontend/svelte",\n  vueDirectory: "./src/frontend/vue",\n  htmlDirectory: "./src/frontend/html",\n  htmxDirectory: "./src/frontend/htmx",\n\n  assetsDirectory: "./src/backend/assets",\n  stylesConfig: "./src/frontend/styles/indexes",\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Configuration',
 						language: 'typescript'
 					},
 					{
 						code: 'bun install\nbun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Getting Started',
 						language: 'bash'
 					},
 					{
 						code: 'bun run test',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Testing',
 						language: 'bash'
 					}
 				],
@@ -7084,11 +6984,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'This project showcases the AbsoluteJS Image component across four frameworks — React, Vue, Svelte, and Angular — plus the data-optimized attribute for plain HTML and HTMX. Each demo page renders the same set of images so you can compare the developer experience and output across all six approaches.',
 						title: 'Overview'
-					},
-					{
-						description:
-							'Frameworks is documented in the repository README.',
-						title: 'Frameworks'
 					},
 					{
 						description:
@@ -7145,7 +7040,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'An example project demonstrating the AbsoluteJS islands architecture — mix React, Svelte, Vue, Angular, HTML, and HTMX components on the same page with shared state across frameworks.',
 				name: 'absolutejs-island-example',
 				private: true,
 				publicExports: [],
@@ -7154,35 +7050,35 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: '# Clone the repository\ngit clone https://github.com/absolutejs/examples.git\ncd examples/island\n\n# Install dependencies\nbun install\n\n# Start the dev server\nbun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Getting Started',
 						language: 'bash'
 					},
 					{
 						code: 'src/\n├── backend/\n│   ├── assets/              # Static assets (icons, images, SVGs)\n│   ├── plugins/\n│   │   └── pagesPlugin.ts   # Route definitions for each host page\n│   ├── server.ts            # Elysia server setup\n│   └── vueImporter.ts       # Vue SSR import helper\n└── frontend/\n    ├── angular/             # Angular island components and host page\n    ├── client/\n    │   └── bootstrap.ts     # Client-side island hydration bootstrap\n    ├── html/                # Plain HTML host page\n    ├── htmx/                # HTMX host page\n    ├── islands/\n    │   ├── counterStore.ts  # Shared cross-framework state store\n    │   └── registry.ts      # Central island registry (type-safe)\n    ├── react/               # React island components and host page\n    ├── styles/              # Global styles\n    ├── svelte/              # Svelte island components and host page\n    └── vue/                 # Vue island components and host page',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Project Structure',
 						language: 'text'
 					},
 					{
 						code: "// src/frontend/islands/counterStore.ts\nexport const counterIslandStore = createIslandStore(\n\t'counter',\n\t{\n\t\tsharedCount: 0\n\t},\n\t(set) => ({\n\t\tincrementShared: () =>\n\t\t\tset((state) => ({ sharedCount: state.sharedCount + 1 })),\n\t\tresetShared: () => set({ sharedCount: 0 })\n\t})\n);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: '1. Define a shared store',
 						language: 'typescript'
 					},
 					{
 						code: '// src/frontend/islands/registry.ts\nexport const islandRegistry = defineIslandRegistry({\n\treact: { ReactCounter },\n\tsvelte: { SvelteCounter },\n\tvue: { VueCounter },\n\tangular: { AngularCounter }\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: '2. Register island components',
 						language: 'typescript'
 					},
 					{
 						code: '// In a React host page\n<TypedReactIsland\n  framework="react"\n  component="ReactCounter"\n  hydrate="load"\n  props={{ initialCount: 0, label: "React island" }}\n/>\n\n// Embed a Svelte island inside a React page\n<TypedReactIsland\n  framework="svelte"\n  component="SvelteCounter"\n  hydrate="visible"\n  props={{ initialCount: 0, label: "Svelte island" }}\n/>',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: '3. Use islands in any host page',
 						language: 'typescript'
 					}
 				],
@@ -7199,38 +7095,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
-							'What This Example Shows is documented in the repository README.',
-						title: 'What This Example Shows'
-					},
-					{
-						description:
-							'Prerequisites is documented in the repository README.',
-						title: 'Prerequisites'
-					},
-					{
-						description:
-							'Getting Started is documented in the repository README.',
-						title: 'Getting Started'
-					},
-					{
-						description:
-							'Scripts is documented in the repository README.',
-						title: 'Scripts'
-					},
-					{
-						description:
 							'src/ ├── backend/ │ ├── assets/ # Static assets (icons, images, SVGs) │ ├── plugins/ │ │ └── pagesPlugin.ts # Route definitions for each host page │ ├── server.ts # Elysia server setup │ └── vueImporter.ts # Vue SSR import helper └── frontend/ ├── angular/ # Angular island components and host page ├── client/ │ └── bootstrap.ts # Client-side island hydration bootstrap ├── html/ # Plain HTML host page ├── htmx/ # HTMX host page ├── islands/ │ ├── counterStore.ts # Shared cross-framework state store │ └── registry.ts # Central island registry (type-safe) ├── react/ # React island components and host page ├── styles/ # Global styles ├── svelte/ # Svelte island components and host page └── vue/ # Vue island components and host page',
 						title: 'Project Structure'
-					},
-					{
-						description:
-							'How It Works is documented in the repository README.',
-						title: 'How It Works'
-					},
-					{
-						description:
-							'Routes is documented in the repository README.',
-						title: 'Routes'
 					}
 				],
 				sourcePath: 'island',
@@ -7263,7 +7129,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'Live demo of @absolutejs/isolated-jsc, a Bun-native sandbox for executing untrusted JavaScript with heap isolation, CPU timeouts, memory caps, brokered host capabilities, execution receipts, output limits, and an FFI backend when JavaScriptCore is available.',
 				name: 'absolutejs-isolated-jsc-example',
 				private: true,
 				publicExports: [],
@@ -7272,7 +7139,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun install\nbun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Run it',
 						language: 'bash'
 					}
 				],
@@ -7290,16 +7157,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'The example deliberately uses one-shot execution to keep each demo self-contained. A real PaaS should use createIsolatedRunner() to pool by tenant/session, precompile hot callables, and expose host powers through typed capability tools with manifests and receipts.',
 						title: 'How it works'
-					},
-					{
-						description:
-							'Backend decision guide is documented in the repository README.',
-						title: 'Backend decision guide'
-					},
-					{
-						description:
-							'Related examples is documented in the repository README.',
-						title: 'Related examples'
 					}
 				],
 				sourcePath: 'isolated-jsc',
@@ -7328,7 +7185,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'An example project demonstrating the AbsoluteJS out-of-order streaming model across React, Svelte, Vue, and Angular.',
 				name: 'absolutejs-out-of-order-streaming-example',
 				private: true,
 				publicExports: [],
@@ -7337,7 +7195,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: '# Clone the repository\ngit clone https://github.com/absolutejs/examples.git\ncd examples/out-of-order-streaming\n\n# Install dependencies\nbun install\n\n# Start the dev server\nbun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Getting Started',
 						language: 'bash'
 					}
 				],
@@ -7354,33 +7212,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
-							'What This Example Shows is documented in the repository README.',
-						title: 'What This Example Shows'
-					},
-					{
-						description:
-							'Prerequisites is documented in the repository README.',
-						title: 'Prerequisites'
-					},
-					{
-						description:
-							'Getting Started is documented in the repository README.',
-						title: 'Getting Started'
-					},
-					{
-						description:
-							'Scripts is documented in the repository README.',
-						title: 'Scripts'
-					},
-					{
-						description:
 							'Each streaming page renders fast shell content immediately, then defers slower sections into independently resolving stream slots. When a section finishes, AbsoluteJS patches that slot into the response without waiting for the rest of the page.',
 						title: 'How It Works'
-					},
-					{
-						description:
-							'Routes is documented in the repository README.',
-						title: 'Routes'
 					}
 				],
 				sourcePath: 'out-of-order-streaming',
@@ -7409,7 +7242,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'Background jobs with @absolutejs/queue, shown across every framework AbsoluteJS supports. An in-process worker drains a typed job queue; every page — React, Vue, Svelte, Angular, HTML, or HTMX — enqueues work and polls the live status as the worker picks jobs up, retries the occasional transient failure, and marks them done.',
 				name: 'absolutejs-queue-example',
 				private: true,
 				publicExports: [],
@@ -7418,7 +7252,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun install\nbun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Run',
 						language: 'bash'
 					}
 				],
@@ -7436,11 +7270,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: 'bun install bun run dev',
 						title: 'Run'
-					},
-					{
-						description:
-							'One page per framework is documented in the repository README.',
-						title: 'One page per framework'
 					}
 				],
 				sourcePath: 'queue',
@@ -7469,7 +7298,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'This demo is pinned to @absolutejs/absolute@0.19.0-beta.644 + @absolutejs/ai@0.0.2 + @absolutejs/rag@0.0.1.',
 				name: 'absolutejs-rag-vector-example',
 				private: true,
 				publicExports: [],
@@ -7478,42 +7308,42 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'cd ~/alex/absolutejs-rag-vector-example\nbun dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'SQLite only',
 						language: 'bash'
 					},
 					{
 						code: 'cd ~/alex/absolutejs-rag-vector-example\nbun run pg:start',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'SQLite + PostgreSQL',
 						language: 'bash'
 					},
 					{
 						code: 'bun run dev:docker',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'SQLite + PostgreSQL 2',
 						language: 'bash'
 					},
 					{
 						code: 'bun run pg:stop',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'SQLite + PostgreSQL 3',
 						language: 'bash'
 					},
 					{
 						code: 'bun run pg:logs',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'SQLite + PostgreSQL 4',
 						language: 'bash'
 					},
 					{
 						code: "cd ~/alex/absolutejs-rag-vector-example\nRAG_POSTGRES_URL='postgresql://USER:PASS@HOST:PORT/DBNAME?sslmode=require' bun dev",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading: 'Use a Hosted PostgreSQL Database',
 						language: 'bash'
 					}
 				],
@@ -7522,11 +7352,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'This demo is pinned to @absolutejs/absolute@0.19.0-beta.644 + @absolutejs/ai@0.0.2 + @absolutejs/rag@0.0.1.',
 						title: 'Overview'
-					},
-					{
-						description:
-							'Run It is documented in the repository README.',
-						title: 'Run It'
 					},
 					{
 						description:
@@ -7545,11 +7370,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: 'Default selected mode:',
 						title: 'Direct API Checks'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'rag-vector',
@@ -7582,7 +7402,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'Single-package example for @absolutejs/rate-limit. Boots an Elysia app with three rate-limiting setups:',
 				name: 'absolutejs-rate-limit-example',
 				private: true,
 				publicExports: [],
@@ -7591,14 +7412,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun install\nbun run dev      # absolute dev — hot reload\n# or\nbun run start    # absolute start — production server',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Run',
 						language: 'bash'
 					},
 					{
 						code: 'PORT=3000 bun run test',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Test',
 						language: 'bash'
 					}
 				],
@@ -7644,7 +7465,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'A multi-framework demonstration of Service Worker capabilities built with AbsoluteJS. The same interactive demo is implemented in React, Vue, Svelte, Angular, and vanilla HTML — all served from a single application.',
 				name: 'absolutejs-service-worker-example',
 				private: true,
 				publicExports: [],
@@ -7653,28 +7475,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: '# Install dependencies\nbun install\n\n# Start development server\nbun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Getting Started',
 						language: 'bash'
 					},
 					{
 						code: 'bun run compile   # Compile server to single executable\nbun start         # Start production server',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Production Build',
 						language: 'bash'
 					},
 					{
 						code: 'bun run typecheck  # TypeScript type checking\nbun run lint       # ESLint\nbun run format     # Prettier',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Other Commands',
 						language: 'bash'
 					},
 					{
 						code: 'src/\n├── backend/\n│   ├── server.ts             # Elysia server setup\n│   ├── sw.ts                 # Service worker script\n│   └── plugins/\n│       └── pagesPlugin.ts    # Route handlers for all framework pages\n└── frontend/\n    ├── constants.ts          # Shared constants (cache URLs, ping intervals)\n    ├── react/                # React demo page & components\n    ├── svelte/               # Svelte demo page & components\n    ├── vue/                  # Vue demo page & components\n    ├── angular/              # Angular demo page & template\n    ├── html/                 # Vanilla HTML demo & scripts\n    └── styles/               # Shared CSS',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Project Structure',
 						language: 'text'
 					}
 				],
@@ -7683,11 +7505,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'A multi-framework demonstration of Service Worker capabilities built with AbsoluteJS. The same interactive demo is implemented in React, Vue, Svelte, Angular, and vanilla HTML — all served from a single application.',
 						title: 'Overview'
-					},
-					{
-						description:
-							'Features is documented in the repository README.',
-						title: 'Features'
 					},
 					{
 						description: 'Prerequisites: Bun',
@@ -7740,7 +7557,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					"Demonstrates intra-framework SPA navigation in AbsoluteJS using each framework's native router. The top-level route between frameworks (/react → /svelte) is a full-page MPA navigation. The sub-routes inside each framework page (/react/settings, /react/profile) are client-side SPA navigations driven by the framework's own router.",
 				name: 'absolutejs-spa-example',
 				private: true,
 				publicExports: [],
@@ -7792,16 +7610,52 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'Shows AbsoluteJS Sass, SCSS, Less, and SCSS module preprocessing across React, Svelte, Vue, Angular, HTML, and HTMX routes.',
 				name: 'absolutejs-stylelab-example',
 				private: true,
 				publicExports: [],
-				readmeSamples: [],
+				readmeSamples: [
+					{
+						code: 'bun install\nbun run dev',
+						description:
+							'Example from the canonical repository README.',
+						heading: 'Run it',
+						language: 'bash'
+					},
+					{
+						code: "export default defineConfig({\n\tstylePreprocessors: {\n\t\tless: { additionalData: '@accent: #0f766e;' },\n\t\tstylus: { additionalData: 'stylusAccent = #7e22ce' }\n\t},\n\tstylesConfig: './src/frontend/styles/indexes',\n\ttailwind: {\n\t\tinput: './src/frontend/styles/tailwind.css',\n\t\toutput: 'tailwind.css'\n\t}\n});",
+						description:
+							'Example from the canonical repository README.',
+						heading: 'Configuration',
+						language: 'typescript'
+					},
+					{
+						code: 'bun run typecheck\nbun run lint',
+						description:
+							'Example from the canonical repository README.',
+						heading: 'Validate changes',
+						language: 'bash'
+					}
+				],
 				readmeTopics: [
 					{
 						description:
 							'Shows AbsoluteJS Sass, SCSS, Less, and SCSS module preprocessing across React, Svelte, Vue, Angular, HTML, and HTMX routes.',
 						title: 'Overview'
+					},
+					{
+						description: 'bun install bun run dev',
+						title: 'Run it'
+					},
+					{
+						description:
+							'The central setup lives in absolute.config.ts:',
+						title: 'Configuration'
+					},
+					{
+						description: 'bun run typecheck bun run lint',
+						title: 'Validate changes'
 					}
 				],
 				sourcePath: 'stylelab',
@@ -7834,7 +7688,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'The @absolutejs/sync Tier 3 sync engine, shown across every framework AbsoluteJS supports. A shared task list is a live collection: each page hydrates once over a WebSocket, then the server pushes { added, removed, changed } diffs — no polling. Edits apply optimistically and reconcile when the server confirms. Open two tabs (or two frameworks) and every open client stays in sync.',
 				name: 'absolutejs-sync-example',
 				private: true,
 				publicExports: [],
@@ -7843,7 +7698,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun install\nbun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Run',
 						language: 'bash'
 					}
 				],
@@ -7866,11 +7721,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: 'bun install bun run dev',
 						title: 'Run'
-					},
-					{
-						description:
-							'One page per framework is documented in the repository README.',
-						title: 'One page per framework'
 					}
 				],
 				sourcePath: 'sync',
@@ -7903,7 +7753,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'This is a full AbsoluteJS demo app for @absolutejs/voice.',
 				name: 'absolutejs-voice-example',
 				private: true,
 				publicExports: [],
@@ -7912,28 +7763,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'cd ~/alex/absolutejs-voice-example\nbun install\nDEEPGRAM_API_KEY=... ASSEMBLYAI_API_KEY=... bun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Run',
 						language: 'bash'
 					},
 					{
 						code: 'OPENAI_API_KEY=... OPENAI_VOICE_MODEL=gpt-4.1-mini bun run dev\nANTHROPIC_API_KEY=... ANTHROPIC_VOICE_MODEL=claude-sonnet-4-5 bun run dev\nGEMINI_API_KEY=... GEMINI_VOICE_MODEL=gemini-2.5-flash bun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Run 2',
 						language: 'bash'
 					},
 					{
 						code: 'const contracts = createVoiceProviderContractMatrixPreset("phone-agent", {\n  env: process.env,\n  providers: {\n    llm: configuredModelProviders,\n    stt: configuredSTTProviders,\n    tts: openAITelephonyTTS ? ["openai", "emergency"] : ["emergency"],\n  },\n  selected: {\n    llm: modelProvider,\n    stt: selectedSTTProvider,\n    tts: openAITelephonyTTS ? "openai" : "emergency",\n  },\n  remediationHref: "/provider-contracts",\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Provider Routing And Failover',
 						language: 'typescript'
 					},
 					{
 						code: "curl -X POST 'http://localhost:3000/api/provider-simulate/failure?provider=openai'\ncurl -X POST 'http://localhost:3000/api/provider-simulate/recovery?provider=openai'\ncurl 'http://localhost:3000/api/provider-status'",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Provider Routing And Failover 2',
 						language: 'bash'
 					}
 				],
@@ -7976,11 +7827,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'Open /ops-recovery to inspect the package-level recovery primitive mounted by the demo. It rolls provider fallback recovery, unresolved provider failures, audit and trace delivery health, handoff delivery health, live-ops interventions, failed sessions, and latency SLOs into one operator-facing report.',
 						title: 'Ops Recovery'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'voice',
@@ -8009,7 +7855,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'typecheck'
 					}
 				],
-				description: 'No package description provided.',
+				description:
+					'A demo project showcasing web workers across 5 frontend frameworks (React, Svelte, Vue, Angular, HTML) — all running in a single app powered by AbsoluteJS.',
 				name: 'absolutejs-web-worker-example',
 				private: true,
 				publicExports: [],
@@ -8018,42 +7865,42 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun install',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Setup',
 						language: 'bash'
 					},
 					{
 						code: 'bun run dev',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Development',
 						language: 'bash'
 					},
 					{
 						code: 'bun run start',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Production',
 						language: 'bash'
 					},
 					{
 						code: 'bun run compile',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Compile to Standalone Executable',
 						language: 'bash'
 					},
 					{
 						code: 'bun run serve\n# or just\n./compiled-server',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Compile to Standalone Executable 2',
 						language: 'bash'
 					},
 					{
 						code: 'export default defineConfig({\n  // ...\n  static: {\n    routes: "all",       // or ["/", "/html"]\n    revalidate: 60,      // optional — re-render stale pages every 60s\n  },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading: 'Static Config',
 						language: 'typescript'
 					}
 				],
@@ -8125,7 +7972,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun install\nbun run dev      # watch mode on the example server\n# or\nbun run start',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Run',
 						language: 'bash'
 					}
 				],
@@ -8139,11 +7986,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'bun install bun run dev # watch mode on the example server',
 						title: 'Run'
-					},
-					{
-						description:
-							'Scripts is documented in the repository README.',
-						title: 'Scripts'
 					}
 				],
 				sourcePath: 'citra',
@@ -8321,19 +8163,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/handoff',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'import {\n  handoffCorrelationFrom,\n  withHandoffCorrelation,\n} from "@absolutejs/handoff";\n\nconst metadata = withHandoffCorrelation(\n  { campaign: "summer" },\n  crypto.randomUUID(),\n);\n\n// Services with fixed metadata slots can name the slot explicitly.\nconst gatewayFields = withHandoffCorrelation(\n  { field_1: "campaign" },\n  crypto.randomUUID(),\n  "field_20",\n);\n\nconst correlationId = handoffCorrelationFrom(gatewayFields, "field_20");',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Correlation',
 				language: 'typescript'
 			},
 			{
 				code: 'import { summarizeHandoff } from "@absolutejs/handoff";\n\nconst summary = summarizeHandoff([\n  {\n    at: Date.now(),\n    correlationId: "invoice-123",\n    operation: "invoice_payment",\n    outcome: "succeeded",\n    service: "gateway",\n    source: "callback",\n  },\n  {\n    at: Date.now() + 1,\n    correlationId: "invoice-123",\n    message: "The hosted page displayed an error",\n    operation: "invoice_payment",\n    outcome: "failed",\n    service: "gateway",\n    source: "external_surface_report",\n  },\n]);\n\n// The callback remains authoritative while the customer-visible contradiction\n// remains actionable.\nconsole.log(summary.status); // "succeeded"\nconsole.log(summary.contradiction); // true',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Evidence and reconciliation',
 				language: 'typescript'
 			}
 		],
@@ -8419,13 +8261,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: '{\n  "status": "pass",\n  "at": 1717161600000,\n  "checks": {\n    "queue": {\n      "status": "pass",\n      "latencyMs": 1,\n      "observed": { "runs": 1057, "failed": 0 }\n    },\n    "postgres": { "status": "pass", "latencyMs": 12 }\n  }\n}',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Body shape',
 				language: 'json'
 			},
 			{
 				code: "{ name: 'shutting-down', kind: 'readiness', check: () => ({\n  status: draining ? 'fail' : 'pass'\n})}",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Kind filtering',
 				language: 'typescript'
 			}
 		],
@@ -8509,25 +8351,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { hotkeys, listenForHotkeys } from "@absolutejs/hotkeys";\n\nconst stop = listenForHotkeys();\n\nhotkeys.register("j", selectNext, { description: "Next", group: "Navigation" });\nhotkeys.register("mod+k", openPalette, { description: "Command palette" });\nhotkeys.register("g i", goToInbox, { description: "Go to inbox" });',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Core (no framework)',
 				language: 'typescript'
 			},
 			{
 				code: 'hotkeys.register("escape", closeApp);\nhotkeys.register("escape", closeModal, { scope: "modal" });\n\nhotkeys.pushScope("modal"); // escape now closes the modal\nhotkeys.popScope("modal");  // ...and the app-wide binding is back',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Scopes',
 				language: 'typescript'
 			},
 			{
 				code: 'import { useHotkeys, useHotkeyScope } from "@absolutejs/hotkeys/vue";\n\nuseHotkeyScope("inbox");\nuseHotkeys({\n  e: { description: "Dismiss", group: "Actions", handler: dismiss },\n  j: selectNext,\n  k: selectPrevious,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Vue',
 				language: 'typescript'
 			},
 			{
 				code: 'import { groupedBindings } from "@absolutejs/hotkeys";\n\ngroupedBindings(); // [{ group: "Navigation", bindings: [{ display: "⌘ K", … }] }]',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Shortcuts help',
 				language: 'typescript'
 			}
 		],
@@ -8604,7 +8446,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import { createIncidentDeliveryWorker } from '@absolutejs/incidents';\n\nconst worker = createIncidentDeliveryWorker({\n\tstore: incidentDeliveryStore,\n\tprepare: discoverAndEscalateIncidents,\n\tdeliver: (delivery, signal) =>\n\t\tdispatchAlert(delivery.payload, {\n\t\t\tidempotencyKey: delivery.idempotencyKey,\n\t\t\tsignal\n\t\t})\n});\n\nawait worker.runOnce();\nworker.start();",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Quick start',
 				language: 'typescript'
 			}
 		],
@@ -8613,11 +8455,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Reusable incident-delivery infrastructure for AbsoluteJS control planes. Applications retain their domain-specific incident schema and transitions; this package owns the operational machinery that should not be rewritten:',
 				title: 'Overview'
-			},
-			{
-				description:
-					'Delivery worker capabilities is documented in the repository README.',
-				title: 'Delivery worker capabilities'
 			},
 			{
 				description:
@@ -8692,31 +8529,31 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/isolated-jsc',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Install',
 				language: 'bash'
 			},
 			{
 				code: 'bunx @absolutejs/isolated-jsc\nbunx @absolutejs/isolated-jsc --json\n# or, from this repo:\nbun src/doctor.ts',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Doctor',
 				language: 'bash'
 			},
 			{
 				code: 'bun run example:agent-tool\nbun run example:checkpoint',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Examples',
 				language: 'bash'
 			},
 			{
 				code: 'bun run bench:proof',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Benchmarks',
 				language: 'bash'
 			},
 			{
 				code: 'bun install\nbun test',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Tests',
 				language: 'bash'
 			}
 		],
@@ -8771,10 +8608,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				description: 'bun run check:release',
 				title: 'Release checks'
-			},
-			{
-				description: 'Related is documented in the repository README.',
-				title: 'Related'
 			}
 		],
 		repository: 'https://github.com/absolutejs/isolated-jsc',
@@ -8814,13 +8647,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/linked-providers',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			},
 			{
 				code: "import type {\n\tLinkedProviderCredentialResolver,\n\tResolveLinkedProviderCredentialInput\n} from '@absolutejs/linked-providers';\n\nexport const resolveConnectorCredential = (\n\tresolver: LinkedProviderCredentialResolver,\n\tinput: ResolveLinkedProviderCredentialInput\n) => resolver.resolveCredential(input);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Resolver contract',
 				language: 'typescript'
 			}
 		],
@@ -8885,19 +8718,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/logs',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'bash'
 			},
 			{
 				code: 'import { createLogger, consoleJsonSink, rotatingFileSink } from \'@absolutejs/logs\';\nimport { readActiveTraceId } from \'@absolutejs/telemetry\';\n\nconst log = createLogger({\n  level: \'info\',\n  fields: { service: \'api\', region: \'us-east-2\' },\n  sinks: [\n    consoleJsonSink(),\n    rotatingFileSink({ path: \'/var/log/api/app.log\', maxBytes: 10_000_000, keep: 5 }),\n  ],\n  redact: (text) => broker.redact(text),     // @absolutejs/secrets\n  readTraceId: readActiveTraceId,            // @absolutejs/telemetry\n});\n\nlog.info(\'User signed in\', { userId: \'u_42\', tenant: \'acme\' });\n// → {"at":1700000000000,"level":"info","message":"User signed in","tenant":"acme","traceId":"abc123","fields":{"service":"api","region":"us-east-2","userId":"u_42"}}\n\nconst requestLog = log.child({ requestId: req.id });\nrequestLog.warn(\'rate limit exceeded\', { remaining: 0 });\n// Same as parent, plus requestId in fields.',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Quick start',
 				language: 'typescript'
 			},
 			{
 				code: 'logger.metrics();\n// {\n//   logged: { trace: 0, debug: 0, info: 100, warn: 5, error: 2, fatal: 0 },\n//   writes: 214,          // 107 events × 2 sinks\n//   writeErrors: 0,\n//   sinkErrors: {}\n// }',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Metrics',
 				language: 'typescript'
 			}
 		],
@@ -8988,25 +8821,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'send_email: tool.runtime({\n  authorization: {\n    approval: "policy",\n    audience: "owner",\n    destinationFields: ["to"],\n    effects: ["send", "external-network"],\n    idempotency: { mode: "host" },\n    requiredScopes: ["email:send"],\n    reversible: false,\n  },\n  // input, handler, description…\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Agent action authorization (contract 2)',
 				language: 'typescript'
 			},
 			{
 				code: '// src/manifest.ts of @absolutejs/dispatch\nimport { Type } from "@sinclair/typebox";\nimport { defineManifest, toolFactory } from "@absolutejs/manifest";\nimport type { Dispatcher, DispatcherOptions } from "./types";\n\nconst tool = toolFactory<Dispatcher>();\n\nexport const manifest = defineManifest<DispatcherOptions, Dispatcher>()({\n  contract: 2,\n  identity: {\n    category: "messaging",\n    name: "@absolutejs/dispatch",\n    tagline: "Send email, texts, and push notifications from your site.",\n  },\n  settings: Type.Object({\n    defaultFrom: Type.Optional(\n      Type.Object(\n        { email: Type.Optional(Type.String({ format: "email" })) },\n        { title: "Default sender" },\n      ),\n    ),\n  }),\n  slots: {\n    email: {\n      configPath: "email",\n      contract: "dispatch/email-adapter",\n      description: "Email transport",\n      known: ["@absolutejs/dispatch-resend", "@absolutejs/dispatch-postmark"],\n    },\n  },\n  tools: {\n    send_email: tool.runtime({\n      annotations: { openWorldHint: true },\n      authorization: {\n        approval: "policy",\n        audience: "owner",\n        destinationFields: ["to"],\n        effects: ["send", "external-network"],\n        idempotency: { mode: "host" },\n        requiredScopes: ["email:send"],\n        reversible: false,\n      },\n      description: "Send a transactional email through the configured adapter.",\n      handler: async (input, dispatcher) => {\n        const result = await dispatcher.email(input);\n\n        return `sent via ${result.provider}`;\n      },\n      input: Type.Object({\n        subject: Type.String(),\n        text: Type.String(),\n        to: Type.String({ format: "email" }),\n      }),\n    }),\n  },\n  wiring: [\n    {\n      id: "default",\n      server: {\n        code: "const dispatcher = createDispatcher({ email: ${slot.email}, ...${settings} });",\n        imports: [\n          { from: "@absolutejs/dispatch", names: ["createDispatcher"] },\n        ],\n        placement: "module-scope",\n      },\n      title: "Create the dispatcher",\n    },\n  ],\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Authoring a manifest',
 				language: 'typescript'
 			},
 			{
 				code: '// package.json\n{\n  "absolutejs": {\n    "manifestContract": 2,\n    "runtimePeers": {\n      "@absolutejs/agency": {\n        "artifactImports": ["@absolutejs/agency"],\n        "artifactReferences": [],\n        "range": ">=0.7.1 <0.8.0",\n        "tested": "0.7.1",\n        "buildExternals": ["@absolutejs/agency", "@absolutejs/agency/*"],\n      },\n    },\n  },\n  "exports": {\n    "./manifest": {\n      "types": "./dist/manifest.d.ts",\n      "import": "./dist/manifest.js",\n    },\n    "./manifest.json": "./dist/manifest.json",\n  },\n  "scripts": {\n    "build": "… && absolute-manifest emit",\n  },\n}',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Package plumbing',
 				language: 'jsonc'
 			},
 			{
 				code: "import { loadManifest, toAIToolMap, toMcpToolRegistry } from '@absolutejs/manifest';\n\nconst result = await loadManifest('@absolutejs/dispatch');\nif (!result.ok) throw new Error(result.details);\n\n// AI tool loop (@absolutejs/ai)\nconst enforce = async (request, execute) => {\n\tawait agency.authorizeAndLease(request);\n\tconst toolResult = await execute();\n\tawait agency.recordReceipt(request, toolResult);\n\n\treturn toolResult;\n};\nconst tools = toAIToolMap(result.manifest, { enforce, runtime: dispatcher });\nstreamAIToSSE({ tools, ... });\n\n// Remote MCP server (@absolutejs/mcp)\nnew Elysia().use(mcpServer({\n\tpath: '/mcp',\n\ttools: () => toMcpToolRegistry(result.manifest, { enforce, runtime: dispatcher })\n}));",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Consuming manifests',
 				language: 'typescript'
 			}
 		],
@@ -9088,7 +8921,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import {\n\tcriteriaFromAsset,\n\tmatchesAssetCriteria,\n\tplanSaleSettlement\n} from '@absolutejs/marketplace';\n\nconst wanted = criteriaFromAsset(copy, 'exact', 100);\nif (matchesAssetCriteria(candidate, wanted)) {\n\tconst plan = planSaleSettlement({\n\t\tidempotencyKey: 'sale:42',\n\t\tassetId: candidate.id,\n\t\tbuyerAccountId: 'wallet:buyer',\n\t\tsellerAccountId: 'wallet:seller',\n\t\tplatformAccountId: 'wallet:platform',\n\t\tgrossCents: 2500\n\t});\n\t// Apply `plan.entries` and the ownership transfer in one storage transaction.\n}",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Settlement planning',
 				language: 'typescript'
 			}
 		],
@@ -9155,37 +8988,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { createAgency, createMemoryAgencyStore } from "@absolutejs/agency";\n\nconst agency = createAgency({ policy, store: createMemoryAgencyStore() });\n\nmcpServer<Caller>({\n  agency: {\n    enforcement: agency,\n    resolveActor: ({ caller, scopes }) => ({\n      agentId: caller.agentId,\n      delegationId: caller.delegationId,\n      scopes,\n      userId: caller.userId,\n    }),\n  },\n  // normal MCP config…\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Agent action enforcement',
 				language: 'typescript'
 			},
 			{
 				code: 'tasks: {\n  authorizationKey: (caller) => caller.userId,\n  shouldCreate: ({ name }) => name === "long_running_report",\n  store: createMemoryMcpTaskStore(), // use a durable shared store in production\n  ttlMs: 60 * 60 * 1000,\n}\n\ntools: () => ({\n  long_running_report: {\n    taskSupport: "optional", // "required" and "forbidden" are also supported\n    // normal tool definition…\n  },\n})',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Durable Tasks',
 				language: 'typescript'
 			},
 			{
 				code: 'bun add @absolutejs/mcp',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Durable Tasks 2',
 				language: 'text'
 			},
 			{
 				code: 'import { Elysia } from "elysia";\nimport { mcpServer, verifyBearer } from "@absolutejs/mcp";\nimport { verifyJwt } from "@absolutejs/auth"; // or any JWT verifier\n\ntype Caller = { userId: string };\n\nconst server = new Elysia().use(\n  mcpServer<Caller>({\n    path: "/mcp",\n    issuer: "https://your.app",\n    serverInfo: { name: "your-app", title: "Your App", version: "1.0.0" },\n    instructions: "What the model should know about this server.",\n    scopesSupported: ["openid", "mcp"],\n    serveRootMetadata: true,\n\n    // You decide who is allowed in. verifyBearer does the standard OAuth\n    // access-token checks; add your own (billing, role, MFA) on top.\n    authorize: async (request) => {\n      const token = await verifyBearer({\n        audience: "https://your.app/mcp",\n        request,\n        issuer: "https://your.app",\n        requiredScope: "mcp",\n        verify: (jwt) => verifyJwt(jwt, publicJwk),\n      });\n      if ("error" in token) return { ok: false, reason: token.error };\n      return { ok: true, caller: { userId: token.subject } };\n    },\n\n    // Called once per request; build the tools for this caller.\n    tools: ({ caller }) => buildToolsFor(caller.userId),\n  }),\n);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Define an endpoint',
 				language: 'typescript'
 			},
 			{
 				code: 'mcpServer<Caller>({\n  // ...as above\n\n  // Refuse a single call before it runs (credits, rate limit). The message\n  // comes back as an isError tool result the model can relay — not a crash.\n  beforeCall: async ({ caller }) =>\n    (await outOfCredits(caller))\n      ? { block: "Out of credits this cycle." }\n      : undefined,\n\n  // Audit every call. `meta` carries whatever the tool handler wrote.\n  onCall: ({ caller, name, ok, meta }) =>\n    recordCall({ caller, name, ok, touched: meta.touched }),\n\n  // Server-side prompts: recipes the client shows in its picker.\n  prompts: {\n    definitions: {\n      daily_briefing: { title: "Daily briefing", description: "..." },\n    },\n    get: async ({ name, args, caller }) => buildPromptText(name, args, caller),\n  },\n\n  // Readable resources.\n  resources: {\n    list: ({ caller }) => listResources(caller),\n    read: ({ caller, uri }) => readResource(caller, uri), // string | null\n  },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Guards, prompts, resources',
 				language: 'typescript'
 			},
 			{
 				code: 'tools: ({ caller, meta }) =>\n  buildAdminTools(caller, (memberId) => { meta.touched = memberId; }),\nonCall: ({ meta, name, ok }) =>\n  ledger.write({ tool: name, ok, member: meta.touched }),',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'The meta scratchpad',
 				language: 'typescript'
 			}
 		],
@@ -9281,13 +9114,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/media',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			},
 			{
 				code: "import { createMediaFrame } from '@absolutejs/media';\n\nconst pcmBytes = new Uint8Array(320);\nconst frame = createMediaFrame({\n\tat: Date.now(),\n\taudio: pcmBytes,\n\tdurationMs: 20,\n\tid: 'frame-1',\n\tkind: 'input-audio',\n\tsource: 'browser'\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Media frames',
 				language: 'typescript'
 			}
 		],
@@ -9305,11 +9138,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					"import { createMediaFrame } from '@absolutejs/media';",
 				title: 'Media frames'
-			},
-			{
-				description:
-					"What's new is documented in the repository README.",
-				title: "What's new"
 			}
 		],
 		repository: 'https://github.com/absolutejs/media',
@@ -9358,13 +9186,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { createMeeting } from "@absolutejs/meeting";\nimport { deepgram } from "@absolutejs/voice-deepgram";\nimport { createRecallMeetingSource } from "@absolutejs/meeting-recall";\n\nconst meeting = await createMeeting({\n  source: createRecallMeetingSource({\n    apiKey: process.env.RECALL_API_KEY!,\n    meetingUrl,\n    websocketUrl: process.env.RECALL_WEBSOCKET_URL!,\n  }),\n  stt: deepgram({ apiKey: process.env.DEEPGRAM_API_KEY!, diarize: true }),\n  sessionId: "deal-123",\n});\n\nmeeting.on("turn", ({ turn }) => {\n  // { speaker, text, participant? } — stream to your analyzer / UI\n});\nmeeting.on("end", ({ transcript }) => {\n  // full diarized transcript — run your deal-call analysis\n});\n\nawait meeting.start(); // bot joins the call\n// ... later: await meeting.stop()',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Usage',
 				language: 'typescript'
 			},
 			{
 				code: 'import { createMeetingManager } from "@absolutejs/meeting";\nimport { createRecallMeetingSourceFactory } from "@absolutejs/meeting-recall";\n\nconst meetings = createMeetingManager({\n  source: createRecallMeetingSourceFactory({\n    apiKey: process.env.RECALL_API_KEY!,\n    websocketUrl: "wss://app.example.com/meeting/audio",\n  }),\n  stt: deepgram({ apiKey: process.env.DEEPGRAM_API_KEY!, diarize: true }),\n});\n\nawait meetings.start({\n  sessionId: "deal-123",\n  target: "https://meet.google.com/abc-defg-hij",\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Usage 2',
 				language: 'typescript'
 			}
 		],
@@ -9392,7 +9220,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		category: 'Voice & Media',
 		commands: [],
 		description:
-			'Voice-source adapters that connect meeting platforms to @absolutejs/meeting.',
+			'Platform source adapters for @absolutejs/meeting. Each is its own published package under this directory (mirrors voice-adapters/). An adapter implements the MeetingSource contract — join a call and stream its audio (and, when available, the participant roster) into the meeting core, which runs the @absolutejs/voice scribe for live diarized transcription.',
 		directory: 'meeting-adapters',
 		kind: 'monorepo',
 		name: 'Meeting Adapters',
@@ -9467,28 +9295,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'Discord voice channel ──(per-user Opus)──▶ adapter (decode + downmix) ──▶ @absolutejs/meeting ──▶ scribe ──▶ per-speaker turns',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'How it works',
 						language: 'text'
 					},
 					{
 						code: 'bun add @absolutejs/meeting-discord @absolutejs/meeting @absolutejs/voice discord.js @discordjs/voice\n# Discord voice also needs an Opus codec + an encryption lib at runtime:\nbun add @discordjs/opus libsodium-wrappers\n# (or the pure-JS / native alternatives: opusscript, sodium-native, tweetnacl)',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { createMeeting } from "@absolutejs/meeting";\nimport { createDiscordMeetingSource } from "@absolutejs/meeting-discord";\nimport { deepgram } from "@absolutejs/voice-deepgram";\n\nconst source = createDiscordMeetingSource({\n  token: process.env.DISCORD_BOT_TOKEN!,\n  guildId: "123…", // server id\n  channelId: "456…", // voice channel id\n});\n\nconst meeting = await createMeeting({\n  source,\n  stt: deepgram({ apiKey: process.env.DEEPGRAM_API_KEY! }),\n  sessionId: crypto.randomUUID(),\n});\nmeeting.on("turn", (turn) => console.log(turn.participant?.name, turn.text));\n\nawait meeting.start(); // bot joins the channel + starts listening\n// …\nawait meeting.stop(); // bot leaves',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Usage',
 						language: 'typescript'
 					}
 				],
 				readmeTopics: [
 					{
 						description:
-							'The Studio adapter uses createDiscordMeetingSourceFactory to bind the bot and guild configuration once. Each governed Meeting session supplies its voice channel id dynamically, so installation never logs in or joins a channel.',
+							'The hosted AbsoluteJS.ai platform uses createDiscordMeetingSourceFactory to bind the bot and guild configuration once. Each governed Meeting session supplies its voice channel id dynamically, so installation never logs in or joins a channel.',
 						title: 'Overview'
 					},
 					{
@@ -9553,21 +9381,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'Recall bot ──(wss, per-participant PCM)──▶ your server ──source.ingest()──▶ @absolutejs/meeting ──▶ voice scribe ──▶ diarized turns',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'How it works',
 						language: 'text'
 					},
 					{
 						code: 'bun add @absolutejs/meeting-recall @absolutejs/meeting @absolutejs/voice',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { createMeeting } from "@absolutejs/meeting";\nimport { createRecallMeetingSource } from "@absolutejs/meeting-recall";\nimport { createDeepgramStt } from "@absolutejs/voice-deepgram";\n\n// 1. A source backed by a Recall bot. `websocketUrl` is a public wss:// URL\n//    your server listens on (Recall connects out to it).\nconst source = createRecallMeetingSource({\n  apiKey: process.env.RECALL_API_KEY!,\n  baseUrl: process.env.RECALL_API_BASE_URL, // regional; defaults to us-west-2\n  meetingUrl: "https://meet.google.com/abc-defg-hij",\n  websocketUrl: "wss://your-app.example.com/meeting/recall",\n  botName: "Deal Referee",\n});\n\n// 2. Wire it into the meeting core + a scribe STT.\nconst meeting = await createMeeting({\n  source,\n  stt: createDeepgramStt({ apiKey: process.env.DEEPGRAM_API_KEY! }),\n  sessionId: crypto.randomUUID(),\n});\nmeeting.on("turn", (turn) => console.log(turn.speaker, turn.text));\n\nawait meeting.start(); // creates the bot; it joins + starts streaming\n\n// 3. In your websocket handler, pipe each frame into the source:\n//    ws.on("message", (data) => source.ingest(data));\n\nawait meeting.stop(); // bot leaves the call',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Usage',
 						language: 'typescript'
 					}
 				],
@@ -9657,13 +9485,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'createMeter({\n  rollingBudgets: {\n    "*": [\n      { dimension: "errors", windowMs: 5 * 60_000, limit: 50 }, // 50 errors / 5 min trips the breaker\n      { dimension: "requests", windowMs: 1 * 60_000, limit: 1_000 }, // 1k req / min rate cap\n    ],\n    "acme-prod": [\n      { dimension: "cpuMs", windowMs: 60_000, limit: 50_000 }, // 50s sandbox CPU / minute\n    ],\n  },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Rolling-window budgets',
 				language: 'typescript'
 			},
 			{
 				code: "const json = JSON.stringify(meter.snapshot());\nawait persistToDisk('/var/lib/meter/state.json', json);\n\n// On shard restart:\nconst restored = createMeter({ ... same config ... });\nrestored.restore(JSON.parse(await readFromDisk('/var/lib/meter/state.json')));",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Snapshot + restore',
 				language: 'typescript'
 			}
 		],
@@ -9672,16 +9500,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Per-tenant cost-attribution + budget enforcement for multi-tenant Bun runtimes.',
 				title: 'Overview'
-			},
-			{
-				description:
-					'Surface (0.2.0) is documented in the repository README.',
-				title: 'Surface (0.2.0)'
-			},
-			{
-				description:
-					'Architectural role is documented in the repository README.',
-				title: 'Architectural role'
 			}
 		],
 		repository: 'https://github.com/absolutejs/metering',
@@ -9741,31 +9559,31 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/metrics',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'bash'
 			},
 			{
 				code: "import { Elysia } from 'elysia';\nimport { createMetricsRegistry, metricsPlugin } from '@absolutejs/metrics';\nimport { runtimeCollector } from '@absolutejs/metrics/runtime';\nimport { routerCollector } from '@absolutejs/metrics/router';\nimport { egressCollector } from '@absolutejs/metrics/egress';\nimport {\n\tqueueCollector,\n\twakeSchedulerCollector\n} from '@absolutejs/metrics/queue';\nimport { syncCollector } from '@absolutejs/metrics/sync';\nimport { secretsCollector } from '@absolutejs/metrics/secrets';\nimport { auditCollector } from '@absolutejs/metrics/audit';\nimport { dispatchCollector } from '@absolutejs/metrics/dispatch';\nimport { errorsCollector } from '@absolutejs/metrics/errors';\nimport { logsCollector } from '@absolutejs/metrics/logs';\n\nconst registry = createMetricsRegistry();\nregistry.register(\n\t'runtime',\n\truntimeCollector(() => runtime.metrics())\n);\nregistry.register(\n\t'router',\n\trouterCollector(() => router.metrics())\n);\nregistry.register(\n\t'egress',\n\tegressCollector(() => egressGuard.metrics())\n);\nregistry.register(\n\t'queue',\n\tqueueCollector(() => worker.metrics())\n);\nregistry.register(\n\t'billing-wakes',\n\twakeSchedulerCollector(() => billingScheduler.metrics(), {\n\t\tlabels: { scheduler: 'billing' }\n\t})\n);\nregistry.register(\n\t'sync',\n\tsyncCollector(() => engine.metrics())\n);\nregistry.register(\n\t'secrets',\n\tsecretsCollector(() => broker.metrics())\n);\nregistry.register(\n\t'audit',\n\tauditCollector(() => audit.metrics())\n);\nregistry.register(\n\t'dispatch',\n\tdispatchCollector(() => dispatcher.metrics())\n);\nregistry.register(\n\t'errors',\n\terrorsCollector(() => tracker.metrics())\n);\nregistry.register(\n\t'logs',\n\tlogsCollector(() => logger.metrics())\n);\n\nconst app = new Elysia().use(await metricsPlugin({ registry }));\n//        GET /metrics → Prometheus text",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Usage',
 				language: 'typescript'
 			},
 			{
 				code: "const app = new Elysia().use(\n\tawait metricsPlugin({\n\t\tregistry,\n\t\tauthorize: (request) =>\n\t\t\trequest.headers.get('authorization') === `Bearer ${scrapeToken}`\n\t})\n);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Usage 2',
 				language: 'typescript'
 			},
 			{
 				code: '# HELP abs_runtime_active Tenants currently active in the runtime\n# TYPE abs_runtime_active gauge\nabs_runtime_active 3\n# HELP abs_queue_completed_total Successful job completions\n# TYPE abs_queue_completed_total counter\nabs_queue_completed_total 1057\n# HELP abs_sync_subscriptions Active subscriptions across collections\n# TYPE abs_sync_subscriptions gauge\nabs_sync_subscriptions 142\n…',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Usage 3',
 				language: 'text'
 			},
 			{
 				code: "import { counter, gauge } from '@absolutejs/metrics';\n\nregistry.register('app', () => [\n\tcounter('myapp_requests_total', requestCount, {\n\t\thelp: 'Total HTTP requests',\n\t\tlabels: { route: '/api/users' }\n\t}),\n\tgauge('myapp_workers', activeWorkers, {\n\t\thelp: 'Currently running workers'\n\t})\n]);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Custom metrics',
 				language: 'typescript'
 			}
 		],
@@ -9851,13 +9669,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import { createManagedObservability } from '@absolutejs/observability';\n\nconst observability = createManagedObservability({\n\tproject: '6756f6d7-8e09-4ef9-b445-ed07092748ac'\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Quick start',
 				language: 'typescript'
 			},
 			{
 				code: "import { createManagedObservabilityRelayFromEnv } from '@absolutejs/observability/elysia';\n\nnew Elysia().use(createManagedObservabilityRelayFromEnv());",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Quick start 2',
 				language: 'typescript'
 			}
 		],
@@ -9925,7 +9743,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { createOnchain, edition, localAdapter } from "@absolutejs/onchain";\n\nconst onchain = createOnchain(localAdapter({ file: "~/.myapp/ledger.json" }));\n\n// the ONLY path to ownership: earn → attest(verifiable fact) → mint(soulbound, real serial)\nconst token = await onchain.claim("user-id", {\n  seed: "wild:acme/app@abc123",            // the deterministic asset\n  fact: "github:commit:acme/app@abc123",   // the real interaction it\'s earned from\n  archetype: "wild-creature",\n  maxSupply: 1                              // ⇒ a literal 1-of-1\n});\nedition(token); // "1 of 1"\nawait onchain.inventory("user-id");         // what they\'ve earned',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Quick start (local adapter, no setup)',
 				language: 'typescript'
 			}
 		],
@@ -10068,13 +9886,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import {\n\tcomputeOutcomeStats,\n\tdefineOutcomeVocabulary,\n\trenderEvidence\n} from '@absolutejs/outcomes';\n\nconst vocabulary = defineOutcomeVocabulary({\n\tartifacts: {\n\t\toutreach_email: {\n\t\t\tlabel: 'Outreach email',\n\t\t\tfeatures: {\n\t\t\t\tsubjectWords: {\n\t\t\t\t\ttype: 'number',\n\t\t\t\t\tbuckets: [\n\t\t\t\t\t\t{ label: 'short', max: 7 },\n\t\t\t\t\t\t{ label: 'medium', max: 12 }\n\t\t\t\t\t],\n\t\t\t\t\toverflowLabel: 'long'\n\t\t\t\t},\n\t\t\t\tmode: { type: 'string', values: ['outreach', 'followup'] },\n\t\t\t\thasQuestion: { type: 'boolean' }\n\t\t\t}\n\t\t}\n\t},\n\toutcomes: ['opened', 'replied', 'meeting_scheduled']\n});\n\n// At production time: store.recordArtifact({ id: sendId, ownerId, kind, features })\n// From your signal hooks: store.recordOutcome({ artifactId: sendId, outcome: \"replied\", ownerId })\n\nconst rows = await store.listArtifactsWithOutcomes(\n\townerId,\n\t'outreach_email',\n\tsince\n);\nconst stats = computeOutcomeStats(vocabulary, 'outreach_email', rows, {\n\tminSample: 10\n});\nif (stats.ready) {\n\tconst memo = await yourAiCall(\n\t\t`Distill what works:\\n${renderEvidence(stats)}`\n\t);\n\t// …feed `memo` into every future draft; show `stats` in your UI.\n}",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'The idea',
 				language: 'typescript'
 			},
 			{
 				code: "import {\n\tcreateDrizzleOutcomeStore,\n\toutcomesDrizzleSchema\n} from '@absolutejs/outcomes/drizzle';\n\nconst store = createDrizzleOutcomeStore({ db });",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Production persistence (Drizzle + Postgres/Neon)',
 				language: 'typescript'
 			}
 		],
@@ -10132,25 +9950,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/partnership',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'import type { GenerateObject } from "@absolutejs/partnership";\nimport { meteredGenerateObjectAI } from "./usage/meteredAI";\nimport { aiProvider } from "./integrations/aiProvider";\n\nexport const partnershipCtx = (userSub?: string | null) => ({\n  generateObject: ((req) =>\n    meteredGenerateObjectAI({ ...req, provider: aiProvider, userSub })) as GenerateObject,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Wiring (one-time)',
 				language: 'typescript'
 			},
 			{
 				code: 'import { scoreTrustFit } from "@absolutejs/partnership";\n\nconst { dimensions, reasons } = await scoreTrustFit(\n  {\n    member: { niche: "devtools", offer: "hosted CI", audienceSize: "10k" },\n    partner: { company: companyData, person: personData, reasoning },\n    priorScores: { theirReceptiveness: 0.4, yourFit: 0.9 },\n  },\n  partnershipCtx(userSub),\n);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Primitives (Wave 1A)',
 				language: 'typescript'
 			},
 			{
 				code: 'await verifyPartner(input, {\n  ...partnershipCtx(userSub),\n  research: (system, user) => webResearch(system, user),\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Web-grounded primitives',
 				language: 'typescript'
 			}
 		],
@@ -10227,7 +10045,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import {\n\tcreateDrizzlePolicyStore,\n\tpolicyDrizzleSchema\n} from '@absolutejs/policy/drizzle';\n\nconst policyStore = createDrizzlePolicyStore({ db });",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Drizzle persistence',
 				language: 'typescript'
 			}
 		],
@@ -10301,25 +10119,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import {\n  createWebAppManifest,\n  pushServiceWorker,\n  createWebPush,\n} from "@absolutejs/pwa";\n\nconst ICON = "/icons/app-512.png";\n\n// Serve as application/manifest+json at /manifest.webmanifest\nexport const manifest = createWebAppManifest({\n  name: "My App",\n  shortName: "MyApp",\n  themeColor: "#6366f1",\n  icons: [\n    { src: ICON, sizes: "192x192", type: "image/png", purpose: "any" },\n    { src: ICON, sizes: "512x512", type: "image/png", purpose: "any" },\n  ],\n});\n\n// Serve as text/javascript at /sw.js with header `Service-Worker-Allowed: /`.\n// Pass `offline` to also precache an app shell + serve a fallback page when a\n// navigation fails offline, and cache same-origin assets cache-first.\nexport const sw = pushServiceWorker({\n  icon: ICON,\n  offline: { fallback: "/offline.html", assetPrefix: "/assets/" },\n});\n\n// VAPID sender — pass empty/unset keys and it no-ops (isConfigured() === false),\n// so push degrades gracefully to your email/in-app fallback.\nconst push = createWebPush({\n  publicKey: process.env.VAPID_PUBLIC_KEY,\n  privateKey: process.env.VAPID_PRIVATE_KEY,\n  subject: "mailto:you@example.com",\n});\n\n// Fan out to a user\'s devices; prune whatever it reports gone.\nconst { gone } = await push.sendMany(subscriptions, {\n  title: "New match",\n  body: "Acme Co. just replied.",\n  url: "/inbox",\n});\nawait pruneEndpoints(gone); // your storage',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Server',
 				language: 'typescript'
 			},
 			{
 				code: 'new Elysia()\n  .get("/manifest.webmanifest", ({ set }) => {\n    set.headers["content-type"] = "application/manifest+json";\n    return manifest;\n  })\n  .get("/sw.js", ({ set }) => {\n    set.headers["content-type"] = "text/javascript";\n    set.headers["service-worker-allowed"] = "/";\n    return sw;\n  });',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Server 2',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  registerServiceWorker,\n  getPushStatus,\n  subscribeToPush,\n  unsubscribeFromPush,\n} from "@absolutejs/pwa/client";\n\n// At boot:\nawait registerServiceWorker(); // defaults to "/sw.js"\n\n// Toggle on: returns the subscription JSON — send it through your typed API.\nconst subscription = await subscribeToPush(vapidPublicKey);\nawait api.push.subscriptions.post(subscription);\n\n// Toggle off: returns the endpoint to drop server-side.\nconst endpoint = await unsubscribeFromPush();\nawait api.push.subscriptions.delete({ endpoint });\n\nconst status = await getPushStatus(); // { supported, permission, subscribed }',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Client',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  initInstallPrompt,\n  onInstallable,\n  promptInstall,\n  canInstall,\n} from "@absolutejs/pwa/client";\n\ninitInstallPrompt(); // once at boot\n\n// React to availability (show/hide your install button):\nconst off = onInstallable((installable) => setShowInstall(installable));\n\n// From a click handler (must be a user gesture):\nconst accepted = await promptInstall();',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Install prompt',
 				language: 'typescript'
 			}
 		],
@@ -10381,37 +10199,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/queue elysia',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'bash'
 			},
 			{
 				code: "import { Elysia } from 'elysia';\nimport {\n\tcreateInMemoryJobStore,\n\tcreateJobRegistry,\n\tdefineJobs,\n\tqueue,\n\tt\n} from '@absolutejs/queue';\n\n// Define jobs once: kind -> payload schema. Payload types are inferred from this\n// (no hand-written job map, no generics) and validated at enqueue + dequeue.\n// Build schemas with `t` from this package so they share one TypeBox instance.\nconst jobs = defineJobs({\n\t'email.send': t.Object({ to: t.String(), subject: t.String() }),\n\t'webhook.deliver': t.Object({ url: t.String(), body: t.Unknown() })\n});\n\nconst store = createInMemoryJobStore(jobs);\nconst registry = createJobRegistry(jobs)\n\t.on('email.send', async ({ to, subject }) => {\n\t\t// to: string, subject: string — inferred from the schema\n\t})\n\t.on('webhook.deliver', async ({ url, body }, { attempts }) => {\n\t\t// retried automatically; `attempts` is which try this is\n\t});\n\nconst app = new Elysia()\n\t.use(queue({ registry, store })) // in-process worker auto-starts\n\t.post('/welcome/:email', ({ params, queue }) =>\n\t\tqueue.enqueue('email.send', {\n\t\t\tsubject: 'Welcome',\n\t\t\tto: params.email\n\t\t})\n\t)\n\t.post('/notify', ({ body, queue }) =>\n\t\t// delayed one-shot: deliver the webhook in 1 hour\n\t\tqueue.enqueue(\n\t\t\t'webhook.deliver',\n\t\t\t{ body, url: 'https://example.com/hook' },\n\t\t\t{ runAt: Date.now() + 60 * 60 * 1000 }\n\t\t)\n\t)\n\t.listen(3000);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Usage',
 				language: 'typescript'
 			},
 			{
 				code: "// src/jobs/index.ts\nimport {\n\tcreateInMemoryJobStore,\n\tcreateJobRegistry,\n\tdefineJobs,\n\tqueue,\n\tt\n} from '@absolutejs/queue';\nimport { cron } from '@elysiajs/cron';\nimport { Elysia } from 'elysia';\n\nconst jobs = defineJobs({\n\t'email.send': t.Object({ to: t.String(), subject: t.String() })\n});\n\n// Module-scoped so cron + worker reference the same backing state.\nexport const store = createInMemoryJobStore(jobs);\nexport const registry = createJobRegistry(jobs).on(\n\t'email.send',\n\tasync () => {}\n);\n\nexport const backgroundJobs = new Elysia({ name: 'background-jobs' })\n\t.use(queue({ registry, store }))\n\t.use(\n\t\tcron({\n\t\t\tname: 'weekly-digest',\n\t\t\tpattern: '0 8 * * 1', // Mondays at 08:00\n\t\t\trun: () =>\n\t\t\t\tstore.enqueue({\n\t\t\t\t\tidempotencyKey: `weekly-digest:${new Date().toISOString().slice(0, 10)}`,\n\t\t\t\t\tkind: 'email.send',\n\t\t\t\t\tpayload: {\n\t\t\t\t\t\tsubject: 'Weekly digest',\n\t\t\t\t\t\tto: 'team@example.com'\n\t\t\t\t\t}\n\t\t\t\t})\n\t\t})\n\t);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Recurring jobs (with @elysiajs/cron)',
 				language: 'typescript'
 			},
 			{
 				code: "import { createWakeScheduler, httpWake } from '@absolutejs/queue';\n\n// Runs on the CONTROL PLANE (always-on), not in tenant processes.\nconst wakeScheduler = createWakeScheduler({\n\tentries: [\n\t\t// Exactly one of `every` (ms) or `cron` (5-field, UTC) per entry.\n\t\t{\n\t\t\tevery: 6 * 60 * 60 * 1000,\n\t\t\tid: 'acme-digest',\n\t\t\ttenant: 'acme',\n\t\t\turl: 'https://acme.internal/wake'\n\t\t},\n\t\t{ cron: '0 8 * * 1', id: 'globex-report', tenant: 'globex' }\n\t],\n\t// The wake is the single seam. httpWake() POSTs entry.url and treats\n\t// non-2xx as an error...\n\twake: httpWake(),\n\tonError: (error, entry) => console.error(entry?.id, error)\n});\nwakeScheduler.start();",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Waking idle-killed tenants (createWakeScheduler)',
 				language: 'typescript'
 			},
 			{
 				code: 'const wakeScheduler = createWakeScheduler({\n\tentries: tenantSchedules,\n\twake: async (entry) => {\n\t\tawait runtime.ensure(entry.tenant);\n\t}\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Waking idle-killed tenants (createWakeScheduler) 2',
 				language: 'typescript'
 			},
 			{
 				code: "// scripts/runWeeklyDigest.ts\nimport { runHandlerOnce } from '@absolutejs/queue';\nimport { registry } from '../src/jobs/registry'; // direct import — see warning below\n\nawait runHandlerOnce(registry, 'email.send', {\n\tto: 'team@example.com',\n\tsubject: 'Weekly digest (manual trigger)'\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'One-shot manual triggers (runHandlerOnce)',
 				language: 'typescript'
 			}
 		],
@@ -10473,7 +10291,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun install          # installs every workspace member\nbun run typecheck    # across all adapters\nbun run test         # across all adapters\nbun run build        # across all adapters',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Develop',
 				language: 'bash'
 			}
 		],
@@ -10537,42 +10355,43 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: '# pick your driver\nbun add @absolutejs/queue @absolutejs/queue-postgres drizzle-orm postgres\n# …or\nbun add @absolutejs/queue @absolutejs/queue-postgres drizzle-orm @neondatabase/serverless',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: "import { createPostgresJobStore } from '@absolutejs/queue-postgres/postgres';\nimport { createJobRegistry, defineJobs, queue, t } from '@absolutejs/queue';\nimport postgres from 'postgres';\n\nconst jobs = defineJobs({\n\t'email.send': t.Object({ to: t.String(), subject: t.String() })\n});\nconst registry = createJobRegistry(jobs).on(\n\t'email.send',\n\tasync ({ to, subject }) => {}\n);\n\n// Share your app's existing postgres.js client (one pool)…\nconst client = postgres(process.env.DATABASE_URL, { prepare: false });\nconst store = createPostgresJobStore({ client, jobs });\n\n// …or let the adapter open its own connection:\n// const store = createPostgresJobStore({ connectionString: url, jobs });\n\napp.use(queue({ registry, store }));",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage with postgres.js',
 						language: 'typescript'
 					},
 					{
 						code: "import {\n\tcreateNeonJobStore,\n\tneonConfig\n} from '@absolutejs/queue-postgres/neon';\nimport { createJobRegistry, defineJobs, queue, t } from '@absolutejs/queue';\nimport { Pool } from '@neondatabase/serverless';\n\n// Bun ships a global WebSocket; for node, polyfill once:\n//   import ws from 'ws'; neonConfig.webSocketConstructor = ws;\n\nconst jobs = defineJobs({\n\t'email.send': t.Object({ to: t.String(), subject: t.String() })\n});\n\n// Share an existing Neon Pool…\nconst pool = new Pool({ connectionString: process.env.DATABASE_URL });\nconst store = createNeonJobStore({ jobs, pool });\n\n// …or let the adapter open its own:\n// const store = createNeonJobStore({ connectionString: url, jobs });",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Usage with Neon (@neondatabase/serverless)',
 						language: 'typescript'
 					},
 					{
 						code: "import { buildPostgresJobStore, queueSchema } from '@absolutejs/queue-postgres';\nimport { drizzle } from 'drizzle-orm/node-postgres';\nimport { Pool } from 'pg';\n\nconst pool = new Pool({ connectionString: process.env.DATABASE_URL });\nconst db = drizzle(pool, { schema: queueSchema });\nconst store = buildPostgresJobStore(db, jobs);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading:
+							'Usage with any other Drizzle Postgres adapter',
 						language: 'typescript'
 					},
 					{
 						code: "export { queueJobsTable } from '@absolutejs/queue-postgres';",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Migrations',
 						language: 'typescript'
 					},
 					{
 						code: "SELECT … FROM queue_jobs\nWHERE status = 'pending' AND run_at <= $now\nORDER BY run_at LIMIT $n\nFOR UPDATE SKIP LOCKED;        -- concurrent workers skip locked rows\n-- then UPDATE those ids → status='claimed'",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading: 'How claiming works',
 						language: 'sql'
 					}
 				],
@@ -10581,11 +10400,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							"Postgres storage adapter for @absolutejs/queue, built on Drizzle. The production JobStore: durable, with atomic multi-worker claiming via FOR UPDATE SKIP LOCKED. Ships convenience factories for both postgres.js and Neon's WebSocket driver (@neondatabase/serverless); the underlying buildPostgresJobStore accepts any Drizzle Postgres database, so other drivers (including Bun SQL and node-postgres) work too. Its portable JSONB encoding preserves payload objects across all supported drivers.",
 						title: 'Overview'
-					},
-					{
-						description:
-							'Install is documented in the repository README.',
-						title: 'Install'
 					},
 					{
 						description:
@@ -10644,21 +10458,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/queue @absolutejs/queue-redis\nbun add ioredis      # OR\nbun add redis        # node-redis v4+',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: "import { Redis } from 'ioredis';\nimport {\n  createJobRegistry,\n  createQueueWorker,\n  defineJobs,\n  t,\n  type JobMapFromDefinition\n} from '@absolutejs/queue';\nimport { createRedisJobStore } from '@absolutejs/queue-redis';\n\nconst redis = new Redis(process.env.REDIS_URL!);\n\nconst jobs = defineJobs({\n  'email.send': t.Object({ to: t.String(), subject: t.String() }),\n});\n\nconst store = createRedisJobStore<JobMapFromDefinition<typeof jobs>>({\n  client: redis,                    // ioredis structurally satisfies RedisCommandClient\n  keyPrefix: 'myapp:queue:',         // optional\n});\n\nconst registry = createJobRegistry(jobs).on('email.send', async (payload) => {\n  await sendEmail(payload);\n});\n\nconst worker = createQueueWorker({ store, registry });\nworker.start();",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage with ioredis',
 						language: 'typescript'
 					},
 					{
 						code: "import { createClient } from 'redis';\n\nconst client = createClient({ url: process.env.REDIS_URL });\nawait client.connect();\n\n// node-redis's typed wrappers have slightly different signatures\n// (e.g. `client.hSet(key, fields)` is camelCase). Adapt:\nconst adapted: RedisCommandClient = {\n  hset: (key, fields) => client.hSet(key, fields),\n  hgetall: (key) => client.hGetAll(key),\n  hdel: (key, ...fields) => client.hDel(key, fields),\n  del: (...keys) => client.del(keys),\n  zadd: (key, score, member) => client.zAdd(key, { score, value: member }),\n  zrem: (key, ...members) => client.zRem(key, members),\n  zrangebyscore: (key, min, max, offset, count) =>\n    client.zRangeByScore(key, min, max,\n      offset !== undefined && count !== undefined\n        ? { LIMIT: { offset, count } }\n        : undefined),\n  zcard: (key) => client.zCard(key),\n  sadd: (key, ...m) => client.sAdd(key, m),\n  srem: (key, ...m) => client.sRem(key, m),\n  set: (key, value, mode) => client.set(key, value, mode === 'NX' ? { NX: true } : undefined),\n  get: (key) => client.get(key),\n  scard: (key) => client.sCard(key),\n  smembers: (key) => client.sMembers(key),\n  eval: (script, keys, args) => client.eval(script, { keys, arguments: args }),\n};\n\nconst store = createRedisJobStore({ client: adapted });",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Usage with node-redis v4+',
 						language: 'typescript'
 					}
 				],
@@ -10763,13 +10577,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/rag',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			},
 			{
 				code: "import {\n\tcreateInMemoryRAGStore,\n\tcreateRAGCollection,\n\tingestRAGDocuments,\n\topenaiEmbeddings,\n\tsearchDocuments\n} from '@absolutejs/rag';\n\nconst collection = createRAGCollection({\n\tembedding: openaiEmbeddings({\n\t\tapiKey: process.env.OPENAI_API_KEY ?? '',\n\t\tdefaultModel: 'text-embedding-3-small'\n\t}),\n\tstore: createInMemoryRAGStore()\n});\n\nawait ingestRAGDocuments(collection, {\n\tdocuments: [{ id: 'intro', text: 'AbsoluteJS ships typed Bun primitives.' }]\n});\n\nconst results = await searchDocuments(collection, {\n\tquery: 'What does AbsoluteJS ship?',\n\ttopK: 3\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Quick start',
 				language: 'typescript'
 			}
 		],
@@ -10845,7 +10659,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun install          # installs every workspace member\nbun run typecheck    # across all adapters\nbun run test         # across all adapters\nbun run build        # across all adapters',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Develop',
 				language: 'bash'
 			}
 		],
@@ -10902,21 +10716,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/rag @absolutejs/rag-pinecone @pinecone-database/pinecone',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: 'import { createPineconeRAG } from "@absolutejs/rag-pinecone";\n\nconst rag = createPineconeRAG({\n  apiKey: process.env.PINECONE_API_KEY,\n  indexName: "absolute-rag-demo",\n  namespace: "production",\n  vector: {\n    provider: "pinecone",\n    dimensions: 1536,\n    distanceMetric: "cosine",\n  },\n});\n\nawait rag.store.upsert({\n  chunks: [\n    {\n      chunkId: "doc-1#0",\n      text: "Pinecone stores vectors with attached metadata.",\n      title: "Pinecone overview",\n      source: "https://docs.pinecone.io",\n      metadata: { tags: ["vector", "managed"] },\n    },\n  ],\n});\n\nconst hits = await rag.collection.search({ query: "vector database", topK: 4 });',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: 'import {\n  describePineconeIndex,\n  ensurePineconeIndex,\n} from "@absolutejs/rag-pinecone";\n\nawait ensurePineconeIndex({\n  apiKey: process.env.PINECONE_API_KEY,\n  indexName: "absolute-rag-demo",\n  dimensions: 1536,\n  metric: "cosine",\n  waitUntilReady: true,\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Index provisioning',
 						language: 'typescript'
 					}
 				],
@@ -10974,21 +10788,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/rag @absolutejs/rag-postgres postgres',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: "import { createPostgresRAG } from '@absolutejs/rag-postgres';\nimport { ragPlugin } from '@absolutejs/rag';\n\nconst rag = createPostgresRAG({\n\tconnectionString: process.env.DATABASE_URL,\n\tvector: {\n\t\tprovider: 'pgvector',\n\t\tdimensions: 1536,\n\t\tdistanceMetric: 'cosine',\n\t\tautoCreateExtension: true,\n\t\tautoCreateSchema: true,\n\t\tautoCreateTables: true,\n\t\tautoCreateIndex: true,\n\t\tindex: { type: 'hnsw', efSearch: 100, efConstruction: 64, m: 16 }\n\t},\n\tschema: { schemaName: 'absolute_rag', chunkTableName: 'chunks' }\n});\n\napp.use(ragPlugin({ path: '/rag', collection: rag.collection }));",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: 'const schemaPlan = rag.getSchemaPlan();\nconst migrationPlan = rag.getMigrationPlan();\nawait rag.applyMigrations();',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Schema and migrations',
 						language: 'typescript'
 					}
 				],
@@ -11046,14 +10860,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/rag @absolutejs/rag-sqlite',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: "import { createSQLiteRAG, ragPlugin } from '@absolutejs/rag-sqlite';\n\nconst rag = createSQLiteRAG({\n\tstoreOptions: {\n\t\tpath: './rag.sqlite',\n\t\tnative: { mode: 'vec0' }\n\t}\n});\n\napp.use(ragPlugin({ path: '/rag', collection: rag.collection }));\n\n// Inspect what happened at runtime:\nconsole.log(rag.getNativeSupport().actionableMessage);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					}
 				],
@@ -11130,25 +10944,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "rateLimit({\n  algorithm: gcra({ requestsPerPeriod: 100, periodMs: 60_000, burst: 20 }),\n  store: memoryStore({ maxKeys: 100_000 }),\n\n  // key — defaults to 'ip' (uses extractIp).\n  key: 'ip',                                                   // built-in\n  // key: 'authorization',                                       // built-in\n  // key: (ctx) => ctx.request.headers.get('x-user') ?? null,    // custom\n\n  trustedProxies: 1,         // honor only the last hop of XFF (typical: 1)\n  ipv6Prefix: 64,            // group IPv6 by /64\n\n  skip: (ctx) => ctx.request.headers.get('authorization') === ADMIN_TOKEN,\n\n  headers: 'standard',       // 'standard' | 'legacy' | 'both' | false\n\n  onLimit: (ctx, info) => new Response(JSON.stringify({\n    ok: false,\n    retryAfterSec: info.decision.retryAfterSec,\n  }), { status: 429, headers: { 'Content-Type': 'application/json' } }),\n})",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Elysia plugin (@absolutejs/rate-limit)',
 				language: 'typescript'
 			},
 			{
 				code: "import { gcra, tokenBucket, slidingWindow, memoryStore } from '@absolutejs/rate-limit/core';\n\nconst limiter = gcra({ requestsPerPeriod: 100, periodMs: 60_000, burst: 20 });\nconst store = memoryStore();\nconst decision = limiter.check(store, 'user-42', Date.now());\n// → { allowed, limit, remaining, retryAfterSec, resetSec, policy }",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Algorithms (@absolutejs/rate-limit/core)',
 				language: 'typescript'
 			},
 			{
 				code: 'type Store = {\n  update<T>(key: string, ttlMs: number, fn: (prev: T | null) => T): T | Promise<T>;\n  delete?(key: string): void | Promise<void>;\n  clear?(): void | Promise<void>;\n};',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Store interface',
 				language: 'typescript'
 			},
 			{
 				code: "import { SQL } from 'bun';\nimport { postgresStore } from '@absolutejs/rate-limit/postgres';\n\nconst store = postgresStore({\n  sql: new SQL(process.env.DATABASE_URL),\n  table: 'absolute_rate_limit_entries',\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Store interface 2',
 				language: 'typescript'
 			}
 		],
@@ -11162,10 +10976,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					"The leader in the Elysia ecosystem is rayriffy/elysia-rate-limit. It uses a token bucket over a Map with a setInterval cleanup. That's fine, but every choice in it is from 2020. The 2026 from-scratch answers:",
 				title: 'Why not just use the existing libraries'
-			},
-			{
-				description: 'Surface is documented in the repository README.',
-				title: 'Surface'
 			},
 			{
 				description:
@@ -11219,13 +11029,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/reliability',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			},
 			{
 				code: "import {\n\tcreateMemoryIdempotentOperationStore,\n\tfingerprintPayload,\n\toperationId\n} from '@absolutejs/reliability';\n\nconst scope = { actorId: 'tenant-1', key: 'charge-42', operation: 'charge' };\nconst id = operationId(scope);\nconst fingerprint = await fingerprintPayload({ amount: 2500, currency: 'usd' });\nconst store = createMemoryIdempotentOperationStore();",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Idempotent operations',
 				language: 'typescript'
 			}
 		],
@@ -11309,37 +11119,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'npm install -g @absolutejs/renown   # or: bun add -g @absolutejs/renown\nrenown link                         # link your GitHub account → get a verified score\nrenown                              # open the TUI: skills, quests, pets, leaderboard',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Quick start',
 				language: 'bash'
 			},
 			{
 				code: 'renown install-agent all            # Claude Code / Codex hooks + tmux HUD',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Quick start 2',
 				language: 'bash'
 			},
 			{
 				code: '# .github/workflows/renown.yml\non: [push]\njobs:\n  renown:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: absolutejs/renown@v1',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Quick start 3',
 				language: 'yaml'
 			},
 			{
 				code: 'bun install\ncp .env.example .env      # paste your Neon DATABASE_URL\nbun run db:push           # create tables on Neon\nbun run db:check          # verify connectivity',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Database (Drizzle + Postgres on Neon)',
 				language: 'bash'
 			},
 			{
 				code: '# .github/workflows/renown.yml\nname: Renown\non: [push]\njobs:\n  renown:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: absolutejs/renown@v1   # points at the hosted leaderboard by default',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'GitHub Action — auto-sync from CI',
 				language: 'yaml'
 			},
 			{
 				code: '- run: npx -y @absolutejs/renown ci-sync\n        # RENOWN_ENDPOINT defaults to the hosted board; set it only when self-hosting.',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'GitHub Action — auto-sync from CI 2',
 				language: 'yaml'
 			}
 		],
@@ -11378,10 +11188,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					"Drop the renown Action into a repo and every push refreshes that repo's contributors' renown — their score, Co-Authored-By attribution, freshly-pulled serialized pets, and the repo's own /project leaderboard — with no manual renown sync and no secrets in the workflow. The Action reads GitHub's own context (the pusher + the authors GitHub names in the event) and asks your renown server to recompute each linked contributor from the GitHub API using the server's token: their global renown and their per-repo commits/XP (scored by the same craft engine your local CLI uses — core/craftScore.ts is shared, so CI and local scoring can't drift; the board upsert is monotonic, so CI only ever adds contributors or raises stats). Contributors who aren't on renown simply no-op, and the step never fails your build.",
 				title: 'GitHub Action — auto-sync from CI'
-			},
-			{
-				description: 'Roadmap is documented in the repository README.',
-				title: 'Roadmap'
 			}
 		],
 		repository: 'https://github.com/absolutejs/renown',
@@ -11413,13 +11219,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'git clone https://github.com/absolutejs/renown-vscode-extension\n   cd renown-vscode-extension\n   bun install && bun run build',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Getting started',
 				language: 'bash'
 			},
 			{
 				code: 'you edit files  →  N minutes of activity in a repo  →  extension asks the server to recompute\n                                                         │\n                                   server scores your real GitHub commits (its own token,\n                                   the shared craft formula) and updates your verified renown\n                                                         │\n                          status bar + panel refresh  ·  any new 1/1 pets are celebrated',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'How the sync works',
 				language: 'text'
 			}
 		],
@@ -11439,10 +11245,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Getting started'
 			},
 			{
-				description: 'Commands is documented in the repository README.',
-				title: 'Commands'
-			},
-			{
 				description: '---',
 				title: 'Settings'
 			},
@@ -11450,11 +11252,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'you edit files → N minutes of activity in a repo → extension asks the server to recompute │ server scores your real GitHub commits (its own token, the shared craft formula) and updates your verified renown │ status bar + panel refresh · any new 1/1 pets are celebrated',
 				title: 'How the sync works'
-			},
-			{
-				description:
-					'Requirements is documented in the repository README.',
-				title: 'Requirements'
 			}
 		],
 		repository: 'https://github.com/absolutejs/renown-vscode-extension',
@@ -11503,25 +11300,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/replay rrweb',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'import { createRecorder } from "@absolutejs/replay";\nimport { initBeacon } from "@absolutejs/beacon";\n\nconst recorder = createRecorder({\n  project: "web",\n  release: import.meta.env.VITE_RELEASE,\n  upload: (chunk) =>\n    uploadToBlob(\n      `replays/${chunk.replayId}/${chunk.seq}.json`,\n      JSON.stringify(chunk),\n    ),\n  // privacy defaults: maskAllInputs: true, blockClass: \'rr-block\', maskTextClass: \'rr-mask\'\n});\n\n// Cross-link errors → this session:\ninitBeacon({ project: "web", getReplayId: () => recorder.replayId });\n\n// On error, flush the tail so the replay around it is stored:\nwindow.addEventListener("error", () => void recorder.flush());',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Record',
 				language: 'typescript'
 			},
 			{
 				code: 'import { assembleReplay, createReplayPlayer } from "@absolutejs/replay";\n\nconst chunks = await loadChunksFromBlob(replayId); // your storage read\nconst player = await createReplayPlayer({\n  target: document.getElementById("replay")!,\n  events: assembleReplay(chunks), // ordered + flattened\n});\nplayer.pause();\nplayer.play(0);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Play back',
 				language: 'typescript'
 			},
 			{
 				code: 'createRecorder(options) => Recorder\n//   Recorder: { replayId, manifest(), flush(), stop() }\n//   options:  project, upload, release?, environment?, replayId?,\n//             chunkIntervalMs? (5000), chunkMaxEvents? (200),\n//             maskAllInputs? (true), maskAllText? (false), blockClass?, maskTextClass?,\n//             recordCanvas?, record? (inject rrweb), onError?\n\nassembleReplay(chunks) => ReplayEvent[]              // sort by seq, flatten\ncreateReplayPlayer({ target, events, Replayer?, autoplay?, speed? }) => Promise<ReplayPlayer>',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'API',
 				language: 'typescript'
 			}
 		],
@@ -11609,25 +11406,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'const meter = createMeter({ ... });\nconst router = createRouter({\n  shards,\n  allow: meter.allow,                // refuse routes for over-quota tenants\n  load: (id) => runtimeRoster.load(id), // and bias toward less-loaded shards\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Allow hook (meter integration)',
 				language: 'typescript'
 			},
 			{
 				code: "const json = JSON.stringify(router.snapshot());\nawait persistToDisk('/var/lib/router/state.json', json);\n\n// On edge restart:\nconst restored = createRouter({ ... same config ... });\nrestored.restore(JSON.parse(await readFromDisk('/var/lib/router/state.json')));",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Snapshot + restore',
 				language: 'typescript'
 			},
 			{
 				code: "import { createRegionDirectory, createRouter } from '@absolutejs/router';\n\nconst directory = createRegionDirectory({\n\tregions: [\n\t\t{ id: 'us-east', weight: 2 }, // twice the tenants of eu-west\n\t\t{ id: 'eu-west' }\n\t],\n\t// Optional: latency-based placement. Return undefined to fall back to\n\t// the default weighted-rendezvous strategy.\n\tassign: (tenantId) => edgeProbe.closestRegion(tenantId)\n});\n\nconst router = createRouter({\n\tshards: [\n\t\t{ id: 'us-1', url: 'ws://10.0.0.11:3000', region: 'us-east' },\n\t\t{ id: 'us-2', url: 'ws://10.0.0.12:3000', region: 'us-east' },\n\t\t{ id: 'eu-1', url: 'ws://10.1.0.11:3000', region: 'eu-west' }\n\t]\n});\n\n// The wire-up: the directory picks the region, the router picks the shard.\nconst decision = router.route({\n\ttenantId,\n\tregion: directory.regionFor(tenantId)\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Region-aware routing (0.4.0)',
 				language: 'typescript'
 			},
 			{
 				code: "import { createDomainMap } from '@absolutejs/router';\n\nconst domainMap = createDomainMap({\n\t// Resolver of last resort — the platform's own subdomain scheme.\n\tfallback: (host) =>\n\t\thost.endsWith('.cloud.absolutejs.com')\n\t\t\t? host.slice(0, -'.cloud.absolutejs.com'.length)\n\t\t\t: undefined\n});\n\ndomainMap.add('app.acme.com', 'acme'); // exact custom domain\ndomainMap.add('*.acme.com', 'acme'); // wildcard — exactly one label deep\n\n// Edge gateway: host header → tenant → region → shard.\nconst hit = domainMap.resolve(request.headers.get('host') ?? '');\nif (!hit) return new Response('unknown domain', { status: 404 });\nconst decision = router.route({\n\ttenantId: hit.tenantId,\n\tregion: directory.regionFor(hit.tenantId)\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Custom-domain map (0.4.0)',
 				language: 'typescript'
 			}
 		],
@@ -11639,11 +11436,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					'Surface (0.1.0) is documented in the repository README.',
-				title: 'Surface (0.1.0)'
-			},
-			{
-				description:
 					'createRouter shards WITHIN a region; createRegionDirectory decides which region a tenant lives in. Sticky, deterministic assignment — weighted rendezvous over region ids by default, so every replica computes the same answer without coordination — plus an optional caller hook for latency-based placement and explicit overrides for control-plane onboarding decisions.',
 				title: 'Region-aware routing (0.4.0)'
 			},
@@ -11651,16 +11443,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					"A tenant's traffic arrives as app.acme.com (their CNAME), not as a tenant id. createDomainMap is the first lookup in the edge gateway: hostname → tenant, dependency-free and O(1)-ish (a Map for exact hosts, a Map keyed by suffix for wildcards).",
 				title: 'Custom-domain map (0.4.0)'
-			},
-			{
-				description:
-					'Architectural role is documented in the repository README.',
-				title: 'Architectural role'
-			},
-			{
-				description:
-					'What v0.0.1 does NOT include is documented in the repository README.',
-				title: 'What v0.0.1 does NOT include'
 			}
 		],
 		repository: 'https://github.com/absolutejs/router',
@@ -11704,7 +11486,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import {\n\tcreateMemoryRuleStore,\n\tcreateRuleEngine,\n\tdefineRuleVocabulary,\n\truleToolSchemas,\n\tvalidateRuleInput\n} from '@absolutejs/rules';\n\nconst vocabulary = defineRuleVocabulary({\n\ttriggers: {\n\t\tno_reply: {\n\t\t\tlabel: 'My outreach gets no reply',\n\t\t\tparamsHelp: 'days (default 4)',\n\t\t\tparams: {\n\t\t\t\tdays: { type: 'number', min: 1, max: 30, defaultValue: 4 }\n\t\t\t}\n\t\t}\n\t},\n\tactions: {\n\t\tdraft_followup: {\n\t\t\tlabel: 'Draft a follow-up for my approval',\n\t\t\tparamsHelp: 'none (guidance styles the copy)',\n\t\t\tcapability: 'outbound'\n\t\t}\n\t}\n});\n\n// 1. Validate anything that wants to become a rule (AI tool, REST, forms):\nconst result = validateRuleInput(\n\tvocabulary,\n\t{\n\t\ttrigger: 'no_reply',\n\t\taction: 'draft_followup',\n\t\ttriggerParams: { days: 45 }\n\t},\n\t{\n\t\tcanUseAction: (action) =>\n\t\t\tmemberTier !== 'restricted' ||\n\t\t\t'Outbound rules need a higher score.',\n\t\tcanAutoSend: () =>\n\t\t\tmemberTier === 'trusted' || 'Auto-send needs the trusted tier.'\n\t}\n);\n// result.ok.triggerParams.days === 30 (clamped)\n\n// 2. Give your agent the tools (schemas only — you own the handlers):\nconst { createInput, updateInput, help } = ruleToolSchemas(vocabulary);\n\n// 3. Fire occurrences from your signal hooks / sweeps:\nconst engine = createRuleEngine({\n\tvocabulary,\n\tstore, // your RuleStore (drizzle, memory, …)\n\texecuteAction: async (rule, event, { autoSend }) => {\n\t\t// queue a draft for approval, create a task, auto-execute…\n\t\treturn autoSend ? 'executed' : 'drafted';\n\t}\n});\n\nawait engine.fire(\n\townerId,\n\t{\n\t\ttrigger: 'no_reply',\n\t\tentityId: `noreply:${matchId}`,\n\t\tcontext: 'no reply from Brendan in 5 days',\n\t\tsignal: { days: 5 }\n\t},\n\t{\n\t\tkillSwitch: false,\n\t\tcooldownDays: 3,\n\t\tmaxFiringsPerDay: 10,\n\t\tmaxAutoPerDay: 3,\n\t\tcanUseAction: () => true,\n\t\tcanAutoSend: () => true\n\t}\n);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Quick start',
 				language: 'typescript'
 			}
 		],
@@ -11772,19 +11554,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { createRuntime, execCheckpointDriver } from "@absolutejs/runtime";\n\nconst runtime = createRuntime({\n  source: { kind: "directory", root: "/srv/tenants" },\n  checkpoint: {\n    driver: execCheckpointDriver({\n      checkpointCommand: [\n        "criu",\n        "dump",\n        "--tree",\n        "{pid}",\n        "--images-dir",\n        "{dir}",\n        "--shell-job",\n        "--tcp-established",\n      ],\n      restoreCommand: ["restore-and-print-pid.sh", "{dir}"], // must print RESTORED_PID=<n>\n      imageDir: "/var/lib/tenants/images",\n    }),\n    restoreTimeoutMs: 10_000,\n  },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Checkpoint/restore seam (0.4.0) — ⚠️ EXPERIMENTAL',
 				language: 'typescript'
 			},
 			{
 				code: 'import { createEgressGuard, EgressDeniedError } from "@absolutejs/runtime";\n\nconst guard = createEgressGuard({\n  budgets: { requests: 100, bytes: 25 * 1024 * 1024, windowMs: 60_000 },\n  onDeny: (info) =>\n    audit.append({\n      kind: "egress.denied",\n      tenant: info.tenant,\n      url: info.url.href,\n      reason: info.reason,\n    }),\n});\n\nconst guardedFetch = guard.fetchFor("tenant-42");\nawait guardedFetch("https://api.stripe.com/v1/charges"); // ok\nawait guardedFetch("http://169.254.169.254/latest/meta-data/"); // throws EgressDeniedError { reason: \'not-allowed\' }\n\nguard.metrics(); // { tenants, requests, denied: { \'not-allowed\', \'requests-budget\', \'bytes-budget\' }, bytesEgress }\nguard.reset("tenant-42"); // re-open the tenant\'s budget window',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Egress guard (0.4.0)',
 				language: 'typescript'
 			},
 			{
 				code: 'const guardedFetch = guard.fetchFor(tenantKey);\n\ndefineMutation({\n  name: "enrich:lookup",\n  sandboxedHandler: `async (args, ctx, actions, unsafeHost) =>\n    unsafeHost.fetchJson(args.url)`,\n  sandbox: {\n    unsafeHost: {\n      fetchJson: async (url: string) => (await guardedFetch(url)).json(),\n    },\n  },\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Egress guard (0.4.0) 2',
 				language: 'typescript'
 			}
 		],
@@ -11793,16 +11575,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Multi-tenant Bun runtime substrate. Wraps Bun.spawn so that "run this tenant\'s bun run start inside an idle-killing, metric-emitting child process" is one function call.',
 				title: 'Overview'
-			},
-			{
-				description:
-					'Surface (0.1.0) is documented in the repository README.',
-				title: 'Surface (0.1.0)'
-			},
-			{
-				description:
-					'Architectural role is documented in the repository README.',
-				title: 'Architectural role'
 			}
 		],
 		repository: 'https://github.com/absolutejs/runtime',
@@ -11855,27 +11627,17 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: '# Bun\nbun add @absolutejs/scoped-state\n\n# npm\nnpm install @absolutejs/scoped-state\n\n# pnpm\npnpm add @absolutejs/scoped-state\n\n# Yarn\nyarn add @absolutejs/scoped-state',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'bash'
 			},
 			{
 				code: "import { Elysia } from 'elysia';\nimport { scopedState } from '@absolutejs/scoped-state';\n\nexport const server = new Elysia()\n\t.use(\n\t\tscopedState({\n\t\t\tcount: { value: 0 },\n\t\t\tuserData: { value: {}, preserve: true }\n\t\t})\n\t)\n\t.get('/', () => Bun.file('./build/pages/example.html'))\n\t.post('/api/reset?force', ({ resetScopedStore, query: { force } }) =>\n\t\tresetScopedStore(\n\t\t\tforce !== undefined && force !== 'false' && force !== '0'\n\t\t)\n\t)\n\t.get('/api/count', ({ scopedStore }) => scopedStore.count)\n\t.post('/api/increment', ({ scopedStore }) => ++scopedStore.count)\n\t.listen({ port: 3000 }, () => {\n\t\tconsole.log('Server is running on http://localhost:3000');\n\t});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Example',
 				language: 'typescript'
 			}
 		],
 		readmeTopics: [
-			{
-				description:
-					'Elysia Scoped State is a plugin that provides per-user-session server-side state management in Elysia, letting you store and retrieve data tied to individual users. It’s especially useful for powering stateful HTMX interactions, but can be used for any server-side data you need to persist across requests. is documented in the repository README.',
-				title: 'Elysia Scoped State is a plugin that provides per-user-session server-side state management in Elysia, letting you store and retrieve data tied to individual users. It’s especially useful for powering stateful HTMX interactions, but can be used for any server-side data you need to persist across requests.'
-			},
-			{
-				description:
-					'Installation is documented in the repository README.',
-				title: 'Installation'
-			},
 			{
 				description:
 					'Each request is mapped to its own slice of the shared .state.scoped object, keyed by a secure usersessionid cookie set automatically on first visit.',
@@ -11934,11 +11696,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'This application is a server-side rendered (SSR) app using Bun, Elysia, and React. It demonstrates the power of modern JavaScript technologies for building fast, efficient, and scalable web applications.',
 				title: 'Overview'
-			},
-			{
-				description:
-					'Technologies is documented in the repository README.',
-				title: 'Technologies'
 			},
 			{
 				description:
@@ -12013,13 +11770,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import {\n  createCredentialOperationBroker,\n  createMemoryCredentialGrantStore,\n} from "@absolutejs/secrets/agent";\n\nconst grants = createMemoryCredentialGrantStore();\nawait grants.put({\n  agentId: "research-agent",\n  allowedOrigins: ["https://api.example.com"],\n  createdAt: Date.now(),\n  expiresAt: Date.now() + 60_000,\n  grantId: "grant_123",\n  maximumUses: 1,\n  provider: "example",\n  scopes: ["create-report"],\n  secretName: "EXAMPLE_API_KEY",\n  used: 0,\n  userId: "user_123",\n});\n\nconst operations = createCredentialOperationBroker({\n  agency,\n  providers: [\n    {\n      provider: "example",\n      operations: {\n        "create-report": ({ credential, destination, input, signal }) =>\n          fetch(new URL("/reports", destination), {\n            body: JSON.stringify(input),\n            headers: { authorization: `Bearer ${credential}` },\n            method: "POST",\n            signal,\n          }).then((response) => response.json()),\n      },\n    },\n  ],\n  secrets: broker,\n  store: grants,\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Agent credential operations',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  createSecretBroker,\n  envAdapter,\n  inMemoryAdapter,\n  compositeAdapter,\n} from "@absolutejs/secrets/broker";\n\nconst broker = createSecretBroker({\n  adapter: compositeAdapter([\n    inMemoryAdapter({ initial: { TEST_KEY: "sk_test_local_value" } }),\n    envAdapter({ prefix: "ABS_SECRET_" }),\n  ]),\n  audit: (event) => observabilitySink.write(event),\n  cacheTtlMs: 60_000,\n});\n\n// In bridgeFetch.authorization():\nconst { value, fingerprint } = (await broker.resolve("STRIPE_KEY"))!;\nlogger.info("charging", { tenant, fingerprint }); // safe — no plaintext\nreturn { Authorization: `Bearer ${value}` };\n\n// In a log sink, before text leaves the host:\nconst sanitized = broker.redact(line); // [REDACTED:STRIPE_KEY] replaces plaintext\nsinkToCustomerVisibleLog(sanitized);\n\n// Rotate:\nconst next = await broker.rotate("STRIPE_KEY");\nnotifyDependents(next.fingerprint); // tell consumers a new key is in cache',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Agent credential operations 2',
 				language: 'typescript'
 			}
 		],
@@ -12033,21 +11790,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Agents should not call resolve() and should never receive a bearer token. createCredentialOperationBroker() instead gives them bounded capabilities: an exact agent and user, provider, operation scopes, URL origins, expiry, and maximum use count. The host resolves the secret only after the grant is atomically consumed, then passes it directly to an allowlisted provider operation. Results and audit events contain digests and identifiers, never the credential.',
 				title: 'Agent credential operations'
-			},
-			{
-				description:
-					'v0.0.1 surface is documented in the repository README.',
-				title: 'v0.0.1 surface'
-			},
-			{
-				description:
-					'What v0.0.1 does NOT include is documented in the repository README.',
-				title: 'What v0.0.1 does NOT include'
-			},
-			{
-				description:
-					'Architectural role is documented in the repository README.',
-				title: 'Architectural role'
 			}
 		],
 		repository: 'https://github.com/absolutejs/secrets',
@@ -12092,7 +11834,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import { evaluateSlo, sloReleaseGate } from '@absolutejs/slo';\n\nconst evaluation = evaluateSlo(\n\t{\n\t\tid: 'checkout-availability',\n\t\tobjective: 0.999,\n\t\twindowMs: 30 * 86_400_000,\n\t\tminimumSamples: 1_000\n\t},\n\t{ good: 99_950, total: 100_000, start, end }\n);\n\nconst gate = sloReleaseGate(evaluation);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Quick start',
 				language: 'typescript'
 			}
 		],
@@ -12177,37 +11919,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import { Elysia } from 'elysia';\nimport { createPlatformSyncRuntime } from '@absolutejs/sync/platform';\nimport { createCommentsPack } from '@absolutejs/sync-pack-comments';\nimport { createPostgresClusterBus } from '@absolutejs/sync-bus-pg';\n\nconst managedSync = createPlatformSyncRuntime({\n\tclusterBus: createPostgresClusterBus({ sql }),\n\tpacks: [createCommentsPack({ store: commentsStore })],\n\tresolveContext: (request) => authenticate(request)\n});\n\nawait managedSync.ready;\nnew Elysia().use(managedSync.app).listen(3000);\n\n// During graceful shutdown:\nawait managedSync.dispose();",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Platform-managed runtime',
 				language: 'typescript'
 			},
 			{
 				code: 'bun add @absolutejs/sync',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Install',
 				language: 'bash'
 			},
 			{
 				code: "// server\nimport { Elysia } from 'elysia';\nimport { createReactiveHub, sync } from '@absolutejs/sync';\n\nconst hub = createReactiveHub();\n\nnew Elysia()\n\t.use(sync({ hub })) // serves SSE at GET /sync?topics=a,b,c\n\t.post('/orders', async ({ body }) => {\n\t\tconst order = await db.orders.insert(body); // your Drizzle/Prisma write\n\t\thub.publish('orders'); // notify everyone watching \"orders\"\n\t\thub.publish(`orders:${order.id}`); // …and this one specifically\n\t\treturn order;\n\t})\n\t.listen(3000);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Reactive push — kill the polling loop',
 				language: 'typescript'
 			},
 			{
 				code: "// browser\nimport { createSyncSubscriber } from '@absolutejs/sync/client';\n\nconst sub = createSyncSubscriber({\n\ttopics: ['orders', 'orders:*'], // trailing * matches by prefix\n\tonEvent: (event) => {\n\t\t// data changed — refetch instead of polling on a timer\n\t\tif (event.topic.startsWith('orders')) refetchOrders();\n\t}\n});\n// sub.close() when the view unmounts",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Reactive push — kill the polling loop 2',
 				language: 'typescript'
 			},
 			{
 				code: "// server — Drizzle\nimport { eq } from 'drizzle-orm';\nimport { deriveReadTopics, publishWhere } from '@absolutejs/sync/drizzle';\n\nnew Elysia()\n\t.use(sync({ hub }))\n\t.get('/api/orders', () => db.select().from(orders)) // list -> topic \"orders\"\n\t.patch('/api/orders/:id', async ({ params, body }) => {\n\t\tconst id = Number(params.id);\n\t\tawait db.update(orders).set(body).where(eq(orders.id, id));\n\t\tpublishWhere(hub, orders, eq(orders.id, id), { op: 'update' });\n\t\t// publishes \"orders\" and \"orders:<id>\"\n\t});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'ORM auto-reactivity — stop hand-naming topics',
 				language: 'typescript'
 			},
 			{
 				code: "// browser — createLiveQuery + Prisma topic derivation (just a model name, no deps)\nimport { createLiveQuery, jsonFetcher } from '@absolutejs/sync/client';\nimport { deriveReadTopics } from '@absolutejs/sync/prisma';\n\nconst orders = createLiveQuery({\n\ttopics: deriveReadTopics('order').topics, // ['order']\n\tfetcher: jsonFetcher('/api/orders')\n});\n\norders.subscribe((state) => render(state.data)); // refetches on every order change\n// orders.close() when the view unmounts",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'ORM auto-reactivity — stop hand-naming topics 2',
 				language: 'typescript'
 			}
 		],
@@ -12252,10 +11994,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Connection broker — one upstream pool, many tenants'
 			},
 			{
-				description: 'API is documented in the repository README.',
-				title: 'API'
-			},
-			{
 				description:
 					'Run bun run bench/run.ts. Highlights (Bun 1.3, full results + methodology in docs/benchmarks.md):',
 				title: 'Benchmarks'
@@ -12297,7 +12035,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun install          # installs every workspace member\nbun run typecheck    # across all adapters\nbun run test         # across all adapters\nbun run build        # across all adapters',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Develop',
 				language: 'bash'
 			}
 		],
@@ -12359,14 +12097,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/sync-automerge @automerge/automerge',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: "import { automergeText } from '@absolutejs/sync-automerge';\n// ...instead of: import { rgaText } from '@absolutejs/sync/crdt';\n\n// Server — declare the CRDT field with this backend\nengine.registerCrdt('doc', { state: automergeText });\n\n// Client — same hook, just pass the backend's factory\nconst doc = useCollaborativeText({\n\tcollection: 'doc',\n\tfield: 'state',\n\tid: 'shared',\n\turl,\n\tcreate: (replica) => createAutomergeText(replica)\n});",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					}
 				],
@@ -12429,35 +12167,35 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/sync-bus-pg postgres',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: "import postgres from 'postgres';\nimport { createSyncEngine } from '@absolutejs/sync/engine';\nimport { createPostgresClusterBus } from '@absolutejs/sync-bus-pg';\n\nconst sql = postgres(process.env.DATABASE_URL!);\nconst engine = createSyncEngine();\n// ...registerReader/Writer/Reactive/Mutation as usual...\n\nconst bus = createPostgresClusterBus({ sql });\nawait engine.connectCluster(bus);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					},
 					{
 						code: "createPostgresClusterBus({\n\tsql, // your postgres client\n\tchannel: 'absolutejs_sync_cluster', // override to scope multiple engines on the same PG\n\tspill: 'overflow', // 'overflow' (default) | 'always' | 'never'\n\tlistenerHealth: {\n\t\t// optional; these are the defaults\n\t\tprobeIntervalMs: 15_000,\n\t\tprobeTimeoutMs: 5_000\n\t},\n\tonError: (e) => log.warn(e) // listener-side errors\n});",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Options',
 						language: 'typescript'
 					},
 					{
 						code: "const health = bus.listenerHealth();\n// {\n//   state: 'connected' | 'connecting' | 'reconnecting' | 'idle',\n//   activeSubscriptions, connections, reconnects,\n//   probeAttempts, probeSuccesses, probeFailures,\n//   lastConnectedAt, lastProbeAttemptAt,\n//   lastProbeSucceededAt, lastProbeFailedAt\n// }\n\nconst receivingNotifications = await bus.probeListener();",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Listener health and reconnects',
 						language: 'typescript'
 					},
 					{
 						code: "import { defineSchedule } from '@absolutejs/sync/engine';\n\nengine.registerSchedule(\n\tdefineSchedule({\n\t\tname: 'vacuum-cluster-spill',\n\t\tpattern: '*/5 * * * *', // every 5 minutes\n\t\trun: async () => {\n\t\t\tconst pruned = await bus.vacuum(60_000); // older than 60s\n\t\t\tconsole.log(`pruned ${pruned} spill rows`);\n\t\t}\n\t})\n);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Vacuum',
 						language: 'typescript'
 					}
 				],
@@ -12495,11 +12233,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							"Oversized messages spill to syncclusterspill. Rows aren't auto-deleted on consume (every listener on the channel needs to read them, including the publisher's own listener which fetches but doesn't double-apply via the engine's origin filter). Sweep periodically:",
 						title: 'Vacuum'
-					},
-					{
-						description:
-							'Caveats inherited from the engine seam is documented in the repository README.',
-						title: 'Caveats inherited from the engine seam'
 					}
 				],
 				sourcePath: 'bus-pg',
@@ -12539,35 +12272,35 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/sync @absolutejs/sync-bus-redis\n# Plus a Redis client — bring your own:\nbun add ioredis            # OR\nbun add redis              # node-redis v4+',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: "import { Redis } from 'ioredis';\nimport { createSyncEngine } from '@absolutejs/sync/engine';\nimport { createRedisClusterBus } from '@absolutejs/sync-bus-redis';\n\nconst publisher = new Redis(process.env.REDIS_URL!);\nconst subscriberClient = new Redis(process.env.REDIS_URL!);\n\n// ioredis: a subscribed connection can't issue other commands.\n// Bridge its EventEmitter API into our (channel, listener) shape:\nconst subscriber = {\n  subscribe: async (channel: string, listener: (msg: string) => void) => {\n    await subscriberClient.subscribe(channel);\n    const handler = (chan: string, msg: string) => {\n      if (chan === channel) listener(msg);\n    };\n    subscriberClient.on('message', handler);\n    return async () => {\n      subscriberClient.off('message', handler);\n      await subscriberClient.unsubscribe(channel);\n    };\n  },\n};\n\nconst bus = createRedisClusterBus({ publisher, subscriber });\nconst engine = createSyncEngine({ instanceId: 'shard-A' });\nawait engine.connectCluster(bus);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage with ioredis',
 						language: 'typescript'
 					},
 					{
 						code: "import { createClient } from 'redis';\nimport { createRedisClusterBus } from '@absolutejs/sync-bus-redis';\n\nconst publisher = createClient({ url: process.env.REDIS_URL });\nconst subscriberClient = publisher.duplicate();\nawait Promise.all([publisher.connect(), subscriberClient.connect()]);\n\n// node-redis: subscribe takes a callback directly.\nconst subscriber = {\n  subscribe: async (channel: string, listener: (msg: string) => void) => {\n    await subscriberClient.subscribe(channel, listener);\n    return async () => {\n      await subscriberClient.unsubscribe(channel);\n    };\n  },\n};\n\nconst bus = createRedisClusterBus({ publisher, subscriber });",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Usage with node-redis v4+',
 						language: 'typescript'
 					},
 					{
 						code: "createRedisClusterBus({\n  publisher,         // RedisPublisher — publish(channel, message)\n  subscriber,        // RedisSubscriber — subscribe(channel, listener) → unsubscribe fn\n  channel?,          // default 'absolutejs_sync_cluster'\n  onError?,          // logger for parse / delivery failures\n});",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'API',
 						language: 'typescript'
 					},
 					{
 						code: '{\n  published: number;             // PUBLISH calls\n  received: number;              // messages parsed + delivered to onMessage\n  publishErrors: number;         // publisher.publish() rejections\n  subscribeErrors: number;       // JSON.parse failures on incoming messages\n  totalSubscribersReached: number; // sum of counts Redis returned from PUBLISH\n                                 // — a drop to 0 when you expect peers signals\n                                 // subscriber disconnects (partition, restart)\n}',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'bus.metrics()',
 						language: 'typescript'
 					}
 				],
@@ -12640,14 +12373,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/sync-loro loro-crdt',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: "import { loroText } from '@absolutejs/sync-loro';\n// ...instead of: import { rgaText } from '@absolutejs/sync/crdt';\n\n// Server — declare the CRDT field with this backend\nengine.registerCrdt('doc', { state: loroText });\n\n// Client — same hook, just pass the backend's factory\nconst doc = useCollaborativeText({\n\tcollection: 'doc',\n\tfield: 'state',\n\tid: 'shared',\n\turl,\n\tcreate: (replica) => createLoroText(replica)\n});",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					}
 				],
@@ -12709,14 +12442,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/sync-yjs yjs',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: "import { yjsText } from '@absolutejs/sync-yjs';\n// ...instead of: import { rgaText } from '@absolutejs/sync/crdt';\n\n// Client — a live doc per replica (e.g. per tab/device)\nconst doc = yjsText.create('tab-a', initialStateFromServer);\ndoc.setText(textarea.value); // reconciles via a minimal diff\nsocket.send(doc.state()); // broadcast the serialized (base64) state\ndoc.merge(incomingState); // fold a peer's state into local edits\ndoc.text(); // the merged visible text\nconst cursor = doc.anchorAt?.(textarea.selectionStart); // stable relative cursor\ndoc.indexOfAnchor?.(cursor ?? null); // follows concurrent inserts/deletes\n\n// Server — merge-on-write so concurrent writes combine instead of clobbering\nconst next = yjsText.merge(storedState, incomingState);\n// store `next`; yjsText.textOf(next) is the plain text",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					}
 				],
@@ -12837,35 +12570,36 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: "import { createSyncEngine } from '@absolutejs/sync/engine';\nimport { createCommentsPack } from '@absolutejs/sync-pack-comments';\n\nconst engine = createSyncEngine();\nengine.registerPack(\n\tcreateCommentsPack({\n\t\t// REQUIRED: gate read access on a resource. The host knows which\n\t\t// resources a given ctx can see; the pack does not duplicate that.\n\t\tcanReadResource: (resourceId, ctx) =>\n\t\t\thostAcl.canRead(resourceId, ctx.session.userId),\n\n\t\t// REQUIRED in practice: how the pack reads the current actor id\n\t\t// from your app's ctx. Default is `(ctx) => ctx.userId`.\n\t\tgetActorId: (ctx) => ctx.session.userId,\n\n\t\t// OPTIONAL: moderator predicate. Used by comments:delete (author OR\n\t\t// moderator can delete). Default `() => false`.\n\t\tcanModerate: (ctx) => ctx.session.isModerator,\n\n\t\t// OPTIONAL: max thread depth (top-level = 0). Default 8.\n\t\tmaxDepth: 8,\n\n\t\t// OPTIONAL: wire the comment body as a CRDT field via registerCrdt\n\t\t// so concurrent edits merge instead of clobbering. Pass anything\n\t\t// implementing `CrdtMergeable<T>` — e.g. yjsText from\n\t\t// @absolutejs/sync-yjs. The pack does NOT import Yjs.\n\t\t// bodyCrdt: yjsText,\n\t})\n);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: 'type CommentRow = {\n\tid: string;\n\tresourceId: string;\n\tparentCommentId: string | null; // null on top-level; parent id on replies\n\tauthorId: string;\n\tbody: string;\n\tdepth: number; // 0 for top-level, parent.depth + 1 for replies\n\tcreatedAt: number;\n\teditedAt: number | null;\n};',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Row shape',
 						language: 'typescript'
 					},
 					{
 						code: "import {\n\tcreateCommentsPack,\n\ttype CommentsStore,\n} from '@absolutejs/sync-pack-comments';\n\nconst store: CommentsStore = {\n\tgetById: (id) => /* SELECT * FROM comments WHERE id = $1 */,\n\treader: { all: () => /* SELECT * FROM comments */ },\n\twriter: {\n\t\tinsert: (row) => /* INSERT */,\n\t\tupdate: (row) => /* UPDATE */,\n\t\tdelete: (row) => /* DELETE WHERE id = $1 */,\n\t},\n};\n\nengine.registerPack(createCommentsPack({ store, canReadResource, getActorId }));",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Storage',
 						language: 'typescript'
 					},
 					{
 						code: "engine.registerPack(createCommentsPack({ prefix: 'docs_', canReadResource, getActorId }));\nengine.registerPack(createCommentsPack({ prefix: 'chat_', canReadResource, getActorId }));\n\n// Tables:       docs_comments,        chat_comments\n// Collections:  docs_comments,        chat_comments\n// Mutations:    docs_comments:create, chat_comments:create  (etc.)",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Multiple instances',
 						language: 'typescript'
 					},
 					{
 						code: "type Author = { id: string; displayName: string; avatarUrl?: string };\n\nengine.registerReader('users', { all: () => db.users.list() });\nengine.registerWriter('users', { /* ... */ });\n\nengine.registerPack(\n\tcreateCommentsPack<MyCtx, Author>({\n\t\tcanReadResource,\n\t\tgetActorId,\n\t\tjoinUsers: {\n\t\t\t// Default 'users'; pass another name if your table differs.\n\t\t\ttable: 'users',\n\t\t\t// Default (u) => u.id; override if your user id key isn't `id`.\n\t\t\t// key: (user) => user.userId,\n\t\t\t// Required: host supplies the users-side hydrate.\n\t\t\thydrate: () => db.users.list(),\n\t\t},\n\t}),\n);\n\n// Subscribe with the same params shape as the base collection.\nconst subscription = await engine.subscribe<\n\tCommentRow & { author: Author },\n\t{ resourceId: string }\n>({\n\tcollection: 'comments-with-author',\n\tparams: { resourceId },\n\tctx,\n\tonDiff: rerender,\n});\n// subscription.initial[0] === { ...comment, author: { id, displayName, ... } }",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading:
+							'Optional: comments-with-author join collection (0.2+)',
 						language: 'typescript'
 					}
 				],
@@ -12959,21 +12693,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: "import { createSyncEngine } from '@absolutejs/sync/engine';\nimport { createCountersPack } from '@absolutejs/sync-pack-counters';\n\nconst engine = createSyncEngine();\nengine.registerReader('tasks',         { all: () => db.tasks.list() });\nengine.registerReader('notifications', { all: () => db.notifications.list() });\n\nengine.registerPack(\n\tcreateCountersPack({\n\t\tcounters: {\n\t\t\t// Bare function form.\n\t\t\topenTasks: async ({ db }) =>\n\t\t\t\t(await db.all<Task>('tasks')).filter((t) => !t.done).length,\n\n\t\t\t// Per-actor counter using ctx.\n\t\t\tunreadNotifications: async ({ db, ctx }) =>\n\t\t\t\t(await db.all<Notification>('notifications'))\n\t\t\t\t\t.filter((n) => n.actorId === ctx.userId && n.readAt === null)\n\t\t\t\t\t.length,\n\n\t\t\t// Object form when you need a per-counter authorize override —\n\t\t\t// e.g. a public site-wide stat anyone can subscribe to.\n\t\t\ttotalUsers: {\n\t\t\t\tauthorize: () => true,\n\t\t\t\tcompute: async ({ db }) => (await db.all('users')).length,\n\t\t\t},\n\t\t},\n\t}),\n);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: "useSyncCollection<CounterRow>({ collection: 'counter:openTasks' });\n// Emits { id: 'openTasks', key: 'openTasks', value: 3, computedAt: ... }",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Usage 2',
 						language: 'typescript'
 					},
 					{
 						code: "engine.registerPack(createCountersPack({ prefix: 'team_', counters: { ... } }));\nengine.registerPack(createCountersPack({ prefix: 'org_',  counters: { ... } }));\n// Collections: team_counter:<key> and org_counter:<key>",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Multiple instances',
 						language: 'typescript'
 					}
 				],
@@ -13053,28 +12787,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: "import { createSyncEngine } from '@absolutejs/sync/engine';\nimport { createDigestPack } from '@absolutejs/sync-pack-digest';\n\nconst engine = createSyncEngine();\nengine.registerPack(\n\tcreateDigestPack({\n\t\t// Cron pattern for the digest fire. Default '0 8 * * 1' (Mon 8am).\n\t\tcron: '0 8 * * 1',\n\n\t\t// REQUIRED: yield the actor ids to iterate per fire. The host's\n\t\t// data layer is the source of truth for \"who exists\" — the pack\n\t\t// just maintains per-actor cursors.\n\t\tlistActors: () => db.users.allActiveIds(),\n\n\t\t// REQUIRED: build the payload for one actor. `since` is the actor's\n\t\t// last successful send (or null on first-ever). Return null to skip\n\t\t// this actor silently (no content this week).\n\t\tbuildDigest: async (actorId, since) => {\n\t\t\tconst items = await db.feed.since(actorId, since ?? new Date(0));\n\t\t\tif (items.length === 0) return null;\n\t\t\treturn {\n\t\t\t\tto: await db.users.email(actorId),\n\t\t\t\tsubject: `Your weekly digest`,\n\t\t\t\tbody: render(items),\n\t\t\t};\n\t\t},\n\n\t\t// REQUIRED: host's transport adapter. Pack catches throws per\n\t\t// actor so one bad send doesn't block the rest.\n\t\tsend: async (msg) => await resend.send(msg),\n\n\t\t// OPTIONAL: back-pressure. Default 1000.\n\t\tmaxActorsPerFire: 1000,\n\n\t\t// OPTIONAL: per-actor cool-down. Default 168 hours = 1 week. Match\n\t\t// to your cron — weekly cron + 168h = each actor gets one digest\n\t\t// per fire; daily cron + 168h = each actor gets at most one per week.\n\t\tminHoursBetweenDigests: 168,\n\n\t\t// OPTIONAL: surface failures (default logs to console.error).\n\t\tonActorFailure: ({ actorId, phase, error }) => {\n\t\t\tlogger.warn({ actorId, phase, error }, 'digest failure');\n\t\t},\n\n\t\t// OPTIONAL: outer schedule retry (sync 1.9.0+). Defaults to no\n\t\t// retry — per-actor failures are handled internally; this is for\n\t\t// transient infra failures (DB, etc) of the whole fire. The next\n\t\t// cron fire catches up anyway.\n\t\t// retry: { maxAttempts: 3, backoff: exponentialBackoff() },\n\t})\n);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: 'type DigestCursor = {\n\tid: string; // = actorId\n\tactorId: string;\n\tlastSentAt: number; // epoch ms\n\tlastSubject: string;\n};',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Cursor row',
 						language: 'typescript'
 					},
 					{
 						code: "import {\n\tcreateDigestPack,\n\ttype DigestStore,\n} from '@absolutejs/sync-pack-digest';\n\nconst store: DigestStore = {\n\tgetById: (id) => /* SELECT * FROM digest_cursors WHERE id = $1 */,\n\treader: { all: () => /* SELECT * FROM digest_cursors */ },\n\twriter: { insert, update, delete },\n};",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Storage',
 						language: 'typescript'
 					},
 					{
 						code: "engine.registerPack(createDigestPack({ prefix: 'team_', /* ... */ }));\nengine.registerPack(createDigestPack({ prefix: 'cust_', /* ... */ }));\n\n// Tables:       team_digest_cursors,  cust_digest_cursors\n// Schedules:    team_digest:fire,     cust_digest:fire\n// Collections:  team_digest_cursors,  cust_digest_cursors",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Multiple instances',
 						language: 'typescript'
 					}
 				],
@@ -13088,11 +12822,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							"import { createSyncEngine } from '@absolutejs/sync/engine'; import { createDigestPack } from '@absolutejs/sync-pack-digest';",
 						title: 'Usage'
-					},
-					{
-						description:
-							'The pack exposes is documented in the repository README.',
-						title: 'The pack exposes'
 					},
 					{
 						description:
@@ -13159,35 +12888,35 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: "import { createSyncEngine } from '@absolutejs/sync/engine';\nimport { createFavoritesPack } from '@absolutejs/sync-pack-favorites';\n\nconst engine = createSyncEngine();\nengine.registerPack(\n\tcreateFavoritesPack({\n\t\tgetActorId: (ctx) => ctx.session.userId,\n\t}),\n);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: "// Toggle is the easy default — one round-trip, returns the new state.\nconst { favorited } = await store.mutate({\n\targs: { resourceKind: 'doc', resourceId: 'doc-123' },\n\tname: 'favorites:toggle',\n});\n\n// Or favorite / unfavorite explicitly.\nawait store.mutate({ args: { resourceKind: 'doc', resourceId: 'doc-123' }, name: 'favorites:favorite' });\nawait store.mutate({ args: { resourceKind: 'doc', resourceId: 'doc-123' }, name: 'favorites:unfavorite' });",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Usage 2',
 						language: 'typescript'
 					},
 					{
 						code: 'type FavoriteRow = {\n\tid: string;              // `${actorId}:${resourceKind}:${resourceId}` — deterministic\n\tactorId: string;\n\tresourceKind: string;    // app-level: "doc" | "task" | "issue" | ...\n\tresourceId: string;\n\tcreatedAt: number;\n};',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Row shape',
 						language: 'typescript'
 					},
 					{
 						code: "type DocRow = { id: string; title: string };\n\nengine.registerReader('docs', { all: () => db.docs.list() });\nengine.registerPack(\n\tcreateFavoritesPack<MyCtx, DocRow>({\n\t\tgetActorId,\n\t\tjoinResources: {\n\t\t\ttable: 'docs',\n\t\t\t// Default (row) => row.id; override if your resource id key isn't `id`.\n\t\t\t// key: (doc) => doc.docId,\n\t\t\t// Required: host supplies the resource-side hydrate.\n\t\t\thydrate: () => db.docs.list(),\n\t\t},\n\t}),\n);\n\nconst view = await engine.subscribe<\n\tFavoriteRow & { resource: DocRow },\n\t{ resourceKind?: string }\n>({\n\tcollection: 'favorites-with-resource',\n\tparams: { resourceKind: 'doc' },\n\tctx,\n\tonDiff: rerender,\n});\n// view.initial[0] === { ...favorite, resource: { id, title } }",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Optional: favorites-with-resource join',
 						language: 'typescript'
 					},
 					{
 						code: "import { type FavoritesStore } from '@absolutejs/sync-pack-favorites';\n\nconst store: FavoritesStore = {\n\tgetById: (id) => /* SELECT * FROM favorites WHERE id = $1 */,\n\treader: { all: () => /* SELECT */ },\n\twriter: { insert, update, delete },\n};",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 6',
+						heading: 'Storage',
 						language: 'typescript'
 					}
 				],
@@ -13201,11 +12930,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							"import { createSyncEngine } from '@absolutejs/sync/engine'; import { createFavoritesPack } from '@absolutejs/sync-pack-favorites';",
 						title: 'Usage'
-					},
-					{
-						description:
-							'The pack exposes is documented in the repository README.',
-						title: 'The pack exposes'
 					},
 					{
 						description:
@@ -13277,11 +13001,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
-							'Surface is documented in the repository README.',
-						title: 'Surface'
-					},
-					{
-						description:
 							"The host calls mentions:record right after its own post mutation succeeds, then onMention fires once per parsed mention. From inside the hook, the host can engine.runMutation('notifications:notify', …) to compose with @absolutejs/sync-pack-notifications.",
 						title: 'Composition pattern'
 					}
@@ -13330,28 +13049,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: "import { createSyncEngine } from '@absolutejs/sync/engine';\nimport { createNotificationsPack } from '@absolutejs/sync-pack-notifications';\n\nconst engine = createSyncEngine();\nengine.registerPack(\n\tcreateNotificationsPack({\n\t\tgetActorId: (ctx) => ctx.session.userId,\n\t\t// `notify` is the trusted insert path. Mark the ctx your host\n\t\t// uses to call notify as a moderator so the row-author permission\n\t\t// check passes. (In a real app this is a server-only \"system\"\n\t\t// trust flag, not isModerator.)\n\t\tcanModerate: (ctx) => ctx.session.systemTrusted === true,\n\t\t// Optional: archive rows after 30 days. Cleanup schedule fires\n\t\t// hourly by default.\n\t\tautoArchiveAfterDays: 30,\n\t}),\n);\n\n// From any server-side path (a webhook, a schedule, another mutation):\nawait engine.runMutation(\n\t'notifications:notify',\n\t{\n\t\tactorId: 'alice',\n\t\tkind: 'mention',\n\t\ttitle: 'You were mentioned',\n\t\tbody: 'in @doc-123 by bob',\n\t\thref: '/docs/123#comment-456',\n\t},\n\t{ session: { systemTrusted: true } },\n);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: 'type NotificationRow = {\n\tid: string;\n\tactorId: string;       // whose inbox\n\tkind: string;          // app-level tag: "mention", "reply", "system", ...\n\ttitle: string;\n\tbody: string;\n\thref: string | null;   // optional jump-to URL\n\tcreatedAt: number;\n\treadAt: number | null; // null = unread\n\texpiresAt: number | null;\n};',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Row shape',
 						language: 'typescript'
 					},
 					{
 						code: "import {\n\tcreateNotificationsPack,\n\ttype NotificationsStore,\n} from '@absolutejs/sync-pack-notifications';\n\nconst store: NotificationsStore = {\n\tgetById: (id) => /* SELECT * FROM notifications WHERE id = $1 */,\n\texpired: (now) => /* SELECT * FROM notifications WHERE expires_at <= $1 */,\n\treader: { all: () => /* SELECT */ },\n\twriter: { insert, update, delete },\n};",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Storage',
 						language: 'typescript'
 					},
 					{
 						code: "engine.registerPack(createNotificationsPack({ prefix: 'user_', /* ... */ }));\nengine.registerPack(createNotificationsPack({ prefix: 'system_', /* ... */ }));",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Multiple instances',
 						language: 'typescript'
 					}
 				],
@@ -13365,11 +13084,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							"import { createSyncEngine } from '@absolutejs/sync/engine'; import { createNotificationsPack } from '@absolutejs/sync-pack-notifications';",
 						title: 'Usage'
-					},
-					{
-						description:
-							'The pack exposes is documented in the repository README.',
-						title: 'The pack exposes'
 					},
 					{
 						description:
@@ -13431,21 +13145,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: "import { createSyncEngine } from '@absolutejs/sync/engine';\nimport { createPresencePack } from '@absolutejs/sync-pack-presence';\n\nconst engine = createSyncEngine();\nengine.registerPack(\n\tcreatePresencePack({\n\t\t// REQUIRED in practice: how the pack reads the current actor id from\n\t\t// your app's ctx. Default is `(ctx) => ctx.userId`.\n\t\tgetActorId: (ctx) => ctx.session.userId,\n\n\t\t// OPTIONAL: tenant/workspace scope. Two scopes never see each other's\n\t\t// presence rows.\n\t\tscope: (ctx) => ctx.session.workspaceId,\n\n\t\t// OPTIONAL: TTL on a heartbeat (seconds). Default 30.\n\t\theartbeatTtlSec: 30,\n\n\t\t// OPTIONAL: cron for the cleanup schedule. Default every 15 seconds.\n\t\t// You must still wire `@elysiajs/cron` to fire this — sync only owns\n\t\t// the handler, not the trigger.\n\t\tcleanupCron: '*/15 * * * * *'\n\t})\n);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
 						code: "import { createPresencePack, type PresenceStore } from '@absolutejs/sync-pack-presence';\n\nconst store: PresenceStore = {\n\treader: { all: () => /* SELECT * FROM presence */ },\n\twriter: {\n\t\tinsert: (row) => /* INSERT */,\n\t\tupdate: (row) => /* UPDATE */,\n\t\tdelete: (row) => /* DELETE */,\n\t},\n\texpired: (now) => /* SELECT * FROM presence WHERE expires_at <= $1 */\n};\n\nengine.registerPack(createPresencePack({ store, getActorId: (ctx) => ctx.userId }));",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Storage',
 						language: 'typescript'
 					},
 					{
 						code: "engine.registerPack(createPresencePack({ prefix: 'docs_', getActorId }));\nengine.registerPack(createPresencePack({ prefix: 'chat_', getActorId }));\n\n// Mutations are now `docs_presence:heartbeat` and `chat_presence:heartbeat`.\n// Collections are `docs_presence` and `chat_presence`.\n// Schedules are `docs_presence:cleanup` and `chat_presence:cleanup`.",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Multiple instances',
 						language: 'typescript'
 					}
 				],
@@ -13532,14 +13246,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: "import { triageVisibility, isUnread } from \"@absolutejs/sync-pack-triage\";\n\ntriageVisibility(row, { lastActivityAt: thread.lastMessageAt }); // 'active' | 'snoozed' | 'dismissed'\nisUnread(row, thread.lastMessageAt); // never looked, or changed since they did",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'The two rules that matter',
 						language: 'typescript'
 					},
 					{
 						code: 'createTriagePack({\n  getActorId: (ctx) => ctx.userId, // default reads ctx.userId\n  prefix: "team_", // namespaces table, collection, mutations, schedule\n  store: myPostgresTriageStore, // default is per-instance in-memory\n  now: () => Date.now(),\n  maxBulkSize: 500,\n  wakeCron: "*/5 * * * *", // null to skip registering the sweep\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'Config',
 						language: 'typescript'
 					}
 				],
@@ -13614,28 +13328,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: "import {\n\tdefaultGetActorId,\n\tresolveActor,\n} from '@absolutejs/sync-pack-utils';\n\n// (ctx) => ctx.userId — the conventional default.\nconst getActorId = config.getActorId ?? defaultGetActorId<MyCtx>();\n\n// Inside a mutation handler: throws UnauthorizedError if no actor id.\n// The context string ends up in the error message so logs name the op.\nconst actorId = resolveActor(getActorId, ctx, 'mypack:create');",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Actor resolution',
 						language: 'typescript'
 					},
 					{
 						code: "import {\n\trequireRowOwner,\n\trequireOwnerOrModerator,\n} from '@absolutejs/sync-pack-utils';\n\npermissions: {\n\t[table]: {\n\t\tread: ...,\n\t\t// Owner-only writes — uses row.actorId by default; override the\n\t\t// field name for packs that use authorId, userId, etc.\n\t\tinsert: requireRowOwner(getActorId, 'actorId'),\n\t\tupdate: requireRowOwner(getActorId, 'actorId'),\n\t\t// Owner OR moderator delete. Falls back to store.getById when\n\t\t// actions.delete supplied only the row key (the common case).\n\t\tdelete: requireOwnerOrModerator({\n\t\t\tactorIdField: 'actorId',\n\t\t\tcanModerate,        // optional\n\t\t\tgetActorId,\n\t\t\tstore,              // { getById }\n\t\t}),\n\t},\n},",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Permission builders',
 						language: 'typescript'
 					},
 					{
 						code: "import {\n\tcreateInMemoryStore,\n\ttype InMemoryStore,\n} from '@absolutejs/sync-pack-utils';\n\ntype FavoriteRow = { id: string; actorId: string; /* ... */ };\n\nconst store: InMemoryStore<FavoriteRow> =\n\tconfig.store ?? createInMemoryStore<FavoriteRow>();\n\nengine.registerPack(defineSyncPack({\n\t// ...\n\treaders: { favorites: store.reader },\n\twriters: { favorites: store.writer },\n\t// store.getById is available for permission + mutation handler use.\n}));",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'In-memory store',
 						language: 'typescript'
 					},
 					{
 						code: "import { expectRejection } from '@absolutejs/sync/testing';\nimport { resolveActor } from '@absolutejs/sync-pack-utils';\n\nconst error = await expectRejection(() => {\n\tresolveActor(getActorId, {}, 'mypack:do');\n\treturn Promise.resolve();\n});\nexpect(error).toBeInstanceOf(UnauthorizedError);",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'Pairing with @absolutejs/sync/testing',
 						language: 'typescript'
 					}
 				],
@@ -13644,11 +13358,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							"Shared helpers for @absolutejs/sync packs. Each helper closes one repeated pattern that showed up across the six official packs (presence, comments, digest, notifications, favorites, counters). The goal: make new packs — first- or third-party — cheaper to write and consistent with what's already shipped.",
 						title: 'Overview'
-					},
-					{
-						description:
-							'API is documented in the repository README.',
-						title: 'API'
 					},
 					{
 						description: '${prefix} is fine.',
@@ -13714,31 +13423,32 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/telemetry\n# Optional — only if you want real OTel spans:\nbun add @opentelemetry/api @opentelemetry/sdk-node',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: "import { tracerOrNoop, ABS_ATTRS, type TracerProvider } from '@absolutejs/telemetry';\n\nexport type MyPackageOptions = {\n  // existing options...\n  tracerProvider?: TracerProvider;\n};\n\nexport const createMyPackage = (options: MyPackageOptions) => {\n  const tracer = tracerOrNoop(options.tracerProvider, '@absolutejs/my-package');\n\n  return {\n    doWork: async (input: string) => {\n      return tracer.startActiveSpan(\n        'my-package.doWork',\n        { attributes: { [ABS_ATTRS.tenant]: input } },\n        async (span) => {\n          try {\n            const result = await actuallyDoWork(input);\n            return result;\n          } catch (error) {\n            span.recordException(error);\n            throw error;\n          } finally {\n            span.end();\n          }\n        }\n      );\n    },\n  };\n};",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'As a substrate-package author',
 				language: 'typescript'
 			},
 			{
 				code: "import { NodeTracerProvider } from '@opentelemetry/sdk-node';\nimport { createMyPackage } from '@absolutejs/my-package';\n\nconst tracerProvider = new NodeTracerProvider({ /* exporter, sampler, etc */ });\ntracerProvider.register();\n\nconst pkg = createMyPackage({ tracerProvider });\n// Spans now flow through to your configured exporter.",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'As a consumer wiring it all together',
 				language: 'typescript'
 			},
 			{
 				code: "const result = await withSpan(\n  tracer,\n  'sync.runMutation',\n  { attributes: { [ABS_ATTRS.mutation]: 'createIssue' } },\n  async (span) => {\n    span.setAttribute(ABS_ATTRS.mutationAttempt, 1);\n    return await engine.runMutation('createIssue', args, ctx);\n  }\n);",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading:
+					'withSpan(tracer, name, options, fn) / withSpanSync(...)',
 				language: 'typescript'
 			},
 			{
 				code: 'abs.tenant                  // tenant / shard key\nabs.shard.id\n\n// sync\nabs.engine.id\nabs.collection\nabs.mutation\nabs.mutation.attempt\nabs.subscription.id\nabs.batch.size\nabs.cluster.origin\n\n// queue\nabs.job.id\nabs.job.kind\nabs.job.attempt\nabs.job.max_attempts\nabs.worker.id\n\n// runtime\nabs.runtime.key\nabs.runtime.pid\nabs.runtime.port\nabs.runtime.exit_reason\nabs.runtime.readiness_ms\n\n// router\nabs.route.shard\nabs.route.decision\n\n// secrets\nabs.secret.name\nabs.secret.fingerprint\n\n// audit\nabs.audit.kind\n\n// handoff\nabs.handoff.correlation_id\nabs.handoff.operation\nabs.handoff.outcome\nabs.handoff.service\nabs.handoff.source\nabs.handoff.attempt\nabs.handoff.contradiction',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'ABSATTRS',
 				language: 'text'
 			}
 		],
@@ -13751,14 +13461,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				description: 'bun add @absolutejs/telemetry',
 				title: 'Install'
-			},
-			{
-				description: 'Usage is documented in the repository README.',
-				title: 'Usage'
-			},
-			{
-				description: 'API is documented in the repository README.',
-				title: 'API'
 			}
 		],
 		repository: 'https://github.com/absolutejs/telemetry',
@@ -13807,37 +13509,39 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/tour',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'import type { Tutorial } from "@absolutejs/tour";\n\nconst tour: Tutorial = {\n  slug: "portal-intro",\n  trigger: { firstVisitOnly: true, onRoutePrefix: "/portal" },\n  steps: [\n    {\n      title: "Welcome",\n      body: "A quick tour.",\n      placement: "center",\n      route: "/dashboard",\n    },\n    {\n      title: "Your command center",\n      body: "Your single best next step is always one click here.",\n      route: "/dashboard",\n      target: \'[data-tour=\\"hero\\"]\',\n      placement: "bottom",\n    },\n    // …intake, matches, network — each navigates and spotlights a real element\n  ],\n};',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'The protocol',
 				language: 'typescript'
 			},
 			{
 				code: '// shared controller (singleton per storage key)\nimport { useTourController } from "@absolutejs/tour";\nconst tour = useTourController("myapp.tour");\n\n// auto-play once on first visit, then stamp your own "seen" marker\nif (!account.tourSeenAt) tour.start();\n\n// replay from anywhere (does not re-stamp — pass replay=true)\ntour.start(true);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Wiring it up',
 				language: 'typescript'
 			},
 			{
 				code: '<script setup lang="ts">\nimport { useSpotlight, useTourController } from "@absolutejs/tour";\nimport { PORTAL_TOUR_STEPS } from "./steps";\n\nconst controller = useTourController("myapp.tour");\nconst emit = defineEmits<{ close: [] }>();\nconst t = useSpotlight({\n  steps: () => PORTAL_TOUR_STEPS,\n  controller,\n  onClose: () => emit("close"),\n});\n</script>\n\n<template>\n  <Teleport to="body">\n    <div v-if="t.active.value && t.step.value" class="tour-root">\n      <div class="tour-blocker" :class="{ dim: t.isCentered.value }"></div>\n      <div class="tour-spotlight" :style="t.spotlightStyle.value"></div>\n      <div\n        class="tour-tooltip"\n        :class="{ centered: t.isCentered.value }"\n        :style="t.isCentered.value ? {} : t.tooltipStyle.value"\n      >\n        <p>Step {{ t.index.value + 1 }} of {{ t.stepCount.value }}</p>\n        <h3>{{ t.step.value.title }}</h3>\n        <p>{{ t.step.value.body }}</p>\n        <button @click="t.skip">Skip</button>\n        <button v-if="!t.isFirst.value" @click="t.back">Back</button>\n        <button @click="t.next">{{ t.isLast.value ? "Done" : "Next" }}</button>\n      </div>\n    </div>\n  </Teleport>\n</template>',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Wiring it up 2',
 				language: 'vue'
 			},
 			{
 				code: '// The page that OWNS the surface registers its demo handler (setup):\nimport { useTourActions } from "@absolutejs/tour";\n\nconst actions = useTourActions();\nconst unregister = actions.register("matches.demo-swipe", async (ctx) => {\n  const direction = ctx.args.direction === "left" ? "left" : "right";\n  await swiper.value?.demoSwipe(direction); // ctx.signal aborts long demos\n});\nonBeforeUnmount(unregister);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading:
+					"Step actions — demo the product, don't just point at it",
 				language: 'typescript'
 			},
 			{
 				code: '// The step invokes it — plain JSON, safe to store in a DB / author in an admin UI:\n{\n\ttitle: "Swipe or list",\n\troute: "/portal/matches",\n\ttarget: \'[data-tour="match-view"]\',\n\tonEnter: [\n\t\t{ action: "matches.demo-swipe", args: { direction: "right" } },\n\t\t{ action: "wait", args: { ms: 700 } },\n\t\t{ action: "matches.demo-swipe", args: { direction: "left" } },\n\t],\n}',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading:
+					"Step actions — demo the product, don't just point at it 2",
 				language: 'typescript'
 			}
 		],
@@ -13986,37 +13690,41 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'import { Elysia } from "elysia";\nimport {\n  createVoiceInMemoryMonitorRegistry,\n  createVoiceLiveMonitorRoutes,\n  createVoiceMonitorRuntimeBinding,\n  voice,\n} from "@absolutejs/voice";\n\nconst monitorRegistry = createVoiceInMemoryMonitorRegistry();\n\nconst app = new Elysia()\n  .use(\n    voice({\n      path: "/voice/realtime",\n      stt: deepgram({ apiKey: process.env.DEEPGRAM_API_KEY! }),\n      tts: elevenlabs({ apiKey: process.env.ELEVENLABS_API_KEY! }),\n      onTurn: async (session, turn, api) => {\n        // your business logic\n      },\n      session: sessionStore,\n      monitor: createVoiceMonitorRuntimeBinding(monitorRegistry, {\n        audioFormat: { channels: 1, container: "raw", encoding: "pcm_s16le", sampleRateHz: 24_000 },\n      }),\n    }),\n  )\n  .use(\n    createVoiceLiveMonitorRoutes({\n      registry: monitorRegistry,\n      authenticate: async ({ request }) => await verifySupervisorJWT(request),\n    }),\n  );',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading:
+					'0.0.22-beta.474 · Phase 5 runtime hookup — auto-wire monitor sockets to live sessions',
 				language: 'typescript'
 			},
 			{
 				code: 'import { Elysia } from "elysia";\nimport {\n  buildVoiceMonitorPlan,\n  createVoiceInMemoryMonitorRegistry,\n  createVoiceLiveMonitorRoutes,\n  createVoiceMonitorSession,\n} from "@absolutejs/voice";\n\nconst registry = createVoiceInMemoryMonitorRegistry();\n\n// In your runtime: when a session opens, register it so supervisors can listen.\nconst record = createVoiceMonitorSession({ handle, sessionId: handle.id });\nconst deregister = registry.register(record);\n// When audio leaves the assistant, fan it out:\n//   record.emit({ at: Date.now(), chunk, format, source: \'assistant\' });\n// On call end:\n//   deregister();\n\nconst app = new Elysia()\n  .use(\n    createVoiceLiveMonitorRoutes({\n      authenticate: async ({ sessionId, route, request }) =>\n        await verifySupervisorJWT(request),\n      controlHandlers: {\n        say: async ({ message, session }) => {\n          await yourTtsRuntime.sayInSession(session.sessionId, message.text);\n          return { detail: `Said: ${message.text}`, ok: true, type: "say" };\n        },\n      },\n      htmlPath: "/voice/monitor",\n      registry,\n    }),\n  );\n\nconst plan = buildVoiceMonitorPlan({\n  baseUrl: "wss://api.example.com",\n  sessionId: handle.id,\n});\n// plan.listenUrl  → wss://api.example.com/api/voice/monitor/<sessionId>/listen\n// plan.controlUrl → wss://api.example.com/api/voice/monitor/<sessionId>/control',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading:
+					'0.0.22-beta.473 · Phase 5 — live listen + control monitor sockets (Vapi monitorPlan parity)',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  buildVoiceMultilingualProofReadinessCheck,\n  renderVoiceMultilingualProofMarkdown,\n  runVoiceMultilingualProof,\n} from "@absolutejs/voice";\nimport { deepgram } from "@absolutejs/voice-deepgram";\nimport { speechmatics } from "@absolutejs/voice-speechmatics";\nimport { soniox } from "@absolutejs/voice-soniox";\n\nconst report = await runVoiceMultilingualProof({\n  adapters: [\n    { adapter: deepgram({ apiKey, model: "nova-3" }), adapterId: "deepgram-nova3" },\n    { adapter: speechmatics({ apiKey, region: "eu2" }), adapterId: "speechmatics-enhanced" },\n    { adapter: soniox({ apiKey, enableLanguageIdentification: true }), adapterId: "soniox" },\n  ],\n  defaultThresholds: { maxAverageWordErrorRate: 0.30, minPassRate: 0.7 },\n  perLanguage: [\n    { language: "ca-es", label: "Catalan-Spanish code-switch", maxAverageWordErrorRate: 0.45 },\n    { language: "hi-en", label: "Hindi-English code-switch", maxAverageWordErrorRate: 0.50 },\n  ],\n});\n\nconst readiness = buildVoiceMultilingualProofReadinessCheck(report, {\n  baseHref: "/voice/multilingual-proof",\n});\n// drop `readiness` into your VoiceProductionReadinessReport.checks array\n\nawait Bun.write("docs/multilingual-proof.md", renderVoiceMultilingualProofMarkdown(report));',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading:
+					'0.0.22-beta.472 · Phase 6 — multilingual STT proof gate',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  createOpenAIVoiceAssistantModel,\n  fromVapiAssistantConfig,\n  type VapiAssistantConfig,\n} from "@absolutejs/voice";\n\nconst config: VapiAssistantConfig = JSON.parse(vapiDump);\n\nconst { assistant, tools, routeHints, unsupported } = fromVapiAssistantConfig(config, {\n  assistantId: "support",\n  fetch,\n  knowledgeBase: { collection: ragCollection },\n  modelFactory: ({ provider, model, temperature }) => {\n    if (provider === "openai") {\n      return createOpenAIVoiceAssistantModel({\n        apiKey: process.env.OPENAI_API_KEY!,\n        model: model ?? "gpt-4.1-mini",\n        temperature,\n      });\n    }\n    throw new Error(`Unsupported provider: ${provider}`);\n  },\n  variableResolver: (path, { context }) => {\n    if (path === "customer.name") return context.customerName;\n    return undefined;\n  },\n  dtmfSendFactory: () => ({ args, api }) =>\n    api.transfer({ target: "ivr", metadata: { digits: args.digits } }),\n});\n\nconsole.log("Migrated", tools.length, "tools;", unsupported.length, "fields need manual review:");\nfor (const reason of unsupported) console.log(`  - ${reason.field}: ${reason.detail}`);',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading:
+					'0.0.22-beta.471 · Vapi parity — fromVapiAssistantConfig adapter',
 				language: 'typescript'
 			},
 			{
 				code: 'import {\n  createVoiceAssistant,\n  createVoiceApiRequestTool,\n  createVoiceDTMFTool,\n  createVoiceEndCallTool,\n  createVoiceTransferCallTool,\n  createVoiceVoicemailDetectionTool,\n} from "@absolutejs/voice";\n\nconst tools = [\n  createVoiceEndCallTool({ farewell: "Thanks for calling, goodbye." }),\n  createVoiceTransferCallTool({\n    destinations: [\n      { id: "billing", target: "+15551234567", message: "Connecting you to billing." },\n      { id: "supervisor", target: "sip:supervisor@pbx", metadata: { queue: "vip" } },\n    ],\n  }),\n  createVoiceDTMFTool({\n    send: async ({ args, api }) => api.transfer({ target: "ivr", metadata: { digits: args.digits } }),\n  }),\n  createVoiceVoicemailDetectionTool({ completeAfterMarking: true }),\n  createVoiceApiRequestTool({\n    description: "Look up a customer record",\n    name: "lookupCustomer",\n    method: "GET",\n    url: "https://api.example.com/customers",\n    buildQuery: ({ args }) => ({ email: String(args.email) }),\n    parameters: { type: "object", properties: { email: { type: "string" } }, required: ["email"] },\n  }),\n];',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: '0.0.22-beta.470 · Vapi parity — named tool catalog',
 				language: 'typescript'
 			},
 			{
 				code: 'import { createInMemoryRAGStore, createRAGCollection } from "@absolutejs/rag";\nimport { createVoiceAssistant, createVoiceRAGTool } from "@absolutejs/voice";\n\nconst collection = createRAGCollection(\n  createInMemoryRAGStore(),\n  { embedding: openaiEmbeddings("text-embedding-3-small") },\n);\n\nconst knowledgeBase = createVoiceRAGTool(collection, {\n  allowedFilterKeys: ["productLine"],\n  fixedFilter: ({ context }) => ({ tenantId: context.tenantId }),\n  maxChunkChars: 320,\n  scoreThreshold: 0.65,\n});\n\nconst assistant = createVoiceAssistant({\n  id: "support",\n  model: openaiVoiceAssistantModel,\n  tools: [knowledgeBase],\n  system: "You are a support agent. Always cite the knowledge base.",\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: '0.0.22-beta.469 · Vapi parity — RAG-as-a-tool helper',
 				language: 'typescript'
 			}
 		],
@@ -14028,16 +13736,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					"What's new is documented in the repository README.",
-				title: "What's new"
-			},
-			{
-				description:
-					'Why AbsoluteJS Voice is documented in the repository README.',
-				title: 'Why AbsoluteJS Voice'
-			},
-			{
-				description:
 					'Pick the path that matches what you are building:',
 				title: 'Start Here'
 			},
@@ -14045,11 +13743,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'These are the primitive-first paths a Vapi-style buyer usually needs. Each path stays inside your AbsoluteJS app; the package gives you route handlers, stores, reports, hooks, composables, services, widgets, and contracts instead of a hosted dashboard.',
 				title: 'Buyer Paths'
-			},
-			{
-				description:
-					'Capability Matrix is documented in the repository README.',
-				title: 'Capability Matrix'
 			},
 			{
 				description:
@@ -14300,8 +13993,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'typecheck'
 			}
 		],
-		description:
-			'Speech-to-text, text-to-speech, and realtime provider adapters for @absolutejs/voice.',
+		description: 'Provider adapters for @absolutejs/voice.',
 		directory: 'voice-adapters',
 		kind: 'monorepo',
 		name: 'Voice Adapters',
@@ -14312,7 +14004,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/voice @absolutejs/voice-deepgram @absolutejs/voice-elevenlabs',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			}
 		],
@@ -14320,16 +14012,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				description: 'Provider adapters for @absolutejs/voice.',
 				title: 'Overview'
-			},
-			{
-				description:
-					'Speech to text is documented in the repository README.',
-				title: 'Speech to text'
-			},
-			{
-				description:
-					'Text to speech is documented in the repository README.',
-				title: 'Text to speech'
 			},
 			{
 				description:
@@ -14383,14 +14065,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice @absolutejs/voice-assemblyai',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: 'import { assemblyai } from "@absolutejs/voice-assemblyai";\n\nconst stt = assemblyai({\n  apiKey: process.env.ASSEMBLYAI_API_KEY!,\n  speechModel: "universal-streaming-english",\n  formatTurns: true,\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Setup',
 						language: 'typescript'
 					}
 				],
@@ -14467,35 +14149,35 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-azure',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { azureTTS } from "@absolutejs/voice-azure";\n\nconst app = voice({\n  // ... stt + other voice options ...\n  tts: azureTTS({\n    region: "eastus",\n    subscriptionKey: process.env.AZURE_SPEECH_KEY!,\n    voice: "en-US-JennyNeural",\n    // optional:\n    outputFormat: "raw-24khz-16bit-mono-pcm", // default\n    language: "en-US", // default\n    voiceStyle: "cheerful",\n    styleDegree: 1.5,\n    prosody: { rate: "fast", pitch: "+5%" },\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'TTS',
 						language: 'typescript'
 					},
 					{
 						code: 'azureTTS({\n  region,\n  subscriptionKey,\n  voice: "en-US-AriaNeural",\n  outputFormat: "raw-8khz-8bit-mono-mulaw",\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'TTS 2',
 						language: 'typescript'
 					},
 					{
 						code: 'azureTTS({ region, token, voice });',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 4',
+						heading: 'TTS 3',
 						language: 'typescript'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { azureSTT, azureTTS } from "@absolutejs/voice-azure";\n\nconst app = voice({\n  stt: azureSTT({\n    region: "eastus",\n    subscriptionKey: process.env.AZURE_SPEECH_KEY!,\n    language: "en-US",\n    // optional:\n    recognitionMode: "conversation", // \'conversation\' | \'dictation\' | \'interactive\'\n    format: "detailed", // \'detailed\' | \'simple\'\n    profanity: "masked", // \'masked\' | \'raw\' | \'removed\'\n  }),\n  tts: azureTTS({\n    region: "eastus",\n    subscriptionKey,\n    voice: "en-US-JennyNeural",\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 5',
+						heading: 'STT',
 						language: 'typescript'
 					}
 				],
@@ -14516,23 +14198,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
-					},
-					{
-						description:
 							'import { voice } from "@absolutejs/voice"; import { azureSTT, azureTTS } from "@absolutejs/voice-azure";',
 						title: 'STT'
-					},
-					{
-						description:
-							'Roadmap is documented in the repository README.',
-						title: 'Roadmap'
 					}
 				],
 				sourcePath: 'azure',
@@ -14577,21 +14244,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-cartesia',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { cartesia } from "@absolutejs/voice-cartesia";\n\nconst app = voice({\n  // ... stt + other voice options ...\n  tts: cartesia({\n    apiKey: process.env.CARTESIA_API_KEY!,\n    model: "sonic-2",\n    outputFormat: {\n      container: "raw",\n      encoding: "pcm_s16le",\n      sampleRate: 24_000,\n    },\n    voice: "a0e99841-438c-4a64-b679-ae501e7d6091",\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					},
 					{
 						code: 'cartesia({\n  apiKey,\n  voice: voiceId,\n  outputFormat: {\n    container: "raw",\n    encoding: "pcm_mulaw",\n    sampleRate: 8_000,\n  },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Use 2',
 						language: 'typescript'
 					}
 				],
@@ -14609,16 +14276,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'import { voice } from "@absolutejs/voice"; import { cartesia } from "@absolutejs/voice-cartesia";',
 						title: 'Use'
-					},
-					{
-						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'cartesia',
@@ -14663,14 +14320,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice @absolutejs/voice-deepgram',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: 'import { deepgram } from "@absolutejs/voice-deepgram";\n\nconst stt = deepgram({\n  apiKey: process.env.DEEPGRAM_API_KEY!,\n  model: "nova-3",\n  language: "en-US",\n  punctuate: true,\n  smartFormat: true,\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Setup',
 						language: 'typescript'
 					}
 				],
@@ -14747,21 +14404,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice @absolutejs/voice-elevenlabs',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'bash'
 					},
 					{
 						code: 'import { elevenlabs } from "@absolutejs/voice-elevenlabs";\n\nconst tts = elevenlabs({\n  apiKey: process.env.ELEVENLABS_API_KEY!,\n  voiceId: "JBFqnCBsd6RMkjVDRZzb",\n  modelId: "eleven_flash_v2_5",\n  outputFormat: "pcm_16000",\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Setup',
 						language: 'typescript'
 					},
 					{
 						code: 'const tts = elevenlabs({\n  apiKey: process.env.ELEVENLABS_API_KEY!,\n  voiceId: "JBFqnCBsd6RMkjVDRZzb",\n  modelId: "eleven_flash_v2_5",\n  outputFormat: "ulaw_8000",\n  transport: "websocket",\n  websocket: {\n    autoMode: true,\n    inactivityTimeoutSec: 180,\n  },\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Setup 2',
 						language: 'typescript'
 					}
 				],
@@ -14891,21 +14548,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-gladia',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { gladia } from "@absolutejs/voice-gladia";\n\nconst app = voice({\n  stt: gladia({\n    apiKey: process.env.GLADIA_API_KEY!,\n    // optional:\n    model: "solaria-1",\n    languages: ["en"], // language detection seed\n    codeSwitching: true, // for multilingual callers\n    realtimeProcessing: { sentences: true },\n  }),\n  // ... tts + other options ...\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					},
 					{
 						code: "app.use({\n  stt: gladia({ apiKey, codeSwitching: true }),\n  // and at open() time:\n  // languageStrategy: { mode: 'allow-switching', primaryLanguage: 'en', secondaryLanguages: ['hi'] }\n});",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Use 2',
 						language: 'typescript'
 					}
 				],
@@ -14923,16 +14580,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'import { voice } from "@absolutejs/voice"; import { gladia } from "@absolutejs/voice-gladia";',
 						title: 'Use'
-					},
-					{
-						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'gladia',
@@ -14977,21 +14624,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-google-speech',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { googleSpeechStream } from "@absolutejs/voice-google-speech";\n\nconst app = voice({\n  stt: googleSpeechStream({\n    project: process.env.GOOGLE_PROJECT_ID!,\n    accessToken: await mintBearerToken(),\n    // optional:\n    location: "global", // default\n    model: "latest_long", // default; or \'latest_short\' / \'chirp_2\' / \'telephony\' / ...\n    language: "en-US",\n    languages: ["en-US"], // used unless languageStrategy overrides\n    interimResults: true, // default — partial transcripts emitted\n    enableVoiceActivityEvents: true, // surface SPEECH_ACTIVITY_END as endOfTurn\n    enableAutomaticPunctuation: true,\n    enableWordConfidence: true,\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Streaming (googleSpeechStream)',
 						language: 'typescript'
 					},
 					{
 						code: 'googleSpeechStream({\n  project,\n  getAccessToken: async () => await refreshGoogleAccessToken(),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Streaming (googleSpeechStream) 2',
 						language: 'typescript'
 					}
 				],
@@ -15014,16 +14661,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'See the existing buffered-batch section for the REST-based API key / OAuth flow. The streaming and batch exports can coexist in the same project; pick per-route.',
 						title: 'Buffered-batch (googleSpeech)'
-					},
-					{
-						description:
-							'Notes & limitations is documented in the repository README.',
-						title: 'Notes & limitations'
-					},
-					{
-						description:
-							'Roadmap is documented in the repository README.',
-						title: 'Roadmap'
 					}
 				],
 				sourcePath: 'google-speech',
@@ -15068,21 +14705,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-lmnt',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { lmnt } from "@absolutejs/voice-lmnt";\n\nconst app = voice({\n  tts: lmnt({\n    apiKey: process.env.LMNT_API_KEY!,\n    voice: "lily",\n    // optional:\n    model: "aurora", // default; or \'blizzard\' / \'mochi\'\n    format: "raw", // default; or \'mulaw\' for telephony\n    sampleRate: 24_000, // default\n    language: "en", // \'auto\' to detect\n    speed: 1.0,\n    temperature: 0.6,\n    topP: 0.95,\n    conversational: true,\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					},
 					{
 						code: 'lmnt({ apiKey, voice: "lily", format: "mulaw" });',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Use 2',
 						language: 'typescript'
 					}
 				],
@@ -15100,16 +14737,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'import { voice } from "@absolutejs/voice"; import { lmnt } from "@absolutejs/voice-lmnt";',
 						title: 'Use'
-					},
-					{
-						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'lmnt',
@@ -15154,14 +14781,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-neets',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { neets } from "@absolutejs/voice-neets";\n\nconst app = voice({\n  tts: neets({\n    apiKey: process.env.NEETS_API_KEY!,\n    voiceId: "us-male-2",\n    // optional:\n    model: "ar-diff-50k", // default; or \'style-tts-2\' / \'vits\'\n    format: "pcm", // default; only "pcm" is supported for streaming\n    sampleRate: 22_050, // default\n    language: "en-us",\n    temperature: 0.7,\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					}
 				],
@@ -15179,16 +14806,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'import { voice } from "@absolutejs/voice"; import { neets } from "@absolutejs/voice-neets";',
 						title: 'Use'
-					},
-					{
-						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'neets',
@@ -15232,14 +14849,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice @absolutejs/voice-openai',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'typescript'
 					},
 					{
 						code: 'import { openai } from "@absolutejs/voice-openai";\n\nconst realtime = openai({\n  apiKey: process.env.OPENAI_API_KEY!,\n  model: "gpt-realtime-mini",\n  voice: "marin",\n  instructions: "Be concise and clear.",\n  inputTranscriptionModel: "gpt-4o-mini-transcribe",\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Setup',
 						language: 'typescript'
 					}
 				],
@@ -15316,8 +14933,53 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/voice-openai-whisper/manifest',
 					'@absolutejs/voice-openai-whisper/manifest.json'
 				],
-				readmeSamples: [],
-				readmeTopics: [],
+				readmeSamples: [
+					{
+						code: 'bun add @absolutejs/voice @absolutejs/voice-openai-whisper',
+						description:
+							'Example from the canonical repository README.',
+						heading: 'Install',
+						language: 'bash'
+					},
+					{
+						code: 'import { openaiWhisper } from "@absolutejs/voice-openai-whisper";\n\nconst stt = openaiWhisper({\n  apiKey: process.env.OPENAI_API_KEY!,\n  model: "gpt-4o-mini-transcribe",\n  language: "en",\n});\n\nconst session = stt.open({\n  format: {\n    channels: 1,\n    encoding: "pcm_s16le",\n    sampleRateHz: 16_000,\n  },\n});\n\nsession.on("final", ({ transcript }) => {\n  console.log(transcript.text);\n});\n\nawait session.send(audioChunk);\nawait session.flush();\nawait session.close("turn-complete");',
+						description:
+							'Example from the canonical repository README.',
+						heading: 'Setup',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Buffered OpenAI transcription adapter for @absolutejs/voice. It collects raw audio for a turn, wraps PCM input in a WAV container, and sends one transcription request when you flush or close the session.',
+						title: 'Overview'
+					},
+					{
+						description:
+							'bun add @absolutejs/voice @absolutejs/voice-openai-whisper',
+						title: 'Install'
+					},
+					{
+						description:
+							'import { openaiWhisper } from "@absolutejs/voice-openai-whisper";',
+						title: 'Setup'
+					},
+					{
+						description:
+							'This is a batch adapter, not a realtime streaming transport. send() appends audio to the current turn. flush() transcribes the accumulated buffer and emits final followed by endOfTurn. Closing flushes by default; set flushOnClose: false when the caller owns that lifecycle explicitly.',
+						title: 'Buffering behavior'
+					},
+					{
+						description: 'take precedence.',
+						title: 'Options'
+					},
+					{
+						description:
+							'HTTP failures and malformed provider responses emit a non-recoverable error. Successful responses emit normalized final and endOfTurn events through the standard @absolutejs/voice STTAdapter contract. The adapter does not emit partial transcripts because the provider request happens only at flush time.',
+						title: 'Errors and events'
+					}
+				],
 				sourcePath: 'openai-whisper',
 				version: '0.0.1-beta.5'
 			},
@@ -15360,21 +15022,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-playht',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { playht } from "@absolutejs/voice-playht";\n\nconst app = voice({\n  // ... stt + other voice options ...\n  tts: playht({\n    apiKey: process.env.PLAYHT_API_KEY!,\n    userId: process.env.PLAYHT_USER_ID!,\n    voice: "s3://voice-cloning-zero-shot/.../jennifer.json",\n    // optional:\n    voiceEngine: "Play3.0-mini", // default\n    outputFormat: "raw", // default\n    sampleRate: 24_000, // default\n    language: "english",\n    quality: "premium",\n    speed: 1.0,\n    temperature: 1.0,\n    voiceGuidance: 1.5,\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					},
 					{
 						code: 'playht({\n  apiKey,\n  userId,\n  voice,\n  outputFormat: "mulaw", // PlayHT serves μ-law @ 8 kHz\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Use 2',
 						language: 'typescript'
 					}
 				],
@@ -15392,16 +15054,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'import { voice } from "@absolutejs/voice"; import { playht } from "@absolutejs/voice-playht";',
 						title: 'Use'
-					},
-					{
-						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'playht',
@@ -15446,21 +15098,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-rime',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { rime } from "@absolutejs/voice-rime";\n\nconst app = voice({\n  // ... stt + other voice options ...\n  tts: rime({\n    apiKey: process.env.RIME_API_KEY!,\n    speaker: "cove",\n    // optional:\n    modelId: "mistv2", // default; or \'mist\' / \'arcana\'\n    audioFormat: "pcm", // default; or \'mulaw\' for telephony\n    sampleRate: 22_050, // default\n    speedAlpha: 1.0,\n    lang: "eng",\n    reduceLatency: true,\n    pauseBetweenBrackets: true,\n    phonemizeBetweenBrackets: true,\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					},
 					{
 						code: 'rime({\n  apiKey,\n  speaker: "cove",\n  audioFormat: "mulaw",\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Use 2',
 						language: 'typescript'
 					}
 				],
@@ -15478,16 +15130,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'import { voice } from "@absolutejs/voice"; import { rime } from "@absolutejs/voice-rime";',
 						title: 'Use'
-					},
-					{
-						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'rime',
@@ -15532,14 +15174,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-smallest',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { smallest } from "@absolutejs/voice-smallest";\n\nconst app = voice({\n  tts: smallest({\n    apiKey: process.env.SMALLEST_API_KEY!,\n    voiceId: "george",\n    // optional:\n    model: "lightning", // default; or \'lightning-v2\'\n    sampleRate: 24_000, // default\n    language: "en",\n    speed: 1.0,\n    similarity: 0.5,\n    consistency: 0.5,\n    enhancement: 1,\n  }),\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					}
 				],
@@ -15557,16 +15199,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'import { voice } from "@absolutejs/voice"; import { smallest } from "@absolutejs/voice-smallest";',
 						title: 'Use'
-					},
-					{
-						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'smallest',
@@ -15611,21 +15243,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-soniox',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { soniox } from "@absolutejs/voice-soniox";\n\nconst app = voice({\n  stt: soniox({\n    apiKey: process.env.SONIOX_API_KEY!,\n    // optional:\n    model: "stt-rt-preview", // default\n    languageHints: ["en", "es"],\n    enableLanguageIdentification: true,\n    enableSpeakerDiarization: true,\n    enableEndpointDetection: true,\n    context: "Customer support call about billing.",\n  }),\n  // ... tts + other options ...\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					},
 					{
 						code: "soniox({\n  apiKey,\n  enableLanguageIdentification: true,\n});\n// open(...) with languageStrategy: { mode: 'allow-switching', primaryLanguage: 'en', secondaryLanguages: ['hi'] }",
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Use 2',
 						language: 'typescript'
 					}
 				],
@@ -15643,16 +15275,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'import { voice } from "@absolutejs/voice"; import { soniox } from "@absolutejs/voice-soniox";',
 						title: 'Use'
-					},
-					{
-						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'soniox',
@@ -15697,21 +15319,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						code: 'bun add @absolutejs/voice-speechmatics',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example',
+						heading: 'Install',
 						language: 'sh'
 					},
 					{
 						code: 'import { voice } from "@absolutejs/voice";\nimport { speechmatics } from "@absolutejs/voice-speechmatics";\n\nconst app = voice({\n  stt: speechmatics({\n    apiKey: process.env.SPEECHMATICS_API_KEY!,\n    region: "eu2", // \'eu\' | \'eu2\' | \'usa\'\n    language: "en",\n    operatingPoint: "enhanced", // or \'standard\' for lower latency\n    enablePartials: true,\n    diarization: "speaker", // optional\n  }),\n  // ... tts + other options ...\n});',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 2',
+						heading: 'Use',
 						language: 'typescript'
 					},
 					{
 						code: 'speechmatics({ region: "eu2", jwt: shortLivedJwt, language: "en" });',
 						description:
 							'Example from the canonical repository README.',
-						heading: 'README Example 3',
+						heading: 'Use 2',
 						language: 'typescript'
 					}
 				],
@@ -15729,16 +15351,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						description:
 							'import { voice } from "@absolutejs/voice"; import { speechmatics } from "@absolutejs/voice-speechmatics";',
 						title: 'Use'
-					},
-					{
-						description:
-							'Options is documented in the repository README.',
-						title: 'Options'
-					},
-					{
-						description:
-							'Notes is documented in the repository README.',
-						title: 'Notes'
 					}
 				],
 				sourcePath: 'speechmatics',
@@ -15750,8 +15362,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 	{
 		category: 'Voice & Media',
 		commands: [],
-		description:
-			'Multilingual audio fixtures used to evaluate and regression-test voice providers.',
+		description: 'Generated by voice/scripts/build-multilingual-corpus.ts.',
 		directory: 'voice-fixtures-multilingual',
 		kind: 'repository',
 		name: 'Multilingual Voice Fixtures',
@@ -15807,37 +15418,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add -d @absolutejs/voice-tester @absolutejs/ai',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Install',
 				language: 'sh'
 			},
 			{
 				code: 'bun x @absolutejs/voice-tester \\\n  --target wss://example.com/v1/voice/phone/stream \\\n  --scenario adversarial \\\n  --duration 90 \\\n  --from +15555550100 \\\n  --to +15555550199 \\\n  --session phone:+15555550100:$(date +%s)',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Quick start (CLI)',
 				language: 'sh'
 			},
 			{
 				code: '{\n  "scenario": "adversarial",\n  "callerTurns": 7,\n  "serviceTurns": 7,\n  "durationMs": 68073,\n  "endedReason": "scenario_hangup",\n  "streamSid": "MZ…",\n  "transcript": [ { "speaker": "service", "text": "…", "at": 9271 }, … ]\n}',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Quick start (CLI) 2',
 				language: 'json'
 			},
 			{
 				code: "import { runScenario } from '@absolutejs/voice-tester';\nimport { adversarialScenario } from '@absolutejs/voice-tester/scenarios';\n\nconst report = await runScenario({\n\twsUrl: 'wss://example.com/v1/voice/phone/stream',\n\ttts: { apiKey: process.env.DEEPGRAM_API_KEY! },\n\tstt: { apiKey: process.env.DEEPGRAM_API_KEY! },\n\tscenario: adversarialScenario({\n\t\tllm: { model: 'claude-haiku-4-5-20251001' }\n\t}),\n\tcustomParameters: { sessionId: `phone:+15555550100:${Date.now()}` },\n\tfrom: '+15555550100',\n\tto: '+15555550199'\n});\n\nif (report.endedReason === 'error') {\n\tthrow new Error(report.error?.message ?? 'scenario failed');\n}",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Quick start (API)',
 				language: 'typescript'
 			},
 			{
 				code: "import type { Scenario } from '@absolutejs/voice-tester';\n\nexport const myScenario: Scenario = {\n\tid: 'my-scenario',\n\tmaxDurationMs: 60_000,\n\tidleMs: 1200,\n\tdecide: async ({ transcript, lastServiceUtterance, callerTurnCount }) => {\n\t\tif (callerTurnCount >= 5) return { type: 'hangup' };\n\t\tif (lastServiceUtterance?.toLowerCase().includes('price')) {\n\t\t\treturn { type: 'speak', text: 'Is there a free trial?' };\n\t\t}\n\t\treturn { type: 'speak', text: 'Tell me more.' };\n\t}\n};",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Writing your own scenario',
 				language: 'typescript'
 			},
 			{
 				code: 'DISCORD_TESTER_TOKEN=Bot.your_tester_bot_token bunx @absolutejs/voice-tester \\\n  --mode discord \\\n  --guild   1234567890 \\\n  --channel 9876543210 \\\n  --target-user 1122334455 \\\n  --scenario adversarial \\\n  --duration 90',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Discord mode',
 				language: 'sh'
 			}
 		],
@@ -15869,17 +15480,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					'Built-in scenarios is documented in the repository README.',
-				title: 'Built-in scenarios'
-			},
-			{
-				description:
 					'A scenario is a decide function that receives the rolling context and returns the next caller action:',
 				title: 'Writing your own scenario'
-			},
-			{
-				description: 'Modes is documented in the repository README.',
-				title: 'Modes'
 			},
 			{
 				description: '+-----------------------------------+',
@@ -15919,25 +15521,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/vue-composables vue',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Installation',
 				language: 'sh'
 			},
 			{
 				code: "import {\n\tconfigureAsyncNotifier,\n\trunAsyncAction,\n\tuseHydrated\n} from '@absolutejs/vue-composables';\n\nconfigureAsyncNotifier({ success: toast.success, error: toast.error });\n\nawait runAsyncAction(() => api.save(payload), {\n\tsuccessMessage: 'Saved',\n\tloading: (s) => (saving.value = s),\n\tonSuccess: () => emit('updated')\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 2',
+				heading: 'Async actions',
 				language: 'typescript'
 			},
 			{
 				code: "const panel = useTemplateRef<HTMLElement>('panel');\n\nuseResizeObserver(panel, ([entry]) => {\n\tif (entry) compact.value = entry.contentRect.width < 640;\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Resize observation',
 				language: 'typescript'
 			},
 			{
 				code: 'const total = computed(() => query.data.value?.total ?? 0);\nconst pagination = useOffsetPagination({ pageSize: 25, total });\n\nawait listRows({\n\tlimit: pagination.pageSize.value,\n\toffset: pagination.offset.value\n});',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 4',
+				heading: 'Pagination',
 				language: 'typescript'
 			}
 		],
@@ -16047,13 +15649,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: "import {\n\tcomparePackageVersions,\n\tevaluateVersionConstraints\n} from '@absolutejs/vulnerabilities';\n\ncomparePackageVersions({\n\tecosystem: 'ubuntu',\n\tleft: '1.24.0-2ubuntu7.4',\n\tright: '1.24.0-2ubuntu7.5'\n});\n\nevaluateVersionConstraints({\n\tecosystem: 'ubuntu',\n\tinstalledVersion: '1.24.0-2ubuntu7.4',\n\tconstraints: [\n\t\t{ operator: 'gte', version: '1.24.0' },\n\t\t{ operator: 'lt', version: '1.24.0-2ubuntu7.5' }\n\t]\n});",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 5',
+				heading: 'Version intelligence',
 				language: 'typescript'
 			},
 			{
 				code: "import { createMemoryFeedStore, syncFeed } from '@absolutejs/vulnerabilities';\n\nconst result = await syncFeed({\n\tadapter,\n\tmaxStaleMs: 24 * 60 * 60 * 1_000,\n\tstore: createMemoryFeedStore()\n});\n\nif (result.status === 'stale') {\n\t// Cached intelligence remains available, with the provider error attached.\n}",
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 6',
+				heading: 'Advisory feeds',
 				language: 'typescript'
 			}
 		],
@@ -16122,7 +15724,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun install\nbun run typecheck\nbun run test\nbun run build',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Development',
 				language: 'sh'
 			}
 		],
@@ -16456,7 +16058,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun install\nbun run typecheck\nbun run test\nbun run build',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Development',
 				language: 'sh'
 			}
 		],
@@ -16465,10 +16067,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Optional first-party modules for @absolutejs/vulnerabilities. Each module remains an independently versioned npm package; this repository is their source monorepo.',
 				title: 'Overview'
-			},
-			{
-				description: 'Packages is documented in the repository README.',
-				title: 'Packages'
 			},
 			{
 				description:
@@ -16720,7 +16318,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			}
 		],
 		description:
-			'Funding and payment-provider adapters for @absolutejs/wallet.',
+			'Provider integrations for @absolutejs/wallet. Financial policy and double-entry accounting remain in the wallet core; adapters normalize external provider events into idempotent wallet actions.',
 		directory: 'wallet-adapters',
 		kind: 'monorepo',
 		name: 'Wallet Adapters',
@@ -16731,7 +16329,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'bun add @absolutejs/wallet @absolutejs/wallet-stripe stripe',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example',
+				heading: 'Stripe',
 				language: 'sh'
 			}
 		],
@@ -16847,7 +16445,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				code: 'const mounted = await bootstrapWebMcpHttpActions({\n  manifestPath: "/api/owner/webmcp",\n  actionBasePath: "/api/owner/webmcp/actions/",\n  formats: {\n    uuid: (value) => /^[0-9a-f-]{36}$/iu.test(value),\n  },\n});\n\n// Unregister every tool when the authenticated page unmounts or signs out.\nmounted.dispose();',
 				description: 'Example from the canonical repository README.',
-				heading: 'README Example 3',
+				heading: 'Same-origin HTTP actions',
 				language: 'typescript'
 			}
 		],

@@ -31,6 +31,7 @@ export const AuthTesting = ({
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head
+				canonicalUrl="https://absolutejs.com/demos/authentication"
 				description="Explore the Citra and AbsoluteJS authentication provider matrix and run live OAuth flows."
 				title="Authentication Demo | AbsoluteJS"
 			/>

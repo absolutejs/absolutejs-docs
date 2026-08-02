@@ -138,8 +138,16 @@ export const DocsNavigation = ({
 	return (
 		<div style={containerStyle}>
 			{prevPage ? (
-				<animated.button
-					onClick={() => handleClick(prevPage.id)}
+				<animated.a
+					href={
+						prevPage.id === 'overview'
+							? '/documentation'
+							: `/documentation/${prevPage.id}`
+					}
+					onClick={(event) => {
+						event.preventDefault();
+						handleClick(prevPage.id);
+					}}
 					style={navButtonStyle(themeSprings, 'prev')}
 				>
 					<animated.span style={directionLabelStyle}>
@@ -149,14 +157,22 @@ export const DocsNavigation = ({
 					<animated.span style={pageLabelStyle(themeSprings)}>
 						{formatLabel(prevPage)}
 					</animated.span>
-				</animated.button>
+				</animated.a>
 			) : (
 				<div style={{ flex: '1 1 40%', minWidth: '160px' }} />
 			)}
 
 			{nextPage ? (
-				<animated.button
-					onClick={() => handleClick(nextPage.id)}
+				<animated.a
+					href={
+						nextPage.id === 'overview'
+							? '/documentation'
+							: `/documentation/${nextPage.id}`
+					}
+					onClick={(event) => {
+						event.preventDefault();
+						handleClick(nextPage.id);
+					}}
 					style={navButtonStyle(themeSprings, 'next')}
 				>
 					<animated.span
@@ -171,7 +187,7 @@ export const DocsNavigation = ({
 					<animated.span style={pageLabelStyle(themeSprings)}>
 						{formatLabel(nextPage)}
 					</animated.span>
-				</animated.button>
+				</animated.a>
 			) : (
 				<div style={{ flex: '1 1 40%', minWidth: '160px' }} />
 			)}

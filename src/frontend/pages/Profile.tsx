@@ -149,7 +149,7 @@ export const Profile = ({ user, theme }: ProfileProps) => {
 
 	return (
 		<html lang="en" style={htmlDefault}>
-			<Head title="Profile | AbsoluteJS" />
+			<Head robots="noindex,nofollow" title="Profile | AbsoluteJS" />
 			<animated.body
 				style={{
 					...bodyDefault(themeSprings),

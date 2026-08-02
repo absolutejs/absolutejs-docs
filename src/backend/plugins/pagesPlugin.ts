@@ -27,6 +27,7 @@ const whitelistedAdmins =
 	getEnv('ADMIN_SUBS')
 		?.split(',')
 		.map((adminSub) => adminSub.trim()) ?? [];
+const permanentRedirectStatus = 301;
 
 export const pagesPlugin = (manifest: Record<string, string>) =>
 	new Elysia()
@@ -143,6 +144,27 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 					}),
 				async () => redirect('/signup/profile')
 			)
+		)
+		.get('/documentation/react', ({ redirect }) =>
+			redirect('/documentation/react-overview', permanentRedirectStatus)
+		)
+		.get('/documentation/vue', ({ redirect }) =>
+			redirect('/documentation/vue-overview', permanentRedirectStatus)
+		)
+		.get('/documentation/svelte', ({ redirect }) =>
+			redirect('/documentation/svelte-overview', permanentRedirectStatus)
+		)
+		.get('/documentation/angular', ({ redirect }) =>
+			redirect('/documentation/angular-overview', permanentRedirectStatus)
+		)
+		.get('/documentation/html', ({ redirect }) =>
+			redirect('/documentation/html-overview', permanentRedirectStatus)
+		)
+		.get('/documentation/htmx', ({ redirect }) =>
+			redirect('/documentation/htmx-overview', permanentRedirectStatus)
+		)
+		.get('/documentation/overview', ({ redirect }) =>
+			redirect('/documentation', permanentRedirectStatus)
 		)
 		.get(
 			'/documentation/:view?',

@@ -198,7 +198,10 @@ const TelemetryDashboardInner = ({
 
 	return (
 		<html lang="en" style={htmlDefault}>
-			<Head title="Telemetry Dashboard | AbsoluteJS" />
+			<Head
+				robots="noindex,nofollow"
+				title="Telemetry Dashboard | AbsoluteJS"
+			/>
 			<animated.body style={bodyDefault(themeSprings)}>
 				<Navbar
 					setTheme={setTheme}

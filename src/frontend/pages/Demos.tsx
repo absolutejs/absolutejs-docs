@@ -28,6 +28,7 @@ export const Demos = ({ user, theme }: DemosProps) => {
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head
+				canonicalUrl="https://absolutejs.com/demos"
 				title="Demos | AbsoluteJS"
 				description="Try live demos built with packages from the AbsoluteJS ecosystem."
 			/>

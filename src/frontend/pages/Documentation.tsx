@@ -12,7 +12,10 @@ import { AuroraBackground } from '../components/utils/AuroraBackground';
 import { Head } from '../components/page/Head';
 import { SidebarSection } from '../components/sidebar/SidebarSection';
 import { docsViews, sidebarCategories } from '../data/sidebarData';
-import { documentationMetadataFor } from '../data/documentation/documentationMetadata';
+import {
+	documentationMetadataFor,
+	documentationStructuredDataFor
+} from '../data/documentation/documentationMetadata';
 import { packageCatalog } from '../data/documentation/packages/catalog';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
 import { useMediaQuery } from '../hooks/useMediaQuery';
@@ -170,8 +173,13 @@ export const Documentation = ({
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head
-				canonicalUrl={`https://absolutejs.com/documentation/${view}`}
+				canonicalUrl={
+					view === 'overview'
+						? 'https://absolutejs.com/documentation'
+						: `https://absolutejs.com/documentation/${view}`
+				}
 				description={documentationMetadataFor(view).description}
+				jsonLd={documentationStructuredDataFor(view)}
 				title={documentationMetadataFor(view).title}
 			/>
 			<animated.body

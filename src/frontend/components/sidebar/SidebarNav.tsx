@@ -1,6 +1,9 @@
 import { animated } from '@react-spring/web';
 import { CSSProperties, ReactNode, useState } from 'react';
-import { ThemeSprings } from '../../../types/springTypes';
+import {
+	AnimatedCSSProperties,
+	ThemeSprings
+} from '../../../types/springTypes';
 import {
 	DocsView,
 	isExpandableEntry,
@@ -63,6 +66,7 @@ const rowBaseStyle: CSSProperties = {
 type NavRowProps = {
 	active?: boolean;
 	children?: ReactNode;
+	href?: string;
 	indent?: boolean;
 	label: string;
 	onClick: () => void;
@@ -80,6 +84,7 @@ const rowBackground = (active?: boolean, hovered?: boolean) => {
 const NavRow = ({
 	active,
 	children,
+	href,
 	indent,
 	label,
 	onClick,
@@ -88,25 +93,8 @@ const NavRow = ({
 }: NavRowProps) => {
 	const [hovered, setHovered] = useState(false);
 	const emphasized = active || hovered;
-
-	return (
-		<animated.button
-			onClick={onClick}
-			onMouseEnter={() => setHovered(true)}
-			onMouseLeave={() => setHovered(false)}
-			style={{
-				...rowBaseStyle,
-				background: rowBackground(active, hovered),
-				borderLeft: active
-					? `2px solid ${primaryColor}`
-					: '2px solid transparent',
-				color: emphasized
-					? themeSprings.contrastPrimary
-					: themeSprings.contrastSecondary,
-				fontSize: indent ? '0.8rem' : '0.85rem',
-				fontWeight: active ? '600' : '400'
-			}}
-		>
+	const content = (
+		<>
 			<span
 				style={{
 					flex: 1,
@@ -120,6 +108,45 @@ const NavRow = ({
 			</span>
 			{status ? <span style={dotStyle(status)} /> : null}
 			{children}
+		</>
+	);
+	const style: AnimatedCSSProperties = {
+		...rowBaseStyle,
+		background: rowBackground(active, hovered),
+		borderLeft: active
+			? `2px solid ${primaryColor}`
+			: '2px solid transparent',
+		color: emphasized
+			? themeSprings.contrastPrimary
+			: themeSprings.contrastSecondary,
+		fontSize: indent ? '0.8rem' : '0.85rem',
+		fontWeight: active ? '600' : '400'
+	};
+
+	if (href)
+		return (
+			<animated.a
+				href={href}
+				onClick={(event) => {
+					event.preventDefault();
+					onClick();
+				}}
+				onMouseEnter={() => setHovered(true)}
+				onMouseLeave={() => setHovered(false)}
+				style={{ ...style, textDecoration: 'none' }}
+			>
+				{content}
+			</animated.a>
+		);
+
+	return (
+		<animated.button
+			onClick={onClick}
+			onMouseEnter={() => setHovered(true)}
+			onMouseLeave={() => setHovered(false)}
+			style={style}
+		>
+			{content}
 		</animated.button>
 	);
 };
@@ -149,6 +176,11 @@ const PageRows = ({
 		{pages.map((page) => (
 			<NavRow
 				active={view === page.id}
+				href={
+					page.id === 'overview'
+						? '/documentation'
+						: `/documentation/${page.id}`
+				}
 				indent={true}
 				key={page.id}
 				label={page.label}
@@ -185,6 +217,11 @@ const EntryItem = ({
 		return (
 			<NavRow
 				active={view === id}
+				href={
+					id === 'overview'
+						? '/documentation'
+						: `/documentation/${id}`
+				}
 				label={entry.label}
 				onClick={() => navigateToView(id)}
 				status={entry.status}

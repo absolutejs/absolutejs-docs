@@ -2,7 +2,7 @@
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
 import { env, stdin, stderr, stdout } from 'node:process';
-import { relations, schema } from '../schema';
+import { relations } from '../schema';
 import { getProvidersByStatus } from '../../src/backend/handlers/providerHandlers';
 import { createInterface } from 'node:readline/promises';
 import { PROVIDER_STATUSES } from '../../src/constants';

@@ -348,7 +348,7 @@ export const ErrorBoundariesView = ({
 						See a full working example with error boundaries
 						configured for multiple frameworks in the{' '}
 						<a
-							href="https://github.com/alexkahndev/absolutejs-error-boundaries-example"
+							href="https://github.com/absolutejs/examples/tree/main/error-boundaries"
 							rel="noopener noreferrer"
 							style={{ color: 'inherit' }}
 							target="_blank"

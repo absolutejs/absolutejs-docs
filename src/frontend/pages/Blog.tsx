@@ -35,6 +35,7 @@ export const Blog = ({ user, theme }: BlogProps) => {
 	return (
 		<html lang="en" style={htmlDefault}>
 			<Head
+				canonicalUrl="https://absolutejs.com/blog"
 				title="Blog | AbsoluteJS"
 				description={blog.site.description}
 			/>

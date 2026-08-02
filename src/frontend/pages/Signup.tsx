@@ -116,7 +116,7 @@ export const Signup = ({ theme }: SignupProps) => {
 
 	return (
 		<html lang="en" style={htmlDefault}>
-			<Head title="Sign Up | AbsoluteJS" />
+			<Head robots="noindex,nofollow" title="Sign Up | AbsoluteJS" />
 			<animated.body
 				style={{
 					...bodyDefault(themeSprings),

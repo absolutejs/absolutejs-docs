@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /profile
+Disallow: /signup
+Disallow: /telemetry
+
+Sitemap: https://absolutejs.com/sitemap.xml

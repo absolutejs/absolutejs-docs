@@ -2,7 +2,7 @@
 import { neon } from '@neondatabase/serverless';
 import { env, exit, stdout } from 'node:process';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { relations, schema } from '../schema';
+import { relations } from '../schema';
 import { resetAllProviderStatuses } from '../../src/backend/handlers/providerHandlers';
 
 if (!env.DATABASE_URL) {

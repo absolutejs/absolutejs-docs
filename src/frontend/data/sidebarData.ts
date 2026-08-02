@@ -479,7 +479,9 @@ export const docsViews = definePortalViews({
 });
 export const documentationSitemapRoutes = [
 	'/documentation',
-	...Object.keys(docsViews).map((view) => `/documentation/${view}`)
+	...Object.keys(docsViews)
+		.filter((view) => view !== 'overview')
+		.map((view) => `/documentation/${view}`)
 ];
 export const sidebarCategories: SidebarCategory[] = [
 	{

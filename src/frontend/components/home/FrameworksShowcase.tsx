@@ -20,37 +20,37 @@ type Framework = {
 const frameworks: Framework[] = [
 	{
 		color: '#61DAFB',
-		href: '/documentation/react',
+		href: '/documentation/react-overview',
 		icon: <FaReact />,
 		name: 'React'
 	},
 	{
 		color: '#4FC08D',
-		href: '/documentation/vue',
+		href: '/documentation/vue-overview',
 		icon: <FaVuejs />,
 		name: 'Vue'
 	},
 	{
 		color: '#FF3E00',
-		href: '/documentation/svelte',
+		href: '/documentation/svelte-overview',
 		icon: <SiSvelte />,
 		name: 'Svelte'
 	},
 	{
 		color: '#E34F26',
-		href: '/documentation/html',
+		href: '/documentation/html-overview',
 		icon: <FaHtml5 />,
 		name: 'HTML'
 	},
 	{
 		color: '#3D72D7',
-		href: '/documentation/htmx',
+		href: '/documentation/htmx-overview',
 		icon: <SiHtmx />,
 		name: 'HTMX'
 	},
 	{
 		color: '#DD0031',
-		href: '/documentation/angular',
+		href: '/documentation/angular-overview',
 		icon: <FaAngular />,
 		name: 'Angular'
 	}

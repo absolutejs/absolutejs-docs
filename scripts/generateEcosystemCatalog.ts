@@ -278,12 +278,7 @@ const readReadmeTopics = (directory: string) => {
 		const title = cleanMarkdown(headingMatch[1] ?? '');
 		if (!title || /^license$/i.test(title)) continue;
 		const description = readMarkdownParagraph(lines, lineIndex + 1);
-		topics.push({
-			description:
-				description ||
-				`${title} is documented in the repository README.`,
-			title
-		});
+		if (description) topics.push({ description, title });
 		if (topics.length >= maximumReadmeTopics) break;
 	}
 
@@ -311,13 +306,24 @@ const readReadmeSamples = (directory: string) => {
 			language = 'typescript';
 		if (declaredLanguage === 'js' || declaredLanguage === 'jsx')
 			language = 'javascript';
+		const precedingHeading = readme
+			.slice(0, match.index)
+			.split(/\r?\n/)
+			.reverse()
+			.find((line) => /^#{2,6}\s+/.test(line));
+		const heading = precedingHeading
+			? cleanMarkdown(precedingHeading.replace(/^#{2,6}\s+/, ''))
+			: 'README Example';
+		const matchingHeadingCount = samples.filter((sample) =>
+			sample.heading.startsWith(heading)
+		).length;
 		samples.push({
 			code,
 			description: 'Example from the canonical repository README.',
 			heading:
-				samples.length === 0
-					? 'README Example'
-					: `README Example ${samples.length + 1}`,
+				matchingHeadingCount === 0
+					? heading
+					: `${heading} ${matchingHeadingCount + 1}`,
 			language
 		});
 		if (samples.length >= maximumReadmeSamples) break;
@@ -425,7 +431,10 @@ const projects = readdirSync(workspaceDirectory)
 			.map(({ manifestPath, packageData: subpackage }) => ({
 				commands: readPackageCommands(subpackage),
 				description: normalizeDescription(
-					subpackage.description ?? 'No package description provided.'
+					subpackage.description ??
+						readReadmeTopics(dirname(manifestPath))[0]
+							?.description ??
+						`${subpackage.name ?? basename(dirname(manifestPath))} package in the ${directory} workspace.`
 				),
 				name: subpackage.name ?? 'Unnamed package',
 				private: subpackage.private === true,
@@ -453,6 +462,7 @@ const projects = readdirSync(workspaceDirectory)
 			commands: readPackageCommands(packageData),
 			description: normalizeDescription(
 				packageData?.description ??
+					readReadmeTopics(projectDirectory)[0]?.description ??
 					descriptionByDirectory[directory] ??
 					`${titleCase(directory)} repository in the AbsoluteJS workspace.`
 			),

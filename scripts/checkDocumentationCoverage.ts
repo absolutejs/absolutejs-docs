@@ -27,6 +27,7 @@ if (packageCatalog.length !== ecosystemProjects.length)
 	);
 
 for (const view of Object.keys(docsViews)) {
+	if (view === 'overview') continue;
 	if (!documentationSitemapRoutes.includes(`/documentation/${view}`))
 		failures.push(
 			`${view}: missing from automatic documentation sitemap routes.`
@@ -93,6 +94,19 @@ for await (const file of docsGlob.scan(resolve(import.meta.dir, '..'))) {
 		if (contents.includes(forbidden))
 			failures.push(
 				`${file}: contains historical package reference ${forbidden}.`
+			);
+	}
+	for (const match of contents.matchAll(
+		/href\s*=\s*["']\/documentation\/([^"'#?\s]+)/g
+	)) {
+		const [, linkedView] = match;
+		if (
+			linkedView &&
+			!linkedView.includes('{') &&
+			!(linkedView in docsViews)
+		)
+			failures.push(
+				`${file}: links to unknown documentation view ${linkedView}.`
 			);
 	}
 }

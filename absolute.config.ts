@@ -4,10 +4,11 @@ import { documentationSitemapRoutes } from './src/frontend/data/sidebarData';
 
 export default defineConfig({
 	assetsDirectory: './src/backend/assets',
+	publicDirectory: './public',
 	reactDirectory: './src/frontend',
 	sitemap: {
 		baseUrl: blog.site.baseUrl,
-		exclude: ['/profile'],
+		exclude: ['/profile', '/signup', '/signup/telemetry', '/telemetry'],
 		overrides: Object.fromEntries(
 			blog.posts.map((post) => [
 				`${blog.site.basePath}/${post.slug}`,
