@@ -1,19 +1,45 @@
 import { ThemeSprings } from '../../../../types/springTypes';
-import {
-	listItemStyle,
-	listStyle,
-	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { paragraphSpacedStyle, sectionStyle } from '../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 
 type UseMediaQuerySectionProps = {
 	codeString: string;
 	themeSprings: ThemeSprings;
 };
+
+const mediaQueryHookItems: DefinitionItem[] = [
+	{
+		description: (
+			<>
+				the current breakpoint name (<code>xs</code>, <code>sm</code>,{' '}
+				<code>md</code>, <code>lg</code>, <code>xl</code>,{' '}
+				<code>2xl</code>)
+			</>
+		),
+		term: 'breakpoint'
+	},
+	{
+		description: (
+			<>
+				returns <code>true</code> if the viewport is at or above the
+				given breakpoint
+			</>
+		),
+		term: 'isSizeOrGreater'
+	},
+	{
+		description: (
+			<>
+				returns <code>true</code> if the viewport is at or below the
+				given breakpoint
+			</>
+		),
+		term: 'isSizeOrLess'
+	}
+];
 
 export const UseMediaQuerySection = ({
 	codeString,
@@ -33,24 +59,10 @@ export const UseMediaQuerySection = ({
 			responsive breakpoints. It returns the current breakpoint name and
 			two helper functions for checking size ranges.
 		</p>
-		<ul style={listStyle}>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>breakpoint</strong> : the current
-				breakpoint name (<code>xs</code>, <code>sm</code>,{' '}
-				<code>md</code>, <code>lg</code>, <code>xl</code>,{' '}
-				<code>2xl</code>)
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>isSizeOrGreater</strong> : returns{' '}
-				<code>true</code> if the viewport is at or above the given
-				breakpoint
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>isSizeOrLess</strong> : returns{' '}
-				<code>true</code> if the viewport is at or below the given
-				breakpoint
-			</li>
-		</ul>
+		<DefinitionGrid
+			items={mediaQueryHookItems}
+			themeSprings={themeSprings}
+		/>
 		<PrismPlus
 			codeString={codeString}
 			language="tsx"

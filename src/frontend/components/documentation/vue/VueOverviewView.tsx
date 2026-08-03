@@ -12,18 +12,16 @@ import {
 } from '../../../data/documentation/vueDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -37,21 +35,17 @@ const tocItems: TocItem[] = [
 	{ href: '#vue-imports', label: 'Vue Imports' }
 ];
 
-const VueHeadOptionsList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>title</strong>: Sets the page title
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>meta</strong>: Array of meta tags with
-			name/property and content
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>link</strong>: Array of link elements
-			for canonical URLs, icons, etc.
-		</li>
-	</ul>
-);
+const headOptionItems: DefinitionItem[] = [
+	{ description: 'Sets the page title', term: 'title' },
+	{
+		description: 'Array of meta tags with name/property and content',
+		term: 'meta'
+	},
+	{
+		description: 'Array of link elements for canonical URLs, icons, etc.',
+		term: 'link'
+	}
+];
 
 export const VueOverviewView = ({
 	currentPageId,
@@ -182,7 +176,10 @@ export const VueOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<VueHeadOptionsList />
+					<DefinitionGrid
+						items={headOptionItems}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>

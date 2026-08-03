@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { CSSProperties, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import type {
 	PackageApiEntrypoint,
 	PackageApiSymbol
@@ -124,6 +124,11 @@ const kindBadgeStyle: CSSProperties = {
 	textTransform: 'uppercase'
 };
 
+// Permalink format used by earlier releases and shared links:
+// #api-<entry-point>-<symbol-name>, both slugified.
+export const apiSymbolAnchor = (entryPoint: string, symbolName: string) =>
+	`api-${entryPoint.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${symbolName.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
+
 const groupSymbols = (symbols: PackageApiSymbol[]) => {
 	const groups = new Map<string, PackageApiSymbol[]>();
 	for (const symbol of symbols) {
@@ -169,7 +174,10 @@ const SymbolDetail = ({
 	};
 
 	return (
-		<div style={detailPanelStyle}>
+		<div
+			id={apiSymbolAnchor(entryPoint, symbol.name)}
+			style={detailPanelStyle}
+		>
 			<div
 				style={{
 					alignItems: 'center',
@@ -209,6 +217,12 @@ const SymbolDetail = ({
 						marginLeft: 'auto'
 					}}
 				>
+					<a
+						href={`#${apiSymbolAnchor(entryPoint, symbol.name)}`}
+						style={actionChipStyle}
+					>
+						Permalink
+					</a>
 					<button
 						onClick={copyImport}
 						style={actionChipStyle}
@@ -288,6 +302,23 @@ export const PackageApiExplorer = ({
 	);
 	const [query, setQuery] = useState('');
 	const [selectedName, setSelectedName] = useState('');
+
+	useEffect(() => {
+		const hash = window.location.hash.replace(/^#/, '');
+		if (!hash.startsWith('api-')) return;
+		for (const candidate of api) {
+			const match = candidate.symbols.find(
+				(symbol) =>
+					apiSymbolAnchor(candidate.entryPoint, symbol.name) === hash
+			);
+			if (!match) continue;
+			setActiveEntryPoint(candidate.entryPoint);
+			setSelectedName(match.name);
+
+			return;
+		}
+	}, [api]);
+
 	const entrypoint =
 		api.find((candidate) => candidate.entryPoint === activeEntryPoint) ??
 		api[0];

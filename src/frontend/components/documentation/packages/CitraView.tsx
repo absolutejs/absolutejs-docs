@@ -18,7 +18,6 @@ import {
 	h1Style,
 	sectionStyle,
 	paragraphLargeStyle,
-	strongStyle,
 	paragraphSpacedStyle,
 	githubButtonStyle
 } from '../../../styles/docsStyles';
@@ -29,6 +28,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { DARK_LOGO_PROVIDERS } from '../../../styles/authModalStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -46,82 +46,58 @@ const tocItems: TocItem[] = [
 ];
 
 type CitraCardProps = {
-	themeSprings: DocsViewProps['themeSprings'];
-	title?: string;
-	description?: string;
-	providerName?: string;
-	logoUrl?: string;
+	logoUrl: string;
 	needsInvert?: boolean;
+	providerName: string;
+	themeSprings: DocsViewProps['themeSprings'];
 };
 
 const CitraCard = ({
-	themeSprings,
-	title,
-	description,
-	providerName,
 	logoUrl,
-	needsInvert
-}: CitraCardProps) => {
-	if (providerName && logoUrl) {
-		return (
-			<animated.div
-				style={{
-					...featureCardStyle(themeSprings),
-					alignItems: 'center',
-					display: 'flex',
-					gap: '0.75rem',
-					padding: '0.75rem 1rem'
-				}}
-			>
-				<animated.img
-					alt={`${providerName} logo`}
-					src={logoUrl}
-					style={{
-						borderRadius: '4px',
-						filter: needsInvert
-							? themeSprings.theme.to((t) =>
-									t.endsWith('dark')
-										? 'brightness(0) invert(1)'
-										: 'none'
-								)
-							: 'none',
-						flexShrink: 0,
-						height: '24px',
-						objectFit: 'contain',
-						width: '24px'
-					}}
-				/>
-				<span
-					style={{
-						fontSize: '0.9rem',
-						fontWeight: 500,
-						overflow: 'hidden',
-						textOverflow: 'ellipsis',
-						whiteSpace: 'nowrap'
-					}}
-				>
-					{providerName}
-				</span>
-			</animated.div>
-		);
-	}
-
-	return (
-		<animated.div style={featureCardStyle(themeSprings)}>
-			<p
-				style={{
-					...paragraphSpacedStyle,
-					marginBottom: '0.5rem'
-				}}
-			>
-				<strong style={strongStyle}>{title}</strong>
-			</p>
-			<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
-				{description}
-			</p>
-		</animated.div>
-	);
-};
+	needsInvert,
+	providerName,
+	themeSprings
+}: CitraCardProps) => (
+	<animated.div
+		style={{
+			...featureCardStyle(themeSprings),
+			alignItems: 'center',
+			display: 'flex',
+			gap: '0.75rem',
+			padding: '0.75rem 1rem'
+		}}
+	>
+		<animated.img
+			alt={`${providerName} logo`}
+			src={logoUrl}
+			style={{
+				borderRadius: '4px',
+				filter: needsInvert
+					? themeSprings.theme.to((t) =>
+							t.endsWith('dark')
+								? 'brightness(0) invert(1)'
+								: 'none'
+						)
+					: 'none',
+				flexShrink: 0,
+				height: '24px',
+				objectFit: 'contain',
+				width: '24px'
+			}}
+		/>
+		<span
+			style={{
+				fontSize: '0.9rem',
+				fontWeight: 500,
+				overflow: 'hidden',
+				textOverflow: 'ellipsis',
+				whiteSpace: 'nowrap'
+			}}
+		>
+			{providerName}
+		</span>
+	</animated.div>
+);
 
 export const CitraView = ({
 	currentPageId,
@@ -179,26 +155,21 @@ export const CitraView = ({
 					>
 						Why Citra?
 					</AnchorHeading>
-					<div
-						style={{
-							display: 'grid',
-							gap: '1rem',
-							gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-							marginBottom: '1.5rem',
-							marginTop: '1rem'
-						}}
-					>
-						<CitraCard
-							description="All OAuth 2.0 providers follow the same flow. Citra abstracts this into a unified interface."
-							themeSprings={themeSprings}
-							title="Interchangeability"
-						/>
-						<CitraCard
-							description="TypeScript generics and type guards catch configuration mistakes at compile time."
-							themeSprings={themeSprings}
-							title="Type Safety"
-						/>
-					</div>
+					<DefinitionGrid
+						items={[
+							{
+								description:
+									'All OAuth 2.0 providers follow the same flow. Citra abstracts this into a unified interface.',
+								term: 'Interchangeability'
+							},
+							{
+								description:
+									'TypeScript generics and type guards catch configuration mistakes at compile time.',
+								term: 'Type Safety'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 					<p style={paragraphSpacedStyle}>
 						Inspired by Arctic, Citra reduces boilerplate and
 						minimizes integration errors by enforcing a uniform

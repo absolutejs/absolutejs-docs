@@ -9,14 +9,14 @@ import {
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
@@ -535,26 +535,37 @@ export const IsolatedJscProofPackView = ({
 						</a>
 						.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<span style={strongStyle}>Node migration:</span>{' '}
-							teams using <code>isolated-vm</code> get familiar
-							nouns: Isolate, Context, Script, Reference, and
-							ExternalCopy.
-						</li>
-						<li style={listItemStyle}>
-							<span style={strongStyle}>Bun-native runtime:</span>{' '}
-							the FFI backend talks to JavaScriptCore directly
-							when libJSC is available, with a Worker fallback for
-							portability.
-						</li>
-						<li style={listItemStyle}>
-							<span style={strongStyle}>Operational proof:</span>{' '}
-							<code>isolated-jsc doctor</code> shows the backend,
-							checked JSC paths, and platform-specific install
-							guidance before teams hit runtime errors.
-						</li>
-					</ul>
+					<DefinitionGrid
+						items={[
+							{
+								description: (
+									<>
+										teams using <code>isolated-vm</code> get
+										familiar nouns: Isolate, Context,
+										Script, Reference, and ExternalCopy.
+									</>
+								),
+								term: 'Node migration'
+							},
+							{
+								description:
+									'the FFI backend talks to JavaScriptCore directly when libJSC is available, with a Worker fallback for portability.',
+								term: 'Bun-native runtime'
+							},
+							{
+								description: (
+									<>
+										<code>isolated-jsc doctor</code> shows
+										the backend, checked JSC paths, and
+										platform-specific install guidance
+										before teams hit runtime errors.
+									</>
+								),
+								term: 'Operational proof'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={installCode}
 						language="bash"
@@ -606,26 +617,32 @@ export const IsolatedJscProofPackView = ({
 						keep it behind a process or container boundary if
 						hostile workloads could reach meaningful host secrets.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<span style={strongStyle}>FFI:</span> lowest cold
-							heap, interrupt-driven timeouts, isolate survives
-							timeouts, and eval / Function-constructor residuals
-							are closed.
-						</li>
-						<li style={listItemStyle}>
-							<span style={strongStyle}>Worker fallback:</span>{' '}
-							portable heap isolation and resource caps, but
-							deploy it with OS-level blast-radius controls for
-							arbitrary third-party code.
-						</li>
-						<li style={listItemStyle}>
-							<span style={strongStyle}>Host tools:</span> expose
-							powers through <code>Reference</code> or the typed
-							capability broker, then validate, timeout, and audit
-							every call.
-						</li>
-					</ul>
+					<DefinitionGrid
+						items={[
+							{
+								description:
+									'lowest cold heap, interrupt-driven timeouts, isolate survives timeouts, and eval / Function-constructor residuals are closed.',
+								term: 'FFI'
+							},
+							{
+								description:
+									'portable heap isolation and resource caps, but deploy it with OS-level blast-radius controls for arbitrary third-party code.',
+								term: 'Worker fallback'
+							},
+							{
+								description: (
+									<>
+										expose powers through{' '}
+										<code>Reference</code> or the typed
+										capability broker, then validate,
+										timeout, and audit every call.
+									</>
+								),
+								term: 'Host tools'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 				</section>
 				<section style={sectionStyle}>
 					<AnchorHeading

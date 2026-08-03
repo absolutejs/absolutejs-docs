@@ -14,6 +14,10 @@ import {
 	packageSubpackageViewId
 } from '../../../data/documentation/packages/packageRoutes';
 import { packageExplanationsByName } from '../../../data/documentation/packages/packageExplanations';
+import {
+	capabilityTopics,
+	nonInstallSamples
+} from '../../../data/documentation/packages/ecosystemVersions';
 import { createPackageView } from './PackageOverviewTemplate';
 
 const statusForVersion = (version: string | null) => {
@@ -25,6 +29,10 @@ const statusForVersion = (version: string | null) => {
 };
 
 const installCommandFor = (project: EcosystemProject) => {
+	const installSample = project.readmeSamples.find((sample) =>
+		/^install(?:ation)?$/i.test(sample.heading)
+	);
+	if (installSample) return installSample.code;
 	if (project.packageName && !project.private)
 		return `bun add ${project.packageName}`;
 	if (project.repository) return `git clone ${project.repository}.git`;
@@ -105,9 +113,9 @@ const adapterGroupsFor = (project: EcosystemProject) => {
 };
 
 const featuresFor = (project: EcosystemProject) => {
-	const features: PackageFeature[] = project.readmeTopics.map((topic) => ({
-		...topic
-	}));
+	const features: PackageFeature[] = capabilityTopics(
+		project.readmeTopics
+	).map((topic) => ({ ...topic }));
 	if (project.kind === 'monorepo') {
 		const publicCount = project.subpackages.filter(
 			(subpackage) => !subpackage.private
@@ -159,7 +167,7 @@ const toPackageDocData = (project: EcosystemProject): PackageDocData => ({
 	name: project.name,
 	notes: notesFor(project),
 	npmName: project.packageName ?? project.directory,
-	samples: project.readmeSamples,
+	samples: nonInstallSamples(project.readmeSamples),
 	status: statusForVersion(project.version),
 	tagline: project.description,
 	version: project.version ?? 'workspace'
@@ -264,13 +272,15 @@ const toSubpackageDocData = (
 		category: project.category,
 		description: subpackage.description,
 		explanations: packageExplanationsByName[subpackage.name],
-		features: subpackage.readmeTopics.map((topic) => ({ ...topic })),
+		features: capabilityTopics(subpackage.readmeTopics).map((topic) => ({
+			...topic
+		})),
 		installCommand,
 		links: subpackageLinksFor(project, subpackage),
 		name: subpackage.name,
 		notes,
 		npmName: subpackage.name,
-		samples: subpackage.readmeSamples,
+		samples: nonInstallSamples(subpackage.readmeSamples),
 		status: statusForVersion(subpackage.version),
 		tagline: subpackage.description,
 		version: subpackage.version ?? 'workspace'

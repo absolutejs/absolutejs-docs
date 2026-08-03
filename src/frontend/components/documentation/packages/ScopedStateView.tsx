@@ -260,7 +260,7 @@ export const ScopedStateView = ({
 						The plugin uses a secure session cookie to identify
 						users and maintain their state server-side:
 					</p>
-					<ScopedStateHowItWorksSteps />
+					<ScopedStateHowItWorksSteps themeSprings={themeSprings} />
 					<ScopedStateUserCards
 						isMobile={isMobile}
 						themeSprings={themeSprings}

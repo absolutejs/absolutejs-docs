@@ -377,9 +377,11 @@ export const PackageOverviewTemplate = ({
 				/>
 
 				<section style={sectionStyle}>
-					<p style={paragraphSpacedStyle}>
-						{currentData.description}
-					</p>
+					{currentData.description !== currentData.tagline ? (
+						<p style={paragraphSpacedStyle}>
+							{currentData.description}
+						</p>
+					) : null}
 					<AnchorHeading
 						id="installation"
 						level="h2"

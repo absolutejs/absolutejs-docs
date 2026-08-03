@@ -4,6 +4,18 @@ import { ecosystemProjects } from './ecosystem.generated';
 import { packageExplanationsByName } from './packageExplanations';
 import { firstSuccessSamplesByPackage } from './firstSuccessSamples';
 
+// The package template renders its own Installation section, so README
+// install topics/samples would duplicate it on every generated page.
+const installHeadingPattern = /^install(?:ation)?$/i;
+
+export const capabilityTopics = <Topic extends { title: string }>(
+	topics: Topic[]
+) => topics.filter((topic) => !installHeadingPattern.test(topic.title));
+
+export const nonInstallSamples = <Sample extends { heading: string }>(
+	samples: Sample[]
+) => samples.filter((sample) => !installHeadingPattern.test(sample.heading));
+
 const packageVersions = new Map<string, string>();
 const packageApi = new Map(
 	ecosystemProjects.flatMap((project) => [
@@ -22,8 +34,8 @@ const packageFacts = new Map(
 					[
 						project.packageName,
 						{
-							features: project.readmeTopics,
-							samples: project.readmeSamples
+							features: capabilityTopics(project.readmeTopics),
+							samples: nonInstallSamples(project.readmeSamples)
 						}
 					] as const
 				]
@@ -33,8 +45,8 @@ const packageFacts = new Map(
 				[
 					subpackage.name,
 					{
-						features: subpackage.readmeTopics,
-						samples: subpackage.readmeSamples
+						features: capabilityTopics(subpackage.readmeTopics),
+						samples: nonInstallSamples(subpackage.readmeSamples)
 					}
 				] as const
 		)

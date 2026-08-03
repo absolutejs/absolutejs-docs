@@ -3,13 +3,10 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
 	sectionStyle,
-	strongStyle,
 	tableCellStyle,
 	tableContainerStyle,
 	tableHeaderStyle,
@@ -20,6 +17,7 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
@@ -72,22 +70,26 @@ const alternatives: Array<{
 	}
 ];
 
-const painPoints: Array<{ title: string; body: string }> = [
+const painPoints: DefinitionItem[] = [
 	{
-		body: 'Model-generated snippets need timeouts, heap caps, console capture, and host tools without file, network, process, or shell authority.',
-		title: 'AI code execution'
+		description:
+			'Model-generated snippets need timeouts, heap caps, console capture, and host tools without file, network, process, or shell authority.',
+		term: 'AI code execution'
 	},
 	{
-		body: 'SaaS teams want customer-authored transforms, policy checks, workflow steps, and webhooks without a custom service per tenant.',
-		title: 'Tenant scripting'
+		description:
+			'SaaS teams want customer-authored transforms, policy checks, workflow steps, and webhooks without a custom service per tenant.',
+		term: 'Tenant scripting'
 	},
 	{
-		body: 'Internal tools and build systems want plugins while keeping filesystem, network, process, and package-manager access explicit.',
-		title: 'Plugin evaluation'
+		description:
+			'Internal tools and build systems want plugins while keeping filesystem, network, process, and package-manager access explicit.',
+		term: 'Plugin evaluation'
 	},
 	{
-		body: 'Teams that already know isolated-vm need an isolate-shaped JavaScriptCore path when the host app moves to Bun.',
-		title: 'Node-to-Bun migration'
+		description:
+			'Teams that already know isolated-vm need an isolate-shaped JavaScriptCore path when the host app moves to Bun.',
+		term: 'Node-to-Bun migration'
 	}
 ];
 
@@ -143,21 +145,33 @@ export const IsolatedJscBunPositioningView = ({
 						shell APIs. Teams also need timeouts, heap limits,
 						deterministic teardown, metrics, and audited host tools.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Bun issue <code>oven-sh/bun#6617</code> asks for
-							sandboxing permissions.
-						</li>
-						<li style={listItemStyle}>
-							Bun issue <code>oven-sh/bun#25929</code> asks for a
-							secure runtime for AI-agent generated code.
-						</li>
-						<li style={listItemStyle}>
-							Bun issue <code>oven-sh/bun#23653</code> shows the
-							migration trap: <code>isolated-vm</code> is a V8
-							addon, not a JavaScriptCore solution for Bun.
-						</li>
-					</ul>
+					<DefinitionGrid
+						items={[
+							{
+								badge: 'Bun issue',
+								description: 'asks for sandboxing permissions.',
+								term: 'oven-sh/bun#6617'
+							},
+							{
+								badge: 'Bun issue',
+								description:
+									'asks for a secure runtime for AI-agent generated code.',
+								term: 'oven-sh/bun#25929'
+							},
+							{
+								badge: 'Bun issue',
+								description: (
+									<>
+										shows the migration trap:{' '}
+										<code>isolated-vm</code> is a V8 addon,
+										not a JavaScriptCore solution for Bun.
+									</>
+								),
+								term: 'oven-sh/bun#23653'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -169,41 +183,44 @@ export const IsolatedJscBunPositioningView = ({
 					>
 						Quick answers
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						<span style={strongStyle}>
-							Why not Node isolated-vm?
-						</span>{' '}
-						It is the right shape for Node/V8, but Bun is
-						JavaScriptCore. <code>isolated-jsc</code> ports the
-						isolate-shaped API to Bun/JSC instead of trying to load
-						a V8 addon.
-					</p>
-					<p style={paragraphSpacedStyle}>
-						<span style={strongStyle}>
-							Why not just use Bun Workers?
-						</span>{' '}
-						Workers are the portable substrate and fallback backend.
-						This package adds the sandbox product layer: hardened
-						globals, heap limits, timeouts, metrics, error fidelity,
-						TypeScript helpers, pools, execution receipts, output
-						limits, and explicit host capability brokers with
-						manifests, redaction, per-tool output byte caps, and
-						bounded audit buffers. As of 0.11.0 that layer also
-						covers hibernating keyed pools that checkpoint idle
-						tenants to bytes, operator-shaped pool metrics with
-						drain and warm, and optional OpenTelemetry tracing.
-					</p>
-					<p style={paragraphSpacedStyle}>
-						<span style={strongStyle}>
-							When should I require FFI?
-						</span>{' '}
-						Require <code>backend: &apos;ffi&apos;</code> for
-						hostile-code production paths on macOS or Linux where
-						JavaScriptCore is available. Use{' '}
-						<code>backend: &apos;auto&apos;</code> for portable
-						defaults, demos, and CI. Add OS boundaries when a
-						sandbox escape would expose meaningful host secrets.
-					</p>
+					<DefinitionGrid
+						items={[
+							{
+								description: (
+									<>
+										It is the right shape for Node/V8, but
+										Bun is JavaScriptCore.{' '}
+										<code>isolated-jsc</code> ports the
+										isolate-shaped API to Bun/JSC instead of
+										trying to load a V8 addon.
+									</>
+								),
+								term: 'Why not Node isolated-vm?'
+							},
+							{
+								description:
+									'Workers are the portable substrate and fallback backend. This package adds the sandbox product layer: hardened globals, heap limits, timeouts, metrics, error fidelity, TypeScript helpers, pools, execution receipts, output limits, and explicit host capability brokers with manifests, redaction, per-tool output byte caps, and bounded audit buffers. As of 0.11.0 that layer also covers hibernating keyed pools that checkpoint idle tenants to bytes, operator-shaped pool metrics with drain and warm, and optional OpenTelemetry tracing.',
+								term: 'Why not just use Bun Workers?'
+							},
+							{
+								description: (
+									<>
+										Require{' '}
+										<code>backend: &apos;ffi&apos;</code>{' '}
+										for hostile-code production paths on
+										macOS or Linux where JavaScriptCore is
+										available. Use{' '}
+										<code>backend: &apos;auto&apos;</code>{' '}
+										for portable defaults, demos, and CI.
+										Add OS boundaries when a sandbox escape
+										would expose meaningful host secrets.
+									</>
+								),
+								term: 'When should I require FFI?'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -277,24 +294,26 @@ export const IsolatedJscBunPositioningView = ({
 						more embeddable than a process or container per script;
 						native to Bun and JavaScriptCore instead of Node and V8.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							<span style={strongStyle}>FFI backend:</span> use
-							for production Bun/JSC isolation where
-							JavaScriptCore is available.
-						</li>
-						<li style={listItemStyle}>
-							<span style={strongStyle}>Worker fallback:</span>{' '}
-							use for local development, CI, demos, Windows, and
-							hosts without libJSC.
-						</li>
-						<li style={listItemStyle}>
-							<span style={strongStyle}>OS boundary:</span> add
-							process, container, uid, seccomp, or network policy
-							when a sandbox escape would expose high-value
-							secrets.
-						</li>
-					</ul>
+					<DefinitionGrid
+						items={[
+							{
+								description:
+									'use for production Bun/JSC isolation where JavaScriptCore is available.',
+								term: 'FFI backend'
+							},
+							{
+								description:
+									'use for local development, CI, demos, Windows, and hosts without libJSC.',
+								term: 'Worker fallback'
+							},
+							{
+								description:
+									'add process, container, uid, seccomp, or network policy when a sandbox escape would expose high-value secrets.',
+								term: 'OS boundary'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -306,14 +325,10 @@ export const IsolatedJscBunPositioningView = ({
 					>
 						Pain points
 					</AnchorHeading>
-					<ul style={listStyle}>
-						{painPoints.map((item) => (
-							<li key={item.title} style={listItemStyle}>
-								<span style={strongStyle}>{item.title}:</span>{' '}
-								{item.body}
-							</li>
-						))}
-					</ul>
+					<DefinitionGrid
+						items={painPoints}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -325,35 +340,26 @@ export const IsolatedJscBunPositioningView = ({
 					>
 						Objections
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						<span style={strongStyle}>
-							Why not wait for Bun permissions?
-						</span>{' '}
-						Runtime permissions would be valuable, but this is an
-						embedding API: many tenant isolates inside one Bun app,
-						host tools passed intentionally, pooled lifecycle, and
-						per-run metrics.
-					</p>
-					<p style={paragraphSpacedStyle}>
-						<span style={strongStyle}>
-							Why not just use Workers?
-						</span>{' '}
-						Workers are the portable substrate and fallback path.
-						The product layer adds hardened globals, memory limits,
-						timeout behavior, error fidelity, TypeScript helpers,
-						execution receipts, result and console limits,
-						capability brokers with redacted bounded audit events,
-						and hibernating keyed pools with operator metrics and
-						OpenTelemetry tracing.
-					</p>
-					<p style={paragraphSpacedStyle}>
-						<span style={strongStyle}>
-							Is this enough for arbitrary hostile code?
-						</span>{' '}
-						Use FFI plus OS isolation when host secrets or broad
-						network/filesystem access are in scope. The claim is
-						defense in depth, not magic in-process containment.
-					</p>
+					<DefinitionGrid
+						items={[
+							{
+								description:
+									'Runtime permissions would be valuable, but this is an embedding API: many tenant isolates inside one Bun app, host tools passed intentionally, pooled lifecycle, and per-run metrics.',
+								term: 'Why not wait for Bun permissions?'
+							},
+							{
+								description:
+									'Workers are the portable substrate and fallback path. The product layer adds hardened globals, memory limits, timeout behavior, error fidelity, TypeScript helpers, execution receipts, result and console limits, capability brokers with redacted bounded audit events, and hibernating keyed pools with operator metrics and OpenTelemetry tracing.',
+								term: 'Why not just use Workers?'
+							},
+							{
+								description:
+									'Use FFI plus OS isolation when host secrets or broad network/filesystem access are in scope. The claim is defense in depth, not magic in-process containment.',
+								term: 'Is this enough for arbitrary hostile code?'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -365,24 +371,39 @@ export const IsolatedJscBunPositioningView = ({
 					>
 						Launch copy
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						<span style={strongStyle}>Primary:</span> The missing{' '}
-						<code>isolated-vm</code> layer for Bun.
-					</p>
-					<p style={paragraphSpacedStyle}>
-						<span style={strongStyle}>Expanded:</span> Run untrusted
-						JavaScript and TypeScript inside a bounded
-						JavaScriptCore isolate, from a Bun host, with explicit
-						capability brokering, redacted receipts, and bounded
-						outputs instead of ambient <code>Bun</code>/
-						<code>process</code> access.
-					</p>
-					<p style={paragraphSpacedStyle}>
-						<span style={strongStyle}>Security:</span> Use FFI for
-						production Bun/JSC isolation, Worker fallback for
-						portability, and compose with process or container
-						boundaries for fully adversarial code.
-					</p>
+					<DefinitionGrid
+						items={[
+							{
+								description: (
+									<>
+										The missing <code>isolated-vm</code>{' '}
+										layer for Bun.
+									</>
+								),
+								term: 'Primary'
+							},
+							{
+								description: (
+									<>
+										Run untrusted JavaScript and TypeScript
+										inside a bounded JavaScriptCore isolate,
+										from a Bun host, with explicit
+										capability brokering, redacted receipts,
+										and bounded outputs instead of ambient{' '}
+										<code>Bun</code>/<code>process</code>{' '}
+										access.
+									</>
+								),
+								term: 'Expanded'
+							},
+							{
+								description:
+									'Use FFI for production Bun/JSC isolation, Worker fallback for portability, and compose with process or container boundaries for fully adversarial code.',
+								term: 'Security'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<DocsNavigation

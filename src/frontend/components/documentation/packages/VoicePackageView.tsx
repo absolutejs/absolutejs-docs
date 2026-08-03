@@ -12,11 +12,12 @@ import { DocsNavigation } from '../DocsNavigation';
 import { PackageExplanationBlocks } from './PackageExplanationBlocks';
 import { DocumentationModeNav } from './DocumentationModeNav';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { ChecklistRows } from '../../utils/ChecklistRows';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PackageCard, PackageCardGrid } from '../../utils/PackageCardGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents } from '../../utils/TableOfContents';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	mainContentStyle,
@@ -31,7 +32,6 @@ import {
 	tableStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
@@ -1645,12 +1645,38 @@ const pillStyle: CSSProperties = {
 	padding: '0.28rem 0.58rem'
 };
 
-const cardGridStyle = (isMobile: boolean): CSSProperties => ({
-	display: 'grid',
-	gap: '0.9rem',
-	gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, minmax(0, 1fr))',
-	marginTop: '1rem'
-});
+const labeledItemPattern = /^([A-Za-z][A-Za-z0-9 &()./+'-]{0,39}): (.+)$/;
+
+const parseDefinitionItems = (items: string[]) => {
+	const parsed: DefinitionItem[] = [];
+	for (const item of items) {
+		const match = labeledItemPattern.exec(item);
+		const term = match?.[1];
+		const description = match?.[2];
+		if (term === undefined || description === undefined) {
+			return null;
+		}
+		parsed.push({ description, term });
+	}
+	const uniqueTerms = new Set(parsed.map((entry) => entry.term));
+
+	return uniqueTerms.size === parsed.length ? parsed : null;
+};
+
+type VoiceSectionItemsProps = {
+	items: string[];
+	themeSprings: DocsViewProps['themeSprings'];
+};
+
+const VoiceSectionItems = ({ items, themeSprings }: VoiceSectionItemsProps) => {
+	const definitionItems = parseDefinitionItems(items);
+
+	return definitionItems ? (
+		<DefinitionGrid items={definitionItems} themeSprings={themeSprings} />
+	) : (
+		<ChecklistRows items={items} themeSprings={themeSprings} />
+	);
+};
 
 const buildTocItems = (page: VoicePageDefinition) => [
 	...page.sections.map((section) => ({
@@ -1700,59 +1726,40 @@ const VoiceSectionBlock = ({
 }: {
 	section: VoiceSection;
 	themeSprings: DocsViewProps['themeSprings'];
-}) => {
-	const { isSizeOrLess } = useMediaQuery();
-	const isMobile = isSizeOrLess('sm');
-
-	return (
-		<section style={sectionStyle}>
-			<AnchorHeading
-				id={section.id}
-				level="h2"
-				style={gradientHeadingStyle(themeSprings)}
+}) => (
+	<section style={sectionStyle}>
+		<AnchorHeading
+			id={section.id}
+			level="h2"
+			style={gradientHeadingStyle(themeSprings)}
+			themeSprings={themeSprings}
+		>
+			{section.title}
+		</AnchorHeading>
+		{section.body && <p style={paragraphSpacedStyle}>{section.body}</p>}
+		{section.items && (
+			<VoiceSectionItems
+				items={section.items}
 				themeSprings={themeSprings}
-			>
-				{section.title}
-			</AnchorHeading>
-			{section.body && <p style={paragraphSpacedStyle}>{section.body}</p>}
-			{section.items && (
-				<div style={cardGridStyle(isMobile)}>
-					{section.items.map((item) => (
-						<animated.div
-							key={item}
-							style={featureCardStyle(themeSprings)}
-						>
-							<p
-								style={{
-									fontSize: '0.94rem',
-									lineHeight: 1.6,
-									margin: 0
-								}}
-							>
-								{item}
-							</p>
-						</animated.div>
-					))}
-				</div>
-			)}
-			{section.cards && (
-				<PackageCardGrid
-					items={section.cards}
-					themeSprings={themeSprings}
-				/>
-			)}
-			{section.table && renderTable(section.table, themeSprings)}
-			{section.code && (
-				<PrismPlus
-					codeString={section.code.source}
-					language={section.code.language}
-					showLineNumbers={section.code.language !== 'bash'}
-					themeSprings={themeSprings}
-				/>
-			)}
-		</section>
-	);
-};
+			/>
+		)}
+		{section.cards && (
+			<PackageCardGrid
+				items={section.cards}
+				themeSprings={themeSprings}
+			/>
+		)}
+		{section.table && renderTable(section.table, themeSprings)}
+		{section.code && (
+			<PrismPlus
+				codeString={section.code.source}
+				language={section.code.language}
+				showLineNumbers={section.code.language !== 'bash'}
+				themeSprings={themeSprings}
+			/>
+		)}
+	</section>
+);
 
 const VoiceDocsPage = ({
 	pageId,

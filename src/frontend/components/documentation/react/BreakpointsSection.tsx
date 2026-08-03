@@ -1,19 +1,23 @@
 import { ThemeSprings } from '../../../../types/springTypes';
-import {
-	listItemStyle,
-	listStyle,
-	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { paragraphSpacedStyle, sectionStyle } from '../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 
 type BreakpointsSectionProps = {
 	codeString: string;
 	themeSprings: ThemeSprings;
 };
+
+const breakpointItems: DefinitionItem[] = [
+	{ badge: '0px', description: '', term: 'xs' },
+	{ badge: '640px', description: '', term: 'sm' },
+	{ badge: '768px', description: '', term: 'md' },
+	{ badge: '1024px', description: '', term: 'lg' },
+	{ badge: '1280px', description: '', term: 'xl' },
+	{ badge: '1536px', description: '', term: '2xl' }
+];
 
 export const BreakpointsSection = ({
 	codeString,
@@ -33,26 +37,7 @@ export const BreakpointsSection = ({
 			viewport width against these thresholds and returns the largest
 			breakpoint that the current width satisfies.
 		</p>
-		<ul style={listStyle}>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>xs</strong>: 0px
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>sm</strong>: 640px
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>md</strong>: 768px
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>lg</strong>: 1024px
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>xl</strong>: 1280px
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>2xl</strong>: 1536px
-			</li>
-		</ul>
+		<DefinitionGrid items={breakpointItems} themeSprings={themeSprings} />
 		<PrismPlus
 			codeString={codeString}
 			language="tsx"

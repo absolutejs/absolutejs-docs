@@ -10,18 +10,16 @@ import {
 } from '../../../data/documentation/svelteDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -33,18 +31,17 @@ const tocItems: TocItem[] = [
 	{ href: '#compilation', label: 'Compilation' }
 ];
 
-const SvelteCompilationList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Page file</strong>: The compiled
-			component used for server-side rendering
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Index file</strong>: The compiled
-			hydration script that makes the page interactive on the client
-		</li>
-	</ul>
-);
+const compilationItems: DefinitionItem[] = [
+	{
+		description: 'The compiled component used for server-side rendering',
+		term: 'Page file'
+	},
+	{
+		description:
+			'The compiled hydration script that makes the page interactive on the client',
+		term: 'Index file'
+	}
+];
 
 export const SvelteOverviewView = ({
 	currentPageId,
@@ -166,7 +163,10 @@ export const SvelteOverviewView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<SvelteCompilationList />
+					<DefinitionGrid
+						items={compilationItems}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<DocsNavigation

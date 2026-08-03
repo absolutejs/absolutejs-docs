@@ -7,7 +7,6 @@ import {
 	isolatedJscHibernationObservability,
 	isolatedJscHibernationStorage
 } from '../../../data/documentation/isolatedJscHibernationDocsCode';
-import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
 	mainContentStyle,
@@ -20,6 +19,7 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { Callout } from '../../utils/Callout';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -61,8 +61,6 @@ export const IsolatedJscHibernationView = ({
 	onTocToggle,
 	isMobileOrTablet
 }: DocsViewProps) => {
-	const { isSizeOrLess } = useMediaQuery();
-	void isSizeOrLess;
 	const showDesktopToc = !isMobileOrTablet;
 
 	return (
@@ -177,14 +175,14 @@ export const IsolatedJscHibernationView = ({
 						expose, and what hibernation uses, is
 						structured-cloneable data on the context's globalThis.
 					</p>
-					<p style={paragraphSpacedStyle}>
+					<Callout themeSprings={themeSprings} variant="warning">
 						Concretely: your callables RECOMPILE on wake (same as a
 						fresh spawn — but the data they read is already there).
 						Host <code>Reference</code> bindings need reinstalling
 						via <code>setGlobal</code>. Pending promises and
 						in-flight async state do not survive. Anything you can
 						pass through <code>structuredClone</code> does.
-					</p>
+					</Callout>
 					<PrismPlus
 						codeString={isolatedJscHibernationBoundary}
 						language="typescript"
@@ -245,11 +243,11 @@ export const IsolatedJscHibernationView = ({
 						fresh-spawn rather than throwing — TTL expiry, network
 						partition, manual eviction all degrade safely.
 					</p>
-					<p style={paragraphSpacedStyle}>
+					<Callout themeSprings={themeSprings} variant="warning">
 						<code>pool.dispose()</code> does not clear the store —
 						it may be shared with other processes. Purge externally
 						if you need to.
-					</p>
+					</Callout>
 					<PrismPlus
 						codeString={isolatedJscHibernationStorage}
 						language="typescript"

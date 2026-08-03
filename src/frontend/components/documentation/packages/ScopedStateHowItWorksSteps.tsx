@@ -1,17 +1,32 @@
-import { listItemStyle, listStyle } from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { StepFlow } from '../../utils/StepFlow';
 
-export const ScopedStateHowItWorksSteps = () => (
-	<ol style={{ ...listStyle, marginTop: '1rem' }}>
-		<li style={listItemStyle}>
-			On first request, a secure <code>user_session_id</code> cookie is
-			created
-		</li>
-		<li style={listItemStyle}>
-			Each subsequent request uses this cookie to retrieve the user&apos;s
-			state
-		</li>
-		<li style={listItemStyle}>
-			State is stored server-side, keyed by session ID
-		</li>
-	</ol>
+export const ScopedStateHowItWorksSteps = ({ themeSprings }: ThemeProps) => (
+	<StepFlow
+		steps={[
+			{
+				description: (
+					<>
+						On first request, a secure <code>user_session_id</code>{' '}
+						cookie is created
+					</>
+				),
+				title: 'First request'
+			},
+			{
+				description: (
+					<>
+						Each subsequent request uses this cookie to retrieve the
+						user&apos;s state
+					</>
+				),
+				title: 'Subsequent requests'
+			},
+			{
+				description: 'State is stored server-side, keyed by session ID',
+				title: 'Server-side storage'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
