@@ -104,7 +104,7 @@ export const AngularComponentsView = ({
 						The Angular Image component uses <code>input()</code>{' '}
 						signals for each prop. All available inputs:
 					</p>
-					<ImageInputsList />
+					<ImageInputsList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

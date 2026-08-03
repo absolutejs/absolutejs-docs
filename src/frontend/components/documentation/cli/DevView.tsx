@@ -23,6 +23,8 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { ChecklistRows } from '../../utils/ChecklistRows';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -86,55 +88,6 @@ const chromeDevtoolsSteps: DevListItem[] = [
 			</>
 		),
 		id: 'windows-paths'
-	}
-];
-
-const devConfigOptions: DevListItem[] = [
-	{
-		content: (
-			<>
-				<code>https</code>: enables HTTPS in dev mode and allows the dev
-				server to use local trusted certs and HTTP/2.
-			</>
-		),
-		id: 'https'
-	},
-	{
-		content: (
-			<>
-				<code>projectRoot</code>: overrides the path reported to Chrome
-				DevTools.
-			</>
-		),
-		id: 'project-root'
-	},
-	{
-		content: (
-			<>
-				<code>uuid</code>: uses a fixed workspace UUID instead of
-				generating one.
-			</>
-		),
-		id: 'uuid'
-	},
-	{
-		content: (
-			<>
-				<code>uuidCachePath</code>: changes where the generated UUID is
-				persisted between dev restarts.
-			</>
-		),
-		id: 'uuid-cache-path'
-	},
-	{
-		content: (
-			<>
-				<code>normalizeForWindowsContainer</code>: rewrites Linux paths
-				to UNC form for Chrome on Windows in WSL or Docker Desktop
-				environments.
-			</>
-		),
-		id: 'normalize-for-windows-container'
 	}
 ];
 
@@ -205,20 +158,15 @@ export const DevView = ({
 						trusted certificates and HTTP/2 when you enable{' '}
 						<code>dev.https</code>.
 					</p>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Use it to test secure-context browser APIs like
-							service workers, Web Crypto, and geolocation.
-						</li>
-						<li style={listItemStyle}>
-							It improves production parity and helps catch
-							mixed-content issues earlier.
-						</li>
-						<li style={listItemStyle}>
-							With mkcert configured, localhost runs without
-							browser certificate warnings.
-						</li>
-					</ul>
+					<ChecklistRows
+						items={[
+							'Use it to test secure-context browser APIs like service workers, Web Crypto, and geolocation.',
+							'It improves production parity and helps catch mixed-content issues earlier.',
+							'With mkcert configured, localhost runs without browser certificate warnings.'
+						]}
+						themeSprings={themeSprings}
+						tone="info"
+					/>
 					<p style={{ ...paragraphSpacedStyle, marginBottom: 0 }}>
 						For certificate setup and mkcert prerequisites, see the{' '}
 						<code>absolute mkcert</code> documentation.
@@ -286,7 +234,36 @@ export const DevView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<DevSectionList items={devConfigOptions} />
+					<DefinitionGrid
+						items={[
+							{
+								description:
+									'enables HTTPS in dev mode and allows the dev server to use local trusted certs and HTTP/2.',
+								term: 'https'
+							},
+							{
+								description:
+									'overrides the path reported to Chrome DevTools.',
+								term: 'projectRoot'
+							},
+							{
+								description:
+									'uses a fixed workspace UUID instead of generating one.',
+								term: 'uuid'
+							},
+							{
+								description:
+									'changes where the generated UUID is persisted between dev restarts.',
+								term: 'uuidCachePath'
+							},
+							{
+								description:
+									'rewrites Linux paths to UNC form for Chrome on Windows in WSL or Docker Desktop environments.',
+								term: 'normalizeForWindowsContainer'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -325,7 +302,7 @@ export const DevView = ({
 					>
 						Options
 					</AnchorHeading>
-					<DevCliOptions />
+					<DevCliOptions themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -337,7 +314,7 @@ export const DevView = ({
 					>
 						Features
 					</AnchorHeading>
-					<DevFeaturesList />
+					<DevFeaturesList themeSprings={themeSprings} />
 				</section>
 
 				<DocsNavigation

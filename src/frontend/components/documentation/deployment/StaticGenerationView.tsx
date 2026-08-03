@@ -168,7 +168,7 @@ export const StaticGenerationView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<StaticGenerationIsrList />
+					<StaticGenerationIsrList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

@@ -19,6 +19,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -152,43 +153,52 @@ const routeGroupRows: DocsTableCell[][] = [
 	]
 ];
 
-const reactHookRows: DocsTableCell[][] = [
-	[
-		{ code: 'useRAG(path, options?)' },
-		'Composes every hook below into one object: search, ingest, status, ops, documents, chunkPreview, evaluate, index, stream / workflow, sources, citations, grounding.'
-	],
-	[
-		{ code: 'useRAGSearch' },
-		'search / searchWithTrace with results, trace, isSearching, error.'
-	],
-	[
-		{ code: 'useRAGIngest' },
-		'ingestChunks / ingestDocuments / ingestUrls / ingestUploads / clearIndex.'
-	],
-	[
-		{ code: 'useRAGStream / useRAGWorkflow' },
-		'WebSocket answer workflow: query(), stage, sources, citations, groundedAnswer, progress.'
-	],
-	[
-		{ code: 'useRAGStatus / useRAGOps' },
-		'Backend status, capabilities, health, jobs, and maintenance rollups (auto-load on mount).'
-	],
-	[
-		{ code: 'useRAGDocuments / useRAGChunkPreview' },
-		'Indexed document listing and per-document chunk graph navigation.'
-	],
-	[
-		{ code: 'useRAGEvaluate' },
-		'evaluate / evaluateStream / runSuite with leaderboard and suite-run state.'
-	],
-	[
-		{ code: 'useRAGIndexAdmin' },
-		'createDocument, deleteDocument, reindex, reseed, reset, sync sources, backend actions.'
-	],
-	[
-		{ code: 'useRAGSources / useRAGCitations / useRAGGrounding' },
-		'Pure derivations over messages: source groups, citation maps, grounded-answer coverage.'
-	]
+const reactHookItems: DefinitionItem[] = [
+	{
+		description:
+			'Composes every hook below into one object: search, ingest, status, ops, documents, chunkPreview, evaluate, index, stream / workflow, sources, citations, grounding.',
+		term: 'useRAG(path, options?)'
+	},
+	{
+		description:
+			'search / searchWithTrace with results, trace, isSearching, error.',
+		term: 'useRAGSearch'
+	},
+	{
+		description:
+			'ingestChunks / ingestDocuments / ingestUrls / ingestUploads / clearIndex.',
+		term: 'useRAGIngest'
+	},
+	{
+		description:
+			'WebSocket answer workflow: query(), stage, sources, citations, groundedAnswer, progress.',
+		term: 'useRAGStream / useRAGWorkflow'
+	},
+	{
+		description:
+			'Backend status, capabilities, health, jobs, and maintenance rollups (auto-load on mount).',
+		term: 'useRAGStatus / useRAGOps'
+	},
+	{
+		description:
+			'Indexed document listing and per-document chunk graph navigation.',
+		term: 'useRAGDocuments / useRAGChunkPreview'
+	},
+	{
+		description:
+			'evaluate / evaluateStream / runSuite with leaderboard and suite-run state.',
+		term: 'useRAGEvaluate'
+	},
+	{
+		description:
+			'createDocument, deleteDocument, reindex, reseed, reset, sync sources, backend actions.',
+		term: 'useRAGIndexAdmin'
+	},
+	{
+		description:
+			'Pure derivations over messages: source groups, citation maps, grounded-answer coverage.',
+		term: 'useRAGSources / useRAGCitations / useRAGGrounding'
+	}
 ];
 
 const bindingRows: DocsTableCell[][] = [
@@ -369,9 +379,8 @@ export const RagFrameworksView = ({
 						<code>useRAG(path)</code> composes them all when you
 						want one handle.
 					</p>
-					<DocsTable
-						columns={['Hook', 'Surface']}
-						rows={reactHookRows}
+					<DefinitionGrid
+						items={reactHookItems}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus

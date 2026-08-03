@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	envRequired,
@@ -8,19 +8,17 @@ import {
 } from '../../../data/documentation/configDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -31,25 +29,29 @@ const tocItems: TocItem[] = [
 	{ href: '#type-safety', label: 'Fail-Fast Validation' }
 ];
 
-const RequiredEnvList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>DATABASE_URL</strong>: Connection string
-			for your database
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>HOST</strong>: Server host (default:
-			localhost)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>PORT</strong>: Server port (default:
-			3000)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>OAUTH2_CALLBACK_URI</strong>: Callback
-			URL for OAuth providers (e.g., http://localhost:3000/auth/callback)
-		</li>
-	</ul>
+const RequiredEnvList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: 'Connection string for your database',
+				term: 'DATABASE_URL'
+			},
+			{
+				description: 'Server host (default: localhost)',
+				term: 'HOST'
+			},
+			{
+				description: 'Server port (default: 3000)',
+				term: 'PORT'
+			},
+			{
+				description:
+					'Callback URL for OAuth providers (e.g., http://localhost:3000/auth/callback)',
+				term: 'OAUTH2_CALLBACK_URI'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const EnvironmentVariablesView = ({
@@ -128,7 +130,7 @@ export const EnvironmentVariablesView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<RequiredEnvList />
+					<RequiredEnvList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

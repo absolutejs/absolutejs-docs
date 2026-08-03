@@ -1,20 +1,20 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const IslandsLooseVsTypedList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Loose Island</strong>: runtime-safe,
-			flexible, and useful when the framework/component pairing is chosen
-			dynamically.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Typed island wrappers</strong>: exact
-			component names and prop shapes inferred from the registry for that
-			framework.
-		</li>
-	</ul>
+export const IslandsLooseVsTypedList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'runtime-safe, flexible, and useful when the framework/component pairing is chosen dynamically.',
+				term: 'Loose Island'
+			},
+			{
+				description:
+					'exact component names and prop shapes inferred from the registry for that framework.',
+				term: 'Typed island wrappers'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

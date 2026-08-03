@@ -244,7 +244,7 @@ export const ScopedStateView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ScopedStateHtmxList />
+					<ScopedStateHtmxList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -265,7 +265,7 @@ export const ScopedStateView = ({
 						isMobile={isMobile}
 						themeSprings={themeSprings}
 					/>
-					<ScopedStateHowItWorksList />
+					<ScopedStateHowItWorksList themeSprings={themeSprings} />
 				</section>
 
 				<DocsNavigation

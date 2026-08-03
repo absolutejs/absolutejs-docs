@@ -22,8 +22,10 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
-import { DocsTable } from '../../utils/DocsTable';
+import { ChecklistRows } from '../../utils/ChecklistRows';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
+import { SwapList } from '../../utils/SwapList';
+import { TriageList } from '../../utils/TriageList';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
@@ -185,28 +187,6 @@ const QuickstartSteps = ({
 	);
 };
 
-const BulletCards = ({
-	items,
-	themeSprings
-}: {
-	items: string[];
-	themeSprings: ThemeSprings;
-}) => (
-	<div
-		style={{
-			display: 'grid',
-			gap: '0.75rem',
-			gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))'
-		}}
-	>
-		{items.map((item) => (
-			<animated.div key={item} style={featureCardStyle(themeSprings)}>
-				{item}
-			</animated.div>
-		))}
-	</div>
-);
-
 const tocItems: TocItem[] = [
 	{ href: '#architecture', label: 'Architecture' },
 	{ href: '#prerequisites', label: 'Prerequisites' },
@@ -289,7 +269,7 @@ const OutcomePlaybookView = ({
 				>
 					Prerequisites
 				</AnchorHeading>
-				<BulletCards
+				<ChecklistRows
 					items={playbook.prerequisites}
 					themeSprings={themeSprings}
 				/>
@@ -343,9 +323,10 @@ const OutcomePlaybookView = ({
 				>
 					Expected results
 				</AnchorHeading>
-				<BulletCards
+				<ChecklistRows
 					items={playbook.expectedResults}
 					themeSprings={themeSprings}
+					tone="success"
 				/>
 			</section>
 
@@ -358,13 +339,12 @@ const OutcomePlaybookView = ({
 				>
 					Development to production
 				</AnchorHeading>
-				<DocsTable
-					columns={['Development', 'Production', 'Why']}
-					rows={playbook.substitutions.map((item) => [
-						item.development,
-						item.production,
-						item.reason
-					])}
+				<SwapList
+					items={playbook.substitutions.map((item) => ({
+						after: item.production,
+						before: item.development,
+						reason: item.reason
+					}))}
 					themeSprings={themeSprings}
 				/>
 			</section>
@@ -378,13 +358,14 @@ const OutcomePlaybookView = ({
 				>
 					Failure decisions
 				</AnchorHeading>
-				<DocsTable
-					columns={['Problem', 'Check first', 'Then']}
-					rows={playbook.failures.map((failure) => [
-						failure.problem,
-						failure.check,
-						failure.ifTrue
-					])}
+				<TriageList
+					items={playbook.failures.map((failure) => ({
+						problem: failure.problem,
+						steps: [
+							{ action: failure.check, label: 'Check first' },
+							{ action: failure.ifTrue, label: 'Then' }
+						]
+					}))}
 					themeSprings={themeSprings}
 				/>
 			</section>

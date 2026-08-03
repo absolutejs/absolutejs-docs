@@ -2,6 +2,9 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { Callout } from '../../utils/Callout';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
+import { StepFlow } from '../../utils/StepFlow';
 import {
 	angularAppProviders,
 	angularBuild,
@@ -76,6 +79,140 @@ const AngularMultiFrameworkList = () => (
 	</ul>
 );
 
+type ThemedHelperProps = {
+	themeSprings: DocsViewProps['themeSprings'];
+};
+
+const BuildProviderPipeline = ({ themeSprings }: ThemedHelperProps) => (
+	<StepFlow
+		steps={[
+			{
+				description:
+					'Not a string path — TypeScript catches a missing import or renamed binding at compile time.',
+				title: 'Write the providers as a real typed value'
+			},
+			{
+				description:
+					'The framework finds the import path of the binding referenced here.',
+				title: 'The build AST-parses absolute.config.ts'
+			},
+			{
+				description: (
+					<>
+						A matching import + an{' '}
+						<code>export const providers = [...]</code> declaration
+						is baked directly into every page&apos;s compiled server
+						output.
+					</>
+				),
+				title: 'Providers land in compiled output'
+			},
+			{
+				description: (
+					<>
+						Additions like <code>provideRouter(routes)</code> and{' '}
+						<code>APP_BASE_HREF</code> come from page-level signals
+						&mdash; you never write either yourself. See{' '}
+						<a href="#provider-model">Provider Model</a> and{' '}
+						<a href="#routing">Routing</a> for the full auto-wire
+						pipeline.
+					</>
+				),
+				title: 'Per-page additions are auto-wired'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
+);
+
+const ResourceStartModes = ({ themeSprings }: ThemedHelperProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						Keeps <code>loading()</code> <code>true</code> on first
+						paint so the template renders the spinner branch
+						immediately, with no blank-frame flash between mount and
+						the first fetch.
+					</>
+				),
+				term: "'pending'"
+			},
+			{
+				badge: 'default',
+				description: 'Fire the fetcher at construction.',
+				term: "'immediate'"
+			},
+			{
+				description: (
+					<>
+						Dormant until <code>refresh()</code> or{' '}
+						<code>mutate()</code> is called explicitly.
+					</>
+				),
+				term: "'idle'"
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
+);
+
+const ProviderScanSteps = ({ themeSprings }: ThemedHelperProps) => (
+	<StepFlow
+		steps={[
+			{ title: 'Walk the project from your server entrypoint' },
+			{
+				code: 'handleAngularPageRequest({...})',
+				title: 'Find every page handler call'
+			},
+			{
+				description:
+					"The providers declaration is injected directly into each page's compiled server output.",
+				title: 'Inject the providers declaration'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
+);
+
+const ProviderEntriesGrid = ({ themeSprings }: ThemedHelperProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						The import resolves to the path the build extracted from{' '}
+						<code>absolute.config.ts</code>.
+					</>
+				),
+				term: 'appProviders'
+			},
+			{
+				description: (
+					<>
+						Appended only when the page exports a{' '}
+						<code>routes</code> array &mdash; see{' '}
+						<a href="#routing">Routing</a>.
+					</>
+				),
+				term: 'provideRouter(routes, ...)'
+			},
+			{
+				description: (
+					<>
+						Included only when the Elysia mount is a sub-router
+						pattern (<code>.get(&apos;/admin/*&apos;, ...)</code>{' '}
+						&rarr; <code>&apos;/admin/&apos;</code>).
+					</>
+				),
+				term: 'APP_BASE_HREF'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
+);
+
 export const AngularOverviewView = ({
 	currentPageId,
 	isMobileOrTablet,
@@ -135,24 +272,7 @@ export const AngularOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<p style={paragraphSpacedStyle}>
-						Write the providers as a real typed value (not a string
-						path). TypeScript catches a missing import or renamed
-						binding at compile time, and the framework AST-parses{' '}
-						<code>absolute.config.ts</code> at build time to find
-						the import path of the binding referenced here, then
-						bakes a matching import + an{' '}
-						<code>export const providers = [...]</code> declaration
-						directly into every page&apos;s compiled server output.
-						Per-page additions like{' '}
-						<code>provideRouter(routes)</code> and{' '}
-						<code>APP_BASE_HREF</code> are auto-wired by the build
-						from page-level signals &mdash; you never write either
-						yourself. See{' '}
-						<a href="#provider-model">Provider Model</a> and{' '}
-						<a href="#routing">Routing</a> for the full auto-wire
-						pipeline.
-					</p>
+					<BuildProviderPipeline themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={angularAppProviders}
 						language="typescript"
@@ -291,20 +411,15 @@ export const AngularOverviewView = ({
 						example is <code>this.id</code> assigned by the page
 						factory from a <code>:id</code> route param &mdash; pass{' '}
 						<code>{`{ start: 'pending' }`}</code> and call{' '}
-						<code>refresh()</code> from <code>ngOnInit</code>. That
-						keeps <code>loading()</code> <code>true</code> on first
-						paint so the template renders the spinner branch
-						immediately, with no blank-frame flash between mount and
-						the first fetch. The other values are{' '}
-						<code>{`'immediate'`}</code> (the default &mdash; fire
-						the fetcher at construction) and <code>{`'idle'`}</code>{' '}
-						(dormant until <code>refresh()</code> or{' '}
-						<code>mutate()</code> is called explicitly).
+						<code>refresh()</code> from <code>ngOnInit</code>. The
+						available <code>start</code> values are:
 					</p>
-					<p style={paragraphSpacedStyle}>
-						<strong style={strongStyle}>
-							When to reach for TanStack Query instead.
-						</strong>{' '}
+					<ResourceStartModes themeSprings={themeSprings} />
+					<Callout
+						themeSprings={themeSprings}
+						title="When to reach for TanStack Query instead"
+						variant="note"
+					>
 						<code>useResource</code> is intentionally minimal: each
 						instance owns its own copy of the data. Two components
 						that fetch the same entity will fire two requests, and
@@ -318,7 +433,7 @@ export const AngularOverviewView = ({
 						for one-off fetches and trivial admin screens; reach for
 						TanStack Query when the data layer is shared across
 						pages or needs cache semantics.
-					</p>
+					</Callout>
 					<p style={paragraphSpacedStyle}>
 						<code>useSubscription()</code> &mdash; wraps{' '}
 						<code>observable.subscribe(...)</code> with{' '}
@@ -330,7 +445,7 @@ export const AngularOverviewView = ({
 						that drives the template &mdash; subscription teardown
 						is the only thing this composable handles.
 					</p>
-					<p style={paragraphSpacedStyle}>
+					<Callout themeSprings={themeSprings} variant="warning">
 						<code>inject(DestroyRef)</code> is only legal in an
 						Angular injection context (constructor, field
 						initializer, <code>runInInjectionContext</code>), so a
@@ -342,7 +457,7 @@ export const AngularOverviewView = ({
 						one-time warning. The cleanest fix is to capture{' '}
 						<code>DestroyRef</code> once in a field initializer and
 						pass it through:
-					</p>
+					</Callout>
 					<PrismPlus
 						codeString={angularUseSubscription}
 						language="typescript"
@@ -464,36 +579,29 @@ export const AngularOverviewView = ({
 					</p>
 					<p style={paragraphSpacedStyle}>
 						The build runs an AST scan before any framework compile:
-						it walks the project from your server entrypoint, finds
-						every <code>handleAngularPageRequest({'{...}'})</code>{' '}
-						call, then injects the providers declaration directly
-						into each page&apos;s compiled server output:
 					</p>
+					<ProviderScanSteps themeSprings={themeSprings} />
+					<PrismPlus
+						codeString={`export const providers = [
+	...appProviders,
+	provideRouter(
+		routes,
+		withComponentInputBinding(),
+		withViewTransitions()
+	),
+	{ provide: APP_BASE_HREF, useValue: "/admin/" }
+];`}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<ProviderEntriesGrid themeSprings={themeSprings} />
 					<p style={paragraphSpacedStyle}>
-						<code>
-							export const providers = [...appProviders,
-							provideRouter(routes, withComponentInputBinding(),
-							withViewTransitions()),{' '}
-							{`{ provide: APP_BASE_HREF, useValue: "/admin/" }`}
-							];
-						</code>
-					</p>
-					<p style={paragraphSpacedStyle}>
-						The <code>appProviders</code> import resolves to the
-						path the build extracted from{' '}
-						<code>absolute.config.ts</code>;{' '}
-						<code>provideRouter(routes, ...)</code> is appended only
-						when the page exports a <code>routes</code> array (see{' '}
-						<a href="#routing">Routing</a>), and the{' '}
-						<code>APP_BASE_HREF</code> entry is included only when
-						the Elysia mount is a sub-router pattern (
-						<code>.get(&apos;/admin/*&apos;, ...)</code> &rarr;{' '}
-						<code>&apos;/admin/&apos;</code>). Because the
-						declaration lives in the page module itself, the
-						page&apos;s server bundle and the client wrapper both
-						read the same <code>providers</code> export off the same
-						module &mdash; one <code>@angular/core</code> instance,
-						no runtime providers indirection.
+						Because the declaration lives in the page module itself,
+						the page&apos;s server bundle and the client wrapper
+						both read the same <code>providers</code> export off the
+						same module &mdash; one <code>@angular/core</code>{' '}
+						instance, no runtime providers indirection.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						For request-specific data, inject <code>REQUEST</code>,{' '}
@@ -506,20 +614,20 @@ export const AngularOverviewView = ({
 						work normally for token values that should be scoped to
 						one matched route subtree.
 					</p>
-					<p style={paragraphSpacedStyle}>
+					<Callout themeSprings={themeSprings} variant="warning">
 						Lazy routes using <code>loadComponent</code> also work
 						during SSR, including imports from installed packages.
 						The package must be importable from the server runtime
 						environment; if a package is only available to the
 						browser bundle, SSR cannot resolve that route component.
-					</p>
-					<p style={paragraphSpacedStyle}>
+					</Callout>
+					<Callout themeSprings={themeSprings} variant="info">
 						If an Angular route guard redirects during SSR by
 						returning a <code>UrlTree</code> or redirect command,
-						AbsoluteJS converts that router redirect into an HTTP
+						AbsoluteJS converts that router redirect into an HTTP{' '}
 						<code>302</code> response with a <code>Location</code>{' '}
 						header.
-					</p>
+					</Callout>
 					<PrismPlus
 						codeString={angularProviderModel}
 						language="typescript"

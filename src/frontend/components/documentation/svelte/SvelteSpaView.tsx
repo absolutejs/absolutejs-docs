@@ -1,7 +1,9 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
+import { StepFlow } from '../../utils/StepFlow';
 import {
 	svelteGoto,
 	svelteHashMode,
@@ -16,8 +18,6 @@ import {
 } from '../../../data/documentation/spaDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
@@ -47,126 +47,214 @@ const tocItems: TocItem[] = [
 	{ href: '#nested', label: 'Nested Routers' }
 ];
 
-const WhyShippedList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>
-				Svelte has no first-party router.
-			</strong>{' '}
-			SvelteKit is a meta-framework, not a router — and it owns the whole
-			app. AbsoluteJS users want a router that drops into a single page,
-			not a runtime that takes over.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>
-				Third-party routers ship raw <code>.svelte</code> files.
-			</strong>{' '}
-			Bun has no built-in Svelte plugin, so a server bundle pass over
-			something like <code>svelte-routing</code> fails to compile its
-			source. Authoring our own router and shipping pre-compiled JS
-			sidesteps the entire problem.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>API names align with SvelteKit</strong>{' '}
-			where there's an analog (<code>goto</code>, <code>page</code>,{' '}
-			<code>pushState</code>, <code>replaceState</code>) so users
-			migrating from SvelteKit don't relearn the primitives.
-		</li>
-	</ul>
+type SpaListProps = {
+	themeSprings: ThemeSprings;
+};
+
+const WhyShippedList = ({ themeSprings }: SpaListProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'SvelteKit is a meta-framework, not a router — and it owns the whole app. AbsoluteJS users want a router that drops into a single page, not a runtime that takes over.',
+				term: 'Svelte has no first-party router.'
+			},
+			{
+				description: (
+					<>
+						Bun has no built-in Svelte plugin, so a server bundle
+						pass over something like <code>svelte-routing</code>{' '}
+						fails to compile its source. Authoring our own router
+						and shipping pre-compiled JS sidesteps the entire
+						problem.
+					</>
+				),
+				term: 'Third-party routers ship raw .svelte files.'
+			},
+			{
+				description: (
+					<>
+						where there's an analog (<code>goto</code>,{' '}
+						<code>page</code>, <code>pushState</code>,{' '}
+						<code>replaceState</code>) so users migrating from
+						SvelteKit don't relearn the primitives.
+					</>
+				),
+				term: 'API names align with SvelteKit'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const RouterPropsList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>url</strong>: SSR URL passthrough. On
-			the server, the page handler auto-injects the request pathname into
-			props (see Page Handler section below). On the client, omit it — the
-			router reads <code>window.location</code> directly.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>basepath</strong>: optional URL prefix
-			the router operates under. Stacks with parent{' '}
-			<code>{'<Router basepath>'}</code> blocks for nested routers.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>mode</strong>: <code>'history'</code>{' '}
-			(default, clean URLs) or <code>'hash'</code> (<code>/#/path</code>,
-			for static deploys).
-		</li>
-	</ul>
+const RouterPropsList = ({ themeSprings }: SpaListProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						SSR URL passthrough. On the server, the page handler
+						auto-injects the request pathname into props (see Page
+						Handler section below). On the client, omit it — the
+						router reads <code>window.location</code> directly.
+					</>
+				),
+				term: 'url'
+			},
+			{
+				description: (
+					<>
+						optional URL prefix the router operates under. Stacks
+						with parent <code>{'<Router basepath>'}</code> blocks
+						for nested routers.
+					</>
+				),
+				term: 'basepath'
+			},
+			{
+				description: (
+					<>
+						<code>'history'</code> (default, clean URLs) or{' '}
+						<code>'hash'</code> (<code>/#/path</code>, for static
+						deploys).
+					</>
+				),
+				term: 'mode'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const RoutePropsList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>path</strong>: pattern with{' '}
-			<code>:param</code>, <code>:param?</code> (optional), and{' '}
-			<code>*</code> (wildcard) syntax.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>content</strong>: a Svelte 5 snippet.
-			Receives a <code>params</code> argument typed from the path literal
-			— no annotation needed.
-		</li>
-	</ul>
+const RoutePropsList = ({ themeSprings }: SpaListProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						pattern with <code>:param</code>, <code>:param?</code>{' '}
+						(optional), and <code>*</code> (wildcard) syntax.
+					</>
+				),
+				term: 'path'
+			},
+			{
+				description: (
+					<>
+						a Svelte 5 snippet. Receives a <code>params</code>{' '}
+						argument typed from the path literal — no annotation
+						needed.
+					</>
+				),
+				term: 'content'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const MatchPriorityList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			Longest static prefix wins (<code>/users/me</code> beats{' '}
-			<code>/users/:id</code>).
-		</li>
-		<li style={listItemStyle}>
-			Then most static segments (<code>/a/b/:c</code> beats{' '}
-			<code>/a/:b/:c</code>).
-		</li>
-		<li style={listItemStyle}>Then declaration order (tie-breaker).</li>
-	</ul>
+const MatchPriorityList = ({ themeSprings }: SpaListProps) => (
+	<StepFlow
+		steps={[
+			{
+				description: (
+					<>
+						(<code>/users/me</code> beats <code>/users/:id</code>).
+					</>
+				),
+				title: 'Longest static prefix wins'
+			},
+			{
+				description: (
+					<>
+						(<code>/a/b/:c</code> beats <code>/a/:b/:c</code>).
+					</>
+				),
+				title: 'Then most static segments'
+			},
+			{ title: 'Then declaration order (tie-breaker).' }
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const LinkPropsList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>to</strong>: destination URL (relative
-			or absolute).
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>prefetch</strong>: <code>'hover'</code>{' '}
-			(default), <code>'viewport'</code>, or <code>'none'</code>.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>replaceState</strong>: use{' '}
-			<code>history.replaceState</code> instead of <code>pushState</code>.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>noScroll</strong>,{' '}
-			<strong style={strongStyle}>keepFocus</strong>: pass-through to the
-			underlying <code>goto()</code>.
-		</li>
-		<li style={listItemStyle}>
+const LinkPropsList = ({ themeSprings }: SpaListProps) => (
+	<>
+		<DefinitionGrid
+			items={[
+				{
+					description: 'destination URL (relative or absolute).',
+					term: 'to'
+				},
+				{
+					description: (
+						<>
+							<code>'hover'</code> (default),{' '}
+							<code>'viewport'</code>, or <code>'none'</code>.
+						</>
+					),
+					term: 'prefetch'
+				},
+				{
+					description: (
+						<>
+							use <code>history.replaceState</code> instead of{' '}
+							<code>pushState</code>.
+						</>
+					),
+					term: 'replaceState'
+				},
+				{
+					description: (
+						<>
+							pass-through to the underlying <code>goto()</code>.
+						</>
+					),
+					term: 'noScroll, keepFocus'
+				}
+			]}
+			themeSprings={themeSprings}
+		/>
+		<p style={paragraphSpacedStyle}>
 			All standard <code>{'<a>'}</code> attributes pass through (
 			<code>class</code>, <code>aria-*</code>, etc.).
-		</li>
-	</ul>
+		</p>
+	</>
 );
 
-const LinkBehaviorList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			Internal same-origin URLs: client-side navigation via{' '}
-			<code>goto()</code>.
-		</li>
-		<li style={listItemStyle}>
-			External URLs, <code>target="_blank"</code>, <code>download</code>,
-			modifier-key clicks (Ctrl/Cmd/Shift): fall through to browser
-			default. No interception.
-		</li>
-		<li style={listItemStyle}>
-			No JS available: the rendered <code>{'<a href>'}</code> still works
-			as a normal link. Progressive enhancement by default.
-		</li>
-	</ul>
+const LinkBehaviorList = ({ themeSprings }: SpaListProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						client-side navigation via <code>goto()</code>.
+					</>
+				),
+				term: 'Internal same-origin URLs'
+			},
+			{
+				description: (
+					<>
+						<code>target="_blank"</code>, <code>download</code>,
+						modifier-key clicks (Ctrl/Cmd/Shift): fall through to
+						browser default. No interception.
+					</>
+				),
+				term: 'External URLs'
+			},
+			{
+				description: (
+					<>
+						the rendered <code>{'<a href>'}</code> still works as a
+						normal link. Progressive enhancement by default.
+					</>
+				),
+				term: 'No JS available'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const SvelteSpaView = ({
@@ -214,7 +302,7 @@ export const SvelteSpaView = ({
 					>
 						Why AbsoluteJS Ships This
 					</AnchorHeading>
-					<WhyShippedList />
+					<WhyShippedList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -325,7 +413,7 @@ export const SvelteSpaView = ({
 						subtree) in <code>{'<Router url={url}>'}</code> on the
 						server, <code>{'<Router>'}</code> on the client.
 					</p>
-					<RouterPropsList />
+					<RouterPropsList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -344,7 +432,7 @@ export const SvelteSpaView = ({
 						a layout <code>{'<section>'}</code> renders inside that
 						section, not at the router's root.
 					</p>
-					<RoutePropsList />
+					<RoutePropsList themeSprings={themeSprings} />
 					<p
 						style={{
 							...paragraphSpacedStyle,
@@ -371,7 +459,7 @@ export const SvelteSpaView = ({
 						Router, Angular Router, and SvelteKit's internal
 						matcher):
 					</p>
-					<MatchPriorityList />
+					<MatchPriorityList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -394,7 +482,7 @@ export const SvelteSpaView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<LinkPropsList />
+					<LinkPropsList themeSprings={themeSprings} />
 					<p
 						style={{
 							...paragraphSpacedStyle,
@@ -403,7 +491,7 @@ export const SvelteSpaView = ({
 					>
 						<strong style={strongStyle}>Behavior</strong>:
 					</p>
-					<LinkBehaviorList />
+					<LinkBehaviorList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

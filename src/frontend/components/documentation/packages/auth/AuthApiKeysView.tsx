@@ -17,10 +17,39 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const clientCredentialsSteps: StepFlowStep[] = [
+	{
+		description: (
+			<>
+				Register a client — a public <code>cid_…</code> plus a one-time{' '}
+				<code>cs_…</code> secret.
+			</>
+		),
+		title: 'Register the client'
+	},
+	{
+		description: (
+			<>
+				The client trades those for a short-lived <code>at_…</code>{' '}
+				access token at <code>/oauth2/token</code>. Credentials may
+				arrive in the body or as an HTTP Basic header.
+			</>
+		),
+		title: 'Trade for a token'
+	},
+	{
+		description:
+			'Tokens are opaque and stored by hash with an expiry, so they remain revocable — no JWKS to publish.',
+		title: 'Stay revocable'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#static-keys', label: 'Static API Keys' },
@@ -73,12 +102,14 @@ export const AuthApiKeysView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Mint a long-lived <code>sk_…</code> key bound to any
-						owner id, with string scopes and an optional expiry.
-						Only the hash is persisted; the plaintext is shown once
-						and the stored prefix lets you list keys in a UI. The
+						owner id, with string scopes and an optional expiry. The
 						package gives you the helpers — you wire creation behind
 						your own admin route, exactly like SCIM tokens.
 					</p>
+					<Callout themeSprings={themeSprings} variant="warning">
+						Only the hash is persisted; the plaintext is shown once,
+						and the stored prefix lets you list keys in a UI.
+					</Callout>
 					<PrismPlus
 						codeString={staticApiKeys}
 						language="typescript"
@@ -125,15 +156,12 @@ export const AuthApiKeysView = ({
 						Client Credentials (M2M)
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						For the OAuth2 client_credentials grant, register a
-						client (public <code>cid_…</code> + one-time{' '}
-						<code>cs_…</code> secret) and let it trade those for a
-						short-lived <code>at_…</code> access token at{' '}
-						<code>/oauth2/token</code>. Tokens are opaque and stored
-						by hash with an expiry, so they remain revocable — no
-						JWKS to publish. Credentials may arrive in the body or
-						as an HTTP Basic header.
+						For the OAuth2 client_credentials grant:
 					</p>
+					<StepFlow
+						steps={clientCredentialsSteps}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={clientCredentials}
 						language="typescript"

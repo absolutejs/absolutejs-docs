@@ -18,10 +18,35 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const derivationItems: DefinitionItem[] = [
+	{
+		description: 'Direct warrants.',
+		term: 'self',
+		tone: 'info'
+	},
+	{
+		description: 'An editor is also a viewer.',
+		term: 'computedUserset',
+		tone: 'info'
+	},
+	{
+		description: "A doc inherits its parent folder's viewers.",
+		term: 'tupleToUserset',
+		tone: 'info'
+	},
+	{
+		description: 'Any of the combined derivations grants the relation.',
+		term: 'union',
+		tone: 'info'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#schema', label: 'Schema & inheritance' },
@@ -76,12 +101,15 @@ export const AuthFgaView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The schema declares each resource type&apos;s relations
-						and how they derive: <code>self</code> (direct
-						warrants), <code>computedUserset</code> (an editor is
-						also a viewer), <code>tupleToUserset</code> (a doc
-						inherits its parent folder&apos;s viewers), and{' '}
-						<code>union</code>. Usersets like{' '}
-						<code>group#member</code> expand recursively.
+						and how they derive:
+					</p>
+					<DefinitionGrid
+						items={derivationItems}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Usersets like <code>group#member</code> expand
+						recursively.
 					</p>
 					<PrismPlus
 						codeString={fgaSchema}
@@ -104,9 +132,12 @@ export const AuthFgaView = ({
 						Write warrants, then <code>check</code> (does X have a
 						relation on Y?) or <code>listSubjects</code> (who has
 						it?). The engine follows the schema&apos;s inheritance,
-						with cycle protection and a depth limit. v1 is a correct
-						ReBAC engine — not yet Zanzibar-scale throughput.
+						with cycle protection and a depth limit.
 					</p>
+					<Callout themeSprings={themeSprings} variant="note">
+						v1 is a correct ReBAC engine — not yet Zanzibar-scale
+						throughput.
+					</Callout>
 					<PrismPlus
 						codeString={fgaCheck}
 						language="typescript"
@@ -152,11 +183,14 @@ export const AuthFgaView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Pass a <code>cache</code> to memoize <code>check</code>{' '}
-						(and the checks <code>listObjects</code> runs). A write
-						clears the cache on that instance; other instances see
-						staleness up to <code>ttlMs</code> — supply a shared{' '}
-						<code>FgaCache</code> for a multi-instance deployment.
+						(and the checks <code>listObjects</code> runs).
 					</p>
+					<Callout themeSprings={themeSprings} variant="warning">
+						A write clears the cache on that instance; other
+						instances see staleness up to <code>ttlMs</code> —
+						supply a shared <code>FgaCache</code> for a
+						multi-instance deployment.
+					</Callout>
 					<PrismPlus
 						codeString={fgaCache}
 						language="typescript"

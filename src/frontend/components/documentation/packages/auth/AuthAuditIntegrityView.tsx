@@ -19,10 +19,28 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const verifySteps: StepFlowStep[] = [
+	{
+		description: 'The events are walked oldest-first.',
+		title: 'Walk the events'
+	},
+	{
+		description:
+			'Each link is recomputed — deterministic even after a jsonb round-trip reorders keys.',
+		title: 'Recompute each link'
+	},
+	{
+		description: 'Returns the index of the first break.',
+		title: 'Report the first break'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#tamper-evident', label: 'Tamper-evident chain' },
@@ -133,11 +151,9 @@ export const AuthAuditIntegrityView = ({
 						Verify the chain
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>verifyAuditChain</code> walks the events
-						oldest-first, recomputes each link, and returns the
-						index of the first break — deterministic even after a
-						jsonb round-trip reorders keys.
+						<code>verifyAuditChain</code>:
 					</p>
+					<StepFlow steps={verifySteps} themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={auditVerify}
 						language="typescript"
@@ -159,10 +175,12 @@ export const AuthAuditIntegrityView = ({
 						<code>exportAuditCsv</code> renders events to RFC-4180
 						CSV (the parity piece to WorkOS&apos;s CSV export), and{' '}
 						<code>auditStore.prune(before)</code> enforces a
-						retention window by deleting older events. Pruning
-						necessarily drops the tamper-evidence of the removed
-						rows.
+						retention window by deleting older events.
 					</p>
+					<Callout themeSprings={themeSprings} variant="warning">
+						Pruning necessarily drops the tamper-evidence of the
+						removed rows.
+					</Callout>
 					<PrismPlus
 						codeString={auditRetention}
 						language="typescript"

@@ -112,7 +112,7 @@ export const DockerView = ({
 					>
 						Best Practices
 					</AnchorHeading>
-					<DockerBestPracticesList />
+					<DockerBestPracticesList themeSprings={themeSprings} />
 				</section>
 
 				<DocsNavigation

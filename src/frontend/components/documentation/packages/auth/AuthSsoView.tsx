@@ -23,10 +23,63 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const samlOwnershipItems: DefinitionItem[] = [
+	{
+		description: 'Owns route wiring, cookies, and session minting',
+		term: 'The package'
+	},
+	{
+		description: 'Owns the XML and signature validation',
+		term: 'Your adapter'
+	}
+];
+
+const samlIdpSteps: StepFlowStep[] = [
+	{
+		description: (
+			<>
+				in the <code>samlServiceProviderStore</code>
+			</>
+		),
+		title: 'Register each relying party'
+	},
+	{
+		description: (
+			<>
+				with a <code>SamlIdpAdapter</code> that wraps the same vetted
+				XML-DSig library the SP role uses
+			</>
+		),
+		title: 'Mount samlIdpRoutes'
+	}
+];
+
+const discoveryItems: DefinitionItem[] = [
+	{
+		description: (
+			<>Routes a user to their org&apos;s connection by email domain</>
+		),
+		term: 'Home-realm discovery'
+	},
+	{
+		description: (
+			<>
+				Fully signed on both sides — SP-initiated logout sends a signed
+				LogoutRequest, and the /slo endpoint completes or replies to
+				IdP-initiated logout
+			</>
+		),
+		term: 'SAML Single Logout'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#connections', label: 'Connections' },
@@ -132,10 +185,12 @@ export const AuthSsoView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						SAML support sits behind a dependency-light SamlAdapter
-						you supply (wrapping a vetted XML-DSig library). The
-						package owns route wiring, cookies, and session minting;
-						your adapter owns the XML and signature validation.
+						you supply (wrapping a vetted XML-DSig library).
 					</p>
+					<DefinitionGrid
+						items={samlOwnershipItems}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={ssoSaml}
 						language="typescript"
@@ -156,13 +211,15 @@ export const AuthSsoView = ({
 					<p style={paragraphSpacedStyle}>
 						The inverse of the SP role: your app issues SAML
 						assertions to legacy SaaS RPs (Salesforce, Workday,
-						Concur — anything older than OIDC). Register each
-						relying party in the{' '}
-						<code>samlServiceProviderStore</code>; mount{' '}
-						<code>samlIdpRoutes</code> with a{' '}
-						<code>SamlIdpAdapter</code> that wraps the same vetted
-						XML-DSig library the SP role uses. Both SP-initiated
-						(via AuthnRequest) and IdP-initiated SSO are supported.
+						Concur — anything older than OIDC).
+					</p>
+					<StepFlow
+						steps={samlIdpSteps}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Both SP-initiated (via AuthnRequest) and IdP-initiated
+						SSO are supported.
 					</p>
 					<PrismPlus
 						codeString={ssoSamlIdp}
@@ -181,13 +238,10 @@ export const AuthSsoView = ({
 					>
 						Discovery &amp; SLO
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Home-realm discovery routes a user to their org&apos;s
-						connection by email domain. SAML Single Logout is fully
-						signed on both sides — SP-initiated logout sends a
-						signed LogoutRequest, and the /slo endpoint completes or
-						replies to IdP-initiated logout.
-					</p>
+					<DefinitionGrid
+						items={discoveryItems}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={ssoDiscovery}
 						language="typescript"
@@ -217,7 +271,7 @@ export const AuthSsoView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<p style={paragraphSpacedStyle}>
+					<Callout themeSprings={themeSprings} variant="note">
 						<code>0.38.0</code> added the required SCIM 2.0
 						discovery endpoints (<code>/Schemas</code>,{' '}
 						<code>/Schemas/:id</code>, <code>/ResourceTypes</code>,{' '}
@@ -225,7 +279,7 @@ export const AuthSsoView = ({
 						probe during connection setup — they work automatically
 						with the core User + Group schemas, and extend through{' '}
 						<code>customAttributes.schemas</code>.
-					</p>
+					</Callout>
 				</section>
 
 				<section style={sectionStyle}>

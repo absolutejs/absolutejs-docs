@@ -1,7 +1,9 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
+import { StepFlow } from '../../utils/StepFlow';
 import {
 	angularRedirectBridge,
 	angularSpaHandler,
@@ -10,8 +12,6 @@ import {
 } from '../../../data/documentation/spaDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
@@ -34,80 +34,135 @@ const tocItems: TocItem[] = [
 	{ href: '#redirects', label: 'Redirects' }
 ];
 
-const PrimitivesList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>provideRouter(routes)</strong>: from{' '}
-			<code>@angular/router</code>. Returns a provider that the AbsoluteJS
-			handler installs at bootstrap. Export it as <code>providers</code>{' '}
-			from your page module.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>RouterOutlet</strong>: standalone
-			directive that renders the active route's component. Place{' '}
-			<code>{'<router-outlet />'}</code> anywhere in the page template.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>RouterLink / RouterLinkActive</strong>:
-			navigation directives. <code>routerLinkActive</code> applies a class
-			when its route matches; combine with{' '}
-			<code>{'[routerLinkActiveOptions]="{ exact: true }"'}</code> for
-			exact-match links.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Router (injected)</strong>: programmatic
-			navigation. <code>inject(Router)</code> at field-initializer time
-			gives you the router instance — <code>router.navigate(['/x'])</code>
-			, <code>router.events.subscribe(...)</code>, <code>router.url</code>
-			, etc.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Routes</strong>: type for the array of{' '}
-			<code>{'{ path, component, canActivate?, data? }'}</code> entries
-			passed to <code>provideRouter</code>.
-		</li>
-	</ul>
+type SpaListProps = {
+	themeSprings: ThemeSprings;
+};
+
+const PrimitivesList = ({ themeSprings }: SpaListProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						from <code>@angular/router</code>. Returns a provider
+						that the AbsoluteJS handler installs at bootstrap.
+						Export it as <code>providers</code> from your page
+						module.
+					</>
+				),
+				term: 'provideRouter(routes)'
+			},
+			{
+				description: (
+					<>
+						standalone directive that renders the active route's
+						component. Place <code>{'<router-outlet />'}</code>{' '}
+						anywhere in the page template.
+					</>
+				),
+				term: 'RouterOutlet'
+			},
+			{
+				description: (
+					<>
+						navigation directives. <code>routerLinkActive</code>{' '}
+						applies a class when its route matches; combine with{' '}
+						<code>
+							{'[routerLinkActiveOptions]="{ exact: true }"'}
+						</code>{' '}
+						for exact-match links.
+					</>
+				),
+				term: 'RouterLink / RouterLinkActive'
+			},
+			{
+				description: (
+					<>
+						programmatic navigation. <code>inject(Router)</code> at
+						field-initializer time gives you the router instance —{' '}
+						<code>router.navigate(['/x'])</code>,{' '}
+						<code>router.events.subscribe(...)</code>,{' '}
+						<code>router.url</code>, etc.
+					</>
+				),
+				term: 'Router (injected)'
+			},
+			{
+				description: (
+					<>
+						type for the array of{' '}
+						<code>
+							{'{ path, component, canActivate?, data? }'}
+						</code>{' '}
+						entries passed to <code>provideRouter</code>.
+					</>
+				),
+				term: 'Routes'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const PageExportsList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>default export</strong>: your root
-			component (the standalone Component class with{' '}
-			<code>{'<router-outlet />'}</code>).
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>providers</strong>: an array including{' '}
-			<code>provideRouter(routes)</code>. The Angular handler installs
-			these when bootstrapping the app.
-		</li>
-	</ul>
+const PageExportsList = ({ themeSprings }: SpaListProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						your root component (the standalone Component class with{' '}
+						<code>{'<router-outlet />'}</code>).
+					</>
+				),
+				term: 'default export'
+			},
+			{
+				description: (
+					<>
+						an array including <code>provideRouter(routes)</code>.
+						The Angular handler installs these when bootstrapping
+						the app.
+					</>
+				),
+				term: 'providers'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const RedirectMechanicsList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			A guard returning a <code>UrlTree</code> (via{' '}
-			<code>router.parseUrl(...)</code>), or a route with a{' '}
-			<code>redirectTo</code> property, triggers an Angular Router
-			redirect.
-		</li>
-		<li style={listItemStyle}>
-			Internally Angular emits a <code>NavigationCancel</code> event with
-			code <code>Redirect</code>, immediately followed by a{' '}
-			<code>NavigationStart</code> for the redirect target.
-		</li>
-		<li style={listItemStyle}>
-			AbsoluteJS subscribes to <code>router.events</code> via an{' '}
-			<code>ENVIRONMENT_INITIALIZER</code> and watches for that pair. When
-			detected, it sets <code>responseInit.status = 302</code> and{' '}
-			<code>Location</code> on the outbound response.
-		</li>
-		<li style={listItemStyle}>
-			The handler returns the redirect response instead of rendering HTML
-			for the redirected route.
-		</li>
-	</ul>
+const RedirectMechanicsList = ({ themeSprings }: SpaListProps) => (
+	<StepFlow
+		steps={[
+			{
+				description: 'triggers an Angular Router redirect.',
+				title: 'A guard returning a UrlTree (via router.parseUrl(...)), or a route with a redirectTo property'
+			},
+			{
+				description: (
+					<>
+						immediately followed by a <code>NavigationStart</code>{' '}
+						for the redirect target.
+					</>
+				),
+				title: 'Internally Angular emits a NavigationCancel event with code Redirect'
+			},
+			{
+				description: (
+					<>
+						When detected, it sets{' '}
+						<code>responseInit.status = 302</code> and{' '}
+						<code>Location</code> on the outbound response.
+					</>
+				),
+				title: 'AbsoluteJS subscribes to router.events via an ENVIRONMENT_INITIALIZER and watches for that pair.'
+			},
+			{
+				title: 'The handler returns the redirect response instead of rendering HTML for the redirected route.'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const AngularSpaView = ({
@@ -235,7 +290,7 @@ export const AngularSpaView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<PageExportsList />
+					<PageExportsList themeSprings={themeSprings} />
 					<p
 						style={{
 							...paragraphSpacedStyle,
@@ -244,7 +299,7 @@ export const AngularSpaView = ({
 					>
 						<strong style={strongStyle}>Primitives:</strong>
 					</p>
-					<PrimitivesList />
+					<PrimitivesList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -269,7 +324,7 @@ export const AngularSpaView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<RedirectMechanicsList />
+					<RedirectMechanicsList themeSprings={themeSprings} />
 				</section>
 
 				<DocsNavigation

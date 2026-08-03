@@ -16,10 +16,37 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const startSteps: StepFlowStep[] = [
+	{
+		description: (
+			<>
+				Mints a short-lived session for the target, stamped with an{' '}
+				<code>impersonator</code> (RFC 8693 actor semantics: who, and a
+				required reason).
+			</>
+		),
+		title: 'Mint the target session'
+	},
+	{
+		description: "Captures the admin's session to return to afterwards.",
+		title: 'Capture the return session'
+	},
+	{
+		description: (
+			<>
+				Emits an <code>impersonation_started</code> event.
+			</>
+		),
+		title: 'Emit the audit event'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#start', label: 'Start (audited, step-up)' },
@@ -72,14 +99,13 @@ export const AuthImpersonationView = ({
 						Start (audited, step-up)
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>startImpersonation</code> mints a short-lived
-						session for the target, stamped with an{' '}
-						<code>impersonator</code> (RFC 8693 actor semantics:
-						who, and a required reason), captures the admin&apos;s
-						session to return to, and emits an{' '}
-						<code>impersonation_started</code> event. Gate it behind
-						your admin auth and a step-up — it&apos;s privileged.
+						<code>startImpersonation</code>:
 					</p>
+					<StepFlow steps={startSteps} themeSprings={themeSprings} />
+					<Callout themeSprings={themeSprings} variant="warning">
+						Gate it behind your admin auth and a step-up — it&apos;s
+						privileged.
+					</Callout>
 					<PrismPlus
 						codeString={impersonationStart}
 						language="typescript"

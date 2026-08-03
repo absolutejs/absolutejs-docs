@@ -263,7 +263,7 @@ export const CompileView = ({
 					>
 						CLI Options
 					</AnchorHeading>
-					<CompileCliOptions />
+					<CompileCliOptions themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

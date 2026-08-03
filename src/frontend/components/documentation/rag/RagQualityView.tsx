@@ -19,6 +19,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -36,43 +37,44 @@ const tocItems: TocItem[] = [
 	{ href: '#access-control', label: 'Access Control' }
 ];
 
-const suiteLifecycleRows: DocsTableCell[][] = [
-	[
-		{ code: 'createRAGEvaluationSuite' },
-		'Normalizes cases and throws on duplicate case ids.'
-	],
-	[
-		{
-			code: 'addRAGEvaluationSuiteCase / updateRAGEvaluationSuiteCase / removeRAGEvaluationSuiteCase'
-		},
-		'Immutable case edits — each returns a new suite and validates ids.'
-	],
-	[
-		{ code: 'reorderRAGEvaluationSuiteCases' },
-		'Reorders by explicit id list; requires exactly one id per case.'
-	],
-	[
-		{ code: 'setRAGEvaluationSuiteCaseGoldenSet' },
-		'Marks or unmarks a case as part of the golden set.'
-	],
-	[
-		{ code: 'addRAGEvaluationSuiteCaseHardNegative' },
-		"Attaches a hard negative by kind: 'chunkId', 'source', or 'documentId'."
-	],
-	[
-		{ code: 'generateRAGEvaluationSuiteFromDocuments' },
-		'Synthesizes one case per indexed document (defaults: maxCases 20, topK 5, includeGoldenSet true, hardNegativePerCase 1).'
-	],
-	[
-		{
-			code: 'createRAGEvaluationSuiteSnapshot / buildRAGEvaluationSuiteSnapshotDiff'
-		},
-		'Versioned suite snapshots plus added / removed / changed / reordered case diffs.'
-	],
-	[
-		{ code: 'summarizeRAGEvaluationSuiteDataset' },
-		'Case, golden-set, and hard-negative counts for a suite.'
-	]
+const suiteLifecycleItems: DefinitionItem[] = [
+	{
+		description: 'Normalizes cases and throws on duplicate case ids.',
+		term: 'createRAGEvaluationSuite'
+	},
+	{
+		description:
+			'Immutable case edits — each returns a new suite and validates ids.',
+		term: 'addRAGEvaluationSuiteCase / updateRAGEvaluationSuiteCase / removeRAGEvaluationSuiteCase'
+	},
+	{
+		description:
+			'Reorders by explicit id list; requires exactly one id per case.',
+		term: 'reorderRAGEvaluationSuiteCases'
+	},
+	{
+		description: 'Marks or unmarks a case as part of the golden set.',
+		term: 'setRAGEvaluationSuiteCaseGoldenSet'
+	},
+	{
+		description:
+			"Attaches a hard negative by kind: 'chunkId', 'source', or 'documentId'.",
+		term: 'addRAGEvaluationSuiteCaseHardNegative'
+	},
+	{
+		description:
+			'Synthesizes one case per indexed document (defaults: maxCases 20, topK 5, includeGoldenSet true, hardNegativePerCase 1).',
+		term: 'generateRAGEvaluationSuiteFromDocuments'
+	},
+	{
+		description:
+			'Versioned suite snapshots plus added / removed / changed / reordered case diffs.',
+		term: 'createRAGEvaluationSuiteSnapshot / buildRAGEvaluationSuiteSnapshotDiff'
+	},
+	{
+		description: 'Case, golden-set, and hard-negative counts for a suite.',
+		term: 'summarizeRAGEvaluationSuiteDataset'
+	}
 ];
 
 const retrievalMetricRows: DocsTableCell[][] = [
@@ -127,20 +129,30 @@ const groundingMetricRows: DocsTableCell[][] = [
 	]
 ];
 
-const verdictRows: DocsTableCell[][] = [
-	[
-		{ code: 'pass' },
-		'Gate passed, or no gate and every tracked delta is non-negative.'
-	],
-	[{ code: 'warn' }, "Gate thresholds missed under severity: 'warn'."],
-	[
-		{ code: 'fail' },
-		"Gate thresholds missed under severity: 'fail' (the default)."
-	],
-	[
-		{ code: 'needs_review' },
-		'No gate policy and at least one negative delta — or no baseline verdict derivable.'
-	]
+const verdictItems: DefinitionItem[] = [
+	{
+		description:
+			'Gate passed, or no gate and every tracked delta is non-negative.',
+		term: 'pass',
+		tone: 'success'
+	},
+	{
+		description: "Gate thresholds missed under severity: 'warn'.",
+		term: 'warn',
+		tone: 'warning'
+	},
+	{
+		description:
+			"Gate thresholds missed under severity: 'fail' (the default).",
+		term: 'fail',
+		tone: 'error'
+	},
+	{
+		description:
+			'No gate policy and at least one negative delta — or no baseline verdict derivable.',
+		term: 'needs_review',
+		tone: 'neutral'
+	}
 ];
 
 const storeFamilyRows: DocsTableCell[][] = [
@@ -244,9 +256,8 @@ export const RagQualityView = ({
 						<code>executeDryRunRAGEvaluation</code> produces zeroed
 						results for wiring tests.
 					</p>
-					<DocsTable
-						columns={['Function', 'What it does']}
-						rows={suiteLifecycleRows}
+					<DefinitionGrid
+						items={suiteLifecycleItems}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus
@@ -328,9 +339,8 @@ export const RagQualityView = ({
 						latency regression, with <code>severity</code> deciding
 						whether a miss warns or fails.
 					</p>
-					<DocsTable
-						columns={['Verdict', 'When']}
-						rows={verdictRows}
+					<DefinitionGrid
+						items={verdictItems}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus

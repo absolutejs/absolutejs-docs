@@ -19,10 +19,30 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const verdictItems: DefinitionItem[] = [
+	{
+		description: 'Blocks the login.',
+		term: 'deny',
+		tone: 'error'
+	},
+	{
+		description: 'Routes into the MFA gate.',
+		term: 'step_up',
+		tone: 'warning'
+	},
+	{
+		description: 'Proceeds as a normal login.',
+		term: 'allow',
+		tone: 'success'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#engine', label: 'Engine & Rules' },
@@ -82,9 +102,12 @@ export const AuthAdaptiveView = ({
 						<code>new_device</code>, <code>new_country</code>,{' '}
 						<code>impossible_travel</code>, <code>velocity</code> —
 						and every rule&apos;s action and threshold is
-						overridable. The verdict is the most severe rule that
-						fired (allow &lt; step_up &lt; deny).
+						overridable.
 					</p>
+					<Callout themeSprings={themeSprings} variant="note">
+						The verdict is the most severe rule that fired (allow
+						&lt; step_up &lt; deny).
+					</Callout>
 					<PrismPlus
 						codeString={adaptiveEngine}
 						language="typescript"
@@ -107,10 +130,13 @@ export const AuthAdaptiveView = ({
 						OAuth-callback handler, where the request context
 						(device, IP, geo) is available — the credentials MFA
 						gate only sees the user, so adaptive auth is
-						consumer-invoked by design. Record the attempt, then
-						act: <code>deny</code> blocks, <code>step_up</code>{' '}
-						routes into the MFA gate, <code>allow</code> proceeds.
+						consumer-invoked by design. Record the attempt, then act
+						on the verdict:
 					</p>
+					<DefinitionGrid
+						items={verdictItems}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={adaptiveLogin}
 						language="typescript"

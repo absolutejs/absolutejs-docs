@@ -19,6 +19,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -52,17 +53,22 @@ const feedbackToolRows: DocsTableCell[][] = [
 	]
 ];
 
-const elicitAnswerRows: DocsTableCell[][] = [
-	[
-		{ code: 'accept' },
-		'The user answered — the values arrive in content, shaped by requestedSchema.'
-	],
-	[{ code: 'decline' }, 'They said no.'],
-	[{ code: 'cancel' }, 'They dismissed it (or never answered in time).'],
-	[
-		{ code: 'unsupported' },
-		'This client can’t ask anyone — check canElicit and take another path.'
-	]
+const elicitAnswerItems: DefinitionItem[] = [
+	{
+		description:
+			'The user answered — the values arrive in content, shaped by requestedSchema.',
+		term: 'accept'
+	},
+	{ description: 'They said no.', term: 'decline' },
+	{
+		description: 'They dismissed it (or never answered in time).',
+		term: 'cancel'
+	},
+	{
+		description:
+			'This client can’t ask anyone — check canElicit and take another path.',
+		term: 'unsupported'
+	}
 ];
 
 const elicitFlowSteps: StepFlowStep[] = [
@@ -224,9 +230,8 @@ export const McpFeedbackView = ({
 						because the spec restricts it so any client can render a
 						form. The answer's <code>action</code> is one of:
 					</p>
-					<DocsTable
-						columns={['Action', 'Meaning']}
-						rows={elicitAnswerRows}
+					<DefinitionGrid
+						items={elicitAnswerItems}
 						themeSprings={themeSprings}
 					/>
 					<Callout

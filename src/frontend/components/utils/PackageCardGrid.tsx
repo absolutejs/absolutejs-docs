@@ -1,11 +1,15 @@
 import { animated } from '@react-spring/web';
-import { ThemeSprings } from '../../../types/springTypes';
+import {
+	AnimatedCSSProperties,
+	ThemeSprings
+} from '../../../types/springTypes';
 import { tableCodeStyle } from '../../styles/docsStyles';
 import { featureCardStyle } from '../../styles/gradientStyles';
 
 export type PackageCard = {
 	badge?: string;
 	description: string;
+	href?: string;
 	name: string;
 	packageName?: string;
 	version?: string;
@@ -22,79 +26,94 @@ const PackageCardItem = ({
 }: {
 	item: PackageCard;
 	themeSprings: ThemeSprings;
-}) => (
-	<animated.div style={featureCardStyle(themeSprings)}>
-		<div
-			style={{
-				alignItems: 'baseline',
-				display: 'flex',
-				flexWrap: 'wrap',
-				gap: '0.5rem',
-				marginBottom: '0.4rem'
-			}}
-		>
-			<animated.span
+}) => {
+	const cardStyle: AnimatedCSSProperties = {
+		...featureCardStyle(themeSprings),
+		color: 'inherit',
+		textDecoration: 'none'
+	};
+	const content = (
+		<>
+			<div
 				style={{
-					color: themeSprings.contrastPrimary,
-					fontSize: '1rem',
-					fontWeight: 600
+					alignItems: 'baseline',
+					display: 'flex',
+					flexWrap: 'wrap',
+					gap: '0.5rem',
+					marginBottom: '0.4rem'
 				}}
 			>
-				{item.name}
-			</animated.span>
-			{item.version ? (
-				<span
+				<animated.span
 					style={{
-						color: '#6366F1',
-						fontSize: '0.72rem',
-						fontVariantNumeric: 'tabular-nums',
+						color: themeSprings.contrastPrimary,
+						fontSize: '1rem',
 						fontWeight: 600
 					}}
 				>
-					v{item.version}
-				</span>
-			) : null}
-			{item.badge ? (
-				<span
+					{item.name}
+				</animated.span>
+				{item.version ? (
+					<span
+						style={{
+							color: '#6366F1',
+							fontSize: '0.72rem',
+							fontVariantNumeric: 'tabular-nums',
+							fontWeight: 600
+						}}
+					>
+						v{item.version}
+					</span>
+				) : null}
+				{item.badge ? (
+					<span
+						style={{
+							background: 'rgba(99, 102, 241, 0.12)',
+							borderRadius: '999px',
+							color: '#6366F1',
+							fontSize: '0.68rem',
+							fontWeight: 600,
+							letterSpacing: '0.04em',
+							padding: '0.1rem 0.5rem',
+							textTransform: 'uppercase'
+						}}
+					>
+						{item.badge}
+					</span>
+				) : null}
+			</div>
+			{item.packageName ? (
+				<code
 					style={{
-						background: 'rgba(99, 102, 241, 0.12)',
-						borderRadius: '999px',
-						color: '#6366F1',
-						fontSize: '0.68rem',
-						fontWeight: 600,
-						letterSpacing: '0.04em',
-						padding: '0.1rem 0.5rem',
-						textTransform: 'uppercase'
+						...tableCodeStyle,
+						display: 'inline-block',
+						fontSize: '0.72rem',
+						marginBottom: '0.5rem'
 					}}
 				>
-					{item.badge}
-				</span>
+					{item.packageName}
+				</code>
 			) : null}
-		</div>
-		{item.packageName ? (
-			<code
+			<animated.p
 				style={{
-					...tableCodeStyle,
-					display: 'inline-block',
-					fontSize: '0.72rem',
-					marginBottom: '0.5rem'
+					color: themeSprings.contrastSecondary,
+					fontSize: '0.875rem',
+					lineHeight: 1.55,
+					margin: 0
 				}}
 			>
-				{item.packageName}
-			</code>
-		) : null}
-		<animated.p
-			style={{
-				color: themeSprings.contrastSecondary,
-				fontSize: '0.875rem',
-				lineHeight: 1.55,
-				margin: 0
-			}}
-		>
-			{item.description}
-		</animated.p>
-	</animated.div>
-);
+				{item.description}
+			</animated.p>
+		</>
+	);
+
+	return item.href ? (
+		<animated.a href={item.href} style={cardStyle}>
+			{content}
+		</animated.a>
+	) : (
+		<animated.div style={cardStyle}>{content}</animated.div>
+	);
+};
 
 export const PackageCardGrid = ({
 	items,

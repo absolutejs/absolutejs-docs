@@ -497,6 +497,7 @@ export const PackageOverviewTemplate = ({
 					currentPageId={currentPageId}
 					isMobileOrTablet={isMobileOrTablet}
 					onNavigate={onNavigate}
+					packageSurfaceOnly
 					themeSprings={themeSprings}
 				/>
 			</div>

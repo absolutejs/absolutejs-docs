@@ -1,15 +1,22 @@
-import { listItemStyle, listStyle } from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const TypecheckDependenciesList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<code>vue-tsc</code>: required if you have a Vue directory
-		</li>
-		<li style={listItemStyle}>
-			<code>svelte-check</code>: required if you have a Svelte directory
-		</li>
-		<li style={listItemStyle}>
-			<code>typescript</code>: always required
-		</li>
-	</ul>
+export const TypecheckDependenciesList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: 'required if you have a Vue directory',
+				term: 'vue-tsc'
+			},
+			{
+				description: 'required if you have a Svelte directory',
+				term: 'svelte-check'
+			},
+			{
+				description: 'always required',
+				term: 'typescript'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

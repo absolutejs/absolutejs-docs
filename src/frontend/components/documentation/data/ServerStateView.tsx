@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	stateBasicUsage,
@@ -9,19 +9,17 @@ import {
 } from '../../../data/documentation/dataDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -33,17 +31,22 @@ const tocItems: TocItem[] = [
 	{ href: '#state-vs-decorate', label: 'State vs Decorate' }
 ];
 
-const StateVsDecorateList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>.state()</strong>: Mutable primitives
-			like counters, flags, and configuration values
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>.decorate()</strong>: Non-primitive
-			objects like database connections, loggers, and service classes
-		</li>
-	</ul>
+const StateVsDecorateList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'Mutable primitives like counters, flags, and configuration values',
+				term: '.state()'
+			},
+			{
+				description:
+					'Non-primitive objects like database connections, loggers, and service classes',
+				term: '.decorate()'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const ServerStateView = ({
@@ -163,7 +166,7 @@ export const ServerStateView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<StateVsDecorateList />
+					<StateVsDecorateList themeSprings={themeSprings} />
 				</section>
 
 				<DocsNavigation

@@ -20,7 +20,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
-import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { Endpoint, EndpointTable } from '../../utils/EndpointTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -100,94 +100,126 @@ const postLifecycleSteps: StepFlowStep[] = [
 	}
 ];
 
-const methodRows: DocsTableCell[][] = [
-	[
-		{ code: 'initialize' },
-		'Negotiates the protocol version, advertises capabilities derived from the config, and returns serverInfo + instructions.'
-	],
-	[{ code: 'ping' }, 'Returns an empty result.'],
-	[
-		{ code: 'tools/list' },
-		'The tools visible to this caller (scope-gated tools filtered out), paginated with an opaque cursor.'
-	],
-	[
-		{ code: 'tools/call' },
-		'Runs one tool through beforeCall, the handler, and onCall.'
-	],
-	[
-		{ code: 'prompts/list' },
-		'The prompt definitions, paginated.',
-		'prompts configured'
-	],
-	[
-		{ code: 'prompts/get' },
-		'Builds one prompt as a single user text message.',
-		'prompts configured'
-	],
-	[
-		{ code: 'resources/list' },
-		'The resources visible to this caller, paginated.',
-		'resources configured'
-	],
-	[
-		{ code: 'resources/read' },
-		'Reads one resource by uri.',
-		'resources configured'
-	]
+const methodItems: DefinitionItem[] = [
+	{
+		description:
+			'Negotiates the protocol version, advertises capabilities derived from the config, and returns serverInfo + instructions.',
+		term: 'initialize'
+	},
+	{ description: 'Returns an empty result.', term: 'ping' },
+	{
+		description:
+			'The tools visible to this caller (scope-gated tools filtered out), paginated with an opaque cursor.',
+		term: 'tools/list'
+	},
+	{
+		description:
+			'Runs one tool through beforeCall, the handler, and onCall.',
+		term: 'tools/call'
+	},
+	{
+		badge: 'prompts configured',
+		description: 'The prompt definitions, paginated.',
+		term: 'prompts/list'
+	},
+	{
+		badge: 'prompts configured',
+		description: 'Builds one prompt as a single user text message.',
+		term: 'prompts/get'
+	},
+	{
+		badge: 'resources configured',
+		description: 'The resources visible to this caller, paginated.',
+		term: 'resources/list'
+	},
+	{
+		badge: 'resources configured',
+		description: 'Reads one resource by uri.',
+		term: 'resources/read'
+	}
 ];
 
-const bearerCheckRows: DocsTableCell[][] = [
-	[
-		'Bearer header present',
-		{ code: 'Missing bearer token', suffix: 'rejection reason' }
-	],
-	['Signature valid (via your verify)', { code: 'Invalid token' }],
-	[{ code: 'token_use === "access"' }, { code: 'Not an access token' }],
-	['Issuer matches', { code: 'Wrong issuer' }],
-	['Not expired', { code: 'Token expired' }],
-	[
-		'Holds requiredScope, when set',
-		{ code: 'Token lacks the <scope> scope' }
-	],
-	['Has a subject', { code: 'Token has no subject' }]
+const bearerCheckItems: DefinitionItem[] = [
+	{
+		badge: 'rejection reason',
+		description: 'Bearer header present',
+		term: 'Missing bearer token',
+		tone: 'error'
+	},
+	{
+		description: 'Signature valid (via your verify)',
+		term: 'Invalid token',
+		tone: 'error'
+	},
+	{
+		description: <code>token_use === "access"</code>,
+		term: 'Not an access token',
+		tone: 'error'
+	},
+	{ description: 'Issuer matches', term: 'Wrong issuer', tone: 'error' },
+	{ description: 'Not expired', term: 'Token expired', tone: 'error' },
+	{
+		description: 'Holds requiredScope, when set',
+		term: 'Token lacks the <scope> scope',
+		tone: 'error'
+	},
+	{
+		description: 'Has a subject',
+		term: 'Token has no subject',
+		tone: 'error'
+	}
 ];
 
-const toolFieldRows: DocsTableCell[][] = [
-	[
-		{ code: 'description' },
-		'What the tool does, shown to the model on tools/list.'
-	],
-	[{ code: 'inputSchema' }, 'A JSON Schema object for the arguments.'],
-	[
-		{ code: 'handler(args, context)' },
-		'Returns a bare string, an array of content blocks, or a full McpToolResult.'
-	],
-	[
-		{ code: 'annotations', suffix: 'optional' },
-		'MCP behaviour hints (readOnlyHint, destructiveHint, idempotentHint, openWorldHint, title), passed straight through to the client.'
-	],
-	[
-		{ code: 'outputSchema', suffix: 'optional' },
-		'JSON Schema for structuredContent, advertised on tools/list.'
-	],
-	[
-		{ code: 'scope', suffix: 'optional' },
-		'The tool is only listed and callable when the caller holds this scope. Fails closed.'
-	],
-	[
-		{ code: 'mayElicit', suffix: 'optional' },
-		'Marks a tool that may ask the user a question mid-call — it answers over SSE instead of a plain JSON body.'
-	]
+const toolFieldItems: DefinitionItem[] = [
+	{
+		description: 'What the tool does, shown to the model on tools/list.',
+		term: 'description'
+	},
+	{
+		description: 'A JSON Schema object for the arguments.',
+		term: 'inputSchema'
+	},
+	{
+		description:
+			'Returns a bare string, an array of content blocks, or a full McpToolResult.',
+		term: 'handler(args, context)'
+	},
+	{
+		badge: 'optional',
+		description:
+			'MCP behaviour hints (readOnlyHint, destructiveHint, idempotentHint, openWorldHint, title), passed straight through to the client.',
+		term: 'annotations'
+	},
+	{
+		badge: 'optional',
+		description:
+			'JSON Schema for structuredContent, advertised on tools/list.',
+		term: 'outputSchema'
+	},
+	{
+		badge: 'optional',
+		description:
+			'The tool is only listed and callable when the caller holds this scope. Fails closed.',
+		term: 'scope'
+	},
+	{
+		badge: 'optional',
+		description:
+			'Marks a tool that may ask the user a question mid-call — it answers over SSE instead of a plain JSON body.',
+		term: 'mayElicit'
+	}
 ];
 
-const contentBlockRows: DocsTableCell[][] = [
-	[{ code: 'text' }, { code: '{ text, type }' }],
-	[{ code: 'image' }, { code: '{ data, mimeType, type }' }],
-	[{ code: 'audio' }, { code: '{ data, mimeType, type }' }],
-	[
-		{ code: 'resource_link' },
-		{ code: '{ uri, type, name?, description?, mimeType? }' }
-	]
+const contentBlockItems: DefinitionItem[] = [
+	{ description: <code>{'{ text, type }'}</code>, term: 'text' },
+	{ description: <code>{'{ data, mimeType, type }'}</code>, term: 'image' },
+	{ description: <code>{'{ data, mimeType, type }'}</code>, term: 'audio' },
+	{
+		description: (
+			<code>{'{ uri, type, name?, description?, mimeType? }'}</code>
+		),
+		term: 'resource_link'
+	}
 ];
 
 export const McpEndpointsView = ({
@@ -312,9 +344,8 @@ export const McpEndpointsView = ({
 						first being preferred — a request for an unknown version
 						falls back to it. The dispatcher handles:
 					</p>
-					<DocsTable
-						columns={['Method', 'Behavior', 'Requires']}
-						rows={methodRows}
+					<DefinitionGrid
+						items={methodItems}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -362,9 +393,8 @@ export const McpEndpointsView = ({
 						<code>verify</code> function, and it layers the claim
 						checks every MCP endpoint needs:
 					</p>
-					<DocsTable
-						columns={['Check', 'Failure']}
-						rows={bearerCheckRows}
+					<DefinitionGrid
+						items={bearerCheckItems}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -395,9 +425,8 @@ export const McpEndpointsView = ({
 						<code>McpTool</code> entries built for that caller. Each
 						tool carries:
 					</p>
-					<DocsTable
-						columns={['Field', 'Meaning']}
-						rows={toolFieldRows}
+					<DefinitionGrid
+						items={toolFieldItems}
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
@@ -406,9 +435,8 @@ export const McpEndpointsView = ({
 						types, plus optional <code>structuredContent</code>{' '}
 						validated against the tool's <code>outputSchema</code>:
 					</p>
-					<DocsTable
-						columns={['Block', 'Shape']}
-						rows={contentBlockRows}
+					<DefinitionGrid
+						items={contentBlockItems}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus

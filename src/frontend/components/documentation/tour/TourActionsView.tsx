@@ -21,6 +21,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -68,52 +69,72 @@ const controllerApiRows: DocsTableCell[][] = [
 	]
 ];
 
-const builtinActionRows: DocsTableCell[][] = [
-	[
-		{ code: 'click' },
-		{ code: 'selector?' },
-		'Clicks the resolved element. Defaults to the step’s own target.'
-	],
-	[
-		{ code: 'scroll' },
-		{ code: 'selector?, block?' },
-		'Smooth scrollIntoView. block is "center" unless set to "start".'
-	],
-	[
-		{ code: 'wait' },
-		{ code: 'ms?' },
-		'Abortable sleep (default 600ms) — resolves early when the step changes or the tour stops.'
-	]
+const builtinActions: DefinitionItem[] = [
+	{
+		badge: 'selector?',
+		description:
+			'Clicks the resolved element. Defaults to the step’s own target.',
+		term: 'click'
+	},
+	{
+		badge: 'selector?, block?',
+		description:
+			'Smooth scrollIntoView. block is "center" unless set to "start".',
+		term: 'scroll'
+	},
+	{
+		badge: 'ms?',
+		description:
+			'Abortable sleep (default 600ms) — resolves early when the step changes or the tour stops.',
+		term: 'wait'
+	}
 ];
 
-const actionRefRows: DocsTableCell[][] = [
-	[
-		{ code: 'action' },
-		'Names a built-in ("click" | "wait" | "scroll") or a handler the host registered.'
-	],
-	[
-		{ code: 'args' },
-		'Plain-JSON scalars (string | number | boolean | null) passed to the handler.'
-	],
-	[{ code: 'delayMs' }, 'Wait this long (ms) before running this action.']
+const actionRefFields: DefinitionItem[] = [
+	{
+		description:
+			'Names a built-in ("click" | "wait" | "scroll") or a handler the host registered.',
+		term: 'action'
+	},
+	{
+		description:
+			'Plain-JSON scalars (string | number | boolean | null) passed to the handler.',
+		term: 'args'
+	},
+	{
+		description: 'Wait this long (ms) before running this action.',
+		term: 'delayMs'
+	}
 ];
 
-const handlerContextRows: DocsTableCell[][] = [
-	[{ code: 'step' }, 'The step being shown.'],
-	[
-		{ code: 'target' },
-		'The step’s resolved target element, or null for a centered / missing-target step.'
-	],
-	[{ code: 'args' }, 'The raw args from the serialized ref.'],
-	[{ code: 'index' }, 'The current step index.'],
-	[
-		{ code: 'signal' },
-		'An AbortSignal that fires when the step changes or the tour stops mid-run.'
-	],
-	[
-		{ code: 'next / back / stop' },
-		'Tour navigation — a handler can drive the tour itself, e.g. auto-advance when its demo finishes.'
-	]
+const handlerContextFields: DefinitionItem[] = [
+	{
+		description: 'The step being shown.',
+		term: 'step'
+	},
+	{
+		description:
+			'The step’s resolved target element, or null for a centered / missing-target step.',
+		term: 'target'
+	},
+	{
+		description: 'The raw args from the serialized ref.',
+		term: 'args'
+	},
+	{
+		description: 'The current step index.',
+		term: 'index'
+	},
+	{
+		description:
+			'An AbortSignal that fires when the step changes or the tour stops mid-run.',
+		term: 'signal'
+	},
+	{
+		description:
+			'Tour navigation — a handler can drive the tour itself, e.g. auto-advance when its demo finishes.',
+		term: 'next / back / stop'
+	}
 ];
 
 const stepLifecycle: StepFlowStep[] = [
@@ -148,19 +169,23 @@ const stepLifecycle: StepFlowStep[] = [
 	}
 ];
 
-const dataModeRows: DocsTableCell[][] = [
-	[
-		{ code: '"auto"', suffix: 'default' },
-		'The viewer’s real data when they have it — a member with sourced matches is toured on their literal matches — and the sample when they don’t.'
-	],
-	[
-		{ code: '"demo"' },
-		'Always the sample while the tour plays, even when real data exists.'
-	],
-	[
-		{ code: '"live"' },
-		'Always the real data, even mid-tour — the sample never shows.'
-	]
+const dataModes: DefinitionItem[] = [
+	{
+		badge: 'default',
+		description:
+			'The viewer’s real data when they have it — a member with sourced matches is toured on their literal matches — and the sample when they don’t.',
+		term: '"auto"'
+	},
+	{
+		description:
+			'Always the sample while the tour plays, even when real data exists.',
+		term: '"demo"'
+	},
+	{
+		description:
+			'Always the real data, even mid-tour — the sample never shows.',
+		term: '"live"'
+	}
 ];
 
 export const TourActionsView = ({
@@ -295,9 +320,8 @@ export const TourActionsView = ({
 						Each takes an optional <code>selector</code> and
 						defaults to the step's own target.
 					</p>
-					<DocsTable
-						columns={['Action', 'Args', 'Behavior']}
-						rows={builtinActionRows}
+					<DefinitionGrid
+						items={builtinActions}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus
@@ -310,9 +334,8 @@ export const TourActionsView = ({
 						Each entry in <code>onEnter</code> / <code>onExit</code>{' '}
 						is a <code>TourActionRef</code>:
 					</p>
-					<DocsTable
-						columns={['Field', 'Description']}
-						rows={actionRefRows}
+					<DefinitionGrid
+						items={actionRefFields}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -342,9 +365,8 @@ export const TourActionsView = ({
 						— enough to run a demo against the highlighted element
 						and even drive the tour itself:
 					</p>
-					<DocsTable
-						columns={['Field', 'Description']}
-						rows={handlerContextRows}
+					<DefinitionGrid
+						items={handlerContextFields}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus
@@ -439,9 +461,8 @@ export const TourActionsView = ({
 						serialized tutorial, and <code>useTourDemo</code>'s{' '}
 						<code>mode</code> getter wires it through:
 					</p>
-					<DocsTable
-						columns={['Mode', 'Resolution while the tour plays']}
-						rows={dataModeRows}
+					<DefinitionGrid
+						items={dataModes}
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>

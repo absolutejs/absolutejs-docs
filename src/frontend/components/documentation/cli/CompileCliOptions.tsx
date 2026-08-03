@@ -1,26 +1,44 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const CompileCliOptions = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>[entry]</strong> : Server entry file
-			(defaults to <code>src/backend/server.ts</code>)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--outdir</strong> : Build output
-			directory (defaults to <code>dist</code>)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--outfile</strong> : Compiled binary
-			path (defaults to <code>compiled-server</code>)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--config</strong>: Path to{' '}
-			<code>absolute.config.ts</code>
-		</li>
-	</ul>
+export const CompileCliOptions = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						Server entry file (defaults to{' '}
+						<code>src/backend/server.ts</code>)
+					</>
+				),
+				term: '[entry]'
+			},
+			{
+				description: (
+					<>
+						Build output directory (defaults to <code>dist</code>)
+					</>
+				),
+				term: '--outdir'
+			},
+			{
+				description: (
+					<>
+						Compiled binary path (defaults to{' '}
+						<code>compiled-server</code>)
+					</>
+				),
+				term: '--outfile'
+			},
+			{
+				description: (
+					<>
+						Path to <code>absolute.config.ts</code>
+					</>
+				),
+				term: '--config'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

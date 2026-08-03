@@ -24,11 +24,12 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
+import { StepFlow } from '../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { TypeSafetyFeatureCard } from './TypeSafetyFeatureCard';
-import { TypeSafetyFlowList } from './TypeSafetyFlowList';
 
 const tocItems: TocItem[] = [
 	{ href: '#how-it-works', label: 'How It Works' },
@@ -139,20 +140,20 @@ export const TypeSafetyView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<TypeSafetyFlowList
+					<DefinitionGrid
 						items={[
 							{
 								description:
-									' : the type you get back when querying rows',
-								label: '$inferSelect'
+									'the type you get back when querying rows',
+								term: '$inferSelect'
 							},
 							{
 								description:
-									' : the type required when inserting new rows (optional fields with defaults are made optional)',
-								label: '$inferInsert'
+									'the type required when inserting new rows (optional fields with defaults are made optional)',
+								term: '$inferInsert'
 							}
 						]}
-						style={{ marginTop: '1.5rem' }}
+						themeSprings={themeSprings}
 					/>
 				</section>
 
@@ -177,25 +178,25 @@ export const TypeSafetyView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<TypeSafetyFlowList
-						items={[
+					<StepFlow
+						steps={[
 							{
 								description:
-									': Drizzle infers types directly from your table definitions',
-								label: 'Schema → Types'
+									'Drizzle infers types directly from your table definitions',
+								title: 'Schema → Types'
 							},
 							{
 								description:
-									': Your inferred types flow into route handlers and props',
-								label: 'Types → Server'
+									'Your inferred types flow into route handlers and props',
+								title: 'Types → Server'
 							},
 							{
 								description:
-									': React receives correctly typed props on both server and client',
-								label: 'Props → Component'
+									'React receives correctly typed props on both server and client',
+								title: 'Props → Component'
 							}
 						]}
-						style={{ marginTop: '1.5rem' }}
+						themeSprings={themeSprings}
 					/>
 				</section>
 
@@ -229,25 +230,25 @@ export const TypeSafetyView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<TypeSafetyFlowList
-						items={[
+					<StepFlow
+						steps={[
 							{
 								description:
-									': Drizzle infers types directly from your table definitions',
-								label: 'Schema → Types'
+									'Drizzle infers types directly from your table definitions',
+								title: 'Schema → Types'
 							},
 							{
 								description:
-									': Your inferred types flow into route handlers and props',
-								label: 'Types → Server'
+									'Your inferred types flow into route handlers and props',
+								title: 'Types → Server'
 							},
 							{
 								description:
-									': Svelte receives correctly typed props on both server and client',
-								label: 'Props → Component'
+									'Svelte receives correctly typed props on both server and client',
+								title: 'Props → Component'
 							}
 						]}
-						style={{ marginTop: '1.5rem' }}
+						themeSprings={themeSprings}
 					/>
 				</section>
 
@@ -273,25 +274,25 @@ export const TypeSafetyView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<TypeSafetyFlowList
+					<DefinitionGrid
 						items={[
 							{
 								description:
-									': Props types are validated end-to-end',
-								label: 'Server to client'
+									'Props types are validated end-to-end',
+								term: 'Server to client'
 							},
 							{
 								description:
-									': Derived values maintain type safety',
-								label: 'Computed properties'
+									'Derived values maintain type safety',
+								term: 'Computed properties'
 							},
 							{
 								description:
-									': Vue Language Server validates template bindings',
-								label: 'Template type checking'
+									'Vue Language Server validates template bindings',
+								term: 'Template type checking'
 							}
 						]}
-						style={{ marginTop: '1.5rem' }}
+						themeSprings={themeSprings}
 					/>
 				</section>
 
@@ -334,24 +335,25 @@ export const TypeSafetyView = ({
 						reference a component's props without importing the type
 						definition directly.
 					</p>
-					<TypeSafetyFlowList
+					<DefinitionGrid
 						items={[
 							{
 								description:
-									' extracts props from a React component type. Works with function components and class components.',
-								label: <>ReactPropsOf{'<C>'}</>
+									'extracts props from a React component type. Works with function components and class components.',
+								term: 'ReactPropsOf<C>'
 							},
 							{
 								description:
-									' extracts props from a compiled Svelte component. Infers the exported prop types from the component module.',
-								label: <>SveltePropsOf{'<C>'}</>
+									'extracts props from a compiled Svelte component. Infers the exported prop types from the component module.',
+								term: 'SveltePropsOf<C>'
 							},
 							{
 								description:
-									' extracts props from a Vue component defined with defineProps. Works with both runtime and type-only prop declarations.',
-								label: <>VuePropsOf{'<C>'}</>
+									'extracts props from a Vue component defined with defineProps. Works with both runtime and type-only prop declarations.',
+								term: 'VuePropsOf<C>'
 							}
 						]}
+						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
 						These utility types are especially useful when building

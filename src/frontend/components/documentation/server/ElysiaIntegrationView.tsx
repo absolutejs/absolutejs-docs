@@ -4,8 +4,6 @@ import { DocsNavigation } from '../DocsNavigation';
 import { elysiaServer } from '../../../data/documentation/elysiaIntegrationDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
@@ -18,6 +16,7 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { ChecklistRows } from '../../utils/ChecklistRows';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -79,7 +78,7 @@ export const ElysiaIntegrationView = ({
 						plugins, define routes, validate data, and use lifecycle
 						hooks for cross-cutting behavior.
 					</p>
-					<ElysiaOverviewList />
+					<ElysiaOverviewList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -114,7 +113,7 @@ export const ElysiaIntegrationView = ({
 					>
 						Page Guide
 					</AnchorHeading>
-					<ElysiaPageGuideList />
+					<ElysiaPageGuideList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -126,23 +125,16 @@ export const ElysiaIntegrationView = ({
 					>
 						Integration Baseline
 					</AnchorHeading>
-					<ul style={listStyle}>
-						<li style={listItemStyle}>
-							Start from Elysia defaults, then add only required
-							plugins.
-						</li>
-						<li style={listItemStyle}>
-							Keep route-level validation next to handlers.
-						</li>
-						<li style={listItemStyle}>
-							Use plugin/group scope boundaries to avoid
-							cross-cutting side effects.
-						</li>
-						<li style={listItemStyle}>
-							Keep recurring jobs in the cron page and request
-							lifecycle concerns in middleware.
-						</li>
-					</ul>
+					<ChecklistRows
+						items={[
+							'Start from Elysia defaults, then add only required plugins.',
+							'Keep route-level validation next to handlers.',
+							'Use plugin/group scope boundaries to avoid cross-cutting side effects.',
+							'Keep recurring jobs in the cron page and request lifecycle concerns in middleware.'
+						]}
+						themeSprings={themeSprings}
+						tone="info"
+					/>
 					<p style={paragraphSpacedStyle}>
 						Reference:{' '}
 						<a

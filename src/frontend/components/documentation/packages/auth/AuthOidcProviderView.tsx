@@ -26,34 +26,163 @@ import {
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
 import { Callout } from '../../../utils/Callout';
-import { DocsTable, DocsTableCell } from '../../../utils/DocsTable';
+import { DefinitionGrid, DefinitionItem } from '../../../utils/DefinitionGrid';
 import { Endpoint, EndpointTable } from '../../../utils/EndpointTable';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
 
-const reauthRows: DocsTableCell[][] = [
-	[
-		{ code: 'prompt=login' },
-		'Ignore the active session, force a fresh login'
-	],
-	[
-		{ code: 'prompt=none' },
-		'Never show UI; return login_required if there is no session'
-	],
-	[
-		{ code: 'prompt=select_account' },
-		'Route to your account-chooser (account_selection_required)'
-	],
-	[
-		{ code: 'max_age=300' },
-		'If the session is older than 300s, re-authenticate'
-	],
-	[
-		{ code: 'id_token_hint=...' },
-		'Verify the active user matches; on mismatch return login_required'
-	]
+const reauthItems: DefinitionItem[] = [
+	{
+		description: 'Ignore the active session, force a fresh login',
+		term: 'prompt=login'
+	},
+	{
+		description:
+			'Never show UI; return login_required if there is no session',
+		term: 'prompt=none'
+	},
+	{
+		description:
+			'Route to your account-chooser (account_selection_required)',
+		term: 'prompt=select_account'
+	},
+	{
+		description: 'If the session is older than 300s, re-authenticate',
+		term: 'max_age=300'
+	},
+	{
+		description:
+			'Verify the active user matches; on mismatch return login_required',
+		term: 'id_token_hint=...'
+	}
+];
+
+const autoMountedEndpointItems: DefinitionItem[] = [
+	{
+		badge: 'GET',
+		description: 'code + PKCE',
+		term: '{oidcRoute}/authorize'
+	},
+	{
+		badge: 'POST',
+		description: 'with refresh rotation',
+		term: '{oidcRoute}/token'
+	},
+	{ badge: 'GET', description: '', term: '{oidcRoute}/jwks' },
+	{ badge: 'GET/POST', description: '', term: '{oidcRoute}/userinfo' },
+	{ badge: 'POST', description: '', term: '{oidcRoute}/introspect' },
+	{ badge: 'POST', description: '', term: '{oidcRoute}/revoke' },
+	{ badge: 'GET', description: '', term: '{oidcRoute}/end_session' },
+	{
+		badge: 'GET',
+		description: '',
+		term: '/.well-known/openid-configuration'
+	}
+];
+
+const optionalEndpointItems: DefinitionItem[] = [
+	{
+		badge: 'POST',
+		description: '',
+		term: '{oidcRoute}/device_authorization',
+		tone: 'neutral'
+	},
+	{
+		badge: 'POST',
+		description: '',
+		term: '{oidcRoute}/par',
+		tone: 'neutral'
+	},
+	{
+		badge: 'POST',
+		description: (
+			<>
+				+ <code>GET/PUT/DELETE {'{oidcRoute}'}/register/:id</code>
+			</>
+		),
+		term: '{oidcRoute}/register',
+		tone: 'neutral'
+	}
+];
+
+const introspectResponseItems: DefinitionItem[] = [
+	{
+		description: (
+			<>
+				Mirrors the JWT claims (<code>sub</code>, <code>scope</code>,{' '}
+				<code>aud</code>, <code>exp</code>, <code>token_use</code>, and{' '}
+				<code>cnf</code> for DPoP binding)
+			</>
+		),
+		term: 'Active token',
+		tone: 'success'
+	},
+	{
+		description: (
+			<>
+				Flips to <code>{'{ active: false }'}</code>
+			</>
+		),
+		term: 'Revoked token',
+		tone: 'error'
+	}
+];
+
+const deviceFlowSteps: StepFlowStep[] = [
+	{
+		actor: 'Device',
+		description: (
+			<>
+				Prints a short <code>user_code</code>
+			</>
+		),
+		title: 'Show a user code'
+	},
+	{ actor: 'User', title: 'Authorizes on a phone' },
+	{
+		actor: 'Package',
+		description: (
+			<>
+				<code>slow_down</code>, <code>authorization_pending</code>, and{' '}
+				<code>access_denied</code>
+			</>
+		),
+		title: 'Handles the polling endpoint'
+	},
+	{
+		actor: 'Your app',
+		description: (
+			<>
+				Your <code>/device</code> page calls it after the user signs in
+			</>
+		),
+		title: 'Calls approveDeviceCode'
+	}
+];
+
+const logoutSpecItems: DefinitionItem[] = [
+	{
+		description: (
+			<>
+				Lets RPs sign users out and bounce them to a registered{' '}
+				<code>post_logout_redirect_uri</code>
+			</>
+		),
+		term: 'OIDC RP-Initiated Logout 1.0'
+	},
+	{
+		description: (
+			<>
+				Pushes a signed <code>logout_token</code> to every other RP that
+				holds a session for the same <code>sid</code>, so one click logs
+				the user out of every connected app
+			</>
+		),
+		term: 'OIDC Back-Channel Logout 1.0'
+	}
 ];
 
 const introspectEndpoints: Endpoint[] = [
@@ -167,22 +296,20 @@ export const AuthOidcProviderView = ({
 					>
 						Endpoints
 					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>Mounted automatically:</p>
+					<DefinitionGrid
+						items={autoMountedEndpointItems}
+						themeSprings={themeSprings}
+					/>
 					<p style={paragraphSpacedStyle}>
-						Mounted automatically:{' '}
-						<code>GET {'{oidcRoute}'}/authorize</code> (code +
-						PKCE), <code>POST {'{oidcRoute}'}/token</code> (with
-						refresh rotation), <code>GET {'{oidcRoute}'}/jwks</code>
-						, <code>GET/POST {'{oidcRoute}'}/userinfo</code>,{' '}
-						<code>POST {'{oidcRoute}'}/introspect</code>,{' '}
-						<code>POST {'{oidcRoute}'}/revoke</code>,{' '}
-						<code>GET {'{oidcRoute}'}/end_session</code>, and{' '}
-						<code>GET /.well-known/openid-configuration</code>.
-						Optional endpoints opt in by configuring their store:{' '}
-						<code>POST {'{oidcRoute}'}/device_authorization</code>,{' '}
-						<code>POST {'{oidcRoute}'}/par</code>,{' '}
-						<code>POST {'{oidcRoute}'}/register</code> (+{' '}
-						<code>GET/PUT/DELETE {'{oidcRoute}'}/register/:id</code>
-						). Everything is self-hosted — you own the keys, with no
+						Optional endpoints opt in by configuring their store:
+					</p>
+					<DefinitionGrid
+						items={optionalEndpointItems}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Everything is self-hosted — you own the keys, with no
 						dependency on api.workos.com. Consent is yours via the{' '}
 						<code>getGrantedScopes</code> hook (auto-granted for
 						first-party clients).
@@ -201,15 +328,17 @@ export const AuthOidcProviderView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>getAccessTokenClaims</code> lets you add per-token
 						claims (email, name, org_id, tenant tier, …) to every
-						issued access token. Reserved keys (<code>iss</code>,{' '}
-						<code>sub</code>, <code>aud</code>, <code>exp</code>,{' '}
-						<code>iat</code>, <code>jti</code>,{' '}
-						<code>client_id</code>, <code>scope</code>,{' '}
-						<code>token_use</code>, <code>act</code>,{' '}
-						<code>cnf</code>) are stripped before merge, so the hook
-						can&apos;t rewrite the token&apos;s identity, lifetime,
-						or DPoP binding.
+						issued access token.
 					</p>
+					<Callout themeSprings={themeSprings} variant="warning">
+						Reserved keys (<code>iss</code>, <code>sub</code>,{' '}
+						<code>aud</code>, <code>exp</code>, <code>iat</code>,{' '}
+						<code>jti</code>, <code>client_id</code>,{' '}
+						<code>scope</code>, <code>token_use</code>,{' '}
+						<code>act</code>, <code>cnf</code>) are stripped before
+						merge, so the hook can&apos;t rewrite the token&apos;s
+						identity, lifetime, or DPoP binding.
+					</Callout>
 					<PrismPlus
 						codeString={oidcClaims}
 						language="typescript"
@@ -264,9 +393,8 @@ export const AuthOidcProviderView = ({
 						and bounces to <code>loginUrl</code> when needed,
 						preserving the original <code>return_to</code>.
 					</p>
-					<DocsTable
-						columns={['Parameter', 'Behavior']}
-						rows={reauthRows}
+					<DefinitionGrid
+						items={reauthItems}
 						themeSprings={themeSprings}
 					/>
 					<Callout themeSprings={themeSprings} variant="note">
@@ -287,14 +415,13 @@ export const AuthOidcProviderView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Resource servers ask the AS whether a token is still
-						live and who it belongs to. Active responses mirror the
-						JWT claims (<code>sub</code>, <code>scope</code>,{' '}
-						<code>aud</code>, <code>exp</code>,{' '}
-						<code>token_use</code>, and <code>cnf</code> for DPoP
-						binding); revoked tokens flip to{' '}
-						<code>{'{ active: false }'}</code>. Required by most
-						enterprise procurement reviews.
+						live and who it belongs to. Required by most enterprise
+						procurement reviews.
 					</p>
+					<DefinitionGrid
+						items={introspectResponseItems}
+						themeSprings={themeSprings}
+					/>
 					<EndpointTable
 						endpoints={introspectEndpoints}
 						themeSprings={themeSprings}
@@ -312,11 +439,13 @@ export const AuthOidcProviderView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Clients voluntarily kill a refresh token — &quot;Sign
-						out of this device&quot;. The spec mandates a 200
-						whether the token existed or not (no enumeration leak);
-						revoking a refresh token cascades to its derived access
-						tokens at the introspect endpoint.
+						out of this device&quot;.
 					</p>
+					<Callout themeSprings={themeSprings} variant="note">
+						The spec mandates a 200 whether the token existed or not
+						(no enumeration leak); revoking a refresh token cascades
+						to its derived access tokens at the introspect endpoint.
+					</Callout>
 					<EndpointTable
 						endpoints={revokeEndpoints}
 						themeSprings={themeSprings}
@@ -333,15 +462,12 @@ export const AuthOidcProviderView = ({
 						Device Authorization Grant (RFC 8628)
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Sign-in for TVs, CLIs, and IoT — the device prints a
-						short
-						<code>user_code</code> and the user authorizes on a
-						phone. The package handles <code>slow_down</code>,{' '}
-						<code>authorization_pending</code>, and{' '}
-						<code>access_denied</code> at the polling endpoint; your
-						<code>/device</code> page calls{' '}
-						<code>approveDeviceCode</code> after the user signs in.
+						Sign-in for TVs, CLIs, and IoT.
 					</p>
+					<StepFlow
+						steps={deviceFlowSteps}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={oidcDeviceFlow}
 						language="typescript"
@@ -462,17 +588,13 @@ export const AuthOidcProviderView = ({
 					>
 						Logout (RP-Initiated + Back-Channel)
 					</AnchorHeading>
+					<DefinitionGrid
+						items={logoutSpecItems}
+						themeSprings={themeSprings}
+					/>
 					<p style={paragraphSpacedStyle}>
-						<strong>OIDC RP-Initiated Logout 1.0</strong> lets RPs
-						sign users out and bounce them to a registered{' '}
-						<code>post_logout_redirect_uri</code>.{' '}
-						<strong>OIDC Back-Channel Logout 1.0</strong> pushes a
-						signed
-						<code>logout_token</code> to every other RP that holds a
-						session for the same <code>sid</code>, so one click logs
-						the user out of every connected app. Delivery uses
-						Standard Webhooks signing + automatic retries; failures
-						persist for manual replay.
+						Delivery uses Standard Webhooks signing + automatic
+						retries; failures persist for manual replay.
 					</p>
 					<PrismPlus
 						codeString={oidcLogout}

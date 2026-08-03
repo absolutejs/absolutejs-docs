@@ -92,7 +92,7 @@ export const IslandsView = ({
 						while selectively embedding islands from other
 						frameworks.
 					</p>
-					<IslandsOverviewList />
+					<IslandsOverviewList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -161,7 +161,7 @@ export const IslandsView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<IslandsLooseVsTypedList />
+					<IslandsLooseVsTypedList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -219,7 +219,7 @@ export const IslandsView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<IslandsHydrationModesList />
+					<IslandsHydrationModesList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

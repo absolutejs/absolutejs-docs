@@ -20,7 +20,7 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
 import { ComparisonRow, ComparisonTable } from '../../utils/ComparisonTable';
-import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { StepFlow, StepFlowStep } from '../../utils/StepFlow';
@@ -70,41 +70,55 @@ const surfaceRows: ComparisonRow[] = [
 	}
 ];
 
-const checklistItemRows: DocsTableCell[][] = [
-	[{ code: 'id' }, 'Identity of the task — completions persist against it.'],
-	[
-		{ code: 'title / description?' },
-		'The copy the host renders in the panel row.'
-	],
-	[
-		{ code: 'tutorialSlug' },
-		'A tutorial this task launches — completing that tutorial (via completeForTutorial) checks the task off.'
-	],
-	[{ code: 'href' }, 'Or a plain deep link the host navigates to.']
+const checklistItemFields: DefinitionItem[] = [
+	{
+		description: 'Identity of the task — completions persist against it.',
+		term: 'id'
+	},
+	{
+		description: 'The copy the host renders in the panel row.',
+		term: 'title / description?'
+	},
+	{
+		description:
+			'A tutorial this task launches — completing that tutorial (via completeForTutorial) checks the task off.',
+		term: 'tutorialSlug'
+	},
+	{
+		description: 'Or a plain deep link the host navigates to.',
+		term: 'href'
+	}
 ];
 
-const checklistApiRows: DocsTableCell[][] = [
-	[
-		{ code: 'items' },
-		'Computed [{ ...item, done }] — the panel maps straight over it.'
-	],
-	[
-		{ code: 'progress' },
-		'{ done, total, percent } — percent is rounded, and 0 for an empty list. The progress bar comes for free.'
-	],
-	[
-		{ code: 'complete / uncomplete / isDone' },
-		'Manual task management by item id.'
-	],
-	[
-		{ code: 'completeForTutorial(slug)' },
-		'Checks off every task tied to that tutorial — wire it to the tour_completed funnel event.'
-	],
-	[
-		{ code: 'dismissed / dismiss() / restore()' },
-		'Dismissal persists (an ISO timestamp) until restored — a closed panel stays closed across sessions.'
-	],
-	[{ code: 'reset()' }, 'Wipes completions AND the dismissal.']
+const checklistApiMembers: DefinitionItem[] = [
+	{
+		description:
+			'Computed [{ ...item, done }] — the panel maps straight over it.',
+		term: 'items'
+	},
+	{
+		description:
+			'{ done, total, percent } — percent is rounded, and 0 for an empty list. The progress bar comes for free.',
+		term: 'progress'
+	},
+	{
+		description: 'Manual task management by item id.',
+		term: 'complete / uncomplete / isDone'
+	},
+	{
+		description:
+			'Checks off every task tied to that tutorial — wire it to the tour_completed funnel event.',
+		term: 'completeForTutorial(slug)'
+	},
+	{
+		description:
+			'Dismissal persists (an ISO timestamp) until restored — a closed panel stays closed across sessions.',
+		term: 'dismissed / dismiss() / restore()'
+	},
+	{
+		description: 'Wipes completions AND the dismissal.',
+		term: 'reset()'
+	}
 ];
 
 const activationLoop: StepFlowStep[] = [
@@ -142,128 +156,166 @@ const activationLoop: StepFlowStep[] = [
 	}
 ];
 
-const hotspotFieldRows: DocsTableCell[][] = [
-	[
-		{ code: 'id' },
-		'Identity of the hotspot — dismissals persist against it.'
-	],
-	[{ code: 'target' }, 'CSS selector for the element the beacon rides.'],
-	[{ code: 'title / body' }, 'The copy of the explainer card.'],
-	[
-		{ code: 'placement', suffix: 'default "bottom"' },
-		'Preferred card side. bottom flips to top when the viewport runs out of room, and the card clamps on screen.'
-	],
-	[{ code: 'media' }, 'Optional image or video shown in the card.'],
-	[
-		{ code: 'once' },
-		'Hide the beacon permanently once the viewer has opened it.'
-	]
+const hotspotFields: DefinitionItem[] = [
+	{
+		description: 'Identity of the hotspot — dismissals persist against it.',
+		term: 'id'
+	},
+	{
+		description: 'CSS selector for the element the beacon rides.',
+		term: 'target'
+	},
+	{
+		description: 'The copy of the explainer card.',
+		term: 'title / body'
+	},
+	{
+		badge: 'default "bottom"',
+		description:
+			'Preferred card side. bottom flips to top when the viewport runs out of room, and the card clamps on screen.',
+		term: 'placement'
+	},
+	{
+		description: 'Optional image or video shown in the card.',
+		term: 'media'
+	},
+	{
+		description:
+			'Hide the beacon permanently once the viewer has opened it.',
+		term: 'once'
+	}
 ];
 
-const hotspotApiRows: DocsTableCell[][] = [
-	[
-		{ code: 'beacons' },
-		'One { hotspot, style } per visible target. Elements that vanish (page changed, panel closed) simply drop out — beacons follow the DOM.'
-	],
-	[
-		{ code: 'card' },
-		'{ hotspot, style } for the open explainer, or null — its position is clamped to the viewport.'
-	],
-	[
-		{ code: 'open(id) / openId' },
-		'Open a hotspot’s card; openId is the currently open id.'
-	],
-	[
-		{ code: 'close()' },
-		'Close the card — and permanently dismiss the hotspot when it is marked once.'
-	],
-	[
-		{ code: 'dismiss(id)' },
-		'Persist a dismissal (localStorage) and close the card if it is open.'
-	],
-	[{ code: 'restoreAll()' }, 'Clear every persisted dismissal.']
+const hotspotApiMembers: DefinitionItem[] = [
+	{
+		description:
+			'One { hotspot, style } per visible target. Elements that vanish (page changed, panel closed) simply drop out — beacons follow the DOM.',
+		term: 'beacons'
+	},
+	{
+		description:
+			'{ hotspot, style } for the open explainer, or null — its position is clamped to the viewport.',
+		term: 'card'
+	},
+	{
+		description: 'Open a hotspot’s card; openId is the currently open id.',
+		term: 'open(id) / openId'
+	},
+	{
+		description:
+			'Close the card — and permanently dismiss the hotspot when it is marked once.',
+		term: 'close()'
+	},
+	{
+		description:
+			'Persist a dismissal (localStorage) and close the card if it is open.',
+		term: 'dismiss(id)'
+	},
+	{
+		description: 'Clear every persisted dismissal.',
+		term: 'restoreAll()'
+	}
 ];
 
-const spotlightOptionRows: DocsTableCell[][] = [
-	[
-		{ code: 'controller' },
-		'The shared switch from useTourController — the overlay consumes what start() flips.'
-	],
-	[
-		{ code: 'steps' },
-		'Getter for the ordered steps. Swapped under a running tour (an async tutorial fetch), the engine re-positions against the new list.'
-	],
-	[
-		{ code: 'onClose' },
-		'Called when the viewer finishes the last step or skips.'
-	],
-	[
-		{ code: 'actions / conditions' },
-		'Registries that resolve the steps’ serialized action and condition names. Default to the shared keyed singletons.'
-	],
-	[
-		{ code: 'mobileQuery', suffix: 'default "(max-width: 640px)"' },
-		'Below this query, steps’ mobile blocks win — target, placement, copy, or skip.'
-	],
-	[
-		{ code: 'onEvent / tutorialSlug' },
-		'The funnel-event sink and the tutorial identity stamped on every event.'
-	],
-	[
-		{ code: 'ready' },
-		'Hold positioning (and navigation!) until the host has resolved WHICH steps to play — the engine re-locates when it flips true.'
-	],
-	[
-		{ code: 'theme' },
-		'Per-tutorial TourTheme, exposed to the host as CSS custom properties via themeVars.'
-	]
+const spotlightOptions: DefinitionItem[] = [
+	{
+		description:
+			'The shared switch from useTourController — the overlay consumes what start() flips.',
+		term: 'controller'
+	},
+	{
+		description:
+			'Getter for the ordered steps. Swapped under a running tour (an async tutorial fetch), the engine re-positions against the new list.',
+		term: 'steps'
+	},
+	{
+		description: 'Called when the viewer finishes the last step or skips.',
+		term: 'onClose'
+	},
+	{
+		description:
+			'Registries that resolve the steps’ serialized action and condition names. Default to the shared keyed singletons.',
+		term: 'actions / conditions'
+	},
+	{
+		badge: 'default "(max-width: 640px)"',
+		description:
+			'Below this query, steps’ mobile blocks win — target, placement, copy, or skip.',
+		term: 'mobileQuery'
+	},
+	{
+		description:
+			'The funnel-event sink and the tutorial identity stamped on every event.',
+		term: 'onEvent / tutorialSlug'
+	},
+	{
+		description:
+			'Hold positioning (and navigation!) until the host has resolved WHICH steps to play — the engine re-locates when it flips true.',
+		term: 'ready'
+	},
+	{
+		description:
+			'Per-tutorial TourTheme, exposed to the host as CSS custom properties via themeVars.',
+		term: 'theme'
+	}
 ];
 
-const overlaySurfaceRows: DocsTableCell[][] = [
-	[
-		{ code: 'active / step / index / stepCount' },
-		'Where the viewer is. step is the resolved current step, mobile overrides already applied.'
-	],
-	[
-		{ code: 'isFirst / isLast' },
-		'The edges — hide Back on the first step, relabel Next to "Done" on the last.'
-	],
-	[
-		{ code: 'isCentered' },
-		'True when there is no target rect — welcome and closing steps, and steps whose target went missing, render as a centered card.'
-	],
-	[
-		{ code: 'next / back / skip' },
-		'Navigation. skip(reason) emits tour_skipped — pass "escape"-style strings; non-strings coerce to "skip".'
-	],
-	[
-		{ code: 'runCta()' },
-		'Runs the step’s cta action refs through the registry, then advances unless advance: false.'
-	],
-	[
-		{ code: 'spotlightStyle' },
-		'Position and size for the highlight ring, honoring the step’s spotlight padding, radius, and shape.'
-	],
-	[
-		{ code: 'tooltipStyle / tooltipEl' },
-		'The card position, computed from the card’s MEASURED size — bind ref="tooltipEl" so clamping never works from a guess.'
-	],
-	[
-		{ code: 'blockers' },
-		'The click-blocking layers: one full-screen rect, or four bands around the target when spotlight.allowInteraction keeps the element clickable.'
-	],
-	[
-		{ code: 'showBeacon / beaconStyle' },
-		'The pulsing hint dot for beacon: true steps — a lighter touch than the full spotlight.'
-	],
-	[
-		{ code: 'cardAnimationStyle' },
-		'Entrance animation per the step’s transition — re-key the card per step so it replays.'
-	],
-	[
-		{ code: 'themeVars / isMobile' },
-		'CSS custom properties from the tutorial theme, and whether the mobile query currently matches.'
-	]
+const overlaySurfaceMembers: DefinitionItem[] = [
+	{
+		description:
+			'Where the viewer is. step is the resolved current step, mobile overrides already applied.',
+		term: 'active / step / index / stepCount'
+	},
+	{
+		description:
+			'The edges — hide Back on the first step, relabel Next to "Done" on the last.',
+		term: 'isFirst / isLast'
+	},
+	{
+		description:
+			'True when there is no target rect — welcome and closing steps, and steps whose target went missing, render as a centered card.',
+		term: 'isCentered'
+	},
+	{
+		description:
+			'Navigation. skip(reason) emits tour_skipped — pass "escape"-style strings; non-strings coerce to "skip".',
+		term: 'next / back / skip'
+	},
+	{
+		description:
+			'Runs the step’s cta action refs through the registry, then advances unless advance: false.',
+		term: 'runCta()'
+	},
+	{
+		description:
+			'Position and size for the highlight ring, honoring the step’s spotlight padding, radius, and shape.',
+		term: 'spotlightStyle'
+	},
+	{
+		description:
+			'The card position, computed from the card’s MEASURED size — bind ref="tooltipEl" so clamping never works from a guess.',
+		term: 'tooltipStyle / tooltipEl'
+	},
+	{
+		description:
+			'The click-blocking layers: one full-screen rect, or four bands around the target when spotlight.allowInteraction keeps the element clickable.',
+		term: 'blockers'
+	},
+	{
+		description:
+			'The pulsing hint dot for beacon: true steps — a lighter touch than the full spotlight.',
+		term: 'showBeacon / beaconStyle'
+	},
+	{
+		description:
+			'Entrance animation per the step’s transition — re-key the card per step so it replays.',
+		term: 'cardAnimationStyle'
+	},
+	{
+		description:
+			'CSS custom properties from the tutorial theme, and whether the mobile query currently matches.',
+		term: 'themeVars / isMobile'
+	}
 ];
 
 export const TourChecklistView = ({
@@ -357,9 +409,8 @@ export const TourChecklistView = ({
 					<p style={paragraphSpacedStyle}>
 						Each <code>TourChecklistItem</code> is plain data:
 					</p>
-					<DocsTable
-						columns={['Field', 'Description']}
-						rows={checklistItemRows}
+					<DefinitionGrid
+						items={checklistItemFields}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -388,9 +439,8 @@ export const TourChecklistView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<DocsTable
-						columns={['Member', 'Description']}
-						rows={checklistApiRows}
+					<DefinitionGrid
+						items={checklistApiMembers}
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
@@ -426,9 +476,8 @@ export const TourChecklistView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<DocsTable
-						columns={['Field', 'Description']}
-						rows={hotspotFieldRows}
+					<DefinitionGrid
+						items={hotspotFields}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -459,9 +508,8 @@ export const TourChecklistView = ({
 						visible box (a collapsed drawer, a hidden panel) is
 						skipped rather than beaconed at 0×0.
 					</p>
-					<DocsTable
-						columns={['Member', 'Description']}
-						rows={hotspotApiRows}
+					<DefinitionGrid
+						items={hotspotApiMembers}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -501,9 +549,8 @@ export const TourChecklistView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<DocsTable
-						columns={['Option', 'Description']}
-						rows={spotlightOptionRows}
+					<DefinitionGrid
+						items={spotlightOptions}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -538,9 +585,8 @@ export const TourChecklistView = ({
 						target that collapses mid-step degrades to the centered
 						card instead of a 0×0 spotlight.
 					</p>
-					<DocsTable
-						columns={['Member', 'Description']}
-						rows={overlaySurfaceRows}
+					<DefinitionGrid
+						items={overlaySurfaceMembers}
 						themeSprings={themeSprings}
 					/>
 				</section>

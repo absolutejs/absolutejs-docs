@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
@@ -15,19 +14,17 @@ import {
 } from '../../../data/documentation/buildManifestDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { BuildPipelineDiagram } from '../../diagrams/BuildPipelineDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -43,23 +40,6 @@ const tocItems: TocItem[] = [
 	{ href: '#build-options', label: 'Build Options' },
 	{ href: '#cli', label: 'CLI Commands' }
 ];
-
-type BuildManifestListProps = {
-	items: Array<{
-		label: ReactNode;
-		text: string;
-	}>;
-};
-
-const BuildManifestList = ({ items }: BuildManifestListProps) => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		{items.map((item, index) => (
-			<li key={index} style={listItemStyle}>
-				{item.label}: {item.text}
-			</li>
-		))}
-	</ul>
-);
 
 export const BuildManifestView = ({
 	currentPageId,
@@ -139,25 +119,20 @@ export const BuildManifestView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<BuildManifestList
+					<DefinitionGrid
 						items={[
 							{
-								label: (
-									<strong style={strongStyle}>
-										absolutejs
-									</strong>
-								),
-								text: 'An Elysia plugin that adds HMR routes in development'
+								description:
+									'An Elysia plugin that adds HMR routes in development',
+								term: 'absolutejs'
 							},
 							{
-								label: (
-									<strong style={strongStyle}>
-										manifest
-									</strong>
-								),
-								text: 'Maps entry point names to their bundled asset paths'
+								description:
+									'Maps entry point names to their bundled asset paths',
+								term: 'manifest'
 							}
 						]}
+						themeSprings={themeSprings}
 					/>
 				</section>
 
@@ -210,25 +185,20 @@ export const BuildManifestView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<BuildManifestList
+					<DefinitionGrid
 						items={[
 							{
-								label: (
-									<strong style={strongStyle}>
-										Entry point names
-									</strong>
-								),
-								text: 'Derived from your component file names (e.g., Home.tsx -> HomeIndex)'
+								description:
+									'Derived from your component file names (e.g., Home.tsx -> HomeIndex)',
+								term: 'Entry point names'
 							},
 							{
-								label: (
-									<strong style={strongStyle}>
-										Hashed paths
-									</strong>
-								),
-								text: 'Include content hashes for cache busting'
+								description:
+									'Include content hashes for cache busting',
+								term: 'Hashed paths'
 							}
 						]}
+						themeSprings={themeSprings}
 					/>
 				</section>
 

@@ -7,13 +7,25 @@ import {
 } from '../../../../data/authDocsCode';
 import {
 	sectionStyle,
-	paragraphSpacedStyle,
-	listStyle,
-	listItemStyle
+	paragraphSpacedStyle
 } from '../../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
+
+const authorizationRouteSteps: StepFlowStep[] = [
+	{ title: 'Generating state + PKCE (if required)' },
+	{ title: 'Storing the provider name' },
+	{ title: 'Storing the origin URL' },
+	{ title: "Building and redirecting to the provider's authorization URL" }
+];
+
+const signOutRouteSteps: StepFlowStep[] = [
+	{ title: 'Runs your onSignOut hook (if provided)' },
+	{ title: 'Deletes the user session' },
+	{ title: 'Clears authentication cookies' }
+];
 
 export const AuthFlowSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
@@ -43,14 +55,7 @@ export const AuthFlowSection = ({ themeSprings }: ThemeProps) => (
 		<p style={paragraphSpacedStyle}>
 			This triggers the built-in authorization route, which handles:
 		</p>
-		<ul style={listStyle}>
-			<li style={listItemStyle}>Generating state + PKCE (if required)</li>
-			<li style={listItemStyle}>Storing the provider name</li>
-			<li style={listItemStyle}>Storing the origin URL</li>
-			<li style={listItemStyle}>
-				Building and redirecting to the provider's authorization URL
-			</li>
-		</ul>
+		<StepFlow steps={authorizationRouteSteps} themeSprings={themeSprings} />
 		<animated.h3 style={gradientHeadingStyle(themeSprings, true)}>
 			Check whether the user is logged in
 		</animated.h3>
@@ -72,12 +77,6 @@ export const AuthFlowSection = ({ themeSprings }: ThemeProps) => (
 		<p style={paragraphSpacedStyle}>
 			This calls the built-in sign-out route, which:
 		</p>
-		<ul style={listStyle}>
-			<li style={listItemStyle}>
-				Runs your onSignOut hook (if provided)
-			</li>
-			<li style={listItemStyle}>Deletes the user session</li>
-			<li style={listItemStyle}>Clears authentication cookies</li>
-		</ul>
+		<StepFlow steps={signOutRouteSteps} themeSprings={themeSprings} />
 	</section>
 );

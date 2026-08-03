@@ -24,6 +24,7 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
 import { ComparisonTable, ComparisonRow } from '../../utils/ComparisonTable';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -142,49 +143,71 @@ const runnerOptionRows: DocsTableCell[][] = [
 	]
 ];
 
-const stepBuilderRows: DocsTableCell[][] = [
-	[
-		{ code: 'signIn(profileId)' },
-		'Run the named credential profile through the auth driver.'
-	],
-	[{ code: 'goto(url)' }, 'Navigate the page.'],
-	[{ code: 'click(selector)' }, 'Click an element.'],
-	[{ code: 'fill(selector, value)' }, 'Set an input value instantly.'],
-	[{ code: 'press(selector, key)' }, 'Press a key in an element.'],
-	[
-		{ code: 'waitFor(target)' },
-		'Wait for a selector to appear, or sleep for a number of ms.'
-	],
-	[
-		{ code: 'screenshot(name?)' },
-		'Capture the page; the PNG becomes a screenshot artifact.'
-	],
-	[
-		{ code: 'narrate(input)' },
-		'Speak a line — a string or { text, voice?, emotion? }.'
-	],
-	[
-		{ code: 'spotlight / circle / highlight' },
-		'Draw a presenter callout over the UI (see Annotations).'
-	],
-	[{ code: 'clearAnnotations()' }, 'Remove the current overlay.'],
-	[
-		{ code: 'openApp / focusApp' },
-		'Open or focus a native app via the desktop driver.'
-	],
-	[
-		{ code: 'hotkey(keys) / typeText(text)' },
-		'Send OS-level keystrokes or type text into the focused app.'
-	],
-	[{ code: 'wait(ms)' }, 'Pause the run.'],
-	[
-		{ code: 'markRecording(label)' },
-		'Drop a chapter marker on recorders that support mark().'
-	],
-	[
-		{ code: '{ run: (context) => ... }' },
-		'Escape hatch — arbitrary logic with the full DemoContext.'
-	]
+const stepBuilders: DefinitionItem[] = [
+	{
+		description:
+			'Run the named credential profile through the auth driver.',
+		term: 'signIn(profileId)'
+	},
+	{
+		description: 'Navigate the page.',
+		term: 'goto(url)'
+	},
+	{
+		description: 'Click an element.',
+		term: 'click(selector)'
+	},
+	{
+		description: 'Set an input value instantly.',
+		term: 'fill(selector, value)'
+	},
+	{
+		description: 'Press a key in an element.',
+		term: 'press(selector, key)'
+	},
+	{
+		description:
+			'Wait for a selector to appear, or sleep for a number of ms.',
+		term: 'waitFor(target)'
+	},
+	{
+		description: 'Capture the page; the PNG becomes a screenshot artifact.',
+		term: 'screenshot(name?)'
+	},
+	{
+		description: 'Speak a line — a string or { text, voice?, emotion? }.',
+		term: 'narrate(input)'
+	},
+	{
+		description: 'Draw a presenter callout over the UI (see Annotations).',
+		term: 'spotlight / circle / highlight'
+	},
+	{
+		description: 'Remove the current overlay.',
+		term: 'clearAnnotations()'
+	},
+	{
+		description: 'Open or focus a native app via the desktop driver.',
+		term: 'openApp / focusApp'
+	},
+	{
+		description:
+			'Send OS-level keystrokes or type text into the focused app.',
+		term: 'hotkey(keys) / typeText(text)'
+	},
+	{
+		description: 'Pause the run.',
+		term: 'wait(ms)'
+	},
+	{
+		description: 'Drop a chapter marker on recorders that support mark().',
+		term: 'markRecording(label)'
+	},
+	{
+		description:
+			'Escape hatch — arbitrary logic with the full DemoContext.',
+		term: '{ run: (context) => ... }'
+	}
 ];
 
 const profileKindRows: ComparisonRow[] = [
@@ -228,39 +251,58 @@ const profileKindRows: ComparisonRow[] = [
 	}
 ];
 
-const annotationFieldRows: DocsTableCell[][] = [
-	[
-		{ code: 'type' },
-		'"spotlight" dims the page around the target; "circle" rings it; "highlight" borders it; "clear" removes the overlay.'
-	],
-	[
-		{ code: 'selector' },
-		'CSS selector to anchor on — or use x / y / width / height for an explicit rect.'
-	],
-	[{ code: 'label' }, 'Presenter caption rendered above the target.'],
-	[{ code: 'color' }, 'Accent color; defaults to #ff3b30.'],
-	[
-		{ code: 'durationMs' },
-		'Auto-clear after this many ms; omit to keep the callout up until the next one.'
-	]
+const annotationFields: DefinitionItem[] = [
+	{
+		description:
+			'"spotlight" dims the page around the target; "circle" rings it; "highlight" borders it; "clear" removes the overlay.',
+		term: 'type'
+	},
+	{
+		description:
+			'CSS selector to anchor on — or use x / y / width / height for an explicit rect.',
+		term: 'selector'
+	},
+	{
+		description: 'Presenter caption rendered above the target.',
+		term: 'label'
+	},
+	{
+		description: 'Accent color; defaults to #ff3b30.',
+		term: 'color'
+	},
+	{
+		description:
+			'Auto-clear after this many ms; omit to keep the callout up until the next one.',
+		term: 'durationMs'
+	}
 ];
 
-const desktopCapabilityRows: DocsTableCell[][] = [
-	[
-		{ code: 'open(target)' },
-		'Launch an app. Targets are a name string or { name, bundleId, executable, windowTitle }.'
-	],
-	[{ code: 'focus(target)' }, 'Bring an app’s window to the front.'],
-	[
-		{ code: 'hotkey(...keys)' },
-		'Send a key chord (modifiers first, key last).'
-	],
-	[{ code: 'typeText(text)' }, 'Type text into the focused app.'],
-	[{ code: 'click?(x, y)' }, 'Optional — click at screen coordinates.'],
-	[
-		{ code: 'waitForWindow?(target, timeoutMs?)' },
-		'Optional — block until a window exists.'
-	]
+const desktopCapabilities: DefinitionItem[] = [
+	{
+		description:
+			'Launch an app. Targets are a name string or { name, bundleId, executable, windowTitle }.',
+		term: 'open(target)'
+	},
+	{
+		description: 'Bring an app’s window to the front.',
+		term: 'focus(target)'
+	},
+	{
+		description: 'Send a key chord (modifiers first, key last).',
+		term: 'hotkey(...keys)'
+	},
+	{
+		description: 'Type text into the focused app.',
+		term: 'typeText(text)'
+	},
+	{
+		description: 'Optional — click at screen coordinates.',
+		term: 'click?(x, y)'
+	},
+	{
+		description: 'Optional — block until a window exists.',
+		term: 'waitForWindow?(target, timeoutMs?)'
+	}
 ];
 
 export const DemoBrowserView = ({
@@ -399,9 +441,8 @@ export const DemoBrowserView = ({
 						<code>{'{ id?, name? }'}</code> options object that
 						labels the step in the event log and timeline.
 					</p>
-					<DocsTable
-						columns={['Builder', 'Step']}
-						rows={stepBuilderRows}
+					<DefinitionGrid
+						items={stepBuilders}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus
@@ -489,9 +530,8 @@ export const DemoBrowserView = ({
 						<code>DemoAnnotationDriver</code> with a single{' '}
 						<code>show()</code> method.
 					</p>
-					<DocsTable
-						columns={['Field', 'Meaning']}
-						rows={annotationFieldRows}
+					<DefinitionGrid
+						items={annotationFields}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus
@@ -523,9 +563,8 @@ export const DemoBrowserView = ({
 						<code>xdotool</code>, <code>wmctrl</code>, PowerShell,
 						or a UIA bridge.
 					</p>
-					<DocsTable
-						columns={['Capability', 'Description']}
-						rows={desktopCapabilityRows}
+					<DefinitionGrid
+						items={desktopCapabilities}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus

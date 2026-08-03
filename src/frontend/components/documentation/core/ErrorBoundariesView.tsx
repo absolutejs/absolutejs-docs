@@ -93,7 +93,9 @@ export const ErrorBoundariesView = ({
 						it and renders the matching error convention component
 						instead of crashing.
 					</p>
-					<ErrorBoundariesHowItWorksList />
+					<ErrorBoundariesHowItWorksList
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -115,7 +117,9 @@ export const ErrorBoundariesView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<ErrorBoundariesConventionFilesList />
+					<ErrorBoundariesConventionFilesList
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>

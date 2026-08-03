@@ -124,7 +124,7 @@ export const MiddlewareView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<LifecycleHooksList />
+					<LifecycleHooksList themeSprings={themeSprings} />
 					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
 						See the full lifecycle details in the{' '}
 						<a
@@ -314,7 +314,7 @@ export const MiddlewareView = ({
 						application. You can control this with three scope
 						levels:
 					</p>
-					<ScopingLevelsList />
+					<ScopingLevelsList themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={scopingMiddleware}
 						language="typescript"

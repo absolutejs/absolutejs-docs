@@ -20,6 +20,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -50,20 +51,32 @@ const guardHookRows: DocsTableCell[][] = [
 	]
 ];
 
-const promptDefinitionRows: DocsTableCell[][] = [
-	[{ code: 'title' }, 'The display name the client shows in its picker.'],
-	[{ code: 'description' }, 'What the prompt does.'],
-	[
-		{ code: 'arguments', suffix: 'optional' },
-		'A list of { name, description, required? } entries advertised on prompts/list.'
-	]
+const promptDefinitionItems: DefinitionItem[] = [
+	{
+		description: 'The display name the client shows in its picker.',
+		term: 'title'
+	},
+	{ description: 'What the prompt does.', term: 'description' },
+	{
+		badge: 'optional',
+		description:
+			'A list of { name, description, required? } entries advertised on prompts/list.',
+		term: 'arguments'
+	}
 ];
 
-const resourceFieldRows: DocsTableCell[][] = [
-	[{ code: 'uri' }, 'The identifier a client passes to resources/read.'],
-	[{ code: 'name' }, 'The display name.'],
-	[{ code: 'description', suffix: 'optional' }, 'What the resource holds.'],
-	[{ code: 'mimeType', suffix: 'optional' }, 'The content type.']
+const resourceFieldItems: DefinitionItem[] = [
+	{
+		description: 'The identifier a client passes to resources/read.',
+		term: 'uri'
+	},
+	{ description: 'The display name.', term: 'name' },
+	{
+		badge: 'optional',
+		description: 'What the resource holds.',
+		term: 'description'
+	},
+	{ badge: 'optional', description: 'The content type.', term: 'mimeType' }
 ];
 
 const capabilityRows: DocsTableCell[][] = [
@@ -229,9 +242,8 @@ export const McpCapabilitiesView = ({
 						<code>prompts/list</code> (paginated) and{' '}
 						<code>prompts/get</code> from them.
 					</p>
-					<DocsTable
-						columns={['Definition field', 'Meaning']}
-						rows={promptDefinitionRows}
+					<DefinitionGrid
+						items={promptDefinitionItems}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus
@@ -268,9 +280,8 @@ export const McpCapabilitiesView = ({
 						<code>null</code>, which answers{' '}
 						<code>Unknown resource</code>.
 					</p>
-					<DocsTable
-						columns={['Resource field', 'Meaning']}
-						rows={resourceFieldRows}
+					<DefinitionGrid
+						items={resourceFieldItems}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus

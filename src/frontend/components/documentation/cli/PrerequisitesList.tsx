@@ -1,36 +1,27 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-type PrerequisiteItemProps = {
-	platform: string;
-	commands: Array<string>;
-};
-
-const PrerequisiteItem = ({ platform, commands }: PrerequisiteItemProps) => (
-	<li style={listItemStyle}>
-		<strong style={strongStyle}>{platform}</strong>:{' '}
-		{commands.map((cmd, index) => (
-			<span key={cmd}>
-				{index > 0 && <>{' or '}</>}
-				<code>{cmd}</code>
-			</span>
-		))}
-	</li>
-);
-
-export const PrerequisitesList = () => (
-	<ul style={listStyle}>
-		<PrerequisiteItem commands={['brew install mkcert']} platform="macOS" />
-		<PrerequisiteItem
-			commands={['sudo apt install mkcert', 'yay -S mkcert']}
-			platform="Linux"
-		/>
-		<PrerequisiteItem
-			commands={['choco install mkcert']}
-			platform="Windows"
-		/>
-	</ul>
+export const PrerequisitesList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: <code>brew install mkcert</code>,
+				term: 'macOS'
+			},
+			{
+				description: (
+					<>
+						<code>sudo apt install mkcert</code> or{' '}
+						<code>yay -S mkcert</code>
+					</>
+				),
+				term: 'Linux'
+			},
+			{
+				description: <code>choco install mkcert</code>,
+				term: 'Windows'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

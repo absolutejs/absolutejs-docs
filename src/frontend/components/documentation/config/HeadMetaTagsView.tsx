@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	headReact,
@@ -10,19 +10,17 @@ import {
 } from '../../../data/documentation/configDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -36,25 +34,28 @@ const tocItems: TocItem[] = [
 	{ href: '#seo', label: 'SEO Considerations' }
 ];
 
-const SeoChecklist = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Title tags</strong>: Unique, descriptive
-			titles for each page
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Meta descriptions</strong>: Summarize
-			page content for search results
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Open Graph tags</strong>: Control social
-			media previews
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Canonical URLs</strong>: Prevent
-			duplicate content issues
-		</li>
-	</ul>
+const SeoChecklist = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: 'Unique, descriptive titles for each page',
+				term: 'Title tags'
+			},
+			{
+				description: 'Summarize page content for search results',
+				term: 'Meta descriptions'
+			},
+			{
+				description: 'Control social media previews',
+				term: 'Open Graph tags'
+			},
+			{
+				description: 'Prevent duplicate content issues',
+				term: 'Canonical URLs'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const HeadMetaTagsView = ({
@@ -207,7 +208,7 @@ export const HeadMetaTagsView = ({
 						tags are present in the initial HTML response: perfect
 						for SEO.
 					</p>
-					<SeoChecklist />
+					<SeoChecklist themeSprings={themeSprings} />
 				</section>
 
 				<DocsNavigation

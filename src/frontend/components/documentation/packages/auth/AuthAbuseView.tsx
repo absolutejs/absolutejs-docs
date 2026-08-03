@@ -17,10 +17,31 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const guardSignalItems: DefinitionItem[] = [
+	{
+		description: 'IP lists, exact or IPv4 CIDR.',
+		term: 'ipDeny / ipAllow',
+		tone: 'info'
+	},
+	{
+		description: 'A hook wrapping your CAPTCHA provider.',
+		term: 'verifyCaptcha',
+		tone: 'info'
+	},
+	{
+		description:
+			'The built-in UA heuristic, or your own AI-agent detector.',
+		term: 'classifyBot',
+		tone: 'info'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#guard', label: 'The guard' },
@@ -74,14 +95,16 @@ export const AuthAbuseView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						<code>createAbuseGuard</code> owns the decision
-						pipeline; you supply the signals: <code>ipDeny</code> /{' '}
-						<code>ipAllow</code> (exact or IPv4 CIDR), a{' '}
-						<code>verifyCaptcha</code> wrapping your provider, and a{' '}
-						<code>classifyBot</code> (the built-in UA heuristic, or
-						your own AI-agent detector). Honest scope:
-						fingerprint-grade detection needs a data network — this
-						is the framework and hooks.
+						pipeline; you supply the signals:
 					</p>
+					<DefinitionGrid
+						items={guardSignalItems}
+						themeSprings={themeSprings}
+					/>
+					<Callout themeSprings={themeSprings} variant="note">
+						Honest scope: fingerprint-grade detection needs a data
+						network — this is the framework and hooks.
+					</Callout>
 					<PrismPlus
 						codeString={abuseGuard}
 						language="typescript"

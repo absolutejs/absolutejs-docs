@@ -161,7 +161,7 @@ export const SvelteComponentsView = ({
 						The Svelte Image component accepts the same props as the
 						React Image component:
 					</p>
-					<SvelteImagePropsList />
+					<SvelteImagePropsList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

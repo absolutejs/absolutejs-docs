@@ -1,13 +1,8 @@
 import { ThemeProps } from '../../../../types/springTypes';
-import {
-	listItemStyle,
-	listStyle,
-	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { paragraphSpacedStyle, sectionStyle } from '../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
 export const HowItWorksSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
@@ -24,25 +19,43 @@ export const HowItWorksSection = ({ themeSprings }: ThemeProps) => (
 			<code>&lt;img&gt;</code> tags with the <code>data-optimized</code>{' '}
 			attribute and transforms them:
 		</p>
-		<ul style={listStyle}>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>Rewrites src</strong> : replaces the
-				original <code>src</code> with a URL pointing to the{' '}
-				<code>/_absolute/image</code> optimization endpoint
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>Adds srcset</strong> : generates a
-				responsive <code>srcset</code> with all configured breakpoints
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>Sets loading and decoding</strong> :
-				adds <code>loading="lazy"</code> and{' '}
-				<code>decoding="async"</code> for performance
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>Removes data-optimized</strong> :
-				the attribute is stripped from the output HTML
-			</li>
-		</ul>
+		<DefinitionGrid
+			items={[
+				{
+					description: (
+						<>
+							replaces the original <code>src</code> with a URL
+							pointing to the <code>/_absolute/image</code>{' '}
+							optimization endpoint
+						</>
+					),
+					term: 'Rewrites src'
+				},
+				{
+					description: (
+						<>
+							generates a responsive <code>srcset</code> with all
+							configured breakpoints
+						</>
+					),
+					term: 'Adds srcset'
+				},
+				{
+					description: (
+						<>
+							adds <code>loading="lazy"</code> and{' '}
+							<code>decoding="async"</code> for performance
+						</>
+					),
+					term: 'Sets loading and decoding'
+				},
+				{
+					description:
+						'the attribute is stripped from the output HTML',
+					term: 'Removes data-optimized'
+				}
+			]}
+			themeSprings={themeSprings}
+		/>
 	</section>
 );

@@ -1,30 +1,30 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const ElysiaOverviewList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Runtime model</strong>: one long-lived
-			Elysia server handles pages, APIs, and background scheduling
-			plugins.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Plugin boundaries</strong>: keep
-			concerns isolated (CORS, auth, cron, networking) using plugin/group
-			scope.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Type flow</strong>: schemas and route
-			definitions in Elysia drive end-to-end types through handlers and
-			clients.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>AbsoluteJS role</strong>: rendering,
-			build/asset pipeline, and framework host integration layered onto
-			the same server.
-		</li>
-	</ul>
+export const ElysiaOverviewList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'one long-lived Elysia server handles pages, APIs, and background scheduling plugins.',
+				term: 'Runtime model'
+			},
+			{
+				description:
+					'keep concerns isolated (CORS, auth, cron, networking) using plugin/group scope.',
+				term: 'Plugin boundaries'
+			},
+			{
+				description:
+					'schemas and route definitions in Elysia drive end-to-end types through handlers and clients.',
+				term: 'Type flow'
+			},
+			{
+				description:
+					'rendering, build/asset pipeline, and framework host integration layered onto the same server.',
+				term: 'AbsoluteJS role'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

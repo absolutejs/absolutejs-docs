@@ -1,7 +1,9 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
+import { StepFlow } from '../../utils/StepFlow';
 import {
 	vueRedirectHelper,
 	vueSetupAppHook,
@@ -11,8 +13,6 @@ import {
 } from '../../../data/documentation/spaDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
@@ -36,82 +36,133 @@ const tocItems: TocItem[] = [
 	{ href: '#redirects', label: 'Redirects' }
 ];
 
-const PrimitivesList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>createRouter</strong>: from{' '}
-			<code>vue-router</code>. Pair with{' '}
-			<code>createMemoryHistory()</code> on the server and{' '}
-			<code>createWebHistory()</code> on the client.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>RouterLink / RouterView</strong>:
-			vue-router's components for navigation and the active-route outlet.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>useRouter / useRoute</strong>:
-			composables for accessing the router instance and the current
-			route's reactive state.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>setupApp</strong>: AbsoluteJS-specific
-			hook your page module exports. The handler invokes it between{' '}
-			<code>createSSRApp()</code> and <code>renderToWebStream()</code> —
-			the only window where vue-router can be installed and resolved
-			before SSR starts.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>applyVueRouterRedirect</strong>:
-			AbsoluteJS helper that translates a vue-router redirect (from a
-			guard or redirect rule) into a 302 response.
-		</li>
-	</ul>
+type SpaListProps = {
+	themeSprings: ThemeSprings;
+};
+
+const PrimitivesList = ({ themeSprings }: SpaListProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						from <code>vue-router</code>. Pair with{' '}
+						<code>createMemoryHistory()</code> on the server and{' '}
+						<code>createWebHistory()</code> on the client.
+					</>
+				),
+				term: 'createRouter'
+			},
+			{
+				description:
+					"vue-router's components for navigation and the active-route outlet.",
+				term: 'RouterLink / RouterView'
+			},
+			{
+				description:
+					"composables for accessing the router instance and the current route's reactive state.",
+				term: 'useRouter / useRoute'
+			},
+			{
+				description: (
+					<>
+						AbsoluteJS-specific hook your page module exports. The
+						handler invokes it between <code>createSSRApp()</code>{' '}
+						and <code>renderToWebStream()</code> — the only window
+						where vue-router can be installed and resolved before
+						SSR starts.
+					</>
+				),
+				term: 'setupApp'
+			},
+			{
+				description:
+					'AbsoluteJS helper that translates a vue-router redirect (from a guard or redirect rule) into a 302 response.',
+				term: 'applyVueRouterRedirect'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const SetupAppContextList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>url</strong>: request pathname (plus
-			search) on the server, current window URL on the client.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>isServer</strong>: <code>true</code>{' '}
-			during SSR, <code>false</code> during client hydration. Use it to
-			pick <code>createMemoryHistory()</code> vs{' '}
-			<code>createWebHistory()</code>, and to gate{' '}
-			<code>router.push(url)</code> + the redirect bridge to server-only.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>setRedirect(location, status?)</strong>:
-			server-only. Call to short-circuit the SSR render and emit an HTTP
-			redirect instead. Status defaults to <code>302</code>.
-		</li>
-	</ul>
+const SetupAppContextList = ({ themeSprings }: SpaListProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'request pathname (plus search) on the server, current window URL on the client.',
+				term: 'url'
+			},
+			{
+				description: (
+					<>
+						<code>true</code> during SSR, <code>false</code> during
+						client hydration. Use it to pick{' '}
+						<code>createMemoryHistory()</code> vs{' '}
+						<code>createWebHistory()</code>, and to gate{' '}
+						<code>router.push(url)</code> + the redirect bridge to
+						server-only.
+					</>
+				),
+				term: 'isServer'
+			},
+			{
+				description: (
+					<>
+						server-only. Call to short-circuit the SSR render and
+						emit an HTTP redirect instead. Status defaults to{' '}
+						<code>302</code>.
+					</>
+				),
+				term: 'setRedirect(location, status?)'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const RedirectFlowList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			After <code>await router.isReady()</code>, vue-router's{' '}
-			<code>currentRoute.value.fullPath</code> reflects every guard,
-			redirect rule, and <code>{"next('/foo')"}</code> call.
-		</li>
-		<li style={listItemStyle}>
-			If the resolved path differs from the requested URL, a redirect
-			happened. <code>applyVueRouterRedirect</code> compares them and
-			calls <code>setRedirect</code> if different.
-		</li>
-		<li style={listItemStyle}>
-			The page handler sees <code>setRedirect</code> was called and
-			returns a 302 response with the redirect target as the{' '}
-			<code>Location</code> header — no HTML rendered for the redirected
-			route.
-		</li>
-		<li style={listItemStyle}>
+const RedirectFlowList = ({ themeSprings }: SpaListProps) => (
+	<>
+		<StepFlow
+			steps={[
+				{
+					description: (
+						<>
+							vue-router's{' '}
+							<code>currentRoute.value.fullPath</code> reflects
+							every guard, redirect rule, and{' '}
+							<code>{"next('/foo')"}</code> call.
+						</>
+					),
+					title: 'After await router.isReady()'
+				},
+				{
+					description: (
+						<>
+							<code>applyVueRouterRedirect</code> compares them
+							and calls <code>setRedirect</code> if different.
+						</>
+					),
+					title: 'If the resolved path differs from the requested URL, a redirect happened.'
+				},
+				{
+					description: (
+						<>
+							and returns a 302 response with the redirect target
+							as the <code>Location</code> header — no HTML
+							rendered for the redirected route.
+						</>
+					),
+					title: 'The page handler sees setRedirect was called'
+				}
+			]}
+			themeSprings={themeSprings}
+		/>
+		<p style={paragraphSpacedStyle}>
 			Pass a custom status (e.g. <code>308</code>) for permanent
 			redirects.
-		</li>
-	</ul>
+		</p>
+	</>
 );
 
 export const VueSpaView = ({
@@ -240,7 +291,7 @@ export const VueSpaView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<SetupAppContextList />
+					<SetupAppContextList themeSprings={themeSprings} />
 					<p
 						style={{
 							...paragraphSpacedStyle,
@@ -276,7 +327,7 @@ export const VueSpaView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<PrimitivesList />
+					<PrimitivesList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -302,7 +353,7 @@ export const VueSpaView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<RedirectFlowList />
+					<RedirectFlowList themeSprings={themeSprings} />
 				</section>
 
 				<DocsNavigation

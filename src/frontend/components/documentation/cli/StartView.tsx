@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	startCommand,
@@ -8,19 +8,17 @@ import {
 } from '../../../data/documentation/cliDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TerminalFrame } from '../../utils/TerminalFrame';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -32,21 +30,37 @@ const tocItems: TocItem[] = [
 	{ href: '#with-ssg', label: 'With Static Generation' }
 ];
 
-const StartOptionsList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>[entry]</strong> : Server entry file
-			(defaults to <code>src/backend/server.ts</code>)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--outdir</strong> : Build output
-			directory (defaults to <code>dist</code>)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--config</strong>: Path to{' '}
-			<code>absolute.config.ts</code>
-		</li>
-	</ul>
+const StartOptionsList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						Server entry file (defaults to{' '}
+						<code>src/backend/server.ts</code>)
+					</>
+				),
+				term: '[entry]'
+			},
+			{
+				description: (
+					<>
+						Build output directory (defaults to <code>dist</code>)
+					</>
+				),
+				term: '--outdir'
+			},
+			{
+				description: (
+					<>
+						Path to <code>absolute.config.ts</code>
+					</>
+				),
+				term: '--config'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const StartView = ({
@@ -111,7 +125,7 @@ export const StartView = ({
 					>
 						Options
 					</AnchorHeading>
-					<StartOptionsList />
+					<StartOptionsList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

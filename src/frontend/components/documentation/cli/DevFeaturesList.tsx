@@ -1,26 +1,28 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const DevFeaturesList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>HMR</strong>: Hot module replacement for
-			React, Svelte, Vue, Angular, HTML, and HTMX
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Module server</strong> : Unbundled
-			source serving for fast refresh
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Error overlay</strong> : Compilation and
-			runtime errors displayed in the browser
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>File watching</strong> : Automatic
-			rebuild on file changes
-		</li>
-	</ul>
+export const DevFeaturesList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'Hot module replacement for React, Svelte, Vue, Angular, HTML, and HTMX',
+				term: 'HMR'
+			},
+			{
+				description: 'Unbundled source serving for fast refresh',
+				term: 'Module server'
+			},
+			{
+				description:
+					'Compilation and runtime errors displayed in the browser',
+				term: 'Error overlay'
+			},
+			{
+				description: 'Automatic rebuild on file changes',
+				term: 'File watching'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

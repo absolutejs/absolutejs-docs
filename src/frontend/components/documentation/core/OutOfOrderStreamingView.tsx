@@ -1,22 +1,20 @@
 import { animated } from '@react-spring/web';
 import { PackageExplanation } from '../../../../types/packageDocs';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
@@ -80,23 +78,30 @@ const tocItems: TocItem[] = [
 	{ href: '#detached-transport', label: 'Detached Transport' }
 ];
 
-const AuthoringLayerList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Raw slots</strong> : you own the
-			fallback HTML and the resolved HTML directly. This is the
-			lowest-level transport API and the correct abstraction for plain
-			HTML. HTMX gets its own native streaming primitive.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Framework primitives</strong> : you
-			author fallback and resolved UI with JSX, Svelte markup, Vue
-			templates, or Angular template syntax. AbsoluteJS lowers that into
-			the same slot transport underneath, but only when the handler is
-			enabled for streaming with
-			<code>collectStreamingSlots: true</code>.
-		</li>
-	</ul>
+const AuthoringLayerList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'you own the fallback HTML and the resolved HTML directly. This is the lowest-level transport API and the correct abstraction for plain HTML. HTMX gets its own native streaming primitive.',
+				term: 'Raw slots'
+			},
+			{
+				description: (
+					<>
+						you author fallback and resolved UI with JSX, Svelte
+						markup, Vue templates, or Angular template syntax.
+						AbsoluteJS lowers that into the same slot transport
+						underneath, but only when the handler is enabled for
+						streaming with
+						<code>collectStreamingSlots: true</code>.
+					</>
+				),
+				term: 'Framework primitives'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const OutOfOrderStreamingView = ({
@@ -183,7 +188,7 @@ export const OutOfOrderStreamingView = ({
 						AbsoluteJS exposes one streaming engine through two
 						authoring layers:
 					</p>
-					<AuthoringLayerList />
+					<AuthoringLayerList themeSprings={themeSprings} />
 					<p style={paragraphSpacedStyle}>
 						The transport is shared. The difference is the authoring
 						surface.

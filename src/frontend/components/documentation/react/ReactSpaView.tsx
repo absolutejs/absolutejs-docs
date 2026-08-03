@@ -1,7 +1,9 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
+import { StepFlow } from '../../utils/StepFlow';
 import {
 	reactSpaHandler,
 	reactSpaPage,
@@ -9,13 +11,10 @@ import {
 } from '../../../data/documentation/spaDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -33,60 +32,96 @@ const tocItems: TocItem[] = [
 	{ href: '#redirects', label: 'Redirects' }
 ];
 
-const PrimitivesList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>StaticRouter</strong>: server-side
-			router that takes a fixed <code>location</code> prop. The page
-			handler injects the request pathname so SSR resolves the right
-			route.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>BrowserRouter</strong>: client-side
-			router that reads from <code>window.location</code>. Used after
-			hydration for client-side navigation via{' '}
-			<code>history.pushState</code>.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Routes / Route</strong>: declarative
-			path matching. React Router v6+ uses specificity ranking — longest
-			static prefix wins, no manual ordering required.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Link</strong>: client-side navigation
-			anchor. Renders a real <code>{'<a href>'}</code> for progressive
-			enhancement; click is intercepted on same-origin URLs.
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>useLocation / useNavigate</strong>:
-			hooks for reading the current location and navigating
-			programmatically.
-		</li>
-	</ul>
+type SpaListProps = {
+	themeSprings: ThemeSprings;
+};
+
+const PrimitivesList = ({ themeSprings }: SpaListProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						server-side router that takes a fixed{' '}
+						<code>location</code> prop. The page handler injects the
+						request pathname so SSR resolves the right route.
+					</>
+				),
+				term: 'StaticRouter'
+			},
+			{
+				description: (
+					<>
+						client-side router that reads from{' '}
+						<code>window.location</code>. Used after hydration for
+						client-side navigation via{' '}
+						<code>history.pushState</code>.
+					</>
+				),
+				term: 'BrowserRouter'
+			},
+			{
+				description:
+					'declarative path matching. React Router v6+ uses specificity ranking — longest static prefix wins, no manual ordering required.',
+				term: 'Routes / Route'
+			},
+			{
+				description: (
+					<>
+						client-side navigation anchor. Renders a real{' '}
+						<code>{'<a href>'}</code> for progressive enhancement;
+						click is intercepted on same-origin URLs.
+					</>
+				),
+				term: 'Link'
+			},
+			{
+				description:
+					'hooks for reading the current location and navigating programmatically.',
+				term: 'useLocation / useNavigate'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const RequestFlowList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>request</strong> field on{' '}
-			<code>handleReactPageRequest</code> input — pass the Elysia request
-			through.
-		</li>
-		<li style={listItemStyle}>
-			The handler reads <code>new URL(request.url).pathname</code> and
-			auto-injects it into <code>props.url</code> if you didn't already
-			pass one.
-		</li>
-		<li style={listItemStyle}>
-			Your page component receives <code>url</code> as a prop and feeds it
-			to <code>{'<StaticRouter location={url}>'}</code> for SSR.
-		</li>
-		<li style={listItemStyle}>
-			On the client, <code>url</code> is undefined (no request to derive
-			it from); the page swaps to <code>{'<BrowserRouter>'}</code> which
-			reads from <code>window.location</code> directly.
-		</li>
-	</ul>
+const RequestFlowList = ({ themeSprings }: SpaListProps) => (
+	<StepFlow
+		steps={[
+			{
+				description: 'pass the Elysia request through.',
+				title: 'request field on handleReactPageRequest input'
+			},
+			{
+				description: (
+					<>
+						and auto-injects it into <code>props.url</code> if you
+						didn't already pass one.
+					</>
+				),
+				title: 'The handler reads new URL(request.url).pathname'
+			},
+			{
+				description: (
+					<>
+						and feeds it to{' '}
+						<code>{'<StaticRouter location={url}>'}</code> for SSR.
+					</>
+				),
+				title: 'Your page component receives url as a prop'
+			},
+			{
+				description: (
+					<>
+						the page swaps to <code>{'<BrowserRouter>'}</code> which
+						reads from <code>window.location</code> directly.
+					</>
+				),
+				title: 'On the client, url is undefined (no request to derive it from)'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const ReactSpaView = ({
@@ -143,7 +178,7 @@ export const ReactSpaView = ({
 						page so the server-side router has something to match
 						against.
 					</p>
-					<RequestFlowList />
+					<RequestFlowList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
@@ -214,7 +249,7 @@ export const ReactSpaView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<PrimitivesList />
+					<PrimitivesList themeSprings={themeSprings} />
 					<p style={paragraphSpacedStyle}>
 						In React Router v7, <code>BrowserRouter</code>,{' '}
 						<code>StaticRouter</code>, <code>Routes</code>,{' '}

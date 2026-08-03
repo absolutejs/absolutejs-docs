@@ -1,5 +1,4 @@
 import { animated } from '@react-spring/web';
-import { CSSProperties, ReactNode } from 'react';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
 	syncVsConvexCacheColumns,
@@ -22,15 +21,17 @@ import {
 	strongStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
+import { ChecklistRows } from '../../utils/ChecklistRows';
 import { ComparisonTable } from '../../utils/ComparisonTable';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { StepFlow } from '../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const noop = () => undefined;
@@ -50,256 +51,97 @@ const tocItems: TocItem[] = [
 	{ href: '#honesty', label: 'Honest framing' }
 ];
 
-const cardGridStyle = (isMobileOrTablet?: boolean): CSSProperties => ({
-	display: 'grid',
-	gap: '1rem',
-	gridTemplateColumns: isMobileOrTablet ? '1fr' : 'repeat(2, 1fr)',
-	marginBottom: '1.5rem'
-});
-
-const cardListStyle: CSSProperties = {
-	display: 'flex',
-	flexDirection: 'column',
-	gap: '0.5rem',
-	listStyleType: 'disc',
-	margin: 0,
-	paddingLeft: '1.1rem'
-};
-
-type FeatureCardProps = {
-	children: ReactNode;
-	themeSprings: DocsViewProps['themeSprings'];
-	title: ReactNode;
-};
-
-const FeatureCard = ({ children, themeSprings, title }: FeatureCardProps) => (
-	<animated.div style={featureCardStyle(themeSprings)}>
-		<p
-			style={{
-				fontSize: '1rem',
-				fontWeight: 600,
-				marginBottom: '0.5rem'
-			}}
-		>
-			{title}
-		</p>
-		<div style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>{children}</div>
-	</animated.div>
-);
-
-type CardGridSectionProps = {
-	isMobileOrTablet: DocsViewProps['isMobileOrTablet'];
+type ThemedSectionProps = {
 	themeSprings: DocsViewProps['themeSprings'];
 };
 
-const ArchitectureCards = ({
-	isMobileOrTablet,
-	themeSprings
-}: CardGridSectionProps) => (
-	<div style={cardGridStyle(isMobileOrTablet)}>
-		<FeatureCard themeSprings={themeSprings} title="Convex">
-			<ul style={cardListStyle}>
-				<li>
-					<strong style={strongStyle}>Managed runtime.</strong> Hosted
-					V8 isolates with seeded ChaCha12 RNG and a frozen{' '}
-					<code>Date.now()</code> inside mutations. Every mutation is
-					automatically deterministic, retryable, and replayable.
-				</li>
-				<li>
-					<strong style={strongStyle}>
-						JS-only mutation handlers.
-					</strong>{' '}
-					The runtime decides what your handler can reach.
-				</li>
-				<li>
-					<strong style={strongStyle}>Convex's own database</strong>{' '}
-					under the runtime. Replication, point-in-time recovery,
-					multi-region failover are theirs to operate.
-				</li>
-				<li>
-					<strong style={strongStyle}>One product.</strong> You opt in
-					or out; there's no piecemeal.
-				</li>
-			</ul>
-		</FeatureCard>
-		<FeatureCard themeSprings={themeSprings} title="sync">
-			<ul style={cardListStyle}>
-				<li>
-					<strong style={strongStyle}>A library you import.</strong>{' '}
-					Runs on your Bun (or Node) process, alongside your other
-					Elysia routes. No managed control plane.
-				</li>
-				<li>
-					<strong style={strongStyle}>
-						Arbitrary host JS handlers
-					</strong>{' '}
-					— TypeScript, async, with access to anything you've
-					imported. Fast, full-power, no sandbox by default.
-				</li>
-				<li>
-					<strong style={strongStyle}>Brings your own DB.</strong>{' '}
-					First-party adapters for Postgres / MySQL / SQLite, plus
-					Drizzle and Prisma. The engine treats your DB as the source
-					of truth; replication / backups / regions are your choice
-					(same way you'd run a normal Elysia app).
-				</li>
-				<li>
-					<strong style={strongStyle}>
-						Pick the pieces you need.
-					</strong>{' '}
-					Use just reactive subscriptions, or add CRDT, search,
-					scheduled jobs, cluster bus, sandboxing — each is opt-in via
-					a sub-package.
-				</li>
-			</ul>
-		</FeatureCard>
-	</div>
+const MigrationVerbsGrid = ({ themeSprings }: ThemedSectionProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						Pauses new mutations on the source so its captured state
+						stops drifting. <code>runMutation</code> rejects with{' '}
+						<code>EngineFencedError</code> carrying the reason.
+						Reads keep working — <code>subscribe</code> /{' '}
+						<code>hydrate</code> / <code>streamChanges</code> stay
+						open, so live readers don't go dark during the transfer.
+						Multiple fences compose: every handle has to{' '}
+						<code>lift()</code> before the engine unfences.
+					</>
+				),
+				term: 'fence({ reason })'
+			},
+			{
+				description: (
+					<>
+						Walks each registered reader's <code>all(ctx)</code> and
+						returns a portable <code>EngineSnapshot</code>{' '}
+						<code>
+							{
+								'{ sourceInstanceId, version, exportedAt, tables }'
+							}
+						</code>
+						. Optionally narrow with{' '}
+						<code>{'{ tables: [...] }'}</code> for partial
+						migrations.
+					</>
+				),
+				term: 'exportSnapshot()'
+			},
+			{
+				description: (
+					<>
+						Bulk-loads via each table's registered writer on the
+						target. <code>onProgress</code> fires per row. Tables in
+						the snapshot without a writer on the target are surfaced
+						in <code>result.skipped</code> so a misconfigured target
+						doesn't silently drop rows.
+					</>
+				),
+				term: 'importSnapshot(snapshot, options)'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const MigrationVerbCards = ({
-	isMobileOrTablet,
-	themeSprings
-}: CardGridSectionProps) => (
-	<div style={cardGridStyle(isMobileOrTablet)}>
-		<FeatureCard
-			themeSprings={themeSprings}
-			title={<code>fence({'{ reason }'})</code>}
-		>
-			Pauses new mutations on the source so its captured state stops
-			drifting. <code>runMutation</code> rejects with{' '}
-			<code>EngineFencedError</code> carrying the reason. Reads keep
-			working — <code>subscribe</code> / <code>hydrate</code> /{' '}
-			<code>streamChanges</code> stay open, so live readers don't go dark
-			during the transfer. Multiple fences compose: every handle has to{' '}
-			<code>lift()</code> before the engine unfences.
-		</FeatureCard>
-		<FeatureCard
-			themeSprings={themeSprings}
-			title={<code>exportSnapshot()</code>}
-		>
-			Walks each registered reader's <code>all(ctx)</code> and returns a
-			portable <code>EngineSnapshot</code>{' '}
-			<code>{'{ sourceInstanceId, version, exportedAt, tables }'}</code>.
-			Optionally narrow with <code>{'{ tables: [...] }'}</code> for
-			partial migrations.
-		</FeatureCard>
-		<FeatureCard
-			themeSprings={themeSprings}
-			title={<code>importSnapshot(snapshot, options)</code>}
-		>
-			Bulk-loads via each table's registered writer on the target.{' '}
-			<code>onProgress</code> fires per row. Tables in the snapshot
-			without a writer on the target are surfaced in{' '}
-			<code>result.skipped</code> so a misconfigured target doesn't
-			silently drop rows.
-		</FeatureCard>
-	</div>
-);
-
-const GapsCards = ({
-	isMobileOrTablet,
-	themeSprings
-}: CardGridSectionProps) => (
-	<div style={cardGridStyle(isMobileOrTablet)}>
-		<FeatureCard themeSprings={themeSprings} title="Strict determinism">
-			Convex enforces it; sync trusts you (unless you opt into{' '}
-			<code>sandboxedHandler</code>, where the sandbox enforces resource
-			caps but not "no random / no real time" determinism).
-		</FeatureCard>
-		<FeatureCard
-			themeSprings={themeSprings}
-			title="Multi-region with managed failover"
-		>
-			Convex handles this for you; in sync this is a deployment choice
-			(Postgres logical replication or Redis pub/sub via{' '}
-			<code>@absolutejs/sync-bus-redis</code> works, but you operate it).
-		</FeatureCard>
-	</div>
-);
-
-const PickEachCards = ({
-	isMobileOrTablet,
-	themeSprings
-}: CardGridSectionProps) => (
-	<div style={cardGridStyle(isMobileOrTablet)}>
-		<FeatureCard themeSprings={themeSprings} title="Pick Convex if:">
-			<ul style={cardListStyle}>
-				<li>You want one managed product end-to-end.</li>
-				<li>JS-only mutation handlers are fine.</li>
-				<li>
-					You don't need to choose your database — Convex's is good
-					and you'd rather not operate one.
-				</li>
-				<li>
-					You want strict determinism guaranteed by the runtime, with
-					no developer responsibility for it.
-				</li>
-				<li>
-					You're not running Bun (Convex doesn't run on Bun
-					specifically; it has its own runtime).
-				</li>
-			</ul>
-		</FeatureCard>
-		<FeatureCard themeSprings={themeSprings} title="Pick sync if:">
-			<ul style={cardListStyle}>
-				<li>
-					You already have a database (Postgres / MySQL / SQLite) and
-					want to keep it as the source of truth.
-				</li>
-				<li>
-					You want your handlers to be normal TS code with access to
-					your other libraries and your own runtime.
-				</li>
-				<li>
-					You want first-party CRDT support with pluggable backends
-					(Yjs, Automerge, Loro).
-				</li>
-				<li>
-					You want to use sandboxing on some handlers (untrusted
-					source, PaaS, AI-generated) but not pay the cost on the fast
-					path.
-				</li>
-				<li>You're running on Bun and want native primitives.</li>
-				<li>
-					You want to host it yourself (or wait for the absolutejs
-					PaaS).
-				</li>
-			</ul>
-		</FeatureCard>
-	</div>
-);
-
-const HonestyCards = ({
-	isMobileOrTablet,
-	themeSprings
-}: CardGridSectionProps) => (
-	<div style={cardGridStyle(isMobileOrTablet)}>
-		<FeatureCard
-			themeSprings={themeSprings}
-			title="No backwards-compat burden"
-		>
-			We didn't have to commit to backwards compat. Convex has paying
-			customers; we can move fast on shape.
-		</FeatureCard>
-		<FeatureCard themeSprings={themeSprings} title="We don't host the DB">
-			They have to design for multi-region; we delegate that to your
-			existing infra.
-		</FeatureCard>
-		<FeatureCard
-			themeSprings={themeSprings}
-			title="CRDT was already shipped"
-		>
-			The CRDT story was already shipped in absolutejs (<code>/crdt</code>
-			) before sync started, so we slotted in.
-		</FeatureCard>
-		<FeatureCard
-			themeSprings={themeSprings}
-			title="The targets were written down"
-		>
-			Convex's gaps are well-tracked in their public issue tracker (#95,
-			etc) — we had the targets written down.
-		</FeatureCard>
-	</div>
+const HonestyGrid = ({ themeSprings }: ThemedSectionProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					"We didn't have to commit to backwards compat. Convex has paying customers; we can move fast on shape.",
+				term: 'No backwards-compat burden',
+				tone: 'neutral'
+			},
+			{
+				description:
+					'They have to design for multi-region; we delegate that to your existing infra.',
+				term: "We don't host the DB",
+				tone: 'neutral'
+			},
+			{
+				description: (
+					<>
+						The CRDT story was already shipped in absolutejs (
+						<code>/crdt</code>) before sync started, so we slotted
+						in.
+					</>
+				),
+				term: 'CRDT was already shipped',
+				tone: 'neutral'
+			},
+			{
+				description:
+					"Convex's gaps are well-tracked in their public issue tracker (#95, etc) — we had the targets written down.",
+				term: 'The targets were written down',
+				tone: 'neutral'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const SyncVsConvexView = ({
@@ -361,41 +203,31 @@ export const SyncVsConvexView = ({
 						Both engines collapse "store + cache + invalidation +
 						push" into one abstraction.
 					</p>
-					<div style={cardGridStyle(isMobileOrTablet)}>
-						<FeatureCard
-							themeSprings={themeSprings}
-							title="Subscribe to a query"
-						>
-							Clients subscribe to a query. The engine returns the
-							initial result and pushes updates whenever anything
-							that query depends on changes.
-						</FeatureCard>
-						<FeatureCard
-							themeSprings={themeSprings}
-							title="Writes go through mutations"
-						>
-							Writes go through server-authored mutations. The
-							mutation transacts against the durable store and
-							emits the changes; subscribers see them atomically
-							after commit.
-						</FeatureCard>
-						<FeatureCard
-							themeSprings={themeSprings}
-							title="Automatic dependency tracking"
-						>
-							The engine notes what tables/keys a query read, and
-							only re-runs (or invalidates) when something in that
-							read-set is written.
-						</FeatureCard>
-						<FeatureCard
-							themeSprings={themeSprings}
-							title="Mutation results as the ack"
-						>
-							Mutation results are pushed back to the calling
-							client as the ack, so the optimistic edit can settle
-							against authoritative state.
-						</FeatureCard>
-					</div>
+					<StepFlow
+						steps={[
+							{
+								description:
+									'Clients subscribe to a query. The engine returns the initial result and pushes updates whenever anything that query depends on changes.',
+								title: 'Subscribe to a query'
+							},
+							{
+								description:
+									'Writes go through server-authored mutations. The mutation transacts against the durable store and emits the changes; subscribers see them atomically after commit.',
+								title: 'Writes go through mutations'
+							},
+							{
+								description:
+									'The engine notes what tables/keys a query read, and only re-runs (or invalidates) when something in that read-set is written.',
+								title: 'Automatic dependency tracking'
+							},
+							{
+								description:
+									'Mutation results are pushed back to the calling client as the ack, so the optimistic edit can settle against authoritative state.',
+								title: 'Mutation results as the ack'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 					<p style={paragraphSpacedStyle}>
 						Where the two diverge is <em>under</em> that surface —
 						see "Where the engine runs" below.
@@ -416,8 +248,39 @@ export const SyncVsConvexView = ({
 						library you import into your own Bun server, talking to
 						your own DB.
 					</p>
-					<ArchitectureCards
-						isMobileOrTablet={isMobileOrTablet}
+					<ComparisonTable
+						columns={['Convex', 'sync']}
+						firstColumnLabel="Dimension"
+						rows={[
+							{
+								feature: 'Runtime',
+								values: [
+									'Managed — hosted V8 isolates with seeded ChaCha12 RNG and a frozen Date.now() inside mutations; every mutation is automatically deterministic, retryable, and replayable',
+									'A library you import — runs on your Bun (or Node) process, alongside your other Elysia routes; no managed control plane'
+								]
+							},
+							{
+								feature: 'Mutation handlers',
+								values: [
+									'JS-only — the runtime decides what your handler can reach',
+									"Arbitrary host JS — TypeScript, async, with access to anything you've imported; fast, full-power, no sandbox by default"
+								]
+							},
+							{
+								feature: 'Database',
+								values: [
+									"Convex's own database under the runtime — replication, point-in-time recovery, multi-region failover are theirs to operate",
+									"Brings your own — first-party adapters for Postgres / MySQL / SQLite, plus Drizzle and Prisma; the engine treats your DB as the source of truth, and replication / backups / regions are your choice (same way you'd run a normal Elysia app)"
+								]
+							},
+							{
+								feature: 'Packaging',
+								values: [
+									"One product — you opt in or out; there's no piecemeal",
+									'Pick the pieces you need — use just reactive subscriptions, or add CRDT, search, scheduled jobs, cluster bus, sandboxing; each is opt-in via a sub-package'
+								]
+							}
+						]}
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
@@ -599,30 +462,26 @@ export const SyncVsConvexView = ({
 					<p style={paragraphSpacedStyle}>
 						Use <code>sandboxedHandler</code> when:
 					</p>
-					<div style={cardGridStyle(isMobileOrTablet)}>
-						<FeatureCard
-							themeSprings={themeSprings}
-							title="User-supplied source"
-						>
-							The handler source is user-supplied (multi-tenant
-							PaaS, plugins).
-						</FeatureCard>
-						<FeatureCard
-							themeSprings={themeSprings}
-							title="AI-generated source"
-						>
-							The source is AI-generated and you need hard caps
-							before running.
-						</FeatureCard>
-						<FeatureCard
-							themeSprings={themeSprings}
-							title="Defense-in-depth"
-						>
-							You want defense-in-depth resource limits on your
-							own first-party handlers — capped CPU/memory keeps a
-							runaway from taking the engine down.
-						</FeatureCard>
-					</div>
+					<DefinitionGrid
+						items={[
+							{
+								description:
+									'The handler source is user-supplied (multi-tenant PaaS, plugins).',
+								term: 'User-supplied source'
+							},
+							{
+								description:
+									'The source is AI-generated and you need hard caps before running.',
+								term: 'AI-generated source'
+							},
+							{
+								description:
+									'You want defense-in-depth resource limits on your own first-party handlers — capped CPU/memory keeps a runaway from taking the engine down.',
+								term: 'Defense-in-depth'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -719,10 +578,7 @@ export const SyncVsConvexView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<MigrationVerbCards
-						isMobileOrTablet={isMobileOrTablet}
-						themeSprings={themeSprings}
-					/>
+					<MigrationVerbsGrid themeSprings={themeSprings} />
 					<p style={paragraphSpacedStyle}>
 						Why three verbs, not one big <code>migrate()</code>: a
 						monolithic call would conflate pause-writes,
@@ -761,8 +617,21 @@ export const SyncVsConvexView = ({
 						the AbsoluteJS.ai platform provides the hosted product
 						experience.
 					</p>
-					<GapsCards
-						isMobileOrTablet={isMobileOrTablet}
+					<ComparisonTable
+						columns={['Convex', 'sync']}
+						firstColumnLabel="Capability"
+						rows={[
+							{
+								feature: 'Strict determinism',
+								note: 'Convex enforces it; sync trusts you — opting into sandboxedHandler enforces resource caps but not "no random / no real time" determinism.',
+								values: [true, false]
+							},
+							{
+								feature: 'Multi-region with managed failover',
+								note: 'Convex handles this for you; in sync this is a deployment choice — Postgres logical replication or Redis pub/sub via @absolutejs/sync-bus-redis works, but you operate it.',
+								values: [true, false]
+							}
+						]}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -781,8 +650,31 @@ export const SyncVsConvexView = ({
 						whether the managed-runtime / managed-DB trade is one
 						you want.
 					</p>
-					<PickEachCards
-						isMobileOrTablet={isMobileOrTablet}
+					<p style={paragraphSpacedStyle}>
+						<strong style={strongStyle}>Pick Convex if:</strong>
+					</p>
+					<ChecklistRows
+						items={[
+							'You want one managed product end-to-end.',
+							'JS-only mutation handlers are fine.',
+							"You don't need to choose your database — Convex's is good and you'd rather not operate one.",
+							'You want strict determinism guaranteed by the runtime, with no developer responsibility for it.',
+							"You're not running Bun (Convex doesn't run on Bun specifically; it has its own runtime)."
+						]}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						<strong style={strongStyle}>Pick sync if:</strong>
+					</p>
+					<ChecklistRows
+						items={[
+							'You already have a database (Postgres / MySQL / SQLite) and want to keep it as the source of truth.',
+							'You want your handlers to be normal TS code with access to your other libraries and your own runtime.',
+							'You want first-party CRDT support with pluggable backends (Yjs, Automerge, Loro).',
+							'You want to use sandboxing on some handlers (untrusted source, PaaS, AI-generated) but not pay the cost on the fast path.',
+							"You're running on Bun and want native primitives.",
+							'You want to host it yourself (or wait for the absolutejs PaaS).'
+						]}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -806,10 +698,7 @@ export const SyncVsConvexView = ({
 						We were able to close most of the architectural gaps
 						quickly because:
 					</p>
-					<HonestyCards
-						isMobileOrTablet={isMobileOrTablet}
-						themeSprings={themeSprings}
-					/>
+					<HonestyGrid themeSprings={themeSprings} />
 					<Callout themeSprings={themeSprings} variant="note">
 						The gaps we still have (managed deployment, strict
 						determinism, managed multi-region failover) are real and

@@ -98,7 +98,7 @@ export const TypecheckView = ({
 						<code>absolute.config.ts</code> and runs the right
 						checker for each framework directory:
 					</p>
-					<TypecheckFrameworkList />
+					<TypecheckFrameworkList themeSprings={themeSprings} />
 					<p style={paragraphSpacedStyle}>
 						Since <code>vue-tsc</code> is a superset of{' '}
 						<code>tsc</code> (it checks all <code>.ts</code> files
@@ -128,7 +128,7 @@ export const TypecheckView = ({
 						your <code>absolute.config.ts</code>. Just make sure the
 						relevant dev dependencies are installed:
 					</p>
-					<TypecheckDependenciesList />
+					<TypecheckDependenciesList themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={typecheckConfig}
 						language="typescript"

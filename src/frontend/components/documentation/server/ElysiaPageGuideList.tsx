@@ -1,34 +1,38 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const ElysiaPageGuideList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Plugin Composition</strong>: how to
-			structure and scope plugins
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Validation</strong>: request/response
-			schemas and guarded routes
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>CORS</strong>: origin policy,
-			credentials, and per-group config
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Cron Jobs</strong>: scheduled tasks with{' '}
-			<code>@elysiajs/cron</code>
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Middleware</strong>: hook order and
-			guard strategy
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Networking Plugin</strong>: startup
-			behavior and host/port exposure
-		</li>
-	</ul>
+export const ElysiaPageGuideList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: 'how to structure and scope plugins',
+				term: 'Plugin Composition'
+			},
+			{
+				description: 'request/response schemas and guarded routes',
+				term: 'Validation'
+			},
+			{
+				description: 'origin policy, credentials, and per-group config',
+				term: 'CORS'
+			},
+			{
+				description: (
+					<>
+						scheduled tasks with <code>@elysiajs/cron</code>
+					</>
+				),
+				term: 'Cron Jobs'
+			},
+			{
+				description: 'hook order and guard strategy',
+				term: 'Middleware'
+			},
+			{
+				description: 'startup behavior and host/port exposure',
+				term: 'Networking Plugin'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

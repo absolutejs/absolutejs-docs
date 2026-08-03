@@ -17,6 +17,7 @@ type DocsNavigationProps = {
 	currentPageId: string;
 	isMobileOrTablet?: boolean;
 	onNavigate: (pageId: string) => void;
+	packageSurfaceOnly?: boolean;
 	themeSprings: ThemeSprings;
 };
 
@@ -129,16 +130,40 @@ const JourneyNavigation = ({
 							onNavigate(playbook.id);
 						}}
 						style={{
+							background: 'rgba(99, 102, 241, 0.05)',
 							border: '1px solid rgba(99, 102, 241, 0.25)',
 							borderRadius: '0.65rem',
 							color: 'inherit',
+							display: 'flex',
+							flexDirection: 'column',
+							gap: '0.35rem',
 							padding: '0.85rem 1rem',
 							textDecoration: 'none'
 						}}
 					>
-						<strong>{playbook.title}</strong>
-						<br />
-						<small>{playbook.description}</small>
+						<animated.span
+							style={{
+								alignItems: 'center',
+								color: themeSprings.contrastPrimary,
+								display: 'flex',
+								fontSize: '0.92rem',
+								fontWeight: 600,
+								gap: '0.45rem',
+								justifyContent: 'space-between'
+							}}
+						>
+							{playbook.title}
+							<FaArrowRight color="#6366F1" size={11} />
+						</animated.span>
+						<animated.span
+							style={{
+								color: themeSprings.contrastSecondary,
+								fontSize: '0.82rem',
+								lineHeight: 1.55
+							}}
+						>
+							{playbook.description}
+						</animated.span>
 					</a>
 				))}
 			</div>
@@ -150,6 +175,7 @@ export const DocsNavigation = ({
 	currentPageId,
 	isMobileOrTablet,
 	onNavigate,
+	packageSurfaceOnly,
 	themeSprings
 }: DocsNavigationProps) => {
 	const flattenedPages = useMemo<NavItem[]>(
@@ -214,6 +240,7 @@ export const DocsNavigation = ({
 			<PackageReleaseSnapshot
 				currentPageId={currentPageId}
 				isMobileOrTablet={isMobileOrTablet}
+				surfaceOnly={packageSurfaceOnly}
 				themeSprings={themeSprings}
 			/>
 			<div style={containerStyle}>

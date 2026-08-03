@@ -37,8 +37,10 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
-import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
+import { PackageCard, PackageCardGrid } from '../../utils/PackageCardGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../utils/StepFlow';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -199,221 +201,282 @@ const ChannelCard = ({
 	</animated.div>
 );
 
-const dispatcherOptionRows: DocsTableCell[][] = [
-	[
-		{ code: 'email / messaging / push' },
-		'One optional adapter per channel. Only the channels you configure become callable.'
-	],
-	[
-		{ code: 'defaultFrom' },
-		'Fallback sender per channel ({ email?, messaging? }) when a message omits from.'
-	],
-	[
-		{ code: 'policies' },
-		'Ordered synchronous or asynchronous authorization checks that run before any adapter or provider receives the message.'
-	],
-	[
-		{ code: 'audit' },
-		'Audit writer from @absolutejs/audit — appends a sent/failed event for every send.'
-	],
-	[
-		{ code: 'tracerProvider' },
-		'OpenTelemetry TracerProvider (via @absolutejs/telemetry) — one span per send.'
-	],
-	[
-		{ code: 'onError' },
-		'(err, channel, message) => void hook that fires on every failed send.'
-	]
+const dispatcherOptionItems: DefinitionItem[] = [
+	{
+		description:
+			'One optional adapter per channel. Only the channels you configure become callable.',
+		term: 'email / messaging / push'
+	},
+	{
+		description:
+			'Fallback sender per channel ({ email?, messaging? }) when a message omits from.',
+		term: 'defaultFrom'
+	},
+	{
+		description:
+			'Ordered synchronous or asynchronous authorization checks that run before any adapter or provider receives the message.',
+		term: 'policies'
+	},
+	{
+		description:
+			'Audit writer from @absolutejs/audit — appends a sent/failed event for every send.',
+		term: 'audit'
+	},
+	{
+		description:
+			'OpenTelemetry TracerProvider (via @absolutejs/telemetry) — one span per send.',
+		term: 'tracerProvider'
+	},
+	{
+		description:
+			'(err, channel, message) => void hook that fires on every failed send.',
+		term: 'onError'
+	}
 ];
 
-const productionBoundaryRows: DocsTableCell[][] = [
-	[
-		{ code: '@absolutejs/dispatch' },
-		'Application-authored email, carrier/rich messaging, and push. It owns typed messages, policy evaluation, results, metrics, tracing, and audit emission.'
-	],
-	[
-		{ code: '@absolutejs/compliance' },
-		'Provider-neutral consent evidence and a pre-send policy that rejects missing or revoked recipient/program/purpose/transport scopes.'
-	],
-	[
-		{ code: '@absolutejs/reliability' },
-		'Durable webhook inboxes, checked-out PostgreSQL transactions, and fenced idempotent operations shared by provider adapters.'
-	],
-	[
-		{ code: '@absolutejs/auth-twilio' },
-		'Provider-owned OTP generation, delivery, fraud checks, and code verification through Twilio Verify. Auth owns enrollment and session promotion.'
-	],
-	[
-		{ code: '@absolutejs/voice' },
-		'Twilio voice calls and Media Streams. Voice is intentionally outside Dispatch messaging and Auth verification.'
-	]
+const productionBoundaryItems: DefinitionItem[] = [
+	{
+		description:
+			'Application-authored email, carrier/rich messaging, and push. It owns typed messages, policy evaluation, results, metrics, tracing, and audit emission.',
+		term: '@absolutejs/dispatch'
+	},
+	{
+		description:
+			'Provider-neutral consent evidence and a pre-send policy that rejects missing or revoked recipient/program/purpose/transport scopes.',
+		term: '@absolutejs/compliance'
+	},
+	{
+		description:
+			'Durable webhook inboxes, checked-out PostgreSQL transactions, and fenced idempotent operations shared by provider adapters.',
+		term: '@absolutejs/reliability'
+	},
+	{
+		description:
+			'Provider-owned OTP generation, delivery, fraud checks, and code verification through Twilio Verify. Auth owns enrollment and session promotion.',
+		term: '@absolutejs/auth-twilio'
+	},
+	{
+		description:
+			'Twilio voice calls and Media Streams. Voice is intentionally outside Dispatch messaging and Auth verification.',
+		term: '@absolutejs/voice'
+	}
 ];
 
-const pushOutcomeRows: DocsTableCell[][] = [
-	[
-		{ code: 'delivered' },
-		'The provider accepted the send and the claim completed.'
-	],
-	[
-		{ code: 'retired' },
-		'The provider reported an invalid token; the registration was disabled.'
-	],
-	[
-		{ code: 'skipped' },
-		'A completed or in-flight fenced claim already owns this fanout item.'
-	],
-	[
-		{ code: 'failed' },
-		'A definite failure exhausted bounded retries; a fresh operation may decide whether to resend.'
-	],
-	[
-		{ code: 'indeterminate' },
-		'The provider acknowledgement was ambiguous. Reconcile it operationally; never convert it into an automatic duplicate send.'
-	]
+const pushOutcomeItems: DefinitionItem[] = [
+	{
+		description: 'The provider accepted the send and the claim completed.',
+		term: 'delivered',
+		tone: 'success'
+	},
+	{
+		description:
+			'The provider reported an invalid token; the registration was disabled.',
+		term: 'retired',
+		tone: 'neutral'
+	},
+	{
+		description:
+			'A completed or in-flight fenced claim already owns this fanout item.',
+		term: 'skipped',
+		tone: 'warning'
+	},
+	{
+		description:
+			'A definite failure exhausted bounded retries; a fresh operation may decide whether to resend.',
+		term: 'failed',
+		tone: 'error'
+	},
+	{
+		description:
+			'The provider acknowledgement was ambiguous. Reconcile it operationally; never convert it into an automatic duplicate send.',
+		term: 'indeterminate',
+		tone: 'warning'
+	}
 ];
 
-const webhookLifecycleRows: DocsTableCell[][] = [
-	[
-		'1. Verify',
-		'Authenticate the exact raw request using the provider signature, JWT, HMAC, or the trusted gateway/EventBridge boundary.'
-	],
-	[
-		'2. Persist',
-		'Write the raw payload and stable provider event id to a durable WebhookInboxStore before performing application effects.'
-	],
-	[
-		'3. Acknowledge',
-		'Return 202 as soon as durable intake succeeds so slow consent, lifecycle, and application work cannot trigger provider retry storms.'
-	],
-	[
-		'4. Drain',
-		'Claim with a fencing token, normalize into delivery/inbound/consent events, apply idempotent effects in a worker, then complete or release.'
-	]
+const webhookLifecycleSteps: StepFlowStep[] = [
+	{
+		description:
+			'Authenticate the exact raw request using the provider signature, JWT, HMAC, or the trusted gateway/EventBridge boundary.',
+		title: 'Verify'
+	},
+	{
+		description:
+			'Write the raw payload and stable provider event id to a durable WebhookInboxStore before performing application effects.',
+		title: 'Persist'
+	},
+	{
+		description:
+			'Return 202 as soon as durable intake succeeds so slow consent, lifecycle, and application work cannot trigger provider retry storms.',
+		title: 'Acknowledge'
+	},
+	{
+		description:
+			'Claim with a fencing token, normalize into delivery/inbound/consent events, apply idempotent effects in a worker, then complete or release.',
+		title: 'Drain'
+	}
 ];
 
-const messagingEventRows: DocsTableCell[][] = [
-	[
-		{ code: 'delivery' },
-		'Normalized provider status, requested/actual transport, attempt history, failure detail, carrier/economics metadata when available.'
-	],
-	[
-		{ code: 'inbound' },
-		'Typed sender/recipient endpoints, portable text/media content, and interaction payloads for replies and rich actions.'
-	],
-	[
-		{ code: 'consent' },
-		'Grant, revoke, or help intent from provider opt-in/opt-out signals; adapters can apply these to the shared consent ledger.'
-	]
+const messagingEventItems: DefinitionItem[] = [
+	{
+		description:
+			'Normalized provider status, requested/actual transport, attempt history, failure detail, carrier/economics metadata when available.',
+		term: 'delivery'
+	},
+	{
+		description:
+			'Typed sender/recipient endpoints, portable text/media content, and interaction payloads for replies and rich actions.',
+		term: 'inbound'
+	},
+	{
+		description:
+			'Grant, revoke, or help intent from provider opt-in/opt-out signals; adapters can apply these to the shared consent ledger.',
+		term: 'consent'
+	}
 ];
 
-const vendorAdapterRows: DocsTableCell[][] = [
-	[
-		{ code: '@absolutejs/dispatch-resend' },
-		'0.7.0',
-		'Email',
-		'createResendAdapter — takes your Resend client; the Resend message id becomes the result id.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-postmark' },
-		'0.1.0',
-		'Email',
-		'createPostmarkAdapter — transactional + broadcast streams; the MessageID becomes the result id.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-apns' },
-		'0.2.0',
-		'Apple push',
-		'HTTP/2 APNs delivery with ES256 provider-token rotation, alert/background modes, payload validation, and normalized provider errors.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-fcm' },
-		'0.2.0',
-		'Android / Apple / web push',
-		'FCM HTTP v1 delivery with Application Default Credentials, short-lived OAuth tokens, token/topic/condition targets, and platform payloads.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-push-postgres' },
-		'0.1.0',
-		'Push lifecycle storage',
-		'Tenant-isolated device registry plus fenced, indeterminate-safe fanout claims on PostgreSQL.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-aws-end-user-messaging' },
-		'0.1.0',
-		'SMS / MMS / RCS / WhatsApp',
-		'AWS SDK v3, phone-pool RCS fallback, Protect fraud controls, Notify templates, event ingress, readiness, and registration workflows.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-infobip' },
-		'0.1.0',
-		'Global carrier / conversational messaging',
-		'Messages API validation, portable rich content, scheduling, authenticated durable callbacks, and US brand/campaign/number operations.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-telnyx' },
-		'0.3.0',
-		'SMS / MMS / RCS',
-		'Direct rich RCS, capability checks, SMS/MMS fallback, Ed25519 webhooks, scheduling, carrier registration, and shared atomic reliability.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-twilio' },
-		'0.7.0',
-		'SMS / MMS / RCS / WhatsApp',
-		'Rich Messaging Service sending, signed delivery, inbound, and consent webhooks, durable idempotency/lifecycle stores, tenant routing, and API-inspected readiness.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-vonage' },
-		'0.2.0',
-		'SMS / MMS / RCS / WhatsApp / Viber / Messenger',
-		'Ordered native failover, rich RCS, capability checks and revocation, signed JWT webhooks, durable reliability, tenant routing, and 10DLC workflows.'
-	],
-	[
-		{ code: '@absolutejs/dispatch-sinch' },
-		'0.3.0',
-		'SMS / MMS / RCS / WhatsApp / social messaging',
-		'Conversation API channel-priority fallback, rich transcoding, fast durable HMAC intake, capability lookup, tenant routing, and concrete OAuth 10DLC/toll-free operations.'
-	]
+const vendorAdapterCards: PackageCard[] = [
+	{
+		badge: 'Email',
+		description:
+			'createResendAdapter — takes your Resend client; the Resend message id becomes the result id.',
+		name: 'dispatch-resend',
+		packageName: '@absolutejs/dispatch-resend',
+		version: '0.7.0'
+	},
+	{
+		badge: 'Email',
+		description:
+			'createPostmarkAdapter — transactional + broadcast streams; the MessageID becomes the result id.',
+		name: 'dispatch-postmark',
+		packageName: '@absolutejs/dispatch-postmark',
+		version: '0.1.0'
+	},
+	{
+		badge: 'Apple push',
+		description:
+			'HTTP/2 APNs delivery with ES256 provider-token rotation, alert/background modes, payload validation, and normalized provider errors.',
+		name: 'dispatch-apns',
+		packageName: '@absolutejs/dispatch-apns',
+		version: '0.2.0'
+	},
+	{
+		badge: 'Android / Apple / web push',
+		description:
+			'FCM HTTP v1 delivery with Application Default Credentials, short-lived OAuth tokens, token/topic/condition targets, and platform payloads.',
+		name: 'dispatch-fcm',
+		packageName: '@absolutejs/dispatch-fcm',
+		version: '0.2.0'
+	},
+	{
+		badge: 'Push lifecycle storage',
+		description:
+			'Tenant-isolated device registry plus fenced, indeterminate-safe fanout claims on PostgreSQL.',
+		name: 'dispatch-push-postgres',
+		packageName: '@absolutejs/dispatch-push-postgres',
+		version: '0.1.0'
+	},
+	{
+		badge: 'SMS / MMS / RCS / WhatsApp',
+		description:
+			'AWS SDK v3, phone-pool RCS fallback, Protect fraud controls, Notify templates, event ingress, readiness, and registration workflows.',
+		name: 'dispatch-aws-end-user-messaging',
+		packageName: '@absolutejs/dispatch-aws-end-user-messaging',
+		version: '0.1.0'
+	},
+	{
+		badge: 'Global carrier / conversational messaging',
+		description:
+			'Messages API validation, portable rich content, scheduling, authenticated durable callbacks, and US brand/campaign/number operations.',
+		name: 'dispatch-infobip',
+		packageName: '@absolutejs/dispatch-infobip',
+		version: '0.1.0'
+	},
+	{
+		badge: 'SMS / MMS / RCS',
+		description:
+			'Direct rich RCS, capability checks, SMS/MMS fallback, Ed25519 webhooks, scheduling, carrier registration, and shared atomic reliability.',
+		name: 'dispatch-telnyx',
+		packageName: '@absolutejs/dispatch-telnyx',
+		version: '0.3.0'
+	},
+	{
+		badge: 'SMS / MMS / RCS / WhatsApp',
+		description:
+			'Rich Messaging Service sending, signed delivery, inbound, and consent webhooks, durable idempotency/lifecycle stores, tenant routing, and API-inspected readiness.',
+		name: 'dispatch-twilio',
+		packageName: '@absolutejs/dispatch-twilio',
+		version: '0.7.0'
+	},
+	{
+		badge: 'SMS / MMS / RCS / WhatsApp / Viber / Messenger',
+		description:
+			'Ordered native failover, rich RCS, capability checks and revocation, signed JWT webhooks, durable reliability, tenant routing, and 10DLC workflows.',
+		name: 'dispatch-vonage',
+		packageName: '@absolutejs/dispatch-vonage',
+		version: '0.2.0'
+	},
+	{
+		badge: 'SMS / MMS / RCS / WhatsApp / social messaging',
+		description:
+			'Conversation API channel-priority fallback, rich transcoding, fast durable HMAC intake, capability lookup, tenant routing, and concrete OAuth 10DLC/toll-free operations.',
+		name: 'dispatch-sinch',
+		packageName: '@absolutejs/dispatch-sinch',
+		version: '0.3.0'
+	}
 ];
 
-const builtInAdapterRows: DocsTableCell[][] = [
-	[
-		{
-			code: 'memoryEmailAdapter / memoryMessagingAdapter / memoryPushAdapter'
-		},
-		'In-process FIFO buffer (default 1000 messages). Call .inspect() to read a copy, .clear() to reset between tests.'
-	],
-	[
-		{
-			code: 'consoleEmailAdapter / consoleMessagingAdapter / consolePushAdapter'
-		},
-		'Prints the message as JSON to stdout and returns immediately. Handy for local dev without a vendor account.'
-	]
+const builtInAdapterCards: PackageCard[] = [
+	{
+		description:
+			'In-process FIFO buffer (default 1000 messages). Call .inspect() to read a copy, .clear() to reset between tests.',
+		name: 'memoryEmailAdapter / memoryMessagingAdapter / memoryPushAdapter'
+	},
+	{
+		description:
+			'Prints the message as JSON to stdout and returns immediately. Handy for local dev without a vendor account.',
+		name: 'consoleEmailAdapter / consoleMessagingAdapter / consolePushAdapter'
+	}
 ];
 
-const spanAttributeRows: DocsTableCell[][] = [
-	[{ code: 'dispatch.channel' }, "'email' | 'messaging' | 'push'"],
-	[
-		{ code: 'dispatch.provider' },
-		"Adapter name — 'resend', 'postmark', 'twilio', …"
-	],
-	[
-		{ code: 'dispatch.recipient_count' },
-		'Recipient count only; addresses and device tokens are excluded.'
-	],
-	[
-		{ code: 'dispatch.message_id' },
-		'Vendor id, set after the adapter returns one'
-	],
-	[{ code: 'abs.tenant' }, 'message.tenant when set']
+const spanAttributeItems: DefinitionItem[] = [
+	{
+		description: "'email' | 'messaging' | 'push'",
+		term: 'dispatch.channel'
+	},
+	{
+		description: "Adapter name — 'resend', 'postmark', 'twilio', …",
+		term: 'dispatch.provider'
+	},
+	{
+		description:
+			'Recipient count only; addresses and device tokens are excluded.',
+		term: 'dispatch.recipient_count'
+	},
+	{
+		description: 'Vendor id, set after the adapter returns one',
+		term: 'dispatch.message_id'
+	},
+	{
+		description: 'message.tenant when set',
+		term: 'abs.tenant'
+	}
 ];
 
-const metricsCounterRows: DocsTableCell[][] = [
-	[{ code: 'sent' }, 'Cumulative successful sends across every channel.'],
-	[{ code: 'failed' }, 'Cumulative failed sends across every channel.'],
-	[
-		{ code: 'byChannel' },
-		'Per-channel { sent, failed } breakdown for email, messaging, and push.'
-	]
+const metricsCounterItems: DefinitionItem[] = [
+	{
+		description: 'Cumulative successful sends across every channel.',
+		term: 'sent'
+	},
+	{
+		description: 'Cumulative failed sends across every channel.',
+		term: 'failed'
+	},
+	{
+		description:
+			'Per-channel { sent, failed } breakdown for email, messaging, and push.',
+		term: 'byChannel'
+	}
 ];
 
 export const DispatchOverviewView = ({
@@ -542,9 +605,8 @@ export const DispatchOverviewView = ({
 						alerting layer and carrier compliance out of individual
 						call sites.
 					</p>
-					<DocsTable
-						columns={['Package', 'Responsibility']}
-						rows={productionBoundaryRows}
+					<DefinitionGrid
+						items={productionBoundaryItems}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -613,14 +675,12 @@ export const DispatchOverviewView = ({
 						production; the memory store is for tests and local
 						development.
 					</p>
-					<DocsTable
-						columns={['Stage', 'Requirement']}
-						rows={webhookLifecycleRows}
+					<StepFlow
+						steps={webhookLifecycleSteps}
 						themeSprings={themeSprings}
 					/>
-					<DocsTable
-						columns={['Event kind', 'Normalized meaning']}
-						rows={messagingEventRows}
+					<DefinitionGrid
+						items={messagingEventItems}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -642,8 +702,8 @@ export const DispatchOverviewView = ({
 						invalid-token retirement, and portable badges, sounds,
 						actions, and deep links. PostgreSQL persistence keeps
 						registrations durable and uses fenced claims so
-						ambiguous sends become
-						<code>indeterminate</code> instead of double-delivering.
+						ambiguous sends become <code>indeterminate</code>{' '}
+						instead of double-delivering.
 					</p>
 					<PrismPlus
 						codeString={dispatchPushLifecycle}
@@ -651,9 +711,8 @@ export const DispatchOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<DocsTable
-						columns={['Fanout status', 'Meaning']}
-						rows={pushOutcomeRows}
+					<DefinitionGrid
+						items={pushOutcomeItems}
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
@@ -818,9 +877,8 @@ export const DispatchOverviewView = ({
 						Besides the per-channel adapters,{' '}
 						<code>createDispatcher()</code> accepts:
 					</p>
-					<DocsTable
-						columns={['Option', 'Description']}
-						rows={dispatcherOptionRows}
+					<DefinitionGrid
+						items={dispatcherOptionItems}
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
@@ -854,14 +912,8 @@ export const DispatchOverviewView = ({
 						Each vendor adapter is its own npm package — install
 						only the ones you wire.
 					</p>
-					<DocsTable
-						columns={[
-							'Package',
-							'Version',
-							'Channel',
-							'Description'
-						]}
-						rows={vendorAdapterRows}
+					<PackageCardGrid
+						items={vendorAdapterCards}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -880,9 +932,8 @@ export const DispatchOverviewView = ({
 						In-memory and console adapters ship with the core
 						package for tests and local dev:
 					</p>
-					<DocsTable
-						columns={['Adapters', 'Behavior']}
-						rows={builtInAdapterRows}
+					<PackageCardGrid
+						items={builtInAdapterCards}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -903,18 +954,16 @@ export const DispatchOverviewView = ({
 						<code>dispatch.push.send</code> — carrying these
 						attributes:
 					</p>
-					<DocsTable
-						columns={['Attribute', 'Value']}
-						rows={spanAttributeRows}
+					<DefinitionGrid
+						items={spanAttributeItems}
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
 						<code>dispatcher.metrics()</code> returns cumulative
 						counters since the dispatcher was created:
 					</p>
-					<DocsTable
-						columns={['Counter', 'Meaning']}
-						rows={metricsCounterRows}
+					<DefinitionGrid
+						items={metricsCounterItems}
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>

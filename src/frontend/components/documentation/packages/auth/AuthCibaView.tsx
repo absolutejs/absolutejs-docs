@@ -17,10 +17,29 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { DefinitionGrid, DefinitionItem } from '../../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const pollResponseItems: DefinitionItem[] = [
+	{
+		description: 'While the user decides.',
+		term: 'authorization_pending',
+		tone: 'info'
+	},
+	{
+		description: 'If poll-rate enforcement trips.',
+		term: 'slow_down',
+		tone: 'warning'
+	},
+	{
+		description: 'Returned once the user approves.',
+		term: 'token set',
+		tone: 'success'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#config', label: 'Configure CIBA' },
@@ -123,11 +142,14 @@ export const AuthCibaView = ({
 						Wire flow
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Three protocol responses the client polls through:{' '}
-						<code>authorization_pending</code> while the user
-						decides, <code>slow_down</code> if poll-rate enforcement
-						trips, then the token set on approval. Ping + push
-						delivery modes follow when a consumer asks.
+						Three protocol responses the client polls through:
+					</p>
+					<DefinitionGrid
+						items={pollResponseItems}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Ping + push delivery modes follow when a consumer asks.
 					</p>
 					<PrismPlus
 						codeString={cibaFlow}

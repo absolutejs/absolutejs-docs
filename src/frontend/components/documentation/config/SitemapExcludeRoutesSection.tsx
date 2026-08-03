@@ -3,11 +3,11 @@ import {
 	listItemStyle,
 	listStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
 export const SitemapExcludeRoutesSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
@@ -25,25 +25,41 @@ export const SitemapExcludeRoutesSection = ({ themeSprings }: ThemeProps) => (
 			Each entry can be a string (exact match) or a regex (tested against
 			the full URL path).
 		</p>
-		<ul style={listStyle}>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>Exact strings</strong> :{' '}
-				<code>"/admin"</code> drops only that path.
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>Regex patterns</strong> :{' '}
-				<code>{'/^\\/admin(\\/|$)/'}</code> drops <code>/admin</code>{' '}
-				and every <code>/admin/*</code> sub-route — useful for excluding
-				an entire SPA wing.
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>Per-route opt-out</strong> : for one
-				SPA sub-route, set the framework's route metadata to{' '}
-				<code>sitemap: 'exclude'</code> (Angular <code>Route.data</code>
-				, React Router <code>Route.handle</code>, Vue Router{' '}
-				<code>Route.meta</code>).
-			</li>
-		</ul>
+		<DefinitionGrid
+			items={[
+				{
+					description: (
+						<>
+							<code>"/admin"</code> drops only that path.
+						</>
+					),
+					term: 'Exact strings'
+				},
+				{
+					description: (
+						<>
+							<code>{'/^\\/admin(\\/|$)/'}</code> drops{' '}
+							<code>/admin</code> and every <code>/admin/*</code>{' '}
+							sub-route — useful for excluding an entire SPA wing.
+						</>
+					),
+					term: 'Regex patterns'
+				},
+				{
+					description: (
+						<>
+							for one SPA sub-route, set the framework's route
+							metadata to <code>sitemap: 'exclude'</code> (Angular{' '}
+							<code>Route.data</code>, React Router{' '}
+							<code>Route.handle</code>, Vue Router{' '}
+							<code>Route.meta</code>).
+						</>
+					),
+					term: 'Per-route opt-out'
+				}
+			]}
+			themeSprings={themeSprings}
+		/>
 		<p style={paragraphSpacedStyle}>
 			Three things are dropped automatically and don't need to appear in{' '}
 			<code>exclude</code>:

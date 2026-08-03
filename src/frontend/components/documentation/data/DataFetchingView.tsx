@@ -27,8 +27,8 @@ import { PrismPlus } from '../../utils/PrismPlus';
 import { TypeSafetyFlowDiagram } from '../../diagrams/TypeSafetyFlowDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { StepFlow } from '../../utils/StepFlow';
 import { DataFetchingFeatureCard } from './DataFetchingFeatureCard';
-import { DataFetchingTypeFlowList } from './DataFetchingTypeFlowList';
 
 const tocItems: TocItem[] = [
 	{ href: '#server-side', label: 'Server-Side Fetching' },
@@ -242,24 +242,25 @@ export const DataFetchingView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<DataFetchingTypeFlowList
-						items={[
+					<StepFlow
+						steps={[
 							{
 								description:
 									'Drizzle/Prisma infer types from your schema',
-								label: 'Schema \u2192 Types'
+								title: 'Schema \u2192 Types'
 							},
 							{
 								description:
 									'Query results are typed based on your schema',
-								label: 'Query \u2192 Results'
+								title: 'Query \u2192 Results'
 							},
 							{
 								description:
 									'handleReactPageRequest validates prop types',
-								label: 'Props \u2192 Components'
+								title: 'Props \u2192 Components'
 							}
 						]}
+						themeSprings={themeSprings}
 					/>
 				</section>
 

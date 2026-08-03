@@ -19,10 +19,29 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const invitationSteps: StepFlowStep[] = [
+	{
+		description:
+			'Invite teammates by email with a single-use, hashed-at-rest token.',
+		title: 'Invite by email'
+	},
+	{
+		description:
+			'The plaintext token is returned once, for your email link.',
+		title: 'Send the link'
+	},
+	{
+		description: 'Accepting turns the invite into an active membership.',
+		title: 'Accept to join'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#organizations', label: 'Organizations' },
@@ -101,12 +120,12 @@ export const AuthOrganizationsView = ({
 					>
 						Invitations
 					</AnchorHeading>
+					<StepFlow
+						steps={invitationSteps}
+						themeSprings={themeSprings}
+					/>
 					<p style={paragraphSpacedStyle}>
-						Invite teammates by email with a single-use,
-						hashed-at-rest token (the plaintext is returned once for
-						your email link). Accepting turns the invite into an
-						active membership. The whole flow is also exposed as
-						pure operations.
+						The whole flow is also exposed as pure operations.
 					</p>
 					<PrismPlus
 						codeString={invitations}
@@ -128,10 +147,12 @@ export const AuthOrganizationsView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>autoAssignOrgsByEmail</code> auto-joins every new
 						user to the orgs their email domain maps to — call it
-						from your OAuth-callback or register hook. Idempotent
-						(skips orgs the user already belongs to); returns the
-						orgs newly added, so you can audit-log them.
+						from your OAuth-callback or register hook.
 					</p>
+					<Callout themeSprings={themeSprings} variant="note">
+						Idempotent (skips orgs the user already belongs to);
+						returns the orgs newly added, so you can audit-log them.
+					</Callout>
 					<PrismPlus
 						codeString={orgsJit}
 						language="typescript"

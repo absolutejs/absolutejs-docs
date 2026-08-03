@@ -25,6 +25,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { StepFlow } from '../../utils/StepFlow';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -146,53 +147,44 @@ const pgOptions: OptionRow[] = [
 	}
 ];
 
-type SpillStrategyRow = {
-	behavior: string;
-	mode: string;
-};
-
-const spillStrategies: SpillStrategyRow[] = [
+const spillStrategyItems: DefinitionItem[] = [
 	{
-		behavior:
+		badge: 'default',
+		description:
 			'Inline JSON when the payload is small; table-backed above the inline budget. The best balance for most workloads.',
-		mode: "'overflow' (default)"
+		term: "'overflow'"
 	},
 	{
-		behavior:
+		description:
 			'Every message goes through the spill table — durable but slower. Useful for forensic-replay workflows.',
-		mode: "'always'"
+		term: "'always'"
 	},
 	{
-		behavior:
+		description:
 			'Throws on oversized payloads. Useful in tests to assert payload-size discipline.',
-		mode: "'never'"
+		term: "'never'"
 	}
 ];
 
-type CounterRow = {
-	counter: string;
-	meaning: string;
-};
-
-const pgCounters: CounterRow[] = [
-	{ counter: 'published', meaning: 'Envelopes put on the channel.' },
+const pgCounterItems: DefinitionItem[] = [
+	{ description: 'Envelopes put on the channel.', term: 'published' },
 	{
-		counter: 'publishedInline',
-		meaning: 'Small payloads sent as direct NOTIFY.'
+		description: 'Small payloads sent as direct NOTIFY.',
+		term: 'publishedInline'
 	},
 	{
-		counter: 'publishedSpilled',
-		meaning: 'Oversized payloads routed via the spill table.'
+		description: 'Oversized payloads routed via the spill table.',
+		term: 'publishedSpilled'
 	},
-	{ counter: 'received', meaning: 'Envelopes pulled off the channel.' },
-	{ counter: 'spillFetched', meaning: 'Receiver fetched a spill row.' },
+	{ description: 'Envelopes pulled off the channel.', term: 'received' },
+	{ description: 'Receiver fetched a spill row.', term: 'spillFetched' },
 	{
-		counter: 'spillFetchFailed',
-		meaning: 'Spill row was vacuumed before it could be read.'
+		description: 'Spill row was vacuumed before it could be read.',
+		term: 'spillFetchFailed'
 	},
-	{ counter: 'spillVacuumed', meaning: 'Rows pruned by vacuum().' },
-	{ counter: 'publishErrors', meaning: 'publish() threw.' },
-	{ counter: 'subscribeErrors', meaning: 'onError fired.' }
+	{ description: 'Rows pruned by vacuum().', term: 'spillVacuumed' },
+	{ description: 'publish() threw.', term: 'publishErrors' },
+	{ description: 'onError fired.', term: 'subscribeErrors' }
 ];
 
 const redisOptions: OptionRow[] = [
@@ -219,14 +211,14 @@ const redisOptions: OptionRow[] = [
 	}
 ];
 
-const redisCounters: CounterRow[] = [
-	{ counter: 'published', meaning: 'Envelopes published.' },
-	{ counter: 'received', meaning: 'Envelopes received.' },
-	{ counter: 'publishErrors', meaning: 'publish() threw.' },
-	{ counter: 'subscribeErrors', meaning: 'onError fired.' },
+const redisCounterItems: DefinitionItem[] = [
+	{ description: 'Envelopes published.', term: 'published' },
+	{ description: 'Envelopes received.', term: 'received' },
+	{ description: 'publish() threw.', term: 'publishErrors' },
+	{ description: 'onError fired.', term: 'subscribeErrors' },
 	{
-		counter: 'totalSubscribersReached',
-		meaning: "Sum of Redis's PUBLISH return values across calls."
+		description: "Sum of Redis's PUBLISH return values across calls.",
+		term: 'totalSubscribersReached'
 	}
 ];
 
@@ -437,12 +429,8 @@ export const ClusterBusView = ({
 						Three spill strategies cover different durability /
 						speed trade-offs:
 					</p>
-					<DocsTable
-						headers={['Mode', 'Behavior']}
-						rows={spillStrategies.map((row) => [
-							<code style={tableCodeStyle}>{row.mode}</code>,
-							row.behavior
-						])}
+					<DefinitionGrid
+						items={spillStrategyItems}
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
@@ -479,12 +467,8 @@ export const ClusterBusView = ({
 						small-payload workload keeps{' '}
 						<code>publishedSpilled</code> near zero.
 					</p>
-					<DocsTable
-						headers={['Counter', 'Meaning']}
-						rows={pgCounters.map((row) => [
-							<code style={tableCodeStyle}>{row.counter}</code>,
-							row.meaning
-						])}
+					<DefinitionGrid
+						items={pgCounterItems}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -579,12 +563,8 @@ export const ClusterBusView = ({
 						<code>bus.metrics()</code> returns cumulative counters
 						since <code>createRedisClusterBus()</code>:
 					</p>
-					<DocsTable
-						headers={['Counter', 'Meaning']}
-						rows={redisCounters.map((row) => [
-							<code style={tableCodeStyle}>{row.counter}</code>,
-							row.meaning
-						])}
+					<DefinitionGrid
+						items={redisCounterItems}
 						themeSprings={themeSprings}
 					/>
 					<Callout

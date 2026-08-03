@@ -149,7 +149,7 @@ export const ElysiaPluginCompositionView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<PluginCompositionOrderList />
+					<PluginCompositionOrderList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

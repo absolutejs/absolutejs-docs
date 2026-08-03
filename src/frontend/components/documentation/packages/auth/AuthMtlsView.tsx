@@ -19,8 +19,34 @@ import {
 import { AnchorHeading } from '../../../utils/AnchorHeading';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const certBoundSteps: StepFlowStep[] = [
+	{
+		description: (
+			<>
+				mTLS authenticates the client at <code>/token</code>.
+			</>
+		),
+		title: 'Authenticate with mTLS'
+	},
+	{
+		description: (
+			<>
+				The issued access token&apos;s <code>cnf</code> claim gets{' '}
+				<code>x5t#S256</code> = SHA-256 of the cert DER.
+			</>
+		),
+		title: 'Bind the token to the cert'
+	},
+	{
+		description:
+			'Resource servers verify the presented cert matches the binding — a stolen token is useless without the matching private key.',
+		title: 'Verify at the resource server'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#config', label: 'mTLS client auth' },
@@ -99,15 +125,13 @@ export const AuthMtlsView = ({
 					>
 						Cert-bound access tokens
 					</AnchorHeading>
+					<StepFlow
+						steps={certBoundSteps}
+						themeSprings={themeSprings}
+					/>
 					<p style={paragraphSpacedStyle}>
-						When mTLS authenticates at <code>/token</code>, the
-						issued access token&apos;s <code>cnf</code> claim gets{' '}
-						<code>x5t#S256</code> = SHA-256 of the cert DER.
-						Resource servers verify the presented cert matches the
-						binding — a stolen token is useless without the matching
-						private key. Coexists with DPoP&apos;s{' '}
-						<code>cnf.jkt</code>; a single token can be both DPoP-
-						and cert-bound.
+						Coexists with DPoP&apos;s <code>cnf.jkt</code>; a single
+						token can be both DPoP- and cert-bound.
 					</p>
 					<PrismPlus
 						codeString={certBoundTokens}

@@ -164,7 +164,7 @@ export const HTMLOverviewView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
-					<AssetFeatureList />
+					<AssetFeatureList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

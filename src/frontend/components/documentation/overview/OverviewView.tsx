@@ -15,13 +15,10 @@ import {
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -29,6 +26,7 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { FrameworkEcosystemDiagram } from '../../diagrams/FrameworkEcosystemDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { OverviewFeatureCard } from './OverviewFeatureCard';
@@ -58,11 +56,6 @@ type FrameworkCardItem = {
 	description: string;
 	icon: typeof FaAngular;
 	name: string;
-};
-
-type NextStepItem = {
-	label: string;
-	text: string;
 };
 
 const authProviderCount = Object.keys(providers).length;
@@ -179,21 +172,6 @@ const ecosystemCards: OverviewCardItem[] = [
 	}
 ];
 
-const nextStepItems: NextStepItem[] = [
-	{
-		label: 'Quickstart',
-		text: 'Build a real app with a database, typed props, and an API in 5 minutes'
-	},
-	{
-		label: 'Core Concepts',
-		text: 'Learn how SSR, the build system, and routing work'
-	},
-	{
-		label: 'Frontends',
-		text: 'Deep dives into React, Angular, Svelte, Vue, HTML, and HTMX'
-	}
-];
-
 const renderOverviewCardGrid = (
 	items: OverviewCardItem[],
 	themeSprings: DocsViewProps['themeSprings'],
@@ -242,16 +220,6 @@ const renderFrameworkCardGrid = (
 			/>
 		))}
 	</animated.div>
-);
-
-const renderNextSteps = () => (
-	<ul style={listStyle}>
-		{nextStepItems.map((item) => (
-			<li key={item.label} style={listItemStyle}>
-				<strong style={strongStyle}>{item.label}</strong>: {item.text}
-			</li>
-		))}
-	</ul>
 );
 
 export const Overview = ({
@@ -502,7 +470,26 @@ export const Overview = ({
 					>
 						Next Steps
 					</AnchorHeading>
-					{renderNextSteps()}
+					<DefinitionGrid
+						items={[
+							{
+								description:
+									'Build a real app with a database, typed props, and an API in 5 minutes',
+								term: 'Quickstart'
+							},
+							{
+								description:
+									'Learn how SSR, the build system, and routing work',
+								term: 'Core Concepts'
+							},
+							{
+								description:
+									'Deep dives into React, Angular, Svelte, Vue, HTML, and HTMX',
+								term: 'Frontends'
+							}
+						]}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<DocsNavigation

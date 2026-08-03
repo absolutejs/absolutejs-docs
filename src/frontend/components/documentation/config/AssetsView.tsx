@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	assetsDirectory,
@@ -7,19 +7,17 @@ import {
 } from '../../../data/documentation/configDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -30,21 +28,16 @@ const tocItems: TocItem[] = [
 	{ href: '#asset-types', label: 'Asset Types' }
 ];
 
-const AssetTypesList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Images</strong>: PNG, JPG, SVG, WebP
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Fonts</strong>: WOFF, WOFF2, TTF, OTF
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Documents</strong>: PDF, TXT, JSON
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Media</strong>: MP4, WebM, MP3, WAV
-		</li>
-	</ul>
+const AssetTypesList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{ description: 'PNG, JPG, SVG, WebP', term: 'Images' },
+			{ description: 'WOFF, WOFF2, TTF, OTF', term: 'Fonts' },
+			{ description: 'PDF, TXT, JSON', term: 'Documents' },
+			{ description: 'MP4, WebM, MP3, WAV', term: 'Media' }
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const AssetsView = ({
@@ -129,7 +122,7 @@ export const AssetsView = ({
 					>
 						Asset Types
 					</AnchorHeading>
-					<AssetTypesList />
+					<AssetTypesList themeSprings={themeSprings} />
 				</section>
 
 				<DocsNavigation

@@ -18,10 +18,38 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { ChecklistRows } from '../../../utils/ChecklistRows';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const clientGuarantees: string[] = [
+	'Every method returns { data, error } so you branch without try/catch.',
+	'Routes are configurable — override the ones you mounted on a custom path.',
+	'fetch is injectable for tests.',
+	'Same-origin cookies are sent by default.'
+];
+
+const autofillSteps: StepFlowStep[] = [
+	{
+		actor: 'You',
+		description: 'Mount the hook on the sign-in page.',
+		title: 'Mount usePasskeyAutofill'
+	},
+	{
+		actor: 'Browser',
+		description:
+			"The browser surfaces the user's saved passkeys in its autofill dropdown.",
+		title: 'Passkeys appear in autofill'
+	},
+	{
+		actor: 'User',
+		description: 'One tap signs them in.',
+		title: 'One-tap sign-in'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#client', label: 'createAuthClient' },
@@ -75,13 +103,10 @@ export const AuthClientView = ({
 					>
 						createAuthClient
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Every method returns <code>{'{ data, error }'}</code> so
-						you branch without try/catch. Routes are configurable
-						(override the ones you mounted on a custom path) and{' '}
-						<code>fetch</code> is injectable for tests. Same-origin
-						cookies are sent by default.
-					</p>
+					<ChecklistRows
+						items={clientGuarantees}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={clientUsage}
 						language="typescript"
@@ -134,9 +159,13 @@ export const AuthClientView = ({
 					<p style={paragraphSpacedStyle}>
 						<code>0.37.0</code> ships{' '}
 						<code>usePasskeyAutofill</code> across React, Vue,
-						Solid, and Svelte. Mount it on the sign-in page and the
-						browser surfaces the user&apos;s saved passkeys in its
-						autofill dropdown — one tap signs them in.{' '}
+						Solid, and Svelte.
+					</p>
+					<StepFlow
+						steps={autofillSteps}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
 						<code>@simplewebauthn/browser</code> is an optional peer
 						dep loaded via dynamic import; non-passkey consumers pay
 						nothing.

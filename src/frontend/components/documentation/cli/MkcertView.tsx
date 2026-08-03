@@ -107,7 +107,7 @@ export const MkcertView = ({
 						Install mkcert on your system before running the
 						command:
 					</p>
-					<PrerequisitesList />
+					<PrerequisitesList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

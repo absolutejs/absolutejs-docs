@@ -6,13 +6,38 @@ import {
 } from '../../../../data/authDocsCode';
 import {
 	sectionStyle,
-	paragraphSpacedStyle,
-	listStyle,
-	listItemStyle
+	paragraphSpacedStyle
 } from '../../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { DefinitionGrid, DefinitionItem } from '../../../utils/DefinitionGrid';
 import { PrismPlus } from '../../../utils/PrismPlus';
+
+const cleanupProcessItems: DefinitionItem[] = [
+	{
+		description:
+			'Cleanup runs automatically at the interval specified here',
+		term: 'cleanupIntervalMs'
+	},
+	{
+		description: 'Sessions older than this duration are removed',
+		term: 'sessionDurationMs'
+	},
+	{
+		description:
+			'Unregistered sessions older than this duration are removed',
+		term: 'unregisteredSessionDurationMs'
+	},
+	{
+		description:
+			'The limit is enforced per user, removing oldest sessions first',
+		term: 'maxSessions'
+	},
+	{
+		description: 'The hook is called with maps of removed sessions',
+		term: 'onSessionCleanup'
+	}
+];
 
 export const SessionManagementSection = ({ themeSprings }: ThemeProps) => (
 	<section style={sectionStyle}>
@@ -44,26 +69,10 @@ export const SessionManagementSection = ({ themeSprings }: ThemeProps) => (
 			themeSprings={themeSprings}
 		/>
 		<p style={paragraphSpacedStyle}>The cleanup process:</p>
-		<ul style={listStyle}>
-			<li style={listItemStyle}>
-				Runs automatically at the interval specified by
-				cleanupIntervalMs
-			</li>
-			<li style={listItemStyle}>
-				Removes sessions older than sessionDurationMs
-			</li>
-			<li style={listItemStyle}>
-				Removes unregistered sessions older than
-				unregisteredSessionDurationMs
-			</li>
-			<li style={listItemStyle}>
-				Enforces the maxSessions limit per user, removing oldest
-				sessions first
-			</li>
-			<li style={listItemStyle}>
-				Calls the onSessionCleanup hook with maps of removed sessions
-			</li>
-		</ul>
+		<DefinitionGrid
+			items={cleanupProcessItems}
+			themeSprings={themeSprings}
+		/>
 
 		<animated.h3 style={gradientHeadingStyle(themeSprings, true)}>
 			The cleanupSessions Derived Function

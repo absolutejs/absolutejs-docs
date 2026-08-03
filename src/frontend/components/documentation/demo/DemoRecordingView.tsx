@@ -20,6 +20,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -198,57 +199,73 @@ const elevenLabsDefaultRows: DocsTableCell[][] = [
 	]
 ];
 
-const emotionRows: DocsTableCell[][] = [
-	[{ code: "'neutral'" }, 'No change — the tuned base settings.'],
-	[
-		{ code: "'calm'" },
-		'Stability 0.6, style 0.25 — steadier, more measured.'
-	],
-	[{ code: "'confident'" }, 'Stability 0.5, style 0.45 — assured delivery.'],
-	[
-		{ code: "'excited'" },
-		'Stability 0.3, style 0.6 — the most animated read.'
-	]
+const emotionEffects: DefinitionItem[] = [
+	{
+		description: 'No change — the tuned base settings.',
+		term: "'neutral'"
+	},
+	{
+		description: 'Stability 0.6, style 0.25 — steadier, more measured.',
+		term: "'calm'"
+	},
+	{
+		description: 'Stability 0.5, style 0.45 — assured delivery.',
+		term: "'confident'"
+	},
+	{
+		description: 'Stability 0.3, style 0.6 — the most animated read.',
+		term: "'excited'"
+	}
 ];
 
-const compositionOptionRows: DocsTableCell[][] = [
-	[
-		{ code: 'outputPath' },
-		'Final video path. .mp4 defaults the video codec to libx264; anything else remuxes with copy.'
-	],
-	[
-		{ code: 'recordingPath' },
-		'Use this file instead of the report’s recording artifact.'
-	],
-	[
-		{ code: 'audioMode' },
-		'"voiceover-only" (default) mixes just the narration; "voiceover+recording" keeps the recording’s own captured audio (live call voices) under the narration; "none" strips audio.'
-	],
-	[
-		{ code: 'voiceoverTiming' },
-		'"timeline" places each line at its run-clock offset; "sequential" plays lines back-to-back.'
-	],
-	[
-		{ code: 'voiceoverGapMs' },
-		'Gap between lines in sequential mode; defaults to 250.'
-	],
-	[
-		{ code: 'voiceoverOffsetsMs' },
-		'Per-artifact-id manual offsets — always win over either timing mode.'
-	],
-	[
-		{ code: 'extendVideo' },
-		'Freeze the last frame until the final narration ends (default on when narration exists).'
-	],
-	[{ code: 'outputDurationMs' }, 'Force a total duration for the output.'],
-	[
-		{ code: 'videoCodec / audioCodec' },
-		'"copy" | "libx264" and "aac" | "copy" overrides.'
-	],
-	[
-		{ code: 'overwrite / ffmpegPath' },
-		'Overwrite the output (default true) and the ffmpeg binary to run.'
-	]
+const compositionOptions: DefinitionItem[] = [
+	{
+		description:
+			'Final video path. .mp4 defaults the video codec to libx264; anything else remuxes with copy.',
+		term: 'outputPath'
+	},
+	{
+		description:
+			'Use this file instead of the report’s recording artifact.',
+		term: 'recordingPath'
+	},
+	{
+		description:
+			'"voiceover-only" (default) mixes just the narration; "voiceover+recording" keeps the recording’s own captured audio (live call voices) under the narration; "none" strips audio.',
+		term: 'audioMode'
+	},
+	{
+		description:
+			'"timeline" places each line at its run-clock offset; "sequential" plays lines back-to-back.',
+		term: 'voiceoverTiming'
+	},
+	{
+		description: 'Gap between lines in sequential mode; defaults to 250.',
+		term: 'voiceoverGapMs'
+	},
+	{
+		description:
+			'Per-artifact-id manual offsets — always win over either timing mode.',
+		term: 'voiceoverOffsetsMs'
+	},
+	{
+		description:
+			'Freeze the last frame until the final narration ends (default on when narration exists).',
+		term: 'extendVideo'
+	},
+	{
+		description: 'Force a total duration for the output.',
+		term: 'outputDurationMs'
+	},
+	{
+		description: '"copy" | "libx264" and "aac" | "copy" overrides.',
+		term: 'videoCodec / audioCodec'
+	},
+	{
+		description:
+			'Overwrite the output (default true) and the ffmpeg binary to run.',
+		term: 'overwrite / ffmpegPath'
+	}
 ];
 
 export const DemoRecordingView = ({
@@ -395,9 +412,8 @@ export const DemoRecordingView = ({
 						expressive dials, so a tuned base voice keeps its
 						character:
 					</p>
-					<DocsTable
-						columns={['Emotion', 'Effect']}
-						rows={emotionRows}
+					<DefinitionGrid
+						items={emotionEffects}
 						themeSprings={themeSprings}
 					/>
 					<Callout
@@ -470,9 +486,8 @@ export const DemoRecordingView = ({
 						the mix never clips the recording short, and the video
 						is padded so narration never outruns the screen.
 					</p>
-					<DocsTable
-						columns={['Option', 'Description']}
-						rows={compositionOptionRows}
+					<DefinitionGrid
+						items={compositionOptions}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus

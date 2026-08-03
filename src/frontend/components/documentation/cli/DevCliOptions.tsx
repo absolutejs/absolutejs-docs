@@ -1,22 +1,35 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const DevCliOptions = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>[entry]</strong> : Server entry file
-			(defaults to <code>src/backend/server.ts</code>)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--config</strong>: Path to{' '}
-			<code>absolute.config.ts</code>
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--host</strong>: Bind to{' '}
-			<code>0.0.0.0</code> and show network address
-		</li>
-	</ul>
+export const DevCliOptions = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						Server entry file (defaults to{' '}
+						<code>src/backend/server.ts</code>)
+					</>
+				),
+				term: '[entry]'
+			},
+			{
+				description: (
+					<>
+						Path to <code>absolute.config.ts</code>
+					</>
+				),
+				term: '--config'
+			},
+			{
+				description: (
+					<>
+						Bind to <code>0.0.0.0</code> and show network address
+					</>
+				),
+				term: '--host'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

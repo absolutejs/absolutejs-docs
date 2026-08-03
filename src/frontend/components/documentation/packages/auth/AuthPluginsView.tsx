@@ -18,10 +18,25 @@ import {
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
 import { Callout } from '../../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const denyPluginItems: DefinitionItem[] = [
+	{
+		description: 'Blocks signups from throwaway mail providers.',
+		term: 'denyDisposableEmailPlugin',
+		tone: 'error'
+	},
+	{
+		description:
+			'Takes an allow- or deny-list of ISO-3166 country codes and reads whichever header your CDN already populates.',
+		term: 'geoBlockPlugin',
+		tone: 'error'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#philosophy', label: 'Philosophy' },
@@ -138,14 +153,13 @@ export const AuthPluginsView = ({
 					>
 						Geo block &amp; disposable email
 					</AnchorHeading>
+					<DefinitionGrid
+						items={denyPluginItems}
+						themeSprings={themeSprings}
+					/>
 					<p style={paragraphSpacedStyle}>
-						<code>denyDisposableEmailPlugin</code> blocks signups
-						from throwaway mail providers;{' '}
-						<code>geoBlockPlugin</code> takes an allow- or deny-list
-						of ISO-3166 country codes and reads whichever header
-						your CDN already populates. Both compose with the
-						existing credentials and abuse hooks — no separate
-						middleware pipeline.
+						Both compose with the existing credentials and abuse
+						hooks — no separate middleware pipeline.
 					</p>
 					<PrismPlus
 						codeString={pluginsGeoDeny}

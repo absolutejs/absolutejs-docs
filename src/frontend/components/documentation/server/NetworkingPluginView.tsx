@@ -116,7 +116,7 @@ export const NetworkingPluginView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<NetworkingHowItWorksList />
+					<NetworkingHowItWorksList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

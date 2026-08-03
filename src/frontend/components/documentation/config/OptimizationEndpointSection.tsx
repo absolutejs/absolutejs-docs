@@ -1,14 +1,9 @@
 import { ThemeProps } from '../../../../types/springTypes';
 import { imageEndpointDirect } from '../../../data/documentation/imageOptDocsCode';
-import {
-	listItemStyle,
-	listStyle,
-	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { paragraphSpacedStyle, sectionStyle } from '../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 
 export const OptimizationEndpointSection = ({ themeSprings }: ThemeProps) => (
@@ -24,21 +19,33 @@ export const OptimizationEndpointSection = ({ themeSprings }: ThemeProps) => (
 		<p style={paragraphSpacedStyle}>
 			The endpoint accepts three query parameters:
 		</p>
-		<ul style={listStyle}>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>url</strong> (required) : the source
-				image path or a full remote URL
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>w</strong> (required) : target width
-				in pixels. Must be one of the configured{' '}
-				<code>deviceSizes</code> or <code>imageSizes</code> values.
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>q</strong> (optional) : quality
-				1-100. Defaults to the configured quality.
-			</li>
-		</ul>
+		<DefinitionGrid
+			items={[
+				{
+					badge: 'required',
+					description: 'the source image path or a full remote URL',
+					term: 'url'
+				},
+				{
+					badge: 'required',
+					description: (
+						<>
+							target width in pixels. Must be one of the
+							configured <code>deviceSizes</code> or{' '}
+							<code>imageSizes</code> values.
+						</>
+					),
+					term: 'w'
+				},
+				{
+					badge: 'optional',
+					description:
+						'quality 1-100. Defaults to the configured quality.',
+					term: 'q'
+				}
+			]}
+			themeSprings={themeSprings}
+		/>
 		<PrismPlus
 			codeString={imageEndpointDirect}
 			language="bash"

@@ -20,6 +20,7 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -52,135 +53,177 @@ const builtinConditionRows: DocsTableCell[][] = [
 	]
 ];
 
-const waitForRows: DocsTableCell[][] = [
-	[
-		{ code: 'selector' },
-		'Poll until the selector exists and has a visible box (a 0×0 element does not count).'
-	],
-	[
-		{ code: 'condition' },
-		'Poll a serialized condition ref (120ms interval) until it returns true.'
-	],
-	[
-		{ code: 'timeoutMs', suffix: 'default 3500' },
-		'Past the timeout the step shows anyway rather than stalling the tour.'
-	]
+const waitForFields: DefinitionItem[] = [
+	{
+		description:
+			'Poll until the selector exists and has a visible box (a 0×0 element does not count).',
+		term: 'selector'
+	},
+	{
+		description:
+			'Poll a serialized condition ref (120ms interval) until it returns true.',
+		term: 'condition'
+	},
+	{
+		badge: 'default 3500',
+		description:
+			'Past the timeout the step shows anyway rather than stalling the tour.',
+		term: 'timeoutMs'
+	}
 ];
 
-const eventRows: DocsTableCell[][] = [
-	[
-		{ code: 'tour_started' },
-		'A genuine start — a cross-page resume does not re-fire it.'
-	],
-	[
-		{ code: 'step_viewed' },
-		'A step is positioned and on screen (centered and missing-target steps included).'
-	],
-	[
-		{ code: 'step_completed' },
-		'The viewer (or an action) advanced past the step.'
-	],
-	[
-		{ code: 'step_target_missing' },
-		'The target selector was not found in time; the step degraded to a centered card.'
-	],
-	[
-		{ code: 'action_failed' },
-		'An action ref failed or named an unknown handler — reason carries the action name.'
-	],
-	[
-		{ code: 'tour_completed' },
-		'The last step finished. reason is "remaining-skipped" when the tail of the tour was branch-skipped.'
-	],
-	[
-		{ code: 'tour_skipped' },
-		'The viewer bailed — reason distinguishes the Skip button ("skip") from Escape ("escape").'
-	]
+const funnelEvents: DefinitionItem[] = [
+	{
+		description:
+			'A genuine start — a cross-page resume does not re-fire it.',
+		term: 'tour_started'
+	},
+	{
+		description:
+			'A step is positioned and on screen (centered and missing-target steps included).',
+		term: 'step_viewed'
+	},
+	{
+		description: 'The viewer (or an action) advanced past the step.',
+		term: 'step_completed'
+	},
+	{
+		description:
+			'The target selector was not found in time; the step degraded to a centered card.',
+		term: 'step_target_missing',
+		tone: 'warning'
+	},
+	{
+		description:
+			'An action ref failed or named an unknown handler — reason carries the action name.',
+		term: 'action_failed',
+		tone: 'error'
+	},
+	{
+		description:
+			'The last step finished. reason is "remaining-skipped" when the tail of the tour was branch-skipped.',
+		term: 'tour_completed',
+		tone: 'success'
+	},
+	{
+		description:
+			'The viewer bailed — reason distinguishes the Skip button ("skip") from Escape ("escape").',
+		term: 'tour_skipped',
+		tone: 'warning'
+	}
 ];
 
-const eventPayloadRows: DocsTableCell[][] = [
-	[{ code: 'at' }, 'ISO timestamp.'],
-	[{ code: 'isReplay' }, 'Whether the run was an explicit replay.'],
-	[{ code: 'name' }, 'One of the seven event names above.'],
-	[
-		{ code: 'reason' },
-		'Skip source, completion detail, or the failed action name — per event.'
-	],
-	[
-		{ code: 'route' },
-		'window.location.pathname when the event fired — for a skip, the screen the viewer was on when they had enough.'
-	],
-	[
-		{ code: 'stepIndex / stepCount / stepTitle' },
-		'Where in the tour the event happened.'
-	],
-	[
-		{ code: 'target' },
-		'The step target selector, post mobile-override resolution.'
-	],
-	[
-		{ code: 'tutorialSlug' },
-		'The tutorial identity the host is playing, so events from different tutorials never blur together.'
-	]
+const eventPayloadFields: DefinitionItem[] = [
+	{
+		description: 'ISO timestamp.',
+		term: 'at'
+	},
+	{
+		description: 'Whether the run was an explicit replay.',
+		term: 'isReplay'
+	},
+	{
+		description: 'One of the seven event names above.',
+		term: 'name'
+	},
+	{
+		description:
+			'Skip source, completion detail, or the failed action name — per event.',
+		term: 'reason'
+	},
+	{
+		description:
+			'window.location.pathname when the event fired — for a skip, the screen the viewer was on when they had enough.',
+		term: 'route'
+	},
+	{
+		description: 'Where in the tour the event happened.',
+		term: 'stepIndex / stepCount / stepTitle'
+	},
+	{
+		description:
+			'The step target selector, post mobile-override resolution.',
+		term: 'target'
+	},
+	{
+		description:
+			'The tutorial identity the host is playing, so events from different tutorials never blur together.',
+		term: 'tutorialSlug'
+	}
 ];
 
-const gateApiRows: DocsTableCell[][] = [
-	[
-		{ code: 'pick(tutorials, routePath)' },
-		'The one tutorial to auto-play now: eligible candidates, highest trigger.priority wins (stable on ties). Null when none qualify.'
-	],
-	[
-		{ code: 'shouldAutoPlay(tutorial, routePath)' },
-		'The full eligibility check for a single tutorial. Manual replays bypass the gate entirely.'
-	],
-	[
-		{ code: 'recordAutoPlay(slug)' },
-		'Stamp that an auto-play actually started (session marker + last-played timestamp).'
-	],
-	[
-		{ code: 'recordDismissal(slug)' },
-		'The viewer skipped out — counts toward maxDismissals.'
-	],
-	[{ code: 'recordCompletion(slug)' }, 'The viewer finished the tour.'],
-	[
-		{ code: 'stateFor(slug)' },
-		'The persisted state: { completedAt, dismissals, lastAutoPlayAt }.'
-	],
-	[
-		{ code: 'reset(slug)' },
-		'Clear the persisted gate state for one tutorial.'
-	]
+const gateApiMethods: DefinitionItem[] = [
+	{
+		description:
+			'The one tutorial to auto-play now: eligible candidates, highest trigger.priority wins (stable on ties). Null when none qualify.',
+		term: 'pick(tutorials, routePath)'
+	},
+	{
+		description:
+			'The full eligibility check for a single tutorial. Manual replays bypass the gate entirely.',
+		term: 'shouldAutoPlay(tutorial, routePath)'
+	},
+	{
+		description:
+			'Stamp that an auto-play actually started (session marker + last-played timestamp).',
+		term: 'recordAutoPlay(slug)'
+	},
+	{
+		description: 'The viewer skipped out — counts toward maxDismissals.',
+		term: 'recordDismissal(slug)'
+	},
+	{
+		description: 'The viewer finished the tour.',
+		term: 'recordCompletion(slug)'
+	},
+	{
+		description:
+			'The persisted state: { completedAt, dismissals, lastAutoPlayAt }.',
+		term: 'stateFor(slug)'
+	},
+	{
+		description: 'Clear the persisted gate state for one tutorial.',
+		term: 'reset(slug)'
+	}
 ];
 
-const triggerRows: DocsTableCell[][] = [
-	[
-		{ code: 'firstVisitOnly' },
-		'Auto-play once per viewer — never again after a completion or a prior auto-play.'
-	],
-	[
-		{ code: 'onRoutePrefix' },
-		'Only auto-play when the current path starts with this prefix.'
-	],
-	[
-		{ code: 'roles' },
-		'Restrict auto-play to these role slugs — at least one must match the gate roles getter. Ignored when the getter is omitted.'
-	],
-	[
-		{ code: 'maxDismissals', suffix: 'default 2' },
-		'Stop auto-playing after the viewer has skipped it this many times. Manual replay stays available.'
-	],
-	[
-		{ code: 'oncePerSession' },
-		'Auto-play at most once per browser session (sessionStorage marker).'
-	],
-	[
-		{ code: 'priority' },
-		'When several tutorials match a page, the highest priority wins.'
-	],
-	[
-		{ code: 'showIf' },
-		'Audience predicates — all must hold for auto-play, resolved through the condition registry.'
-	]
+const triggerRules: DefinitionItem[] = [
+	{
+		description:
+			'Auto-play once per viewer — never again after a completion or a prior auto-play.',
+		term: 'firstVisitOnly'
+	},
+	{
+		description:
+			'Only auto-play when the current path starts with this prefix.',
+		term: 'onRoutePrefix'
+	},
+	{
+		description:
+			'Restrict auto-play to these role slugs — at least one must match the gate roles getter. Ignored when the getter is omitted.',
+		term: 'roles'
+	},
+	{
+		badge: 'default 2',
+		description:
+			'Stop auto-playing after the viewer has skipped it this many times. Manual replay stays available.',
+		term: 'maxDismissals'
+	},
+	{
+		description:
+			'Auto-play at most once per browser session (sessionStorage marker).',
+		term: 'oncePerSession'
+	},
+	{
+		description:
+			'When several tutorials match a page, the highest priority wins.',
+		term: 'priority'
+	},
+	{
+		description:
+			'Audience predicates — all must hold for auto-play, resolved through the condition registry.',
+		term: 'showIf'
+	}
 ];
 
 const gateWiring: StepFlowStep[] = [
@@ -352,9 +395,8 @@ export const TourBranchingView = ({
 						after a data fetch, a host predicate flipped true —
 						instead of spotlighting a half-loaded surface.
 					</p>
-					<DocsTable
-						columns={['Field', 'Behavior']}
-						rows={waitForRows}
+					<DefinitionGrid
+						items={waitForFields}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -374,9 +416,8 @@ export const TourBranchingView = ({
 						engine emits; the host sinks the events into whatever
 						analytics it runs.
 					</p>
-					<DocsTable
-						columns={['Event', 'Fires when']}
-						rows={eventRows}
+					<DefinitionGrid
+						items={funnelEvents}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus
@@ -388,9 +429,8 @@ export const TourBranchingView = ({
 					<p style={paragraphSpacedStyle}>
 						Every <code>TourEvent</code> carries the full context:
 					</p>
-					<DocsTable
-						columns={['Field', 'Description']}
-						rows={eventPayloadRows}
+					<DefinitionGrid
+						items={eventPayloadFields}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -421,9 +461,8 @@ export const TourBranchingView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<DocsTable
-						columns={['Method', 'Description']}
-						rows={gateApiRows}
+					<DefinitionGrid
+						items={gateApiMethods}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -443,9 +482,8 @@ export const TourBranchingView = ({
 						auto-plays. All rules are serializable, so they store
 						and author like the rest of the protocol:
 					</p>
-					<DocsTable
-						columns={['Rule', 'Behavior']}
-						rows={triggerRows}
+					<DefinitionGrid
+						items={triggerRules}
 						themeSprings={themeSprings}
 					/>
 					<PrismPlus

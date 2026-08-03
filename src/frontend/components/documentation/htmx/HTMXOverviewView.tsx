@@ -1,8 +1,8 @@
-import type { ReactNode } from 'react';
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import {
 	htmxApiEndpoint,
 	htmxBuild,
@@ -15,13 +15,10 @@ import {
 } from '../../../data/documentation/htmlHtmxDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
@@ -38,23 +35,6 @@ const tocItems: TocItem[] = [
 	{ href: '#out-of-order-streaming', label: 'Out-of-Order Streaming' },
 	{ href: '#scoped-state', label: 'Per-User State' }
 ];
-
-type HtmxFeatureListProps = {
-	items: Array<{
-		label: ReactNode;
-		text: string;
-	}>;
-};
-
-const HtmxFeatureList = ({ items }: HtmxFeatureListProps) => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		{items.map((item, index) => (
-			<li key={index} style={listItemStyle}>
-				{item.label}: {item.text}
-			</li>
-		))}
-	</ul>
-);
 
 export const HTMXOverviewView = ({
 	currentPageId,
@@ -170,33 +150,25 @@ export const HTMXOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<HtmxFeatureList
+					<DefinitionGrid
 						items={[
 							{
-								label: (
-									<strong style={strongStyle}>
-										Return HTML
-									</strong>
-								),
-								text: 'Endpoints return HTML strings that HTMX injects into the page'
+								description:
+									'Endpoints return HTML strings that HTMX injects into the page',
+								term: 'Return HTML'
 							},
 							{
-								label: (
-									<strong style={strongStyle}>
-										Type-safe data
-									</strong>
-								),
-								text: 'Your data fetching is still fully typed even though the response is HTML'
+								description:
+									'Your data fetching is still fully typed even though the response is HTML',
+								term: 'Type-safe data'
 							},
 							{
-								label: (
-									<strong style={strongStyle}>
-										No JSON serialization
-									</strong>
-								),
-								text: 'Skip the JSON/parse cycle for simpler data flow'
+								description:
+									'Skip the JSON/parse cycle for simpler data flow',
+								term: 'No JSON serialization'
 							}
 						]}
+						themeSprings={themeSprings}
 					/>
 				</section>
 
@@ -281,25 +253,20 @@ export const HTMXOverviewView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<HtmxFeatureList
+					<DefinitionGrid
 						items={[
 							{
-								label: (
-									<strong style={strongStyle}>
-										Automatic sessions
-									</strong>
-								),
-								text: 'A secure user_session_id cookie is created on first visit'
+								description:
+									'A secure user_session_id cookie is created on first visit',
+								term: 'Automatic sessions'
 							},
 							{
-								label: (
-									<strong style={strongStyle}>
-										User isolation
-									</strong>
-								),
-								text: "Each user's scopedStore is completely independent"
+								description:
+									"Each user's scopedStore is completely independent",
+								term: 'User isolation'
 							}
 						]}
+						themeSprings={themeSprings}
 					/>
 				</section>
 

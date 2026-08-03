@@ -1,14 +1,9 @@
 import { ThemeProps } from '../../../../types/springTypes';
 import { imageRemotePatterns } from '../../../data/documentation/imageOptDocsCode';
-import {
-	listItemStyle,
-	listStyle,
-	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { paragraphSpacedStyle, sectionStyle } from '../../../styles/docsStyles';
 import { gradientHeadingStyle } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 
 export const RemoteImagesSection = ({ themeSprings }: ThemeProps) => (
@@ -33,17 +28,29 @@ export const RemoteImagesSection = ({ themeSprings }: ThemeProps) => (
 			showLineNumbers={true}
 			themeSprings={themeSprings}
 		/>
-		<ul style={listStyle}>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>hostname</strong> : supports
-				wildcards: <code>"*.example.com"</code> matches{' '}
-				<code>cdn.example.com</code>, etc.
-			</li>
-			<li style={listItemStyle}>
-				<strong style={strongStyle}>pathname</strong> : supports glob
-				prefixes: <code>"/photos/**"</code> matches any path starting
-				with <code>/photos/</code>.
-			</li>
-		</ul>
+		<DefinitionGrid
+			items={[
+				{
+					description: (
+						<>
+							supports wildcards: <code>"*.example.com"</code>{' '}
+							matches <code>cdn.example.com</code>, etc.
+						</>
+					),
+					term: 'hostname'
+				},
+				{
+					description: (
+						<>
+							supports glob prefixes: <code>"/photos/**"</code>{' '}
+							matches any path starting with <code>/photos/</code>
+							.
+						</>
+					),
+					term: 'pathname'
+				}
+			]}
+			themeSprings={themeSprings}
+		/>
 	</section>
 );

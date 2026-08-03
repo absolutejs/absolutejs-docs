@@ -142,7 +142,9 @@ export const ProductionBuildView = ({
 					>
 						Optimization Tips
 					</AnchorHeading>
-					<ProductionBuildOptimizationTips />
+					<ProductionBuildOptimizationTips
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<DocsNavigation

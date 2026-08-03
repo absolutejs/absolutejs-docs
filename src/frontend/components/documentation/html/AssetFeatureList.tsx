@@ -1,22 +1,24 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const AssetFeatureList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Hashed filenames</strong>: Built files
-			include content hashes for cache busting
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Path rewriting</strong>: All asset paths
-			are automatically updated to the build output
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Bundling</strong>: Assets are optimized
-			and minified for production
-		</li>
-	</ul>
+export const AssetFeatureList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'Built files include content hashes for cache busting',
+				term: 'Hashed filenames'
+			},
+			{
+				description:
+					'All asset paths are automatically updated to the build output',
+				term: 'Path rewriting'
+			},
+			{
+				description: 'Assets are optimized and minified for production',
+				term: 'Bundling'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

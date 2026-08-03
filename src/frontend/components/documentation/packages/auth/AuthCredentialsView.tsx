@@ -23,8 +23,61 @@ import { Callout } from '../../../utils/Callout';
 import { Endpoint, EndpointTable } from '../../../utils/EndpointTable';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const mfaGateSteps: StepFlowStep[] = [
+	{
+		description:
+			'TOTP (authenticator apps) plus single-use backup codes. The TOTP secret is AES-GCM encrypted at rest.',
+		title: 'Enroll a factor'
+	},
+	{
+		description:
+			'When MFA is enrolled, login parks the session instead of authenticating.',
+		title: 'Login parks the session'
+	},
+	{
+		description:
+			'The parked session is only promoted once a factor is verified.',
+		title: 'Verify to promote'
+	}
+];
+
+const legacyImportSteps: StepFlowStep[] = [
+	{
+		description: (
+			<>
+				<code>importUser</code> / <code>importUsers</code> migrate an
+				Auth0, Cognito, or Firebase export in one pass.
+			</>
+		),
+		title: 'Import the export'
+	},
+	{
+		description: (
+			<>
+				argon2id and bcrypt hashes verify natively via{' '}
+				<code>Bun.password</code>. Legacy formats (Auth0 PBKDF2, Cognito
+				SHA-256) are recognized by <code>isLegacyHash</code> and
+				verified by the matching <code>verifyAuth0Pbkdf2</code> /{' '}
+				<code>verifyCognitoSha256</code>.
+			</>
+		),
+		title: 'Verify every hash format'
+	},
+	{
+		description: (
+			<>
+				Opt in to <code>rehashOnLogin</code> and the first successful
+				sign-in silently upgrades the stored hash to argon2id. No forced
+				password reset, no public breach.
+			</>
+		),
+		title: 'Upgrade on first login'
+	}
+];
 
 const credentialEndpoints: Endpoint[] = [
 	{
@@ -165,12 +218,10 @@ export const AuthCredentialsView = ({
 					>
 						Multi-Factor Auth
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						TOTP (authenticator apps) plus single-use backup codes.
-						The TOTP secret is AES-GCM encrypted at rest. When MFA
-						is enrolled, login parks the session and only promotes
-						it once a factor is verified.
-					</p>
+					<StepFlow
+						steps={mfaGateSteps}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={mfaSetup}
 						language="typescript"
@@ -233,19 +284,10 @@ export const AuthCredentialsView = ({
 					>
 						Bulk import &amp; legacy hashes
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						<code>importUser</code> / <code>importUsers</code>{' '}
-						migrate an Auth0, Cognito, or Firebase export in one
-						pass — argon2id and bcrypt hashes verify natively via{' '}
-						<code>Bun.password</code>. Legacy formats (Auth0 PBKDF2,
-						Cognito SHA-256) are recognized by{' '}
-						<code>isLegacyHash</code> and verified by the matching{' '}
-						<code>verifyAuth0Pbkdf2</code> /{' '}
-						<code>verifyCognitoSha256</code>; opt in to{' '}
-						<code>rehashOnLogin</code> and the first successful
-						sign-in silently upgrades the stored hash to argon2id.
-						No forced password reset, no public breach.
-					</p>
+					<StepFlow
+						steps={legacyImportSteps}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={bulkImport}
 						language="typescript"

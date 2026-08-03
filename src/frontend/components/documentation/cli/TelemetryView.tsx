@@ -1,22 +1,20 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { telemetryCommand } from '../../../data/documentation/cliUtilityDocsCode';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -27,21 +25,25 @@ const tocItems: TocItem[] = [
 	{ href: '#opting-out', label: 'Opting Out' }
 ];
 
-const TelemetryCollectedList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>CLI commands used</strong> : which
-			commands are run (dev, start, compile)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Build metrics</strong> : build duration
-			and which frameworks are used
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Error types</strong> : what kind of
-			errors occur (not the error content)
-		</li>
-	</ul>
+const TelemetryCollectedList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: 'which commands are run (dev, start, compile)',
+				term: 'CLI commands used'
+			},
+			{
+				description: 'build duration and which frameworks are used',
+				term: 'Build metrics'
+			},
+			{
+				description:
+					'what kind of errors occur (not the error content)',
+				term: 'Error types'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const TelemetryView = ({
@@ -106,7 +108,7 @@ export const TelemetryView = ({
 						the framework. No personal data, source code, or project
 						details are ever collected.
 					</p>
-					<TelemetryCollectedList />
+					<TelemetryCollectedList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

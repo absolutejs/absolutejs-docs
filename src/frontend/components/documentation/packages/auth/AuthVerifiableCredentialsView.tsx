@@ -18,10 +18,80 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const offerSteps: StepFlowStep[] = [
+	{
+		actor: 'You',
+		description: 'Mint an offer, hand the QR / deeplink to the wallet.',
+		title: 'Mint the offer'
+	},
+	{
+		actor: 'Wallet',
+		description: (
+			<>
+				The wallet trades the pre-auth code at the regular OIDC{' '}
+				<code>/oauth2/token</code> endpoint.
+			</>
+		),
+		title: 'Trade the pre-auth code'
+	},
+	{
+		actor: 'Wallet',
+		description: (
+			<>
+				It then POSTs its proof-of-possession JWT to{' '}
+				<code>/vci/credential</code>.
+			</>
+		),
+		title: 'Prove possession'
+	},
+	{
+		actor: 'Package',
+		description:
+			"The package verifies the proof signature, mints the SD-JWT VC bound to the wallet's key.",
+		title: 'Mint the credential'
+	}
+];
+
+const verifierSteps: StepFlowStep[] = [
+	{
+		actor: 'You',
+		description: (
+			<>
+				Mint a request (returns a <code>request_uri</code> for the
+				wallet deeplink).
+			</>
+		),
+		title: 'Mint the request'
+	},
+	{
+		actor: 'Wallet',
+		description: (
+			<>
+				The wallet POSTs back a key-binding-signed <code>vp_token</code>
+				.
+			</>
+		),
+		title: 'Present the token'
+	},
+	{
+		actor: 'Package',
+		description:
+			'The package verifies every link in the chain: issuer signature, holder binding, requested-claim coverage, optional status check.',
+		title: 'Verify the chain'
+	},
+	{
+		actor: 'Package',
+		description: 'Your hook fires with the verified presentation.',
+		title: 'Fire your hook'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#issuer', label: 'Issuer setup' },
@@ -85,10 +155,12 @@ export const AuthVerifiableCredentialsView = ({
 						Declare what credentials you offer + a resolver that
 						produces the claim bag. The package handles SD-JWT
 						signing, selective-disclosure hash math, cnf holder
-						binding, and the c_nonce ceremony. Pre-authorized_code
-						flow only in this cycle; auth-code flow follows when a
-						consumer asks.
+						binding, and the c_nonce ceremony.
 					</p>
+					<Callout themeSprings={themeSprings} variant="note">
+						Pre-authorized_code flow only in this cycle; auth-code
+						flow follows when a consumer asks.
+					</Callout>
 					<PrismPlus
 						codeString={issuerSetup}
 						language="typescript"
@@ -106,14 +178,7 @@ export const AuthVerifiableCredentialsView = ({
 					>
 						Credential offer flow
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Mint an offer, hand the QR / deeplink to the wallet. The
-						wallet trades the pre-auth code at the regular OIDC
-						<code> /oauth2/token</code> endpoint, then POSTs its
-						proof-of-possession JWT to <code>/vci/credential</code>.
-						The package verifies the proof signature, mints the
-						SD-JWT VC bound to the wallet&apos;s key.
-					</p>
+					<StepFlow steps={offerSteps} themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={issuerOfferFlow}
 						language="typescript"
@@ -132,14 +197,12 @@ export const AuthVerifiableCredentialsView = ({
 						Verifier (OID4VP)
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Accept presentations from any wallet. Mint a request
-						(returns a <code>request_uri</code> for the wallet
-						deeplink), the wallet POSTs back a key-binding-signed
-						<code> vp_token</code>, the package verifies every link
-						in the chain (issuer signature, holder binding,
-						requested-claim coverage, optional status check) and
-						fires your hook.
+						Accept presentations from any wallet.
 					</p>
+					<StepFlow
+						steps={verifierSteps}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={verifierFlow}
 						language="typescript"

@@ -1,14 +1,20 @@
-import { listStyle } from '../../../styles/docsStyles';
-import { IsrListItem } from './IsrListItem';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const StaticGenerationIsrList = () => (
-	<ul style={listStyle}>
-		<IsrListItem label="Without revalidate">
-			: pure SSG: pages are rendered once at build time and never change
-		</IsrListItem>
-		<IsrListItem label="With revalidate">
-			: ISR: stale pages are served immediately while a fresh version
-			renders in the background
-		</IsrListItem>
-	</ul>
+export const StaticGenerationIsrList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'pure SSG: pages are rendered once at build time and never change',
+				term: 'Without revalidate'
+			},
+			{
+				description:
+					'ISR: stale pages are served immediately while a fresh version renders in the background',
+				term: 'With revalidate'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

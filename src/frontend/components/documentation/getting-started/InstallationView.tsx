@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	bunInstall,
@@ -10,19 +10,17 @@ import {
 import { ProjectStructureGraph } from './ProjectStructureGraph';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -34,21 +32,24 @@ const tocItems: TocItem[] = [
 	{ href: '#manual-installation', label: 'Manual Installation' }
 ];
 
-const CreateAbsoluteOptionsList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--frontend</strong> : react, svelte,
-			vue, html, htmx
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--database</strong> : drizzle, prisma,
-			none
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>--auth</strong> : Include
-			@absolutejs/auth setup
-		</li>
-	</ul>
+const CreateAbsoluteOptionsList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: 'react, svelte, vue, html, htmx',
+				term: '--frontend'
+			},
+			{
+				description: 'drizzle, prisma, none',
+				term: '--database'
+			},
+			{
+				description: 'Include @absolutejs/auth setup',
+				term: '--auth'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const InstallationView = ({
@@ -135,7 +136,7 @@ export const InstallationView = ({
 					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
 						Available options include:
 					</p>
-					<CreateAbsoluteOptionsList />
+					<CreateAbsoluteOptionsList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

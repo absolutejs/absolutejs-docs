@@ -1,5 +1,4 @@
 import { animated } from '@react-spring/web';
-import { CSSProperties } from 'react';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
 	syncVsFirebaseAuthBridge,
@@ -32,8 +31,10 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
 import { ComparisonTable } from '../../utils/ComparisonTable';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { StepFlow } from '../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
 const noop = () => undefined;
@@ -51,80 +52,102 @@ const tocItems: TocItem[] = [
 	{ href: '#migration', label: 'One-shot migration script' }
 ];
 
-const orderedListStyle: CSSProperties = {
-	lineHeight: 1.6,
-	marginBottom: '1rem',
-	paddingLeft: '1.2rem'
+type ThemedSectionProps = {
+	themeSprings: DocsViewProps['themeSprings'];
 };
 
-const WhyLeaveList = () => (
-	<ul
-		style={{
-			lineHeight: 1.6,
-			marginBottom: '1rem',
-			paddingLeft: '1.2rem'
-		}}
-	>
-		<li>
-			<strong>Surprise bills.</strong> "$70k bill in one day" stories on{' '}
-			<a
-				href="https://news.ycombinator.com/item?id=38935323"
-				rel="noopener noreferrer"
-				target="_blank"
-			>
-				HN
-			</a>
-			. Spencer Pauly's viral{' '}
-			<a
-				href="https://www.spencerpauly.com/tech/why-i-switched-away-from-google-firestore"
-				rel="noopener noreferrer"
-				target="_blank"
-			>
-				migration post
-			</a>
-			: "Firestore is optimizing to make their costs cheaper. Not yours."
-		</li>
-		<li>
-			<strong>No joins, no aggregations</strong> on Firestore Standard.
-			Pipeline Operations API in Enterprise adds them back — at a price.
-		</li>
-		<li>
-			<strong>Vendor lock-in.</strong> Pauly again: "Firestore is the
-			epitome of vendor lock-in." No portable migration; rewriting
-			business logic to leave.
-		</li>
-		<li>
-			<strong>RTDB historical reliability.</strong> A 13-hour outage on a
-			customer's main product (
-			<a
-				href="https://news.ycombinator.com/item?id=19047812"
-				rel="noopener noreferrer"
-				target="_blank"
-			>
-				HN #19047812
-			</a>
-			). "Almost weekly, all clients sometimes wouldn't get notified of
-			document changes."
-		</li>
-		<li>
-			<strong>1.2 MB document limit</strong> is a hard wall for
-			analytics/reporting screens.
-		</li>
-	</ul>
+const WhyLeaveGrid = ({ themeSprings }: ThemedSectionProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						"$70k bill in one day" stories on{' '}
+						<a
+							href="https://news.ycombinator.com/item?id=38935323"
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							HN
+						</a>
+						. Spencer Pauly's viral{' '}
+						<a
+							href="https://www.spencerpauly.com/tech/why-i-switched-away-from-google-firestore"
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							migration post
+						</a>
+						: "Firestore is optimizing to make their costs cheaper.
+						Not yours."
+					</>
+				),
+				term: 'Surprise bills',
+				tone: 'warning'
+			},
+			{
+				description:
+					'On Firestore Standard. Pipeline Operations API in Enterprise adds them back — at a price.',
+				term: 'No joins, no aggregations',
+				tone: 'warning'
+			},
+			{
+				description:
+					'Pauly again: "Firestore is the epitome of vendor lock-in." No portable migration; rewriting business logic to leave.',
+				term: 'Vendor lock-in',
+				tone: 'warning'
+			},
+			{
+				description: (
+					<>
+						A 13-hour outage on a customer's main product (
+						<a
+							href="https://news.ycombinator.com/item?id=19047812"
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							HN #19047812
+						</a>
+						). "Almost weekly, all clients sometimes wouldn't get
+						notified of document changes."
+					</>
+				),
+				term: 'RTDB historical reliability',
+				tone: 'warning'
+			},
+			{
+				description: 'A hard wall for analytics/reporting screens.',
+				term: '1.2 MB document limit',
+				tone: 'warning'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
-const AuthBridgeSteps = () => (
-	<ol style={orderedListStyle}>
-		<li>Keep Firebase Auth as your identity provider (it's fine).</li>
-		<li>
-			Validate the Firebase ID token in your Elysia server's auth
-			middleware (firebase-admin's <code>verifyIdToken</code>).
-		</li>
-		<li>
-			The verified token becomes the <code>ctx</code> object sync sees on
-			every subscription and mutation.
-		</li>
-	</ol>
+const AuthBridgeSteps = ({ themeSprings }: ThemedSectionProps) => (
+	<StepFlow
+		steps={[
+			{
+				description: "It's fine.",
+				title: 'Keep Firebase Auth as your identity provider'
+			},
+			{
+				description: (
+					<>
+						In your Elysia server's auth middleware
+						(firebase-admin's <code>verifyIdToken</code>).
+					</>
+				),
+				title: 'Validate the Firebase ID token'
+			},
+			{
+				description: 'sync sees it on every subscription and mutation.',
+				title: 'The verified token becomes the ctx object'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 const MigrationNotesList = () => (
@@ -211,7 +234,7 @@ export const SyncVsFirebaseView = ({
 						The dominant complaints are sourced and consistent
 						across years of public discourse:
 					</p>
-					<WhyLeaveList />
+					<WhyLeaveGrid themeSprings={themeSprings} />
 					<p style={paragraphSpacedStyle}>
 						sync's positioning is the literal anti-Firebase:
 						self-hosted (no vendor), priced as your existing
@@ -420,7 +443,7 @@ export const SyncVsFirebaseView = ({
 						layer, not an identity provider. The migration pattern
 						that fits 90% of teams:
 					</p>
-					<AuthBridgeSteps />
+					<AuthBridgeSteps themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={syncVsFirebaseAuthBridge}
 						language="typescript"

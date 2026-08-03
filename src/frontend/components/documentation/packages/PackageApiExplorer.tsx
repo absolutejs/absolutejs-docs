@@ -11,16 +11,37 @@ type PackageApiExplorerProps = {
 	themeSprings: ThemeSprings;
 };
 
+const activeTabFontWeight = 700;
+const inactiveTabFontWeight = 400;
+
 const tabStyle = (active: boolean) => ({
 	background: active ? 'rgba(99, 102, 241, 0.16)' : 'transparent',
-	border: '1px solid rgba(99, 102, 241, 0.3)',
+	border: active
+		? '1px solid rgba(99, 102, 241, 0.55)'
+		: '1px solid rgba(99, 102, 241, 0.3)',
 	borderRadius: '0.45rem',
 	color: 'inherit',
 	cursor: 'pointer',
-	fontFamily: 'monospace',
+	fontFamily: 'JetBrains Mono, monospace',
 	fontSize: '0.78rem',
+	fontWeight: active ? activeTabFontWeight : inactiveTabFontWeight,
 	padding: '0.45rem 0.65rem'
 });
+
+const actionChipStyle = {
+	alignItems: 'center',
+	background: 'rgba(99, 102, 241, 0.08)',
+	border: '1px solid rgba(99, 102, 241, 0.25)',
+	borderRadius: '0.4rem',
+	color: 'inherit',
+	cursor: 'pointer',
+	display: 'inline-flex',
+	fontSize: '0.75rem',
+	fontWeight: 600,
+	gap: '0.3rem',
+	padding: '0.3rem 0.6rem',
+	textDecoration: 'none'
+} as const;
 
 export const PackageApiExplorer = ({
 	api,
@@ -41,11 +62,27 @@ export const PackageApiExplorer = ({
 		if (!normalizedQuery) return true;
 
 		return [symbol.name, symbol.kind, symbol.description, symbol.signature]
-			.concat(symbol.deprecated ?? '', symbol.since ?? '', symbol.throws ?? [])
+			.concat(
+				symbol.deprecated ?? '',
+				symbol.since ?? '',
+				symbol.throws ?? []
+			)
 			.join('\n')
 			.toLowerCase()
 			.includes(normalizedQuery);
 	});
+	const baseEntryPoint = api.reduce(
+		(shortest, candidate) =>
+			candidate.entryPoint.length < shortest.length
+				? candidate.entryPoint
+				: shortest,
+		api[0]?.entryPoint ?? ''
+	);
+	const tabLabel = (entryPointName: string) =>
+		entryPointName !== baseEntryPoint &&
+		entryPointName.startsWith(`${baseEntryPoint}/`)
+			? entryPointName.slice(baseEntryPoint.length)
+			: entryPointName;
 	const symbolId = (name: string) =>
 		`api-${entrypoint?.entryPoint.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
 	const importFor = (name: string, kind: string) =>
@@ -71,9 +108,10 @@ export const PackageApiExplorer = ({
 							}
 							role="tab"
 							style={tabStyle(active)}
+							title={candidate.entryPoint}
 							type="button"
 						>
-							{candidate.entryPoint}
+							{tabLabel(candidate.entryPoint)}
 						</button>
 					);
 				})}
@@ -132,7 +170,9 @@ export const PackageApiExplorer = ({
 								}}
 							>
 								{symbol.since ? (
-									<small>Available since {symbol.since}</small>
+									<small>
+										Available since {symbol.since}
+									</small>
 								) : null}
 								{symbol.deprecated ? (
 									<small style={{ color: '#f59e0b' }}>
@@ -149,7 +189,12 @@ export const PackageApiExplorer = ({
 								marginTop: '0.75rem'
 							}}
 						>
-							<a href={`#${symbolId(symbol.name)}`}>Permalink</a>
+							<a
+								href={`#${symbolId(symbol.name)}`}
+								style={actionChipStyle}
+							>
+								Permalink
+							</a>
 							<button
 								onClick={() => {
 									void navigator.clipboard.writeText(
@@ -157,6 +202,7 @@ export const PackageApiExplorer = ({
 									);
 									setCopiedSymbol(symbol.name);
 								}}
+								style={actionChipStyle}
 								type="button"
 							>
 								{copiedSymbol === symbol.name
@@ -167,6 +213,7 @@ export const PackageApiExplorer = ({
 								<a
 									href={sourceHref}
 									rel="noreferrer noopener"
+									style={actionChipStyle}
 									target="_blank"
 								>
 									Source
@@ -214,13 +261,27 @@ export const PackageApiExplorer = ({
 				))}
 			</div>
 			{playbookLinks.length > 0 ? (
-				<div>
-					<strong>Use this API in an outcome:</strong>{' '}
+				<div
+					style={{
+						alignItems: 'center',
+						display: 'flex',
+						flexWrap: 'wrap',
+						gap: '0.5rem'
+					}}
+				>
+					<animated.strong
+						style={{
+							color: themeSprings.contrastPrimary,
+							fontSize: '0.82rem'
+						}}
+					>
+						Use this API in an outcome:
+					</animated.strong>
 					{playbookLinks.map((link) => (
 						<a
 							href={link.href}
 							key={link.href}
-							style={{ marginRight: '0.75rem' }}
+							style={actionChipStyle}
 						>
 							{link.label}
 						</a>

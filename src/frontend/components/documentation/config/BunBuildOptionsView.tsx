@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	bunBuildMultiService,
@@ -16,14 +16,14 @@ import {
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -58,33 +58,6 @@ const allowedOptionGroups = [
 	'define'
 ];
 
-type PassKey = {
-	description: string;
-	name: string;
-};
-
-const passKeys: PassKey[] = [
-	{
-		description: 'compiled Svelte, Vue, and Angular server modules.',
-		name: 'server'
-	},
-	{
-		description: 'React page and generated index client entries.',
-		name: 'reactClient'
-	},
-	{
-		description:
-			'Svelte, Vue, Angular, HTML, HTMX, island bootstrap, and URL-referenced client entries.',
-		name: 'nonReactClient'
-	},
-	{
-		description: 'generated island client entries.',
-		name: 'islandClient'
-	},
-	{ description: 'global CSS entry points.', name: 'globalCss' },
-	{ description: 'CSS emitted by Vue compilation.', name: 'vueCss' }
-];
-
 const AllowedOptionsList = () => (
 	<ul style={listStyle}>
 		{allowedOptionGroups.map((option) => (
@@ -95,14 +68,32 @@ const AllowedOptionsList = () => (
 	</ul>
 );
 
-const PassKeysList = () => (
-	<ul style={listStyle}>
-		{passKeys.map(({ description, name }) => (
-			<li key={name} style={listItemStyle}>
-				<strong style={strongStyle}>{name}</strong>: {description}
-			</li>
-		))}
-	</ul>
+const PassKeysList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'compiled Svelte, Vue, and Angular server modules.',
+				term: 'server'
+			},
+			{
+				description: 'React page and generated index client entries.',
+				term: 'reactClient'
+			},
+			{
+				description:
+					'Svelte, Vue, Angular, HTML, HTMX, island bootstrap, and URL-referenced client entries.',
+				term: 'nonReactClient'
+			},
+			{
+				description: 'generated island client entries.',
+				term: 'islandClient'
+			},
+			{ description: 'global CSS entry points.', term: 'globalCss' },
+			{ description: 'CSS emitted by Vue compilation.', term: 'vueCss' }
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const BunBuildOptionsView = ({
@@ -271,7 +262,7 @@ export const BunBuildOptionsView = ({
 						showLineNumbers={true}
 						themeSprings={themeSprings}
 					/>
-					<PassKeysList />
+					<PassKeysList themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>

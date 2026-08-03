@@ -1,18 +1,26 @@
 import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
+import { FaExternalLinkAlt, FaGithub, FaNpm } from 'react-icons/fa';
+import { PackageStatus } from '../../../../types/packageDocs';
 import { ThemeSprings } from '../../../../types/springTypes';
 import { packageCatalog } from '../../../data/documentation/packages/catalog';
-import { ecosystemProjects } from '../../../data/documentation/packages/ecosystem.generated';
+import {
+	EcosystemProject,
+	ecosystemProjects
+} from '../../../data/documentation/packages/ecosystem.generated';
 import { packageSubpackageViewId } from '../../../data/documentation/packages/packageRoutes';
-import { packageRelationshipsByName } from '../../../data/documentation/packages/packageRelationships';
-import { PackageApiExplorer } from './PackageApiExplorer';
-import { PackageGuidanceSections } from './PackageGuidanceSections';
 import { playbooksForView } from '../../../data/documentation/outcomePlaybooks';
+import { cardGradientStyle } from '../../../styles/gradientStyles';
+import { PackageCardGrid } from '../../utils/PackageCardGrid';
+import { ImportSurfaceTree } from './ImportSurfaceTree';
+import { PackageApiExplorer } from './PackageApiExplorer';
+import { PackageBoundaries } from './PackageBoundaries';
+import { PackageGuidanceSections } from './PackageGuidanceSections';
 
-type PackageReleaseSnapshotProps = {
-	currentPageId: string;
-	isMobileOrTablet?: boolean;
-	themeSprings: ThemeSprings;
+const statusColors: Record<PackageStatus, string> = {
+	alpha: '#F59E0B',
+	beta: '#8B5CF6',
+	stable: '#10B981'
 };
 
 const sectionStyle: CSSProperties = {
@@ -30,19 +38,204 @@ const labelStyle: CSSProperties = {
 	textTransform: 'uppercase'
 };
 
-const chipStyle: CSSProperties = {
-	background: 'rgba(99, 102, 241, 0.08)',
-	border: '1px solid rgba(99, 102, 241, 0.2)',
-	borderRadius: '0.45rem',
+const versionPillStyle = (color: string): CSSProperties => ({
+	background: `${color}1A`,
+	border: `1px solid ${color}55`,
+	borderRadius: '999px',
+	color,
+	fontSize: '0.75rem',
+	fontVariantNumeric: 'tabular-nums',
+	fontWeight: 600,
+	letterSpacing: '0.03em',
+	padding: '0.2rem 0.7rem'
+});
+
+const externalLinkStyle: CSSProperties = {
+	alignItems: 'center',
+	border: '1px solid rgba(99, 102, 241, 0.3)',
+	borderRadius: '0.5rem',
 	color: 'inherit',
-	fontSize: '0.78rem',
-	padding: '0.35rem 0.55rem',
+	display: 'flex',
+	fontSize: '0.8rem',
+	fontWeight: 500,
+	gap: '0.4rem',
+	padding: '0.4rem 0.75rem',
 	textDecoration: 'none'
+};
+
+const plateStatStyle: CSSProperties = {
+	alignItems: 'baseline',
+	display: 'flex',
+	gap: '0.35rem'
+};
+
+const PlateStat = ({
+	label,
+	themeSprings,
+	value
+}: {
+	label: string;
+	themeSprings: ThemeSprings;
+	value: number;
+}) => (
+	<span style={plateStatStyle}>
+		<animated.span
+			style={{
+				color: themeSprings.contrastPrimary,
+				fontSize: '1.05rem',
+				fontVariantNumeric: 'tabular-nums',
+				fontWeight: 700
+			}}
+		>
+			{value}
+		</animated.span>
+		<animated.span
+			style={{
+				color: themeSprings.contrastSecondary,
+				fontSize: '0.75rem',
+				fontWeight: 600,
+				letterSpacing: '0.05em',
+				textTransform: 'uppercase'
+			}}
+		>
+			{label}
+		</animated.span>
+	</span>
+);
+
+const PackageIdentityPlate = ({
+	project,
+	status,
+	themeSprings
+}: {
+	project: EcosystemProject;
+	status: PackageStatus;
+	themeSprings: ThemeSprings;
+}) => {
+	const publicSubpackages = project.subpackages.filter(
+		(subpackage) => !subpackage.private
+	);
+	const symbolTotal = project.api.reduce(
+		(total, entry) => total + entry.symbols.length,
+		0
+	);
+	const stats: { label: string; value: number }[] = [
+		{ label: 'entry points', value: project.publicExports.length },
+		{ label: 'symbols', value: symbolTotal },
+		{ label: 'subpackages', value: publicSubpackages.length }
+	].filter((stat) => stat.value > 0);
+
+	return (
+		<animated.div style={cardGradientStyle(themeSprings)}>
+			<div
+				style={{
+					alignItems: 'center',
+					display: 'flex',
+					flexWrap: 'wrap',
+					gap: '0.75rem'
+				}}
+			>
+				<animated.span
+					style={{
+						color: themeSprings.contrastPrimary,
+						fontFamily: 'JetBrains Mono, monospace',
+						fontSize: '1.2rem',
+						fontWeight: 700,
+						letterSpacing: '-0.02em'
+					}}
+				>
+					{project.packageName ?? project.name}
+				</animated.span>
+				{project.version ? (
+					<span style={versionPillStyle(statusColors[status])}>
+						v{project.version} · {status}
+					</span>
+				) : null}
+				<animated.span
+					style={{
+						color: themeSprings.contrastSecondary,
+						fontSize: '0.75rem',
+						fontWeight: 600,
+						letterSpacing: '0.05em',
+						textTransform: 'uppercase'
+					}}
+				>
+					{project.category}
+				</animated.span>
+				<span
+					style={{
+						display: 'flex',
+						flexWrap: 'wrap',
+						gap: '0.5rem',
+						marginLeft: 'auto'
+					}}
+				>
+					{project.packageName ? (
+						<animated.a
+							href={`https://www.npmjs.com/package/${project.packageName}`}
+							rel="noreferrer noopener"
+							style={{
+								...externalLinkStyle,
+								color: themeSprings.contrastPrimary
+							}}
+							target="_blank"
+						>
+							<FaNpm color="#CB3837" size={16} />
+							npm
+							<FaExternalLinkAlt size={8} />
+						</animated.a>
+					) : null}
+					{project.repository ? (
+						<animated.a
+							href={project.repository}
+							rel="noreferrer noopener"
+							style={{
+								...externalLinkStyle,
+								color: themeSprings.contrastPrimary
+							}}
+							target="_blank"
+						>
+							<FaGithub size={14} />
+							Source
+							<FaExternalLinkAlt size={8} />
+						</animated.a>
+					) : null}
+				</span>
+			</div>
+			{stats.length > 0 ? (
+				<div
+					style={{
+						display: 'flex',
+						flexWrap: 'wrap',
+						gap: '1.5rem',
+						marginTop: '0.9rem'
+					}}
+				>
+					{stats.map((stat) => (
+						<PlateStat
+							key={stat.label}
+							label={stat.label}
+							themeSprings={themeSprings}
+							value={stat.value}
+						/>
+					))}
+				</div>
+			) : null}
+		</animated.div>
+	);
+};
+
+type PackageReleaseSnapshotProps = {
+	currentPageId: string;
+	isMobileOrTablet?: boolean;
+	surfaceOnly?: boolean;
+	themeSprings: ThemeSprings;
 };
 
 export const PackageReleaseSnapshot = ({
 	currentPageId,
 	isMobileOrTablet,
+	surfaceOnly,
 	themeSprings
 }: PackageReleaseSnapshotProps) => {
 	const catalogEntry = packageCatalog.find(
@@ -58,9 +251,6 @@ export const PackageReleaseSnapshot = ({
 	const publicSubpackages = project.subpackages.filter(
 		(subpackage) => !subpackage.private
 	);
-	const relationships = project.packageName
-		? (packageRelationshipsByName[project.packageName] ?? [])
-		: [];
 	const hasPackageDetails =
 		project.packageName ||
 		project.publicExports.length > 0 ||
@@ -74,114 +264,45 @@ export const PackageReleaseSnapshot = ({
 				style={{
 					color: themeSprings.contrastPrimary,
 					fontSize: '1.45rem',
-					margin: '0 0 0.65rem'
+					margin: '0 0 1rem'
 				}}
 			>
 				What ships today
 			</animated.h2>
-			<animated.p
-				style={{
-					color: themeSprings.contrastSecondary,
-					lineHeight: 1.65,
-					margin: '0 0 1.25rem'
-				}}
-			>
-				This guide is paired with the current package manifest so the
-				published version and supported imports stay visible as the
-				package evolves.
-			</animated.p>
 
-			<div
-				style={{
-					display: 'flex',
-					flexWrap: 'wrap',
-					gap: '0.5rem',
-					marginBottom: '1.25rem'
-				}}
-			>
-				{project.packageName ? (
-					<a
-						href={`https://www.npmjs.com/package/${project.packageName}`}
-						rel="noreferrer noopener"
-						style={chipStyle}
-					>
-						{project.packageName}
-					</a>
-				) : null}
-				{project.version ? (
-					<span style={chipStyle}>v{project.version}</span>
-				) : null}
-				{project.repository ? (
-					<a
-						href={project.repository}
-						rel="noreferrer noopener"
-						style={chipStyle}
-					>
-						Source repository
-					</a>
-				) : null}
-			</div>
+			<PackageIdentityPlate
+				project={project}
+				status={catalogEntry.status}
+				themeSprings={themeSprings}
+			/>
 
-			{project.publicExports.length > 0 ? (
-				<>
-					<animated.h3
-						style={{
-							color: themeSprings.contrastPrimary,
-							fontSize: '1rem',
-							marginBottom: '0.75rem'
-						}}
-					>
-						Supported imports
-					</animated.h3>
-					<div
-						style={{
-							display: 'flex',
-							flexWrap: 'wrap',
-							gap: '0.45rem',
-							marginBottom: '1.25rem'
-						}}
-					>
-						{project.publicExports.map((entryPoint) => (
-							<code key={entryPoint} style={chipStyle}>
-								{entryPoint}
-							</code>
-						))}
-					</div>
-				</>
-			) : null}
+			<ImportSurfaceTree project={project} themeSprings={themeSprings} />
 
 			{publicSubpackages.length > 0 ? (
-				<>
+				<div style={{ marginTop: '1.5rem' }}>
 					<animated.h3
 						style={{
 							color: themeSprings.contrastPrimary,
 							fontSize: '1rem',
-							marginBottom: '0.75rem'
+							marginBottom: '0.25rem'
 						}}
 					>
 						Related packages
 					</animated.h3>
-					<div
-						style={{
-							display: 'flex',
-							flexWrap: 'wrap',
-							gap: '0.45rem'
-						}}
-					>
-						{publicSubpackages.map((subpackage) => (
-							<a
-								href={`/documentation/${packageSubpackageViewId(project, subpackage)}`}
-								key={subpackage.name}
-								style={chipStyle}
-							>
-								{subpackage.name}
-							</a>
-						))}
-					</div>
-				</>
+					<PackageCardGrid
+						items={publicSubpackages.map((subpackage) => ({
+							badge: subpackage.version ? undefined : 'workspace',
+							description: subpackage.description,
+							href: `/documentation/${packageSubpackageViewId(project, subpackage)}`,
+							name: subpackage.name,
+							version: subpackage.version ?? undefined
+						}))}
+						themeSprings={themeSprings}
+					/>
+				</div>
 			) : null}
 
-			{project.api.length > 0 ? (
+			{!surfaceOnly && project.api.length > 0 ? (
 				<div style={{ marginTop: '2rem' }}>
 					<PackageApiExplorer
 						api={project.api}
@@ -197,58 +318,12 @@ export const PackageReleaseSnapshot = ({
 				</div>
 			) : null}
 
-			{relationships.length > 0 ? (
-				<div style={{ marginTop: '2rem' }}>
-					<animated.h3
-						style={{
-							color: themeSprings.contrastPrimary,
-							fontSize: '1rem',
-							marginBottom: '0.75rem'
-						}}
-					>
-						Package boundaries and next steps
-					</animated.h3>
-					<div
-						style={{
-							display: 'grid',
-							gap: '0.65rem',
-							gridTemplateColumns:
-								'repeat(auto-fit, minmax(220px, 1fr))'
-						}}
-					>
-						{relationships.map((relationship) => {
-							const content = (
-								<>
-									<small>{relationship.kind}</small>
-									<br />
-									<strong>{relationship.label}</strong>
-									<br />
-									<span>{relationship.detail}</span>
-								</>
-							);
+			<PackageBoundaries
+				packageName={project.packageName}
+				themeSprings={themeSprings}
+			/>
 
-							return relationship.view ? (
-								<a
-									href={`/documentation/${relationship.view}`}
-									key={`${relationship.kind}-${relationship.label}`}
-									style={{ ...chipStyle, lineHeight: 1.55 }}
-								>
-									{content}
-								</a>
-							) : (
-								<div
-									key={`${relationship.kind}-${relationship.label}`}
-									style={{ ...chipStyle, lineHeight: 1.55 }}
-								>
-									{content}
-								</div>
-							);
-						})}
-					</div>
-				</div>
-			) : null}
-
-			{project.packageName ? (
+			{!surfaceOnly && project.packageName ? (
 				<PackageGuidanceSections
 					isMobileOrTablet={isMobileOrTablet}
 					packageName={project.packageName}

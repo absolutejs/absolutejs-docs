@@ -121,7 +121,7 @@ export const CronJobsView = ({
 						and <code>run</code>, the plugin supports schedule
 						controls:
 					</p>
-					<CronJobsConfigOptionsList />
+					<CronJobsConfigOptionsList themeSprings={themeSprings} />
 					<PrismPlus
 						codeString={cronConfig}
 						language="typescript"

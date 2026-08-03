@@ -1,32 +1,40 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeProps } from '../../../../types/springTypes';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 
-export const ErrorBoundariesConventionFilesList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>error.tsx</strong> : default error page
-			for all pages in that framework directory
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Page.error.tsx</strong> : page-specific
-			error boundary that overrides the default for that page only
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>not-found.tsx</strong> : custom 404 page
-			rendered when no route matches
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>error.html</strong> : universal HTML
-			fallback shared across frameworks. Tokens <code>{'{{name}}'}</code>,{' '}
-			<code>{'{{message}}'}</code>, and <code>{'{{stack}}'}</code> are
-			replaced server-side
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>not-found.html</strong> : universal 404
-			fallback for any framework
-		</li>
-	</ul>
+export const ErrorBoundariesConventionFilesList = ({
+	themeSprings
+}: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description:
+					'default error page for all pages in that framework directory',
+				term: 'error.tsx'
+			},
+			{
+				description:
+					'page-specific error boundary that overrides the default for that page only',
+				term: 'Page.error.tsx'
+			},
+			{
+				description: 'custom 404 page rendered when no route matches',
+				term: 'not-found.tsx'
+			},
+			{
+				description: (
+					<>
+						universal HTML fallback shared across frameworks. Tokens{' '}
+						<code>{'{{name}}'}</code>, <code>{'{{message}}'}</code>,
+						and <code>{'{{stack}}'}</code> are replaced server-side
+					</>
+				),
+				term: 'error.html'
+			},
+			{
+				description: 'universal 404 fallback for any framework',
+				term: 'not-found.html'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );

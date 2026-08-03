@@ -1,21 +1,19 @@
 import { animated } from '@react-spring/web';
-import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsViewProps, ThemeProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	h1Style,
-	listItemStyle,
-	listStyle,
 	mainContentStyle,
 	paragraphLargeStyle,
 	paragraphSpacedStyle,
-	sectionStyle,
-	strongStyle
+	sectionStyle
 } from '../../../styles/docsStyles';
 import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 
@@ -24,25 +22,45 @@ const tocItems: TocItem[] = [
 	{ href: '#framework-support', label: 'Framework Support' }
 ];
 
-const FrameworkSupportList = () => (
-	<ul style={listStyle}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>React</strong> : <code>Suspense</code>{' '}
-			boundaries with streaming SSR
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Vue</strong> : <code>Suspense</code>{' '}
-			component with async setup
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Svelte</strong> :{' '}
-			<code>{'#await'}</code> blocks for async data
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>Angular</strong> : <code>@defer</code>{' '}
-			blocks with placeholder and loading states
-		</li>
-	</ul>
+const FrameworkSupportList = ({ themeSprings }: ThemeProps) => (
+	<DefinitionGrid
+		items={[
+			{
+				description: (
+					<>
+						<code>Suspense</code> boundaries with streaming SSR
+					</>
+				),
+				term: 'React'
+			},
+			{
+				description: (
+					<>
+						<code>Suspense</code> component with async setup
+					</>
+				),
+				term: 'Vue'
+			},
+			{
+				description: (
+					<>
+						<code>{'#await'}</code> blocks for async data
+					</>
+				),
+				term: 'Svelte'
+			},
+			{
+				description: (
+					<>
+						<code>@defer</code> blocks with placeholder and loading
+						states
+					</>
+				),
+				term: 'Angular'
+			}
+		]}
+		themeSprings={themeSprings}
+	/>
 );
 
 export const LoadingStatesView = ({
@@ -135,7 +153,7 @@ export const LoadingStatesView = ({
 						Each framework has its own async primitives that loading
 						states will integrate with:
 					</p>
-					<FrameworkSupportList />
+					<FrameworkSupportList themeSprings={themeSprings} />
 				</section>
 
 				<DocsNavigation

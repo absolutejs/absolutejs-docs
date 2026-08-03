@@ -1,22 +1,30 @@
-import {
-	listItemStyle,
-	listStyle,
-	strongStyle
-} from '../../../styles/docsStyles';
+import { ThemeSprings } from '../../../../types/springTypes';
+import { StepFlow, StepFlowStep } from '../../utils/StepFlow';
 
-export const ScopedStateHtmxList = () => (
-	<ul style={{ ...listStyle, marginTop: '1.5rem' }}>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>User A</strong> clicks increment 3 times
-			→ sees count of 3
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>User B</strong> visits the same page →
-			sees count of 0 (their own state)
-		</li>
-		<li style={listItemStyle}>
-			<strong style={strongStyle}>User B</strong> clicks increment → sees
-			count of 1 (independent from User A)
-		</li>
-	</ul>
+const htmxIsolationSteps: StepFlowStep[] = [
+	{
+		actor: 'User A',
+		description: 'Sees count of 3',
+		title: 'Clicks increment 3 times'
+	},
+	{
+		actor: 'User B',
+		description: 'Sees count of 0 (their own state)',
+		title: 'Visits the same page'
+	},
+	{
+		actor: 'User B',
+		description: 'Sees count of 1 (independent from User A)',
+		title: 'Clicks increment'
+	}
+];
+
+type ScopedStateHtmxListProps = {
+	themeSprings: ThemeSprings;
+};
+
+export const ScopedStateHtmxList = ({
+	themeSprings
+}: ScopedStateHtmxListProps) => (
+	<StepFlow steps={htmxIsolationSteps} themeSprings={themeSprings} />
 );

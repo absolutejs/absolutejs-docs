@@ -19,10 +19,55 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
+import { StepFlow, StepFlowStep } from '../../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const breachScanSteps: StepFlowStep[] = [
+	{
+		description:
+			'Walks your user population in cursor-paged batches — the email counterpart to the login-time password check.',
+		title: 'Walk the user population'
+	},
+	{
+		description: (
+			<>
+				Each batch is checked against HIBP&apos;s{' '}
+				<code>breachedaccount</code> API.
+			</>
+		),
+		title: 'Check against HIBP'
+	},
+	{
+		description:
+			'Wire it up as a cron and notify users whose addresses show up in new breaches.',
+		title: 'Run on a schedule & notify'
+	}
+];
+
+const pruneSteps: StepFlowStep[] = [
+	{
+		description: 'A pure orchestrator that walks a paged user population.',
+		title: 'Walk the paged population'
+	},
+	{
+		description: 'Identifies anyone past the inactivity threshold.',
+		title: 'Identify inactive users'
+	},
+	{
+		description: (
+			<>
+				You decide what &quot;prune&quot; means via the{' '}
+				<code>onDelete</code> hook — soft-delete, hard-delete, or
+				disable + notify.
+			</>
+		),
+		title: 'Delegate the delete'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#email', label: 'Email validation' },
@@ -105,14 +150,17 @@ export const AuthCredentialHardeningView = ({
 						The login-time check is the half of Auth0
 						&quot;Credential Guard&quot; a self-hosted library can
 						do: catch a password that was fine at sign-up but later
-						leaked, and prompt a reset. Fails open on a HIBP outage.
+						leaked, and prompt a reset.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Turnkey: set <code>checkBreachesOnLogin: true</code> on
 						the credentials config. A successful login then carries{' '}
-						<code>passwordCompromised</code> in its response (it
-						never blocks — the user is already authenticated).
+						<code>passwordCompromised</code> in its response.
 					</p>
+					<Callout themeSprings={themeSprings} variant="note">
+						The login-time check never blocks — the user is already
+						authenticated — and it fails open on a HIBP outage.
+					</Callout>
 					<PrismPlus
 						codeString={breachCheckOnLogin}
 						language="typescript"
@@ -141,13 +189,13 @@ export const AuthCredentialHardeningView = ({
 						Background breach re-scan
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>0.37.0</code> adds <code>runEmailBreachScan</code>{' '}
-						— the email counterpart to the login-time password
-						check. Walks your user population in cursor-paged
-						batches against HIBP&apos;s <code>breachedaccount</code>{' '}
-						API. Wire it up as a cron and notify users whose
-						addresses show up in new breaches.
+						<code>0.37.0</code> adds <code>runEmailBreachScan</code>
+						:
 					</p>
+					<StepFlow
+						steps={breachScanSteps}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={backgroundEmailScan}
 						language="typescript"
@@ -167,14 +215,13 @@ export const AuthCredentialHardeningView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The other half of <code>0.37.0</code>&apos;s background
-						ops: <code>pruneInactiveUsers</code> is a pure
-						orchestrator that walks a paged user population,
-						identifies anyone past the threshold, and lets you
-						decide what &quot;prune&quot; means via the{' '}
-						<code>onDelete</code> hook (soft-delete, hard-delete,
-						disable + notify). <code>dryRun: true</code> reports
-						candidates without touching anything.
+						ops: <code>pruneInactiveUsers</code>.
 					</p>
+					<StepFlow steps={pruneSteps} themeSprings={themeSprings} />
+					<Callout themeSprings={themeSprings} variant="note">
+						<code>dryRun: true</code> reports candidates without
+						touching anything.
+					</Callout>
 					<PrismPlus
 						codeString={pruneInactiveUsersExample}
 						language="typescript"

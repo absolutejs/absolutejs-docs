@@ -18,10 +18,36 @@ import {
 	heroGradientStyle
 } from '../../../../styles/gradientStyles';
 import { AnchorHeading } from '../../../utils/AnchorHeading';
+import { Callout } from '../../../utils/Callout';
+import { DefinitionGrid, DefinitionItem } from '../../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../../utils/TableOfContents';
 import { DocsNavigation } from '../../DocsNavigation';
+
+const gdprItems: DefinitionItem[] = [
+	{
+		description: 'Self-service export route, delegated to your hooks.',
+		term: 'Right to access',
+		tone: 'info'
+	},
+	{
+		description: (
+			<>
+				Self-service delete route — erasure also revokes the user&apos;s
+				sessions and clears the cookie.
+			</>
+		),
+		term: 'Right to erasure',
+		tone: 'warning'
+	},
+	{
+		description:
+			'Binds an AES-GCM key for encrypting sensitive fields at rest.',
+		term: 'createSecretCipher',
+		tone: 'success'
+	}
+];
 
 const tocItems: TocItem[] = [
 	{ href: '#audit', label: 'Audit Logging' },
@@ -119,13 +145,10 @@ export const AuthComplianceView = ({
 					>
 						GDPR Compliance
 					</AnchorHeading>
-					<p style={paragraphSpacedStyle}>
-						Self-service right-to-access (export) and
-						right-to-erasure (delete) routes, delegated to your
-						hooks — erasure also revokes the user&apos;s sessions
-						and clears the cookie. createSecretCipher binds an
-						AES-GCM key for encrypting sensitive fields at rest.
-					</p>
+					<DefinitionGrid
+						items={gdprItems}
+						themeSprings={themeSprings}
+					/>
 					<PrismPlus
 						codeString={complianceSetup}
 						language="typescript"
@@ -146,9 +169,11 @@ export const AuthComplianceView = ({
 					<p style={paragraphSpacedStyle}>
 						Forward every auth event to your endpoints, HMAC-signed
 						with the Standard Webhooks scheme (Svix-compatible).
+					</p>
+					<Callout themeSprings={themeSprings} variant="note">
 						Delivery is best-effort and per-endpoint isolated, so a
 						dead endpoint never breaks the auth flow.
-					</p>
+					</Callout>
 					<PrismPlus
 						codeString={webhooksSetup}
 						language="typescript"
