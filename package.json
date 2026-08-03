@@ -16,7 +16,8 @@
 	"scripts": {
 		"catalog:generate": "bun scripts/generateEcosystemCatalog.ts",
 		"check:docs": "bun scripts/checkDocumentationCoverage.ts",
-		"check:quality": "bun run lint && bun run check:docs && tsc --noEmit",
+		"check:examples": "bun scripts/checkRunnableExamples.ts",
+		"check:quality": "bun run lint && bun run check:docs && bun run check:examples && tsc --noEmit",
 		"config": "absolute config",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"format": "absolute prettier --write",

@@ -4,6 +4,7 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { ThemeSprings } from '../../../types/springTypes';
 import { isExpandableEntry } from '../../../types/types';
 import { sidebarCategories } from '../../data/sidebarData';
+import { playbooksForView } from '../../data/documentation/outcomePlaybooks';
 import { PackageReleaseSnapshot } from './packages/PackageReleaseSnapshot';
 
 type NavItem = {
@@ -79,6 +80,72 @@ const pageLabelStyle = (themeSprings: ThemeSprings) => ({
 	fontWeight: 600
 });
 
+const JourneyNavigation = ({
+	currentPageId,
+	onNavigate,
+	themeSprings
+}: Pick<
+	DocsNavigationProps,
+	'currentPageId' | 'onNavigate' | 'themeSprings'
+>) => {
+	const playbooks = playbooksForView(currentPageId);
+	if (playbooks.length === 0) return null;
+
+	return (
+		<section
+			aria-labelledby="continue-your-outcome"
+			style={{
+				borderTop: '1px solid rgba(99, 102, 241, 0.15)',
+				marginTop: '3rem',
+				paddingTop: '2rem'
+			}}
+		>
+			<animated.h2
+				id="continue-your-outcome"
+				style={{
+					color: themeSprings.contrastPrimary,
+					fontSize: '1.35rem'
+				}}
+			>
+				Continue toward an outcome
+			</animated.h2>
+			<animated.p style={{ color: themeSprings.contrastSecondary }}>
+				These playbooks show where this package fits, how to verify the
+				combined system, and what changes before production.
+			</animated.p>
+			<div
+				style={{
+					display: 'grid',
+					gap: '0.75rem',
+					gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))'
+				}}
+			>
+				{playbooks.map((playbook) => (
+					<a
+						href={`/documentation/${playbook.id}`}
+						key={playbook.id}
+						onClick={(event) => {
+							event.preventDefault();
+							onNavigate(playbook.id);
+						}}
+						style={{
+							border: '1px solid rgba(99, 102, 241, 0.25)',
+							borderRadius: '0.65rem',
+							color: 'inherit',
+							padding: '0.85rem 1rem',
+							textDecoration: 'none'
+						}}
+					>
+						<strong>{playbook.title}</strong>
+						<br />
+						<small>{playbook.description}</small>
+					</a>
+				))}
+			</div>
+		</section>
+	);
+};
+
 export const DocsNavigation = ({
 	currentPageId,
 	isMobileOrTablet,
@@ -139,6 +206,11 @@ export const DocsNavigation = ({
 
 	return (
 		<>
+			<JourneyNavigation
+				currentPageId={currentPageId}
+				onNavigate={onNavigate}
+				themeSprings={themeSprings}
+			/>
 			<PackageReleaseSnapshot
 				currentPageId={currentPageId}
 				isMobileOrTablet={isMobileOrTablet}

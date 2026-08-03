@@ -1,0 +1,5 @@
+export const voiceFirstSuccessCode =
+	'import { Elysia } from "elysia";\nimport { createVoiceMemoryStore, voice } from "@absolutejs/voice";\nimport { deepgram } from "@absolutejs/voice-deepgram";\nimport { elevenlabs } from "@absolutejs/voice-elevenlabs";\n\nconst sessions = createVoiceMemoryStore();\nconst stt = deepgram({ apiKey: process.env.DEEPGRAM_API_KEY! });\nconst tts = elevenlabs({\n\tapiKey: process.env.ELEVENLABS_API_KEY!,\n\tvoiceId: process.env.ELEVENLABS_VOICE_ID!\n});\n\nnew Elysia()\n\t.use(voice({\n\t\tpath: "/voice/realtime",\n\t\tsession: sessions,\n\t\tstt,\n\t\ttts,\n\t\tgreeting: "Hi, how can I help?",\n\t\tcontext: async ({ session }) => ({ sessionId: session.id }),\n\t\tonTurn: async (_session, turn, api) => {\n\t\t\tawait api.say(`You said: ${turn.text}`);\n\t\t}\n\t}))\n\t.listen(3000);\n\nconsole.log("voice websocket: ws://localhost:3000/voice/realtime");';
+
+export const voiceFirstSuccessInstall =
+	'bun add @absolutejs/voice @absolutejs/voice-deepgram @absolutejs/voice-elevenlabs elysia';

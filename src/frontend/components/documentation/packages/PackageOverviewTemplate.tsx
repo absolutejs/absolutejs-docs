@@ -2,6 +2,7 @@ import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import {
 	PackageAdapterGroup,
+	PackageCodeSample,
 	PackageDocData,
 	PackageFeature,
 	PackageStatus
@@ -28,10 +29,11 @@ import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 import { synchronizePackageDocData } from '../../../data/documentation/packages/ecosystemVersions';
-import { flagshipGuidanceByPackage } from '../../../data/documentation/packages/flagshipGuidance';
 import { PackageGuidanceSections } from './PackageGuidanceSections';
 import { PackageApiExplorer } from './PackageApiExplorer';
 import { PackageExplanationBlocks } from './PackageExplanationBlocks';
+import { DocumentationModeNav } from './DocumentationModeNav';
+import { playbooksForView } from '../../../data/documentation/outcomePlaybooks';
 
 const statusColors: Record<PackageStatus, string> = {
 	alpha: '#F59E0B',
@@ -163,6 +165,62 @@ const adapterRows = (group: PackageAdapterGroup) =>
 		item.description
 	]);
 
+const SampleSection = ({
+	sample,
+	themeSprings
+}: {
+	sample: PackageCodeSample;
+	themeSprings: ThemeSprings;
+}) => {
+	const intent = sample.intent ?? 'partial';
+	const intentLabel = {
+		partial: 'Partial snippet',
+		production: 'Production sketch',
+		runnable: 'Runnable'
+	}[intent];
+
+	return (
+		<section style={sectionStyle}>
+			<AnchorHeading
+				id={slugify(sample.heading)}
+				level="h2"
+				style={gradientHeadingStyle(themeSprings)}
+				themeSprings={themeSprings}
+			>
+				{sample.heading}
+			</AnchorHeading>
+			<span
+				style={pillStyle(intent === 'runnable' ? '#10B981' : '#6366F1')}
+			>
+				{intentLabel}
+			</span>
+			<p style={paragraphSpacedStyle}>{sample.description}</p>
+			{sample.prerequisites && sample.prerequisites.length > 0 ? (
+				<ul>
+					{sample.prerequisites.map((prerequisite) => (
+						<li key={prerequisite}>{prerequisite}</li>
+					))}
+				</ul>
+			) : null}
+			<PrismPlus
+				codeString={sample.code}
+				language={sample.language}
+				showLineNumbers={sample.language !== 'bash'}
+				themeSprings={themeSprings}
+			/>
+			{sample.expectedResult ? (
+				<Callout
+					themeSprings={themeSprings}
+					title="Proof of success"
+					variant="success"
+				>
+					{sample.expectedResult}
+				</Callout>
+			) : null}
+		</section>
+	);
+};
+
 type PackageOverviewTemplateProps = DocsViewProps & {
 	data: PackageDocData;
 };
@@ -185,7 +243,19 @@ export const PackageOverviewTemplate = ({
 	tocOpen
 }: PackageOverviewTemplateProps) => {
 	const currentData = synchronizePackageDocData(data);
-	const flagshipGuidance = flagshipGuidanceByPackage[currentData.npmName];
+	const runnableSamples = currentData.samples.filter(
+		(sample) => sample.intent === 'runnable'
+	);
+	const referenceSamples = currentData.samples.filter(
+		(sample) => sample.intent !== 'runnable'
+	);
+	const sourceHref = currentData.links?.find(
+		(link) => link.label === 'Source'
+	)?.href;
+	const playbookLinks = playbooksForView(currentPageId).map((playbook) => ({
+		href: `/documentation/${playbook.id}`,
+		label: playbook.title
+	}));
 	const heroId = slugify(`${currentData.name}-overview`);
 	const tocItems: TocItem[] = [
 		{ href: `#${heroId}`, label: 'Overview' },
@@ -193,16 +263,12 @@ export const PackageOverviewTemplate = ({
 		...(currentData.features.length > 0
 			? [{ href: '#capabilities', label: 'Capabilities' }]
 			: []),
-		...(flagshipGuidance
-			? [
-					{ href: '#outcomes', label: 'What you can build' },
-					{
-						href: '#production-guidance',
-						label: 'Production guidance'
-					},
-					{ href: '#diagnostics', label: 'Troubleshooting' }
-				]
-			: []),
+		{ href: '#outcomes', label: 'What you can build' },
+		{
+			href: '#production-guidance',
+			label: 'Production guidance'
+		},
+		{ href: '#diagnostics', label: 'Troubleshooting' },
 		...currentData.samples.map((sample) => ({
 			href: `#${slugify(sample.heading)}`,
 			label: sample.heading
@@ -238,6 +304,20 @@ export const PackageOverviewTemplate = ({
 					isMobileOrTablet={isMobileOrTablet}
 					themeSprings={themeSprings}
 				/>
+				<DocumentationModeNav
+					productionHref="#production-guidance"
+					referenceHref={
+						currentData.api && currentData.api.length > 0
+							? '#api-reference'
+							: '#capabilities'
+					}
+					runHref={
+						runnableSamples[0]
+							? `#${slugify(runnableSamples[0].heading)}`
+							: '#installation'
+					}
+					themeSprings={themeSprings}
+				/>
 
 				<section style={sectionStyle}>
 					<p style={paragraphSpacedStyle}>
@@ -258,6 +338,14 @@ export const PackageOverviewTemplate = ({
 						themeSprings={themeSprings}
 					/>
 				</section>
+
+				{runnableSamples.map((sample) => (
+					<SampleSection
+						key={sample.heading}
+						sample={sample}
+						themeSprings={themeSprings}
+					/>
+				))}
 
 				{currentData.features.length > 0 ? (
 					<section style={sectionStyle}>
@@ -304,24 +392,12 @@ export const PackageOverviewTemplate = ({
 					themeSprings={themeSprings}
 				/>
 
-				{currentData.samples.map((sample) => (
-					<section key={sample.heading} style={sectionStyle}>
-						<AnchorHeading
-							id={slugify(sample.heading)}
-							level="h2"
-							style={gradientHeadingStyle(themeSprings)}
-							themeSprings={themeSprings}
-						>
-							{sample.heading}
-						</AnchorHeading>
-						<p style={paragraphSpacedStyle}>{sample.description}</p>
-						<PrismPlus
-							codeString={sample.code}
-							language={sample.language}
-							showLineNumbers={sample.language !== 'bash'}
-							themeSprings={themeSprings}
-						/>
-					</section>
+				{referenceSamples.map((sample) => (
+					<SampleSection
+						key={sample.heading}
+						sample={sample}
+						themeSprings={themeSprings}
+					/>
 				))}
 
 				{(currentData.adapterGroups ?? []).map((group) => (
@@ -371,6 +447,8 @@ export const PackageOverviewTemplate = ({
 						</p>
 						<PackageApiExplorer
 							api={currentData.api}
+							playbookLinks={playbookLinks}
+							sourceHref={sourceHref}
 							themeSprings={themeSprings}
 						/>
 					</section>

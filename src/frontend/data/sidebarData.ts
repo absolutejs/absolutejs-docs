@@ -232,6 +232,7 @@ import { ReactIslandsView } from '../components/documentation/react/ReactIslands
 import { SvelteIslandsView } from '../components/documentation/svelte/SvelteIslandsView';
 import { VueIslandsView } from '../components/documentation/vue/VueIslandsView';
 import { AngularAIView } from '../components/documentation/angular/AngularAIView';
+import { createOutcomePlaybookView } from '../components/documentation/playbooks/OutcomePlaybookView';
 
 const definePortalViews = <T>(views: T) => views;
 
@@ -397,6 +398,23 @@ const primaryDocsViews = definePortalViews({
 	'page-handlers': PageHandlersView,
 	partnership: PartnershipPackageView,
 	'platform-overview': PlatformOverviewView,
+	'playbook-commerce-growth': createOutcomePlaybookView(
+		'playbook-commerce-growth'
+	),
+	'playbook-governed-agent': createOutcomePlaybookView(
+		'playbook-governed-agent'
+	),
+	'playbook-messaging': createOutcomePlaybookView('playbook-messaging'),
+	'playbook-realtime-collaboration': createOutcomePlaybookView(
+		'playbook-realtime-collaboration'
+	),
+	'playbook-release-assurance': createOutcomePlaybookView(
+		'playbook-release-assurance'
+	),
+	'playbook-saas-platform': createOutcomePlaybookView(
+		'playbook-saas-platform'
+	),
+	'playbook-voice-agent': createOutcomePlaybookView('playbook-voice-agent'),
 	'production-build': ProductionBuildView,
 	ps: PsView,
 	pwa: PwaPackageView,
@@ -553,6 +571,44 @@ const packageApiSidebarEntries = ecosystemProjects.flatMap<{
 	];
 });
 const baseSidebarCategories: SidebarCategory[] = [
+	{
+		entries: [
+			{
+				label: 'Outcome Playbooks',
+				pages: [
+					{
+						id: 'playbook-governed-agent',
+						label: 'Govern an AI Agent'
+					},
+					{
+						id: 'playbook-saas-platform',
+						label: 'Ship a SaaS Platform'
+					},
+					{
+						id: 'playbook-realtime-collaboration',
+						label: 'Realtime Collaboration'
+					},
+					{
+						id: 'playbook-messaging',
+						label: 'Deliver Messages Safely'
+					},
+					{
+						id: 'playbook-voice-agent',
+						label: 'Build a Voice Agent'
+					},
+					{
+						id: 'playbook-commerce-growth',
+						label: 'Commerce Growth'
+					},
+					{
+						id: 'playbook-release-assurance',
+						label: 'Prove a Safe Release'
+					}
+				]
+			}
+		],
+		label: 'Playbooks'
+	},
 	{
 		entries: [
 			{ id: 'overview', label: 'Overview' },

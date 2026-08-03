@@ -5,6 +5,7 @@ import {
 	packageProjectViewId,
 	packageSubpackageViewId
 } from './packages/packageRoutes';
+import { outcomePlaybooks } from './outcomePlaybooks';
 
 type DocumentationMetadata = {
 	description: string;
@@ -57,6 +58,11 @@ metadataByView.set('packages', {
 		'Explore every AbsoluteJS package, adapter, module, extension, example, and development tool.',
 	title: 'Packages | AbsoluteJS'
 });
+for (const playbook of outcomePlaybooks)
+	metadataByView.set(playbook.id, {
+		description: conciseDescription(playbook.description),
+		title: `${playbook.title} Playbook | AbsoluteJS`
+	});
 
 const titleCase = (value: string) =>
 	value
@@ -107,6 +113,32 @@ export const documentationStructuredDataFor = (view: string) => {
 					packageSubpackageViewId(candidate, subpackage) === view
 			)
 	);
+	const playbook = outcomePlaybooks.find(
+		(candidate) => candidate.id === view
+	);
+	if (playbook)
+		return JSON.stringify({
+			'@context': 'https://schema.org',
+			'@graph': [
+				breadcrumb,
+				{
+					'@type': 'HowTo',
+					description: playbook.description,
+					name: playbook.title,
+					step: playbook.quickstart.map((step, index) => ({
+						'@type': 'HowToStep',
+						name: step.label,
+						position: index + 1,
+						text: `${step.detail} Verify: ${step.verify}`
+					})),
+					supply: playbook.packages.map((packageRole) => ({
+						'@type': 'HowToSupply',
+						name: packageRole.name
+					})),
+					url
+				}
+			]
+		});
 	if (project) {
 		if (packageProjectViewId(project) === view)
 			return JSON.stringify({

@@ -4,8 +4,13 @@ import { CSSProperties } from 'react';
 import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { synchronizePackageCards } from '../../../data/documentation/packages/ecosystemVersions';
+import {
+	voiceFirstSuccessCode,
+	voiceFirstSuccessInstall
+} from '../../../data/documentation/voiceFirstSuccessCode';
 import { DocsNavigation } from '../DocsNavigation';
 import { PackageExplanationBlocks } from './PackageExplanationBlocks';
+import { DocumentationModeNav } from './DocumentationModeNav';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PackageCard, PackageCardGrid } from '../../utils/PackageCardGrid';
@@ -793,9 +798,8 @@ const codeSamples: Record<
 		'const deliverySinkDescriptors = createVoiceDeliverySinkPair({\n\tauditHref: "/audit/deliveries",\n\tauditId: "demo-file-audit-sink",\n\tauditLabel: "File audit sink",\n\tdescription: "Demo sink selected by VOICE_DELIVERY_SINK.",\n\tkind: "file",\n\tmode: "file",\n\ttarget: `file://${runtimeDirectory}`,\n\ttraceHref: "/traces/deliveries",\n\ttraceId: "demo-file-trace-sink",\n\ttraceLabel: "File trace sink"\n});\n\nvoice({\n\t// ...runtime config\n\tdeliverySink: {\n\t\tauditDeliveries: { href: "/audit/deliveries", store: runtime.auditDeliveries },\n\t\tsinks: deliverySinkDescriptors,\n\t\ttraceDeliveries: { href: "/traces/deliveries", store: runtime.traceDeliveries }\n\t},\n\tdeliveryRuntime: { runtime: deliveryRuntimeControl }\n});',
 	discordTester:
 		'import { runScenario } from "@absolutejs/voice-tester";\nimport { adversarialScenario } from "@absolutejs/voice-tester/scenarios";\nimport { discordVoiceTransport } from "@absolutejs/voice-tester/discord";\n\nconst transport = await discordVoiceTransport({\n\ttoken: process.env.DISCORD_TESTER_TOKEN!,\n\tguildId: "1234567890",\n\tchannelId: "9876543210",\n\ttargetUserId: "1122334455"\n});\n\nconst report = await runScenario({\n\ttransport,\n\tscenario: adversarialScenario({ llm: {} }),\n\ttts: { apiKey: process.env.DEEPGRAM_API_KEY! },\n\tstt: { apiKey: process.env.DEEPGRAM_API_KEY! }\n});',
-	install: 'bun add @absolutejs/voice elysia',
-	minimal:
-		'import { Elysia } from "elysia";\nimport { createVoiceMemoryStore, voice } from "@absolutejs/voice";\n\nconst sessions = createVoiceMemoryStore();\n\nexport const app = new Elysia().use(\n\tvoice({\n\t\tpath: "/voice/realtime",\n\t\tsession: sessions,\n\t\tstt,\n\t\ttts,\n\t\tgreeting: "Hi, how can I help?",\n\t\tcontext: async ({ session }) => ({ sessionId: session.id }),\n\t\tonTurn: async (session, turn, api) => {\n\t\t\tawait api.say(`You said: ${turn.text}`);\n\t\t}\n\t})\n);',
+	install: voiceFirstSuccessInstall,
+	minimal: voiceFirstSuccessCode,
 	monitor:
 		'import {\n\tcreateVoiceInMemoryMonitorRegistry,\n\tcreateVoiceLiveMonitorRoutes,\n\tcreateVoiceMonitorRuntimeBinding,\n\tvoice\n} from "@absolutejs/voice";\n\nconst registry = createVoiceInMemoryMonitorRegistry();\n\napp\n\t.use(voice({\n\t\tpath: "/voice/realtime",\n\t\tsession,\n\t\tstt,\n\t\ttts,\n\t\tmonitor: createVoiceMonitorRuntimeBinding(registry)\n\t}))\n\t.use(createVoiceLiveMonitorRoutes({ registry, authenticate }));',
 	phone: 'import {\n\tcreateVoicePhoneAgentRoutes,\n\tcreateVoiceTwilioPhoneAgentCarrier\n} from "@absolutejs/voice";\n\napp.use(createVoicePhoneAgentRoutes({\n\tcarrier: createVoiceTwilioPhoneAgentCarrier({ accountSid, authToken }),\n\tvoicePath: "/voice/realtime"\n}));',
@@ -831,7 +835,7 @@ const voicePages: Record<VoicePageId, VoicePageDefinition> = {
 				title: 'Entrypoints'
 			},
 			{
-				body: 'Mount voice() on an Elysia app, provide a session store, wire either realtime or STT/TTS adapters, and implement onTurn.',
+				body: 'Runnable provider-backed start: set DEEPGRAM_API_KEY, ELEVENLABS_API_KEY, and ELEVENLABS_VOICE_ID, then run this file. It constructs both adapters, starts the server on port 3000, and prints the exact WebSocket URL. The first successful connection receives the greeting; one spoken turn is transcribed and echoed through TTS.',
 				code: { language: 'typescript', source: codeSamples.minimal },
 				id: 'quickstart',
 				title: 'Quickstart'
@@ -1789,6 +1793,15 @@ const VoiceDocsPage = ({
 						</p>
 					)}
 				</animated.div>
+
+				{pageId === 'voice' ? (
+					<DocumentationModeNav
+						productionHref="/documentation/voice-ops-proof"
+						referenceHref="/documentation/voice-api-reference"
+						runHref="#quickstart"
+						themeSprings={props.themeSprings}
+					/>
+				) : null}
 
 				{page.sections.map((section) => (
 					<VoiceSectionBlock

@@ -2,6 +2,7 @@ import type { PackageDocData } from '../../../../types/packageDocs';
 import type { PackageCard } from '../../../components/utils/PackageCardGrid';
 import { ecosystemProjects } from './ecosystem.generated';
 import { packageExplanationsByName } from './packageExplanations';
+import { firstSuccessSamplesByPackage } from './firstSuccessSamples';
 
 const packageVersions = new Map<string, string>();
 const packageApi = new Map(
@@ -77,6 +78,12 @@ export const synchronizePackageCards = (cards: PackageCard[]) =>
 
 export const synchronizePackageDocData = (data: PackageDocData) => {
 	const facts = packageFacts.get(data.npmName);
+	const firstSuccess = firstSuccessSamplesByPackage[data.npmName];
+	const samples: PackageDocData['samples'] = mergeByKey(
+		firstSuccess ? [firstSuccess, ...data.samples] : data.samples,
+		facts?.samples ?? [],
+		(sample) => sample.code
+	);
 
 	return {
 		...data,
@@ -100,11 +107,7 @@ export const synchronizePackageDocData = (data: PackageDocData) => {
 		features: mergeByKey(data.features, facts?.features ?? [], (feature) =>
 			feature.title.toLowerCase()
 		),
-		samples: mergeByKey(
-			data.samples,
-			facts?.samples ?? [],
-			(sample) => sample.code
-		),
+		samples,
 		version: currentPackageVersion(data.npmName, data.version)
 	};
 };

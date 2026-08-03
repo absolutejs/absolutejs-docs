@@ -20,10 +20,13 @@ export type PackageFeature = {
 };
 
 export type PackageApiSymbol = {
+	deprecated?: string;
 	description: string;
 	kind: string;
 	name: string;
+	since?: string;
 	signature: string;
+	throws?: string[];
 };
 
 export type PackageApiEntrypoint = {
@@ -75,8 +78,11 @@ export type PackageExplanation =
 export type PackageCodeSample = {
 	code: string;
 	description: string;
+	expectedResult?: string;
 	heading: string;
+	intent?: 'partial' | 'production' | 'runnable';
 	language: string;
+	prerequisites?: string[];
 };
 
 export type PackageAdapterGroup = {
@@ -99,6 +105,18 @@ export type PackageNote = {
 export type PackageLink = {
 	href: string;
 	label: string;
+};
+
+export type PackageRelationship = {
+	detail: string;
+	kind:
+		| 'continuesAt'
+		| 'doNotUseFor'
+		| 'optionalWith'
+		| 'productionReplacement'
+		| 'requires';
+	label: string;
+	view?: string;
 };
 
 export type PackageCatalogEntry = {

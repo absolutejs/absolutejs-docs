@@ -6,6 +6,8 @@ import { PrismPlus } from '../../utils/PrismPlus';
 
 type PackageApiExplorerProps = {
 	api: PackageApiEntrypoint[];
+	playbookLinks?: Array<{ href: string; label: string }>;
+	sourceHref?: string;
 	themeSprings: ThemeSprings;
 };
 
@@ -22,12 +24,15 @@ const tabStyle = (active: boolean) => ({
 
 export const PackageApiExplorer = ({
 	api,
+	playbookLinks = [],
+	sourceHref,
 	themeSprings
 }: PackageApiExplorerProps) => {
 	const [activeEntryPoint, setActiveEntryPoint] = useState(
 		api[0]?.entryPoint ?? ''
 	);
 	const [query, setQuery] = useState('');
+	const [copiedSymbol, setCopiedSymbol] = useState('');
 	const entrypoint =
 		api.find((candidate) => candidate.entryPoint === activeEntryPoint) ??
 		api[0];
@@ -36,10 +41,15 @@ export const PackageApiExplorer = ({
 		if (!normalizedQuery) return true;
 
 		return [symbol.name, symbol.kind, symbol.description, symbol.signature]
+			.concat(symbol.deprecated ?? '', symbol.since ?? '', symbol.throws ?? [])
 			.join('\n')
 			.toLowerCase()
 			.includes(normalizedQuery);
 	});
+	const symbolId = (name: string) =>
+		`api-${entrypoint?.entryPoint.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
+	const importFor = (name: string, kind: string) =>
+		`${kind === 'interface' || kind === 'type' ? 'import type' : 'import'} { ${name} } from '${entrypoint?.entryPoint}';`;
 
 	return (
 		<div style={{ display: 'grid', gap: '1rem' }}>
@@ -98,6 +108,7 @@ export const PackageApiExplorer = ({
 			<div style={{ display: 'grid', gap: '0.65rem' }}>
 				{symbols.map((symbol) => (
 					<details
+						id={symbolId(symbol.name)}
 						key={`${entrypoint?.entryPoint}-${symbol.name}`}
 						style={{
 							border: '1px solid rgba(99, 102, 241, 0.2)',
@@ -111,6 +122,63 @@ export const PackageApiExplorer = ({
 								{symbol.kind}
 							</small>
 						</summary>
+						{symbol.deprecated || symbol.since ? (
+							<div
+								style={{
+									display: 'flex',
+									flexWrap: 'wrap',
+									gap: '0.45rem',
+									marginTop: '0.7rem'
+								}}
+							>
+								{symbol.since ? (
+									<small>Available since {symbol.since}</small>
+								) : null}
+								{symbol.deprecated ? (
+									<small style={{ color: '#f59e0b' }}>
+										Deprecated: {symbol.deprecated}
+									</small>
+								) : null}
+							</div>
+						) : null}
+						<div
+							style={{
+								display: 'flex',
+								flexWrap: 'wrap',
+								gap: '0.65rem',
+								marginTop: '0.75rem'
+							}}
+						>
+							<a href={`#${symbolId(symbol.name)}`}>Permalink</a>
+							<button
+								onClick={() => {
+									void navigator.clipboard.writeText(
+										importFor(symbol.name, symbol.kind)
+									);
+									setCopiedSymbol(symbol.name);
+								}}
+								type="button"
+							>
+								{copiedSymbol === symbol.name
+									? 'Copied import'
+									: 'Copy import'}
+							</button>
+							{sourceHref ? (
+								<a
+									href={sourceHref}
+									rel="noreferrer noopener"
+									target="_blank"
+								>
+									Source
+								</a>
+							) : null}
+						</div>
+						<PrismPlus
+							codeString={importFor(symbol.name, symbol.kind)}
+							language="typescript"
+							showLineNumbers={false}
+							themeSprings={themeSprings}
+						/>
 						{symbol.description ? (
 							<animated.p
 								style={{
@@ -121,6 +189,21 @@ export const PackageApiExplorer = ({
 								{symbol.description}
 							</animated.p>
 						) : null}
+						{symbol.throws && symbol.throws.length > 0 ? (
+							<animated.div
+								style={{
+									background: 'rgba(245, 158, 11, 0.08)',
+									border: '1px solid rgba(245, 158, 11, 0.22)',
+									borderRadius: '0.5rem',
+									color: themeSprings.contrastSecondary,
+									marginBottom: '0.75rem',
+									padding: '0.65rem 0.75rem'
+								}}
+							>
+								<strong>Failure contract:</strong>{' '}
+								{symbol.throws.join(' · ')}
+							</animated.div>
+						) : null}
 						<PrismPlus
 							codeString={symbol.signature}
 							language="typescript"
@@ -130,6 +213,20 @@ export const PackageApiExplorer = ({
 					</details>
 				))}
 			</div>
+			{playbookLinks.length > 0 ? (
+				<div>
+					<strong>Use this API in an outcome:</strong>{' '}
+					{playbookLinks.map((link) => (
+						<a
+							href={link.href}
+							key={link.href}
+							style={{ marginRight: '0.75rem' }}
+						>
+							{link.label}
+						</a>
+					))}
+				</div>
+			) : null}
 		</div>
 	);
 };

@@ -9,6 +9,7 @@ import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { packageCatalog } from '../../../data/documentation/packages/catalog';
 import { ecosystemProjects } from '../../../data/documentation/packages/ecosystem.generated';
 import { packageSubpackageViewId } from '../../../data/documentation/packages/packageRoutes';
+import { outcomePlaybooks } from '../../../data/documentation/outcomePlaybooks';
 import {
 	h1Style,
 	mainContentStyle,
@@ -21,63 +22,6 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
-
-type GoalBundle = {
-	description: string;
-	directories: string[];
-	label: string;
-};
-
-const goalBundles: GoalBundle[] = [
-	{
-		description:
-			'Authenticate an agent, authorize an exact action, execute it durably, and preserve evidence.',
-		directories: ['auth', 'agent', 'agency', 'execution', 'queue', 'audit'],
-		label: 'Govern an AI agent'
-	},
-	{
-		description:
-			'Operate tenants, releases, runtime health, usage, invoices, and reliability objectives.',
-		directories: [
-			'auth',
-			'admin',
-			'deploy',
-			'runtime',
-			'health',
-			'metering',
-			'billing',
-			'slo'
-		],
-		label: 'Ship a SaaS platform'
-	},
-	{
-		description:
-			'Build live collections, collaborative state, durable background work, and object storage.',
-		directories: ['sync', 'queue', 'blob', 'audit'],
-		label: 'Add realtime collaboration'
-	},
-	{
-		description:
-			'Connect speech providers, run assistants, test calls, and retain operational traces.',
-		directories: ['voice', 'voice-adapters', 'voice-tester', 'audit'],
-		label: 'Build a voice agent'
-	},
-	{
-		description:
-			'Move from discovery and enrichment through audience, messaging, checkout, and money movement.',
-		directories: [
-			'attribution',
-			'discover',
-			'enrich',
-			'audience',
-			'crm',
-			'dispatch',
-			'commerce',
-			'wallet'
-		],
-		label: 'Build commerce growth'
-	}
-];
 
 const categoryOrder: PackageCategory[] = [
 	'Auth & Identity',
@@ -406,14 +350,7 @@ const GoalBundleExplorer = ({
 	themeSprings
 }: Pick<DocsViewProps, 'onNavigate' | 'themeSprings'>) => {
 	const [activeGoal, setActiveGoal] = useState(0);
-	const goal = goalBundles[activeGoal] ?? goalBundles[0];
-	const entries = (goal?.directories ?? []).flatMap((directory) => {
-		const entry = packageCatalog.find(
-			(candidate) => candidate.sourceDirectory === directory
-		);
-
-		return entry ? [entry] : [];
-	});
+	const goal = outcomePlaybooks[activeGoal] ?? outcomePlaybooks[0];
 
 	return (
 		<section style={{ margin: '1.5rem 0 2.5rem' }}>
@@ -426,10 +363,10 @@ const GoalBundleExplorer = ({
 				What are you building?
 			</AnchorHeading>
 			<div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-				{goalBundles.map((candidate, index) => (
+				{outcomePlaybooks.map((candidate, index) => (
 					<button
 						aria-pressed={index === activeGoal}
-						key={candidate.label}
+						key={candidate.id}
 						onClick={() => setActiveGoal(index)}
 						style={{
 							background:
@@ -444,7 +381,7 @@ const GoalBundleExplorer = ({
 						}}
 						type="button"
 					>
-						{candidate.label}
+						{candidate.title}
 					</button>
 				))}
 			</div>
@@ -457,7 +394,7 @@ const GoalBundleExplorer = ({
 				{goal?.description}
 			</animated.p>
 			<div
-				aria-label={`${goal?.label} package architecture`}
+				aria-label={`${goal?.title} package architecture`}
 				style={{
 					alignItems: 'stretch',
 					display: 'flex',
@@ -465,9 +402,9 @@ const GoalBundleExplorer = ({
 					gap: '0.45rem'
 				}}
 			>
-				{entries.map((entry, index) => (
+				{(goal?.packages ?? []).map((packageRole, index) => (
 					<div
-						key={entry.sourceDirectory}
+						key={`${packageRole.role}-${packageRole.name}`}
 						style={{
 							alignItems: 'center',
 							display: 'flex',
@@ -476,10 +413,10 @@ const GoalBundleExplorer = ({
 					>
 						{index > 0 ? <span aria-hidden="true">→</span> : null}
 						<a
-							href={`/documentation/${entry.view}`}
+							href={`/documentation/${packageRole.view}`}
 							onClick={(event) => {
 								event.preventDefault();
-								onNavigate(entry.view);
+								onNavigate(packageRole.view);
 							}}
 							style={{
 								border: '1px solid rgba(99, 102, 241, 0.25)',
@@ -490,11 +427,33 @@ const GoalBundleExplorer = ({
 								textDecoration: 'none'
 							}}
 						>
-							{entry.name}
+							{packageRole.role}
 						</a>
 					</div>
 				))}
 			</div>
+			{goal ? (
+				<a
+					href={`/documentation/${goal.id}`}
+					onClick={(event) => {
+						event.preventDefault();
+						onNavigate(goal.id);
+					}}
+					style={{
+						background: 'rgba(99, 102, 241, 0.14)',
+						border: '1px solid rgba(99, 102, 241, 0.35)',
+						borderRadius: '0.55rem',
+						color: 'inherit',
+						display: 'inline-block',
+						fontWeight: 700,
+						marginTop: '1rem',
+						padding: '0.65rem 0.8rem',
+						textDecoration: 'none'
+					}}
+				>
+					Open the complete {goal.title} playbook →
+				</a>
+			) : null}
 		</section>
 	);
 };

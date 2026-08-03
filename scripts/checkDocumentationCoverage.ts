@@ -13,6 +13,9 @@ import { packageCatalog } from '../src/frontend/data/documentation/packages/cata
 import { ecosystemProjects } from '../src/frontend/data/documentation/packages/ecosystem.generated';
 import { flagshipDocumentationContract } from '../src/frontend/data/documentation/packages/documentationContract';
 import { flagshipGuidanceByPackage } from '../src/frontend/data/documentation/packages/flagshipGuidance';
+import { firstSuccessSamplesByPackage } from '../src/frontend/data/documentation/packages/firstSuccessSamples';
+import { packageRelationshipsByName } from '../src/frontend/data/documentation/packages/packageRelationships';
+import { outcomePlaybooks } from '../src/frontend/data/documentation/outcomePlaybooks';
 import {
 	legacyEcosystemProjectViewId,
 	legacyEcosystemSubpackageViewId,
@@ -66,6 +69,85 @@ const snapshotVersion = (packageName: string | null, version: unknown) => {
 const sameStrings = (left: string[], right: string[]) =>
 	left.length === right.length &&
 	left.every((value, index) => value === right[index]);
+
+const expectedPlaybookCount = 7;
+const minimumPlaybookListItems = 3;
+if (outcomePlaybooks.length !== expectedPlaybookCount)
+	failures.push(
+		`Expected ${expectedPlaybookCount} outcome playbooks; found ${outcomePlaybooks.length}.`
+	);
+const playbookIds = new Set<string>();
+for (const playbook of outcomePlaybooks) {
+	if (playbookIds.has(playbook.id))
+		failures.push(`${playbook.id}: duplicate playbook id.`);
+	playbookIds.add(playbook.id);
+	if (!(playbook.id in docsViews))
+		failures.push(`${playbook.id}: playbook has no documentation route.`);
+	if (!playbook.installCommand.startsWith('bun add '))
+		failures.push(
+			`${playbook.id}: playbook install command is incomplete.`
+		);
+	if (playbook.prerequisites.length < minimumPlaybookListItems)
+		failures.push(`${playbook.id}: playbook prerequisites are too thin.`);
+	if (playbook.quickstart.length < minimumPlaybookListItems)
+		failures.push(`${playbook.id}: playbook run/verify path is too thin.`);
+	if (playbook.expectedResults.length < minimumPlaybookListItems)
+		failures.push(
+			`${playbook.id}: playbook success criteria are too thin.`
+		);
+	if (playbook.substitutions.length < 2)
+		failures.push(`${playbook.id}: production substitutions are too thin.`);
+	if (playbook.failures.length < 2)
+		failures.push(`${playbook.id}: failure decisions are too thin.`);
+	for (const phase of ['required', 'production', 'operate'])
+		if (
+			!playbook.packages.some(
+				(packageRole) => packageRole.phase === phase
+			)
+		)
+			failures.push(`${playbook.id}: missing ${phase} package role.`);
+	for (const packageRole of playbook.packages)
+		if (!(packageRole.view in docsViews))
+			failures.push(
+				`${playbook.id}: package role links to unknown view ${packageRole.view}.`
+			);
+}
+
+const documentedPackageNames = new Set(
+	ecosystemProjects.flatMap((project) => [
+		...(project.packageName ? [project.packageName] : []),
+		...project.subpackages.map((subpackage) => subpackage.name)
+	])
+);
+
+for (const [packageName, relationships] of Object.entries(
+	packageRelationshipsByName
+)) {
+	if (!documentedPackageNames.has(packageName))
+		failures.push(`${packageName}: relationship owner is not documented.`);
+	if (relationships.length === 0)
+		failures.push(`${packageName}: relationship contract is empty.`);
+	for (const relationship of relationships)
+		if (relationship.view && !(relationship.view in docsViews))
+			failures.push(
+				`${packageName}: relationship links to unknown view ${relationship.view}.`
+			);
+}
+
+for (const [packageName, sample] of Object.entries(
+	firstSuccessSamplesByPackage
+)) {
+	if (sample.intent !== 'runnable')
+		failures.push(`${packageName}: first-success sample is not runnable.`);
+	if (!sample.expectedResult)
+		failures.push(`${packageName}: runnable sample lacks expected output.`);
+	if (!sample.prerequisites || sample.prerequisites.length === 0)
+		failures.push(`${packageName}: runnable sample lacks prerequisites.`);
+	if (!sample.code.includes('import '))
+		failures.push(
+			`${packageName}: runnable sample lacks explicit imports.`
+		);
+}
 const legacyPackageViews = new Set(
 	ecosystemProjects.flatMap((project) => {
 		const legacyView = legacyPackageProjectViewId(project);

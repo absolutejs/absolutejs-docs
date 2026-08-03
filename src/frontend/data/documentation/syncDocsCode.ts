@@ -82,6 +82,8 @@ import {
   defineReactiveQuery,
 } from '@absolutejs/sync/engine';
 
+type Task = { id: string; title: string };
+const store = new Map<string, Task>();
 const engine = createSyncEngine();
 
 // Teach the engine your table once — it powers read-set-tracked queries.

@@ -4,8 +4,10 @@ import { ThemeSprings } from '../../../../types/springTypes';
 import { packageCatalog } from '../../../data/documentation/packages/catalog';
 import { ecosystemProjects } from '../../../data/documentation/packages/ecosystem.generated';
 import { packageSubpackageViewId } from '../../../data/documentation/packages/packageRoutes';
+import { packageRelationshipsByName } from '../../../data/documentation/packages/packageRelationships';
 import { PackageApiExplorer } from './PackageApiExplorer';
 import { PackageGuidanceSections } from './PackageGuidanceSections';
+import { playbooksForView } from '../../../data/documentation/outcomePlaybooks';
 
 type PackageReleaseSnapshotProps = {
 	currentPageId: string;
@@ -56,6 +58,9 @@ export const PackageReleaseSnapshot = ({
 	const publicSubpackages = project.subpackages.filter(
 		(subpackage) => !subpackage.private
 	);
+	const relationships = project.packageName
+		? (packageRelationshipsByName[project.packageName] ?? [])
+		: [];
 	const hasPackageDetails =
 		project.packageName ||
 		project.publicExports.length > 0 ||
@@ -180,8 +185,66 @@ export const PackageReleaseSnapshot = ({
 				<div style={{ marginTop: '2rem' }}>
 					<PackageApiExplorer
 						api={project.api}
+						playbookLinks={playbooksForView(currentPageId).map(
+							(playbook) => ({
+								href: `/documentation/${playbook.id}`,
+								label: playbook.title
+							})
+						)}
+						sourceHref={project.repository ?? undefined}
 						themeSprings={themeSprings}
 					/>
+				</div>
+			) : null}
+
+			{relationships.length > 0 ? (
+				<div style={{ marginTop: '2rem' }}>
+					<animated.h3
+						style={{
+							color: themeSprings.contrastPrimary,
+							fontSize: '1rem',
+							marginBottom: '0.75rem'
+						}}
+					>
+						Package boundaries and next steps
+					</animated.h3>
+					<div
+						style={{
+							display: 'grid',
+							gap: '0.65rem',
+							gridTemplateColumns:
+								'repeat(auto-fit, minmax(220px, 1fr))'
+						}}
+					>
+						{relationships.map((relationship) => {
+							const content = (
+								<>
+									<small>{relationship.kind}</small>
+									<br />
+									<strong>{relationship.label}</strong>
+									<br />
+									<span>{relationship.detail}</span>
+								</>
+							);
+
+							return relationship.view ? (
+								<a
+									href={`/documentation/${relationship.view}`}
+									key={`${relationship.kind}-${relationship.label}`}
+									style={{ ...chipStyle, lineHeight: 1.55 }}
+								>
+									{content}
+								</a>
+							) : (
+								<div
+									key={`${relationship.kind}-${relationship.label}`}
+									style={{ ...chipStyle, lineHeight: 1.55 }}
+								>
+									{content}
+								</div>
+							);
+						})}
+					</div>
 				</div>
 			) : null}
 

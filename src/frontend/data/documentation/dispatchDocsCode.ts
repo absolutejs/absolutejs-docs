@@ -8,6 +8,7 @@
 const dispatchInstall = `bun add @absolutejs/dispatch@0.7.1
 
 # Install only the capabilities you use:
+bun add @absolutejs/dispatch-resend resend
 bun add @absolutejs/dispatch-apns @absolutejs/dispatch-fcm
 bun add @absolutejs/dispatch-push-postgres @absolutejs/reliability
 bun add @absolutejs/dispatch-aws-end-user-messaging
@@ -86,23 +87,29 @@ const emailCustom = createPostmarkAdapter({
     },
   }),
 });`;
-const dispatchQuickStart = `import { createDispatcher } from '@absolutejs/dispatch';
-import { createResendAdapter } from '@absolutejs/dispatch-resend';
-import { Resend } from 'resend';
+const dispatchQuickStart = `import {
+  createDispatcher,
+  memoryEmailAdapter
+} from '@absolutejs/dispatch';
+
+const email = memoryEmailAdapter({
+  idGenerator: () => 'local-message-1'
+});
 
 const dispatch = createDispatcher({
-  email: createResendAdapter({
-    client: new Resend(process.env.RESEND_API_KEY!),
-  }),
+  email,
   defaultFrom: { email: 'Example <noreply@example.com>' },
 });
 
 // Each channel is called directly — dispatch.email(...), dispatch.messaging(...).
-await dispatch.email({
+const result = await dispatch.email({
   to: 'user@example.com',
   subject: 'Welcome',
   text: 'Hi there!',
-});`;
+});
+
+console.log(result.provider); // memory
+console.log(email.inspect()); // exactly one normalized message`;
 const dispatchPushLifecycle = `import { createPushLifecycle } from '@absolutejs/dispatch';
 import {
   createPostgresPushFanoutClaimStore,

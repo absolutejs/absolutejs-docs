@@ -3,6 +3,7 @@ import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
+import { DocumentationModeNav } from '../packages/DocumentationModeNav';
 import {
 	dispatchChannelUsage,
 	dispatchAws,
@@ -453,6 +454,12 @@ export const DispatchOverviewView = ({
 						OpenTelemetry spans and audit events on every send.
 					</p>
 				</animated.div>
+				<DocumentationModeNav
+					productionHref="#production-model"
+					referenceHref="#channels"
+					runHref="#quick-start"
+					themeSprings={themeSprings}
+				/>
 
 				<PackageExplanationBlocks
 					explanations={dispatchExplanations}
@@ -492,6 +499,15 @@ export const DispatchOverviewView = ({
 					>
 						Quick Start
 					</AnchorHeading>
+					<Callout
+						themeSprings={themeSprings}
+						title="Runnable · zero credentials"
+						variant="success"
+					>
+						Run this with only @absolutejs/dispatch installed.
+						Success is proved by provider === memory and one
+						captured message from email.inspect().
+					</Callout>
 					<p style={paragraphSpacedStyle}>
 						<code>createDispatcher()</code> takes one optional
 						adapter per channel. Each channel becomes a top-level

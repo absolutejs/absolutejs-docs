@@ -3,6 +3,9 @@
 import type { PackageCategory } from '../../../../types/packageDocs';
 
 export type EcosystemApiSymbol = {
+	deprecated?: string;
+	since?: string;
+	throws?: string[];
 	description: string;
 	kind: string;
 	name: string;
@@ -13828,7 +13831,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/absolute-auth',
 		subpackages: [],
-		version: '0.59.2'
+		version: '0.59.3'
 	},
 	{
 		api: [],
@@ -26961,7 +26964,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'check:docs'
 			},
 			{
-				command: 'bun run lint && bun run check:docs && tsc --noEmit',
+				command: 'bun scripts/checkRunnableExamples.ts',
+				name: 'check:examples'
+			},
+			{
+				command:
+					'bun run lint && bun run check:docs && bun run check:examples && tsc --noEmit',
 				name: 'check:quality'
 			},
 			{
@@ -63700,7 +63708,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'witness',
-				version: '0.4.9'
+				version: '0.5.2'
 			},
 			{
 				api: [

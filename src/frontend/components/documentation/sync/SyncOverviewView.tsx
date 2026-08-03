@@ -1,6 +1,8 @@
 import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocumentationViewLayout } from '../DocumentationViewLayout';
+import { DocsNavigation } from '../DocsNavigation';
+import { DocumentationModeNav } from '../packages/DocumentationModeNav';
 import {
 	syncCrdt,
 	syncCrdtBackends,
@@ -21,11 +23,13 @@ import {
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { Callout } from '../../utils/Callout';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#sync-overview', label: 'Overview' },
+	{ href: '#installation', label: 'Installation' },
 	{ href: '#quick-start', label: 'Quick Start' },
 	{ href: '#how-it-fits', label: 'How it fits' },
 	{ href: '#crdt', label: 'CRDT Collaboration' },
@@ -37,6 +41,8 @@ const tocItems: TocItem[] = [
 ];
 
 export const SyncOverviewView = ({
+	currentPageId,
+	onNavigate,
 	themeSprings,
 	tocOpen,
 	onTocToggle,
@@ -69,6 +75,29 @@ export const SyncOverviewView = ({
 				.
 			</p>
 		</animated.div>
+		<DocumentationModeNav
+			productionHref="#how-it-fits"
+			referenceHref="#frameworks"
+			runHref="#quick-start"
+			themeSprings={themeSprings}
+		/>
+
+		<section style={sectionStyle}>
+			<AnchorHeading
+				id="installation"
+				level="h2"
+				style={gradientHeadingStyle(themeSprings)}
+				themeSprings={themeSprings}
+			>
+				Installation
+			</AnchorHeading>
+			<PrismPlus
+				codeString="bun add @absolutejs/sync elysia"
+				language="bash"
+				showLineNumbers={false}
+				themeSprings={themeSprings}
+			/>
+		</section>
 
 		<section style={sectionStyle}>
 			<AnchorHeading
@@ -79,6 +108,15 @@ export const SyncOverviewView = ({
 			>
 				Quick Start
 			</AnchorHeading>
+			<Callout
+				themeSprings={themeSprings}
+				title="Runnable server · partial client"
+				variant="success"
+			>
+				The server declares its in-memory Task store, registers the
+				engine, and listens on port 3000. The client block is a React
+				component snippet; mount it in an existing React application.
+			</Callout>
 			<p style={paragraphSpacedStyle}>
 				Define a collection on your engine, expose it over{' '}
 				<code>syncSocket</code>, and let the engine push diffs. Reads
@@ -90,6 +128,10 @@ export const SyncOverviewView = ({
 				showLineNumbers={true}
 				themeSprings={themeSprings}
 			/>
+			<p style={paragraphSpacedStyle}>
+				<strong>Proof of success:</strong> open two clients, add a task
+				in one, and confirm the second receives the row without polling.
+			</p>
 			<p style={paragraphSpacedStyle}>
 				On the client, one hook gives you the live data + an optimistic{' '}
 				<code>mutate</code>:
@@ -305,5 +347,12 @@ export const SyncOverviewView = ({
 				data layer.
 			</p>
 		</section>
+
+		<DocsNavigation
+			currentPageId={currentPageId}
+			isMobileOrTablet={isMobileOrTablet}
+			onNavigate={onNavigate}
+			themeSprings={themeSprings}
+		/>
 	</DocumentationViewLayout>
 );
