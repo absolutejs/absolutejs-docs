@@ -24,6 +24,9 @@ const minimumMetadataDescriptionLength = 50;
 const minimumMetadataTitleLength = 20;
 const failures: string[] = [];
 const reachableViews = new Set<string>(['overview', 'packages']);
+const sourceWorkspaceAvailable = existsSync(
+	resolve(workspaceDirectory, 'absolutejs', 'package.json')
+);
 
 for (const category of sidebarCategories)
 	for (const entry of category.entries) {
@@ -153,7 +156,11 @@ for (const project of ecosystemProjects) {
 		project.directory,
 		'README.md'
 	);
-	if (!existsSync(readmePath) && project.subpackages.length > 0)
+	if (
+		sourceWorkspaceAvailable &&
+		!existsSync(readmePath) &&
+		project.subpackages.length > 0
+	)
 		failures.push(
 			`${project.directory}: monorepo is missing a root README.md.`
 		);
