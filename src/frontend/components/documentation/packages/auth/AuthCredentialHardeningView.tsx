@@ -5,7 +5,12 @@ import {
 	breachCheckOnLogin,
 	compromisedCredential,
 	emailValidation,
-	pruneInactiveUsersExample
+	enumerationResistance,
+	originAllowlist,
+	pruneInactiveUsersExample,
+	requireAuthGuard,
+	safeRedirectAndCookie,
+	secureCookieDefaults
 } from '../../../../data/documentation/authCredentialHardeningDocsCode';
 import {
 	h1Style,
@@ -73,7 +78,12 @@ const tocItems: TocItem[] = [
 	{ href: '#email', label: 'Email validation' },
 	{ href: '#compromised', label: 'Compromised credentials' },
 	{ href: '#background-scan', label: 'Background breach re-scan' },
-	{ href: '#prune-inactive', label: 'Prune inactive users' }
+	{ href: '#prune-inactive', label: 'Prune inactive users' },
+	{ href: '#secure-cookies', label: 'Secure-by-default cookies' },
+	{ href: '#enumeration', label: 'Account-enumeration resistance' },
+	{ href: '#origin-allowlist', label: 'Origin (CSRF) allowlist' },
+	{ href: '#require-auth', label: 'Fail-closed route guard' },
+	{ href: '#safe-redirects', label: 'Safe redirects & cookie parsing' }
 ];
 
 export const AuthCredentialHardeningView = ({
@@ -224,6 +234,109 @@ export const AuthCredentialHardeningView = ({
 					</Callout>
 					<PrismPlus
 						codeString={pruneInactiveUsersExample}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="secure-cookies"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Secure-by-default cookies
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Session cookies are <code>Secure</code> by default. Only the explicit <code>development</code>/<code>test</code> environments opt out (so <code>http://localhost</code> and test runners round-trip cookies) &mdash; every other case, including a production deploy that forgot <code>NODE_ENV</code>, gets Secure cookies. Override with <code>cookieSecure</code> when a proxy terminates TLS but reports the request as http.
+					</p>
+					<PrismPlus
+						codeString={secureCookieDefaults}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="enumeration"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Account-enumeration resistance
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Registration is enumeration-safe by default: a duplicate email returns the same generic response a new pending registration does &mdash; it never says &ldquo;email already registered.&rdquo; <code>onExistingAccount</code> lets you nudge the real owner out of band; <code>revealRegistrationConflicts: true</code> opts back into the explicit 409. Login is timing-equalized too, so response time can&apos;t reveal which emails exist.
+					</p>
+					<PrismPlus
+						codeString={enumerationResistance}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="origin-allowlist"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Origin (CSRF) allowlist
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>trustedOrigins</code> rejects login/register requests whose <code>Origin</code> header isn&apos;t one of yours. <code>enforceTrustedOrigins</code> defaults to <code>true</code> (block); set it <code>false</code> for a report-only rollout, and <code>onUntrustedOrigin</code> fires in both modes so you can observe the real Origin set before enforcing on a login path.
+					</p>
+					<Callout themeSprings={themeSprings} variant="note">
+						Report-only first on a login path: log with <code>onUntrustedOrigin</code>, confirm the Origins are exactly yours, then flip <code>enforceTrustedOrigins</code> to <code>true</code>.
+					</Callout>
+					<PrismPlus
+						codeString={originAllowlist}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="require-auth"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Fail-closed route guard
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>requireAuthPlugin</code> is the fail-closed counterpart to <code>protectRoutePlugin</code>: mounting it guards every route in scope by default, rejecting an unauthenticated request with 401 before the handler runs. Forgetting a per-route check therefore can&apos;t silently leave a route public.
+					</p>
+					<PrismPlus
+						codeString={requireAuthGuard}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="safe-redirects"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Safe redirects & cookie parsing
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						<code>isSafeLocalPath</code>/<code>toSafeLocalPath</code> validate a post-login <code>returnUrl</code> as same-origin &mdash; rejecting the backslash open-redirect a naive check misses. <code>readSessionCookie</code> reads the session id from a request with an anchored parse, so a decoy <code>xuser_session_id=</code> cookie can&apos;t shadow the real one. Use these instead of hand-rolling either check.
+					</p>
+					<PrismPlus
+						codeString={safeRedirectAndCookie}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}

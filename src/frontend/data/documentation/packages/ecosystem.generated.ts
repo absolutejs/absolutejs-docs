@@ -11667,8 +11667,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
-						name: 'AuthIdentityConflictError',
-						signature: 'AuthIdentityConflictError'
+						name: 'readSessionCookie',
+						signature: 'readSessionCookie'
 					}
 				]
 			},
@@ -11742,6 +11742,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'protectRoutePlugin',
 						signature: 'protectRoutePlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'readSessionCookie',
+						signature: 'readSessionCookie'
 					},
 					{
 						description: '',
@@ -13847,7 +13853,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/absolute-auth',
 		subpackages: [],
-		version: '0.64.0'
+		version: '0.65.0'
 	},
 	{
 		api: [],
@@ -29392,7 +29398,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/errors',
 		subpackages: [],
-		version: '0.7.1'
+		version: '0.7.2'
 	},
 	{
 		api: [],
@@ -63728,7 +63734,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'witness',
-				version: '0.7.0'
+				version: '0.7.4'
 			},
 			{
 				api: [
