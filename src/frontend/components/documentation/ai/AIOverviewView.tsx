@@ -38,6 +38,7 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
+import { StepFlow, StepFlowStep } from '../../utils/StepFlow';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
 
@@ -83,32 +84,6 @@ const conversationQueueExplanation: PackageExplanation[] = [
 	}
 ];
 
-const layerNumberStyle: CSSProperties = {
-	alignItems: 'center',
-	background: 'linear-gradient(135deg, #6366F1 0%, #818CF8 100%)',
-	borderRadius: '50%',
-	color: '#fff',
-	display: 'flex',
-	flexShrink: 0,
-	fontSize: '0.875rem',
-	fontWeight: 700,
-	height: '2rem',
-	justifyContent: 'center',
-	width: '2rem'
-};
-
-const layerTitleStyle: CSSProperties = {
-	fontSize: '1.1rem',
-	fontWeight: 600,
-	marginBottom: '0.25rem'
-};
-
-const layerDescStyle: CSSProperties = {
-	fontSize: '0.95rem',
-	lineHeight: 1.5,
-	opacity: 0.85
-};
-
 const featureIconStyle: CSSProperties = {
 	fontSize: '1.5rem',
 	marginBottom: '0.5rem'
@@ -126,44 +101,29 @@ const featureDescStyle: CSSProperties = {
 	opacity: 0.8
 };
 
-const connectorStyle = (themeSprings: ThemeSprings) => ({
-	borderLeft: themeSprings.themeTertiary.to((c: string) => `2px dashed ${c}`),
-	height: '1.5rem',
-	marginLeft: '1rem',
-	width: '0'
-});
-
 type AIOverviewSectionBlockProps = {
 	section: 'architecture' | 'features' | 'providers' | 'hooks';
 	themeSprings: ThemeSprings;
 	isMobile: boolean;
 };
 
-const architectureLayers: Array<{
-	code: string;
-	description: string;
-	number: string;
-	title: string;
-}> = [
+const architectureLayers: StepFlowStep[] = [
 	{
 		code: '@absolutejs/ai',
 		description:
 			'The aiChat Elysia plugin creates WebSocket and REST endpoints, manages conversations, and orchestrates streaming with tool execution.',
-		number: '1',
 		title: 'Server Plugin'
 	},
 	{
 		code: '@absolutejs/ai/anthropic',
 		description:
 			'Adapters for each AI service that normalize different APIs into a unified AsyncIterable<AIChunk> streaming interface.',
-		number: '2',
 		title: 'Provider Layer'
 	},
 	{
 		code: '@absolutejs/ai/react',
 		description:
 			'Framework-specific hooks and composables that manage WebSocket connections, auto-reconnect, and message state with a reducer pattern.',
-		number: '3',
 		title: 'Client Layer'
 	}
 ];
@@ -293,48 +253,16 @@ const AIOverviewSectionBlock = ({
 	if (section === 'architecture') {
 		return (
 			<>
-				{architectureLayers.map((layer, index) => (
-					<div key={layer.number}>
-						<animated.div
-							style={{
-								...featureCardStyle(themeSprings),
-								alignItems: 'flex-start',
-								display: 'flex',
-								gap: '1rem'
-							}}
-						>
-							<div style={layerNumberStyle}>{layer.number}</div>
-							<div>
-								<div style={layerTitleStyle}>{layer.title}</div>
-								<div style={layerDescStyle}>
-									{layer.description}
-								</div>
-								<code
-									style={{
-										...tableCodeStyle,
-										display: 'inline-block',
-										marginTop: '0.5rem'
-									}}
-								>
-									{layer.code}
-								</code>
-							</div>
-						</animated.div>
-						{index < architectureLayers.length - 1 && (
-							<animated.div
-								style={connectorStyle(themeSprings)}
-							/>
-						)}
-					</div>
-				))}
-				<div style={{ marginTop: '1.5rem' }}>
-					<PrismPlus
-						codeString={aiImportPaths}
-						language="typescript"
-						showLineNumbers={false}
-						themeSprings={themeSprings}
-					/>
-				</div>
+				<StepFlow
+					steps={architectureLayers}
+					themeSprings={themeSprings}
+				/>
+				<PrismPlus
+					codeString={aiImportPaths}
+					language="typescript"
+					showLineNumbers={false}
+					themeSprings={themeSprings}
+				/>
 			</>
 		);
 	}

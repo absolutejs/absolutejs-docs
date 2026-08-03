@@ -1,7 +1,6 @@
 import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
 import {
-	PackageAdapterGroup,
 	PackageCodeSample,
 	PackageDocData,
 	PackageFeature,
@@ -23,12 +22,13 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
-import { DocsTable } from '../../utils/DocsTable';
+import { ChecklistRows } from '../../utils/ChecklistRows';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { DocsNavigation } from '../DocsNavigation';
 import { synchronizePackageDocData } from '../../../data/documentation/packages/ecosystemVersions';
+import { PackageAdapterGroupSection } from './PackageAdapterGroupSection';
 import { PackageGuidanceSections } from './PackageGuidanceSections';
 import { PackageApiExplorer } from './PackageApiExplorer';
 import { PackageExplanationBlocks } from './PackageExplanationBlocks';
@@ -68,6 +68,83 @@ const pillStyle = (color: string): CSSProperties => ({
 	padding: '0.2rem 0.7rem'
 });
 
+const visibleDetailLimit = 2;
+
+const detailTickStyle: CSSProperties = {
+	background: 'rgba(99, 102, 241, 0.55)',
+	borderRadius: '2px',
+	flexShrink: 0,
+	height: '0.85em',
+	marginTop: '0.3em',
+	width: '3px'
+};
+
+const detailSummaryStyle: CSSProperties = {
+	color: '#6366F1',
+	cursor: 'pointer',
+	fontSize: '0.78rem',
+	fontWeight: 600,
+	marginTop: '0.6rem'
+};
+
+const FeatureDetailRows = ({
+	details,
+	themeSprings
+}: {
+	details: string[];
+	themeSprings: ThemeSprings;
+}) => (
+	<div style={{ display: 'grid', gap: '0.45rem', marginTop: '0.65rem' }}>
+		{details.map((detail) => (
+			<animated.div
+				key={detail}
+				style={{
+					color: themeSprings.contrastSecondary,
+					display: 'flex',
+					fontSize: '0.84rem',
+					gap: '0.55rem',
+					lineHeight: 1.6
+				}}
+			>
+				<span style={detailTickStyle} />
+				<span>{detail}</span>
+			</animated.div>
+		))}
+	</div>
+);
+
+const FeatureDetails = ({
+	details,
+	themeSprings
+}: {
+	details: string[];
+	themeSprings: ThemeSprings;
+}) => {
+	if (details.length <= visibleDetailLimit) {
+		return (
+			<FeatureDetailRows details={details} themeSprings={themeSprings} />
+		);
+	}
+
+	return (
+		<>
+			<FeatureDetailRows
+				details={details.slice(0, visibleDetailLimit)}
+				themeSprings={themeSprings}
+			/>
+			<details>
+				<summary style={detailSummaryStyle}>
+					Show {details.length - visibleDetailLimit} more
+				</summary>
+				<FeatureDetailRows
+					details={details.slice(visibleDetailLimit)}
+					themeSprings={themeSprings}
+				/>
+			</details>
+		</>
+	);
+};
+
 type PackageFeatureCardProps = {
 	feature: PackageFeature;
 	themeSprings: ThemeSprings;
@@ -98,19 +175,10 @@ const PackageFeatureCard = ({
 			{feature.description}
 		</animated.p>
 		{feature.details && feature.details.length > 0 ? (
-			<animated.ul
-				style={{
-					color: themeSprings.contrastSecondary,
-					fontSize: '0.86rem',
-					lineHeight: 1.55,
-					margin: '0.65rem 0 0',
-					paddingLeft: '1.15rem'
-				}}
-			>
-				{feature.details.map((detail) => (
-					<li key={detail}>{detail}</li>
-				))}
-			</animated.ul>
+			<FeatureDetails
+				details={feature.details}
+				themeSprings={themeSprings}
+			/>
 		) : null}
 	</animated.div>
 );
@@ -155,16 +223,6 @@ const PackageHero = ({
 	</animated.div>
 );
 
-const adapterRows = (group: PackageAdapterGroup) =>
-	group.items.map((item) => [
-		{
-			code: item.name,
-			href: item.href,
-			suffix: item.version ? `v${item.version}` : ''
-		},
-		item.description
-	]);
-
 const SampleSection = ({
 	sample,
 	themeSprings
@@ -196,11 +254,10 @@ const SampleSection = ({
 			</span>
 			<p style={paragraphSpacedStyle}>{sample.description}</p>
 			{sample.prerequisites && sample.prerequisites.length > 0 ? (
-				<ul>
-					{sample.prerequisites.map((prerequisite) => (
-						<li key={prerequisite}>{prerequisite}</li>
-					))}
-				</ul>
+				<ChecklistRows
+					items={sample.prerequisites}
+					themeSprings={themeSprings}
+				/>
 			) : null}
 			<PrismPlus
 				codeString={sample.code}
@@ -411,9 +468,8 @@ export const PackageOverviewTemplate = ({
 							{group.heading}
 						</AnchorHeading>
 						<p style={paragraphSpacedStyle}>{group.description}</p>
-						<DocsTable
-							columns={['Package', 'Description']}
-							rows={adapterRows(group)}
+						<PackageAdapterGroupSection
+							group={group}
 							themeSprings={themeSprings}
 						/>
 					</section>

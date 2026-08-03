@@ -13847,7 +13847,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/absolute-auth',
 		subpackages: [],
-		version: '0.63.0'
+		version: '0.64.0'
 	},
 	{
 		api: [],
@@ -26984,8 +26984,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'check:examples'
 			},
 			{
+				command: 'bun scripts/checkCodeLanguages.ts',
+				name: 'check:languages'
+			},
+			{
 				command:
-					'bun run lint && bun run check:docs && bun run check:examples && tsc --noEmit',
+					'bun run lint && bun run check:docs && bun run check:languages && bun run check:examples && tsc --noEmit',
 				name: 'check:quality'
 			},
 			{

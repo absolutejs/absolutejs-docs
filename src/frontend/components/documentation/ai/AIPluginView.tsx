@@ -25,11 +25,11 @@ import {
 	tableCodeStyle
 } from '../../../styles/docsStyles';
 import {
-	featureCardStyle,
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
+import { DefinitionGrid, DefinitionItem } from '../../utils/DefinitionGrid';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -44,27 +44,6 @@ const tocItems: TocItem[] = [
 	{ href: '#htmx', label: 'HTMX Support' }
 ];
 
-const optionNameStyle: CSSProperties = {
-	fontFamily: 'JetBrains Mono, monospace',
-	fontSize: '0.95rem',
-	fontWeight: 600
-};
-
-const optionDescStyle: CSSProperties = {
-	fontSize: '0.9rem',
-	lineHeight: 1.5,
-	marginTop: '0.25rem',
-	opacity: 0.85
-};
-
-const optionTypeStyle: CSSProperties = {
-	...tableCodeStyle,
-	display: 'inline-block',
-	fontSize: '0.75rem',
-	marginLeft: '0.5rem',
-	opacity: 0.7
-};
-
 const methodBadgeStyle = (color: string): CSSProperties => ({
 	borderRadius: '4px',
 	color,
@@ -73,57 +52,117 @@ const methodBadgeStyle = (color: string): CSSProperties => ({
 	fontWeight: 700
 });
 
-type AIPluginSectionBlockProps = {
-	section: 'options' | 'endpoints';
+type AIPluginEndpointsTableProps = {
 	themeSprings: DocsViewProps['themeSprings'];
 };
 
-const configOptions: Array<{
-	desc: string;
-	name: string;
-	required?: boolean;
-	type: string;
-}> = [
+const configOptionItems: DefinitionItem[] = [
 	{
-		desc: 'Factory function that receives a provider name and returns a provider config. This is the only required option.',
-		name: 'provider',
-		required: true,
-		type: '(name) => AIProviderConfig'
+		badge: 'required',
+		description: (
+			<>
+				<code style={tableCodeStyle}>
+					{'(name) => AIProviderConfig'}
+				</code>
+				<br />
+				{
+					'Factory function that receives a provider name and returns a provider config. This is the only required option.'
+				}
+			</>
+		),
+		term: 'provider'
 	},
 	{
-		desc: 'Static model name or function to select model per provider. If omitted, the client must specify the model.',
-		name: 'model',
-		type: 'string | (name) => string'
+		description: (
+			<>
+				<code style={tableCodeStyle}>
+					{'string | (name) => string'}
+				</code>
+				<br />
+				{
+					'Static model name or function to select model per provider. If omitted, the client must specify the model.'
+				}
+			</>
+		),
+		term: 'model'
 	},
 	{
-		desc: 'Static tool map or function returning tools per provider/model. Return undefined to disable tools for a model.',
-		name: 'tools',
-		type: 'AIToolMap | (name, model) => AIToolMap'
+		description: (
+			<>
+				<code style={tableCodeStyle}>
+					{'AIToolMap | (name, model) => AIToolMap'}
+				</code>
+				<br />
+				{
+					'Static tool map or function returning tools per provider/model. Return undefined to disable tools for a model.'
+				}
+			</>
+		),
+		term: 'tools'
 	},
 	{
-		desc: 'Enable extended thinking globally, with a token budget, or dynamically per provider/model.',
-		name: 'thinking',
-		type: 'boolean | { budgetTokens } | fn'
+		description: (
+			<>
+				<code style={tableCodeStyle}>
+					{'boolean | { budgetTokens } | fn'}
+				</code>
+				<br />
+				{
+					'Enable extended thinking globally, with a token budget, or dynamically per provider/model.'
+				}
+			</>
+		),
+		term: 'thinking'
 	},
 	{
-		desc: 'Custom parser to extract provider, model, and content from the raw message string sent by the client.',
-		name: 'parseProvider',
-		type: '(content) => { content, model, providerName }'
+		description: (
+			<>
+				<code style={tableCodeStyle}>
+					{'(content) => { content, model, providerName }'}
+				</code>
+				<br />
+				{
+					'Custom parser to extract provider, model, and content from the raw message string sent by the client.'
+				}
+			</>
+		),
+		term: 'parseProvider'
 	},
 	{
-		desc: 'Callback fired when a response finishes streaming. Useful for logging token usage or saving to a database.',
-		name: 'onComplete',
-		type: '(conversationId, response, usage) => void'
+		description: (
+			<>
+				<code style={tableCodeStyle}>
+					{'(conversationId, response, usage) => void'}
+				</code>
+				<br />
+				{
+					'Callback fired when a response finishes streaming. Useful for logging token usage or saving to a database.'
+				}
+			</>
+		),
+		term: 'onComplete'
 	},
 	{
-		desc: "WebSocket and REST endpoint path. Defaults to '/chat'.",
-		name: 'path',
-		type: 'string'
+		description: (
+			<>
+				<code style={tableCodeStyle}>{'string'}</code>
+				<br />
+				{"WebSocket and REST endpoint path. Defaults to '/chat'."}
+			</>
+		),
+		term: 'path'
 	},
 	{
-		desc: 'Maximum tool-use rounds before the plugin stops the loop. Defaults to 10.',
-		name: 'maxTurns',
-		type: 'number'
+		description: (
+			<>
+				<code style={tableCodeStyle}>{'number'}</code>
+				<br />
+				{
+					'Maximum tool-use rounds before the plugin stops the loop. Defaults to 10.'
+				}
+			</>
+		),
+		term: 'maxTurns'
 	}
 ];
 
@@ -172,82 +211,28 @@ const renderEndpointRows = (themeSprings: DocsViewProps['themeSprings']) => (
 	</tbody>
 );
 
-const AIPluginSectionBlock = ({
-	section,
+const AIPluginEndpointsTable = ({
 	themeSprings
-}: AIPluginSectionBlockProps) => {
-	if (section === 'options') {
-		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					gap: '0.75rem',
-					marginTop: '0.5rem'
-				}}
-			>
-				{configOptions.map((opt) => (
-					<animated.div
-						key={opt.name}
-						style={{
-							...featureCardStyle(themeSprings),
-							padding: '1rem 1.25rem'
-						}}
-					>
-						<div
-							style={{
-								alignItems: 'center',
-								display: 'flex',
-								flexWrap: 'wrap'
-							}}
-						>
-							<span style={optionNameStyle}>{opt.name}</span>
-							{opt.required && (
-								<span
-									style={{
-										background: 'rgba(239, 68, 68, 0.15)',
-										borderRadius: '4px',
-										color: '#EF4444',
-										fontSize: '0.7rem',
-										fontWeight: 600,
-										marginLeft: '0.5rem',
-										padding: '0.1rem 0.4rem',
-										textTransform: 'uppercase'
-									}}
-								>
-									required
-								</span>
-							)}
-							<span style={optionTypeStyle}>{opt.type}</span>
-						</div>
-						<div style={optionDescStyle}>{opt.desc}</div>
-					</animated.div>
-				))}
-			</div>
-		);
-	}
-
-	return (
-		<div style={tableContainerStyle}>
-			<animated.table style={tableStyle(themeSprings)}>
-				<thead>
-					<tr>
-						<animated.th style={tableHeaderStyle(themeSprings)}>
-							Method
-						</animated.th>
-						<animated.th style={tableHeaderStyle(themeSprings)}>
-							Path
-						</animated.th>
-						<animated.th style={tableHeaderStyle(themeSprings)}>
-							Description
-						</animated.th>
-					</tr>
-				</thead>
-				{renderEndpointRows(themeSprings)}
-			</animated.table>
-		</div>
-	);
-};
+}: AIPluginEndpointsTableProps) => (
+	<div style={tableContainerStyle}>
+		<animated.table style={tableStyle(themeSprings)}>
+			<thead>
+				<tr>
+					<animated.th style={tableHeaderStyle(themeSprings)}>
+						Method
+					</animated.th>
+					<animated.th style={tableHeaderStyle(themeSprings)}>
+						Path
+					</animated.th>
+					<animated.th style={tableHeaderStyle(themeSprings)}>
+						Description
+					</animated.th>
+				</tr>
+			</thead>
+			{renderEndpointRows(themeSprings)}
+		</animated.table>
+	</div>
+);
 
 export const AIPluginView = ({
 	currentPageId,
@@ -335,8 +320,8 @@ export const AIPluginView = ({
 					>
 						Config Options
 					</AnchorHeading>
-					<AIPluginSectionBlock
-						section="options"
+					<DefinitionGrid
+						items={configOptionItems}
 						themeSprings={themeSprings}
 					/>
 				</section>
@@ -371,10 +356,7 @@ export const AIPluginView = ({
 						The plugin automatically creates these endpoints under
 						the configured path (default <code>/chat</code>):
 					</p>
-					<AIPluginSectionBlock
-						section="endpoints"
-						themeSprings={themeSprings}
-					/>
+					<AIPluginEndpointsTable themeSprings={themeSprings} />
 				</section>
 
 				<section style={sectionStyle}>
