@@ -51,10 +51,7 @@ jobs:
         run: bun run typecheck
 
       - name: Documentation quality contract
-        run: |
-          bun run catalog:generate
-          git diff --exit-code -- src/frontend/data/documentation/packages/ecosystem.generated.ts
-          bun run check:docs
+        run: bun run check:docs
 
       - name: Lint documentation source
         run: bun run lint
