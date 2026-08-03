@@ -58,6 +58,7 @@ import { packageReferenceViews } from '../components/documentation/packages/Ecos
 import { ecosystemProjects } from './documentation/packages/ecosystem.generated';
 import {
 	documentationViewByDirectory,
+	legacyPackageProjectViewId,
 	packageProjectViewId,
 	packageSubpackageViewId
 } from './documentation/packages/packageRoutes';
@@ -233,7 +234,7 @@ import { AngularAIView } from '../components/documentation/angular/AngularAIView
 
 const definePortalViews = <T>(views: T) => views;
 
-export const docsViews = definePortalViews({
+const primaryDocsViews = definePortalViews({
 	'absolute-auth': AbsoluteAuthView,
 	'ai-overview': AIOverviewView,
 	'ai-plugin': AIPluginView,
@@ -248,8 +249,8 @@ export const docsViews = definePortalViews({
 	'angular-spa': AngularSpaView,
 	api: ApiView,
 	assets: AssetsView,
-	'audience-overview': AudiencePackageView,
-	'audit-overview': AuditOverviewView,
+	audience: AudiencePackageView,
+	audit: AuditOverviewView,
 	'auth-abuse': AuthAbuseView,
 	'auth-actions': AuthActionsView,
 	'auth-adaptive': AuthAdaptiveView,
@@ -274,33 +275,33 @@ export const docsViews = definePortalViews({
 	'auth-sso': AuthSsoView,
 	'auth-vault': AuthVaultView,
 	'auth-verifiable-credentials': AuthVerifiableCredentialsView,
-	'autoscaler-overview': AutoscalerPackageView,
+	autoscaler: AutoscalerPackageView,
 	'beacon-overview': BeaconPackageView,
-	'billing-overview': BillingPackageView,
-	'blob-overview': BlobPackageView,
+	billing: BillingPackageView,
+	blob: BlobPackageView,
 	'build-and-manifest': BuildManifestView,
 	'bun-build-options': BunBuildOptionsView,
 	citra: CitraView,
-	'cli-overview': OpsCliPackageView,
+	cli: OpsCliPackageView,
 	'cli-reference': CliReferenceView,
 	'cluster-bus-overview': ClusterBusView,
-	'commerce-overview': CommercePackageView,
+	commerce: CommercePackageView,
 	compile: CompileView,
-	'compliance-overview': CompliancePackageView,
+	compliance: CompliancePackageView,
 	config: ConfigView,
 	'create-absolutejs': CreateAbsoluteJSView,
-	'crm-overview': CrmPackageView,
+	crm: CrmPackageView,
 	'cron-jobs': CronJobsView,
 	'data-fetching': DataFetchingView,
 	db: DbView,
 	'demo-browser': DemoBrowserView,
 	'demo-overview': DemoPackageView,
 	'demo-recording': DemoRecordingView,
-	'deploy-overview': DeployOverviewView,
+	deploy: DeployOverviewView,
 	dev: DevView,
 	'dev-tunnel': TunnelView,
-	'discover-overview': DiscoverPackageView,
-	'dispatch-overview': DispatchOverviewView,
+	discover: DiscoverPackageView,
+	dispatch: DispatchOverviewView,
 	docker: DockerView,
 	doctor: DoctorView,
 	'eden-overview': EdenPackageView,
@@ -309,9 +310,9 @@ export const docsViews = definePortalViews({
 	'elysia-integration': ElysiaIntegrationView,
 	'elysia-plugin-composition': ElysiaPluginCompositionView,
 	'elysia-validation': ElysiaValidationView,
-	'email-overview': EmailPackageView,
+	email: EmailPackageView,
 	'engagement-overview': EngagementPackageView,
-	'enrich-overview': EnrichPackageView,
+	enrich: EnrichPackageView,
 	env: EnvView,
 	'environment-variables': EnvironmentVariablesView,
 	'error-boundaries': ErrorBoundariesView,
@@ -349,7 +350,7 @@ export const docsViews = definePortalViews({
 	frameworks: FrameworksView,
 	generate: GenerateView,
 	'head-meta-tags': HeadMetaTagsView,
-	'health-overview': HealthPackageView,
+	health: HealthPackageView,
 	hosting: HostingView,
 	'html-ai': HTMLAIView,
 	'html-image-optimization': HTMLImageOptView,
@@ -367,36 +368,36 @@ export const docsViews = definePortalViews({
 	'isolated-jsc': IsolatedJscProofPackView,
 	'isolated-jsc-bun': IsolatedJscBunPositioningView,
 	'isolated-jsc-hibernation': IsolatedJscHibernationView,
-	'linked-providers-overview': LinkedProvidersPackageView,
+	'linked-providers': LinkedProvidersPackageView,
 	'loading-states': LoadingStatesView,
 	logs: LogsView,
-	'logs-overview': LogsPackageView,
+	'logs-package': LogsPackageView,
 	ls: LsView,
-	'manifest-overview': ManifestPackageView,
+	manifest: ManifestPackageView,
 	'mcp-capabilities': McpCapabilitiesView,
 	'mcp-endpoints': McpEndpointsView,
 	'mcp-feedback': McpFeedbackView,
 	'mcp-overview': McpPackageView,
-	'media-overview': MediaPackageView,
-	'meeting-overview': MeetingPackageView,
+	media: MediaPackageView,
+	meeting: MeetingPackageView,
 	mem: MemView,
-	'metering-overview': MeteringOverviewView,
-	'metrics-overview': MetricsPackageView,
+	metering: MeteringOverviewView,
+	metrics: MetricsPackageView,
 	middleware: MiddlewareView,
 	mkcert: MkcertView,
 	'networking-plugin': NetworkingPluginView,
-	'onchain-overview': OnchainPackageView,
+	onchain: OnchainPackageView,
 	'out-of-order-streaming': OutOfOrderStreamingView,
-	'outcomes-overview': OutcomesPackageView,
+	outcomes: OutcomesPackageView,
 	overview: Overview,
 	'package-exports': PackageExportsView,
 	packages: PackagesCatalogView,
 	'page-handlers': PageHandlersView,
-	'partnership-overview': PartnershipPackageView,
+	partnership: PartnershipPackageView,
 	'platform-overview': PlatformOverviewView,
 	'production-build': ProductionBuildView,
 	ps: PsView,
-	'pwa-overview': PwaPackageView,
+	pwa: PwaPackageView,
 	'queue-jobs': QueueJobsView,
 	'queue-operations': QueueOperationsView,
 	'queue-overview': QueueOverviewView,
@@ -406,22 +407,22 @@ export const docsViews = definePortalViews({
 	'rag-overview': RagPackageView,
 	'rag-quality': RagQualityView,
 	'rag-retrieval': RagRetrievalView,
-	'rate-limit-overview': RateLimitOverviewView,
+	'rate-limit': RateLimitOverviewView,
 	'react-ai': ReactAIView,
 	'react-components': ReactComponentsView,
 	'react-hooks': ReactHooksView,
 	'react-islands': ReactIslandsView,
 	'react-overview': ReactOverviewView,
 	'react-spa': ReactSpaView,
-	'renown-overview': RenownPackageView,
+	renown: RenownPackageView,
 	'replay-overview': ReplayPackageView,
-	'router-overview': RouterOverviewView,
+	router: RouterOverviewView,
 	routes: RoutesView,
 	'routing-and-handlers': RoutingHandlersView,
-	'rules-overview': RulesPackageView,
-	'runtime-overview': RuntimeOverviewView,
+	rules: RulesPackageView,
+	runtime: RuntimeOverviewView,
 	'scoped-state': ScopedStateView,
-	'secrets-overview': SecretsOverviewView,
+	secrets: SecretsOverviewView,
 	'server-state': ServerStateView,
 	sitemap: SitemapView,
 	'ssr-model': SSRModelView,
@@ -450,7 +451,7 @@ export const docsViews = definePortalViews({
 	'sync-we-heard-you': SyncWeHeardYouView,
 	'tailwind-css': TailwindCSSView,
 	telemetry: TelemetryView,
-	'telemetry-overview': TelemetryPackageView,
+	'telemetry-package': TelemetryPackageView,
 	'tour-actions': TourActionsView,
 	'tour-branching': TourBranchingView,
 	'tour-checklist': TourChecklistView,
@@ -474,19 +475,38 @@ export const docsViews = definePortalViews({
 	'voice-tester': VoiceTesterView,
 	'voice-tester-discord': VoiceTesterDiscordView,
 	'voice-tester-scenarios': VoiceTesterScenariosView,
-	'vscode-extension-overview': VscodeExtensionPackageView,
+	'vscode-extension': VscodeExtensionPackageView,
 	'vue-ai': VueAIView,
 	'vue-components': VueComponentsView,
-	'vue-composables-overview': VueComposablesPackageView,
+	'vue-composables': VueComposablesPackageView,
 	'vue-islands': VueIslandsView,
 	'vue-overview': VueOverviewView,
 	'vue-spa': VueSpaView,
 	...packageReferenceViews
 });
+
+const legacyPackageRouteAliases = Object.fromEntries(
+	ecosystemProjects.flatMap((project) => {
+		const canonicalView = packageProjectViewId(project);
+		const legacyView = legacyPackageProjectViewId(project);
+		if (canonicalView === legacyView) return [];
+		const View = primaryDocsViews[canonicalView];
+		if (!View) return [];
+
+		return [[legacyView, View]];
+	})
+);
+
+export const docsViews = definePortalViews({
+	...primaryDocsViews,
+	...legacyPackageRouteAliases
+});
+
+const legacyPackageViews = new Set(Object.keys(legacyPackageRouteAliases));
 export const documentationSitemapRoutes = [
 	'/documentation',
 	...Object.keys(docsViews)
-		.filter((view) => view !== 'overview')
+		.filter((view) => view !== 'overview' && !legacyPackageViews.has(view))
 		.map((view) => `/documentation/${view}`)
 ];
 
@@ -762,11 +782,11 @@ export const sidebarCategories: SidebarCategory[] = [
 			},
 			{ id: 'citra', label: 'Citra', status: 'beta' },
 			{
-				id: 'linked-providers-overview',
+				id: 'linked-providers',
 				label: 'Linked Providers',
 				status: 'alpha'
 			},
-			{ id: 'compliance-overview', label: 'Compliance', status: 'beta' }
+			{ id: 'compliance', label: 'Compliance', status: 'beta' }
 		],
 		label: 'Auth & Identity'
 	},
@@ -805,7 +825,7 @@ export const sidebarCategories: SidebarCategory[] = [
 				],
 				status: 'beta'
 			},
-			{ id: 'blob-overview', label: 'Blob', status: 'beta' }
+			{ id: 'blob', label: 'Blob', status: 'beta' }
 		],
 		label: 'Data & Sync'
 	},
@@ -846,9 +866,9 @@ export const sidebarCategories: SidebarCategory[] = [
 				],
 				status: 'beta'
 			},
-			{ id: 'manifest-overview', label: 'Manifest', status: 'beta' },
-			{ id: 'rules-overview', label: 'Rules', status: 'alpha' },
-			{ id: 'outcomes-overview', label: 'Outcomes', status: 'beta' }
+			{ id: 'manifest', label: 'Manifest', status: 'beta' },
+			{ id: 'rules', label: 'Rules', status: 'alpha' },
+			{ id: 'outcomes', label: 'Outcomes', status: 'beta' }
 		],
 		label: 'AI & Agents'
 	},
@@ -885,27 +905,27 @@ export const sidebarCategories: SidebarCategory[] = [
 				],
 				status: 'beta'
 			},
-			{ id: 'media-overview', label: 'Media', status: 'beta' },
-			{ id: 'meeting-overview', label: 'Meeting', status: 'beta' }
+			{ id: 'media', label: 'Media', status: 'beta' },
+			{ id: 'meeting', label: 'Meeting', status: 'beta' }
 		],
 		label: 'Voice & Media'
 	},
 	{
 		entries: [
 			{ id: 'platform-overview', label: 'Platform Tools' },
-			{ id: 'runtime-overview', label: 'Runtime', status: 'beta' },
-			{ id: 'router-overview', label: 'Router', status: 'beta' },
-			{ id: 'deploy-overview', label: 'Deploy', status: 'beta' },
-			{ id: 'secrets-overview', label: 'Secrets', status: 'beta' },
-			{ id: 'metering-overview', label: 'Metering', status: 'beta' },
-			{ id: 'billing-overview', label: 'Billing', status: 'beta' },
+			{ id: 'runtime', label: 'Runtime', status: 'beta' },
+			{ id: 'router', label: 'Router', status: 'beta' },
+			{ id: 'deploy', label: 'Deploy', status: 'beta' },
+			{ id: 'secrets', label: 'Secrets', status: 'beta' },
+			{ id: 'metering', label: 'Metering', status: 'beta' },
+			{ id: 'billing', label: 'Billing', status: 'beta' },
 			{
-				id: 'autoscaler-overview',
+				id: 'autoscaler',
 				label: 'Autoscaler',
 				status: 'beta'
 			},
-			{ id: 'health-overview', label: 'Health', status: 'beta' },
-			{ id: 'cli-overview', label: 'Ops CLI', status: 'beta' },
+			{ id: 'health', label: 'Health', status: 'beta' },
+			{ id: 'cli', label: 'Ops CLI', status: 'beta' },
 			{
 				label: 'isolated-jsc',
 				pages: [
@@ -919,7 +939,7 @@ export const sidebarCategories: SidebarCategory[] = [
 				status: 'beta'
 			},
 			{
-				id: 'rate-limit-overview',
+				id: 'rate-limit',
 				label: 'Rate Limit',
 				status: 'beta'
 			}
@@ -937,22 +957,22 @@ export const sidebarCategories: SidebarCategory[] = [
 					{ id: 'replay-overview', label: 'Replay' }
 				]
 			},
-			{ id: 'telemetry-overview', label: 'Telemetry', status: 'beta' },
-			{ id: 'metrics-overview', label: 'Metrics', status: 'beta' },
-			{ id: 'logs-overview', label: 'Logs', status: 'beta' },
-			{ id: 'audit-overview', label: 'Audit', status: 'alpha' }
+			{ id: 'telemetry-package', label: 'Telemetry', status: 'beta' },
+			{ id: 'metrics', label: 'Metrics', status: 'beta' },
+			{ id: 'logs-package', label: 'Logs', status: 'beta' },
+			{ id: 'audit', label: 'Audit', status: 'alpha' }
 		],
 		label: 'Observability'
 	},
 	{
 		entries: [
-			{ id: 'commerce-overview', label: 'Commerce', status: 'beta' },
-			{ id: 'crm-overview', label: 'CRM', status: 'alpha' },
-			{ id: 'discover-overview', label: 'Discover', status: 'alpha' },
-			{ id: 'enrich-overview', label: 'Enrich', status: 'beta' },
-			{ id: 'audience-overview', label: 'Audience', status: 'alpha' },
+			{ id: 'commerce', label: 'Commerce', status: 'beta' },
+			{ id: 'crm', label: 'CRM', status: 'alpha' },
+			{ id: 'discover', label: 'Discover', status: 'alpha' },
+			{ id: 'enrich', label: 'Enrich', status: 'beta' },
+			{ id: 'audience', label: 'Audience', status: 'alpha' },
 			{
-				id: 'partnership-overview',
+				id: 'partnership',
 				label: 'Partnership',
 				status: 'alpha'
 			},
@@ -961,15 +981,15 @@ export const sidebarCategories: SidebarCategory[] = [
 				label: 'Engagement',
 				status: 'alpha'
 			},
-			{ id: 'dispatch-overview', label: 'Dispatch', status: 'alpha' },
-			{ id: 'email-overview', label: 'Email', status: 'alpha' },
-			{ id: 'onchain-overview', label: 'Onchain', status: 'alpha' }
+			{ id: 'dispatch', label: 'Dispatch', status: 'alpha' },
+			{ id: 'email', label: 'Email', status: 'alpha' },
+			{ id: 'onchain', label: 'Onchain', status: 'alpha' }
 		],
 		label: 'Commerce & Growth'
 	},
 	{
 		entries: [
-			{ id: 'pwa-overview', label: 'PWA', status: 'beta' },
+			{ id: 'pwa', label: 'PWA', status: 'beta' },
 			{
 				label: 'Tour',
 				pages: [
@@ -982,7 +1002,7 @@ export const sidebarCategories: SidebarCategory[] = [
 			},
 			{ id: 'scoped-state', label: 'Scoped State', status: 'beta' },
 			{
-				id: 'vue-composables-overview',
+				id: 'vue-composables',
 				label: 'Vue Composables',
 				status: 'beta'
 			},
@@ -1112,11 +1132,11 @@ export const sidebarCategories: SidebarCategory[] = [
 				status: 'beta'
 			},
 			{
-				id: 'vscode-extension-overview',
+				id: 'vscode-extension',
 				label: 'VS Code Extension',
 				status: 'alpha'
 			},
-			{ id: 'renown-overview', label: 'Renown', status: 'beta' }
+			{ id: 'renown', label: 'Renown', status: 'beta' }
 		],
 		label: 'Dev Tools'
 	},

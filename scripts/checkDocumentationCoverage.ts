@@ -15,6 +15,7 @@ import { flagshipGuidanceByPackage } from '../src/frontend/data/documentation/pa
 import {
 	legacyEcosystemProjectViewId,
 	legacyEcosystemSubpackageViewId,
+	legacyPackageProjectViewId,
 	packageProjectViewId,
 	packageSubpackageViewId
 } from '../src/frontend/data/documentation/packages/packageRoutes';
@@ -26,6 +27,13 @@ const failures: string[] = [];
 const reachableViews = new Set<string>(['overview', 'packages']);
 const sourceWorkspaceAvailable = existsSync(
 	resolve(workspaceDirectory, 'absolutejs', 'package.json')
+);
+const legacyPackageViews = new Set(
+	ecosystemProjects.flatMap((project) => {
+		const legacyView = legacyPackageProjectViewId(project);
+
+		return legacyView === packageProjectViewId(project) ? [] : [legacyView];
+	})
 );
 
 for (const category of sidebarCategories)
@@ -126,7 +134,7 @@ for (const contract of flagshipDocumentationContract) {
 }
 
 for (const view of Object.keys(docsViews)) {
-	if (view === 'overview') continue;
+	if (view === 'overview' || legacyPackageViews.has(view)) continue;
 	if (!documentationSitemapRoutes.includes(`/documentation/${view}`))
 		failures.push(
 			`${view}: missing from automatic documentation sitemap routes.`
@@ -191,6 +199,23 @@ for (const view of Object.keys(docsViews)) {
 }
 
 for (const project of ecosystemProjects) {
+	const legacyPackageView = legacyPackageProjectViewId(project);
+	const canonicalPackageView = packageProjectViewId(project);
+
+	if (legacyPackageView !== canonicalPackageView) {
+		if (!(legacyPackageView in docsViews))
+			failures.push(
+				`${project.directory}: legacy package route ${legacyPackageView} cannot redirect.`
+			);
+		if (
+			documentationSitemapRoutes.includes(
+				`/documentation/${legacyPackageView}`
+			)
+		)
+			failures.push(
+				`${project.directory}: legacy package route must not be indexed.`
+			);
+	}
 	if (legacyEcosystemProjectViewId(project) === packageProjectViewId(project))
 		failures.push(`${project.directory}: legacy route did not migrate.`);
 	for (const subpackage of project.subpackages)
@@ -234,7 +259,7 @@ for await (const file of docsGlob.scan(resolve(import.meta.dir, '..'))) {
 }
 
 for (const view of Object.keys(docsViews))
-	if (!reachableViews.has(view))
+	if (!legacyPackageViews.has(view) && !reachableViews.has(view))
 		failures.push(
 			`${view}: documentation page is orphaned from navigation, catalog, and internal links.`
 		);

@@ -46,7 +46,7 @@ const platformPackages: PlatformPackage[] = [
 		name: 'Runtime',
 		npm: '@absolutejs/runtime',
 		version: currentPackageVersion('@absolutejs/runtime', '0.3.0'),
-		viewId: 'runtime-overview'
+		viewId: 'runtime'
 	},
 	{
 		description:
@@ -54,7 +54,7 @@ const platformPackages: PlatformPackage[] = [
 		name: 'Router',
 		npm: '@absolutejs/router',
 		version: currentPackageVersion('@absolutejs/router', '0.3.0'),
-		viewId: 'router-overview'
+		viewId: 'router'
 	},
 	{
 		description:
@@ -62,7 +62,7 @@ const platformPackages: PlatformPackage[] = [
 		name: 'Deploy',
 		npm: '@absolutejs/deploy',
 		version: currentPackageVersion('@absolutejs/deploy', '0.10.0'),
-		viewId: 'deploy-overview'
+		viewId: 'deploy'
 	},
 	{
 		description:
@@ -70,7 +70,7 @@ const platformPackages: PlatformPackage[] = [
 		name: 'Secrets',
 		npm: '@absolutejs/secrets',
 		version: currentPackageVersion('@absolutejs/secrets', '0.5.0'),
-		viewId: 'secrets-overview'
+		viewId: 'secrets'
 	},
 	{
 		description:
@@ -78,7 +78,7 @@ const platformPackages: PlatformPackage[] = [
 		name: 'Metering',
 		npm: '@absolutejs/metering',
 		version: currentPackageVersion('@absolutejs/metering', '0.1.0'),
-		viewId: 'metering-overview'
+		viewId: 'metering'
 	},
 	{
 		description:
@@ -86,7 +86,7 @@ const platformPackages: PlatformPackage[] = [
 		name: 'Billing',
 		npm: '@absolutejs/billing',
 		version: currentPackageVersion('@absolutejs/billing', '0.2.1'),
-		viewId: 'billing-overview'
+		viewId: 'billing'
 	},
 	{
 		description:
@@ -94,7 +94,7 @@ const platformPackages: PlatformPackage[] = [
 		name: 'Autoscaler',
 		npm: '@absolutejs/autoscaler',
 		version: currentPackageVersion('@absolutejs/autoscaler', '0.1.0'),
-		viewId: 'autoscaler-overview'
+		viewId: 'autoscaler'
 	},
 	{
 		description:
@@ -102,7 +102,7 @@ const platformPackages: PlatformPackage[] = [
 		name: 'Health',
 		npm: '@absolutejs/health',
 		version: currentPackageVersion('@absolutejs/health', '0.1.0'),
-		viewId: 'health-overview'
+		viewId: 'health'
 	},
 	{
 		description:
@@ -110,7 +110,7 @@ const platformPackages: PlatformPackage[] = [
 		name: 'Ops CLI',
 		npm: '@absolutejs/cli',
 		version: currentPackageVersion('@absolutejs/cli', '0.1.0'),
-		viewId: 'cli-overview'
+		viewId: 'cli'
 	},
 	{
 		description:
@@ -231,9 +231,9 @@ type RelatedLink = {
 
 const relatedLinks: RelatedLink[] = [
 	{ label: 'Queue', viewId: 'queue-overview' },
-	{ label: 'Dispatch', viewId: 'dispatch-overview' },
-	{ label: 'Audit', viewId: 'audit-overview' },
-	{ label: 'Telemetry', viewId: 'telemetry-overview' }
+	{ label: 'Dispatch', viewId: 'dispatch' },
+	{ label: 'Audit', viewId: 'audit' },
+	{ label: 'Telemetry', viewId: 'telemetry-package' }
 ];
 
 type RelatedLinkItemProps = {

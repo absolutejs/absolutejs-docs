@@ -26,6 +26,7 @@ import { ecosystemProjects } from '../../frontend/data/documentation/packages/ec
 import {
 	legacyEcosystemProjectViewId,
 	legacyEcosystemSubpackageViewId,
+	legacyPackageProjectViewId,
 	packageProjectViewId,
 	packageSubpackageViewId
 } from '../../frontend/data/documentation/packages/packageRoutes';
@@ -37,7 +38,15 @@ const whitelistedAdmins =
 const permanentRedirectStatus = 301;
 const notFoundStatus = 404;
 const legacyDocumentationRedirects = new Map<string, string>();
+const legacyPackageDocumentationRedirects = new Map<string, string>();
 for (const project of ecosystemProjects) {
+	const legacyPackageView = legacyPackageProjectViewId(project);
+	const canonicalPackageView = packageProjectViewId(project);
+	if (legacyPackageView !== canonicalPackageView)
+		legacyPackageDocumentationRedirects.set(
+			legacyPackageView,
+			canonicalPackageView
+		);
 	legacyDocumentationRedirects.set(
 		legacyEcosystemProjectViewId(project),
 		packageProjectViewId(project)
@@ -212,9 +221,19 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 			async ({
 				params: { view },
 				cookie: { theme, user_session_id },
+				redirect,
 				store: { session },
 				status
 			}) => {
+				const canonicalView = view
+					? legacyPackageDocumentationRedirects.get(view)
+					: undefined;
+				if (canonicalView)
+					return redirect(
+						`/documentation/${canonicalView}`,
+						permanentRedirectStatus
+					);
+
 				const { user, error } = await getStatus<User>(
 					session,
 					user_session_id
