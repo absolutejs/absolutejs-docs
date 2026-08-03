@@ -1,6 +1,9 @@
 import { animated } from '@react-spring/web';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocumentationViewLayout } from '../DocumentationViewLayout';
+import { DocsNavigation } from '../DocsNavigation';
+import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
 import {
 	rateLimitAlgorithms,
 	rateLimitCost,
@@ -25,6 +28,8 @@ import { TocItem } from '../../utils/TableOfContents';
 
 const tocItems: TocItem[] = [
 	{ href: '#rate-limit-overview', label: 'Overview' },
+	{ href: '#algorithm-decision', label: 'Choose an Algorithm' },
+	{ href: '#proxy-trust-chain', label: 'Proxy Trust Chain' },
 	{ href: '#quick-start', label: 'Quick Start' },
 	{ href: '#algorithms', label: 'Algorithms' },
 	{ href: '#cost-keys-hooks', label: 'Cost, Keys & Hooks' },
@@ -33,7 +38,79 @@ const tocItems: TocItem[] = [
 	{ href: '#non-http', label: 'Non-HTTP Usage' }
 ];
 
+const rateLimitExplanations: PackageExplanation[] = [
+	{
+		description:
+			'The algorithms share a store contract but intentionally expose different traffic semantics.',
+		id: 'algorithm-decision',
+		kind: 'decision',
+		options: [
+			{
+				bestFor:
+					'A precise general-purpose limit with smooth behavior and constant storage.',
+				label: 'GCRA',
+				requirements: ['One theoretical-arrival-time value per key'],
+				tradeoffs:
+					'The model is less intuitive to explain than a visible request counter.'
+			},
+			{
+				bestFor:
+					'Workloads that should accumulate capacity and spend it in a short burst.',
+				label: 'Token bucket',
+				requirements: ['Define refill rate and maximum burst capacity'],
+				tradeoffs: 'Permits deliberate bursts that GCRA would smooth.'
+			},
+			{
+				bestFor:
+					'Product limits phrased as N actions in the last M seconds.',
+				label: 'Sliding window',
+				requirements: ['Accept approximate window accounting'],
+				tradeoffs:
+					'Uses more state and is approximate around window movement.'
+			},
+			{
+				bestFor:
+					'Layered controls such as per-IP bursts plus daily per-account quotas.',
+				label: 'Combined',
+				requirements: [
+					'Choose a key, cost, and store for each component'
+				],
+				tradeoffs:
+					'The request is allowed only when every component permits it.'
+			}
+		],
+		title: 'Choose the traffic behavior you mean'
+	},
+	{
+		description:
+			'Only explicitly trusted network hops may influence the client identity used as a quota key.',
+		id: 'proxy-trust-chain',
+		kind: 'flow',
+		steps: [
+			{
+				detail: 'Receive the socket peer address and any forwarded-address headers.',
+				label: 'Observe'
+			},
+			{
+				detail: 'Walk back only the configured number of trusted proxy hops.',
+				label: 'Bound trust'
+			},
+			{
+				detail: 'Discard attacker-controlled addresses to the left of that boundary.',
+				label: 'Reject spoofing'
+			},
+			{
+				detail: 'Normalize IPv4 or group IPv6 by prefix before consulting the store.',
+				label: 'Derive key'
+			}
+		],
+		title: 'How proxy-aware client identity is derived'
+	}
+];
+
 export const RateLimitOverviewView = ({
+	currentPageId,
+	onNavigate,
 	themeSprings,
 	tocOpen,
 	onTocToggle,
@@ -60,6 +137,11 @@ export const RateLimitOverviewView = ({
 				background sweeper.
 			</p>
 		</animated.div>
+
+		<PackageExplanationBlocks
+			explanations={rateLimitExplanations}
+			themeSprings={themeSprings}
+		/>
 
 		<section style={sectionStyle}>
 			<AnchorHeading
@@ -264,5 +346,12 @@ export const RateLimitOverviewView = ({
 				themeSprings={themeSprings}
 			/>
 		</section>
+
+		<DocsNavigation
+			currentPageId={currentPageId}
+			isMobileOrTablet={isMobileOrTablet}
+			onNavigate={onNavigate}
+			themeSprings={themeSprings}
+		/>
 	</DocumentationViewLayout>
 );

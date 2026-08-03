@@ -16,6 +16,21 @@ export const blobPackageData: PackageDocData = {
 					description:
 						'AWS S3, Cloudflare R2, Backblaze B2, MinIO, Wasabi, Tigris — any S3-compatible HTTP API via a narrow S3ClientLike shape.',
 					name: '@absolutejs/blob/s3'
+				},
+				{
+					description:
+						'Official AWS SDK wiring with multipart streaming uploads that never materialize the entire body in control-plane memory.',
+					name: '@absolutejs/blob/aws-s3'
+				},
+				{
+					description:
+						'UploadThing server SDK with stable application-owned custom ids and signed reads.',
+					name: '@absolutejs/blob/uploadthing'
+				},
+				{
+					description:
+						'Provider-neutral stored-object inspection with bounded reads and a ClamAV clamd INSTREAM adapter.',
+					name: '@absolutejs/blob/inspection'
 				}
 			]
 		}
@@ -53,6 +68,11 @@ export const blobPackageData: PackageDocData = {
 			description:
 				'getStream serves large blobs without loading them into memory, and list paginates with a cursor you pass back into the next call.',
 			title: 'Streaming and pagination'
+		},
+		{
+			description:
+				'Keep customer-controlled uploads private until bounded inspection returns clean. The ClamAV adapter distinguishes clean, infected, and unavailable; scanner errors never become a clean verdict.',
+			title: 'Quarantine and inspection'
 		}
 	],
 	installCommand: 'bun add @absolutejs/blob',
@@ -141,6 +161,25 @@ const url = await blobs.presign('uploads/file.pdf', {
 			description:
 				'The S3 adapter works with any S3-compatible service. You hand it an S3ClientLike object wired onto the real AWS SDK client, so the SDK is your dependency, not the substrate’s.',
 			heading: 'S3-Compatible Services',
+			language: 'typescript'
+		},
+		{
+			code: `import {
+	createClamdBlobInspector,
+	inspectStoredBlob
+} from '@absolutejs/blob/inspection';
+
+const inspector = createClamdBlobInspector({ host: 'clamav.internal' });
+const result = await inspectStoredBlob(blobs, inspector, {
+	filename: 'evidence.pdf',
+	key: 'quarantine/case/evidence.pdf',
+	maxBytes: 25 * 1024 * 1024
+});
+
+if (result.verdict === 'clean') await promoteUpload(result);`,
+			description:
+				'Inspect a quarantined object with strict byte bounds before promoting it into application-visible storage.',
+			heading: 'Private Upload Inspection',
 			language: 'typescript'
 		}
 	],

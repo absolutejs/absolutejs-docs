@@ -13,11 +13,13 @@ import {
 	packageProjectViewId,
 	packageSubpackageViewId
 } from '../../../data/documentation/packages/packageRoutes';
+import { packageExplanationsByName } from '../../../data/documentation/packages/packageExplanations';
 import { createPackageView } from './PackageOverviewTemplate';
 
 const statusForVersion = (version: string | null) => {
 	if (!version || version.includes('alpha')) return 'alpha';
 	if (version.includes('beta')) return 'beta';
+	if (version.startsWith('0.')) return 'beta';
 
 	return 'stable';
 };
@@ -104,8 +106,7 @@ const adapterGroupsFor = (project: EcosystemProject) => {
 
 const featuresFor = (project: EcosystemProject) => {
 	const features: PackageFeature[] = project.readmeTopics.map((topic) => ({
-		description: topic.description,
-		title: topic.title
+		...topic
 	}));
 	if (project.kind === 'monorepo') {
 		const publicCount = project.subpackages.filter(
@@ -121,23 +122,42 @@ const featuresFor = (project: EcosystemProject) => {
 	return features;
 };
 
+const notesFor = (project: EcosystemProject) => {
+	if (project.directory === 'admin') {
+		return [
+			{
+				body: 'The package and repository are named Admin. Exported SiteAdmin and authorizeSiteAdmin identifiers are compatibility APIs from the earlier name; use the Admin terminology for new product and documentation surfaces.',
+				title: 'Compatibility naming',
+				variant: 'info' as const
+			}
+		];
+	}
+	if (project.private) {
+		return [
+			{
+				body: 'This workspace project is not published as a standalone npm package. Use its repository and the accurately labeled public or private workspace contents below.',
+				title: 'Workspace project',
+				variant: 'info' as const
+			}
+		];
+	}
+
+	return undefined;
+};
+
 const toPackageDocData = (project: EcosystemProject): PackageDocData => ({
 	adapterGroups: adapterGroupsFor(project),
+	api: project.api,
 	category: project.category,
 	description: project.description,
+	explanations: project.packageName
+		? packageExplanationsByName[project.packageName]
+		: undefined,
 	features: featuresFor(project),
 	installCommand: installCommandFor(project),
 	links: linksFor(project),
 	name: project.name,
-	notes: project.private
-		? [
-				{
-					body: 'This workspace project is not published as a standalone npm package. Use its repository and the accurately labeled public or private workspace contents below.',
-					title: 'Workspace project',
-					variant: 'info'
-				}
-			]
-		: undefined,
+	notes: notesFor(project),
 	npmName: project.packageName ?? project.directory,
 	samples: project.readmeSamples,
 	status: statusForVersion(project.version),
@@ -240,12 +260,11 @@ const toSubpackageDocData = (
 
 	return {
 		adapterGroups: subpackageAdapterGroupsFor(subpackage),
+		api: subpackage.api,
 		category: project.category,
 		description: subpackage.description,
-		features: subpackage.readmeTopics.map((topic) => ({
-			description: topic.description,
-			title: topic.title
-		})),
+		explanations: packageExplanationsByName[subpackage.name],
+		features: subpackage.readmeTopics.map((topic) => ({ ...topic })),
 		installCommand,
 		links: subpackageLinksFor(project, subpackage),
 		name: subpackage.name,

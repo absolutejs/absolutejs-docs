@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
@@ -21,6 +22,35 @@ import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { streamingRawFrameworkSnippet } from '../../../data/documentation/streamingDocsCode';
+import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
+
+const streamingTimeline: PackageExplanation[] = [
+	{
+		description:
+			'Declaration order remains stable while each asynchronous slot resolves on its own clock.',
+		id: 'resolution-timeline',
+		kind: 'lifecycle',
+		steps: [
+			{
+				detail: 'Send the document shell, slot anchors, and every visible fallback immediately.',
+				label: 'Shell'
+			},
+			{
+				detail: 'Start independent server work for every collected streaming slot.',
+				label: 'Collect'
+			},
+			{
+				detail: 'Patch the fastest completed slot even when it appears later in DOM order.',
+				label: 'Fast result'
+			},
+			{
+				detail: 'Patch slower regions into their original anchors without reordering the page.',
+				label: 'Slow result'
+			}
+		],
+		title: 'What the browser receives over time'
+	}
+];
 
 const transportModeRows: DocsTableCell[][] = [
 	[
@@ -42,6 +72,7 @@ const transportModeRows: DocsTableCell[][] = [
 
 const tocItems: TocItem[] = [
 	{ href: '#what-it-is', label: 'What It Is' },
+	{ href: '#resolution-timeline', label: 'Resolution Timeline' },
 	{ href: '#authoring-models', label: 'Raw vs Framework' },
 	{ href: '#current-transport', label: 'Current Transport' },
 	{ href: '#raw-slots', label: 'Raw Slots' },
@@ -104,6 +135,11 @@ export const OutOfOrderStreamingView = ({
 						work finishes.
 					</p>
 				</animated.div>
+
+				<PackageExplanationBlocks
+					explanations={streamingTimeline}
+					themeSprings={themeSprings}
+				/>
 
 				<section style={sectionStyle}>
 					<AnchorHeading

@@ -7,6 +7,13 @@ import {
 
 export { documentationViewByDirectory } from './packageRoutes';
 
+const statusForVersion = (version: string | null) => {
+	if (!version || version.includes('alpha')) return 'alpha';
+	if (version.includes('beta') || version.startsWith('0.')) return 'beta';
+
+	return 'stable';
+};
+
 export const packageCatalog: PackageCatalogEntry[] = ecosystemProjects.map(
 	(project) => ({
 		category: project.category,
@@ -32,6 +39,7 @@ export const packageCatalog: PackageCatalogEntry[] = ecosystemProjects.map(
 			])
 		].join(' '),
 		sourceDirectory: project.directory,
+		status: statusForVersion(project.version),
 		subpackageCount: project.subpackages.length,
 		tagline: project.description,
 		version: project.version,

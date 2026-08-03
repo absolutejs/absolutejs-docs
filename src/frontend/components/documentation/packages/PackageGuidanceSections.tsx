@@ -1,7 +1,10 @@
 import { animated } from '@react-spring/web';
 import { ThemeSprings } from '../../../../types/springTypes';
 import { flagshipGuidanceByPackage } from '../../../data/documentation/packages/flagshipGuidance';
+import { ecosystemProjects } from '../../../data/documentation/packages/ecosystem.generated';
 import { featureCardStyle } from '../../../styles/gradientStyles';
+
+const maximumGuidanceItems = 3;
 
 type PackageGuidanceSectionsProps = {
 	isMobileOrTablet?: boolean;
@@ -61,8 +64,51 @@ export const PackageGuidanceSections = ({
 	packageName,
 	themeSprings
 }: PackageGuidanceSectionsProps) => {
-	const guidance = flagshipGuidanceByPackage[packageName];
-	if (!guidance) return null;
+	const project = ecosystemProjects.find(
+		(candidate) => candidate.packageName === packageName
+	);
+	const topics = project?.readmeTopics ?? [];
+	const productionTopics = topics.filter((topic) =>
+		/production|security|deploy|operations|readiness|hardening|durab/i.test(
+			`${topic.title} ${topic.description}`
+		)
+	);
+	const diagnosticTopics = topics.filter((topic) =>
+		/troubleshoot|diagnos|failure|verify|testing|debug|recovery|error/i.test(
+			`${topic.title} ${topic.description}`
+		)
+	);
+	const guidance = flagshipGuidanceByPackage[packageName] ?? {
+		diagnostics:
+			diagnosticTopics.length > 0
+				? diagnosticTopics.slice(0, maximumGuidanceItems)
+				: [
+						{
+							description: `Reproduce the smallest canonical ${packageName} example, confirm the supported entry point and version in the API explorer, then inspect the first boundary that did not produce its documented result.`,
+							title: 'Trace from the first failed boundary'
+						}
+					],
+		outcomes:
+			topics.length > 0
+				? topics.slice(0, maximumGuidanceItems)
+				: [
+						{
+							description:
+								project?.description ??
+								`Use ${packageName} through its supported public entry points.`,
+							title: 'Build on the supported package contract'
+						}
+					],
+		production:
+			productionTopics.length > 0
+				? productionTopics.slice(0, maximumGuidanceItems)
+				: [
+						{
+							description: `Pin the deployed ${packageName} version, replace example or memory-backed dependencies with durable implementations, bound external calls, protect credentials, and emit enough evidence to retry or recover safely.`,
+							title: 'Make every external boundary explicit'
+						}
+					]
+	};
 
 	return (
 		<div style={{ display: 'grid', gap: '2rem', marginTop: '1.5rem' }}>

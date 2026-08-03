@@ -1,5 +1,8 @@
 import { animated } from '@react-spring/web';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
+import { DocsNavigation } from '../DocsNavigation';
+import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
 import {
 	dispatchChannelUsage,
 	dispatchAws,
@@ -42,6 +45,8 @@ const noop = () => undefined;
 
 const tocItems: TocItem[] = [
 	{ href: '#dispatch-overview', label: 'Overview' },
+	{ href: '#channel-decision', label: 'Choose a Channel' },
+	{ href: '#delivery-lifecycle', label: 'Delivery Lifecycle' },
 	{ href: '#install', label: 'Install' },
 	{ href: '#quick-start', label: 'Quick Start' },
 	{ href: '#production-model', label: 'Production model' },
@@ -60,6 +65,72 @@ const tocItems: TocItem[] = [
 	{ href: '#vonage', label: 'Vonage' },
 	{ href: '#sinch', label: 'Sinch' },
 	{ href: '#testing', label: 'Testing' }
+];
+
+const dispatchExplanations: PackageExplanation[] = [
+	{
+		columns: ['Use when', 'Portable content', 'Typical adapters'],
+		description:
+			'Choose the application-level channel first; provider adapters remain replaceable beneath the same policy and evidence boundary.',
+		id: 'channel-decision',
+		kind: 'matrix',
+		rows: [
+			{
+				label: 'Email',
+				values: [
+					'Rich transactional or lifecycle communication',
+					'Subject, text/HTML, sender, recipients, headers',
+					'Postmark, AWS SES, Resend'
+				]
+			},
+			{
+				label: 'Messaging',
+				values: [
+					'SMS, MMS, RCS, WhatsApp, and social conversations',
+					'Content, fallbacks, consent, privacy, schedule',
+					'Twilio, Telnyx, Vonage, Sinch, Infobip'
+				]
+			},
+			{
+				label: 'Push',
+				values: [
+					'Device notifications and deep-link re-engagement',
+					'Title, body, data, actions, badge, sound',
+					'APNs, FCM'
+				]
+			}
+		],
+		title: 'Channel and provider are separate decisions'
+	},
+	{
+		description:
+			'One send produces a consistent policy, provider, observability, and callback trail across every adapter.',
+		id: 'delivery-lifecycle',
+		kind: 'lifecycle',
+		steps: [
+			{
+				detail: 'Normalize the typed message and derive tenant, consent, privacy, and idempotency context.',
+				label: 'Normalize'
+			},
+			{
+				detail: 'Run ordered application policies before revealing content to a provider.',
+				label: 'Authorize'
+			},
+			{
+				detail: 'Translate through the selected channel adapter and invoke the provider.',
+				label: 'Deliver'
+			},
+			{
+				detail: 'Emit a typed result, metrics, trace span, and audit event together.',
+				label: 'Evidence'
+			},
+			{
+				detail: 'Verify, persist, deduplicate, and drain provider callbacks into normalized events.',
+				label: 'Reconcile'
+			}
+		],
+		title: 'From application intent to durable provider evidence'
+	}
 ];
 
 type ChannelCardData = {
@@ -345,6 +416,8 @@ const metricsCounterRows: DocsTableCell[][] = [
 ];
 
 export const DispatchOverviewView = ({
+	currentPageId,
+	onNavigate,
 	themeSprings,
 	tocOpen,
 	onTocToggle,
@@ -380,6 +453,11 @@ export const DispatchOverviewView = ({
 						OpenTelemetry spans and audit events on every send.
 					</p>
 				</animated.div>
+
+				<PackageExplanationBlocks
+					explanations={dispatchExplanations}
+					themeSprings={themeSprings}
+				/>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
@@ -1067,6 +1145,13 @@ export const DispatchOverviewView = ({
 						rejection.
 					</p>
 				</section>
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 			</div>
 			{showDesktopToc ? (
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />

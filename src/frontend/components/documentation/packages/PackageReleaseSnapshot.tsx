@@ -4,6 +4,7 @@ import { ThemeSprings } from '../../../../types/springTypes';
 import { packageCatalog } from '../../../data/documentation/packages/catalog';
 import { ecosystemProjects } from '../../../data/documentation/packages/ecosystem.generated';
 import { packageSubpackageViewId } from '../../../data/documentation/packages/packageRoutes';
+import { PackageApiExplorer } from './PackageApiExplorer';
 import { PackageGuidanceSections } from './PackageGuidanceSections';
 
 type PackageReleaseSnapshotProps = {
@@ -173,6 +174,15 @@ export const PackageReleaseSnapshot = ({
 						))}
 					</div>
 				</>
+			) : null}
+
+			{project.api.length > 0 ? (
+				<div style={{ marginTop: '2rem' }}>
+					<PackageApiExplorer
+						api={project.api}
+						themeSprings={themeSprings}
+					/>
+				</div>
 			) : null}
 
 			{project.packageName ? (

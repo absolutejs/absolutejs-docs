@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react';
 import { animated } from '@react-spring/web';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import {
 	FaGlobe,
 	FaWrench,
@@ -38,14 +39,48 @@ import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
 
 const tocItems: TocItem[] = [
 	{ href: '#quick-start', label: 'Quick Start' },
+	{ href: '#conversation-turn-queue', label: 'Conversation Queue' },
 	{ href: '#architecture', label: 'Architecture' },
 	{ href: '#features', label: 'Features' },
 	{ href: '#supported-providers', label: 'Supported Providers' },
 	{ href: '#client-hooks', label: 'Client Hooks' },
 	{ href: '#client-usage', label: 'Client Usage' }
+];
+
+const conversationQueueExplanation: PackageExplanation[] = [
+	{
+		description:
+			'Per-conversation serialization prevents later turns from overtaking active or failed work while keeping queued state visible to every framework adapter.',
+		id: 'conversation-turn-queue',
+		kind: 'lifecycle',
+		steps: [
+			{
+				detail: 'Assign a stable client message id and enqueue behind the active turn.',
+				label: 'Queue'
+			},
+			{
+				detail: 'Emit turn_queued so the UI can render isQueued immediately.',
+				label: 'Expose'
+			},
+			{
+				detail: 'Emit turn_started only when prior work reaches a safe terminal state.',
+				label: 'Start'
+			},
+			{
+				detail: 'Block later turns after failure until the user retries or removes the failed turn.',
+				label: 'Fence failures'
+			},
+			{
+				detail: 'Branch explicitly when the user chooses an alternate history.',
+				label: 'Branch'
+			}
+		],
+		title: 'Deterministic conversation turns'
+	}
 ];
 
 const layerNumberStyle: CSSProperties = {
@@ -420,6 +455,11 @@ export const AIOverviewView = ({
 						themeSprings={themeSprings}
 					/>
 				</section>
+
+				<PackageExplanationBlocks
+					explanations={conversationQueueExplanation}
+					themeSprings={themeSprings}
+				/>
 
 				<section style={sectionStyle}>
 					<AnchorHeading

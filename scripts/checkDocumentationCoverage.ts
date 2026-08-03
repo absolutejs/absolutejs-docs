@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import process from 'node:process';
 import { Glob } from 'bun';
@@ -23,11 +24,48 @@ import {
 const workspaceDirectory = resolve(import.meta.dir, '../..');
 const minimumMetadataDescriptionLength = 50;
 const minimumMetadataTitleLength = 20;
+const minimumPackageDescriptionLength = 20;
 const failures: string[] = [];
 const reachableViews = new Set<string>(['overview', 'packages']);
 const sourceWorkspaceAvailable = existsSync(
 	resolve(workspaceDirectory, 'absolutejs', 'package.json')
 );
+
+const readManifest = (manifestPath: string) =>
+	existsSync(manifestPath)
+		? JSON.parse(readFileSync(manifestPath, 'utf8'))
+		: null;
+
+const readFileDigest = (path: string) =>
+	existsSync(path)
+		? createHash('sha256').update(readFileSync(path)).digest('hex')
+		: null;
+
+const manifestExports = (manifest: Record<string, unknown> | null) => {
+	const packageName = manifest?.name;
+	const exportsValue = manifest?.exports;
+	if (typeof packageName !== 'string' || !exportsValue) return [];
+	if (typeof exportsValue === 'string') return [packageName];
+	if (typeof exportsValue !== 'object') return [];
+
+	return Object.keys(exportsValue).map((entry) =>
+		entry === '.'
+			? packageName
+			: `${packageName}/${entry.replace(/^\.\//, '')}`
+	);
+};
+
+const snapshotVersion = (packageName: string | null, version: unknown) => {
+	if (typeof version !== 'string') return null;
+	if (packageName === '@absolutejs/absolute')
+		return version.replace(/-beta\.\d+$/, '-beta');
+
+	return version;
+};
+
+const sameStrings = (left: string[], right: string[]) =>
+	left.length === right.length &&
+	left.every((value, index) => value === right[index]);
 const legacyPackageViews = new Set(
 	ecosystemProjects.flatMap((project) => {
 		const legacyView = legacyPackageProjectViewId(project);
@@ -158,6 +196,38 @@ for (const project of ecosystemProjects) {
 		failures.push(
 			`${project.directory}: missing generated project view ${projectView}.`
 		);
+	if (project.description.length < minimumPackageDescriptionLength)
+		failures.push(`${project.directory}: package description is too thin.`);
+	if (!project.private && project.readmeTopics.length === 0)
+		failures.push(
+			`${project.directory}: public package has no source-backed feature documentation.`
+		);
+	if (
+		!project.private &&
+		project.readmeSamples.length === 0 &&
+		project.api.length === 0 &&
+		project.commands.length === 0
+	)
+		failures.push(
+			`${project.directory}: public package has no example, API reference, or command reference.`
+		);
+	if (sourceWorkspaceAvailable) {
+		const manifest = readManifest(
+			resolve(workspaceDirectory, project.directory, 'package.json')
+		);
+		const currentVersion = snapshotVersion(
+			project.packageName,
+			manifest?.version
+		);
+		if (currentVersion !== project.version)
+			failures.push(
+				`${project.directory}: generated version ${project.version ?? 'none'} is stale; source is ${currentVersion ?? 'none'}.`
+			);
+		if (!sameStrings(manifestExports(manifest), project.publicExports))
+			failures.push(
+				`${project.directory}: generated public exports are stale.`
+			);
+	}
 
 	const readmePath = resolve(
 		workspaceDirectory,
@@ -172,6 +242,13 @@ for (const project of ecosystemProjects) {
 		failures.push(
 			`${project.directory}: monorepo is missing a root README.md.`
 		);
+	if (
+		sourceWorkspaceAvailable &&
+		readFileDigest(readmePath) !== project.readmeDigest
+	)
+		failures.push(
+			`${project.directory}: generated README documentation is stale.`
+		);
 
 	for (const subpackage of project.subpackages) {
 		const view = packageSubpackageViewId(project, subpackage);
@@ -180,6 +257,63 @@ for (const project of ecosystemProjects) {
 			failures.push(
 				`${subpackage.name}: missing generated subpackage view ${view}.`
 			);
+		if (subpackage.description.length < minimumPackageDescriptionLength)
+			failures.push(
+				`${subpackage.name}: package description is too thin.`
+			);
+		const isNativeArtifact = /^@absolutejs\/native-/.test(subpackage.name);
+		if (
+			!subpackage.private &&
+			!isNativeArtifact &&
+			subpackage.readmeTopics.length === 0
+		)
+			failures.push(
+				`${subpackage.name}: public package has no source-backed feature documentation.`
+			);
+		if (
+			!subpackage.private &&
+			!isNativeArtifact &&
+			subpackage.readmeSamples.length === 0 &&
+			subpackage.api.length === 0 &&
+			subpackage.commands.length === 0
+		)
+			failures.push(
+				`${subpackage.name}: public package has no example, API reference, or command reference.`
+			);
+		if (sourceWorkspaceAvailable) {
+			const subpackageDirectory = resolve(
+				workspaceDirectory,
+				project.directory,
+				subpackage.sourcePath
+			);
+			const manifest = readManifest(
+				resolve(subpackageDirectory, 'package.json')
+			);
+			const currentVersion = snapshotVersion(
+				subpackage.name,
+				manifest?.version
+			);
+			if (currentVersion !== subpackage.version)
+				failures.push(
+					`${subpackage.name}: generated version is stale.`
+				);
+			if (
+				!sameStrings(
+					manifestExports(manifest),
+					subpackage.publicExports
+				)
+			)
+				failures.push(
+					`${subpackage.name}: generated public exports are stale.`
+				);
+			if (
+				readFileDigest(resolve(subpackageDirectory, 'README.md')) !==
+				subpackage.readmeDigest
+			)
+				failures.push(
+					`${subpackage.name}: generated README documentation is stale.`
+				);
+		}
 		if (!catalogEntry.searchText.includes(subpackage.name))
 			failures.push(
 				`${subpackage.name}: not indexed by package catalog search.`
@@ -192,6 +326,23 @@ for (const project of ecosystemProjects) {
 		}
 	}
 }
+
+const generatedEvidence = JSON.stringify(ecosystemProjects);
+if (generatedEvidence.includes('README Example'))
+	failures.push(
+		'Generated samples contain the generic README Example label.'
+	);
+if (generatedEvidence.includes('A verified example from the package README.'))
+	failures.push('Generated samples contain the retired generic description.');
+for (const exactIdentifier of [
+	"BlobError('INVALID_KEY')",
+	'Promise<Uint8Array>',
+	'REGISTRY_AGENT_SIGNING_JWK'
+])
+	if (!generatedEvidence.includes(exactIdentifier))
+		failures.push(
+			`Generated documentation corrupted or omitted ${exactIdentifier}.`
+		);
 
 for (const view of Object.keys(docsViews)) {
 	if (view.startsWith('ecosystem-'))

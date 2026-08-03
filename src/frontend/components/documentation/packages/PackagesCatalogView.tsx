@@ -22,6 +22,62 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 
+type GoalBundle = {
+	description: string;
+	directories: string[];
+	label: string;
+};
+
+const goalBundles: GoalBundle[] = [
+	{
+		description:
+			'Authenticate an agent, authorize an exact action, execute it durably, and preserve evidence.',
+		directories: ['auth', 'agent', 'agency', 'execution', 'queue', 'audit'],
+		label: 'Govern an AI agent'
+	},
+	{
+		description:
+			'Operate tenants, releases, runtime health, usage, invoices, and reliability objectives.',
+		directories: [
+			'auth',
+			'admin',
+			'deploy',
+			'runtime',
+			'health',
+			'metering',
+			'billing',
+			'slo'
+		],
+		label: 'Ship a SaaS platform'
+	},
+	{
+		description:
+			'Build live collections, collaborative state, durable background work, and object storage.',
+		directories: ['sync', 'queue', 'blob', 'audit'],
+		label: 'Add realtime collaboration'
+	},
+	{
+		description:
+			'Connect speech providers, run assistants, test calls, and retain operational traces.',
+		directories: ['voice', 'voice-adapters', 'voice-tester', 'audit'],
+		label: 'Build a voice agent'
+	},
+	{
+		description:
+			'Move from discovery and enrichment through audience, messaging, checkout, and money movement.',
+		directories: [
+			'discover',
+			'enrich',
+			'audience',
+			'crm',
+			'dispatch',
+			'commerce',
+			'wallet'
+		],
+		label: 'Build commerce growth'
+	}
+];
+
 const categoryOrder: PackageCategory[] = [
 	'Auth & Identity',
 	'Data & Sync',
@@ -112,6 +168,9 @@ const CatalogCard = ({ entry, onNavigate, themeSprings }: CatalogCardProps) => (
 				}}
 			>
 				{catalogBadge(entry)}
+			</span>
+			<span style={{ fontSize: '0.72rem', opacity: 0.7 }}>
+				{entry.status}
 			</span>
 		</div>
 		<code
@@ -259,15 +318,206 @@ const CatalogSearch = ({
 	</animated.label>
 );
 
+type CatalogFiltersProps = {
+	categoryFilter: string;
+	maturityFilter: string;
+	onCategoryChange: (value: string) => void;
+	onMaturityChange: (value: string) => void;
+	onScopeChange: (value: string) => void;
+	scopeFilter: string;
+	themeSprings: ThemeSprings;
+};
+
+const CatalogFilters = ({
+	categoryFilter,
+	maturityFilter,
+	onCategoryChange,
+	onMaturityChange,
+	onScopeChange,
+	scopeFilter,
+	themeSprings
+}: CatalogFiltersProps) => (
+	<div
+		style={{
+			display: 'flex',
+			flexWrap: 'wrap',
+			gap: '0.65rem',
+			marginTop: '0.75rem'
+		}}
+	>
+		<animated.select
+			aria-label="Filter by package category"
+			onChange={(event) => onCategoryChange(event.target.value)}
+			style={{
+				background: themeSprings.themeSecondary,
+				border: '1px solid rgba(99, 102, 241, 0.28)',
+				borderRadius: '0.5rem',
+				color: themeSprings.contrastPrimary,
+				padding: '0.55rem 0.7rem'
+			}}
+			value={categoryFilter}
+		>
+			<option value="all">All categories</option>
+			{categoryOrder.map((category) => (
+				<option key={category} value={category}>
+					{category}
+				</option>
+			))}
+		</animated.select>
+		<animated.select
+			aria-label="Filter by maturity"
+			onChange={(event) => onMaturityChange(event.target.value)}
+			style={{
+				background: themeSprings.themeSecondary,
+				border: '1px solid rgba(99, 102, 241, 0.28)',
+				borderRadius: '0.5rem',
+				color: themeSprings.contrastPrimary,
+				padding: '0.55rem 0.7rem'
+			}}
+			value={maturityFilter}
+		>
+			<option value="all">All maturity levels</option>
+			<option value="stable">Stable</option>
+			<option value="beta">Beta</option>
+			<option value="alpha">Alpha</option>
+		</animated.select>
+		<animated.select
+			aria-label="Filter by publication scope"
+			onChange={(event) => onScopeChange(event.target.value)}
+			style={{
+				background: themeSprings.themeSecondary,
+				border: '1px solid rgba(99, 102, 241, 0.28)',
+				borderRadius: '0.5rem',
+				color: themeSprings.contrastPrimary,
+				padding: '0.55rem 0.7rem'
+			}}
+			value={scopeFilter}
+		>
+			<option value="all">Public and workspace</option>
+			<option value="public">Public/installable</option>
+			<option value="workspace">Workspace/internal</option>
+		</animated.select>
+	</div>
+);
+
+const GoalBundleExplorer = ({
+	onNavigate,
+	themeSprings
+}: Pick<DocsViewProps, 'onNavigate' | 'themeSprings'>) => {
+	const [activeGoal, setActiveGoal] = useState(0);
+	const goal = goalBundles[activeGoal] ?? goalBundles[0];
+	const entries = (goal?.directories ?? []).flatMap((directory) => {
+		const entry = packageCatalog.find(
+			(candidate) => candidate.sourceDirectory === directory
+		);
+
+		return entry ? [entry] : [];
+	});
+
+	return (
+		<section style={{ margin: '1.5rem 0 2.5rem' }}>
+			<AnchorHeading
+				id="choose-a-stack"
+				level="h2"
+				style={gradientHeadingStyle(themeSprings)}
+				themeSprings={themeSprings}
+			>
+				What are you building?
+			</AnchorHeading>
+			<div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+				{goalBundles.map((candidate, index) => (
+					<button
+						aria-pressed={index === activeGoal}
+						key={candidate.label}
+						onClick={() => setActiveGoal(index)}
+						style={{
+							background:
+								index === activeGoal
+									? 'rgba(99, 102, 241, 0.16)'
+									: 'transparent',
+							border: '1px solid rgba(99, 102, 241, 0.3)',
+							borderRadius: '0.55rem',
+							color: 'inherit',
+							cursor: 'pointer',
+							padding: '0.55rem 0.75rem'
+						}}
+						type="button"
+					>
+						{candidate.label}
+					</button>
+				))}
+			</div>
+			<animated.p
+				style={{
+					color: themeSprings.contrastSecondary,
+					lineHeight: 1.65
+				}}
+			>
+				{goal?.description}
+			</animated.p>
+			<div
+				aria-label={`${goal?.label} package architecture`}
+				style={{
+					alignItems: 'stretch',
+					display: 'flex',
+					flexWrap: 'wrap',
+					gap: '0.45rem'
+				}}
+			>
+				{entries.map((entry, index) => (
+					<div
+						key={entry.sourceDirectory}
+						style={{
+							alignItems: 'center',
+							display: 'flex',
+							gap: '0.45rem'
+						}}
+					>
+						{index > 0 ? <span aria-hidden="true">→</span> : null}
+						<a
+							href={`/documentation/${entry.view}`}
+							onClick={(event) => {
+								event.preventDefault();
+								onNavigate(entry.view);
+							}}
+							style={{
+								border: '1px solid rgba(99, 102, 241, 0.25)',
+								borderRadius: '0.55rem',
+								color: 'inherit',
+								fontWeight: 600,
+								padding: '0.65rem 0.8rem',
+								textDecoration: 'none'
+							}}
+						>
+							{entry.name}
+						</a>
+					</div>
+				))}
+			</div>
+		</section>
+	);
+};
+
 export const PackagesCatalogView = ({
 	isMobileOrTablet,
 	onNavigate,
 	themeSprings
 }: DocsViewProps) => {
 	const [query, setQuery] = useState('');
-	const visible = packageCatalog.filter((entry) =>
-		matchesQuery(entry, query)
-	);
+	const [categoryFilter, setCategoryFilter] = useState('all');
+	const [maturityFilter, setMaturityFilter] = useState('all');
+	const [scopeFilter, setScopeFilter] = useState('all');
+	const visible = packageCatalog.filter((entry) => {
+		if (!matchesQuery(entry, query)) return false;
+		if (categoryFilter !== 'all' && entry.category !== categoryFilter)
+			return false;
+		if (maturityFilter !== 'all' && entry.status !== maturityFilter)
+			return false;
+		if (scopeFilter === 'public' && entry.private) return false;
+		if (scopeFilter === 'workspace' && !entry.private) return false;
+
+		return true;
+	});
 
 	return (
 		<div
@@ -297,7 +547,21 @@ export const PackagesCatalogView = ({
 						query={query}
 						themeSprings={themeSprings}
 					/>
+					<CatalogFilters
+						categoryFilter={categoryFilter}
+						maturityFilter={maturityFilter}
+						onCategoryChange={setCategoryFilter}
+						onMaturityChange={setMaturityFilter}
+						onScopeChange={setScopeFilter}
+						scopeFilter={scopeFilter}
+						themeSprings={themeSprings}
+					/>
 				</animated.div>
+
+				<GoalBundleExplorer
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 
 				{categoryOrder.map((category) => {
 					const entries = visible.filter(

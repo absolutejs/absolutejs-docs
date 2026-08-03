@@ -1,5 +1,8 @@
 import { animated } from '@react-spring/web';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps } from '../../../../types/springTypes';
+import { DocsNavigation } from '../DocsNavigation';
+import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
 import {
 	routerDrain,
 	routerLimits,
@@ -28,6 +31,7 @@ const noop = () => undefined;
 
 const tocItems: TocItem[] = [
 	{ href: '#router-overview', label: 'Overview' },
+	{ href: '#routing-decision', label: 'Routing Decision' },
 	{ href: '#quick-start', label: 'Quick Start' },
 	{ href: '#strategies', label: 'Hash Strategies + Load' },
 	{ href: '#drain', label: 'Drain Mode' },
@@ -36,7 +40,41 @@ const tocItems: TocItem[] = [
 	{ href: '#snapshot', label: 'Snapshot & Restore' }
 ];
 
+const routingExplanations: PackageExplanation[] = [
+	{
+		description:
+			'Every route call applies the same ordered gates so quota, capacity, health, and shard ownership cannot disagree.',
+		id: 'routing-decision',
+		kind: 'flow',
+		steps: [
+			{
+				detail: 'Ask the application policy or meter whether this tenant may consume work.',
+				label: 'Authorize'
+			},
+			{
+				detail: 'Check the tenant request bucket and active connection cap.',
+				label: 'Bound'
+			},
+			{
+				detail: 'Remove unhealthy and intentionally draining shards from the candidate set.',
+				label: 'Filter'
+			},
+			{
+				detail: 'Choose a sticky owner with jump hash or weighted rendezvous.',
+				label: 'Place'
+			},
+			{
+				detail: 'Return an explicit allow, denied, capped, rate-limited, or no-shards decision.',
+				label: 'Explain'
+			}
+		],
+		title: 'One deterministic decision at the gateway'
+	}
+];
+
 export const RouterOverviewView = ({
+	currentPageId,
+	onNavigate,
 	themeSprings,
 	tocOpen,
 	onTocToggle,
@@ -71,6 +109,11 @@ export const RouterOverviewView = ({
 						layer you have.
 					</p>
 				</animated.div>
+
+				<PackageExplanationBlocks
+					explanations={routingExplanations}
+					themeSprings={themeSprings}
+				/>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
@@ -227,6 +270,13 @@ export const RouterOverviewView = ({
 						themeSprings={themeSprings}
 					/>
 				</section>
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 			</div>
 			{showDesktopToc ? (
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />

@@ -510,25 +510,34 @@ export const documentationSitemapRoutes = [
 		.map((view) => `/documentation/${view}`)
 ];
 
-const packageApiSidebarEntries: SidebarEntry[] =
-	ecosystemProjects.flatMap<SidebarEntry>((project) => {
-		const publicSubpackages = project.subpackages.filter(
-			(subpackage) => !subpackage.private
-		);
-		const hasCuratedGuide = Boolean(
-			documentationViewByDirectory[project.directory]
-		);
-		if (hasCuratedGuide && publicSubpackages.length === 0) return [];
+const packageApiSidebarEntries = ecosystemProjects.flatMap<{
+	category: string;
+	entry: SidebarEntry;
+}>((project) => {
+	const publicSubpackages = project.subpackages.filter(
+		(subpackage) => !subpackage.private
+	);
+	const hasCuratedGuide = Boolean(
+		documentationViewByDirectory[project.directory]
+	);
+	if (hasCuratedGuide && publicSubpackages.length === 0) return [];
 
-		const overview: SidebarPage = {
-			id: packageProjectViewId(project),
-			label: hasCuratedGuide ? 'Guide' : 'Overview'
-		};
-		if (publicSubpackages.length === 0)
-			return [{ id: overview.id, label: project.name }];
-
+	const overview: SidebarPage = {
+		id: packageProjectViewId(project),
+		label: hasCuratedGuide ? 'Guide' : 'Overview'
+	};
+	if (publicSubpackages.length === 0)
 		return [
 			{
+				category: project.category,
+				entry: { id: overview.id, label: project.name }
+			}
+		];
+
+	return [
+		{
+			category: project.category,
+			entry: {
 				label: project.name,
 				pages: [
 					overview,
@@ -538,9 +547,10 @@ const packageApiSidebarEntries: SidebarEntry[] =
 					}))
 				]
 			}
-		];
-	});
-export const sidebarCategories: SidebarCategory[] = [
+		}
+	];
+});
+const baseSidebarCategories: SidebarCategory[] = [
 	{
 		entries: [
 			{ id: 'overview', label: 'Overview' },
@@ -1139,9 +1149,42 @@ export const sidebarCategories: SidebarCategory[] = [
 			{ id: 'renown', label: 'Renown', status: 'beta' }
 		],
 		label: 'Dev Tools'
-	},
-	{
-		entries: packageApiSidebarEntries,
-		label: 'Package APIs'
 	}
+];
+
+const sidebarLabelByPackageCategory: Record<string, string> = {
+	AI: 'AI & Agents',
+	'Auth & Identity': 'Auth & Identity',
+	'Commerce & Growth': 'Commerce & Growth',
+	'Data & Sync': 'Data & Sync',
+	'Dev Tools': 'Dev Tools',
+	'Frontend & UX': 'Frontend & UX',
+	Messaging: 'Messaging',
+	Observability: 'Observability',
+	'On-chain': 'On-chain',
+	'Platform & Infra': 'Platform & Infra',
+	'Voice & Media': 'Voice & Media'
+};
+
+const generatedEntriesFor = (sidebarLabel: string) =>
+	packageApiSidebarEntries
+		.filter(
+			(candidate) =>
+				sidebarLabelByPackageCategory[candidate.category] ===
+				sidebarLabel
+		)
+		.map((candidate) => candidate.entry);
+
+const existingSidebarLabels = new Set(
+	baseSidebarCategories.map((category) => category.label)
+);
+
+export const sidebarCategories: SidebarCategory[] = [
+	...baseSidebarCategories.map((category) => ({
+		...category,
+		entries: [...category.entries, ...generatedEntriesFor(category.label)]
+	})),
+	...Array.from(new Set(Object.values(sidebarLabelByPackageCategory)))
+		.filter((label) => !existingSidebarLabels.has(label))
+		.map((label) => ({ entries: generatedEntriesFor(label), label }))
 ];

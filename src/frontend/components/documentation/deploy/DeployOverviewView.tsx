@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
 	deployAnnotations,
@@ -22,14 +23,21 @@ import {
 } from '../../../styles/gradientStyles';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
+import { DocsTable } from '../../utils/DocsTable';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { DocsNavigation } from '../DocsNavigation';
+import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
 
 const noop = () => undefined;
 
 const tocItems: TocItem[] = [
 	{ href: '#deploy-overview', label: 'Overview' },
 	{ href: '#quick-start', label: 'Quick Start' },
+	{ href: '#infrastructure-providers', label: 'Infrastructure Providers' },
+	{ href: '#release-control-plane', label: 'Release Control Plane' },
+	{ href: '#global-ingress-lifecycle', label: 'Global Edge Ingress' },
+	{ href: '#managed-preview-lifecycle', label: 'Managed Previews' },
 	{ href: '#targets', label: 'Targets' },
 	{ href: '#pipeline', label: 'Pipeline' },
 	{ href: '#process-managers', label: 'Process Managers' },
@@ -38,11 +46,123 @@ const tocItems: TocItem[] = [
 	{ href: '#rollback', label: 'Rollback & Prune' }
 ];
 
+const infrastructureRows: string[][] = [
+	[
+		'DigitalOcean',
+		'@absolutejs/deploy/digitalocean-infrastructure',
+		'Droplets and regional placement'
+	],
+	[
+		'Google Cloud',
+		'@absolutejs/deploy/gcp',
+		'Immutable templates and managed operations'
+	],
+	[
+		'Hetzner',
+		'@absolutejs/deploy/hetzner-infrastructure',
+		'Cloud servers and locations'
+	],
+	[
+		'Linode',
+		'@absolutejs/deploy/linode-infrastructure',
+		'Instances and regional placement'
+	],
+	[
+		'Vultr',
+		'@absolutejs/deploy/vultr-infrastructure',
+		'Instances and regional placement'
+	]
+];
+
+const deployExplanations: PackageExplanation[] = [
+	{
+		description:
+			'Releases are immutable inputs whose transitions remain observable and recoverable.',
+		id: 'release-control-plane',
+		kind: 'lifecycle',
+		steps: [
+			{
+				detail: 'Create or stream an immutable artifact with integrity metadata.',
+				label: 'Artifact'
+			},
+			{
+				detail: 'Upload into a versioned release directory without mutating current.',
+				label: 'Stage'
+			},
+			{
+				detail: 'Install, build, and verify before publication.',
+				label: 'Verify'
+			},
+			{
+				detail: 'Atomically move the current pointer and restart.',
+				label: 'Publish'
+			},
+			{
+				detail: 'Retain evidence, stop superseded releases, or roll back by id.',
+				label: 'Operate'
+			}
+		],
+		title: 'Release control plane'
+	},
+	{
+		description:
+			'Global ingress normalizes provider resources while preserving TLS termination at the regional edge.',
+		id: 'global-ingress-lifecycle',
+		kind: 'flow',
+		steps: [
+			{
+				detail: 'Declare listeners, health checks, and ordered regional backends.',
+				label: 'Desired state'
+			},
+			{
+				detail: 'Construct DigitalOcean or GCP provider resources idempotently.',
+				label: 'Reconcile'
+			},
+			{
+				detail: 'Wait for provider operations before exposing dependent resources.',
+				label: 'Converge'
+			},
+			{
+				detail: 'Return normalized addresses, state, and provider references.',
+				label: 'Observe'
+			}
+		],
+		title: 'Global edge ingress lifecycle'
+	},
+	{
+		description:
+			'Managed previews make temporary environments explicit resources with ownership and garbage collection.',
+		id: 'managed-preview-lifecycle',
+		kind: 'lifecycle',
+		steps: [
+			{
+				detail: 'Bind a commit, artifact, owner, expiry, and idempotency key.',
+				label: 'Request'
+			},
+			{
+				detail: 'Provision ephemeral infrastructure and encrypted storage when required.',
+				label: 'Provision'
+			},
+			{
+				detail: 'Deploy, verify, publish DNS/TLS, and expose the preview URL.',
+				label: 'Publish'
+			},
+			{
+				detail: 'Reconcile expiry or closure and clean every provider resource.',
+				label: 'Collect'
+			}
+		],
+		title: 'Managed preview lifecycle'
+	}
+];
+
 export const DeployOverviewView = ({
+	currentPageId,
 	themeSprings,
 	tocOpen,
 	onTocToggle,
-	isMobileOrTablet
+	isMobileOrTablet,
+	onNavigate
 }: DocsViewProps) => {
 	const showDesktopToc = !isMobileOrTablet;
 
@@ -105,6 +225,33 @@ export const DeployOverviewView = ({
 
 				<section style={sectionStyle}>
 					<AnchorHeading
+						id="infrastructure-providers"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						Infrastructure Providers
+					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						The normalized <code>InfrastructureProvider</code>{' '}
+						contract covers declared capabilities, node identity and
+						state, inventory, idempotent provisioning, termination,
+						and regional placement across five clouds.
+					</p>
+					<DocsTable
+						columns={['Provider', 'Import', 'Surface']}
+						rows={infrastructureRows}
+						themeSprings={themeSprings}
+					/>
+				</section>
+
+				<PackageExplanationBlocks
+					explanations={deployExplanations}
+					themeSprings={themeSprings}
+				/>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
 						id="targets"
 						level="h2"
 						style={gradientHeadingStyle(themeSprings)}
@@ -117,10 +264,10 @@ export const DeployOverviewView = ({
 						<code>
 							{`{ exec(cmd, opts?), upload(local, remote, opts?), close?() }`}
 						</code>
-						. Two are bundled. Anything else that satisfies that
-						contract is a valid target — Cloudflare Workers API, Fly
-						Machines API, AWS Fargate task-run all ship as sibling
-						packages because they don't fit the exec+upload shape.
+						. Two are bundled. Provider-native control planes that
+						do not fit the exec-and-upload shape use typed adapters
+						and package entry points, while infrastructure providers
+						expose a shared reconciliation contract.
 					</p>
 					<PrismPlus
 						codeString={deployTargets}
@@ -258,6 +405,13 @@ export const DeployOverviewView = ({
 						themeSprings={themeSprings}
 					/>
 				</section>
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 			</div>
 			{showDesktopToc ? (
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />

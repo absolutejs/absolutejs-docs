@@ -1,9 +1,11 @@
 /* eslint-disable absolute/max-jsxnesting */
 import { animated } from '@react-spring/web';
 import { CSSProperties } from 'react';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { synchronizePackageCards } from '../../../data/documentation/packages/ecosystemVersions';
 import { DocsNavigation } from '../DocsNavigation';
+import { PackageExplanationBlocks } from './PackageExplanationBlocks';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PackageCard, PackageCardGrid } from '../../utils/PackageCardGrid';
@@ -71,6 +73,38 @@ type VoicePageDefinition = {
 	sections: VoiceSection[];
 	title: string;
 };
+
+const voiceRuntimeExplanation: PackageExplanation[] = [
+	{
+		description:
+			'Browser, phone, realtime, and synthetic callers converge on the same observable session contract.',
+		id: 'live-call-trace',
+		kind: 'lifecycle',
+		steps: [
+			{
+				detail: 'Accept a WebSocket, telephony media stream, provider realtime session, or tester connection.',
+				label: 'Connect'
+			},
+			{
+				detail: 'Resolve tenant context, assistant, language, provider route, policy, and live-ops state.',
+				label: 'Resolve'
+			},
+			{
+				detail: 'Condition audio, detect turns, transcribe or stream realtime input, and invoke the assistant.',
+				label: 'Understand'
+			},
+			{
+				detail: 'Execute tools, synthesize audio, support barge-in, or transfer through typed handoff policy.',
+				label: 'Respond'
+			},
+			{
+				detail: 'Persist trace, cost, audit, recording, delivery, SLO, and proof evidence for the same session.',
+				label: 'Prove'
+			}
+		],
+		title: 'Follow one call through the runtime'
+	}
+];
 
 const entrypoints: Array<[string, string]> = [
 	[
@@ -1614,11 +1648,15 @@ const cardGridStyle = (isMobile: boolean): CSSProperties => ({
 	marginTop: '1rem'
 });
 
-const buildTocItems = (page: VoicePageDefinition) =>
-	page.sections.map((section) => ({
+const buildTocItems = (page: VoicePageDefinition) => [
+	...page.sections.map((section) => ({
 		href: `#${section.id}`,
 		label: section.title
-	}));
+	})),
+	...(page.id === 'voice-runtime'
+		? [{ href: '#live-call-trace', label: 'Live Call Trace' }]
+		: [])
+];
 
 const renderTable = (
 	table: VoiceTable,
@@ -1759,6 +1797,13 @@ const VoiceDocsPage = ({
 						themeSprings={props.themeSprings}
 					/>
 				))}
+
+				{pageId === 'voice-runtime' ? (
+					<PackageExplanationBlocks
+						explanations={voiceRuntimeExplanation}
+						themeSprings={props.themeSprings}
+					/>
+				) : null}
 
 				{pageId === 'voice-route-surfaces' && (
 					<section style={sectionStyle}>

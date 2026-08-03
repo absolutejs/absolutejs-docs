@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
 	auditIntegrity,
@@ -23,6 +24,8 @@ import { DocsTable, DocsTableCell } from '../../utils/DocsTable';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { DocsNavigation } from '../DocsNavigation';
+import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
 
 const noop = () => undefined;
 
@@ -33,6 +36,7 @@ const tocItems: TocItem[] = [
 	{ href: '#sinks', label: 'Sinks' },
 	{ href: '#integrity', label: 'Hash-chain Integrity' },
 	{ href: '#live-wires', label: 'Live-Wire Helpers' },
+	{ href: '#agent-evidence-flow', label: 'Agent & Handoff Evidence' },
 	{ href: '#metrics', label: 'Metrics & Close' },
 	{ href: '#testing', label: 'Testing' }
 ];
@@ -68,29 +72,57 @@ const eventFieldRows: DocsTableCell[][] = [
 const sinkRows: DocsTableCell[][] = [
 	[
 		{ code: 'memorySink({ max })' },
-		{ code: '@absolutejs/audit', suffix: '0.0.1' },
+		{ code: '@absolutejs/audit' },
 		'In-process FIFO (bounded by max). Implements list() — useful for tests and an in-process tail.'
 	],
 	[
 		{ code: 'consoleSink({ pretty })' },
-		{ code: '@absolutejs/audit', suffix: '0.0.1' },
+		{ code: '@absolutejs/audit' },
 		'Forwards events to stdout / stderr as JSON.'
 	],
 	[
 		{ code: 'createPostgresAuditSink({ sql })' },
-		{ code: '@absolutejs/audit-postgres', suffix: '0.0.1' },
+		{ code: '@absolutejs/audit-postgres' },
 		'Postgres sink with list + prune + flush. Accepts any postgres-js-compatible tag template (porsager/postgres or Neon serverless). Lazy schema, jsonb metadata, indexed on at / kind / actor.'
 	],
 	[
 		{ code: 'createS3AuditSink(...)' },
-		{ code: '@absolutejs/audit-s3', suffix: '0.0.1' },
+		{ code: '@absolutejs/audit-s3' },
 		'Buffered JSONL writes to AWS S3, Cloudflare R2, Backblaze B2, or MinIO. Time-sortable object keys; WORM-bucket-friendly for compliance retention.'
 	],
 	[
 		{ code: 'auditElysia(...)' },
-		{ code: '@absolutejs/audit-elysia', suffix: '0.0.2' },
+		{ code: '@absolutejs/audit-elysia' },
 		'Elysia plugin emitting one structured audit event per request — success AND error paths — with optional correlation to the active OTel trace id.'
 	]
+];
+
+const auditEvidenceExplanations: PackageExplanation[] = [
+	{
+		description:
+			'Agent and handoff helpers preserve operational attribution while excluding sensitive prompt and payload content by default.',
+		id: 'agent-evidence-flow',
+		kind: 'flow',
+		steps: [
+			{
+				detail: 'Receive a typed agent-runtime or handoff observer event.',
+				label: 'Observe'
+			},
+			{
+				detail: 'Keep signed discovery identity, delegation, lifecycle, effects, budget, operation, and outcome.',
+				label: 'Normalize'
+			},
+			{
+				detail: 'Exclude goals, prompts, outputs, checkpoints, user ids, evidence messages, references, and raw provider payloads.',
+				label: 'Minimize'
+			},
+			{
+				detail: 'Append a stable agent.run.*, agent.step.*, or handoff.* event through every configured sink.',
+				label: 'Record'
+			}
+		],
+		title: 'Agent and handoff evidence flow'
+	}
 ];
 
 const metricRows: DocsTableCell[][] = [
@@ -112,10 +144,12 @@ const metricRows: DocsTableCell[][] = [
 ];
 
 export const AuditOverviewView = ({
+	currentPageId,
 	themeSprings,
 	tocOpen,
 	onTocToggle,
-	isMobileOrTablet
+	isMobileOrTablet,
+	onNavigate
 }: DocsViewProps) => {
 	const showDesktopToc = !isMobileOrTablet;
 
@@ -168,6 +202,11 @@ export const AuditOverviewView = ({
 						themeSprings={themeSprings}
 					/>
 				</section>
+
+				<PackageExplanationBlocks
+					explanations={auditEvidenceExplanations}
+					themeSprings={themeSprings}
+				/>
 
 				<section style={sectionStyle}>
 					<AnchorHeading
@@ -358,6 +397,13 @@ export const AuditOverviewView = ({
 						themeSprings={themeSprings}
 					/>
 				</section>
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 			</div>
 			{showDesktopToc ? (
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />

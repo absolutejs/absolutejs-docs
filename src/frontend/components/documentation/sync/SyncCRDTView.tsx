@@ -1,4 +1,5 @@
 import { animated } from '@react-spring/web';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocumentationViewLayout } from '../DocumentationViewLayout';
 import {
@@ -23,16 +24,46 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TocItem } from '../../utils/TableOfContents';
+import { PackageExplanationBlocks } from '../packages/PackageExplanationBlocks';
 
 const tocItems: TocItem[] = [
 	{ href: '#sync-crdt', label: 'CRDT & Collaboration' },
 	{ href: '#declarative', label: 'Declarative on the engine' },
 	{ href: '#hook', label: 'The client hook' },
+	{ href: '#authoritative-hydration', label: 'Authoritative Hydration' },
 	{ href: '#kit', label: 'The CRDT kit' },
 	{ href: '#delta', label: 'Delta uploads' },
 	{ href: '#compact', label: 'Tombstone compaction' },
 	{ href: '#cursors', label: 'Collaborative cursors' },
 	{ href: '#adapters', label: 'Yjs / Automerge / Loro' }
+];
+
+const hydrationExplanation: PackageExplanation[] = [
+	{
+		description:
+			'Document-scoped params and a shared ready state prevent early local edits from forking an empty replica before the authoritative row arrives.',
+		id: 'authoritative-hydration',
+		kind: 'lifecycle',
+		steps: [
+			{
+				detail: 'Subscribe with collection params that identify and authorize one document.',
+				label: 'Scope'
+			},
+			{
+				detail: 'Accept keystrokes locally while the transport and hydrate are still starting.',
+				label: 'Buffer'
+			},
+			{
+				detail: 'Hydrate the authoritative CRDT row and expose ready across React, Vue, Svelte, and Angular.',
+				label: 'Ready'
+			},
+			{
+				detail: 'Reconcile buffered edits onto authoritative state, then upload only the resulting delta.',
+				label: 'Reconcile'
+			}
+		],
+		title: 'Authoritative hydration without lost keystrokes'
+	}
 ];
 
 export const SyncCRDTView = ({
@@ -113,6 +144,11 @@ export const SyncCRDTView = ({
 				<code>@absolutejs/sync/{'{react,vue,svelte,angular}'}</code>.
 			</p>
 		</section>
+
+		<PackageExplanationBlocks
+			explanations={hydrationExplanation}
+			themeSprings={themeSprings}
+		/>
 
 		<section style={sectionStyle}>
 			<AnchorHeading

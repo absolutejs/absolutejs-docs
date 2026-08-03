@@ -1,5 +1,6 @@
 /* eslint-disable absolute/max-jsxnesting */
 import { animated } from '@react-spring/web';
+import { PackageExplanation } from '../../../../types/packageDocs';
 import { DocsViewProps } from '../../../../types/springTypes';
 import {
 	h1Style,
@@ -26,9 +27,11 @@ import {
 	VersionTimelineEntry
 } from '../../utils/VersionTimeline';
 import { DocsNavigation } from '../DocsNavigation';
+import { PackageExplanationBlocks } from './PackageExplanationBlocks';
 
 const tocItems: TocItem[] = [
 	{ href: '#isolated-jsc-proof-pack', label: '0.11.0 proof pack' },
+	{ href: '#backend-decision', label: 'Choose a Backend' },
 	{ href: '#what-shipped', label: 'What shipped' },
 	{ href: '#receipts-limits', label: 'Receipts + limits' },
 	{ href: '#bun-wedge', label: 'Bun wedge' },
@@ -36,6 +39,51 @@ const tocItems: TocItem[] = [
 	{ href: '#decision-guide', label: 'Decision guide' },
 	{ href: '#security', label: 'Security posture' },
 	{ href: '#start-here', label: 'Start here' }
+];
+
+const backendDecision: PackageExplanation[] = [
+	{
+		description:
+			'The fastest backend is not automatically the right trust boundary; choose from workload provenance and deployment controls.',
+		id: 'backend-decision',
+		kind: 'decision',
+		options: [
+			{
+				bestFor:
+					'High-volume code you control or tightly broker through explicit host capabilities.',
+				label: 'JSC FFI',
+				requirements: [
+					'Pin and verify the supported JavaScriptCore runtime',
+					'Apply capability, output, console, timeout, and memory policy'
+				],
+				tradeoffs:
+					'Lowest overhead, but it is a same-process boundary and must not be described as an OS sandbox.'
+			},
+			{
+				bestFor:
+					'Work that needs a stronger runtime separation while remaining Bun-native.',
+				label: 'Worker',
+				requirements: [
+					'Account for Worker memory and lifecycle cost',
+					'Preserve the same broker and resource limits'
+				],
+				tradeoffs:
+					'Higher memory and latency than FFI with residual same-host risks.'
+			},
+			{
+				bestFor:
+					'Untrusted or adversarial workloads that demand operating-system containment.',
+				label: 'Process/container',
+				requirements: [
+					'Use OS, container, VM, or microVM isolation',
+					'Bound filesystem, network, credentials, and process resources'
+				],
+				tradeoffs:
+					'Strongest boundary with materially higher cold-start and operating cost.'
+			}
+		],
+		title: 'Match the execution boundary to the threat model'
+	}
 ];
 
 const shippedRows: DocsTableCell[][] = [
@@ -370,6 +418,11 @@ export const IsolatedJscProofPackView = ({
 						operator-shaped pool metrics, and OpenTelemetry tracing.
 					</p>
 				</animated.div>
+
+				<PackageExplanationBlocks
+					explanations={backendDecision}
+					themeSprings={themeSprings}
+				/>
 
 				<section style={sectionStyle}>
 					<AnchorHeading

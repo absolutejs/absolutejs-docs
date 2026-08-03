@@ -34,6 +34,16 @@ export const mcpPackageData: PackageDocData = {
 			description:
 				'Server-side prompt definitions and readable resources are plain hooks, and createMcpClient consumes remote MCP servers, including answering their elicitation requests via onElicit.',
 			title: 'Prompts, resources, and client'
+		},
+		{
+			description:
+				'Tools with manifest-contract authorization metadata fail closed unless Agency enforcement is configured. Allowed calls bind the exact input to a short-lived single-use execution lease and produce a receipt.',
+			title: 'Agency action enforcement'
+		},
+		{
+			description:
+				'Native MCP 2025-11-25 tasks support creation, get, result, authorization-bound listing, cancellation, TTL, and terminal-state protection with memory or PostgreSQL stores.',
+			title: 'Durable MCP tasks'
 		}
 	],
 	installCommand: 'bun add @absolutejs/mcp',
@@ -135,6 +145,37 @@ mcpServer<Caller>({
 			description:
 				'Guard calls, audit them, and give the connected AI client a feedback channel back to you.',
 			heading: 'Guards, Audit, and Feedback',
+			language: 'typescript'
+		},
+		{
+			code: `import { createAgency, createMemoryAgencyStore } from '@absolutejs/agency';
+import { createPostgresMcpTaskStore, mcpServer } from '@absolutejs/mcp';
+
+const agency = createAgency({ policy, store: createMemoryAgencyStore() });
+
+mcpServer<Caller>({
+	agency: {
+		enforcement: agency,
+		resolveActor: ({ caller, scopes }) => ({
+			agentId: caller.agentId,
+			delegationId: caller.delegationId,
+			scopes,
+			userId: caller.userId
+		})
+	},
+	tasks: {
+		authorizationKey: (caller) => caller.userId,
+		shouldCreate: ({ name }) => name === 'long_running_report',
+		store: createPostgresMcpTaskStore({ sql }),
+		ttlMs: 60 * 60 * 1000
+	},
+	tools: () => ({
+		long_running_report: { taskSupport: 'optional', ...reportTool }
+	})
+});`,
+			description:
+				'Enforce consequential tools through the host Agency ledger and persist long-running MCP tasks in PostgreSQL for multi-instance deployments.',
+			heading: 'Governed Durable Tasks',
 			language: 'typescript'
 		}
 	],

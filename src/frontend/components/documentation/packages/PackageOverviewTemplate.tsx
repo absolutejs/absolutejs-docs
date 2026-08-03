@@ -26,9 +26,12 @@ import { DocsTable } from '../../utils/DocsTable';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { DocsNavigation } from '../DocsNavigation';
 import { synchronizePackageDocData } from '../../../data/documentation/packages/ecosystemVersions';
 import { flagshipGuidanceByPackage } from '../../../data/documentation/packages/flagshipGuidance';
 import { PackageGuidanceSections } from './PackageGuidanceSections';
+import { PackageApiExplorer } from './PackageApiExplorer';
+import { PackageExplanationBlocks } from './PackageExplanationBlocks';
 
 const statusColors: Record<PackageStatus, string> = {
 	alpha: '#F59E0B',
@@ -92,6 +95,21 @@ const PackageFeatureCard = ({
 		>
 			{feature.description}
 		</animated.p>
+		{feature.details && feature.details.length > 0 ? (
+			<animated.ul
+				style={{
+					color: themeSprings.contrastSecondary,
+					fontSize: '0.86rem',
+					lineHeight: 1.55,
+					margin: '0.65rem 0 0',
+					paddingLeft: '1.15rem'
+				}}
+			>
+				{feature.details.map((detail) => (
+					<li key={detail}>{detail}</li>
+				))}
+			</animated.ul>
+		) : null}
 	</animated.div>
 );
 
@@ -158,8 +176,10 @@ export const createPackageView = (data: PackageDocData) => {
 };
 
 export const PackageOverviewTemplate = ({
+	currentPageId,
 	data,
 	isMobileOrTablet,
+	onNavigate,
 	onTocToggle,
 	themeSprings,
 	tocOpen
@@ -190,7 +210,14 @@ export const PackageOverviewTemplate = ({
 		...(currentData.adapterGroups ?? []).map((group) => ({
 			href: `#${slugify(group.heading)}`,
 			label: group.heading
-		}))
+		})),
+		...(currentData.explanations ?? []).map((explanation) => ({
+			href: `#${explanation.id}`,
+			label: explanation.title
+		})),
+		...(currentData.api && currentData.api.length > 0
+			? [{ href: '#api-reference', label: 'API reference' }]
+			: [])
 	];
 
 	return (
@@ -263,6 +290,14 @@ export const PackageOverviewTemplate = ({
 					</section>
 				) : null}
 
+				{currentData.explanations &&
+				currentData.explanations.length > 0 ? (
+					<PackageExplanationBlocks
+						explanations={currentData.explanations}
+						themeSprings={themeSprings}
+					/>
+				) : null}
+
 				<PackageGuidanceSections
 					isMobileOrTablet={isMobileOrTablet}
 					packageName={currentData.npmName}
@@ -319,6 +354,28 @@ export const PackageOverviewTemplate = ({
 					</Callout>
 				))}
 
+				{currentData.api && currentData.api.length > 0 ? (
+					<section style={sectionStyle}>
+						<AnchorHeading
+							id="api-reference"
+							level="h2"
+							style={gradientHeadingStyle(themeSprings)}
+							themeSprings={themeSprings}
+						>
+							API reference
+						</AnchorHeading>
+						<p style={paragraphSpacedStyle}>
+							Search the declarations exported by the current
+							package type files. Expand a symbol to inspect its
+							source-backed signature.
+						</p>
+						<PackageApiExplorer
+							api={currentData.api}
+							themeSprings={themeSprings}
+						/>
+					</section>
+				) : null}
+
 				{currentData.links && currentData.links.length > 0 ? (
 					<div
 						style={{
@@ -357,6 +414,13 @@ export const PackageOverviewTemplate = ({
 						))}
 					</div>
 				) : null}
+
+				<DocsNavigation
+					currentPageId={currentPageId}
+					isMobileOrTablet={isMobileOrTablet}
+					onNavigate={onNavigate}
+					themeSprings={themeSprings}
+				/>
 			</div>
 			{!isMobileOrTablet ? (
 				<TableOfContents items={tocItems} themeSprings={themeSprings} />

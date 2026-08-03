@@ -3,6 +3,7 @@ import { CSSProperties } from 'react';
 import { DocsViewProps, ThemeSprings } from '../../../../types/springTypes';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import { currentPackageVersion } from '../../../data/documentation/packages/ecosystemVersions';
+import { packageCatalog } from '../../../data/documentation/packages/catalog';
 import {
 	h1Style,
 	mainContentStyle,
@@ -39,7 +40,7 @@ type PlatformPackage = {
 	viewId: string;
 };
 
-const platformPackages: PlatformPackage[] = [
+const featuredPlatformPackages: PlatformPackage[] = [
 	{
 		description:
 			'Run many isolated Bun apps on one host — spawn-or-reuse child processes with idle-kill, spawn back-off, and per-process CPU + RSS metrics.',
@@ -122,6 +123,27 @@ const platformPackages: PlatformPackage[] = [
 	}
 ];
 
+const featuredPlatformDirectories = new Set(
+	featuredPlatformPackages.map((entry) =>
+		entry.npm.replace(/^@absolutejs\//, '')
+	)
+);
+const platformPackages: PlatformPackage[] = [
+	...featuredPlatformPackages,
+	...packageCatalog
+		.filter((entry) => entry.category === 'Platform & Infra')
+		.filter(
+			(entry) => !featuredPlatformDirectories.has(entry.sourceDirectory)
+		)
+		.map((entry) => ({
+			description: entry.tagline,
+			name: entry.name,
+			npm: entry.npmName ?? `~/abs/${entry.sourceDirectory}`,
+			version: entry.version ?? 'workspace',
+			viewId: entry.view
+		}))
+];
+
 const npmChipStyle: CSSProperties = {
 	background: 'rgba(99, 102, 241, 0.08)',
 	borderRadius: '0.375rem',
@@ -153,11 +175,17 @@ const PlatformPackageCard = ({
 	onNavigate,
 	themeSprings
 }: PlatformPackageCardProps) => (
-	<animated.div
-		onClick={() => onNavigate(entry.viewId)}
+	<animated.a
+		href={`/documentation/${entry.viewId}`}
+		onClick={(event) => {
+			event.preventDefault();
+			onNavigate(entry.viewId);
+		}}
 		style={{
 			...featureCardStyle(themeSprings),
-			cursor: 'pointer'
+			color: 'inherit',
+			cursor: 'pointer',
+			textDecoration: 'none'
 		}}
 	>
 		<p
@@ -170,13 +198,17 @@ const PlatformPackageCard = ({
 			}}
 		>
 			<strong style={strongStyle}>{entry.name}</strong>
-			<span style={versionBadgeStyle}>v{entry.version}</span>
+			<span style={versionBadgeStyle}>
+				{entry.version === 'workspace'
+					? entry.version
+					: `v${entry.version}`}
+			</span>
 		</p>
 		<code style={npmChipStyle}>{entry.npm}</code>
 		<p style={{ fontSize: '0.95rem', lineHeight: 1.6 }}>
 			{entry.description}
 		</p>
-	</animated.div>
+	</animated.a>
 );
 
 const composeSteps: StepFlowStep[] = [

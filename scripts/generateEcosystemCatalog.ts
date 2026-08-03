@@ -5,8 +5,10 @@ import {
 	statSync,
 	writeFileSync
 } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { format, resolveConfig } from 'prettier';
+import ts from 'typescript';
 
 const workspaceDirectory = resolve(import.meta.dir, '../..');
 const outputPath = resolve(
@@ -17,6 +19,10 @@ const maximumPackageDepth = 4;
 const maximumReadmeSampleLength = 4000;
 const maximumReadmeSamples = 6;
 const maximumReadmeTopics = 100;
+const maximumApiSymbolsPerEntrypoint = 80;
+const maximumApiSignatureLength = 1200;
+const maximumApiDescriptionLength = 500;
+const maximumTopicDetails = 12;
 const defaultSampleIntentScore = 50;
 const versionedSamplePenalty = 200;
 const sampleIntentPatterns: Array<{ pattern: RegExp; score: number }> = [
@@ -217,6 +223,13 @@ const labelByDirectory: Record<string, string> = {
 const readPackage = (path: string) =>
 	existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : null;
 
+const readReadmeDigest = (directory: string) => {
+	const readmePath = join(directory, 'README.md');
+	if (!existsSync(readmePath)) return null;
+
+	return createHash('sha256').update(readFileSync(readmePath)).digest('hex');
+};
+
 const readPublicExports = (packageData: Record<string, unknown> | null) => {
 	const packageName = packageData?.name;
 	const packageExports = packageData?.exports;
@@ -248,42 +261,97 @@ const readPackageCommands = (packageData: Record<string, unknown> | null) => {
 		.sort((left, right) => left.name.localeCompare(right.name));
 };
 
-const cleanMarkdown = (value: string) =>
+export const cleanMarkdown = (value: string) =>
 	value
 		.replace(/!\[[^\]]*\]\([^)]*\)/g, '')
 		.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-		.replace(/<[^>]+>/g, '')
-		.replace(/[`*_~]/g, '')
+		.replace(/<\/?[a-z][^>]*>/g, '')
+		.replace(/[`*~]/g, '')
 		.replace(/\s+/g, ' ')
 		.trim();
 
-const readMarkdownParagraph = (lines: string[], startIndex: number) => {
-	const paragraph: string[] = [];
+const readMarkdownSection = (lines: string[], startIndex: number) => {
+	const blocks: string[] = [];
+	let currentBlock: string[] = [];
+	let inCodeFence = false;
+	const flushBlock = () => {
+		const value = cleanMarkdown(currentBlock.join(' '));
+		if (value) blocks.push(value);
+		currentBlock = [];
+	};
+	const consumeLine = (line: string) => {
+		if (/^```/.test(line)) {
+			flushBlock();
+			inCodeFence = !inCodeFence;
+
+			return;
+		}
+		if (inCodeFence || /^!\[/.test(line)) return;
+		if (!line) {
+			flushBlock();
+
+			return;
+		}
+		const subheading = /^#{3,6}\s+(.+)$/.exec(line);
+		if (subheading) {
+			flushBlock();
+			blocks.push(cleanMarkdown(subheading[1] ?? ''));
+
+			return;
+		}
+		const listItem = /^(?:[-*+]\s+|\d+\.\s+)(.+)$/.exec(line);
+		if (listItem) {
+			flushBlock();
+			blocks.push(cleanMarkdown(listItem[1] ?? ''));
+
+			return;
+		}
+		if (/^\|/.test(line)) {
+			flushBlock();
+			const cells = line
+				.split('|')
+				.map((cell) => cleanMarkdown(cell))
+				.filter(Boolean);
+			const isDivider = cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+			if (cells.length > 0 && !isDivider) blocks.push(cells.join(' — '));
+
+			return;
+		}
+		currentBlock.push(line.replace(/^>\s?/, ''));
+	};
+
 	for (let lineIndex = startIndex; lineIndex < lines.length; lineIndex += 1) {
 		const line = (lines[lineIndex] ?? '').trim();
-		if (/^#{1,6}\s/.test(line)) break;
-		const skippedLine =
-			!line || /^(?:```|[-*+]\s|\d+\.\s|\||>|!\[)/.test(line);
-		if (skippedLine && paragraph.length > 0) break;
-		if (skippedLine) continue;
-		paragraph.push(line);
+		if (/^##\s/.test(line)) break;
+		consumeLine(line);
 	}
+	flushBlock();
 
-	return cleanMarkdown(paragraph.join(' '));
+	const [description = '', ...details] = blocks;
+
+	return {
+		description,
+		details: details
+			.filter((detail) => detail !== description)
+			.slice(0, maximumTopicDetails)
+	};
 };
 
 const readReadmeTopics = (directory: string) => {
 	const readmePath = join(directory, 'README.md');
 	if (!existsSync(readmePath)) return [];
 	const lines = readFileSync(readmePath, 'utf8').split(/\r?\n/);
-	const topics: Array<{ description: string; title: string }> = [];
+	const topics: Array<{
+		description: string;
+		details: string[];
+		title: string;
+	}> = [];
 	const titleIndex = lines.findIndex((line) => /^#\s+/.test(line));
-	const overviewDescription = readMarkdownParagraph(
+	const overview = readMarkdownSection(
 		lines,
 		titleIndex >= 0 ? titleIndex + 1 : 0
 	);
-	if (overviewDescription)
-		topics.push({ description: overviewDescription, title: 'Overview' });
+	if (overview.description) topics.push({ ...overview, title: 'Overview' });
 
 	for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
 		const headingMatch = /^##\s+(.+)$/.exec(lines[lineIndex] ?? '');
@@ -296,12 +364,200 @@ const readReadmeTopics = (directory: string) => {
 			)
 		)
 			continue;
-		const description = readMarkdownParagraph(lines, lineIndex + 1);
-		if (description) topics.push({ description, title });
+		const section = readMarkdownSection(lines, lineIndex + 1);
+		if (section.description) topics.push({ ...section, title });
 		if (topics.length >= maximumReadmeTopics) break;
 	}
 
 	return topics;
+};
+
+const apiKindFor = (node: ts.Node) => {
+	if (ts.isFunctionDeclaration(node)) return 'function';
+	if (ts.isClassDeclaration(node)) return 'class';
+	if (ts.isInterfaceDeclaration(node)) return 'interface';
+	if (ts.isTypeAliasDeclaration(node)) return 'type';
+	if (ts.isEnumDeclaration(node)) return 'enum';
+	if (ts.isVariableStatement(node)) return 'value';
+
+	return 'export';
+};
+
+const declarationDocumentation = (node: ts.Node) => {
+	const sourceFile = node.getSourceFile();
+	const comments =
+		ts.getLeadingCommentRanges(sourceFile.text, node.pos) ?? [];
+	const raw = comments
+		.map((comment) => sourceFile.text.slice(comment.pos, comment.end))
+		.join('\n')
+		.replace(/^\/\*\*?|\*\/$/g, '')
+		.replace(/^\s*\*\s?/gm, '')
+		.replace(/@(?:param|returns?|throws?|example)\b[\s\S]*/g, '');
+
+	return cleanMarkdown(raw).slice(0, maximumApiDescriptionLength);
+};
+
+const resolveDeclarationModule = (fromPath: string, moduleName: string) => {
+	const basePath = resolve(dirname(fromPath), moduleName);
+	const candidates = [
+		basePath,
+		`${basePath}.d.ts`,
+		join(basePath, 'index.d.ts')
+	];
+
+	return (
+		candidates.find(
+			(candidate) => existsSync(candidate) && statSync(candidate).isFile()
+		) ?? null
+	);
+};
+
+const exportedNamesFor = (node: ts.Node) => {
+	if (ts.isVariableStatement(node))
+		return node.declarationList.declarations.flatMap((declaration) =>
+			ts.isIdentifier(declaration.name) ? [declaration.name.text] : []
+		);
+	if (
+		(ts.isFunctionDeclaration(node) ||
+			ts.isClassDeclaration(node) ||
+			ts.isInterfaceDeclaration(node) ||
+			ts.isTypeAliasDeclaration(node) ||
+			ts.isEnumDeclaration(node)) &&
+		node.name
+	)
+		return [node.name.text];
+
+	return [];
+};
+
+const readExportDeclaration = (
+	node: ts.ExportDeclaration,
+	declarationPath: string,
+	seen: Set<string>
+) => {
+	if (node.exportClause && ts.isNamedExports(node.exportClause))
+		return node.exportClause.elements.map((element) => ({
+			description: '',
+			kind: 'export',
+			name: element.name.text,
+			signature: element.getText(node.getSourceFile())
+		}));
+	if (!node.moduleSpecifier || !ts.isStringLiteral(node.moduleSpecifier))
+		return [];
+	const resolvedPath = resolveDeclarationModule(
+		declarationPath,
+		node.moduleSpecifier.text
+	);
+	if (!resolvedPath) return [];
+
+	return readDeclarationSymbols(resolvedPath, seen);
+};
+
+type ReadDeclarationSymbols = (
+	declarationPath: string,
+	seen?: Set<string>
+) => Array<{
+	description: string;
+	kind: string;
+	name: string;
+	signature: string;
+}>;
+
+const readDeclarationStatement = (
+	node: ts.Statement,
+	declarationPath: string,
+	seen: Set<string>
+) => {
+	if (ts.isExportDeclaration(node))
+		return readExportDeclaration(node, declarationPath, seen);
+	const hasExportModifier =
+		ts.canHaveModifiers(node) &&
+		ts
+			.getModifiers(node)
+			?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword);
+	if (!hasExportModifier) return [];
+	const signature = node
+		.getText(node.getSourceFile())
+		.replace(/^export\s+(?:declare\s+)?/, '')
+		.slice(0, maximumApiSignatureLength);
+
+	return exportedNamesFor(node).map((name) => ({
+		description: declarationDocumentation(node),
+		kind: apiKindFor(node),
+		name,
+		signature
+	}));
+};
+
+const readDeclarationSymbols: ReadDeclarationSymbols = (
+	declarationPath,
+	seen = new Set<string>()
+) => {
+	if (seen.has(declarationPath) || !existsSync(declarationPath)) return [];
+	seen.add(declarationPath);
+	const sourceText = readFileSync(declarationPath, 'utf8');
+	const sourceFile = ts.createSourceFile(
+		declarationPath,
+		sourceText,
+		ts.ScriptTarget.Latest,
+		true,
+		ts.ScriptKind.TS
+	);
+	const symbols: Array<{
+		description: string;
+		kind: string;
+		name: string;
+		signature: string;
+	}> = [];
+
+	for (const node of sourceFile.statements)
+		symbols.push(...readDeclarationStatement(node, declarationPath, seen));
+
+	return Array.from(
+		new Map(symbols.map((symbol) => [symbol.name, symbol])).values()
+	).slice(0, maximumApiSymbolsPerEntrypoint);
+};
+
+const readTypesTarget = (value: unknown) => {
+	if (typeof value === 'string')
+		return value.endsWith('.d.ts') ? value : null;
+	if (!value || typeof value !== 'object') return null;
+	const typesTarget = Reflect.get(value, 'types');
+	if (typeof typesTarget === 'string') return typesTarget;
+
+	return null;
+};
+
+const readPackageApi = (
+	directory: string,
+	packageData: Record<string, unknown> | null
+) => {
+	const packageName = packageData?.name;
+	const packageExports = packageData?.exports;
+	if (
+		typeof packageName !== 'string' ||
+		!packageExports ||
+		typeof packageExports !== 'object'
+	)
+		return [];
+
+	return Object.entries(packageExports).flatMap(([entry, target]) => {
+		const typesTarget = readTypesTarget(target);
+		if (!typesTarget) return [];
+		const declarationPath = resolve(directory, typesTarget);
+		const symbols = readDeclarationSymbols(declarationPath);
+		if (symbols.length === 0) return [];
+
+		return [
+			{
+				entryPoint:
+					entry === '.'
+						? packageName
+						: `${packageName}/${entry.replace(/^\.\//, '')}`,
+				symbols
+			}
+		];
+	});
 };
 
 const readReadmeSamples = (directory: string) => {
@@ -326,17 +582,25 @@ const readReadmeSamples = (directory: string) => {
 			language = 'typescript';
 		if (declaredLanguage === 'js' || declaredLanguage === 'jsx')
 			language = 'javascript';
-		const precedingHeading = readme
-			.slice(0, match.index)
-			.split(/\r?\n/)
-			.reverse()
-			.find((line) => /^#{2,6}\s+/.test(line));
+		const precedingLines = readme.slice(0, match.index).split(/\r?\n/);
+		const documentTitle = cleanMarkdown(
+			(readme.match(/^#\s+(.+)$/m)?.[1] ?? 'Quick Start').trim()
+		);
+		const headingLineIndex = precedingLines.findLastIndex((line) =>
+			/^#{2,6}\s+/.test(line)
+		);
+		const precedingHeading = precedingLines[headingLineIndex];
 		const heading = precedingHeading
 			? cleanMarkdown(precedingHeading.replace(/^#{2,6}\s+/, ''))
-			: 'README Example';
+			: `${documentTitle} quick start`;
+		const section = readMarkdownSection(
+			precedingLines,
+			headingLineIndex >= 0 ? headingLineIndex + 1 : 0
+		);
 		candidates.push({
 			code,
-			description: 'Example from the canonical repository README.',
+			description:
+				section.description || `Working example for ${heading}.`,
 			heading,
 			language,
 			sourceIndex: match.index
@@ -490,6 +754,7 @@ const projects = readdirSync(workspaceDirectory)
 				Boolean(nestedPackageData)
 			)
 			.map(({ manifestPath, packageData: subpackage }) => ({
+				api: readPackageApi(dirname(manifestPath), subpackage),
 				commands: readPackageCommands(subpackage),
 				description: normalizeDescription(
 					subpackage.description ??
@@ -500,6 +765,7 @@ const projects = readdirSync(workspaceDirectory)
 				name: subpackage.name ?? 'Unnamed package',
 				private: subpackage.private === true,
 				publicExports: readPublicExports(subpackage),
+				readmeDigest: readReadmeDigest(dirname(manifestPath)),
 				readmeSamples: readReadmeSamples(dirname(manifestPath)),
 				readmeTopics: readReadmeTopics(dirname(manifestPath)),
 				sourcePath: relative(projectDirectory, dirname(manifestPath)),
@@ -519,6 +785,7 @@ const projects = readdirSync(workspaceDirectory)
 		const packageName = packageData?.name ?? null;
 
 		return {
+			api: readPackageApi(projectDirectory, packageData),
 			category: categoryByDirectory[directory] ?? 'Dev Tools',
 			commands: readPackageCommands(packageData),
 			description: normalizeDescription(
@@ -533,6 +800,7 @@ const projects = readdirSync(workspaceDirectory)
 			packageName,
 			private: packageData?.private === true || !packageData,
 			publicExports: readPublicExports(packageData),
+			readmeDigest: readReadmeDigest(projectDirectory),
 			readmeSamples: readReadmeSamples(projectDirectory),
 			readmeTopics: readReadmeTopics(projectDirectory),
 			repository:
@@ -546,10 +814,19 @@ const projects = readdirSync(workspaceDirectory)
 		};
 	});
 
-const source = `// Generated by scripts/generateEcosystemCatalog.ts. Do not edit by hand.\n\nimport type { PackageCategory } from '../../../../types/packageDocs';\n\nexport type EcosystemCommand = {\n\tcommand: string;\n\tname: string;\n};\n\nexport type EcosystemSample = {\n\tcode: string;\n\tdescription: string;\n\theading: string;\n\tlanguage: string;\n};\n\nexport type EcosystemTopic = {\n\tdescription: string;\n\ttitle: string;\n};\n\nexport type EcosystemSubpackage = {\n\tcommands: EcosystemCommand[];\n\tdescription: string;\n\tname: string;\n\tprivate: boolean;\n\tpublicExports: string[];\n\treadmeSamples: EcosystemSample[];\n\treadmeTopics: EcosystemTopic[];\n\tsourcePath: string;\n\tversion: string | null;\n};\n\nexport type EcosystemProject = {\n\tcategory: PackageCategory;\n\tcommands: EcosystemCommand[];\n\tdescription: string;\n\tdirectory: string;\n\tkind: 'monorepo' | 'package' | 'repository';\n\tname: string;\n\tpackageName: string | null;\n\tprivate: boolean;\n\tpublicExports: string[];\n\treadmeSamples: EcosystemSample[];\n\treadmeTopics: EcosystemTopic[];\n\trepository: string | null;\n\tsubpackages: EcosystemSubpackage[];\n\tversion: string | null;\n};\n\nexport const ecosystemProjects: EcosystemProject[] = ${JSON.stringify(projects, null, '\t')};\n`;
+const source = `// Generated by scripts/generateEcosystemCatalog.ts. Do not edit by hand.\n\nimport type { PackageCategory } from '../../../../types/packageDocs';\n\nexport type EcosystemApiSymbol = {\n\tdescription: string;\n\tkind: string;\n\tname: string;\n\tsignature: string;\n};\n\nexport type EcosystemApiEntrypoint = {\n\tentryPoint: string;\n\tsymbols: EcosystemApiSymbol[];\n};\n\nexport type EcosystemCommand = {\n\tcommand: string;\n\tname: string;\n};\n\nexport type EcosystemSample = {\n\tcode: string;\n\tdescription: string;\n\theading: string;\n\tlanguage: string;\n};\n\nexport type EcosystemTopic = {\n\tdescription: string;\n\tdetails: string[];\n\ttitle: string;\n};\n\nexport type EcosystemSubpackage = {\n\tapi: EcosystemApiEntrypoint[];\n\tcommands: EcosystemCommand[];\n\tdescription: string;\n\tname: string;\n\tprivate: boolean;\n\tpublicExports: string[];\n\treadmeSamples: EcosystemSample[];\n\treadmeTopics: EcosystemTopic[];\n\tsourcePath: string;\n\tversion: string | null;\n};\n\nexport type EcosystemProject = {\n\tapi: EcosystemApiEntrypoint[];\n\tcategory: PackageCategory;\n\tcommands: EcosystemCommand[];\n\tdescription: string;\n\tdirectory: string;\n\tkind: 'monorepo' | 'package' | 'repository';\n\tname: string;\n\tpackageName: string | null;\n\tprivate: boolean;\n\tpublicExports: string[];\n\treadmeSamples: EcosystemSample[];\n\treadmeTopics: EcosystemTopic[];\n\trepository: string | null;\n\tsubpackages: EcosystemSubpackage[];\n\tversion: string | null;\n};\n\nexport const ecosystemProjects: EcosystemProject[] = ${JSON.stringify(projects, null, '\t')};\n`;
 
+const sourceWithReadmeDigests = source
+	.replace(
+		'export type EcosystemSubpackage = {',
+		'export type EcosystemSubpackage = {\n\treadmeDigest: string | null;'
+	)
+	.replace(
+		'export type EcosystemProject = {',
+		'export type EcosystemProject = {\n\treadmeDigest: string | null;'
+	);
 const prettierOptions = await resolveConfig(outputPath);
-const formattedSource = await format(source, {
+const formattedSource = await format(sourceWithReadmeDigests, {
 	...prettierOptions,
 	parser: 'typescript'
 });

@@ -34,6 +34,11 @@ export const pwaPackageData: PackageDocData = {
 			description:
 				'Every client function no-ops when the APIs are missing or during SSR, and the sender no-ops when VAPID keys are unset — push degrades gracefully.',
 			title: 'Feature-safe everywhere'
+		},
+		{
+			description:
+				'getBrowserCapabilities reports install, push, service-worker, passkey, media, clipboard, and sharing support. detectEmbeddedBrowser conservatively identifies Facebook, Instagram, and Messenger only when explicit host markers are present.',
+			title: 'Capability-aware embedded browser UX'
 		}
 	],
 	installCommand: 'bun add @absolutejs/pwa',
@@ -167,6 +172,24 @@ const accepted = await promptInstall();`,
 			description:
 				'Capture the browser install signal and drive installation from your own button instead of the default mini-infobar.',
 			heading: 'Install Prompt',
+			language: 'typescript'
+		},
+		{
+			code: `import {
+	detectEmbeddedBrowser,
+	getBrowserCapabilities
+} from '@absolutejs/pwa/client';
+
+const capabilities = getBrowserCapabilities();
+if (!capabilities.pushNotifications && capabilities.embeddedBrowser) {
+	showOpenInBrowserHelp(capabilities.embeddedBrowser.app);
+}
+
+// Pure classification is available for SSR and tests.
+detectEmbeddedBrowser(request.headers.get('user-agent') ?? '');`,
+			description:
+				'Feature-detect before offering browser-dependent actions, then use host-app identity only to explain an unavailable capability.',
+			heading: 'Embedded Browser Capabilities',
 			language: 'typescript'
 		}
 	],

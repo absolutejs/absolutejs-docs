@@ -15,8 +15,62 @@ export type PackageStatus = 'alpha' | 'beta' | 'stable';
 
 export type PackageFeature = {
 	description: string;
+	details?: string[];
 	title: string;
 };
+
+export type PackageApiSymbol = {
+	description: string;
+	kind: string;
+	name: string;
+	signature: string;
+};
+
+export type PackageApiEntrypoint = {
+	entryPoint: string;
+	symbols: PackageApiSymbol[];
+};
+
+export type PackageFlowExplanation = {
+	description: string;
+	id: string;
+	kind: 'flow' | 'lifecycle';
+	steps: Array<{
+		detail: string;
+		label: string;
+	}>;
+	title: string;
+};
+
+export type PackageDecisionExplanation = {
+	description: string;
+	id: string;
+	kind: 'decision';
+	options: Array<{
+		bestFor: string;
+		label: string;
+		requirements: string[];
+		tradeoffs: string;
+	}>;
+	title: string;
+};
+
+export type PackageMatrixExplanation = {
+	columns: string[];
+	description: string;
+	id: string;
+	kind: 'matrix';
+	rows: Array<{
+		label: string;
+		values: string[];
+	}>;
+	title: string;
+};
+
+export type PackageExplanation =
+	| PackageDecisionExplanation
+	| PackageFlowExplanation
+	| PackageMatrixExplanation;
 
 export type PackageCodeSample = {
 	code: string;
@@ -56,6 +110,7 @@ export type PackageCatalogEntry = {
 	private: boolean;
 	searchText: string;
 	sourceDirectory: string;
+	status: PackageStatus;
 	subpackageCount: number;
 	tagline: string;
 	version: string | null;
@@ -64,8 +119,10 @@ export type PackageCatalogEntry = {
 
 export type PackageDocData = {
 	adapterGroups?: PackageAdapterGroup[];
+	api?: PackageApiEntrypoint[];
 	category: PackageCategory;
 	description: string;
+	explanations?: PackageExplanation[];
 	features: PackageFeature[];
 	installCommand: string;
 	links?: PackageLink[];
