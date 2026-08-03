@@ -337,15 +337,40 @@ const readMarkdownSection = (lines: string[], startIndex: number) => {
 	};
 };
 
+type ReadmeTopic = {
+	description: string;
+	details: string[];
+	title: string;
+};
+
+// A README section sharing a title with an existing topic (e.g. an authored
+// "## Overview" after the synthesized intro topic) is the authored version;
+// the earlier description demotes to the merged topic's first detail.
+const mergeDuplicateTopic = (duplicate: ReadmeTopic, section: ReadmeTopic) => {
+	duplicate.details = [
+		duplicate.description,
+		...section.details.filter((detail) => detail !== section.description)
+	].slice(0, maximumTopicDetails);
+	duplicate.description = section.description;
+};
+
+const addReadmeTopic = (topics: ReadmeTopic[], section: ReadmeTopic) => {
+	const duplicate = topics.find(
+		(topic) => topic.title.toLowerCase() === section.title.toLowerCase()
+	);
+	if (!duplicate) {
+		topics.push(section);
+
+		return;
+	}
+	mergeDuplicateTopic(duplicate, section);
+};
+
 const readReadmeTopics = (directory: string) => {
 	const readmePath = join(directory, 'README.md');
 	if (!existsSync(readmePath)) return [];
 	const lines = readFileSync(readmePath, 'utf8').split(/\r?\n/);
-	const topics: Array<{
-		description: string;
-		details: string[];
-		title: string;
-	}> = [];
+	const topics: ReadmeTopic[] = [];
 	const titleIndex = lines.findIndex((line) => /^#\s+/.test(line));
 	const overview = readMarkdownSection(
 		lines,
@@ -365,7 +390,8 @@ const readReadmeTopics = (directory: string) => {
 		)
 			continue;
 		const section = readMarkdownSection(lines, lineIndex + 1);
-		if (section.description) topics.push({ ...section, title });
+		if (!section.description) continue;
+		addReadmeTopic(topics, { ...section, title });
 		if (topics.length >= maximumReadmeTopics) break;
 	}
 
@@ -399,7 +425,8 @@ const declarationDocumentation = (node: ts.Node) => {
 
 const declarationTagValues = (node: ts.Node, tag: string) => {
 	const sourceFile = node.getSourceFile();
-	const comments = ts.getLeadingCommentRanges(sourceFile.text, node.pos) ?? [];
+	const comments =
+		ts.getLeadingCommentRanges(sourceFile.text, node.pos) ?? [];
 	const raw = comments
 		.map((comment) => sourceFile.text.slice(comment.pos, comment.end))
 		.join('\n')

@@ -11746,6 +11746,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'requireAuthPlugin',
+						signature: 'requireAuthPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'ScimConfig',
 						signature: 'ScimConfig'
 					},
@@ -12060,6 +12066,20 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'isProtectedSessionRequest',
 						signature:
 							'const isProtectedSessionRequest: ({ input, origin, protectedPaths }: {\n    input: RequestInfo | URL;\n    origin: string;\n    protectedPaths: readonly string[];\n}) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'isSafeLocalPath',
+						signature:
+							'const isSafeLocalPath: (value: string) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'toSafeLocalPath',
+						signature:
+							'const toSafeLocalPath: (value: string | undefined, fallback?: string) => string;'
 					},
 					{
 						description: '',
@@ -13778,14 +13798,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 		readmeTopics: [
 			{
 				description:
-					'Server applications should import the primary authentication contract from @absolutejs/auth/server. This declaration-stable entry point exposes auth, session types, route protection, provider configuration, and the other core server utilities without loading declarations for every optional Auth feature. OIDC provider integrations should likewise import signing keys, token verification, provider stores, and provider types from @absolutejs/auth/oidc. The root entry point remains available for applications that need the complete feature export surface. auth() exposes the complete reusable request context (protectRoute, requireRecentAuth, optional protectPermission, and protectAgent) while keeping its declaration bounded. Consumers that need the typed configurable route applications themselves can call createAuthApplications() from the root entry point and compose its coreRoutes, featureRoutes, and authContext applications independently.',
-				details: [],
-				title: 'Overview'
-			},
-			{
-				description:
 					'Absolute Auth is a TypeScript-based authentication system that provides a comprehensive solution for handling user authentication in web applications. It supports multiple authentication providers and offers features such as authorization, callback handling, token refresh, token revocation, and session management.',
-				details: [],
+				details: [
+					'Server applications should import the primary authentication contract from @absolutejs/auth/server. This declaration-stable entry point exposes auth, session types, route protection, provider configuration, and the other core server utilities without loading declarations for every optional Auth feature. OIDC provider integrations should likewise import signing keys, token verification, provider stores, and provider types from @absolutejs/auth/oidc. The root entry point remains available for applications that need the complete feature export surface. auth() exposes the complete reusable request context (protectRoute, requireRecentAuth, optional protectPermission, and protectAgent) while keeping its declaration bounded. Consumers that need the typed configurable route applications themselves can call createAuthApplications() from the root entry point and compose its coreRoutes, featureRoutes, and authContext applications independently.'
+				],
 				title: 'Overview'
 			},
 			{
@@ -13831,7 +13847,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/absolute-auth',
 		subpackages: [],
-		version: '0.59.3'
+		version: '0.63.0'
 	},
 	{
 		api: [],
@@ -63629,7 +63645,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				commands: [
 					{
 						command:
-							'rm -rf dist && bun build --root src src/index.ts src/postgres.ts src/server.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/secrets --external @absolutejs/vulnerabilities --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+							'rm -rf dist && bun build --root src src/index.ts src/postgres.ts src/server.ts src/backupCli.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @absolutejs/secrets --external @absolutejs/vulnerabilities --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
 						name: 'build'
 					},
 					{
@@ -63661,7 +63677,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/vulnerabilities-witness/manifest.json'
 				],
 				readmeDigest:
-					'ab711b3f171b1f933ccee3a5a09122f227bc960cec811b7415cda309483f8db4',
+					'0394302df0269e50d82a394c36c9984dc79b302911016265dfd61c5deba41335',
 				readmeSamples: [
 					{
 						code: 'import {\n  EVIDENCE_WITNESS_REQUEST_CONTRACT,\n  createEvidenceWitnessHttpHandler,\n  createEvidenceWitnessService,\n  createEvidenceWitnessSigningState,\n} from "@absolutejs/vulnerabilities-witness";\nimport {\n  createPostgresEvidenceWitnessStore,\n  ensurePostgresEvidenceWitnessSchema,\n} from "@absolutejs/vulnerabilities-witness/postgres";\n\nconst signingState = createEvidenceWitnessSigningState();\nawait ensurePostgresEvidenceWitnessSchema(sql);\n\nconst service = createEvidenceWitnessService({\n  loadSigningState,\n  origin: "https://witness.example",\n  signingState,\n  store: createPostgresEvidenceWitnessStore(sql),\n  storeSigningState,\n});\n\nconst fetch = createEvidenceWitnessHttpHandler({\n  authenticate: async (token) => subjectsByToken.get(token) ?? null,\n  service,\n});\n\nBun.serve({ fetch, port: 3000 });',
@@ -63708,7 +63724,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'witness',
-				version: '0.5.2'
+				version: '0.7.0'
 			},
 			{
 				api: [
