@@ -101,6 +101,7 @@ export const headingStyle = (
 export const mainContentStyle = (
 	isMobileOrTablet?: boolean
 ): CSSProperties => ({
+	boxSizing: 'border-box',
 	display: 'flex',
 	flex: 1,
 	flexDirection: 'column',
@@ -109,7 +110,8 @@ export const mainContentStyle = (
 	maxWidth: isMobileOrTablet ? '100%' : '800px',
 	minWidth: 0,
 	padding: isMobileOrTablet ? '1.5rem 1.25rem' : '2rem 0',
-	paddingRight: isMobileOrTablet ? '1.25rem' : '3rem'
+	paddingRight: isMobileOrTablet ? '1.25rem' : '3rem',
+	width: '100%'
 });
 export const tableCellStyle = (
 	themeSprings: ThemeSprings

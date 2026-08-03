@@ -22,6 +22,7 @@ export const documentationViewByDirectory: Record<string, string> = {
 	absolutejs: 'overview',
 	'absolutejs-vscode-extension': 'vscode-extension',
 	ai: 'ai-overview',
+	attribution: 'attribution',
 	audience: 'audience',
 	audit: 'audit',
 	auth: 'absolute-auth',

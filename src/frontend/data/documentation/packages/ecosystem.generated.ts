@@ -1990,6 +1990,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'ABSOLUTE_TELEPORT_TARGET',
+						signature: 'ABSOLUTE_TELEPORT_TARGET'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ABSOLUTE_TELEPORT_TARGET_ID',
+						signature: 'ABSOLUTE_TELEPORT_TARGET_ID'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'Resource',
 						signature: 'Resource'
 					},
@@ -2318,7 +2330,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/darwin-arm64',
-				version: '0.19.0-beta.1128'
+				version: '0.19.0-beta.1131'
 			},
 			{
 				api: [],
@@ -2331,7 +2343,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/darwin-x64',
-				version: '0.19.0-beta.1128'
+				version: '0.19.0-beta.1131'
 			},
 			{
 				api: [],
@@ -2345,7 +2357,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/linux-arm64',
-				version: '0.19.0-beta.1128'
+				version: '0.19.0-beta.1131'
 			},
 			{
 				api: [],
@@ -2358,7 +2370,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/linux-x64',
-				version: '0.19.0-beta.1128'
+				version: '0.19.0-beta.1131'
 			},
 			{
 				api: [],
@@ -2372,7 +2384,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/windows-arm64',
-				version: '0.19.0-beta.1128'
+				version: '0.19.0-beta.1131'
 			},
 			{
 				api: [],
@@ -2386,7 +2398,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/windows-x64',
-				version: '0.19.0-beta.1128'
+				version: '0.19.0-beta.1131'
 			}
 		],
 		version: '0.19.0-beta'
@@ -9438,6 +9450,274 @@ export const ecosystemProjects: EcosystemProject[] = [
 	{
 		api: [
 			{
+				entryPoint: '@absolutejs/attribution',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'GOOGLE_CLICK_ID_PARAMETERS',
+						signature:
+							'const GOOGLE_CLICK_ID_PARAMETERS: readonly ["gclid", "gbraid", "wbraid"];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleClickIdParameter',
+						signature:
+							'type GoogleClickIdParameter = (typeof GOOGLE_CLICK_ID_PARAMETERS)[number];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleClickIdentifiers',
+						signature:
+							'type GoogleClickIdentifiers = Partial<Record<GoogleClickIdParameter, string>>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AttributionSnapshot',
+						signature:
+							'type AttributionSnapshot = {\n    capturedAt: number;\n    identifiers: GoogleClickIdentifiers;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AttributionStorage',
+						signature:
+							'type AttributionStorage = Pick<Storage, "getItem" | "removeItem" | "setItem">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AttributionStore',
+						signature:
+							'type AttributionStore = {\n    capture: (source?: string | URL) => AttributionSnapshot | null;\n    clear: () => void;\n    decorate: (target: string | URL, allowedOrigins: readonly string[]) => string;\n    hasClickId: () => boolean;\n    read: () => AttributionSnapshot | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AttributionStoreOptions',
+						signature:
+							'type AttributionStoreOptions = {\n    key?: string;\n    maxAgeMs?: number;\n    now?: () => number;\n    storage?: AttributionStorage;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'readGoogleClickIdentifiers',
+						signature:
+							'const readGoogleClickIdentifiers: (source: string | URL) => GoogleClickIdentifiers;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'hasGoogleClickIdentifiers',
+						signature:
+							'const hasGoogleClickIdentifiers: (identifiers: GoogleClickIdentifiers | null | undefined) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'decorateAttributionUrl',
+						signature:
+							'const decorateAttributionUrl: (target: string | URL, identifiers: GoogleClickIdentifiers, allowedOrigins: readonly string[]) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAttributionStore',
+						signature:
+							'const createAttributionStore: (options?: AttributionStoreOptions) => AttributionStore;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/attribution/google-ads',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleConsentStatus',
+						signature:
+							'type GoogleConsentStatus = "denied" | "granted";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleAdsConsent',
+						signature:
+							'type GoogleAdsConsent = {\n    adPersonalization: GoogleConsentStatus;\n    adStorage: GoogleConsentStatus;\n    adUserData: GoogleConsentStatus;\n    analyticsStorage: GoogleConsentStatus;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleTagState',
+						signature:
+							'type GoogleTagState = "closed" | "failed" | "idle" | "loading" | "ready" | "waiting-online";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleTagTelemetry',
+						signature:
+							'type GoogleTagTelemetry = {\n    attempt: number;\n    event: "closed" | "failed" | "load-attempt" | "ready" | "retry-scheduled" | "waiting-online";\n    hadGoogleClickId: boolean;\n    recovered: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleTag',
+						signature:
+							'type GoogleTag = (...args: unknown[]) => void;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleAdsTagOptions',
+						signature:
+							'type GoogleAdsTagOptions = {\n    attribution?: AttributionStore;\n    consent: GoogleAdsConsent;\n    document?: Document;\n    id: string;\n    maxAttempts?: number;\n    onTelemetry?: (event: GoogleTagTelemetry) => void;\n    retryDelaysMs?: readonly number[];\n    window?: Window;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleConversion',
+						signature:
+							'type GoogleConversion = {\n    currency?: string;\n    onComplete?: () => void;\n    sendTo: string;\n    timeoutMs?: number;\n    transactionId?: string;\n    value?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleAdsTagController',
+						signature:
+							'type GoogleAdsTagController = {\n    close: () => void;\n    retry: () => void;\n    start: () => void;\n    state: () => GoogleTagState;\n    trackConversion: (conversion: GoogleConversion) => void;\n    updateConsent: (consent: GoogleAdsConsent) => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGoogleAdsTag',
+						signature:
+							'const createGoogleAdsTag: (options: GoogleAdsTagOptions) => GoogleAdsTagController;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleDataManagerConsent',
+						signature:
+							'type GoogleDataManagerConsent = {\n    adPersonalization: GoogleConsentStatus;\n    adUserData: GoogleConsentStatus;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleDataManagerConversion',
+						signature:
+							'type GoogleDataManagerConversion = {\n    consent: GoogleDataManagerConsent;\n    conversionValue?: number;\n    currency?: string;\n    eventTimestamp: string;\n    identifiers: GoogleClickIdentifiers;\n    transactionId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleDataManagerOptions',
+						signature:
+							'type GoogleDataManagerOptions = {\n    accessToken: () => Promise<string>;\n    accountId: string;\n    conversionActionId: string;\n    endpoint?: string;\n    fetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n    loginAccountId?: string;\n    validateOnly?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleDataManagerResult',
+						signature:
+							'type GoogleDataManagerResult = {\n    fieldWarnings?: unknown[];\n    requestId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'sendGoogleAdsDataManagerConversion',
+						signature:
+							'const sendGoogleAdsDataManagerConversion: (options: GoogleDataManagerOptions, conversion: GoogleDataManagerConversion) => Promise<GoogleDataManagerResult>;'
+					}
+				]
+			}
+		],
+		category: 'Dev Tools',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/googleAds.ts --outdir dist --root src --sourcemap --target=browser && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Privacy-aware click attribution, resilient browser measurement, and durable server conversion delivery for AbsoluteJS applications.',
+		directory: 'attribution',
+		kind: 'package',
+		name: 'Attribution',
+		packageName: '@absolutejs/attribution',
+		private: false,
+		publicExports: [
+			'@absolutejs/attribution',
+			'@absolutejs/attribution/google-ads'
+		],
+		readmeDigest:
+			'e1753fe66d18f72ae9462db6e6ee4584d670a25838370c64dd60b6914ffd6ecf',
+		readmeSamples: [
+			{
+				code: 'import { createAttributionStore } from "@absolutejs/attribution";\nimport { createGoogleAdsTag } from "@absolutejs/attribution/google-ads";\n\nconst attribution = createAttributionStore();\nattribution.capture();\n\nconst google = createGoogleAdsTag({\n  attribution,\n  consent: {\n    adPersonalization: "denied",\n    adStorage: "denied",\n    adUserData: "denied",\n    analyticsStorage: "denied",\n  },\n  id: "AW-123",\n  onTelemetry: (event) => console.info(event),\n});\n\n// Start after framework hydration/mount.\ngoogle.start();\n\nconst qualificationUrl = attribution.decorate("https://qualify.example.com", [\n  "https://qualify.example.com",\n]);',
+				description: 'Working example for Browser attribution.',
+				heading: 'Browser attribution',
+				language: 'typescript'
+			},
+			{
+				code: 'import { sendGoogleAdsDataManagerConversion } from "@absolutejs/attribution/google-ads";\n\nawait sendGoogleAdsDataManagerConversion(\n  {\n    accessToken: getGoogleAccessToken,\n    accountId: process.env.GOOGLE_ADS_ACCOUNT_ID!,\n    conversionActionId: process.env.GOOGLE_ADS_CONVERSION_ACTION_ID!,\n  },\n  {\n    consent: { adPersonalization: "denied", adUserData: "denied" },\n    eventTimestamp: new Date().toISOString(),\n    identifiers: { gclid },\n    transactionId: paymentTransactionId,\n  },\n);',
+				description:
+					'Working example for Durable Google conversion supplement.',
+				heading: 'Durable Google conversion supplement',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Privacy-aware attribution primitives for web applications:',
+				details: [
+					'capture gclid, gbraid, and wbraid without persisting full landing URLs;',
+					'forward identifiers only to explicitly allowlisted owned origins;',
+					'load the Google tag through a retrying idle → loading → ready/failed state',
+					'machine;',
+					'keep consent and conversion commands queued while the tag recovers;',
+					'emit identifier-free load telemetry; and',
+					'supplement browser tag conversions through Google Data Manager using the same',
+					'transaction ID for deduplication.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'The package never sends full landing URLs or click identifiers through its telemetry callback. Server delivery requires an explicit access-token provider, destination, consent state, and click identifier.',
+				details: [],
+				title: 'Durable Google conversion supplement'
+			}
+		],
+		repository: 'https://github.com/absolutejs/attribution',
+		subpackages: [],
+		version: '0.1.0'
+	},
+	{
+		api: [
+			{
 				entryPoint: '@absolutejs/audience',
 				symbols: [
 					{
@@ -14344,7 +14624,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/beacon',
 		subpackages: [],
-		version: '0.4.5'
+		version: '0.4.6'
 	},
 	{
 		api: [],
@@ -60784,7 +61064,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/vue-composables',
 		subpackages: [],
-		version: '0.3.1'
+		version: '0.3.3'
 	},
 	{
 		api: [
@@ -63420,7 +63700,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'witness',
-				version: '0.4.5'
+				version: '0.4.9'
 			},
 			{
 				api: [

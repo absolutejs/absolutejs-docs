@@ -66,6 +66,7 @@ const goalBundles: GoalBundle[] = [
 		description:
 			'Move from discovery and enrichment through audience, messaging, checkout, and money movement.',
 		directories: [
+			'attribution',
 			'discover',
 			'enrich',
 			'audience',

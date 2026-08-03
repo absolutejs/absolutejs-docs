@@ -83,6 +83,7 @@ import {
 } from '../components/documentation/packages/VoicePackageView';
 import {
 	AudiencePackageView,
+	AttributionPackageView,
 	AutoscalerPackageView,
 	BeaconPackageView,
 	BillingPackageView,
@@ -249,6 +250,7 @@ const primaryDocsViews = definePortalViews({
 	'angular-spa': AngularSpaView,
 	api: ApiView,
 	assets: AssetsView,
+	attribution: AttributionPackageView,
 	audience: AudiencePackageView,
 	audit: AuditOverviewView,
 	'auth-abuse': AuthAbuseView,
@@ -976,6 +978,7 @@ const baseSidebarCategories: SidebarCategory[] = [
 	},
 	{
 		entries: [
+			{ id: 'attribution', label: 'Attribution', status: 'beta' },
 			{ id: 'commerce', label: 'Commerce', status: 'beta' },
 			{ id: 'crm', label: 'CRM', status: 'alpha' },
 			{ id: 'discover', label: 'Discover', status: 'alpha' },

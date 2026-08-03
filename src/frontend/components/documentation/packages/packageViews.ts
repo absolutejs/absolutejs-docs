@@ -1,4 +1,5 @@
 import { audiencePackageData } from '../../../data/documentation/packages/audience';
+import { attributionPackageData } from '../../../data/documentation/packages/attribution';
 import { autoscalerPackageData } from '../../../data/documentation/packages/autoscaler';
 import { beaconPackageData } from '../../../data/documentation/packages/beacon';
 import { billingPackageData } from '../../../data/documentation/packages/billing';
@@ -35,6 +36,7 @@ import { vscodeExtensionPackageData } from '../../../data/documentation/packages
 import { vueComposablesPackageData } from '../../../data/documentation/packages/vueComposables';
 import { createPackageView } from './PackageOverviewTemplate';
 
+export const AttributionPackageView = createPackageView(attributionPackageData);
 export const AudiencePackageView = createPackageView(audiencePackageData);
 export const AutoscalerPackageView = createPackageView(autoscalerPackageData);
 export const BeaconPackageView = createPackageView(beaconPackageData);
