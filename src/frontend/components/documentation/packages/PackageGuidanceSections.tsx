@@ -5,6 +5,7 @@ import { ThemeSprings } from '../../../../types/springTypes';
 import { flagshipGuidanceByPackage } from '../../../data/documentation/packages/flagshipGuidance';
 import { ecosystemProjects } from '../../../data/documentation/packages/ecosystem.generated';
 import { featureCardStyle } from '../../../styles/gradientStyles';
+import { ClampedText } from '../../utils/ClampedText';
 import { StepFlow } from '../../utils/StepFlow';
 
 const maximumGuidanceItems = 3;
@@ -72,16 +73,10 @@ const OutcomeCards = ({
 				>
 					{feature.title}
 				</animated.h3>
-				<animated.p
-					style={{
-						color: themeSprings.contrastSecondary,
-						fontSize: '0.9rem',
-						lineHeight: 1.65,
-						margin: 0
-					}}
-				>
-					{feature.description}
-				</animated.p>
+				<ClampedText
+					text={feature.description}
+					themeSprings={themeSprings}
+				/>
 			</animated.article>
 		))}
 	</div>

@@ -23,6 +23,7 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { Callout } from '../../utils/Callout';
 import { ChecklistRows } from '../../utils/ChecklistRows';
+import { ClampedText } from '../../utils/ClampedText';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
@@ -96,19 +97,22 @@ const FeatureDetailRows = ({
 }) => (
 	<div style={{ display: 'grid', gap: '0.45rem', marginTop: '0.65rem' }}>
 		{details.map((detail) => (
-			<animated.div
+			<div
 				key={detail}
 				style={{
-					color: themeSprings.contrastSecondary,
 					display: 'flex',
-					fontSize: '0.84rem',
-					gap: '0.55rem',
-					lineHeight: 1.6
+					gap: '0.55rem'
 				}}
 			>
 				<span style={detailTickStyle} />
-				<span>{detail}</span>
-			</animated.div>
+				<div style={{ minWidth: 0 }}>
+					<ClampedText
+						fontSize="0.84rem"
+						text={detail}
+						themeSprings={themeSprings}
+					/>
+				</div>
+			</div>
 		))}
 	</div>
 );
@@ -165,15 +169,7 @@ const PackageFeatureCard = ({
 		>
 			{feature.title}
 		</animated.h3>
-		<animated.p
-			style={{
-				color: themeSprings.contrastSecondary,
-				fontSize: '0.9rem',
-				lineHeight: 1.6
-			}}
-		>
-			{feature.description}
-		</animated.p>
+		<ClampedText text={feature.description} themeSprings={themeSprings} />
 		{feature.details && feature.details.length > 0 ? (
 			<FeatureDetails
 				details={feature.details}
