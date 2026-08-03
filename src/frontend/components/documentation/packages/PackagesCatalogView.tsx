@@ -76,10 +76,14 @@ const CatalogCard = ({ entry, onNavigate, themeSprings }: CatalogCardProps) => (
 		}}
 		style={{
 			...featureCardStyle(themeSprings),
+			boxSizing: 'border-box',
 			color: 'inherit',
 			cursor: 'pointer',
+			display: 'block',
+			flex: 1,
 			textAlign: 'left',
-			textDecoration: 'none'
+			textDecoration: 'none',
+			width: '100%'
 		}}
 	>
 		<div
@@ -158,7 +162,14 @@ const CatalogResult = ({
 				}) ?? []);
 
 	return (
-		<div>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				minWidth: 0,
+				width: '100%'
+			}}
+		>
 			<CatalogCard
 				entry={entry}
 				onNavigate={onNavigate}
