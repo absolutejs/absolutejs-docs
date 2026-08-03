@@ -34,6 +34,74 @@ export const styleReset = `
 		75% { background-position: 0% 0%, 100% 100%, 100% 50%; }
 		100% { background-position: 0% 50%, 100% 50%, 50% 0%; }
 	}
+
+	.code-panel pre.shiki {
+		background: transparent !important;
+		margin: 0;
+		padding: 1rem 0;
+		overflow-x: auto;
+		font-size: 0.85rem;
+		line-height: 1.7;
+	}
+	.code-panel pre.shiki code {
+		display: block;
+		width: fit-content;
+		min-width: 100%;
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-variant-ligatures: contextual;
+	}
+	.code-panel pre.shiki .line {
+		display: inline-block;
+		width: 100%;
+		padding: 0 1.25rem;
+	}
+	.code-panel[data-code-mode='dark'] .shiki,
+	.code-panel[data-code-mode='dark'] .shiki span {
+		color: var(--shiki-dark);
+		font-style: var(--shiki-dark-font-style, normal);
+		font-weight: var(--shiki-dark-font-weight, inherit);
+	}
+	.code-panel[data-code-mode='light'] .shiki,
+	.code-panel[data-code-mode='light'] .shiki span {
+		color: var(--shiki-light);
+		font-style: var(--shiki-light-font-style, normal);
+		font-weight: var(--shiki-light-font-weight, inherit);
+	}
+	.code-panel[data-line-numbers='true'] pre.shiki code {
+		counter-reset: code-line;
+	}
+	.code-panel[data-line-numbers='true'] pre.shiki .line::before {
+		counter-increment: code-line;
+		content: counter(code-line);
+		display: inline-block;
+		width: 2rem;
+		margin-right: 1.1rem;
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+		color: currentColor;
+		opacity: 0.35;
+		user-select: none;
+	}
+	.code-panel[data-wrap='true'] pre.shiki .line {
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+	}
+	.code-panel pre.shiki::-webkit-scrollbar {
+		height: 8px;
+	}
+	.code-panel pre.shiki::-webkit-scrollbar-thumb {
+		background: rgba(99, 102, 241, 0.25);
+		border-radius: 4px;
+	}
+	.code-panel pre.shiki::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.code-panel[data-code-mode='dark'] pre.shiki ::selection {
+		background: rgba(99, 102, 241, 0.35);
+	}
+	.code-panel[data-code-mode='light'] pre.shiki ::selection {
+		background: rgba(99, 102, 241, 0.2);
+	}
 `;
 export const bodyDefault = (
 	themeSprings: ThemeSprings

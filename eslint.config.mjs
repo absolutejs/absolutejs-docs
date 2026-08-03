@@ -23,7 +23,9 @@ export default defineConfig([
 			'dist/**',
 			'build/**',
 			'.absolutejs/**',
-			'.cache/**'
+			'.cache/**',
+			// Sanctioned dangerouslySetInnerHTML wrapper for Shiki output.
+			'src/frontend/components/utils/ShikiHtml.tsx'
 		]
 	},
 	{
