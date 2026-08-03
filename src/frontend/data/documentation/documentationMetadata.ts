@@ -1,4 +1,5 @@
 import { ecosystemProjects } from './packages/ecosystem.generated';
+import { flagshipGuidanceByPackage } from './packages/flagshipGuidance';
 import {
 	documentationViewByDirectory,
 	packageProjectViewId,
@@ -11,20 +12,37 @@ type DocumentationMetadata = {
 };
 
 const metadataByView = new Map<string, DocumentationMetadata>();
+const maximumDescriptionLength = 158;
+
+const conciseDescription = (value: string) => {
+	if (value.length <= maximumDescriptionLength) return value;
+
+	return `${value.slice(0, maximumDescriptionLength - 1).trimEnd()}…`;
+};
 
 for (const project of ecosystemProjects) {
 	const packageLabel = project.packageName ?? project.name;
+	const flagshipGuidance = project.packageName
+		? flagshipGuidanceByPackage[project.packageName]
+		: undefined;
+	const guideMetadata: DocumentationMetadata = {
+		description: conciseDescription(
+			flagshipGuidance
+				? `${project.description} ${flagshipGuidance.outcomes[0]?.description ?? ''}`
+				: project.description
+		),
+		title: `${project.name} Guide | AbsoluteJS`
+	};
 	const referenceMetadata: DocumentationMetadata = {
 		description: `Install ${packageLabel}, inspect its public exports, and use its API with source-backed AbsoluteJS examples.`,
 		title: `${packageLabel} Installation, Exports and API | AbsoluteJS`
 	};
-	metadataByView.set(packageProjectViewId(project), referenceMetadata);
+	metadataByView.set(
+		packageProjectViewId(project),
+		flagshipGuidance ? guideMetadata : referenceMetadata
+	);
 	const guideView = documentationViewByDirectory[project.directory];
-	if (guideView)
-		metadataByView.set(guideView, {
-			description: project.description,
-			title: `${project.name} Guide | AbsoluteJS`
-		});
+	if (guideView) metadataByView.set(guideView, guideMetadata);
 
 	for (const subpackage of project.subpackages) {
 		metadataByView.set(packageSubpackageViewId(project, subpackage), {

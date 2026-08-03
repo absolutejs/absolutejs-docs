@@ -4,9 +4,11 @@ import { ThemeSprings } from '../../../../types/springTypes';
 import { packageCatalog } from '../../../data/documentation/packages/catalog';
 import { ecosystemProjects } from '../../../data/documentation/packages/ecosystem.generated';
 import { packageSubpackageViewId } from '../../../data/documentation/packages/packageRoutes';
+import { PackageGuidanceSections } from './PackageGuidanceSections';
 
 type PackageReleaseSnapshotProps = {
 	currentPageId: string;
+	isMobileOrTablet?: boolean;
 	themeSprings: ThemeSprings;
 };
 
@@ -37,6 +39,7 @@ const chipStyle: CSSProperties = {
 
 export const PackageReleaseSnapshot = ({
 	currentPageId,
+	isMobileOrTablet,
 	themeSprings
 }: PackageReleaseSnapshotProps) => {
 	const catalogEntry = packageCatalog.find(
@@ -170,6 +173,14 @@ export const PackageReleaseSnapshot = ({
 						))}
 					</div>
 				</>
+			) : null}
+
+			{project.packageName ? (
+				<PackageGuidanceSections
+					isMobileOrTablet={isMobileOrTablet}
+					packageName={project.packageName}
+					themeSprings={themeSprings}
+				/>
 			) : null}
 		</section>
 	);

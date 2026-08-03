@@ -27,6 +27,8 @@ import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { PrismPlus } from '../../utils/PrismPlus';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
 import { synchronizePackageDocData } from '../../../data/documentation/packages/ecosystemVersions';
+import { flagshipGuidanceByPackage } from '../../../data/documentation/packages/flagshipGuidance';
+import { PackageGuidanceSections } from './PackageGuidanceSections';
 
 const statusColors: Record<PackageStatus, string> = {
 	alpha: '#F59E0B',
@@ -163,12 +165,23 @@ export const PackageOverviewTemplate = ({
 	tocOpen
 }: PackageOverviewTemplateProps) => {
 	const currentData = synchronizePackageDocData(data);
+	const flagshipGuidance = flagshipGuidanceByPackage[currentData.npmName];
 	const heroId = slugify(`${currentData.name}-overview`);
 	const tocItems: TocItem[] = [
 		{ href: `#${heroId}`, label: 'Overview' },
 		{ href: '#installation', label: 'Installation' },
 		...(currentData.features.length > 0
-			? [{ href: '#features', label: 'Features' }]
+			? [{ href: '#capabilities', label: 'Capabilities' }]
+			: []),
+		...(flagshipGuidance
+			? [
+					{ href: '#outcomes', label: 'What you can build' },
+					{
+						href: '#production-guidance',
+						label: 'Production guidance'
+					},
+					{ href: '#diagnostics', label: 'Troubleshooting' }
+				]
 			: []),
 		...currentData.samples.map((sample) => ({
 			href: `#${slugify(sample.heading)}`,
@@ -222,12 +235,12 @@ export const PackageOverviewTemplate = ({
 				{currentData.features.length > 0 ? (
 					<section style={sectionStyle}>
 						<AnchorHeading
-							id="features"
+							id="capabilities"
 							level="h2"
 							style={gradientHeadingStyle(themeSprings)}
 							themeSprings={themeSprings}
 						>
-							Features
+							Capabilities
 						</AnchorHeading>
 						<div
 							style={{
@@ -249,6 +262,12 @@ export const PackageOverviewTemplate = ({
 						</div>
 					</section>
 				) : null}
+
+				<PackageGuidanceSections
+					isMobileOrTablet={isMobileOrTablet}
+					packageName={currentData.npmName}
+					themeSprings={themeSprings}
+				/>
 
 				{currentData.samples.map((sample) => (
 					<section key={sample.heading} style={sectionStyle}>

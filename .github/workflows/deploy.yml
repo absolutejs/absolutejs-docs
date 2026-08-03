@@ -50,6 +50,15 @@ jobs:
       - name: Typecheck (hard gate — blocks every deploy)
         run: bun run typecheck
 
+      - name: Documentation quality contract
+        run: |
+          bun run catalog:generate
+          git diff --exit-code -- src/frontend/data/documentation/packages/ecosystem.generated.ts
+          bun run check:docs
+
+      - name: Lint documentation source
+        run: bun run lint
+
       - name: Configure SSH key
         run: |
           mkdir -p ~/.ssh

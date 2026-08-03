@@ -4,10 +4,14 @@ import process from 'node:process';
 import { Glob } from 'bun';
 import {
 	docsViews,
-	documentationSitemapRoutes
+	documentationSitemapRoutes,
+	sidebarCategories
 } from '../src/frontend/data/sidebarData';
+import { documentationMetadataFor } from '../src/frontend/data/documentation/documentationMetadata';
 import { packageCatalog } from '../src/frontend/data/documentation/packages/catalog';
 import { ecosystemProjects } from '../src/frontend/data/documentation/packages/ecosystem.generated';
+import { flagshipDocumentationContract } from '../src/frontend/data/documentation/packages/documentationContract';
+import { flagshipGuidanceByPackage } from '../src/frontend/data/documentation/packages/flagshipGuidance';
 import {
 	legacyEcosystemProjectViewId,
 	legacyEcosystemSubpackageViewId,
@@ -16,7 +20,18 @@ import {
 } from '../src/frontend/data/documentation/packages/packageRoutes';
 
 const workspaceDirectory = resolve(import.meta.dir, '../..');
+const minimumMetadataDescriptionLength = 50;
+const minimumMetadataTitleLength = 20;
 const failures: string[] = [];
+const reachableViews = new Set<string>(['overview', 'packages']);
+
+for (const category of sidebarCategories)
+	for (const entry of category.entries) {
+		if (entry.id) reachableViews.add(entry.id);
+		for (const page of entry.pages ?? []) reachableViews.add(page.id);
+	}
+for (const catalogEntry of packageCatalog)
+	reachableViews.add(catalogEntry.view);
 
 if (ecosystemProjects.some((project) => project.directory === 'PAAS'))
 	failures.push(
@@ -27,6 +42,85 @@ if (packageCatalog.length !== ecosystemProjects.length)
 	failures.push(
 		'Every ecosystem project must have exactly one catalog entry.'
 	);
+
+for (const contract of flagshipDocumentationContract) {
+	const project = ecosystemProjects.find(
+		(candidate) => candidate.directory === contract.directory
+	);
+	if (!project) {
+		failures.push(`${contract.directory}: flagship package is missing.`);
+		continue;
+	}
+	const catalogEntry = packageCatalog.find(
+		(entry) => entry.sourceDirectory === contract.directory
+	);
+	if (!catalogEntry || !(catalogEntry.view in docsViews))
+		failures.push(
+			`${contract.directory}: flagship package has no canonical guide.`
+		);
+	if (!project.packageName || project.private)
+		failures.push(
+			`${contract.directory}: flagship package must be publicly installable.`
+		);
+	if (!project.version)
+		failures.push(`${contract.directory}: flagship version is missing.`);
+	if (project.publicExports.length === 0)
+		failures.push(
+			`${contract.directory}: public exports are undocumented.`
+		);
+	if (project.readmeSamples.length === 0)
+		failures.push(`${contract.directory}: verified example is missing.`);
+	if (!project.packageName || !flagshipGuidanceByPackage[project.packageName])
+		failures.push(
+			`${contract.directory}: outcomes, production guidance, or troubleshooting is missing.`
+		);
+	const metadata = documentationMetadataFor(catalogEntry?.view ?? '');
+	if (
+		metadata.title.length < minimumMetadataTitleLength ||
+		metadata.description.length < minimumMetadataDescriptionLength
+	)
+		failures.push(
+			`${contract.directory}: search metadata is too thin for a flagship guide.`
+		);
+
+	const evidence = [
+		project.description,
+		...project.publicExports,
+		...Object.values(
+			project.packageName
+				? (flagshipGuidanceByPackage[project.packageName] ?? {})
+				: {}
+		).flatMap((features) =>
+			features.flatMap((feature) => [feature.title, feature.description])
+		),
+		...project.readmeTopics.flatMap((topic) => [
+			topic.title,
+			topic.description
+		]),
+		...project.readmeSamples.flatMap((sample) => [
+			sample.heading,
+			sample.description,
+			sample.code
+		])
+	].join('\n');
+	for (const requiredEvidence of contract.requiredEvidence)
+		if (!evidence.toLowerCase().includes(requiredEvidence.toLowerCase()))
+			failures.push(
+				`${contract.directory}: missing flagship evidence “${requiredEvidence}”.`
+			);
+	const sampleEvidence = project.readmeSamples
+		.flatMap((sample) => [sample.heading, sample.code])
+		.join('\n');
+	for (const requiredSampleEvidence of contract.requiredSampleEvidence)
+		if (
+			!sampleEvidence
+				.toLowerCase()
+				.includes(requiredSampleEvidence.toLowerCase())
+		)
+			failures.push(
+				`${contract.directory}: prioritized example “${requiredSampleEvidence}” is missing.`
+			);
+}
 
 for (const view of Object.keys(docsViews)) {
 	if (view === 'overview') continue;
@@ -66,6 +160,7 @@ for (const project of ecosystemProjects) {
 
 	for (const subpackage of project.subpackages) {
 		const view = packageSubpackageViewId(project, subpackage);
+		reachableViews.add(view);
 		if (!(view in docsViews))
 			failures.push(
 				`${subpackage.name}: missing generated subpackage view ${view}.`
@@ -118,6 +213,8 @@ for await (const file of docsGlob.scan(resolve(import.meta.dir, '..'))) {
 		/href\s*=\s*["']\/documentation\/([^"'#?\s]+)/g
 	)) {
 		const [, linkedView] = match;
+		if (linkedView && !linkedView.includes('{'))
+			reachableViews.add(linkedView);
 		if (
 			linkedView &&
 			!linkedView.includes('{') &&
@@ -128,6 +225,12 @@ for await (const file of docsGlob.scan(resolve(import.meta.dir, '..'))) {
 			);
 	}
 }
+
+for (const view of Object.keys(docsViews))
+	if (!reachableViews.has(view))
+		failures.push(
+			`${view}: documentation page is orphaned from navigation, catalog, and internal links.`
+		);
 
 if (failures.length > 0) {
 	console.error(failures.map((failure) => `- ${failure}`).join('\n'));

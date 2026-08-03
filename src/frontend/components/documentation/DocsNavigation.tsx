@@ -81,6 +81,7 @@ const pageLabelStyle = (themeSprings: ThemeSprings) => ({
 
 export const DocsNavigation = ({
 	currentPageId,
+	isMobileOrTablet,
 	onNavigate,
 	themeSprings
 }: DocsNavigationProps) => {
@@ -140,6 +141,7 @@ export const DocsNavigation = ({
 		<>
 			<PackageReleaseSnapshot
 				currentPageId={currentPageId}
+				isMobileOrTablet={isMobileOrTablet}
 				themeSprings={themeSprings}
 			/>
 			<div style={containerStyle}>

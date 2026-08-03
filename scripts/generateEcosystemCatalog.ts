@@ -17,6 +17,19 @@ const maximumPackageDepth = 4;
 const maximumReadmeSampleLength = 4000;
 const maximumReadmeSamples = 6;
 const maximumReadmeTopics = 100;
+const defaultSampleIntentScore = 50;
+const versionedSamplePenalty = 200;
+const sampleIntentPatterns: Array<{ pattern: RegExp; score: number }> = [
+	{ pattern: /quick\s*start|fastest first success/i, score: 120 },
+	{ pattern: /install|setup|first deploy/i, score: 110 },
+	{ pattern: /usage|example|define an endpoint|start here/i, score: 100 },
+	{
+		pattern: /production|security|guardrail|readiness|isolation/i,
+		score: 90
+	},
+	{ pattern: /troubleshoot|debug|recovery|verify/i, score: 85 },
+	{ pattern: /recipe|browser agent|phone agent|workflow/i, score: 80 }
+];
 
 const excludedDirectories = new Set([
 	'.absolutejs',
@@ -276,7 +289,13 @@ const readReadmeTopics = (directory: string) => {
 		const headingMatch = /^##\s+(.+)$/.exec(lines[lineIndex] ?? '');
 		if (!headingMatch) continue;
 		const title = cleanMarkdown(headingMatch[1] ?? '');
-		if (!title || /^license$/i.test(title)) continue;
+		if (
+			!title ||
+			/^(?:changelog|contributing|license|roadmap|what's new|workspace dev logs)$/i.test(
+				title
+			)
+		)
+			continue;
 		const description = readMarkdownParagraph(lines, lineIndex + 1);
 		if (description) topics.push({ description, title });
 		if (topics.length >= maximumReadmeTopics) break;
@@ -289,11 +308,12 @@ const readReadmeSamples = (directory: string) => {
 	const readmePath = join(directory, 'README.md');
 	if (!existsSync(readmePath)) return [];
 	const readme = readFileSync(readmePath, 'utf8');
-	const samples: Array<{
+	const candidates: Array<{
 		code: string;
 		description: string;
 		heading: string;
 		language: string;
+		sourceIndex: number;
 	}> = [];
 	for (const match of readme.matchAll(
 		/```([a-zA-Z0-9_-]*)\r?\n([\s\S]*?)```/g
@@ -314,22 +334,63 @@ const readReadmeSamples = (directory: string) => {
 		const heading = precedingHeading
 			? cleanMarkdown(precedingHeading.replace(/^#{2,6}\s+/, ''))
 			: 'README Example';
-		const matchingHeadingCount = samples.filter((sample) =>
-			sample.heading.startsWith(heading)
-		).length;
-		samples.push({
+		candidates.push({
 			code,
 			description: 'Example from the canonical repository README.',
-			heading:
-				matchingHeadingCount === 0
-					? heading
-					: `${heading} ${matchingHeadingCount + 1}`,
-			language
+			heading,
+			language,
+			sourceIndex: match.index
 		});
-		if (samples.length >= maximumReadmeSamples) break;
 	}
 
-	return samples;
+	const scoreSample = ({ heading }: { heading: string }) => {
+		const intentScore = sampleIntentPatterns.find(({ pattern }) =>
+			pattern.test(heading)
+		)?.score;
+		const versionPenalty = /(?:^|\s)v?\d+\.\d+\.\d+|phase\s+\d+/i.test(
+			heading
+		)
+			? versionedSamplePenalty
+			: 0;
+
+		return (intentScore ?? defaultSampleIntentScore) - versionPenalty;
+	};
+	const headingCounts = new Map<string, number>();
+	const intentCounts = new Map<number, number>();
+
+	return candidates
+		.sort(
+			(left, right) =>
+				scoreSample(right) - scoreSample(left) ||
+				left.sourceIndex - right.sourceIndex
+		)
+		.filter((candidate) => {
+			const count = headingCounts.get(candidate.heading) ?? 0;
+			headingCounts.set(candidate.heading, count + 1);
+			const intentIndex = sampleIntentPatterns.findIndex(({ pattern }) =>
+				pattern.test(candidate.heading)
+			);
+			const intentCount = intentCounts.get(intentIndex) ?? 0;
+			intentCounts.set(intentIndex, intentCount + 1);
+
+			return count < 2 && intentCount < 2;
+		})
+		.slice(0, maximumReadmeSamples)
+		.map(({ sourceIndex: _sourceIndex, ...sample }, index, selected) => {
+			const previousCount = selected
+				.slice(0, index)
+				.filter(
+					(candidate) => candidate.heading === sample.heading
+				).length;
+
+			return {
+				...sample,
+				heading:
+					previousCount === 0
+						? sample.heading
+						: `${sample.heading} ${previousCount + 1}`
+			};
+		});
 };
 
 const readRepository = (directory: string) => {
