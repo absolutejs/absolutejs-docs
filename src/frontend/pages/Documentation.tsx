@@ -1,5 +1,5 @@
 import { animated, useSpring } from '@react-spring/web';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
 	DocsView,
 	isExpandableEntry,
@@ -17,15 +17,23 @@ import {
 	documentationStructuredDataFor
 } from '../data/documentation/documentationMetadata';
 import { useDocsNavigation } from '../hooks/useDocsNavigation';
-import { useMediaQuery } from '../hooks/useMediaQuery';
+import {
+	InitialBreakpointContext,
+	isBreakpoint,
+	useMediaQuery
+} from '../hooks/useMediaQuery';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
 import { User } from '../../../db/schema';
 
-type DocumentationProps = {
+type DocumentationViewProps = {
 	user: User | null;
 	theme: ThemeMode | undefined;
 	initialView: DocsView;
+};
+
+type DocumentationProps = DocumentationViewProps & {
+	initialBreakpoint?: string;
 };
 
 const entryContainsView = (entry: SidebarEntry, view: DocsView) =>
@@ -49,11 +57,11 @@ const findOpenKeysForView = (view: DocsView) => {
 		: [category.label];
 };
 
-export const Documentation = ({
+const DocumentationView = ({
 	user,
 	theme,
 	initialView
-}: DocumentationProps) => {
+}: DocumentationViewProps) => {
 	const [themeSprings, setTheme] = useTheme(theme);
 	const [view, navigateToView] = useDocsNavigation(initialView);
 	const { isSizeOrLess } = useMediaQuery();
@@ -73,15 +81,18 @@ export const Documentation = ({
 
 	const [tocOpen, setTocOpen] = useState(false);
 
-	const handleNavigate = (newView: DocsView) => {
-		navigateToView(newView);
-		const keys = findOpenKeysForView(newView);
-		if (keys.length === 0) return;
+	const handleNavigate = useCallback(
+		(newView: DocsView) => {
+			navigateToView(newView);
+			const keys = findOpenKeysForView(newView);
+			if (keys.length === 0) return;
 
-		setOpenSections((current) => new Set([...current, ...keys]));
-	};
+			setOpenSections((current) => new Set([...current, ...keys]));
+		},
+		[navigateToView]
+	);
 
-	const handleToggleSection = (label: string) => {
+	const handleToggleSection = useCallback((label: string) => {
 		setOpenSections((current) => {
 			const next = new Set(current);
 			if (next.has(label)) {
@@ -92,7 +103,7 @@ export const Documentation = ({
 
 			return next;
 		});
-	};
+	}, []);
 
 	const toggleSidebar = () => {
 		void sidebarSpringApi.start({
@@ -101,32 +112,43 @@ export const Documentation = ({
 		});
 	};
 
-	const toggleToc = () => {
+	const toggleToc = useCallback(() => {
 		setTocOpen((prev) => !prev);
-	};
+	}, []);
 
 	const ActiveView = docsViews[view];
-	const activeDocumentation = (
-		<div
-			style={{
-				display: 'flex',
-				flex: 1,
-				flexDirection: 'column',
-				minHeight: 0,
-				minWidth: 0
-			}}
-		>
-			<ActiveView
-				currentPageId={view}
-				isMobileOrTablet={isMobileOrTablet}
-				onNavigate={(pageId: string) => {
-					if (isValidViewId(pageId)) handleNavigate(pageId);
+	const activeDocumentation = useMemo(
+		() => (
+			<div
+				style={{
+					display: 'flex',
+					flex: 1,
+					flexDirection: 'column',
+					minHeight: 0,
+					minWidth: 0
 				}}
-				onTocToggle={toggleToc}
-				themeSprings={themeSprings}
-				tocOpen={tocOpen}
-			/>
-		</div>
+			>
+				<ActiveView
+					currentPageId={view}
+					isMobileOrTablet={isMobileOrTablet}
+					onNavigate={(pageId: string) => {
+						if (isValidViewId(pageId)) handleNavigate(pageId);
+					}}
+					onTocToggle={toggleToc}
+					themeSprings={themeSprings}
+					tocOpen={tocOpen}
+				/>
+			</div>
+		),
+		[
+			ActiveView,
+			view,
+			isMobileOrTablet,
+			handleNavigate,
+			toggleToc,
+			themeSprings,
+			tocOpen
+		]
 	);
 	const documentationContent = (
 		<div
@@ -187,3 +209,20 @@ export const Documentation = ({
 		</html>
 	);
 };
+
+// The provider must sit above every useMediaQuery call (including this
+// page's own), so the seeding wrapper is a separate component.
+export const Documentation = ({
+	initialBreakpoint,
+	...viewProps
+}: DocumentationProps) => (
+	<InitialBreakpointContext.Provider
+		value={
+			initialBreakpoint && isBreakpoint(initialBreakpoint)
+				? initialBreakpoint
+				: undefined
+		}
+	>
+		<DocumentationView {...viewProps} />
+	</InitialBreakpointContext.Provider>
+);

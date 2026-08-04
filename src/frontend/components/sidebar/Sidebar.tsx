@@ -27,8 +27,10 @@ export const Sidebar = ({
 			height: '100%',
 			maxHeight: '100%',
 			overflowY: 'auto',
-			padding: '1.1rem 0.9rem',
-			width: '256px'
+			padding: '1.25rem 1rem 2.5rem',
+			scrollbarColor: 'rgba(128, 128, 128, 0.35) transparent',
+			scrollbarWidth: 'thin',
+			width: '280px'
 		}}
 	>
 		<SidebarNav

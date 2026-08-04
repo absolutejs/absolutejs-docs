@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { startTransition, useCallback, useEffect, useState } from 'react';
 import { isValidViewId } from '../../types/typeGuards';
 import { DocsView } from '../../types/types';
 
 export const useDocsNavigation = (initialView: DocsView) => {
 	const [view, setView] = useState(initialView);
 
-	const navigateToView = (newView: DocsView) => {
+	const navigateToView = useCallback((newView: DocsView) => {
 		const { pathname, search } = window.location;
 		const trimmed = pathname.replace(/\/+$/, '');
 		const parts = trimmed.split('/').filter(Boolean);
@@ -26,15 +26,19 @@ export const useDocsNavigation = (initialView: DocsView) => {
 				`${nextPath}${search}`
 			);
 		}
-		setView(newView);
-	};
+		// Mounting a view is the heaviest render in the app; as a transition
+		// it stays interruptible instead of blocking the click handler.
+		startTransition(() => setView(newView));
+	}, []);
 
 	useEffect(() => {
 		const onPop = () => {
 			const trimmed = window.location.pathname.replace(/\/+$/, '');
 			const parts = trimmed.split('/').filter(Boolean);
 			const last = parts.length > 0 ? parts[parts.length - 1] : undefined;
-			if (last && isValidViewId(last)) setView(last);
+			if (last && isValidViewId(last)) {
+				startTransition(() => setView(last));
+			}
 		};
 		window.addEventListener('popstate', onPop);
 

@@ -1,20 +1,23 @@
 import { animated } from '@react-spring/web';
-import { CSSProperties, ReactNode, useState } from 'react';
 import {
-	AnimatedCSSProperties,
-	ThemeSprings
-} from '../../../types/springTypes';
+	CSSProperties,
+	memo,
+	ReactNode,
+	useDeferredValue,
+	useMemo,
+	useState
+} from 'react';
+import { ThemeSprings } from '../../../types/springTypes';
 import {
 	DocsView,
 	isExpandableEntry,
 	SidebarCategory,
 	SidebarEntry,
 	sidebarEntryKey,
-	SidebarPage,
-	SidebarStatus
+	SidebarPage
 } from '../../../types/types';
 import { sidebarCategories } from '../../data/sidebarData';
-import { primaryColor } from '../../styles/colors';
+import { primaryColor, secondaryColor } from '../../styles/colors';
 
 type SidebarNavProps = {
 	navigateToView: (view: DocsView) => void;
@@ -24,41 +27,108 @@ type SidebarNavProps = {
 	view: DocsView;
 };
 
-const statusColors: Record<SidebarStatus, string> = {
-	alpha: '#F59E0B',
-	beta: '#8B5CF6'
+// The nav root broadcasts the theme as CSS custom properties so every row
+// can be a plain element. Rendering an animated component per row makes
+// react-spring register hundreds of spring dependencies on every sidebar
+// render, which is what made large section toggles blow the 100ms budget.
+const createThemeInterpolations = (themeSprings: ThemeSprings) => ({
+	accent: themeSprings.theme.to((mode) =>
+		mode.endsWith('dark') ? secondaryColor : primaryColor
+	),
+	activeBackground: themeSprings.theme.to((mode) =>
+		mode.endsWith('dark')
+			? 'rgba(129, 140, 248, 0.14)'
+			: 'rgba(99, 102, 241, 0.09)'
+	),
+	filterBackground: themeSprings.theme.to((mode) =>
+		mode.endsWith('dark')
+			? 'rgba(255, 255, 255, 0.05)'
+			: 'rgba(0, 0, 0, 0.03)'
+	),
+	muted: themeSprings.theme.to((mode) =>
+		mode.endsWith('dark') ? '#A1A1AA' : '#71717A'
+	),
+	resting: themeSprings.theme.to((mode) =>
+		mode.endsWith('dark') ? '#D4D4D8' : '#3F3F46'
+	)
+});
+
+const themeInterpolationsCache = new WeakMap<
+	ThemeSprings,
+	ReturnType<typeof createThemeInterpolations>
+>();
+
+const themeInterpolations = (themeSprings: ThemeSprings) => {
+	const cached = themeInterpolationsCache.get(themeSprings);
+	if (cached) return cached;
+	const created = createThemeInterpolations(themeSprings);
+	themeInterpolationsCache.set(themeSprings, created);
+
+	return created;
 };
 
-const dotStyle = (status: SidebarStatus): CSSProperties => ({
-	background: statusColors[status],
-	borderRadius: '50%',
-	flexShrink: 0,
-	height: '5px',
-	opacity: 0.85,
-	width: '5px'
-});
+const rowBackground = (active?: boolean, hovered?: boolean) => {
+	if (active) return 'var(--sidebar-active-bg)';
+	if (hovered) return 'rgba(128, 128, 128, 0.08)';
 
-const chevronStyle = (open: boolean): CSSProperties => ({
-	display: 'inline-block',
-	fontSize: '0.8rem',
-	lineHeight: 1,
-	opacity: 0.45,
-	transform: open ? 'rotate(90deg)' : 'none',
-	transition: 'transform 0.15s ease'
-});
+	return 'transparent';
+};
+
+const rowColor = (active?: boolean, hovered?: boolean) => {
+	if (active) return 'var(--sidebar-accent)';
+	if (hovered) return 'var(--sidebar-contrast)';
+
+	return 'var(--sidebar-resting)';
+};
+
+const Chevron = ({ open }: { open: boolean }) => (
+	<svg
+		fill="none"
+		height="14"
+		stroke="currentColor"
+		strokeLinecap="round"
+		strokeLinejoin="round"
+		strokeWidth="1.75"
+		style={{
+			flexShrink: 0,
+			opacity: 0.55,
+			transform: open ? 'rotate(90deg)' : 'none',
+			transition: 'transform 0.18s ease'
+		}}
+		viewBox="0 0 24 24"
+		width="14"
+	>
+		<polyline points="9 6 15 12 9 18" />
+	</svg>
+);
+
+const SearchIcon = () => (
+	<svg
+		fill="none"
+		height="14"
+		stroke="currentColor"
+		strokeLinecap="round"
+		strokeLinejoin="round"
+		strokeWidth="1.75"
+		viewBox="0 0 24 24"
+		width="14"
+	>
+		<circle cx="11" cy="11" r="7" />
+		<line x1="21" x2="16.2" y1="21" y2="16.2" />
+	</svg>
+);
 
 const rowBaseStyle: CSSProperties = {
 	alignItems: 'center',
 	background: 'transparent',
 	border: 'none',
-	borderLeft: '2px solid transparent',
-	borderRadius: '0 0.375rem 0.375rem 0',
+	borderRadius: '0.5rem',
 	cursor: 'pointer',
 	display: 'flex',
-	fontSize: '0.85rem',
+	fontSize: '0.9rem',
 	gap: '0.5rem',
-	lineHeight: 1.35,
-	padding: '0.3rem 0.5rem 0.3rem 0.7rem',
+	lineHeight: 1.5,
+	padding: '0.45rem 0.65rem',
 	textAlign: 'left',
 	width: '100%'
 };
@@ -70,15 +140,6 @@ type NavRowProps = {
 	indent?: boolean;
 	label: string;
 	onClick: () => void;
-	status?: SidebarStatus;
-	themeSprings: ThemeSprings;
-};
-
-const rowBackground = (active?: boolean, hovered?: boolean) => {
-	if (active) return 'rgba(99, 102, 241, 0.08)';
-	if (hovered) return 'rgba(128, 128, 128, 0.07)';
-
-	return 'transparent';
 };
 
 const NavRow = ({
@@ -87,12 +148,9 @@ const NavRow = ({
 	href,
 	indent,
 	label,
-	onClick,
-	status,
-	themeSprings
+	onClick
 }: NavRowProps) => {
 	const [hovered, setHovered] = useState(false);
-	const emphasized = active || hovered;
 	const content = (
 		<>
 			<span
@@ -106,26 +164,30 @@ const NavRow = ({
 			>
 				{label}
 			</span>
-			{status ? <span style={dotStyle(status)} /> : null}
 			{children}
 		</>
 	);
-	const style: AnimatedCSSProperties = {
+	const style: CSSProperties = {
 		...rowBaseStyle,
 		background: rowBackground(active, hovered),
-		borderLeft: active
-			? `2px solid ${primaryColor}`
-			: '2px solid transparent',
-		color: emphasized
-			? themeSprings.contrastPrimary
-			: themeSprings.contrastSecondary,
-		fontSize: indent ? '0.8rem' : '0.85rem',
-		fontWeight: active ? '600' : '400'
+		color: rowColor(active, hovered),
+		fontWeight: active ? '600' : '400',
+		...(indent
+			? {
+					borderLeft: active
+						? '2px solid var(--sidebar-accent)'
+						: '2px solid transparent',
+					borderRadius: '0 0.5rem 0.5rem 0',
+					fontSize: '0.875rem',
+					marginLeft: '-1px',
+					padding: '0.4rem 0.65rem 0.4rem 0.85rem'
+				}
+			: {})
 	};
 
 	if (href)
 		return (
-			<animated.a
+			<a
 				href={href}
 				onClick={(event) => {
 					event.preventDefault();
@@ -136,41 +198,36 @@ const NavRow = ({
 				style={{ ...style, textDecoration: 'none' }}
 			>
 				{content}
-			</animated.a>
+			</a>
 		);
 
 	return (
-		<animated.button
+		<button
 			onClick={onClick}
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
 			style={style}
 		>
 			{content}
-		</animated.button>
+		</button>
 	);
 };
 
 const PageRows = ({
 	navigateToView,
 	pages,
-	themeSprings,
 	view
 }: {
 	navigateToView: (view: DocsView) => void;
 	pages: SidebarPage[];
-	themeSprings: ThemeSprings;
 	view: DocsView;
 }) => (
-	<animated.div
+	<div
 		style={{
-			borderLeft: themeSprings.themeTertiary.to(
-				(color) => `1px solid ${color}`
-			),
+			borderLeft: '1px solid var(--sidebar-hairline)',
 			display: 'flex',
 			flexDirection: 'column',
-			marginBottom: '0.15rem',
-			marginLeft: '0.95rem'
+			margin: '0.15rem 0 0.35rem 1rem'
 		}}
 	>
 		{pages.map((page) => (
@@ -185,10 +242,9 @@ const PageRows = ({
 				key={page.id}
 				label={page.label}
 				onClick={() => navigateToView(page.id)}
-				themeSprings={themeSprings}
 			/>
 		))}
-	</animated.div>
+	</div>
 );
 
 const EntryItem = ({
@@ -198,7 +254,6 @@ const EntryItem = ({
 	navigateToView,
 	onToggleSection,
 	openSections,
-	themeSprings,
 	view
 }: {
 	categoryLabel: string;
@@ -207,7 +262,6 @@ const EntryItem = ({
 	navigateToView: (view: DocsView) => void;
 	onToggleSection: (key: string) => void;
 	openSections: Set<string>;
-	themeSprings: ThemeSprings;
 	view: DocsView;
 }) => {
 	if (!isExpandableEntry(entry)) {
@@ -224,8 +278,6 @@ const EntryItem = ({
 				}
 				label={entry.label}
 				onClick={() => navigateToView(id)}
-				status={entry.status}
-				themeSprings={themeSprings}
 			/>
 		);
 	}
@@ -239,16 +291,13 @@ const EntryItem = ({
 				active={!open && entry.pages.some((page) => page.id === view)}
 				label={entry.label}
 				onClick={() => onToggleSection(key)}
-				status={entry.status}
-				themeSprings={themeSprings}
 			>
-				<span style={chevronStyle(open)}>›</span>
+				<Chevron open={open} />
 			</NavRow>
 			{open ? (
 				<PageRows
 					navigateToView={navigateToView}
 					pages={entry.pages}
-					themeSprings={themeSprings}
 					view={view}
 				/>
 			) : null}
@@ -256,61 +305,58 @@ const EntryItem = ({
 	);
 };
 
-const CategoryGroup = ({
-	category,
-	forceOpen,
-	navigateToView,
-	onToggleSection,
-	openSections,
-	themeSprings,
-	view
-}: {
+type CategoryGroupProps = {
 	category: SidebarCategory;
 	forceOpen: boolean;
 	navigateToView: (view: DocsView) => void;
 	onToggleSection: (key: string) => void;
 	openSections: Set<string>;
-	themeSprings: ThemeSprings;
 	view: DocsView;
-}) => {
+};
+
+const CategoryGroupContent = ({
+	category,
+	forceOpen,
+	navigateToView,
+	onToggleSection,
+	openSections,
+	view
+}: CategoryGroupProps) => {
 	const open = forceOpen || openSections.has(category.label);
 
 	return (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				marginBottom: open ? '0.6rem' : 0
-			}}
-		>
-			<animated.button
+		<div style={{ display: 'flex', flexDirection: 'column' }}>
+			<button
 				onClick={() => onToggleSection(category.label)}
 				style={{
 					alignItems: 'center',
 					background: 'transparent',
 					border: 'none',
-					color: themeSprings.contrastSecondary,
+					color: 'var(--sidebar-muted)',
 					cursor: 'pointer',
 					display: 'flex',
-					fontSize: '0.66rem',
-					fontWeight: 700,
-					gap: '0.6rem',
-					letterSpacing: '0.12em',
-					padding: '0.55rem 0.5rem 0.45rem 0.2rem',
+					fontSize: '0.7rem',
+					fontWeight: 600,
+					gap: '0.5rem',
+					justifyContent: 'space-between',
+					letterSpacing: '0.08em',
+					margin: '1.35rem 0 0.3rem',
+					padding: '0.25rem 0.65rem',
 					textTransform: 'uppercase',
 					width: '100%'
 				}}
 			>
-				<span style={{ whiteSpace: 'nowrap' }}>{category.label}</span>
-				<animated.span
+				<span
 					style={{
-						background: themeSprings.themeTertiary,
-						flex: 1,
-						height: '1px'
+						overflow: 'hidden',
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap'
 					}}
-				/>
-				<span style={chevronStyle(open)}>›</span>
-			</animated.button>
+				>
+					{category.label}
+				</span>
+				<Chevron open={open} />
+			</button>
 			{open
 				? category.entries.map((entry) => (
 						<EntryItem
@@ -321,7 +367,6 @@ const CategoryGroup = ({
 							navigateToView={navigateToView}
 							onToggleSection={onToggleSection}
 							openSections={openSections}
-							themeSprings={themeSprings}
 							view={view}
 						/>
 					))
@@ -329,6 +374,37 @@ const CategoryGroup = ({
 		</div>
 	);
 };
+
+// One toggle re-renders every open row in the sidebar unless unaffected
+// categories bail out, so equality is judged on each category's own open
+// state instead of the openSections Set identity (which changes per toggle).
+const categoryOpenSignature = (
+	category: SidebarCategory,
+	openSections: Set<string>
+) =>
+	[
+		openSections.has(category.label) ? '1' : '0',
+		...category.entries.map((entry) =>
+			isExpandableEntry(entry) &&
+			openSections.has(sidebarEntryKey(category.label, entry))
+				? '1'
+				: '0'
+		)
+	].join('');
+
+const categoryGroupPropsEqual = (
+	previous: CategoryGroupProps,
+	next: CategoryGroupProps
+) =>
+	previous.category === next.category &&
+	previous.forceOpen === next.forceOpen &&
+	previous.navigateToView === next.navigateToView &&
+	previous.onToggleSection === next.onToggleSection &&
+	previous.view === next.view &&
+	categoryOpenSignature(previous.category, previous.openSections) ===
+		categoryOpenSignature(next.category, next.openSections);
+
+const CategoryGroup = memo(CategoryGroupContent, categoryGroupPropsEqual);
 
 const matchesQuery = (label: string, query: string) =>
 	label.toLowerCase().includes(query);
@@ -353,6 +429,56 @@ const filterCategories = (query: string) => {
 		.filter((category) => category.entries.length > 0);
 };
 
+const SidebarFilter = ({
+	onChange,
+	value
+}: {
+	onChange: (value: string) => void;
+	value: string;
+}) => {
+	const [focused, setFocused] = useState(false);
+
+	return (
+		<div style={{ position: 'relative' }}>
+			<span
+				style={{
+					color: 'var(--sidebar-muted)',
+					display: 'flex',
+					left: '0.7rem',
+					pointerEvents: 'none',
+					position: 'absolute',
+					top: '50%',
+					transform: 'translateY(-50%)'
+				}}
+			>
+				<SearchIcon />
+			</span>
+			<input
+				onBlur={() => setFocused(false)}
+				onChange={(event) => onChange(event.target.value)}
+				onFocus={() => setFocused(true)}
+				placeholder="Filter docs…"
+				style={{
+					background: 'var(--sidebar-filter-bg)',
+					border: focused
+						? '1px solid var(--sidebar-accent)'
+						: '1px solid var(--sidebar-hairline)',
+					borderRadius: '0.5rem',
+					color: 'var(--sidebar-contrast)',
+					fontSize: '0.875rem',
+					lineHeight: 1.5,
+					outline: 'none',
+					padding: '0.45rem 0.75rem 0.45rem 2rem',
+					transition: 'border-color 0.15s ease',
+					width: '100%'
+				}}
+				type="text"
+				value={value}
+			/>
+		</div>
+	);
+};
+
 export const SidebarNav = ({
 	navigateToView,
 	onToggleSection,
@@ -361,37 +487,39 @@ export const SidebarNav = ({
 	view
 }: SidebarNavProps) => {
 	const [query, setQuery] = useState('');
-	const filtered = filterCategories(query);
+	// Deferring the query keeps each keystroke's urgent render down to the
+	// input itself; the expanded result tree renders as an interruptible
+	// background pass instead of blocking the keypress.
+	const deferredQuery = useDeferredValue(query);
+	const filtered = useMemo(
+		() => filterCategories(deferredQuery),
+		[deferredQuery]
+	);
 	const categories = filtered ?? sidebarCategories;
 	const isFiltering = filtered !== null;
+	const interpolations = themeInterpolations(themeSprings);
 
 	return (
-		<nav style={{ display: 'flex', flexDirection: 'column' }}>
-			<animated.input
-				onChange={(event) => setQuery(event.target.value)}
-				placeholder="Filter docs…"
-				style={{
-					background: 'transparent',
-					border: 'none',
-					borderBottom: themeSprings.themeTertiary.to(
-						(color) => `1px solid ${color}`
-					),
-					color: themeSprings.contrastPrimary,
-					fontSize: '0.8rem',
-					marginBottom: '0.6rem',
-					outline: 'none',
-					padding: '0.35rem 0.25rem 0.5rem'
-				}}
-				type="text"
-				value={query}
-			/>
+		<animated.nav
+			style={{
+				'--sidebar-accent': interpolations.accent,
+				'--sidebar-active-bg': interpolations.activeBackground,
+				'--sidebar-contrast': themeSprings.contrastPrimary,
+				'--sidebar-filter-bg': interpolations.filterBackground,
+				'--sidebar-hairline': themeSprings.themeTertiary,
+				'--sidebar-muted': interpolations.muted,
+				'--sidebar-resting': interpolations.resting,
+				display: 'flex',
+				flexDirection: 'column'
+			}}
+		>
+			<SidebarFilter onChange={setQuery} value={query} />
+			<div style={{ height: '1rem' }} />
 			<NavRow
 				active={view === 'packages'}
 				label="All Packages"
 				onClick={() => navigateToView('packages')}
-				themeSprings={themeSprings}
 			/>
-			<div style={{ height: '0.35rem' }} />
 			{categories.map((category) => (
 				<CategoryGroup
 					category={category}
@@ -400,21 +528,20 @@ export const SidebarNav = ({
 					navigateToView={navigateToView}
 					onToggleSection={onToggleSection}
 					openSections={openSections}
-					themeSprings={themeSprings}
 					view={view}
 				/>
 			))}
 			{isFiltering && categories.length === 0 ? (
-				<animated.span
+				<span
 					style={{
-						color: themeSprings.contrastSecondary,
-						fontSize: '0.8rem',
-						padding: '0.75rem 0.5rem'
+						color: 'var(--sidebar-muted)',
+						fontSize: '0.875rem',
+						padding: '1rem 0.65rem'
 					}}
 				>
-					Nothing matches “{query}”.
-				</animated.span>
+					Nothing matches “{deferredQuery}”.
+				</span>
 			) : null}
-		</nav>
+		</animated.nav>
 	);
 };

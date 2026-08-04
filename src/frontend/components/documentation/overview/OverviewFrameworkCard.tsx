@@ -1,11 +1,11 @@
 import { animated } from '@react-spring/web';
-import { ComponentType } from 'react';
+import { ComponentType, CSSProperties } from 'react';
 import { ThemeSprings } from '../../../../types/springTypes';
 
 type OverviewFrameworkCardProps = {
 	color: string;
 	description: string;
-	icon: ComponentType<{ color: string; size: number; style: object }>;
+	icon: ComponentType<{ color: string; size: number; style: CSSProperties }>;
 	name: string;
 	themeSprings: ThemeSprings;
 };

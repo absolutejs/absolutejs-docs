@@ -35,6 +35,11 @@ const whitelistedAdmins =
 	getEnv('ADMIN_SUBS')
 		?.split(',')
 		.map((adminSub) => adminSub.trim()) ?? [];
+
+// First visit only (no breakpoint cookie yet): guess the device class from
+// the user agent so SSR doesn't hand desktop visitors the mobile layout.
+const fallbackBreakpointFor = (userAgent: string | null) =>
+	userAgent && /Mobi|Android|iPhone|iPad/i.test(userAgent) ? 'xs' : 'xl';
 const permanentRedirectStatus = 301;
 const notFoundStatus = 404;
 const legacyDocumentationRedirects = new Map<string, string>();
@@ -220,8 +225,9 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 			'/documentation/:view?',
 			async ({
 				params: { view },
-				cookie: { theme, user_session_id },
+				cookie: { breakpoint, theme, user_session_id },
 				redirect,
+				request,
 				store: { session },
 				status
 			}) => {
@@ -247,6 +253,11 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 					index: asset(manifest, 'DocumentationIndex'),
 					Page: Documentation,
 					props: {
+						initialBreakpoint:
+							breakpoint?.value ??
+							fallbackBreakpointFor(
+								request.headers.get('user-agent')
+							),
 						initialView: view ?? 'overview',
 						theme: theme?.value,
 						user

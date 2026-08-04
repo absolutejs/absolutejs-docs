@@ -20,6 +20,9 @@ export const themeTypebox = t.Optional(
 	])
 );
 export const pageCookie = t.Cookie({
+	// Kept permissive (any string): an unexpected value must degrade to the
+	// client-side default, not fail validation for every page route.
+	breakpoint: t.Optional(t.String()),
 	theme: themeTypebox,
 	user_session_id: userSessionIdTypebox
 });

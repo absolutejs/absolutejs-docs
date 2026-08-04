@@ -3,7 +3,7 @@ import { CSSProperties, useState } from 'react';
 import { ThemeSprings } from '../../../types/springTypes';
 import { CopyButton } from './CopyButton';
 import { ShikiHtml } from './ShikiHtml';
-import { highlightCode, resolveCodeLanguage } from './codeHighlighter';
+import { resolveCodeLanguage } from './codeHighlighter';
 
 type PrismPlusProps = {
 	codeString: string | string[];
@@ -182,7 +182,7 @@ export const PrismPlus = ({
 				) : null}
 				<CopyButton text={displayedCodeString} />
 			</animated.div>
-			<ShikiHtml html={highlightCode(displayedCodeString, language)} />
+			<ShikiHtml code={displayedCodeString} language={language} />
 		</animated.div>
 	);
 };

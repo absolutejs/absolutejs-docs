@@ -1,4 +1,10 @@
-import { useState, useEffect } from 'react';
+import {
+	createContext,
+	useContext,
+	useEffect,
+	useRef,
+	useState
+} from 'react';
 
 type Breakpoints = {
 	xs: number;
@@ -20,33 +26,51 @@ const defaultBreakpoints: Breakpoints = {
 
 export type Breakpoint = keyof Breakpoints;
 
+// Server-known viewport hint (breakpoint cookie, falling back to a
+// user-agent sniff) provided by the page root. Without it every hook
+// instance hydrates as 'xs', so desktop visitors got the mobile layout
+// server-rendered and a full-tree re-render after mount to correct it.
+export const InitialBreakpointContext = createContext<Breakpoint | undefined>(
+	undefined
+);
+
+export const isBreakpoint = (value: string): value is Breakpoint =>
+	value in defaultBreakpoints;
+
+const measureBreakpoint = (width: number, breakpoints: Breakpoints) => {
+	if (width < breakpoints.sm) return 'xs';
+	if (width < breakpoints.md) return 'sm';
+	if (width < breakpoints.lg) return 'md';
+	if (width < breakpoints.xl) return 'lg';
+	if (width < breakpoints['2xl']) return 'xl';
+
+	return '2xl';
+};
+
 export const useMediaQuery = (customBreakpoints = defaultBreakpoints) => {
-	const [breakpoint, setBreakpoint] = useState<Breakpoint>('xs');
+	const initialBreakpoint = useContext(InitialBreakpointContext);
+	const [breakpoint, setBreakpoint] = useState<Breakpoint>(
+		initialBreakpoint ?? 'xs'
+	);
+	const measuredRef = useRef<Breakpoint | null>(null);
 
 	useEffect(() => {
-		const handleResize = () => {
-			const { innerWidth: width } = window;
-
-			if (width < customBreakpoints.sm) {
-				setBreakpoint('xs');
-			} else if (width < customBreakpoints.md) {
-				setBreakpoint('sm');
-			} else if (width < customBreakpoints.lg) {
-				setBreakpoint('md');
-			} else if (width < customBreakpoints.xl) {
-				setBreakpoint('lg');
-			} else if (width < customBreakpoints['2xl']) {
-				setBreakpoint('xl');
-			} else {
-				setBreakpoint('2xl');
-			}
+		const applyMeasurement = () => {
+			const next = measureBreakpoint(
+				window.innerWidth,
+				customBreakpoints
+			);
+			if (measuredRef.current === next) return;
+			measuredRef.current = next;
+			document.cookie = `breakpoint=${next}; Max-Age=31536000; Path=/`;
+			setBreakpoint(next);
 		};
 
-		handleResize();
-		window.addEventListener('resize', handleResize);
+		applyMeasurement();
+		window.addEventListener('resize', applyMeasurement);
 
 		return () => {
-			window.removeEventListener('resize', handleResize);
+			window.removeEventListener('resize', applyMeasurement);
 		};
 	}, [customBreakpoints]);
 
