@@ -66,27 +66,27 @@ new Elysia()
   });`;
 export const elysiaPlugins = `\
 // Use any Elysia plugin with AbsoluteJS
-import { cors } from '@elysiajs/cors';
-import { swagger } from '@elysiajs/swagger';
-import { staticPlugin } from '@elysiajs/static';
+import { cors } from '@elysia/cors';
+import { openapi } from '@elysia/openapi';
+import { staticPlugin } from '@elysia/static';
 import { absoluteAuth } from '@absolutejs/auth';
 
 new Elysia()
   .use(cors())
-  .use(swagger())
+  .use(openapi())
   .use(staticPlugin({ assets: './public' }))
   .use(absoluteAuth(config))
   // Your routes...`;
 export const elysiaProduction = `\
 import { Elysia } from 'elysia';
-import { cors } from '@elysiajs/cors';
-import { swagger } from '@elysiajs/swagger';
+import { cors } from '@elysia/cors';
+import { openapi } from '@elysia/openapi';
 import { absolutejs, networking } from '@absolutejs/absolute';
 
 new Elysia()
   .use(absolutejs)
   .use(cors({ origin: ['https://app.example.com'] }))
-  .use(swagger())
+  .use(openapi())
   .onError(({ code, error, set }) => {
     if (code === 'VALIDATION') {
       set.status = 400;
@@ -113,7 +113,7 @@ new Elysia()
 
   // Use any Elysia plugin
   .use(cors())
-  .use(swagger())
+  .use(openapi())
 
   // Page routes
   .get('/', () => handleReactPageRequest({ Page: Home, index: asset(manifest, 'HomeIndex') }))

@@ -76,7 +76,7 @@ export const InspectView = ({
 						detail pane shows its status, query, request/response
 						headers, and a per-lifecycle-phase timing breakdown
 						(parse, handler, etc.) from{' '}
-						<code>@elysiajs/server-timing</code> — so you see where
+						<code>@elysia/server-timing</code> — so you see where
 						the time actually went; press <code>q</code> to quit
 						(the server keeps running). Piped or in CI it prints a
 						one-shot snapshot instead, and <code>--json</code> emits
@@ -85,7 +85,7 @@ export const InspectView = ({
 						production distributed tracing, enable{' '}
 						<code>telemetry</code> in{' '}
 						<code>absolute.config.ts</code> to wire{' '}
-						<code>@elysiajs/opentelemetry</code>.
+						<code>@elysia/opentelemetry</code>.
 					</p>
 					<PrismPlus
 						codeString={inspectCommand}

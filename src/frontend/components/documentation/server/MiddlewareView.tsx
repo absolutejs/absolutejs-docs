@@ -250,7 +250,7 @@ export const MiddlewareView = ({
 						CORS &amp; Custom Headers
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						For CORS, the <code>@elysiajs/cors</code> plugin is the
+						For CORS, the <code>@elysia/cors</code> plugin is the
 						simplest option. For custom header logic, use{' '}
 						<code>onRequest</code>: it runs earliest and is always
 						global, making it ideal for headers that should apply to

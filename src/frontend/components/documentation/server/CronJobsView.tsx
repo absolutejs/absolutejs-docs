@@ -163,7 +163,7 @@ export const CronJobsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						Use <code>Patterns</code> helpers from{' '}
-						<code>@elysiajs/cron</code> for common schedules:
+						<code>@elysia/cron</code> for common schedules:
 					</p>
 					<PrismPlus
 						codeString={cronPatterns}

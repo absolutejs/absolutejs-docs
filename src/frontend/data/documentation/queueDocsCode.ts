@@ -122,7 +122,7 @@ app.post('/send', ({ queue }) =>
 export const queueRecurringCron = `// src/jobs/index.ts — module-scoped store so the cron trigger and the
 // queue plugin's worker share the same backing state (the cron run
 // callback has no Elysia Context, so it closes over the store).
-import { cron } from '@elysiajs/cron';
+import { cron } from '@elysia/cron';
 
 export const store = createInMemoryJobStore(jobs);
 export const registry = createJobRegistry(jobs).on(

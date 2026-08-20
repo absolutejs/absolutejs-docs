@@ -1463,6 +1463,422 @@ export const ecosystemProjects: EcosystemProject[] = [
 				]
 			},
 			{
+				entryPoint: '@absolutejs/absolute/mobile',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileStoredCompatibilityRelease',
+						signature:
+							'type AbsoluteMobileStoredCompatibilityRelease = {\n    artifact: AbsoluteMobileCompatibilityArtifact;\n    producer: Blob;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCompatibilityArtifactStore',
+						signature:
+							'type AbsoluteMobileCompatibilityArtifactStore = {\n    delete: (appId: string, releaseId: string) => Promise<void>;\n    list: (appId: string) => Promise<AbsoluteMobileCompatibilityArtifact[]>;\n    read: (appId: string, releaseId: string) => Promise<AbsoluteMobileStoredCompatibilityRelease | null>;\n    write: (release: AbsoluteMobileStoredCompatibilityRelease) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileFileArtifactStoreOptions',
+						signature:
+							'type AbsoluteMobileFileArtifactStoreOptions = {\n    maxProducerBytes?: number;\n    root: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileBlobStore',
+						signature:
+							'type AbsoluteMobileBlobStore = {\n    delete: (key: string) => Promise<void>;\n    get: (key: string) => Promise<Uint8Array | null>;\n    list: (options: {\n        cursor?: string;\n        prefix: string;\n    }) => Promise<{\n        cursor?: string;\n        objects: Array<{\n            key: string;\n        }>;\n        truncated: boolean;\n    }>;\n    put: (key: string, body: ReadableStream<Uint8Array> | Uint8Array | string, options?: {\n        contentType?: string;\n        maxBytes?: number;\n        metadata?: Record<string, string>;\n    }) => Promise<unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileBlobArtifactStoreOptions',
+						signature:
+							'type AbsoluteMobileBlobArtifactStoreOptions = {\n    maxProducerBytes?: number;\n    prefix?: string;\n    store: AbsoluteMobileBlobStore;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCarryForwardInput',
+						signature:
+							'type AbsoluteMobileCarryForwardInput = {\n    current: AbsoluteMobileStoredCompatibilityRelease;\n    store: AbsoluteMobileCompatibilityArtifactStore;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'carryForwardAbsoluteMobileCompatibilityReleases',
+						signature:
+							'const carryForwardAbsoluteMobileCompatibilityReleases: (input: AbsoluteMobileCarryForwardInput) => Promise<AbsoluteMobileStoredCompatibilityRelease[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAbsoluteMobileBlobArtifactStore',
+						signature:
+							'const createAbsoluteMobileBlobArtifactStore: (options: AbsoluteMobileBlobArtifactStoreOptions) => AbsoluteMobileCompatibilityArtifactStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAbsoluteMobileFileArtifactStore',
+						signature:
+							'const createAbsoluteMobileFileArtifactStore: (options: AbsoluteMobileFileArtifactStoreOptions) => AbsoluteMobileCompatibilityArtifactStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyAbsoluteMobileCompatibilityProducer',
+						signature:
+							'const verifyAbsoluteMobileCompatibilityProducer: (release: AbsoluteMobileStoredCompatibilityRelease, maxProducerBytes?: number) => Promise<AbsoluteMobileStoredCompatibilityRelease>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobilePageLoader',
+						signature:
+							'type AbsoluteMobilePageLoader = (input: {\n    contract: string;\n    pageId: string;\n}) => Promise<unknown>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobilePageActivation',
+						signature:
+							"type AbsoluteMobilePageActivation = {\n    kind: 'rendered';\n    contract: string;\n    pageId: string;\n} | AbsoluteMobileUpgradeRequiredResult;"
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'AbsoluteMobilePageProtocolError',
+						signature:
+							"class AbsoluteMobilePageProtocolError extends Error {\n    readonly code: 'invalid-envelope' | 'invalid-props' | 'server-error' | 'server-rejected-request';\n    constructor(code: AbsoluteMobilePageProtocolError['code'], message: string);\n}"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'activateAbsoluteMobilePage',
+						signature:
+							'const activateAbsoluteMobilePage: (value: unknown, options: AbsoluteMobilePageActivationOptions) => Promise<AbsoluteMobileUpgradeRequiredResult | {\n    contract: string;\n    kind: "rendered";\n    pageId: string;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseAbsoluteMobilePageEnvelope',
+						signature:
+							'const parseAbsoluteMobilePageEnvelope: (value: unknown) => {\n    protocol: 1;\n    response: AbsoluteMobilePageResult;\n} | {\n    protocol: 1;\n    response: AbsoluteMobileUpgradeRequiredResult;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCompatibilityProducerHandler',
+						signature:
+							'type AbsoluteMobileCompatibilityProducerHandler = {\n    handle: (request: Request) => Promise<Response> | Response;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCompatibilityProducerLoader',
+						signature:
+							'type AbsoluteMobileCompatibilityProducerLoader = (artifact: AbsoluteMobileCompatibilityArtifact) => Promise<AbsoluteMobileCompatibilityProducerHandler>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCompatibilityDispatcherOptions',
+						signature:
+							'type AbsoluteMobileCompatibilityDispatcherOptions = {\n    artifacts: readonly AbsoluteMobileCompatibilityArtifact[];\n    currentReleaseId: string;\n    loadProducer: AbsoluteMobileCompatibilityProducerLoader;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAbsoluteMobileCompatibilityDispatcher',
+						signature:
+							'const createAbsoluteMobileCompatibilityDispatcher: (options: AbsoluteMobileCompatibilityDispatcherOptions) => Elysia<"", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'ABSOLUTE_MOBILE_MATERIALIZED_BUNDLE_FORMAT',
+						signature:
+							'const ABSOLUTE_MOBILE_MATERIALIZED_BUNDLE_FORMAT: 1;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileMaterializedBundleInput',
+						signature:
+							'type AbsoluteMobileMaterializedBundleInput = {\n    currentReleaseId: string;\n    releases: readonly AbsoluteMobileStoredCompatibilityRelease[];\n    root: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileMaterializedBundleIndex',
+						signature:
+							'type AbsoluteMobileMaterializedBundleIndex = {\n    bundleId: string;\n    currentReleaseId: string;\n    format: typeof ABSOLUTE_MOBILE_MATERIALIZED_BUNDLE_FORMAT;\n    releases: AbsoluteMobileCompatibilityArtifact[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'loadAbsoluteMobileMaterializedBundle',
+						signature:
+							'const loadAbsoluteMobileMaterializedBundle: (root: string) => Promise<AbsoluteMobileCompatibilityDispatcherOptions>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'materializeAbsoluteMobileCompatibilityBundle',
+						signature:
+							'const materializeAbsoluteMobileCompatibilityBundle: (input: AbsoluteMobileMaterializedBundleInput) => Promise<{\n    bundleId: string;\n    currentReleaseId: string;\n    format: 1;\n    releases: AbsoluteMobileCompatibilityArtifact[];\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'ABSOLUTE_MOBILE_PAGE_MEDIA_TYPE',
+						signature:
+							'const ABSOLUTE_MOBILE_PAGE_MEDIA_TYPE = "application/vnd.absolute.page+json";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'ABSOLUTE_MOBILE_PAGE_PROTOCOL_VERSION',
+						signature:
+							'const ABSOLUTE_MOBILE_PAGE_PROTOCOL_VERSION: 1;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'MOBILE_PAGE_REQUEST_HEADERS',
+						signature:
+							'const MOBILE_PAGE_REQUEST_HEADERS: {\n    readonly appBuild: "x-absolute-mobile-app-build";\n    readonly pageBundle: "x-absolute-mobile-page-bundle";\n    readonly pageContracts: "x-absolute-mobile-page-contracts";\n    readonly pageId: "x-absolute-mobile-page-id";\n    readonly protocol: "x-absolute-mobile-protocol";\n    readonly runtime: "x-absolute-mobile-runtime";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobilePageFramework',
+						signature:
+							"type AbsoluteMobilePageFramework = 'angular' | 'ember' | 'html' | 'htmx' | 'react' | 'svelte' | 'vue';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobilePageClient',
+						signature:
+							'type AbsoluteMobilePageClient = {\n    appBuild: string;\n    pageBundle: string;\n    pageContracts: string[];\n    pageId: string;\n    protocol: number;\n    runtime: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobilePageRepresentation',
+						signature:
+							'type AbsoluteMobilePageRepresentation<Props> = {\n    /** Stable data contract understood by an embedded page bundle. */\n    contract: string;\n    /**\n     * Adapts the current route props to an older compatible contract. The\n     * current representation normally uses the identity function.\n     */\n    mapProps: (props: Props) => Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobilePageCompatibility',
+						signature:
+							'type AbsoluteMobilePageCompatibility<Props> = {\n    framework: AbsoluteMobilePageFramework;\n    pageId: string;\n    /** Newest representation first, followed by retained compatibility forms. */\n    representations: readonly AbsoluteMobilePageRepresentation<Props>[];\n    /** Current runtime plus every retained compatible runtime generation. */\n    runtimes: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobilePageResult',
+						signature:
+							"type AbsoluteMobilePageResult = {\n    kind: 'page';\n    contract: string;\n    framework: AbsoluteMobilePageFramework;\n    pageId: string;\n    props: Record<string, unknown>;\n    status: number;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileUpgradeReason',
+						signature:
+							"type AbsoluteMobileUpgradeReason = 'app-release' | 'page-contract' | 'protocol' | 'runtime';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileUpgradeRequiredResult',
+						signature:
+							"type AbsoluteMobileUpgradeRequiredResult = {\n    kind: 'upgrade-required';\n    reason: AbsoluteMobileUpgradeReason;\n    pageId: string;\n    supportedContracts?: string[];\n    supportedRuntimes?: string[];\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileInvalidRequestResult',
+						signature:
+							"type AbsoluteMobileInvalidRequestResult = {\n    kind: 'invalid-request';\n    message: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobilePageErrorResult',
+						signature:
+							"type AbsoluteMobilePageErrorResult = {\n    code: 'representation-failed';\n    kind: 'error';\n    pageId: string;\n    status: typeof SERVER_ERROR_STATUS;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobilePageEnvelope',
+						signature:
+							'type AbsoluteMobilePageEnvelope = {\n    protocol: typeof ABSOLUTE_MOBILE_PAGE_PROTOCOL_VERSION;\n    response: AbsoluteMobilePageErrorResult | AbsoluteMobileInvalidRequestResult | AbsoluteMobilePageResult | AbsoluteMobileUpgradeRequiredResult;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'acceptsAbsoluteMobilePage',
+						signature:
+							'const acceptsAbsoluteMobilePage: (request: Request | undefined) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseAbsoluteMobilePageRequest',
+						signature:
+							'const parseAbsoluteMobilePageRequest: (request: Request | undefined) => ParsedMobilePageRequest;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAbsoluteMobileInvalidRequestResponse',
+						signature:
+							'const createAbsoluteMobileInvalidRequestResponse: (message: string) => Response;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAbsoluteMobilePageErrorResponse',
+						signature:
+							'const createAbsoluteMobilePageErrorResponse: (pageId: string) => Response;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAbsoluteMobileUpgradeResponse',
+						signature:
+							'const createAbsoluteMobileUpgradeResponse: (result: AbsoluteMobileUpgradeRequiredResult) => Response;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'finalizeAbsoluteMobilePage',
+						signature:
+							'const finalizeAbsoluteMobilePage: <Props>(input: FinalizeAbsoluteMobilePageInput<Props>) => Response | undefined;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AbsoluteMobileProducerContext',
+						signature: 'AbsoluteMobileProducerContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getCurrentAbsoluteMobileProducerContext',
+						signature: 'getCurrentAbsoluteMobileProducerContext'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'runWithAbsoluteMobileProducer',
+						signature:
+							'const runWithAbsoluteMobileProducer: <Result>(context: AbsoluteMobileProducerContext, callback: () => Result) => Result;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'ABSOLUTE_MOBILE_COMPATIBILITY_FORMAT',
+						signature:
+							'const ABSOLUTE_MOBILE_COMPATIBILITY_FORMAT: 1;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'ABSOLUTE_MOBILE_RETAINED_GENERATIONS',
+						signature:
+							'const ABSOLUTE_MOBILE_RETAINED_GENERATIONS = 3;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCompatibilityPage',
+						signature:
+							'type AbsoluteMobileCompatibilityPage = {\n    bundleHash: string;\n    contract: string;\n    framework: AbsoluteMobilePageFramework;\n    pageId: string;\n    propsSchemaHash: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCompatibilityRoute',
+						signature:
+							"type AbsoluteMobileCompatibilityRoute = {\n    method: 'GET' | 'HEAD';\n    pageId: string;\n    pattern: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCompatibilityProducer',
+						signature:
+							'type AbsoluteMobileCompatibilityProducer = {\n    bundleHash: string;\n    bytes: number;\n    exportName: string;\n    module: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCompatibilityArtifactInput',
+						signature:
+							'type AbsoluteMobileCompatibilityArtifactInput = {\n    appBuild: string;\n    appId: string;\n    generation: number;\n    pages: readonly AbsoluteMobileCompatibilityPage[];\n    producer: AbsoluteMobileCompatibilityProducer;\n    routes: readonly AbsoluteMobileCompatibilityRoute[];\n    runtime: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileCompatibilityArtifact',
+						signature:
+							'type AbsoluteMobileCompatibilityArtifact = {\n    appBuild: string;\n    appId: string;\n    format: typeof ABSOLUTE_MOBILE_COMPATIBILITY_FORMAT;\n    generation: number;\n    pages: AbsoluteMobileCompatibilityPage[];\n    producer: AbsoluteMobileCompatibilityProducer;\n    releaseId: string;\n    routes: AbsoluteMobileCompatibilityRoute[];\n    runtime: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteMobileResolvedRelease',
+						signature:
+							"type AbsoluteMobileResolvedRelease = {\n    artifact: AbsoluteMobileCompatibilityArtifact;\n    kind: 'retained';\n    page: AbsoluteMobileCompatibilityPage;\n} | {\n    kind: 'upgrade-required';\n    result: AbsoluteMobileUpgradeRequiredResult;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAbsoluteMobileCompatibilityArtifact',
+						signature:
+							'const createAbsoluteMobileCompatibilityArtifact: (input: AbsoluteMobileCompatibilityArtifactInput) => {\n    releaseId: string;\n    pages: AbsoluteMobileCompatibilityPage[];\n    routes: AbsoluteMobileCompatibilityRoute[];\n    format: typeof ABSOLUTE_MOBILE_COMPATIBILITY_FORMAT;\n    runtime: string;\n    appBuild: string;\n    appId: string;\n    generation: number;\n    producer: AbsoluteMobileCompatibilityProducer;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'hashAbsoluteMobilePropsSchema',
+						signature:
+							'const hashAbsoluteMobilePropsSchema: (schema: unknown) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseAbsoluteMobileCompatibilityArtifact',
+						signature:
+							'const parseAbsoluteMobileCompatibilityArtifact: (value: unknown) => {\n    releaseId: string;\n    pages: AbsoluteMobileCompatibilityPage[];\n    routes: AbsoluteMobileCompatibilityRoute[];\n    format: typeof ABSOLUTE_MOBILE_COMPATIBILITY_FORMAT;\n    runtime: string;\n    appBuild: string;\n    appId: string;\n    generation: number;\n    producer: AbsoluteMobileCompatibilityProducer;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveAbsoluteMobileCompatibilityRelease',
+						signature:
+							'const resolveAbsoluteMobileCompatibilityRelease: (client: AbsoluteMobilePageClient, artifacts: readonly AbsoluteMobileCompatibilityArtifact[]) => AbsoluteMobileResolvedRelease;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'retainAbsoluteMobileCompatibilityArtifacts',
+						signature:
+							'const retainAbsoluteMobileCompatibilityArtifacts: (artifacts: readonly AbsoluteMobileCompatibilityArtifact[]) => AbsoluteMobileCompatibilityArtifact[];'
+					}
+				]
+			},
+			{
 				entryPoint: '@absolutejs/absolute/react',
 				symbols: [
 					{
@@ -2170,6 +2586,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/absolute/client',
 			'@absolutejs/absolute/image',
 			'@absolutejs/absolute/islands',
+			'@absolutejs/absolute/mobile',
 			'@absolutejs/absolute/react',
 			'@absolutejs/absolute/react/components',
 			'@absolutejs/absolute/react/hooks',
@@ -2202,10 +2619,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/absolute/vue/server'
 		],
 		readmeDigest:
-			'c61b43ea685bd14b3928c74afc783655b3f08be68d1144a5079e0516cfa39ac3',
+			'3f4aaaac6b22de8fbe028184fff1096e00b1b9782ee50e58f67f4a89a7fd55d4',
 		readmeSamples: [
 			{
-				code: "// example/server.ts\nimport { staticPlugin } from '@elysiajs/static';\nimport { Elysia } from 'elysia';\nimport { file } from 'bun';\nimport { build } from 'absolutejs/core/build';\nimport {\n\thandleHTMLPageRequest,\n\thandleSveltePageRequest\n} from 'absolutejs/core/pageHandlers';\nimport { handleReactPageRequest } from 'absolutejs/react';\n\nimport { ReactExample } from './react/pages/ReactExample';\nimport SvelteExample from './svelte/pages/SvelteExample.svelte';\nimport { networkingPlugin } from 'absolutejs';\n\nconst manifest = await build({\n\tassetsDirectory: 'example/assets',\n\tbuildDirectory: 'example/build',\n\thtmlDirectory: 'example/html',\n\thtmxDirectory: 'example/htmx',\n\treactDirectory: 'example/react',\n\tsvelteDirectory: 'example/svelte'\n});\n\nif (!manifest) throw new Error('Manifest generation failed');\n\nlet counter = 0;\n\nexport const server = new Elysia()\n\t.use(staticPlugin({ assets: './example/build', prefix: '' }))\n\n\t// HTML\n\t.get('/', () =>\n\t\thandleHTMLPageRequest('./example/build/html/pages/HTMLExample.html')\n\t)\n\n\t// React\n\t.get('/react', () =>\n\t\thandleReactPageRequest(ReactExample, manifest['ReactExampleIndex'], {\n\t\t\ttest: 123\n\t\t})\n\t)\n\n\t// Svelte\n\t.get('/svelte', () =>\n\t\thandleSveltePageRequest(SvelteExample, manifest, { test: 456 })\n\t)\n\n\t// HTMX demo\n\t.get('/htmx', () => file('./example/build/htmx/HtmxHome.html'))\n\t.get('/htmx/increment', () => new Response(String(++counter)))\n\n\t.use(networkingPlugin)\n\t.on('error', (error) => {\n\t\tconst { request } = error;\n\t\tconsole.error(\n\t\t\t`Server error on ${request.method} ${request.url}: ${error.message}`\n\t\t);\n\t});",
+				code: "// example/server.ts\nimport { staticPlugin } from '@elysia/static';\nimport { Elysia } from 'elysia';\nimport { file } from 'bun';\nimport { build } from 'absolutejs/core/build';\nimport {\n\thandleHTMLPageRequest,\n\thandleSveltePageRequest\n} from 'absolutejs/core/pageHandlers';\nimport { handleReactPageRequest } from 'absolutejs/react';\n\nimport { ReactExample } from './react/pages/ReactExample';\nimport SvelteExample from './svelte/pages/SvelteExample.svelte';\nimport { networkingPlugin } from 'absolutejs';\n\nconst manifest = await build({\n\tassetsDirectory: 'example/assets',\n\tbuildDirectory: 'example/build',\n\thtmlDirectory: 'example/html',\n\thtmxDirectory: 'example/htmx',\n\treactDirectory: 'example/react',\n\tsvelteDirectory: 'example/svelte'\n});\n\nif (!manifest) throw new Error('Manifest generation failed');\n\nlet counter = 0;\n\nexport const server = new Elysia()\n\t.use(staticPlugin({ assets: './example/build', prefix: '' }))\n\n\t// HTML\n\t.get('/', () =>\n\t\thandleHTMLPageRequest('./example/build/html/pages/HTMLExample.html')\n\t)\n\n\t// React\n\t.get('/react', () =>\n\t\thandleReactPageRequest(ReactExample, manifest['ReactExampleIndex'], {\n\t\t\ttest: 123\n\t\t})\n\t)\n\n\t// Svelte\n\t.get('/svelte', () =>\n\t\thandleSveltePageRequest(SvelteExample, manifest, { test: 456 })\n\t)\n\n\t// HTMX demo\n\t.get('/htmx', () => file('./example/build/htmx/HtmxHome.html'))\n\t.get('/htmx/increment', () => new Response(String(++counter)))\n\n\t.use(networkingPlugin)\n\t.on('error', (error) => {\n\t\tconst { request } = error;\n\t\tconsole.error(\n\t\t\t`Server error on ${request.method} ${request.url}: ${error.message}`\n\t\t);\n\t});",
 				description: 'Working example for Quick Start.',
 				heading: 'Quick Start',
 				language: 'typescript'
@@ -2333,7 +2750,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/darwin-arm64',
-				version: '0.19.0-beta.1131'
+				version: '0.20.0-beta.0'
 			},
 			{
 				api: [],
@@ -2346,7 +2763,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/darwin-x64',
-				version: '0.19.0-beta.1131'
+				version: '0.20.0-beta.0'
 			},
 			{
 				api: [],
@@ -2360,7 +2777,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/linux-arm64',
-				version: '0.19.0-beta.1131'
+				version: '0.20.0-beta.0'
 			},
 			{
 				api: [],
@@ -2373,7 +2790,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/linux-x64',
-				version: '0.19.0-beta.1131'
+				version: '0.20.0-beta.0'
 			},
 			{
 				api: [],
@@ -2387,7 +2804,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/windows-arm64',
-				version: '0.19.0-beta.1131'
+				version: '0.20.0-beta.0'
 			},
 			{
 				api: [],
@@ -2401,10 +2818,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				readmeSamples: [],
 				readmeTopics: [],
 				sourcePath: 'native/packages/windows-x64',
-				version: '0.19.0-beta.1131'
+				version: '0.20.0-beta.0'
 			}
 		],
-		version: '0.19.0-beta'
+		version: '0.20.0-beta'
 	},
 	{
 		api: [],
@@ -3278,7 +3695,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -3631,12 +4048,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 		commands: [
 			{
 				command:
-					"rm -rf dist && bun build src/*.ts --outdir dist --root src --target=bun --sourcemap --external '@absolutejs/*' --external '@absolutejs/execution' --external '@sinclair/typebox' --external drizzle-orm --external 'drizzle-orm/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
+					"rm -rf dist && bun build src/*.ts --outdir dist --root src --target=bun --sourcemap --external '@absolutejs/*' --external '@absolutejs/auth' --external '@absolutejs/execution' --external '@sinclair/typebox' --external drizzle-orm --external 'drizzle-orm/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
 				name: 'build'
 			},
 			{
 				command:
-					'bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -3731,7 +4148,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/agent',
 		subpackages: [],
-		version: '0.25.0'
+		version: '0.26.0'
 	},
 	{
 		api: [],
@@ -8043,7 +8460,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/ai/ui'
 		],
 		readmeDigest:
-			'87391f1220bb251a25e19f88d457f80eefb42b879a4af0608e09992bc215f552',
+			'947d32951e0b7c930f1f1cd7172b17f904b3662fe44676fab3ad8556ef972c22',
 		readmeSamples: [
 			{
 				code: 'import { createConversationTurnQueue } from "@absolutejs/ai/client";\n\nconst queue = createConversationTurnQueue({\n  execute: async (turn, { signal }) => runTurn(turn, signal),\n});\n\nqueue.enqueue({ content: "First" });\nqueue.enqueue({ content: "Send this after the first reply" });',
@@ -8068,6 +8485,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'aiChat() serializes turns per conversation. A member may submit follow-ups while a response is streaming: the server emits turn_queued, then turn_started when that turn becomes active. Every framework adapter sends a stable client message ID, and its message state exposes isQueued for UI.',
 				details: [
 					'branch(messageId, content) creates a new conversation through the selected message and immediately runs content as the first turn on that branch. The typed branched event switches the client to the new conversation.',
+					'edit(messageId, content) creates a new conversation through the history before the selected user message, replaces that message with content, and runs it again. The original conversation remains unchanged, matching the edit behavior of modern AI chat interfaces without rewriting conversation history.',
 					'Custom REST/SSE hosts can use the same ordering primitive:',
 					'Failures stop later turns from overtaking the failed message. The host must explicitly retry or remove it. subscribe() exposes immutable queue snapshots for framework-independent UI.'
 				],
@@ -8095,7 +8513,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/ai',
 		subpackages: [],
-		version: '0.0.47'
+		version: '0.0.49'
 	},
 	{
 		api: [],
@@ -8702,6 +9120,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'isJsonValue',
+						signature: 'isJsonValue'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'ArtifactAssetReference',
 						signature: 'type ArtifactAssetReference'
 					},
@@ -8842,6 +9266,24 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'ArtifactUpdateInput',
 						signature: 'type ArtifactUpdateInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JsonObject',
+						signature: 'type JsonObject'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JsonPrimitive',
+						signature: 'type JsonPrimitive'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JsonValue',
+						signature: 'type JsonValue'
 					}
 				]
 			},
@@ -8872,7 +9314,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'artifactRevisions',
 						signature:
-							'const artifactRevisions: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: "artifact_revisions";\n    schema: undefined;\n    columns: {\n        artifactId: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: "artifact_revisions";\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        document: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgCustomColumnBuilder<{\n            dataType: "custom";\n            data: Readonly<ArtifactRecord<unknown>>;\n            driverParam: unknown;\n        }>>, {\n            name: string;\n            tableName: "artifact_revisions";\n            dataType: "custom";'
+							'const artifactRevisions: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: "artifact_revisions";\n    schema: undefined;\n    columns: {\n        artifactId: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: "artifact_revisions";\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        document: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgCustomColumnBuilder<{\n            dataType: "custom";\n            data: Readonly<ArtifactRecord<import("./types").JsonValue>>;\n            driverParam: unknown;\n        }>>, {\n            name: string;\n            tableName: "artifact_revisions";\n           '
 					},
 					{
 						description: '',
@@ -8914,14 +9356,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'ArtifactRevisionInsertSchema',
 						signature:
-							'const ArtifactRevisionInsertSchema: import("drizzle-typebox").BuildSchema<"insert", {\n    artifactId: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n        name: string;\n        tableName: "artifact_revisions";\n        dataType: "string";\n        data: string;\n        driverParam: string;\n        notNull: true;\n        hasDefault: false;\n        isPrimaryKey: false;\n        isAutoincrement: false;\n        hasRuntimeDefault: false;\n        enumValues: undefined;\n        identity: undefined;\n        generated: undefined;\n    }>;\n    document: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgCustomColumnBuilder<{\n        dataType: "custom";\n        data: Readonly<ArtifactRecord<unknown>>;\n        driverParam: unknown;\n    }>>, {\n        name: string;\n        tableName: "artifact_revisions";\n        dataType: "custom";\n        data: Readonly<ArtifactRecord<unknown>>;\n        driverParam: unknown;\n        notNull: true;\n        hasDefault: false;\n        isPrimaryKey: '
+							'const ArtifactRevisionInsertSchema: import("drizzle-typebox").BuildSchema<"insert", {\n    artifactId: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n        name: string;\n        tableName: "artifact_revisions";\n        dataType: "string";\n        data: string;\n        driverParam: string;\n        notNull: true;\n        hasDefault: false;\n        isPrimaryKey: false;\n        isAutoincrement: false;\n        hasRuntimeDefault: false;\n        enumValues: undefined;\n        identity: undefined;\n        generated: undefined;\n    }>;\n    document: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgCustomColumnBuilder<{\n        dataType: "custom";\n        data: Readonly<ArtifactRecord<import("./types").JsonValue>>;\n        driverParam: unknown;\n    }>>, {\n        name: string;\n        tableName: "artifact_revisions";\n        dataType: "custom";\n        data: Readonly<ArtifactRecord<import("./types").JsonValue>>;\n        driverParam: unknown;\n        notNull: true;\n        h'
 					},
 					{
 						description: '',
 						kind: 'value',
 						name: 'ArtifactRevisionSelectSchema',
 						signature:
-							'const ArtifactRevisionSelectSchema: import("drizzle-typebox").BuildSchema<"select", {\n    artifactId: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n        name: string;\n        tableName: "artifact_revisions";\n        dataType: "string";\n        data: string;\n        driverParam: string;\n        notNull: true;\n        hasDefault: false;\n        isPrimaryKey: false;\n        isAutoincrement: false;\n        hasRuntimeDefault: false;\n        enumValues: undefined;\n        identity: undefined;\n        generated: undefined;\n    }>;\n    document: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgCustomColumnBuilder<{\n        dataType: "custom";\n        data: Readonly<ArtifactRecord<unknown>>;\n        driverParam: unknown;\n    }>>, {\n        name: string;\n        tableName: "artifact_revisions";\n        dataType: "custom";\n        data: Readonly<ArtifactRecord<unknown>>;\n        driverParam: unknown;\n        notNull: true;\n        hasDefault: false;\n        isPrimaryKey: '
+							'const ArtifactRevisionSelectSchema: import("drizzle-typebox").BuildSchema<"select", {\n    artifactId: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n        name: string;\n        tableName: "artifact_revisions";\n        dataType: "string";\n        data: string;\n        driverParam: string;\n        notNull: true;\n        hasDefault: false;\n        isPrimaryKey: false;\n        isAutoincrement: false;\n        hasRuntimeDefault: false;\n        enumValues: undefined;\n        identity: undefined;\n        generated: undefined;\n    }>;\n    document: import("drizzle-orm/pg-core").PgBuildColumn<"artifact_revisions", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgCustomColumnBuilder<{\n        dataType: "custom";\n        data: Readonly<ArtifactRecord<import("./types").JsonValue>>;\n        driverParam: unknown;\n    }>>, {\n        name: string;\n        tableName: "artifact_revisions";\n        dataType: "custom";\n        data: Readonly<ArtifactRecord<import("./types").JsonValue>>;\n        driverParam: unknown;\n        notNull: true;\n        h'
 					},
 					{
 						description: '',
@@ -9169,7 +9611,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/artifacts',
 		subpackages: [],
-		version: '0.1.3'
+		version: '0.1.4'
 	},
 	{
 		api: [
@@ -9346,7 +9788,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run typecheck && bun run lint && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test && bun run verify-pack',
+					'bun run typecheck && bun run lint && bun run verify-package && bun run build && bun run test && bun run verify-pack',
 				name: 'check:package'
 			},
 			{
@@ -9556,14 +9998,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'GoogleTagState',
 						signature:
-							'type GoogleTagState = "closed" | "failed" | "idle" | "loading" | "ready" | "waiting-online";'
+							'type GoogleTagState = "closed" | "failed" | "idle" | "loading" | "ready" | "waiting-online" | "waiting-visible";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleTagFailureReason',
+						signature:
+							'type GoogleTagFailureReason = "csp-blocked" | "load-timeout" | "network-or-client-blocked" | "offline";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GoogleTagResourceTiming',
+						signature:
+							'type GoogleTagResourceTiming = {\n    durationMs: number;\n    entryFound: boolean;\n    responseStatus: number;\n    transferSize: number;\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'GoogleTagTelemetry',
 						signature:
-							'type GoogleTagTelemetry = {\n    attempt: number;\n    event: "closed" | "failed" | "load-attempt" | "ready" | "retry-scheduled" | "waiting-online";\n    hadGoogleClickId: boolean;\n    recovered: boolean;\n};'
+							'type GoogleTagTelemetry = {\n    attempt: number;\n    attemptElapsedMs: number;\n    consent: GoogleAdsConsent;\n    elapsedMs: number;\n    event: "closed" | "failed" | "load-attempt" | "ready" | "retry-scheduled" | "waiting-online" | "waiting-visible";\n    failureReason?: GoogleTagFailureReason;\n    hadGoogleClickId: boolean;\n    hadExistingTag: boolean;\n    online: boolean;\n    recovered: boolean;\n    resourceTiming?: GoogleTagResourceTiming;\n    visibilityState: DocumentVisibilityState | "unknown";\n};'
 					},
 					{
 						description: '',
@@ -9577,7 +10033,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'GoogleAdsTagOptions',
 						signature:
-							'type GoogleAdsTagOptions = {\n    attribution?: AttributionStore;\n    consent: GoogleAdsConsent;\n    document?: Document;\n    id: string;\n    maxAttempts?: number;\n    onTelemetry?: (event: GoogleTagTelemetry) => void;\n    retryDelaysMs?: readonly number[];\n    window?: Window;\n};'
+							'type GoogleAdsTagOptions = {\n    attribution?: AttributionStore;\n    consent: GoogleAdsConsent;\n    document?: Document;\n    id: string;\n    loadTimeoutMs?: number;\n    maxAttempts?: number;\n    onTelemetry?: (event: GoogleTagTelemetry) => void;\n    performance?: Performance;\n    retryDelaysMs?: readonly number[];\n    window?: Window;\n};'
 					},
 					{
 						description: '',
@@ -9675,7 +10131,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/attribution/google-ads'
 		],
 		readmeDigest:
-			'e1753fe66d18f72ae9462db6e6ee4584d670a25838370c64dd60b6914ffd6ecf',
+			'd275eab265769ae2967e70c6bc4fae374c8360b236e99f3a379c5790c95140a9',
 		readmeSamples: [
 			{
 				code: 'import { createAttributionStore } from "@absolutejs/attribution";\nimport { createGoogleAdsTag } from "@absolutejs/attribution/google-ads";\n\nconst attribution = createAttributionStore();\nattribution.capture();\n\nconst google = createGoogleAdsTag({\n  attribution,\n  consent: {\n    adPersonalization: "denied",\n    adStorage: "denied",\n    adUserData: "denied",\n    analyticsStorage: "denied",\n  },\n  id: "AW-123",\n  onTelemetry: (event) => console.info(event),\n});\n\n// Start after framework hydration/mount.\ngoogle.start();\n\nconst qualificationUrl = attribution.decorate("https://qualify.example.com", [\n  "https://qualify.example.com",\n]);',
@@ -9701,11 +10157,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'load the Google tag through a retrying idle → loading → ready/failed state',
 					'machine;',
 					'keep consent and conversion commands queued while the tag recovers;',
-					'emit identifier-free load telemetry; and',
+					'emit identifier-free, classified load telemetry with lifecycle, consent, CSP,',
+					'and resource-timing context; and',
 					'supplement browser tag conversions through Google Data Manager using the same',
 					'transaction ID for deduplication.'
 				],
 				title: 'Overview'
+			},
+			{
+				description:
+					"The loader waits for the page to be online and visible, applies a bounded per-attempt timeout, and spaces retries over a longer window. Terminal telemetry classifies CSP blocks, offline transitions, timeouts, and the browser's otherwise opaque network-or-client-blocked failures. Cross-origin response details remain restricted unless the resource opts into Resource Timing access.",
+				details: [],
+				title: 'Browser attribution'
 			},
 			{
 				description:
@@ -9716,7 +10179,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/attribution',
 		subpackages: [],
-		version: '0.1.0'
+		version: '0.2.0'
 	},
 	{
 		api: [
@@ -10319,7 +10782,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+					'bun run typecheck && bun run verify-package && bun run build && bun run test',
 				name: 'check:package'
 			},
 			{
@@ -10484,7 +10947,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 								kind: 'value',
 								name: 'auditElysia',
 								signature:
-									'const auditElysia: (options: AuditElysiaOptions) => Elysia<"", {\n    decorator: {};\n    store: {};\n    derive: {};\n    resolve: {};\n}, {\n    typebox: {};\n    error: {};\n}, {\n    schema: {};\n    standaloneSchema: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n    response: {};\n}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n    response: {};\n}>;'
+									'const auditElysia: (options: AuditElysiaOptions) => Elysia<"", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral>;'
 							}
 						]
 					},
@@ -10509,7 +10972,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+							'bun run typecheck && bun run verify-package && bun run build && bun run test',
 						name: 'check:package'
 					},
 					{
@@ -10526,7 +10989,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				description:
-					'Elysia plugin emitting one structured audit event per request into @absolutejs/audit. Wires into onRequest + onAfterResponse so success AND error paths are captured. Orthogonal to @elysiajs/server-timing (perf headers) and @elysiajs/opentelemetry (sampled tracing); optionally correlates with the active OTel trace id.',
+					'Elysia plugin emitting one structured audit event per request into @absolutejs/audit. Wires into request + afterResponse so success AND error paths are captured. Orthogonal to @elysia/server-timing (perf headers) and @elysia/opentelemetry (sampled tracing); optionally correlates with the active OTel trace id.',
 				name: '@absolutejs/audit-elysia',
 				private: false,
 				publicExports: [
@@ -10535,7 +10998,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/audit-elysia/manifest.json'
 				],
 				readmeDigest:
-					'6fad2dbf59d105fbf04ee616b7d77baf4a43fbfbdb97566d95164c2257d8e6e1',
+					'38589c3a6e0c0fd6b5bedb55e6e7dfa0314a68ecfdee6b44c4ddb3f5e1248af7',
 				readmeSamples: [
 					{
 						code: 'bun add @absolutejs/audit @absolutejs/audit-elysia elysia',
@@ -10580,11 +11043,11 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: 'The Elysia ecosystem already has:',
 						details: [
-							'@elysiajs/server-timing — emits an IETF Server-Timing response',
+							'@elysia/server-timing — emits an IETF Server-Timing response',
 							'header with per-lifecycle-phase durations. Performance instrumentation visible in browser devtools. Off by default in production. Useful, but not compliance-shaped.',
-							'@elysiajs/opentelemetry — wires the request lifecycle into OTel',
+							'@elysia/opentelemetry — wires the request lifecycle into OTel',
 							'spans. Distributed tracing exported to Jaeger / Honeycomb / Axiom / Datadog. Sampled, ephemeral. Useful, but not retention-shaped.',
-							'Neither is structured audit. Audit is "an append-only event per request, tamper-evident when paired with withIntegrity, queryable, and retained for compliance" — a separate concern. This plugin fills that gap. No official @elysiajs/audit exists; the community has logging plugins (logestic, logixlysia, etc.) but none are structured tamper-evident audit pipelines.',
+							'Neither is structured audit. Audit is "an append-only event per request, tamper-evident when paired with withIntegrity, queryable, and retained for compliance" — a separate concern. This plugin fills that gap. No official Elysia audit plugin exists; the community has logging plugins (logestic, logixlysia, etc.) but none are structured tamper-evident audit pipelines.',
 							'Install all three side-by-side if you want all three.'
 						],
 						title: 'Why this exists'
@@ -10607,7 +11070,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'The plugin does not capture request or response bodies by default — PII redaction surface area is too speculative to ship without a real consumer asking. Add it through redact (or call audit.append directly from a handler) when you need it.',
 							'correlateOtelTraceId',
 							"If true, the plugin tries to read the active OTel trace id via @opentelemetry/api (if installed) and attaches it as metadata.traceId. Falls back silently when OTel isn't installed. Default false — opt-in because not every app runs OTel, and we don't want a hidden dynamic import in the request hot path.",
-							'When combined with @elysiajs/opentelemetry, this is the principled bridge: every audit row carries the trace_id of the span that produced it, so SREs investigating a flagged audit row can pivot to the trace.',
+							'When combined with @elysia/opentelemetry, this is the principled bridge: every audit row carries the trace_id of the span that produced it, so SREs investigating a flagged audit row can pivot to the trace.',
 							'kind',
 							"Override the event kind namespace. Default 'http.request' — the plugin appends .ok / .client_error / .error based on response status. Override to differentiate audit streams:",
 							'requestIdHeader'
@@ -10616,7 +11079,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
-							'onAfterResponse — the only Elysia lifecycle hook that fires once per request including error paths. Verified via Elysia 1.4 docs and tested with handlers that throw. onRequest is also wired (to stamp the wall- clock start), but the emission is in onAfterResponse.',
+							'afterResponse — the only Elysia lifecycle hook that fires once per request including error paths. Verified against Elysia 2 and tested with handlers that throw. request is also wired (to stamp the wall- clock start), but the emission is in afterResponse.',
 						details: [
 							"The plugin scopes both hooks to 'global' so they apply to every route registered on the parent app, not just routes defined on the plugin."
 						],
@@ -10635,7 +11098,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'elysia',
-				version: '0.1.2'
+				version: '0.2.0'
 			},
 			{
 				api: [
@@ -10779,7 +11242,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+							'bun run typecheck && bun run verify-package && bun run build && bun run test',
 						name: 'check:package'
 					},
 					{
@@ -10984,7 +11447,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+							'bun run typecheck && bun run verify-package && bun run build && bun run test',
 						name: 'check:package'
 					},
 					{
@@ -11130,14 +11593,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'auth',
 						signature:
-							'const auth: <UserType>(configuration: AuthConfig<UserType>) => Promise<Elysia<"", {\n    decorator: {};\n    store: {\n        session: import("./types").SessionRecord<UserType>;\n        unregisteredSession: import("./types").UnregisteredSessionRecord;\n    };\n    derive: ({\n        readonly protectRoute: <AuthReturn, AuthFailReturn = never>(handleAuth: (user: UserType) => AuthReturn | Promise<AuthReturn>, handleAuthFail?: ((error: {\n            readonly code: "Bad Request";\n            readonly message: "Cookies are missing";\n        } | {\n            readonly code: "Unauthorized";\n            readonly message: "User is not authenticated";\n        }) => AuthFailReturn) | undefined) => Promise<import("elysia").ElysiaCustomStatusResponse<"Bad Request", "Cookies are missing", 400> | import("elysia").ElysiaCustomStatusResponse<"Unauthorized", "User is not authenticated", 401> | AuthReturn | NonNullable<AuthFailReturn>>;\n    } & {\n        readonly requireRecentAuth: <AuthReturn, AuthFailReturn_1>(maxAgeMs: number, handleAuth: (user: UserType) => AuthReturn | Promise<AuthReturn>, handleAuthFail?: ((error: {\n            readonly code: "Unauthorized";\n            readonly message: "Recent aut'
+							'const auth: <UserType>(configuration: AuthConfig<UserType>) => Promise<Elysia<"", "local", {\n    decorator: {};\n    store: {\n        session: import("./types").SessionRecord<UserType>;\n        unregisteredSession: import("./types").UnregisteredSessionRecord;\n    };\n    derive: ({\n        readonly protectRoute: <AuthReturn, AuthFailReturn = never>(handleAuth: (user: UserType) => AuthReturn | Promise<AuthReturn>, handleAuthFail?: ((error: {\n            readonly code: "Bad Request";\n            readonly message: "Cookies are missing";\n        } | {\n            readonly code: "Unauthorized";\n            readonly message: "User is not authenticated";\n        }) => AuthFailReturn) | undefined) => Promise<import("elysia").ElysiaStatus<"Bad Request", "Cookies are missing", 400> | import("elysia").ElysiaStatus<"Unauthorized", "User is not authenticated", 401> | AuthReturn | NonNullable<AuthFailReturn>>;\n    } & {\n        readonly requireRecentAuth: <AuthReturn, AuthFailReturn_1>(maxAgeMs: number, handleAuth: (user: UserType) => AuthReturn | Promise<AuthReturn>, handleAuthFail?: ((error: {\n            readonly code: "Unauthorized";\n            readonly message: "Recent authentication require'
 					},
 					{
 						description: '',
 						kind: 'value',
 						name: 'createAuthApplications',
 						signature:
-							'const createAuthApplications: <UserType>(configuration: AuthConfig<UserType>) => Promise<{\n    authContext: Elysia<"", {\n        decorator: {};\n        store: {\n            session: import("./types").SessionRecord<UserType>;\n            unregisteredSession: import("./types").UnregisteredSessionRecord;\n        };\n        derive: ({\n            readonly protectRoute: <AuthReturn, AuthFailReturn = never>(handleAuth: (user: UserType) => AuthReturn | Promise<AuthReturn>, handleAuthFail?: ((error: {\n                readonly code: "Bad Request";\n                readonly message: "Cookies are missing";\n            } | {\n                readonly code: "Unauthorized";\n                readonly message: "User is not authenticated";\n            }) => AuthFailReturn) | undefined) => Promise<import("elysia").ElysiaCustomStatusResponse<"Bad Request", "Cookies are missing", 400> | import("elysia").ElysiaCustomStatusResponse<"Unauthorized", "User is not authenticated", 401> | AuthReturn | NonNullable<AuthFailReturn>>;\n        } & {\n            readonly requireRecentAuth: <AuthReturn, AuthFailReturn_1>(maxAgeMs: number, handleAuth: (user: UserType) => AuthReturn | Promise<AuthReturn>, handleAuthFail?'
+							'const createAuthApplications: <UserType>(configuration: AuthConfig<UserType>) => Promise<{\n    authContext: Elysia<"", "local", {\n        decorator: {};\n        store: {\n            session: import("./types").SessionRecord<UserType>;\n            unregisteredSession: import("./types").UnregisteredSessionRecord;\n        };\n        derive: ({\n            readonly protectRoute: <AuthReturn, AuthFailReturn = never>(handleAuth: (user: UserType) => AuthReturn | Promise<AuthReturn>, handleAuthFail?: ((error: {\n                readonly code: "Bad Request";\n                readonly message: "Cookies are missing";\n            } | {\n                readonly code: "Unauthorized";\n                readonly message: "User is not authenticated";\n            }) => AuthFailReturn) | undefined) => Promise<import("elysia").ElysiaStatus<"Bad Request", "Cookies are missing", 400> | import("elysia").ElysiaStatus<"Unauthorized", "User is not authenticated", 401> | AuthReturn | NonNullable<AuthFailReturn>>;\n        } & {\n            readonly requireRecentAuth: <AuthReturn, AuthFailReturn_1>(maxAgeMs: number, handleAuth: (user: UserType) => AuthReturn | Promise<AuthReturn>, handleAuthFail?: ((error: {\n      '
 					},
 					{
 						description: '',
@@ -11278,7 +11741,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'UnregisteredSessionData',
 						signature:
-							'type UnregisteredSessionData = {\n    userIdentity?: Record<string, unknown>;\n    sessionInformation?: Record<string, unknown>;\n    expiresAt: number;\n    accessToken?: string;\n    refreshToken?: string;\n    oauthSubject?: string | number;\n};'
+							'type UnregisteredSessionData = {\n    userIdentity?: JsonObject;\n    sessionInformation?: JsonObject;\n    expiresAt: number;\n    accessToken?: string;\n    refreshToken?: string;\n    oauthSubject?: string | number;\n};'
 					},
 					{
 						description: '',
@@ -11292,28 +11755,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'ResolvedOAuthAuthorization',
 						signature:
-							'type ResolvedOAuthAuthorization = {\n    userIdentity: Record<string, unknown>;\n    accessToken: string;\n    oauthSubject?: string | number;\n    refreshToken?: string;\n    expiresAt?: number;\n    tokenType?: string;\n};'
+							'type ResolvedOAuthAuthorization = {\n    userIdentity: JsonObject;\n    accessToken: string;\n    oauthSubject?: string | number;\n    refreshToken?: string;\n    expiresAt?: number;\n    tokenType?: string;\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'StatusReturn',
 						signature:
-							"type StatusReturn = Pick<ElysiaCustomStatusResponse<number | keyof StatusMap, unknown>, 'code' | 'response'>;"
+							"type StatusReturn = Pick<ElysiaStatus<number | keyof StatusMap, unknown>, 'code' | 'response'>;"
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'OnNewUser',
 						signature:
-							'type OnNewUser<UserType> = (userIdentity: Record<string, unknown>) => UserType | StatusReturn | Response | Promise<UserType | StatusReturn | Response>;'
+							'type OnNewUser<UserType> = (userIdentity: JsonObject) => UserType | StatusReturn | Response | Promise<UserType | StatusReturn | Response>;'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'GetUser',
 						signature:
-							'type GetUser<UserType> = (userIdentity: Record<string, unknown>) => UserType | StatusReturn | Response | null | undefined | Promise<UserType | StatusReturn | Response | null | undefined>;'
+							'type GetUser<UserType> = (userIdentity: JsonObject) => UserType | StatusReturn | Response | null | undefined | Promise<UserType | StatusReturn | Response | null | undefined>;'
 					},
 					{
 						description: '',
@@ -11506,31 +11969,66 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description: '',
+						kind: 'type',
+						name: 'JsonPrimitive',
+						signature:
+							'type JsonPrimitive = boolean | null | number | string;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'JsonValue',
+						signature:
+							'type JsonValue = JsonPrimitive | JsonObject | JsonValue[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'JsonObject',
+						signature:
+							'type JsonObject = {\n    [key: string]: JsonValue;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'isJsonValue',
+						signature:
+							'const isJsonValue: (value: unknown) => value is JsonValue;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseJsonObject',
+						signature:
+							'const parseJsonObject: (value: unknown) => JsonObject;'
+					},
+					{
+						description: '',
 						kind: 'value',
 						name: 'authClientOption',
 						signature:
-							'const authClientOption: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;'
+							'const authClientOption: import("typebox").TOptional<import("typebox").TString>;'
 					},
 					{
 						description: '',
 						kind: 'value',
 						name: 'authIntentOption',
 						signature:
-							'const authIntentOption: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"login">, import("@sinclair/typebox").TLiteral<"link_identity">, import("@sinclair/typebox").TLiteral<"link_connector">]>>;'
+							'const authIntentOption: import("typebox").TOptional<import("typebox").TUnion<[import("typebox").TLiteral<"login">, import("typebox").TLiteral<"link_identity">, import("typebox").TLiteral<"link_connector">]>>;'
 					},
 					{
 						description: '',
 						kind: 'value',
 						name: 'authProviderOption',
 						signature:
-							'const authProviderOption: import("@sinclair/typebox").TString;'
+							'const authProviderOption: import("typebox").TString;'
 					},
 					{
 						description: '',
 						kind: 'value',
 						name: 'userSessionIdTypebox',
 						signature:
-							'const userSessionIdTypebox: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TTemplateLiteralSyntax<"${string}-${string}-${string}-${string}-${string}">>;'
+							'const userSessionIdTypebox: import("typebox").TOptional<import("typebox").TTemplateLiteral<"^.*-.*-.*-.*-.*$">>;'
 					},
 					{
 						description: '',
@@ -11639,36 +12137,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'AuthSessionStore',
 						signature: 'type AuthSessionStore'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'SessionUserDecoder',
-						signature: 'type SessionUserDecoder'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'isAuthIntent',
-						signature: 'isAuthIntent'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'isUserSessionId',
-						signature: 'isUserSessionId'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'isValidUser',
-						signature: 'isValidUser'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'readSessionCookie',
-						signature: 'readSessionCookie'
 					}
 				]
 			},
@@ -13724,7 +14192,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run typecheck && bun run lint && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run typecheck && bun run lint && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -13853,7 +14321,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/absolute-auth',
 		subpackages: [],
-		version: '0.65.0'
+		version: '0.66.0'
 	},
 	{
 		api: [],
@@ -13967,7 +14435,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -14214,10 +14682,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 		private: false,
 		publicExports: ['@absolutejs/autoscaler'],
 		readmeDigest:
-			'515221abbe9a7e4432c6f8c9f2e353b7cff601b94c6df48b1f70cb859c7639bd',
+			'a4c20736519d0bfda8f5ea8476bfb55973ba70636041b18f68338d25e8f25113',
 		readmeSamples: [
 			{
-				code: 'read signals  →  combine into a score  →  compare to thresholds  →\nif past threshold & cooldown elapsed  →  ask actuator to spawn/drain\n                                          (clamped to min/max)',
+				code: 'read capacity + signals  →  restore hard min/max bounds first  →\notherwise compare the combined score to thresholds  →\nif past threshold & cooldown elapsed  →  ask actuator to spawn/drain',
 				description: 'Working example for Loop.',
 				heading: 'Loop',
 				language: 'text'
@@ -14285,7 +14753,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/autoscaler',
 		subpackages: [],
-		version: '0.2.1'
+		version: '0.2.2'
 	},
 	{
 		api: [
@@ -14306,7 +14774,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'BEACON_SIGNAL',
 						signature:
-							'const BEACON_SIGNAL: {\n    readonly CONSOLE_ERROR: "console_error";\n    readonly DEAD_CLICK: "dead_click";\n    readonly FETCH_FAILED: "fetch_failed";\n    readonly HTTP_5XX: "http_5xx";\n    readonly RAGE_CLICK: "rage_click";\n    readonly SLOW_RESPONSE: "slow_response";\n};'
+							'const BEACON_SIGNAL: {\n    readonly AUTH_FAILURE_STORM: "auth_failure_storm";\n    readonly BROWSER_INTERVENTION: "browser_intervention";\n    readonly BROWSER_POLICY_VIOLATION: "browser_policy_violation";\n    readonly BFCACHE_BLOCKED: "bfcache_blocked";\n    readonly CAPABILITY_FAILURE: "capability_failure";\n    readonly BLANK_APP_ROOT: "blank_app_root";\n    readonly CONSOLE_ERROR: "console_error";\n    readonly CONTROL_COLLISION: "control_collision";\n    readonly CSP_VIOLATION: "csp_violation";\n    readonly CLIPBOARD_FAILURE: "clipboard_failure";\n    readonly DEAD_CLICK: "dead_click";\n    readonly DISRUPTIVE_LAYOUT_SHIFT: "disruptive_layout_shift";\n    readonly DOCUMENT_DISCARDED: "document_discarded";\n    readonly ERROR_CLICK: "error_click";\n    readonly FETCH_FAILED: "fetch_failed";\n    readonly FOCUS_LOST: "focus_lost";\n    readonly FONT_FAILURE: "font_failure";\n    readonly FORM_FRUSTRATION: "form_frustration";\n    readonly FORM_ABANDONMENT: "form_abandonment";\n    readonly FOCUSED_CONTROL_OFFSCREEN: "focused_control_offscreen";\n    readonly HTTP_5XX: "http_5xx";\n    readonly HTTP_RESPONSE_FAILURE: "http_response_failure";\n    readonly INVISIBLE_TEXT: "invisible_text";\n    readon'
 					},
 					{
 						description: '',
@@ -14317,11 +14785,11 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
-							"Stable DOM attributes understood by Beacon's click instrumentation.",
+							"Stable DOM attributes understood by Beacon's instrumentation.",
 						kind: 'value',
 						name: 'BEACON_ATTRIBUTE',
 						signature:
-							'const BEACON_ATTRIBUTE: {\n    readonly DEAD_CLICK: "data-beacon-dead-click";\n    readonly NAME: "data-beacon-name";\n};'
+							'const BEACON_ATTRIBUTE: {\n    /** Names an application root whose settled empty state is a failure. */\n    readonly APP_ROOT: "data-beacon-app-root";\n    readonly DEAD_CLICK: "data-beacon-dead-click";\n    readonly NAME: "data-beacon-name";\n    /** Names an iframe whose initial load should be watched for a stall. */\n    readonly EMBED: "data-beacon-embed";\n    /** Marks loading UI that should participate in the stuck-loading watchdog. */\n    readonly LOADING: "data-beacon-loading";\n    /** Overrides the stuck-loading deadline for one loading element, in ms. */\n    readonly LOADING_TIMEOUT: "data-beacon-loading-timeout";\n    /** Names a form whose dirty navigation should be reported as abandonment. */\n    readonly FORM: "data-beacon-form";\n    /** Names media whose user-visible playback should be watched. */\n    readonly MEDIA: "data-beacon-media";\n    /** `="allow"` exempts an element AND its subtree from layout-overflow\n     * detection — for deliberate bleeds (decorative shapes, marquees). */\n    readonly OVERFLOW: "data-beacon-overflow";\n    /** `="allow"` exempts an element AND its subtree from the visual scan\n     * detectors (occluded controls, invisible text, stuck loading). '
 					},
 					{
 						description:
@@ -14330,6 +14798,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'BEACON_TRACE_HEADER',
 						signature:
 							'const BEACON_TRACE_HEADER = "x-absolute-trace-id";'
+					},
+					{
+						description:
+							'Beacon package version retained with every captured event.',
+						kind: 'value',
+						name: 'BEACON_SDK_VERSION',
+						signature: 'const BEACON_SDK_VERSION = "0.6.51";'
 					},
 					{
 						description:
@@ -14352,7 +14827,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'BeaconEvent',
 						signature:
-							'type BeaconEvent = {\n    name: string;\n    message: string;\n    level?: BeaconLevel;\n    stack?: string;\n    at?: number;\n    traceId?: string;\n    spanId?: string;\n    replayId?: string;\n    tags?: BeaconTags;\n    extra?: Record<string, unknown>;\n};'
+							'type BeaconEvent = {\n    /** Stable semantic issue identity for synthetic/integration failures. The\n     * ingest service hashes this key; raw client fingerprints are never trusted. */\n    groupingKey?: string;\n    name: string;\n    message: string;\n    level?: BeaconLevel;\n    stack?: string;\n    at?: number;\n    traceId?: string;\n    spanId?: string;\n    replayId?: string;\n    tags?: BeaconTags;\n    extra?: Record<string, unknown>;\n};'
 					},
 					{
 						description:
@@ -14367,7 +14842,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'CaptureContext',
 						signature:
-							'type CaptureContext = {\n    level?: BeaconLevel;\n    traceId?: string;\n    spanId?: string;\n    tags?: BeaconTags;\n    extra?: Record<string, unknown>;\n};'
+							'type CaptureContext = {\n    /** Override stack/message grouping with a stable semantic issue identity. */\n    groupingKey?: string;\n    level?: BeaconLevel;\n    traceId?: string;\n    spanId?: string;\n    tags?: BeaconTags;\n    extra?: Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CaptureMessageContext',
+						signature:
+							'type CaptureMessageContext = Omit<CaptureContext, "level">;'
 					},
 					{
 						description:
@@ -14380,9 +14862,23 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'type',
+						name: 'BeaconResponseClassification',
+						signature:
+							'type BeaconResponseClassification = {\n    groupingKey: string;\n    level?: BeaconLevel;\n    message: string;\n    tags?: Record<string, string>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconResponseClassifier',
+						signature:
+							'type BeaconResponseClassifier = (response: Response, request: {\n    method: string;\n    url: string;\n}) => void | false | BeaconResponseClassification | Promise<void | false | BeaconResponseClassification>;'
+					},
+					{
+						description: '',
+						kind: 'type',
 						name: 'BeaconInstrumentation',
 						signature:
-							'type BeaconInstrumentation = {\n    /** `window.onerror` / `error` events. Default true. */\n    globalErrors?: boolean;\n    /**\n     * Resource-load errors captured by the global `error` listener. Default true.\n     * A predicate can keep a failure as an error, downgrade it to a grouped\n     * warning, or return false to drop it.\n     */\n    resourceErrors?: boolean | ((failure: BeaconResourceFailure) => "error" | "warning" | false);\n    /** `unhandledrejection` events. Default true. */\n    unhandledRejections?: boolean;\n    /** Breadcrumb `console.error` / `console.warn`. Default true. */\n    console?: boolean;\n    /** Breadcrumb document clicks. Default true. */\n    clicks?: boolean;\n    /** Breadcrumb `fetch` calls. Default true. */\n    fetch?: boolean;\n    /** Breadcrumb `XMLHttpRequest` calls (legacy / third-party libs). Default true. */\n    xhr?: boolean;\n    /** Breadcrumb SPA navigations (`pushState`/`replaceState`/`popstate`). Default true. */\n    history?: boolean;\n};'
+							'type BeaconInstrumentation = {\n    /** `window.onerror` / `error` events. Default true. */\n    globalErrors?: boolean;\n    /**\n     * Resource-load errors captured by the global `error` listener. Default true.\n     * A predicate can keep a failure as an error, downgrade it to a grouped\n     * warning, or return false to drop it.\n     */\n    resourceErrors?: boolean | ((failure: BeaconResourceFailure) => "error" | "warning" | false);\n    /** `unhandledrejection` events. Default true. */\n    unhandledRejections?: boolean;\n    /** Breadcrumb `console.error` / `console.warn`. Default true. */\n    console?: boolean;\n    /** Breadcrumb document clicks. Default true. */\n    clicks?: boolean;\n    /** Breadcrumb `fetch` calls. Default true. */\n    fetch?: boolean;\n    /** Breadcrumb `XMLHttpRequest` calls (legacy / third-party libs). Default true. */\n    xhr?: boolean;\n    /** Breadcrumb SPA navigations (`pushState`/`replaceState`/`popstate`). Default true. */\n    history?: boolean;\n    /** Record Network Information API changes as breadcrumbs. Default true. */\n    networkChanges?: boolean;\n    /** Record application-authored Performance API measures as breadcrumbs.\n     * Default false bec'
 					},
 					{
 						description: '',
@@ -14393,25 +14889,32 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
-							'"Something went wrong" signal detection — the gap between captured errors and full session streaming. Each enabled signal becomes a warning-level issue (via captureException, so it carries breadcrumbs + the replayId), surfacing silent problems no thrown error or user report would: rage/dead clicks, server 5xx, slow/failed requests, and console.error. Reuses the existing click / fetch / console instrumentation — no extra global patching.',
+							'"Something went wrong" signal detection — the gap between captured errors and full session streaming. Each enabled signal becomes a warning-level issue (via captureException, so it carries breadcrumbs + the replayId), surfacing silent problems no thrown error or user report would: rage/dead clicks, server failures, policy violations, worker/realtime faults, and console.error. Each detector is feature-gated and independently tunable.',
 						kind: 'type',
 						name: 'BeaconSignals',
 						signature:
-							'type BeaconSignals = {\n    /** N rapid clicks in roughly the same spot. Default true. */\n    rageClicks?: boolean;\n    /** An interactive control clicked with no DOM/nav/scroll/focus/request response. Default true. */\n    deadClicks?: boolean;\n    /** Responses with status >= 500. Default true. */\n    serverErrors?: boolean;\n    /** Responses slower than `slowResponseMs`. Default true. */\n    slowResponses?: boolean;\n    /** Requests that threw (network / CORS). Default true. */\n    failedRequests?: boolean;\n    /** `console.error` calls (the app explicitly logged an error). Default true. */\n    consoleErrors?: boolean;\n    /** Rapid-click count that trips a rage click. Default 3. */\n    rageClickCount?: number;\n    /** Slow-response threshold (ms). Default 8000. */\n    slowResponseMs?: number;\n};'
+							"type BeaconSignals = {\n    /** Back/forward navigations the browser could not restore from bfcache. */\n    bfcacheBlocks?: boolean;\n    /** Browser-specific bfcache reason strings that are inherent to an\n     * application's required capabilities and therefore not actionable. */\n    ignoredBfcacheReasons?: string[];\n    /** Marked application roots that settle without meaningful visible content. */\n    blankAppRoots?: boolean;\n    /** Delay before an application root is evaluated. Default 3000ms. */\n    blankAppRootSettleMs?: number;\n    /** Repeated 401/403 responses from one endpoint inside a short window.\n     *  Default true. */\n    authFailureStorms?: boolean;\n    /** Authorization failures from one endpoint that trip a storm. Default 4. */\n    authFailureStormCount?: number;\n    /** Window for the authorization-failure storm counter. Default 30000ms. */\n    authFailureStormWindowMs?: number;\n    /** Browser intervention reports surfaced by ReportingObserver. Default true. */\n    browserInterventions?: boolean;\n    /** Deprecation, permissions-policy, integrity, and cross-origin policy\n     * reports exposed by ReportingObserver. Default true. */\n    browserPolicyViolations?: "
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconReleaseProbe',
+						signature:
+							'type BeaconReleaseProbe = {\n    /** Same-origin endpoint returning `{ commit }` or `{ release }`. */\n    endpoint: string;\n    /** Visible-page polling interval. Default 60000ms. */\n    intervalMs?: number;\n    /** Called after the stale-release event has been flushed. */\n    onStale?: (input: {\n        currentRelease: string;\n        newestRelease: string;\n    }) => void;\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'BeaconNetworkFailure',
 						signature:
-							'type BeaconNetworkFailure = {\n    at: number;\n    durationMs: number;\n    endpoint: string;\n    error: {\n        message: string;\n        name: string;\n        properties?: Record<string, unknown>;\n        stack?: string;\n    };\n    method: string;\n    online: boolean | null;\n    transport: "fetch" | "xhr";\n    visibilityState: string;\n};'
+							'type BeaconNetworkFailure = {\n    at: number;\n    durationMs: number;\n    endpoint: string;\n    error: {\n        message: string;\n        name: string;\n        properties?: Record<string, unknown>;\n        stack?: string;\n    };\n    method: string;\n    online: boolean | null;\n    connection?: {\n        downlink?: number;\n        effectiveType?: string;\n        rtt?: number;\n        saveData?: boolean;\n    };\n    transport: "fetch" | "xhr";\n    visibilityState: string;\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'BeaconOptions',
 						signature:
-							"type BeaconOptions = {\n    /** Project id (required) — scopes issues server-side. */\n    project: string;\n    /** Ingest endpoint URL. Default `/ingest`. */\n    endpoint?: string;\n    release?: string;\n    environment?: string;\n    /** Auth key, sent as `x-beacon-key` (forces `fetch` over `sendBeacon`). */\n    key?: string;\n    /** Auto-flush once this many events are buffered. Default 30. */\n    maxBatch?: number;\n    /** Auto-flush interval (ms). Default 5000. */\n    flushIntervalMs?: number;\n    /** Breadcrumbs retained (ring buffer). Default 30. */\n    maxBreadcrumbs?: number;\n    /** Sample rate 0..1 — fraction of events kept. Default 1. */\n    sampleRate?: number;\n    /** Mutate or drop (return null) each event before it's buffered. */\n    beforeSend?: (event: BeaconEvent) => BeaconEvent | null;\n    /**\n     * Redact credentials, secret-bearing fields, and URL query/hash values after\n     * `beforeSend` and before buffering. Default true. Disable only when an\n     * equivalent trusted boundary owns redaction.\n     */\n    redact?: boolean;\n    /**\n     * Drop signatures known to come from browser hosts/scanners rather than the\n     * page, such as CefSharp's JavaScript bridge "
+							"type BeaconOptions = {\n    /** Project id (required) — scopes issues server-side. */\n    project: string;\n    /** Ingest endpoint URL. Default `/ingest`. */\n    endpoint?: string;\n    release?: string;\n    /** Compare this page's embedded release with the currently served release.\n     * Once they differ, Beacon emits one stale-release event and suppresses\n     * ambient issue signals from the obsolete page. */\n    releaseProbe?: BeaconReleaseProbe;\n    environment?: string;\n    /** Auth key, sent as `x-beacon-key` (forces `fetch` over `sendBeacon`). */\n    key?: string;\n    /** Auto-flush once this many events are buffered. Default 30. */\n    maxBatch?: number;\n    /** Auto-flush interval (ms). Default 5000. */\n    flushIntervalMs?: number;\n    /** Breadcrumbs retained (ring buffer). Default 30. */\n    maxBreadcrumbs?: number;\n    /** Sample rate 0..1 — fraction of events kept. Default 1. */\n    sampleRate?: number;\n    /** Mutate or drop (return null) each event before it's buffered. */\n    beforeSend?: (event: BeaconEvent) => BeaconEvent | null;\n    /**\n     * Redact credentials, secret-bearing fields, and URL query/hash values after\n     * `beforeSend` and before buffering. Def"
 					},
 					{
 						description:
@@ -14419,7 +14922,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'WebVital',
 						signature:
-							'type WebVital = {\n    /** Unix epoch milliseconds when the finalized metric was observed. */\n    at: number;\n    /** Optional deployment environment copied from the Beacon configuration. */\n    environment?: string;\n    /** The 5 Core Web Vitals, plus TBT (Total Blocking Time — long-task overage). */\n    name: "LCP" | "INP" | "CLS" | "FCP" | "TTFB" | "TBT";\n    /** Metric value (ms for LCP/INP/FCP/TTFB; unitless for CLS). */\n    value: number;\n    rating: "good" | "needs-improvement" | "poor";\n    /** URL path the vital was measured on (for per-route p75). */\n    path: string;\n    /** Stable per-page-load metric id (dedup). */\n    id: string;\n    navigationType: string;\n    /** Beacon project identifier, used by authenticated relays for tenant fencing. */\n    project: string;\n    /** Optional application release copied from the Beacon configuration. */\n    release?: string;\n    /** Optional privacy-masked replay correlation. */\n    replayId?: string;\n    /** Fraction of eligible observations represented by this event. */\n    samplingRate: number;\n    /** Version of this telemetry envelope. */\n    schemaVersion: number;\n    /** Beacon SDK version supplied by the host build. */\n    s'
+							'type WebVital = {\n    /** Unix epoch milliseconds when the finalized metric was observed. */\n    at: number;\n    /** Optional deployment environment copied from the Beacon configuration. */\n    environment?: string;\n    /** The 5 Core Web Vitals, plus TBT measured for 10 seconds from FCP. */\n    name: "LCP" | "INP" | "CLS" | "FCP" | "TTFB" | "TBT";\n    /** Metric value (ms for LCP/INP/FCP/TTFB; unitless for CLS). */\n    value: number;\n    rating: "good" | "needs-improvement" | "poor";\n    /** URL path the vital was measured on (for per-route p75). */\n    path: string;\n    /** Stable per-page-load metric id (dedup). */\n    id: string;\n    navigationType: string;\n    /** Beacon project identifier, used by authenticated relays for tenant fencing. */\n    project: string;\n    /** Optional application release copied from the Beacon configuration. */\n    release?: string;\n    /** Optional privacy-masked replay correlation. */\n    replayId?: string;\n    /** Fraction of eligible observations represented by this event. */\n    samplingRate: number;\n    /** Version of this telemetry envelope. */\n    schemaVersion: number;\n    /** Beacon SDK version supplied by the host build. */\n    sdkVersion'
 					},
 					{
 						description:
@@ -14450,7 +14953,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'Beacon',
 						signature:
-							'type Beacon = {\n    captureException: (error: unknown, context?: CaptureContext) => void;\n    captureMessage: (message: string, level?: BeaconLevel) => void;\n    addBreadcrumb: (crumb: {\n        message: string;\n        type?: Breadcrumb["type"];\n        data?: Record<string, unknown>;\n    }) => void;\n    /** Merge persistent tags applied to every subsequent event. */\n    setTags: (tags: BeaconTags) => void;\n    /** Set (or clear, with null) the user attached to events. */\n    setUser: (user: {\n        id?: string;\n        email?: string;\n    } | null) => void;\n    /** Flush buffered events now. */\n    flush: () => Promise<void>;\n    /** Remove all listeners + do a final flush. */\n    close: () => Promise<void>;\n};'
+							'type Beacon = {\n    captureException: (error: unknown, context?: CaptureContext) => void;\n    captureMessage: (message: string, level?: BeaconLevel, context?: CaptureMessageContext) => void;\n    addBreadcrumb: (crumb: {\n        message: string;\n        type?: Breadcrumb["type"];\n        data?: Record<string, unknown>;\n    }) => void;\n    /** Merge persistent tags applied to every subsequent event. */\n    setTags: (tags: BeaconTags) => void;\n    /** Set (or clear, with null) the user attached to events. */\n    setUser: (user: {\n        id?: string;\n        email?: string;\n    } | null) => void;\n    /** Observe an application-owned browser capability promise without globally\n     * monkey-patching sensitive platform APIs. */\n    observeCapability: <T>(name: string, operation: Promise<T>) => Promise<T>;\n    /** Flush buffered events now. */\n    flush: () => Promise<void>;\n    /** Remove all listeners + do a final flush. */\n    close: () => Promise<void>;\n};'
 					},
 					{
 						description:
@@ -14466,7 +14969,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'isKnownBeaconNoise',
 						signature:
-							'const isKnownBeaconNoise: (event: Pick<BeaconEvent, "message" | "name">, userAgent?: string) => boolean;'
+							'const isKnownBeaconNoise: (event: Pick<BeaconEvent, "message" | "name" | "stack" | "tags">, userAgent?: string) => boolean;'
 					},
 					{
 						description: '',
@@ -14504,7 +15007,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'captureMessage',
 						signature:
-							'const captureMessage: (message: string, level?: BeaconLevel) => void;'
+							'const captureMessage: (message: string, level?: BeaconLevel, context?: CaptureMessageContext) => void;'
 					},
 					{
 						description:
@@ -14513,6 +15016,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'addBreadcrumb',
 						signature:
 							'const addBreadcrumb: (crumb: {\n    message: string;\n    type?: Breadcrumb["type"];\n    data?: Record<string, unknown>;\n}) => void;'
+					},
+					{
+						description:
+							'Observe an application-owned browser capability against the global beacon.',
+						kind: 'value',
+						name: 'observeCapability',
+						signature:
+							'const observeCapability: <T>(name: string, operation: Promise<T>) => Promise<T>;'
 					}
 				]
 			},
@@ -14538,7 +15049,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -14567,10 +15078,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/beacon/manifest.json'
 		],
 		readmeDigest:
-			'0a4f70bd2711569585f3999802a717dd84ef4cb1d5aa869fcdabb5970c48c2a7',
+			'96bd59f28253fddcd70e3cbbee3a902cba5b95be55eee81704a6b2d6c7073131',
 		readmeSamples: [
 			{
-				code: 'import { initBeacon, captureException } from "@absolutejs/beacon";\n\ninitBeacon({\n  project: "web",\n  endpoint: "https://api.example.com/ingest",\n  release: import.meta.env.VITE_RELEASE,\n  environment: "production",\n});\n\n// Uncaught errors + unhandled rejections are captured automatically.\n// Manual capture anywhere:\ntry {\n  await checkout();\n} catch (e) {\n  captureException(e, { tags: { component: "billing" } });\n}',
+				code: 'import { initBeacon, captureException } from "@absolutejs/beacon";\n\ninitBeacon({\n  project: "web",\n  endpoint: "https://api.example.com/ingest",\n  release: import.meta.env.VITE_RELEASE,\n  environment: "production",\n  // Optional: detect a tab that stayed open across a deployment. The endpoint\n  // may return either `{ commit: "..." }` or `{ release: "..." }`.\n  releaseProbe: {\n    endpoint: "/version",\n    onStale: () => window.location.reload(),\n  },\n});\n\n// Uncaught errors + unhandled rejections are captured automatically.\n// Manual capture anywhere:\ntry {\n  await checkout();\n} catch (e) {\n  captureException(e, { tags: { component: "billing" } });\n}',
 				description: 'Working example for Quick start.',
 				heading: 'Quick start',
 				language: 'typescript'
@@ -14588,7 +15099,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				language: 'sh'
 			},
 			{
-				code: 'createBeacon(options) => Beacon\ninitBeacon(options)   => Beacon   // also sets the global singleton\ngetBeacon()           => Beacon | undefined\n\n// Beacon:\ncaptureException(error, { level?, traceId?, spanId?, tags?, extra? })\ncaptureMessage(message, level?)\naddBreadcrumb({ message, type?, data? })\nsetTags(tags) · setUser(user | null)\nflush() => Promise<void>          // buffered events out now\nclose() => Promise<void>          // remove listeners + final flush\n\n// Typed names for event.tags.signal in beforeSend policies:\nBEACON_SIGNAL.FETCH_FAILED\nBEACON_SIGNAL.SLOW_RESPONSE\nBEACON_SIGNAL.HTTP_5XX\nBEACON_TRACE_HEADER // "x-absolute-trace-id"\n\n// Global helpers (no-op until initBeacon): captureException, captureMessage, addBreadcrumb',
+				code: 'createBeacon(options) => Beacon\ninitBeacon(options)   => Beacon   // also sets the global singleton\ngetBeacon()           => Beacon | undefined\n\n// Beacon:\ncaptureException(error, { groupingKey?, level?, traceId?, spanId?, tags?, extra? })\ncaptureMessage(message, level?, { groupingKey?, traceId?, spanId?, tags?, extra? })\naddBreadcrumb({ message, type?, data? })\nsetTags(tags) · setUser(user | null)\nobserveCapability(name, promise) => Promise\nflush() => Promise<void>          // buffered events out now\nclose() => Promise<void>          // remove listeners + final flush\n\n// Typed names for event.tags.signal in beforeSend policies (all built-ins):\nBEACON_SIGNAL.FETCH_FAILED\nBEACON_SIGNAL.SLOW_RESPONSE\nBEACON_SIGNAL.HTTP_5XX\nBEACON_SIGNAL.HTTP_RESPONSE_FAILURE\nBEACON_TRACE_HEADER // "x-absolute-trace-id"\n\n// Global helpers (no-op until initBeacon): captureException, captureMessage,\n// addBreadcrumb, observeCapability',
 				description: 'Working example for API.',
 				heading: 'API',
 				language: 'typescript'
@@ -14630,26 +15141,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'Batching — buffers up to maxBatch (default 30) / flushIntervalMs',
 					'(default 5s); flushes reliably on pagehide / tab-hidden via sendBeacon.',
 					'Context — setTags, setUser, per-call tags/extra, a per-session id.',
+					'Stable semantic grouping — pass groupingKey for synthetic or provider',
+					"failures whose stack or wording can move between releases. The matching @absolutejs/errors ingest service validates and hashes it server-side; clients never choose raw fingerprints. Beacon's built-in signals always add a stable grouping key derived from the normalized route and semantic target, excluding durations, counts, release ids, entity UUIDs, and collector stacks.",
 					'Cause chains — preserves nested Error.cause stacks and diagnostic fields',
 					'in extra.errorCauses, including database driver error codes and details.',
 					'Sampling + redaction — sampleRate, a beforeSend(event) hook',
 					'(return null to drop), and default credential/context redaction after the hook so host customization cannot accidentally reintroduce secrets. URL query/hash values, secret-bearing fields, bearer/JWT values, and breadcrumb text are sanitized. Set redact: false only when a trusted boundary replaces it.',
-					"Noise filtering — known browser-host/scanner failures such as CefSharp's",
-					'Object Not Found Matching Id rejection are dropped by default (filterKnownNoise: false opts out).',
-					'Resource policy — instrument.resourceErrors accepts a predicate so'
+					"Noise filtering — known browser-host/scanner failures such as CefSharp's"
 				],
 				title: 'What it does'
 			},
 			{
 				description:
 					'SSR-safe: imported in a non-DOM environment, createBeacon returns a no-op.',
-				details: [],
+				details: [
+					'Semantic grouping keys require @absolutejs/errors 0.7.3 or newer at the ingest boundary.'
+				],
 				title: 'API'
 			}
 		],
 		repository: 'https://github.com/absolutejs/beacon',
 		subpackages: [],
-		version: '0.4.6'
+		version: '0.6.51'
 	},
 	{
 		api: [],
@@ -15152,7 +15665,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'PutOptions',
 						signature:
-							'type PutOptions = {\n    /** Override MIME type. Adapters may detect from extension if omitted. */\n    contentType?: string;\n    /** User metadata stored alongside the blob. */\n    metadata?: Record<string, string>;\n    /** `Cache-Control` header for HTTP-served blobs. */\n    cacheControl?: string;\n    /** `Content-Disposition` (e.g. `\'attachment; filename="x.pdf"\'`). */\n    contentDisposition?: string;\n    /** Abort the write when the body exceeds this many bytes. */\n    maxBytes?: number;\n};'
+							'type PutOptions = {\n    /** Override MIME type. Adapters may detect from extension if omitted. */\n    contentType?: string;\n    /** User metadata stored alongside the blob. */\n    metadata?: Record<string, string>;\n    /** `Cache-Control` header for HTTP-served blobs. */\n    cacheControl?: string;\n    /** `Content-Disposition` (e.g. `\'attachment; filename="x.pdf"\'`). */\n    contentDisposition?: string;\n    /** Abort the write when the body exceeds this many bytes. */\n    maxBytes?: number;\n    /** Abort an in-flight write, including multipart provider uploads. */\n    signal?: AbortSignal;\n};'
 					},
 					{
 						description: '',
@@ -15312,7 +15825,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'S3ClientLike',
 						signature:
-							'type S3ClientLike = {\n    putObject: (input: S3PutInput, options?: {\n        maxBytes?: number;\n    }) => Promise<S3PutOutput>;\n    getObject: (input: S3GetInput) => Promise<S3GetOutput | null>;\n    headObject: (input: S3GetInput) => Promise<S3HeadOutput | null>;\n    deleteObject: (input: S3GetInput) => Promise<unknown>;\n    listObjectsV2: (input: S3ListInput) => Promise<S3ListOutput>;\n    presignPutObject: (input: S3PresignInput, options: {\n        expiresIn: number;\n    }) => Promise<string>;\n    presignGetObject: (input: S3PresignInput, options: {\n        expiresIn: number;\n    }) => Promise<string>;\n};'
+							'type S3ClientLike = {\n    putObject: (input: S3PutInput, options?: {\n        maxBytes?: number;\n        signal?: AbortSignal;\n    }) => Promise<S3PutOutput>;\n    getObject: (input: S3GetInput) => Promise<S3GetOutput | null>;\n    headObject: (input: S3GetInput) => Promise<S3HeadOutput | null>;\n    deleteObject: (input: S3GetInput) => Promise<unknown>;\n    listObjectsV2: (input: S3ListInput) => Promise<S3ListOutput>;\n    presignPutObject: (input: S3PresignInput, options: {\n        expiresIn: number;\n    }) => Promise<string>;\n    presignGetObject: (input: S3PresignInput, options: {\n        expiresIn: number;\n    }) => Promise<string>;\n};'
 					},
 					{
 						description: '',
@@ -15484,7 +15997,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/blob/manifest.json'
 		],
 		readmeDigest:
-			'2a96b9283dbb3723259bdba47d78a8fa3dee2f1776459f6bee36e7289659239d',
+			'f520b2ae0f1d7c65f77080c24253302d8ab9a9d433ab4e23b53a857a2724a2cc',
 		readmeSamples: [
 			{
 				code: "const store: BlobStore = /* localBlobStore(...) | s3BlobStore(...) */;\nawait store.put('users/42/avatar.png', body, { contentType: 'image/png' });\nconst bytes = await store.get('users/42/avatar.png');\nconst url = await store.presign('users/42/avatar.png', { ttlSeconds: 900 });",
@@ -15535,8 +16048,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					"Files at /. Metadata (contentType, user metadata, cache headers) at /.meta.json. Atomic writes via temp file + rename. presign() throws BlobError('UNSUPPORTED') — use the S3 adapter against a local MinIO if you need presign in dev.",
-				details: [],
+					'Writes accept maxBytes and an AbortSignal, including multipart S3/R2 uploads: blobs.put(key, body, { maxBytes, signal }).',
+				details: [
+					"Files at /. Metadata (contentType, user metadata, cache headers) at /.meta.json. Atomic writes via temp file + rename. presign() throws BlobError('UNSUPPORTED') — use the S3 adapter against a local MinIO if you need presign in dev."
+				],
 				title: 'Local'
 			},
 			{
@@ -15574,7 +16089,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/blob',
 		subpackages: [],
-		version: '0.5.1'
+		version: '0.5.2'
 	},
 	{
 		api: [
@@ -15793,7 +16308,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'blogFeeds',
 						signature:
-							'const blogFeeds: <const Paths extends BlogFeedPaths>(blog: Blog, paths: Paths) => Elysia<"", {\n    decorator: {};\n    store: {};\n    derive: {};\n    resolve: {};\n}, {\n    typebox: {};\n    error: {};\n}, {\n    schema: {};\n    standaloneSchema: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {\n    [x: string]: {\n        get: {\n            body: unknown;\n            params: {};\n            query: unknown;\n            headers: unknown;\n            response: {\n                200: Response;\n            };\n        };\n    };\n} & {\n    [x: string]: {\n        get: {\n            body: unknown;\n            params: {};\n            query: unknown;\n            headers: unknown;\n            response: {\n                200: Response;\n            };\n        };\n    };\n} & {\n    [x: string]: {\n        get: {\n            body: unknown;\n            params: {};\n            query: unknown;\n            headers: unknown;\n            response: {\n                200: Response;\n            };\n        };\n    };\n}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n    response: {};\n}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n'
+							'const blogFeeds: <const Paths extends BlogFeedPaths>(blog: Blog, paths: Paths) => import("elysia/types").AddRoute<"", "local", import("elysia/types").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia/types").DefaultMetadata, {\n    [x: string]: {\n        get: {\n            body: unknown;\n            params: {};\n            query: unknown;\n            headers: unknown;\n            response: {\n                200: Response;\n            };\n            error: never;\n        };\n    };\n} & {\n    [x: string]: {\n        get: {\n            body: unknown;\n            params: {};\n            query: unknown;\n            headers: unknown;\n            response: {\n                200: Response;\n            };\n            error: never;\n        };\n    };\n}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral, "get", `/${string}`, import("elysia/types").IntersectIfObjectSchema<import("elysia").UnwrapRoute<{}, {}, `/${string}`>, import("elysia/types").MergeScopedSchemas<{}, {}, {}>>, {}, () => Response>;'
 					}
 				]
 			},
@@ -15845,7 +16360,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -15931,7 +16446,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/blog',
 		subpackages: [],
-		version: '0.1.0'
+		version: '0.2.0'
 	},
 	{
 		api: [],
@@ -16993,6 +17508,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'const variantIsAvailable: (variant: ProductVariant) => boolean;'
 					},
 					{
+						description: '',
+						kind: 'type',
+						name: 'ListingStockState',
+						signature:
+							'type ListingStockState = "available" | "partial" | "sold-out";'
+					},
+					{
+						description:
+							"Shelf state across a listing's variants, for storefront badges and admin overviews: every variant sellable → available; none → sold-out; some colors/sizes gone → partial.",
+						kind: 'value',
+						name: 'stockStateForVariants',
+						signature:
+							'const stockStateForVariants: (variants: ProductVariant[]) => ListingStockState;'
+					},
+					{
 						description:
 							'Resolve an exact SKU from arbitrary product options (case-insensitive).',
 						kind: 'value',
@@ -17141,21 +17671,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'EmbroideryRates',
 						signature:
 							'type EmbroideryRates = {\n    /** Handling base per piece. */\n    base: number;\n    /** Price per 1,000 estimated stitches. */\n    per1k: number;\n};'
-					},
-					{
-						description: '',
-						kind: 'value',
-						name: 'DEFAULT_EMBROIDERY_RATES',
-						signature:
-							'const DEFAULT_EMBROIDERY_RATES: EmbroideryRates;'
-					},
-					{
-						description:
-							'Per-piece embroidery price for an estimated stitch count.',
-						kind: 'value',
-						name: 'embroideryUnitPrice',
-						signature:
-							'const embroideryUnitPrice: (estimatedStitches: number, rates?: EmbroideryRates) => number;'
 					}
 				]
 			},
@@ -18047,7 +18562,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -18159,7 +18674,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/commerce',
 		subpackages: [],
-		version: '0.40.1-beta.13'
+		version: '0.40.1-beta.20'
 	},
 	{
 		api: [],
@@ -18343,7 +18858,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -18436,7 +18951,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -18527,7 +19042,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -18639,7 +19154,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -18687,7 +19202,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'stripe',
-				version: '0.25.1-beta.3'
+				version: '0.25.1-beta.7'
 			}
 		],
 		version: null
@@ -18997,7 +19512,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+					'bun run typecheck && bun run verify-package && bun run build && bun run test',
 				name: 'check:package'
 			},
 			{
@@ -19285,7 +19800,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/create-absolutejs',
 		subpackages: [],
-		version: '0.15.7'
+		version: '0.16.0'
 	},
 	{
 		api: [
@@ -19803,7 +20318,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -23114,7 +23629,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/deploy',
 		subpackages: [],
-		version: '0.21.0'
+		version: '0.21.2'
 	},
 	{
 		api: [
@@ -24080,7 +24595,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -24245,7 +24760,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -24366,7 +24881,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -24515,7 +25030,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -24614,7 +25129,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -24761,7 +25276,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -24966,7 +25481,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -25416,7 +25931,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -25841,7 +26356,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -26453,7 +26968,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -26879,7 +27394,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -27384,7 +27899,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'GmailMessage',
 						signature:
-							'type GmailMessage = {\n    historyId?: string;\n    id?: string;\n    internalDate?: string;\n    payload?: GmailMessagePart & {\n        headers?: GmailHeader[];\n    };\n    snippet?: string;\n    threadId?: string;\n};'
+							'type GmailMessage = {\n    historyId?: string;\n    id?: string;\n    internalDate?: string;\n    labelIds?: string[];\n    payload?: GmailMessagePart & {\n        headers?: GmailHeader[];\n    };\n    snippet?: string;\n    threadId?: string;\n};'
 					},
 					{
 						description: '',
@@ -27392,6 +27907,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'GmailHistoryResponse',
 						signature:
 							'type GmailHistoryResponse = {\n    history?: {\n        messages?: {\n            id?: string;\n            threadId?: string;\n        }[];\n        messagesAdded?: {\n            message?: {\n                id?: string;\n                threadId?: string;\n            };\n        }[];\n    }[];\n    historyId?: string;\n    nextPageToken?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailMessageListResponse',
+						signature:
+							'type GmailMessageListResponse = {\n    messages?: {\n        id?: string;\n        threadId?: string;\n    }[];\n    nextPageToken?: string;\n    resultSizeEstimate?: number;\n};'
 					},
 					{
 						description: '',
@@ -27405,7 +27927,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'GmailClient',
 						signature:
-							'type GmailClient = {\n    getMessage: (id: string) => Promise<GmailMessage | null>;\n    listHistory: (input: {\n        cursor?: string | null;\n    }) => Promise<EmailDeltaResult<{\n        id: string;\n        threadId?: string;\n    }>>;\n    watch: (topicName: string) => Promise<EmailSubscriptionResult & {\n        cursor?: string | null;\n    }>;\n};'
+							'type GmailClient = {\n    getMessage: (id: string) => Promise<GmailMessage | null>;\n    listHistory: (input: {\n        cursor?: string | null;\n    }) => Promise<EmailDeltaResult<{\n        id: string;\n        threadId?: string;\n    }>>;\n    searchMessages: (input: {\n        maxResults?: number;\n        query: string;\n    }) => Promise<{\n        id: string;\n        threadId?: string;\n    }[]>;\n    watch: (topicName: string) => Promise<EmailSubscriptionResult & {\n        cursor?: string | null;\n    }>;\n};'
 					},
 					{
 						description: '',
@@ -27532,6 +28054,41 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'decryptEmailSecret',
 						signature:
 							'const decryptEmailSecret: (ciphertext: string, key: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'EMAIL_PLACEMENTS',
+						signature:
+							'const EMAIL_PLACEMENTS: readonly ["inbox", "spam", "trash", "other", "missing"];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailPlacement',
+						signature:
+							'type EmailPlacement = (typeof EMAIL_PLACEMENTS)[number];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailPlacementResult',
+						signature:
+							'type EmailPlacementResult = {\n    messageId: string | null;\n    placement: EmailPlacement;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'gmailPlacementFromLabels',
+						signature:
+							'const gmailPlacementFromLabels: (labelIds: GmailMessage["labelIds"]) => Exclude<EmailPlacement, "missing">;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'findGmailMessagePlacement',
+						signature:
+							'const findGmailMessagePlacement: (client: GmailClient, input: {\n    query: string;\n}) => Promise<EmailPlacementResult>;'
 					},
 					{
 						description: '',
@@ -27756,7 +28313,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/email/manifest.json'
 		],
 		readmeDigest:
-			'fab4fdef49db553a31084727e978afaef571ff73df9eb0e2cf182a8ad854f0e1',
+			'8c58fd2d8a18ea302586acd5410a84a5a0e7aa9c0e46f0cb0c985a5e17afe6b4',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/email',
@@ -27780,8 +28337,9 @@ export const ecosystemProjects: EcosystemProject[] = [
 		readmeTopics: [
 			{
 				description:
-					'Provider-neutral email sync adapters for AbsoluteJS applications.',
+					'The Gmail adapter can also locate a tagged delivery canary across Inbox, Spam, Trash, and other labels with findGmailMessagePlacement. The host application owns canary scheduling, mailbox credentials, alert policy, and persistence.',
 				details: [
+					'Provider-neutral email sync adapters for AbsoluteJS applications.',
 					'This package owns the provider mechanics:',
 					'Gmail REST sync, users.watch, and Pub/Sub payload parsing',
 					'Microsoft Graph message delta sync and subscription notification parsing',
@@ -27799,7 +28357,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/email',
 		subpackages: [],
-		version: '0.1.0'
+		version: '0.1.1'
 	},
 	{
 		api: [],
@@ -27960,7 +28518,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -28057,7 +28615,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -28651,7 +29209,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'ErrorContext',
 						signature:
-							'type ErrorContext = {\n    /** Tenant id — propagates to audit `actor` + span attributes. */\n    tenant?: string;\n    /** What the error was acting on — audit `target`. */\n    target?: string;\n    /** Active OTel trace id, if you\'ve already resolved it. */\n    traceId?: string;\n    /** Active OTel span id, if relevant. */\n    spanId?: string;\n    /** Session-replay id, if a recording is active — joins into @absolutejs/replay. */\n    replayId?: string;\n    /** Free-form structured fields. */\n    tags?: Record<string, string>;\n    /** Free-form arbitrary data. */\n    extra?: Record<string, unknown>;\n    /** Severity. Default `\'error\'`. */\n    level?: "fatal" | "error" | "warning" | "info";\n};'
+							'type ErrorContext = {\n    /** Stable semantic issue identity for synthetic/integration errors whose\n     * message or source frame may change between builds. Hashed server-side. */\n    groupingKey?: string;\n    /** Tenant id — propagates to audit `actor` + span attributes. */\n    tenant?: string;\n    /** What the error was acting on — audit `target`. */\n    target?: string;\n    /** Active OTel trace id, if you\'ve already resolved it. */\n    traceId?: string;\n    /** Active OTel span id, if relevant. */\n    spanId?: string;\n    /** Session-replay id, if a recording is active — joins into @absolutejs/replay. */\n    replayId?: string;\n    /** Free-form structured fields. */\n    tags?: Record<string, string>;\n    /** Free-form arbitrary data. */\n    extra?: Record<string, unknown>;\n    /** Severity. Default `\'error\'`. */\n    level?: "fatal" | "error" | "warning" | "info";\n};'
 					},
 					{
 						description:
@@ -28791,7 +29349,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'StoredEvent',
 						signature:
-							'type StoredEvent = {\n    fingerprint: string;\n    /** Project/tenant scope. */\n    project: string;\n    /** Occurrence time (ms). */\n    at: number;\n    level: IssueLevel;\n    name: string;\n    message: string;\n    stack?: string;\n    release?: string;\n    environment?: string;\n    /** Joins straight into @absolutejs/telemetry traces. */\n    traceId?: string;\n    spanId?: string;\n    /** Joins into @absolutejs/replay. */\n    replayId?: string;\n    tags?: Record<string, string>;\n    extra?: Record<string, unknown>;\n};'
+							'type StoredEvent = {\n    fingerprint: string;\n    groupingKey?: string;\n    /** Project/tenant scope. */\n    project: string;\n    /** Occurrence time (ms). */\n    at: number;\n    level: IssueLevel;\n    name: string;\n    message: string;\n    stack?: string;\n    release?: string;\n    environment?: string;\n    /** Joins straight into @absolutejs/telemetry traces. */\n    traceId?: string;\n    spanId?: string;\n    /** Joins into @absolutejs/replay. */\n    replayId?: string;\n    tags?: Record<string, string>;\n    extra?: Record<string, unknown>;\n};'
 					},
 					{
 						description:
@@ -29075,6 +29633,26 @@ export const ecosystemProjects: EcosystemProject[] = [
 				]
 			},
 			{
+				entryPoint: '@absolutejs/errors/reporting',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'BrowserReportingOptions',
+						signature:
+							'type BrowserReportingOptions = {\n    project: string;\n    release?: string;\n    environment?: string;\n};'
+					},
+					{
+						description:
+							'Returns null for malformed deliveries and an envelope for valid batches.',
+						kind: 'value',
+						name: 'browserReportsEnvelope',
+						signature:
+							'const browserReportsEnvelope: (value: unknown, options: BrowserReportingOptions, receivedAt?: number) => BeaconEnvelope | null;'
+					}
+				]
+			},
+			{
 				entryPoint: '@absolutejs/errors/elysia',
 				symbols: [
 					{
@@ -29120,7 +29698,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'ErrorsPluginIngestOptions',
 						signature:
-							'type ErrorsPluginIngestOptions = InMemoryEventBufferOptions & {\n    /** Defaults to the store configured on `tracker`. */\n    store?: IssueStore;\n    buffer?: EventBuffer;\n    /** Route path. Default `/ingest`. */\n    path?: string;\n    authorize?: IngestAuthorizer;\n    maxBytes?: number;\n    maxEvents?: number;\n    intervalMs?: number;\n    prepare?: (event: StoredEvent) => Effect.Effect<StoredEvent>;\n    onIssue?: (result: IssueUpsertResult) => void | Promise<void>;\n    onError?: (error: IssueStoreError) => void;\n};'
+							'type ErrorsPluginIngestOptions = InMemoryEventBufferOptions & {\n    /** Defaults to the store configured on `tracker`. */\n    store?: IssueStore;\n    buffer?: EventBuffer;\n    /** Route path. Default `/ingest`. */\n    path?: string;\n    authorize?: IngestAuthorizer;\n    maxBytes?: number;\n    maxEvents?: number;\n    intervalMs?: number;\n    prepare?: (event: StoredEvent) => Effect.Effect<StoredEvent>;\n    onIssue?: (result: IssueUpsertResult) => void | Promise<void>;\n    onError?: (error: IssueStoreError) => void;\n    /** Browser Reporting API receiver. This is the only path that can receive\n     * crash reports because page JavaScript is gone when a browser crashes. */\n    reporting?: false | (BrowserReportingOptions & {\n        /** Route path. Default `/ingest/reports`. */\n        path?: string;\n        /** Optional dedicated authorization for browser-generated reports. */\n        authorize?: IngestAuthorizer;\n    });\n};'
 					},
 					{
 						description: '',
@@ -29135,7 +29713,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'errorsPlugin',
 						signature:
-							'const errorsPlugin: (options: ErrorsPluginOptions) => Elysia<"", {\n    decorator: {};\n    store: {};\n    derive: {};\n    resolve: {};\n}, {\n    typebox: {};\n    error: {};\n}, {\n    schema: {};\n    standaloneSchema: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n    response: {};\n}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n    response: {};\n}>;'
+							'const errorsPlugin: (options: ErrorsPluginOptions) => Elysia<"", "local", import("elysia/types").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia/types").DefaultMetadata, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral>;'
 					}
 				]
 			},
@@ -29277,12 +29855,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 		commands: [
 			{
 				command:
-					'rm -rf dist && bun build src/index.ts src/ingest.ts src/elysia.ts src/symbolicate.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/handoff --external effect --external @jridgewell/trace-mapping --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
+					'rm -rf dist && bun build src/index.ts src/ingest.ts src/reporting.ts src/elysia.ts src/symbolicate.ts src/manifest.ts --outdir dist --sourcemap --target=bun --external @absolutejs/handoff --external effect --external @jridgewell/trace-mapping --external elysia && tsc --project tsconfig.build.json && absolute-manifest emit',
 				name: 'build'
 			},
 			{
 				command:
-					'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+					'bun run typecheck && bun run verify-package && bun run build && bun run test',
 				name: 'check:package'
 			},
 			{
@@ -29308,13 +29886,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 		publicExports: [
 			'@absolutejs/errors',
 			'@absolutejs/errors/ingest',
+			'@absolutejs/errors/reporting',
 			'@absolutejs/errors/elysia',
 			'@absolutejs/errors/symbolicate',
 			'@absolutejs/errors/manifest',
 			'@absolutejs/errors/manifest.json'
 		],
 		readmeDigest:
-			'671845b0aac1352eaf260dd93622caea0ac4feb17eca859cef18a093301b90b5',
+			'5bcd5310cb56697fbae011fb22efdd2579e2ef267614d4a20e5fb8da95f3aa87',
 		readmeSamples: [
 			{
 				code: 'import { Effect } from "effect";\nimport { status } from "elysia";\nimport { createErrorTracker, createMemoryIssueStore } from "@absolutejs/errors";\nimport { tracerOrNoop } from "@absolutejs/telemetry";\n\nconst errors = createErrorTracker({\n  audit: broker, // @absolutejs/audit\n  tracer: tracerOrNoop(otelProvider, "app"),\n  store: createMemoryIssueStore(), // or @absolutejs/errors-postgres\n  project: "acme",\n  release: process.env.RELEASE,\n  environment: "production",\n  onIssue: (r) => alert(r.issue), // only on new / regression\n});\n\n// Effect API (primary):\nconst outcome = await Effect.runPromise(\n  errors.capture(e, {\n    tenant,\n    target: `order_${orderId}`,\n    tags: { component: "billing" },\n  }),\n);\n\n// Promise edge (for Promise-world consumers) — identical outcome:\nconst out = await errors.captureException(e);\n\nif (out.failures.length > 0) {\n  for (const f of out.failures) {\n    switch (f._tag) {\n      case "StoreFailure":\n        retryLater(f.cause);\n        break; // f.cause: IssueStoreError\n      case "AuditSinkFailure":\n        page("audit lost", f.cause);\n        break;\n      case "TracerFailure":\n      case "OnIssueFailure":\n      case "FingerprintFailure":\n        /* tolerate */ break;\n    }\n  }\n}\nreturn status(\n  "Internal Server Error",\n  `Request failed. Reference: ${out.fingerprint}`,\n);',
@@ -29352,8 +29931,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					'ErrorContext carries the standard Sentry-style triage envelope: tenant, target, traceId, spanId, replayId, tags, extra, level.',
-				details: [],
+					'ErrorContext carries the standard Sentry-style triage envelope: tenant, target, traceId, spanId, replayId, tags, extra, level, and an optional semantic groupingKey. Use a grouping key for synthetic or integration failures whose message or source frame may change between releases:',
+				details: [
+					'The key is validated and hashed at the trusted errors boundary. Clients never choose the stored fingerprint directly, and project scoping still isolates otherwise-identical keys.'
+				],
 				title: 'API'
 			},
 			{
@@ -29361,6 +29942,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/errors/elysia provides one server plugin with separate settings for the two error paths:',
 				details: [
 					"server captures thrown, handled, and unexplained returned 5xx responses. Set captureReturned5xx to a predicate when an intentional control-plane response such as readiness 503 should remain observable through health monitoring without becoming an exception issue. The predicate receives the request context, response type, and status; thrown and explicitly handled exceptions are unaffected. It is enabled by default and can be disabled with server: false. ingest mounts the browser-event endpoint and is opt-in; pass {} to use the tracker's store and defaults, or false/omit it to expose no route.",
+					'ingest.reporting mounts a browser Reporting API receiver and converts crash, deprecation, intervention, and policy deliveries into the same validated issue pipeline. Send the response header Reporting-Endpoints: default="/ingest/reports" on documents to enable browser delivery. Crash reports cannot be collected with ReportingObserver: the page JavaScript is no longer running after a browser-process crash.',
 					'This subpath is server-only and contains the Effect-backed tracker/ingest runtime. Browser code should use @absolutejs/beacon (or @absolutejs/observability) and never import @absolutejs/errors/elysia. Forwarding-only servers can omit tracker and provide server.capture directly; this is still the same errorsPlugin.'
 				],
 				title: 'Elysia server integration'
@@ -29380,7 +29962,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					'The default fingerprint is a 16-hex-char prefix of SHA-1 over',
+					'Without a groupingKey, the default fingerprint is a 16-hex-char prefix of SHA-1 over',
 				details: [
 					"normalized() strips digits and quoted string literals so user 'u_42' not found and user 'u_99' not found group together. Inject a custom fingerprint function for deterministic tests or domain-specific grouping rules."
 				],
@@ -29398,7 +29980,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/errors',
 		subpackages: [],
-		version: '0.7.2'
+		version: '0.9.0'
 	},
 	{
 		api: [],
@@ -29521,7 +30103,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+							'bun run typecheck && bun run verify-package && bun run build && bun run test',
 						name: 'check:package'
 					},
 					{
@@ -29626,7 +30208,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'postgres',
-				version: '0.1.3'
+				version: '0.1.4'
 			}
 		],
 		version: null
@@ -29665,7 +30247,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		private: false,
 		publicExports: [],
 		readmeDigest:
-			'c85fee36b8d83fd8622acdd60fbe8727c7d8691d2ffc4ca24524153568b4f262',
+			'aa29e4ede576ea0a7e5d6aacbb7e8d6a8101c6bd5d41a2ba4b0f72042d4bf3b2',
 		readmeSamples: [
 			{
 				code: 'new Elysia().use(auth).use(metrics);',
@@ -29691,6 +30273,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
+					'absolute/progressbar-has-state requires Vue progressbars to make their state explicit: determinate meters expose aria-valuenow, while indeterminate loaders use aria-busy or data-beacon-loading. This preserves valid ARIA semantics and lets runtime watchdogs distinguish persistent meters from loads.',
+				details: [],
+				title: 'Progressbar state'
+			},
+			{
+				description:
+					'absolute/modal-has-focus-management requires every Vue element that declares aria-modal="true" to expose the structural hooks a host needs for the modal focus lifecycle: a template ref for initial focus and restoration coordination, a tabindex fallback when it has no focusable children, and a keydown handler for Tab containment. The rule cannot prove runtime focus behavior; pair it with an accessibility runtime signal or browser test.',
+				details: [],
+				title: 'Accessible modal focus'
+			},
+			{
+				description:
 					'absolute/elysia-composition-boundaries prevents a route application from being extended through a second variable such as const adminApp = publicApp.get(...). Each route surface must start from its own named new Elysia(...), install shared dependencies explicitly, and be mounted at a shallow root. This keeps TypeScript from repeatedly instantiating the accumulated server graph and preserves real sub-app types for Eden.',
 				details: [
 					'The rule also auto-fixes adjacent plugin chains:',
@@ -29708,11 +30302,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'absolute/elysia-no-response-return prevents Elysia application handlers from returning Response.json(...) or new Response(...), including through same-file helpers. Routes retain their inferred Eden contract by returning plain typed data, status(...), or redirect(...). Exact streaming, file, and HTML route paths can allow new Response(...); Response.json(...) remains forbidden because JSON application data never needs the Fetch escape hatch.'
 				],
 				title: 'Typed request boundaries'
+			},
+			{
+				description:
+					'absolute/no-unsafe-schema-types rejects TypeBox Any, Unknown, and Unsafe escape hatches, plus Drizzle $type declarations containing any or unknown. Drizzle JSON annotations are compile-time promises, not runtime validation; use a bounded type derived from the runtime schema and validate untrusted input before persistence.',
+				details: [
+					'absolute/prefer-drizzle-query-builders rejects sql.raw() and recognizes raw Drizzle SQL templates that have direct typed equivalents such as eq, gte, isNull, inArray, like, and desc. SQL remains available for database features that Drizzle cannot express, including JSONPath and aggregate/window expressions.'
+				],
+				title: 'Typed persistence boundaries'
 			}
 		],
 		repository: 'https://github.com/absolutejs/eslint-plugin-absolute',
 		subpackages: [],
-		version: '0.11.27'
+		version: '0.11.33'
 	},
 	{
 		api: [],
@@ -32901,7 +33503,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -33225,7 +33827,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/health',
 		subpackages: [],
-		version: '0.3.0'
+		version: '0.4.0'
 	},
 	{
 		api: [
@@ -34404,21 +35006,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'LinkedProviderGrant',
 						signature:
-							'type LinkedProviderGrant = {\n    id: string;\n    ownerRef: string;\n    providerFamily: LinkedProviderFamily;\n    authProviderKey: string;\n    providerSubject: string;\n    status: LinkedProviderGrantStatus;\n    grantedScopes: string[];\n    accessTokenCiphertext?: string;\n    refreshTokenCiphertext?: string;\n    tokenType?: string;\n    expiresAt?: number;\n    lastRefreshedAt?: number;\n    lastRefreshError?: string;\n    metadata?: Record<string, unknown>;\n    createdAt: number;\n    updatedAt: number;\n};'
+							'type LinkedProviderGrant = {\n    id: string;\n    ownerRef: string;\n    providerFamily: LinkedProviderFamily;\n    authProviderKey: string;\n    providerSubject: string;\n    status: LinkedProviderGrantStatus;\n    grantedScopes: string[];\n    accessTokenCiphertext?: string;\n    refreshTokenCiphertext?: string;\n    tokenType?: string;\n    expiresAt?: number;\n    lastRefreshedAt?: number;\n    lastRefreshError?: string;\n    metadata?: JsonObject;\n    createdAt: number;\n    updatedAt: number;\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'LinkedProviderBinding',
 						signature:
-							'type LinkedProviderBinding = {\n    id: string;\n    grantId: string;\n    connectorProvider: LinkedConnectorProvider;\n    externalAccountId: string;\n    externalAccountType: LinkedProviderAccountType;\n    label?: string;\n    username?: string;\n    email?: string;\n    status: LinkedProviderBindingStatus;\n    availableScopes: string[];\n    capabilities?: string[];\n    metadata?: Record<string, unknown>;\n    createdAt: number;\n    updatedAt: number;\n};'
+							'type LinkedProviderBinding = {\n    id: string;\n    grantId: string;\n    connectorProvider: LinkedConnectorProvider;\n    externalAccountId: string;\n    externalAccountType: LinkedProviderAccountType;\n    label?: string;\n    username?: string;\n    email?: string;\n    status: LinkedProviderBindingStatus;\n    availableScopes: string[];\n    capabilities?: string[];\n    metadata?: JsonObject;\n    createdAt: number;\n    updatedAt: number;\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'ResolvedLinkedProviderCredential',
 						signature:
-							'type ResolvedLinkedProviderCredential = {\n    bindingId: string;\n    grantId: string;\n    ownerRef: string;\n    connectorProvider: LinkedConnectorProvider;\n    providerFamily: LinkedProviderFamily;\n    authProviderKey: string;\n    externalAccountId: string;\n    externalAccountType: LinkedProviderAccountType;\n    scopes: string[];\n    capabilities?: string[];\n    label?: string;\n    username?: string;\n    email?: string;\n    metadata?: Record<string, unknown>;\n};'
+							'type ResolvedLinkedProviderCredential = {\n    bindingId: string;\n    grantId: string;\n    ownerRef: string;\n    connectorProvider: LinkedConnectorProvider;\n    providerFamily: LinkedProviderFamily;\n    authProviderKey: string;\n    externalAccountId: string;\n    externalAccountType: LinkedProviderAccountType;\n    scopes: string[];\n    capabilities?: string[];\n    label?: string;\n    username?: string;\n    email?: string;\n    metadata?: JsonObject;\n};'
 					},
 					{
 						description: '',
@@ -34432,7 +35034,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'LinkedProviderCredentialFailureReport',
 						signature:
-							'type LinkedProviderCredentialFailureReport = {\n    code: LinkedProviderFailureCode;\n    message?: string;\n    retryAt?: number;\n    metadata?: Record<string, unknown>;\n};'
+							'type LinkedProviderCredentialFailureReport = {\n    code: LinkedProviderFailureCode;\n    message?: string;\n    retryAt?: number;\n    metadata?: JsonObject;\n};'
 					},
 					{
 						description: '',
@@ -34461,6 +35063,27 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'LinkedProviderCredentialResolver',
 						signature:
 							'type LinkedProviderCredentialResolver = {\n    listBindings: (input: {\n        ownerRef: string;\n        connectorProvider?: LinkedConnectorProvider;\n        status?: Extract<LinkedProviderBindingStatus, "active" | "restricted">;\n    }) => Promise<LinkedProviderBinding[]> | LinkedProviderBinding[];\n    resolveCredential: (input: ResolveLinkedProviderCredentialInput) => Promise<ResolvedLinkedProviderCredential | null> | ResolvedLinkedProviderCredential | null;\n    getAccessToken: (credential: ResolvedLinkedProviderCredential, input?: {\n        minValidityMs?: number;\n        requiredScopes?: string[];\n    }) => Promise<LinkedProviderAccessTokenLease> | LinkedProviderAccessTokenLease;\n    reportFailure: (credential: ResolvedLinkedProviderCredential, report: LinkedProviderCredentialFailureReport) => Promise<void> | void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'JsonPrimitive',
+						signature:
+							'type JsonPrimitive = boolean | null | number | string;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'JsonValue',
+						signature:
+							'type JsonValue = JsonPrimitive | JsonObject | JsonValue[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'JsonObject',
+						signature:
+							'type JsonObject = {\n    [key: string]: JsonValue;\n};'
 					}
 				]
 			}
@@ -34539,7 +35162,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/linked-providers',
 		subpackages: [],
-		version: '0.0.5'
+		version: '0.0.6'
 	},
 	{
 		api: [
@@ -34915,44 +35538,26 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
-						name: 'validatePackageArtifactPolicy',
-						signature: 'validatePackageArtifactPolicy'
+						name: 'validatePackagePeerDependencies',
+						signature: 'validatePackagePeerDependencies'
 					},
 					{
 						description: '',
 						kind: 'export',
-						name: 'validatePackageRuntimePolicy',
-						signature: 'validatePackageRuntimePolicy'
+						name: 'PackagePeerDependencyInput',
+						signature: 'PackagePeerDependencyInput'
 					},
 					{
 						description: '',
 						kind: 'export',
-						name: 'PackageArtifactFiles',
-						signature: 'PackageArtifactFiles'
+						name: 'PackagePeerDependencyIssue',
+						signature: 'PackagePeerDependencyIssue'
 					},
 					{
 						description: '',
 						kind: 'export',
-						name: 'PackageRuntimePolicyInput',
-						signature: 'PackageRuntimePolicyInput'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'PackageRuntimePolicyIssue',
-						signature: 'PackageRuntimePolicyIssue'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'PackageRuntimePolicyResult',
-						signature: 'PackageRuntimePolicyResult'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'RuntimePeerPolicy',
-						signature: 'RuntimePeerPolicy'
+						name: 'PackagePeerDependencyResult',
+						signature: 'PackagePeerDependencyResult'
 					},
 					{
 						description: '',
@@ -35277,6 +35882,24 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'WiringPlacement',
 						signature: 'WiringPlacement'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WiringRecipe',
+						signature: 'WiringRecipe'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WiringSnippet',
+						signature: 'WiringSnippet'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Workspace',
+						signature: 'Workspace'
 					}
 				]
 			}
@@ -35290,7 +35913,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run typecheck && bun run lint && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+					'bun run typecheck && bun run lint && bun run verify-package && bun run build && bun run test',
 				name: 'check:package'
 			},
 			{
@@ -35319,7 +35942,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		private: false,
 		publicExports: ['@absolutejs/manifest'],
 		readmeDigest:
-			'a23a70469fad3725851f4365bed1079ee7484a5165f9a2554903854a278a9bd8',
+			'2438ce7fc8f636f1dde4d801d6282e6c4522d6e291456babb1d7187aafc23b5f',
 		readmeSamples: [
 			{
 				code: 'send_email: tool.runtime({\n  authorization: {\n    approval: "policy",\n    audience: "owner",\n    destinationFields: ["to"],\n    effects: ["send", "external-network"],\n    idempotency: { mode: "host" },\n    requiredScopes: ["email:send"],\n    reversible: false,\n  },\n  // input, handler, description…\n});',
@@ -35379,9 +36002,9 @@ export const ecosystemProjects: EcosystemProject[] = [
 				details: [
 					'Server wiring uses placement to preserve lifecycle semantics: server-boundary is mounted before the first route (error capture, request context, and other hooks that must observe every handler); server-plugin joins the normal plugin chain; module-scope creates top-level resources; and server-factory is reserved for host factory composition. Client recipes use client-entry.',
 					'Package plumbing',
-					"absolute-manifest emit validates the manifest (schema, tool-key naming, preset values, package.json agreement, and shared-runtime ownership) and writes dist/manifest.json — the serializable projection (handlers stripped) for consumers that can't execute package code. It is derived, never hand-authored, so the two forms cannot diverge. absolute-manifest scaffold generates a starter src/manifest.ts.",
-					'absolutejs.runtimePeers classifies every peerDependencies entry. Coverage is mandatory: the validator rejects any peer omitted from this map, a runtime duplicated in dependencies, a peer range or optionality mismatch, a dev dependency that differs from the exact tested version, any missing build external, and any artifactImports entry that disappeared from the emitted JavaScript because it was bundled. An empty artifactImports array is the explicit declaration that no static import survives. A dynamically resolved peer must instead declare stable artifactReferences strings that survive in the built JavaScript (for example, a host node_modules/sharp lookup); only a peer with both evidence arrays empty is type-only. Omission is never a declaration. Keep compatibility windows conservative; supporting a new pre-1.0 minor requires a deliberate package release.',
-					'Run absolute-manifest verify-package --artifacts directly for packages that want both package and emitted-artifact gates without emitting a manifest. absolute-manifest verify-tree [directory] [--artifacts] recursively checks a workspace while excluding generated and dependency directories.'
+					"absolute-manifest emit validates the manifest (schema, tool-key naming, preset values, package.json agreement, and peer dependency relationships) and writes dist/manifest.json — the serializable projection (handlers stripped) for consumers that can't execute package code. It is derived, never hand-authored, so the two forms cannot diverge. absolute-manifest scaffold generates a starter src/manifest.ts.",
+					"Standard package metadata is the only dependency contract. Put host-owned runtimes in peerDependencies, optionality in peerDependenciesMeta, and the version used by tests in devDependencies. Configure externals in the package's actual build command or build API. No parallel AbsoluteJS dependency map is required.",
+					'absolute-manifest verify-package checks derivable peer relationships, such as rejecting a peer duplicated in dependencies. absolute-manifest verify-tree [directory] recursively applies the same check while excluding generated and dependency directories.'
 				],
 				title: 'Authoring a manifest'
 			},
@@ -35402,7 +36025,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/manifest',
 		subpackages: [],
-		version: '0.8.0'
+		version: '0.9.0'
 	},
 	{
 		api: [
@@ -36299,7 +36922,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/mcp',
 		subpackages: [],
-		version: '0.11.3'
+		version: '0.12.0'
 	},
 	{
 		api: [
@@ -36865,7 +37488,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -37079,7 +37702,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -37291,7 +37914,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -37521,7 +38144,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -37624,7 +38247,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'HandlerMeterEvent',
 						signature:
-							'type HandlerMeterEvent = {\n    type: "handler";\n    /** Tenant id — the bill-payer for this event. */\n    tenant: string;\n    /** Mutation name (forwarded from sync\'s `defineMutation`). */\n    mutationName?: string;\n    /** Wall-clock duration from call entry to result resolution (ms). */\n    durationMs: number;\n    /** Sandbox CPU time (ms). Sub-millisecond runs round to 0. */\n    cpuMs: number;\n    /** Peak heap bytes the handler reached during the call. */\n    heapBytes?: number;\n    /** Bytes the handler returned to its caller (response payload). */\n    bytesOut?: number;\n    /** `true` on success; `false` if the handler threw. */\n    ok: boolean;\n    /** Error name on failure (e.g. `TimeoutError`, `MemoryLimitError`). */\n    errorName?: string;\n    /** When the event happened (`Date.now()`). Filled in by `record` if omitted. */\n    at?: number;\n};'
+							'type HandlerMeterEvent = {\n    type: "handler";\n    /** Tenant id — the bill-payer for this event. */\n    tenant: string;\n    /** Mutation name (forwarded from sync\'s `defineMutation`). */\n    mutationName?: string;\n    /** Wall-clock duration from call entry to result resolution (ms). */\n    durationMs: number;\n    /** Sandbox CPU time (ms). Sub-millisecond runs round to 0. */\n    cpuMs: number;\n    /** Peak heap bytes the handler reached during the call. */\n    heapBytes?: number;\n    /** Bytes the handler returned to its caller (response payload). */\n    bytesOut?: number;\n    /** Bytes the caller sent in (request payload). */\n    bytesIn?: number;\n    /** `true` on success; `false` if the handler threw. */\n    ok: boolean;\n    /** Error name on failure (e.g. `TimeoutError`, `MemoryLimitError`). */\n    errorName?: string;\n    /** When the event happened (`Date.now()`). Filled in by `record` if omitted. */\n    at?: number;\n};'
 					},
 					{
 						description: '',
@@ -37667,7 +38290,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'Usage',
 						signature:
-							"type Usage = {\n    /** Total handler calls counted for this tenant. */\n    requests: number;\n    /** Of those, how many threw. */\n    errors: number;\n    /** Sum of `cpuMs` across all handler events (sandbox CPU only). */\n    cpuMs: number;\n    /**\n     * Cumulative process CPU ms derived from observation deltas. This is\n     * usually >= `cpuMs` because it includes host work outside the sandbox.\n     * Source of truth for billing CPU on the host process.\n     */\n    processCpuMs: number;\n    /** Sum of `durationMs` across all handler events (wall-clock, not CPU). */\n    durationMs: number;\n    /** Sum of `bytesOut` across all handler events. */\n    bytesEgress: number;\n    /** Sum of `hibernationGbSeconds` across all process events. */\n    hibernationGbSeconds: number;\n    /** Max `heapBytes` observed across all handler events. */\n    heapBytesPeak: number;\n    /** Max `rssBytes` observed across all observation events. */\n    processRssBytesPeak: number;\n    /** Spawn count (process events with `transition === 'spawn'`). */\n    spawns: number;\n    aiRequests: number;\n    aiErrors: number;\n    aiInputTokens: number;\n    aiOutputTokens: number;\n    aiCacheReadInputTokens: number;\n  "
+							"type Usage = {\n    /** Total handler calls counted for this tenant. */\n    requests: number;\n    /** Of those, how many threw. */\n    errors: number;\n    /** Sum of `cpuMs` across all handler events (sandbox CPU only). */\n    cpuMs: number;\n    /**\n     * Cumulative process CPU ms derived from observation deltas. This is\n     * usually >= `cpuMs` because it includes host work outside the sandbox.\n     * Source of truth for billing CPU on the host process.\n     */\n    processCpuMs: number;\n    /** Sum of `durationMs` across all handler events (wall-clock, not CPU). */\n    durationMs: number;\n    /** Sum of `bytesOut` across all handler events. */\n    bytesEgress: number;\n    /** Sum of `bytesIn` across all handler events. */\n    bytesIngress: number;\n    /** Sum of `hibernationGbSeconds` across all process events. */\n    hibernationGbSeconds: number;\n    /** Max `heapBytes` observed across all handler events. */\n    heapBytesPeak: number;\n    /** Max `rssBytes` observed across all observation events. */\n    processRssBytesPeak: number;\n    /** Spawn count (process events with `transition === 'spawn'`). */\n    spawns: number;\n    aiRequests: number;\n    aiErrors: number;\n    aiInputT"
 					},
 					{
 						description: '',
@@ -37792,7 +38415,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'workloadMeterElysia',
 						signature:
-							'const workloadMeterElysia: (options: WorkloadMeterElysiaOptions) => Elysia<"", {\n    decorator: {};\n    store: {};\n    derive: {};\n    resolve: {};\n}, {\n    typebox: {};\n    error: {};\n}, {\n    schema: {};\n    standaloneSchema: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n    response: {};\n}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n    response: {};\n}>;'
+							'const workloadMeterElysia: (options: WorkloadMeterElysiaOptions) => Elysia<"", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral>;'
 					}
 				]
 			},
@@ -37804,21 +38427,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'WorkloadMeterInput',
 						signature:
-							'type WorkloadMeterInput = {\n    at?: number;\n    bytesOut?: number;\n    cpuMs?: number;\n    durationMs: number;\n    errorName?: string;\n    heapBytes?: number;\n    kind: "handler" | "request";\n    method?: string;\n    name: string;\n    ok: boolean;\n    statusCode?: number;\n};'
+							'type WorkloadMeterInput = {\n    at?: number;\n    bytesIn?: number;\n    bytesOut?: number;\n    cpuMs?: number;\n    durationMs: number;\n    errorName?: string;\n    heapBytes?: number;\n    kind: "handler" | "request";\n    method?: string;\n    name: string;\n    ok: boolean;\n    statusCode?: number;\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'WorkloadMeterWireEvent',
 						signature:
-							'type WorkloadMeterWireEvent = {\n    bytes_out?: number;\n    cpu_ms: number;\n    cursor: number;\n    duration_ms: number;\n    error_name?: string;\n    event_at: string;\n    heap_bytes?: number;\n    kind: "handler" | "request";\n    method?: string;\n    name: string;\n    ok: boolean;\n    status_code?: number;\n};'
+							'type WorkloadMeterWireEvent = {\n    bytes_in?: number;\n    bytes_out?: number;\n    cpu_ms: number;\n    cursor: number;\n    duration_ms: number;\n    error_name?: string;\n    event_at: string;\n    heap_bytes?: number;\n    kind: "handler" | "request";\n    method?: string;\n    name: string;\n    ok: boolean;\n    status_code?: number;\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'WorkloadMeterReporter',
 						signature:
-							'type WorkloadMeterReporter = {\n    dispose: () => Promise<void>;\n    flush: () => Promise<void>;\n    handlerMetrics: (record: {\n        bytesOut?: number;\n        cpuMs: number;\n        durationMs: number;\n        errorName?: string;\n        heapBytes?: number;\n        mutationName?: string;\n        ok: boolean;\n    }) => void;\n    record: (event: WorkloadMeterInput) => void;\n};'
+							'type WorkloadMeterReporter = {\n    dispose: () => Promise<void>;\n    flush: () => Promise<void>;\n    handlerMetrics: (record: {\n        bytesIn?: number;\n        bytesOut?: number;\n        cpuMs: number;\n        durationMs: number;\n        errorName?: string;\n        heapBytes?: number;\n        mutationName?: string;\n        ok: boolean;\n    }) => void;\n    record: (event: WorkloadMeterInput) => void;\n};'
 					},
 					{
 						description: '',
@@ -37949,7 +38572,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/metering',
 		subpackages: [],
-		version: '0.6.0'
+		version: '0.7.0'
 	},
 	{
 		api: [
@@ -38447,7 +39070,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/metrics',
 		subpackages: [],
-		version: '0.3.2'
+		version: '0.4.0'
 	},
 	{
 		api: [
@@ -38507,14 +39130,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'createManagedObservabilityRelay',
 						signature:
-							'const createManagedObservabilityRelay: (options: ManagedObservabilityRelayOptions) => Elysia<"/api/observability", {\n    decorator: {};\n    store: {};\n    derive: {};\n    resolve: {};\n}, {\n    typebox: {};\n    error: {};\n}, {\n    schema: {};\n    standaloneSchema: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {\n        500: "Internal Server Error";\n    };\n}, {\n    api: {\n        observability: {};\n    };\n} & {\n    api: {\n        observability: {\n            errors: {\n                post: {\n                    body: {\n                        environment?: string;\n                        release?: string;\n                        events: {\n                            at?: number;\n                            extra?: {};\n                            level?: "fatal" | "error" | "warning" | "info";\n                            replayId?: string;\n                            spanId?: string;\n                            stack?: string;\n                            tags?: {};\n                            traceId?: string;\n                            message: string;\n                            name: string;\n                        }[];\n                        project: string;\n'
+							'const createManagedObservabilityRelay: (options: ManagedObservabilityRelayOptions) => import("elysia/types").AddRoute<"/api/observability", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {\n        500: "Internal Server Error";\n    };\n}, {\n    api: {\n        observability: {};\n    };\n} & {\n    api: {\n        observability: {\n            errors: {\n                post: {\n                    body: {\n                        environment?: string;\n                        release?: string;\n                        events: {\n                            at?: number;\n                            extra?: Record<string, unknown>;\n                            level?: "fatal" | "error" | "warning" | "info";\n                            replayId?: string;\n                            spanId?: string;\n                            stack?: string;\n                            tags?: Record<string, string>;\n                            traceId?: string;\n                            message: string;\n                            name: string;\n                     '
 					},
 					{
 						description: '',
 						kind: 'value',
 						name: 'createManagedObservabilityRelayFromEnv',
 						signature:
-							'const createManagedObservabilityRelayFromEnv: (env?: RelayEnvironment) => Elysia<"/api/observability", {\n    decorator: {};\n    store: {};\n    derive: {};\n    resolve: {};\n}, {\n    typebox: {};\n    error: {};\n}, {\n    schema: {};\n    standaloneSchema: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {\n        500: "Internal Server Error";\n    };\n}, {\n    api: {\n        observability: {};\n    };\n} & {\n    api: {\n        observability: {\n            errors: {\n                post: {\n                    body: {\n                        environment?: string;\n                        release?: string;\n                        events: {\n                            at?: number;\n                            extra?: {};\n                            level?: "fatal" | "error" | "warning" | "info";\n                            replayId?: string;\n                            spanId?: string;\n                            stack?: string;\n                            tags?: {};\n                            traceId?: string;\n                            message: string;\n                            name: string;\n                        }[];\n                        project: string;\n            '
+							'const createManagedObservabilityRelayFromEnv: (env?: RelayEnvironment) => import("elysia/types").AddRoute<"/api/observability", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {\n        500: "Internal Server Error";\n    };\n}, {\n    api: {\n        observability: {};\n    };\n} & {\n    api: {\n        observability: {\n            errors: {\n                post: {\n                    body: {\n                        environment?: string;\n                        release?: string;\n                        events: {\n                            at?: number;\n                            extra?: Record<string, unknown>;\n                            level?: "fatal" | "error" | "warning" | "info";\n                            replayId?: string;\n                            spanId?: string;\n                            stack?: string;\n                            tags?: Record<string, string>;\n                            traceId?: string;\n                            message: string;\n                            name: string;\n                        }[];\n    '
 					},
 					{
 						description: '',
@@ -38629,7 +39252,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/observability',
 		subpackages: [],
-		version: '0.4.3'
+		version: '0.5.0'
 	},
 	{
 		api: [
@@ -39944,7 +40567,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/partnership',
 		subpackages: [],
-		version: '0.0.11'
+		version: '0.0.12'
 	},
 	{
 		api: [
@@ -40519,12 +41142,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'const getBrowserCapabilities: () => BrowserCapabilities;'
 					},
 					{
+						description: '',
+						kind: 'type',
+						name: 'ServiceWorkerRegistrationRetryOptions',
+						signature:
+							'type ServiceWorkerRegistrationRetryOptions = {\n    /** Wait for the document load event before competing for the network. Default\n     *  true. */\n    deferUntilLoad?: boolean;\n    /** Total registration attempts for transient browser/network failures.\n     *  Default 3. */\n    maxAttempts?: number;\n    /** Initial retry delay. Later retries use exponential backoff. Default\n     *  1000ms. */\n    retryDelayMs?: number;\n};'
+					},
+					{
 						description:
-							'Register the service worker (installability + push delivery). Safe to call on every boot; a failed registration is swallowed so it never breaks page load.',
+							'Register the service worker (installability + push delivery). Safe to call on every boot. Registration waits for page load by default and retries transient browser/network failures; terminal failures are swallowed so they never break page load.',
 						kind: 'value',
 						name: 'registerServiceWorker',
 						signature:
-							'const registerServiceWorker: (path?: string) => Promise<void>;'
+							'const registerServiceWorker: (path?: string, options?: ServiceWorkerRegistrationRetryOptions) => Promise<void>;'
 					},
 					{
 						description: '',
@@ -40673,7 +41303,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/pwa/manifest.json'
 		],
 		readmeDigest:
-			'8dbde7a62d7e4d7f4df15f5f0411a7a0e1fcf2cd487d21f4af954182c32533fd',
+			'0830f3106fbf3440f21fafdd112e3f26826e3151cc82f501d79df9ea693da43a',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/pwa',
@@ -40729,7 +41359,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/pwa',
 		subpackages: [],
-		version: '0.7.3'
+		version: '0.7.4'
 	},
 	{
 		api: [
@@ -41260,7 +41890,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/queue',
 		subpackages: [],
-		version: '0.7.1'
+		version: '0.8.0'
 	},
 	{
 		api: [],
@@ -41788,6 +42418,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'classifyEmbeddingError',
+						signature: 'classifyEmbeddingError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGEmbeddingError',
+						signature: 'createRAGEmbeddingError'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'embeddingCacheKey',
 						signature: 'embeddingCacheKey'
 					},
@@ -41796,6 +42438,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'isEmbeddingQuotaError',
 						signature: 'isEmbeddingQuotaError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isRetryableEmbeddingError',
+						signature: 'isRetryableEmbeddingError'
 					},
 					{
 						description: '',
@@ -41820,6 +42468,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'RAGEmbeddingHealth',
 						signature: 'type RAGEmbeddingHealth'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGEmbeddingError',
+						signature: 'type RAGEmbeddingError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGEmbeddingErrorKind',
+						signature: 'type RAGEmbeddingErrorKind'
 					},
 					{
 						description: '',
@@ -42192,36 +42852,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'createRAGMediaFileExtractor',
 						signature: 'createRAGMediaFileExtractor'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createRAGMediaTranscriber',
-						signature: 'createRAGMediaTranscriber'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createRAGOCRProvider',
-						signature: 'createRAGOCRProvider'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createTextFileExtractor',
-						signature: 'createTextFileExtractor'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'loadRAGDocumentFromURL',
-						signature: 'loadRAGDocumentFromURL'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'loadRAGDocumentUpload',
-						signature: 'loadRAGDocumentUpload'
 					}
 				]
 			},
@@ -44146,7 +44776,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/rag',
 		subpackages: [],
-		version: '0.6.2'
+		version: '0.7.0'
 	},
 	{
 		api: [],
@@ -45053,7 +45683,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'rateLimit',
 						signature:
-							'const rateLimit: (options: RateLimitOptions) => Elysia<"", {\n    decorator: {};\n    store: {};\n    derive: {};\n    resolve: {};\n}, {\n    typebox: {};\n    error: {};\n}, {\n    schema: {};\n    standaloneSchema: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n    response: {};\n}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n    response: {\n        200: Response;\n    };\n}>;'
+							'const rateLimit: (options: RateLimitOptions) => Elysia<"", "local", import("elysia/types").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia/types").DefaultMetadata, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral>;'
 					}
 				]
 			},
@@ -45327,7 +45957,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/rate-limit',
 		subpackages: [],
-		version: '0.5.1'
+		version: '0.6.0'
 	},
 	{
 		api: [
@@ -45499,7 +46129,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -45849,7 +46479,43 @@ export const ecosystemProjects: EcosystemProject[] = [
 				symbols: [
 					{
 						description:
-							"@absolutejs/replay — session replay for the AbsoluteJS observability stack. DOM recording genuinely needs a heavy, hard-to-replicate engine, so the recorder wraps rrweb — but rrweb is an optional, lazy-loaded peer (and fully injectable), so: - this package has ZERO hard dependencies; rrweb is only pulled when you actually start recording, and only into the replay code path (opt-in weight — replay is the one heavy feature, never on a page that isn't recording). - it's plain TS, NOT Effect — like ",
+							"Re-assemble a session's chunks into a single ordered event stream.",
+						kind: 'value',
+						name: 'assembleReplay',
+						signature:
+							'const assembleReplay: (chunks: ReplayChunk[]) => ReplayEvent[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReplayPlayerOptions',
+						signature:
+							"type ReplayPlayerOptions = {\n    /** Element to mount the replay into. */\n    target: Element;\n    /** The assembled event stream (see `assembleReplay`). */\n    events: ReplayEvent[];\n    /** Inject rrweb's `Replayer` (default: lazy-imported). */\n    Replayer?: RrwebReplayerConstructor;\n    /** Start playing immediately. Default true. */\n    autoplay?: boolean;\n    speed?: number;\n    /** Inject the replayer's baseline CSS into the target's document. rrweb's\n     *  bare `Replayer` positions its mouse cursor and mouse-tail canvas with\n     *  classes styled only by `rrweb/dist/style.css`; without those rules the\n     *  full-viewport tail canvas lays out in-flow and pushes the replay iframe\n     *  below the mount point (the replay looks blank). Default **true** — set\n     *  false only if you load rrweb's stylesheet yourself. */\n    injectStyles?: boolean;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReplayPlayer',
+						signature:
+							'type ReplayPlayer = {\n    play: (timeOffset?: number) => void;\n    pause: () => void;\n    destroy: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'trimToFirstSnapshot',
+						signature:
+							'const trimToFirstSnapshot: (events: ReplayEvent[]) => ReplayEvent[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createReplayPlayer',
+						signature:
+							'const createReplayPlayer: (options: ReplayPlayerOptions) => Promise<ReplayPlayer>;'
+					},
+					{
+						description:
+							"@absolutejs/replay — session replay for the AbsoluteJS observability stack. DOM recording genuinely needs a heavy, hard-to-replicate engine, so the recorder wraps @rrweb/record, lazy-loaded (and fully injectable), so the engine is only pulled when recording starts and stays separate from rrweb's optional playback path. - it's plain TS, NOT Effect — like @absolutejs/beacon, it's browser-first where bytes are the cost; the server-side rigor lives in the ingest / storage layers. Pipeline: rrweb emi",
 						kind: 'type',
 						name: 'ReplayEvent',
 						signature:
@@ -45860,7 +46526,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'RecordConfig',
 						signature:
-							"type RecordConfig = {\n    emit: (event: ReplayEvent) => void;\n    maskAllInputs?: boolean;\n    maskTextSelector?: string;\n    blockClass?: string;\n    maskTextClass?: string;\n    recordCanvas?: boolean;\n    /** Take a fresh FullSnapshot at least this often (ms). Keeps a recent\n     *  restore point in any bounded buffer so a tail that no longer contains\n     *  the session's first snapshot is still self-contained. */\n    checkoutEveryNms?: number;\n};"
+							"type RecordConfig = {\n    emit: (event: ReplayEvent) => void;\n    maskAllInputs?: boolean;\n    maskTextSelector?: string;\n    blockClass?: string;\n    blockSelector?: string;\n    maskTextClass?: string;\n    recordCanvas?: boolean;\n    /** Take a fresh FullSnapshot at least this often (ms). Keeps a recent\n     *  restore point in any bounded buffer so a tail that no longer contains\n     *  the session's first snapshot is still self-contained. */\n    checkoutEveryNms?: number;\n};"
 					},
 					{
 						description: "rrweb's record — returns a stop handler.",
@@ -45912,7 +46578,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'RecorderOptions',
 						signature:
-							"type RecorderOptions = {\n    project: string;\n    /** Called for each chunk as it's flushed. */\n    upload: ChunkUpload;\n    /** Override the generated session id. */\n    replayId?: string;\n    release?: string;\n    environment?: string;\n    /** Flush a chunk at least this often (ms). Default 5000. */\n    chunkIntervalMs?: number;\n    /** Flush once this many events buffer. Default 200. */\n    chunkMaxEvents?: number;\n    /** Resume a prior session: start chunk `seq` here instead of 0, so a new\n     *  page load's chunks don't collide with the previous load's (storage is\n     *  idempotent on (replayId, seq) and would silently drop the duplicates).\n     *  Default 0. */\n    seqStart?: number;\n    /** Mask all input values (privacy). Default **true**. */\n    maskAllInputs?: boolean;\n    /** Mask all text content (high-sensitivity). Default false. */\n    maskAllText?: boolean;\n    /** CSS class whose subtrees are not recorded. Default `'rr-block'`. */\n    blockClass?: string;\n    /** CSS class whose text is masked. Default `'rr-mask'`. */\n    maskTextClass?: string;\n    /** Record `<canvas>` (heavier). Default false. */\n    recordCanvas?: boolean;\n    /** Take a fresh FullSnapshot at"
+							"type RecorderOptions = {\n    project: string;\n    /** Called for each chunk as it's flushed. */\n    upload: ChunkUpload;\n    /** Override the generated session id. */\n    replayId?: string;\n    release?: string;\n    environment?: string;\n    /** Flush a chunk at least this often (ms). Default 5000. */\n    chunkIntervalMs?: number;\n    /** Flush once this many events buffer. Default 200. */\n    chunkMaxEvents?: number;\n    /** Resume a prior session: start chunk `seq` here instead of 0, so a new\n     *  page load's chunks don't collide with the previous load's (storage is\n     *  idempotent on (replayId, seq) and would silently drop the duplicates).\n     *  Default 0. */\n    seqStart?: number;\n    /** Mask all input values (privacy). Default **true**. */\n    maskAllInputs?: boolean;\n    /** Mask all text content (high-sensitivity). Default false. */\n    maskAllText?: boolean;\n    /** CSS class whose subtrees are not recorded. Default `'rr-block'`. */\n    blockClass?: string;\n    /** CSS selector whose matching subtrees are not recorded. Use this for DOM\n     *  owned by browser extensions or embedded third-party widgets. */\n    blockSelector?: string;\n    /** CSS class whose text is"
 					},
 					{
 						description: '',
@@ -45939,9 +46605,16 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'type',
+						name: 'ReplayFetch',
+						signature:
+							'type ReplayFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;'
+					},
+					{
+						description: '',
+						kind: 'type',
 						name: 'ReplayControllerOptions',
 						signature:
-							'type ReplayControllerOptions = {\n    /** Ingest route accepting `{ chunks: WireChunk[]; manifest: ReplayManifest }`. */\n    endpoint: string;\n    project: string;\n    release?: string;\n    environment?: string;\n    /** Chunks of context to retain (~10 min @ 5s/chunk). Default 120. */\n    maxRingChunks?: number;\n    /** Min ms between throttled auto-error flushes. Default 30000. */\n    flushThrottleMs?: number;\n    /** Max uncompressed bytes per upload batch. Default 700000. */\n    maxBatchBytes?: number;\n    /** Max bytes for the keepalive unload tail (stay under the ~64KB cap). Default 55000. */\n    maxTailBytes?: number;\n    /** sessionStorage key under which to persist `{ replayId, nextSeq }` so a\n     *  full page reload RESUMES the same replay session (same id, continuing seq)\n     *  instead of orphaning the prior recording and minting a fresh one. Matters\n     *  whenever the app can reload mid-session (e.g. a stale-chunk auto-reload).\n     *  Off by default; SSR-safe (no-op without `window`). */\n    persistSessionKey?: string;\n    /** Masking / record-injection / cadence forwarded to the recorder. */\n    recorder?: Omit<RecorderOptions, "project" | "upload" | "replayId" | "'
+							'type ReplayControllerOptions = {\n    /** Ingest route accepting `{ chunks: WireChunk[]; manifest: ReplayManifest }`. */\n    endpoint: string;\n    project: string;\n    release?: string;\n    environment?: string;\n    /** Chunks of context to retain (~10 min @ 5s/chunk). Default 120. */\n    maxRingChunks?: number;\n    /** Min ms between throttled auto-error flushes. Default 30000. */\n    flushThrottleMs?: number;\n    /** Max uncompressed bytes per upload batch. Default 700000. */\n    maxBatchBytes?: number;\n    /** Max bytes for the keepalive unload tail (stay under the ~64KB cap). Default 55000. */\n    maxTailBytes?: number;\n    /** Maximum replay batches uploaded at once. Default 2. */\n    maxUploadConcurrency?: number;\n    /** Deadline for each replay batch attempt. Default 10000ms. */\n    uploadTimeoutMs?: number;\n    /** sessionStorage key under which to persist `{ replayId, nextSeq }` so a\n     *  full page reload RESUMES the same replay session (same id, continuing seq)\n     *  instead of orphaning the prior recording and minting a fresh one. Matters\n     *  whenever the app can reload mid-session (e.g. a stale-chunk auto-reload).\n     *  Off by default; SSR-safe (no-op without'
 					},
 					{
 						description: '',
@@ -45956,7 +46629,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'createReplayController',
 						signature:
 							'const createReplayController: (options: ReplayControllerOptions) => ReplayController;'
-					},
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/replay/player',
+				symbols: [
 					{
 						description:
 							"Re-assemble a session's chunks into a single ordered event stream.",
@@ -45980,8 +46658,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'type ReplayPlayer = {\n    play: (timeOffset?: number) => void;\n    pause: () => void;\n    destroy: () => void;\n};'
 					},
 					{
-						description:
-							"rrweb's Replayer must begin at a FullSnapshot (ideally preceded by its Meta) — otherwise it applies incremental mutations to nodes that were never built and floods the console with \"Node with id 'N' not found\". A persisted ring tail can legitimately start mid-stream (the session's first snapshot was evicted, or a byte-bounded tail begins partway through). Trim leading events to the first FullSnapshot, keeping the Meta immediately before it. Returns the input unchanged when it already starts corr",
+						description: '',
 						kind: 'value',
 						name: 'trimToFirstSnapshot',
 						signature:
@@ -45993,6 +46670,128 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'createReplayPlayer',
 						signature:
 							'const createReplayPlayer: (options: ReplayPlayerOptions) => Promise<ReplayPlayer>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/replay/recorder',
+				symbols: [
+					{
+						description:
+							"@absolutejs/replay — session replay for the AbsoluteJS observability stack. DOM recording genuinely needs a heavy, hard-to-replicate engine, so the recorder wraps @rrweb/record, lazy-loaded (and fully injectable), so the engine is only pulled when recording starts and stays separate from rrweb's optional playback path. - it's plain TS, NOT Effect — like @absolutejs/beacon, it's browser-first where bytes are the cost; the server-side rigor lives in the ingest / storage layers. Pipeline: rrweb emi",
+						kind: 'type',
+						name: 'ReplayEvent',
+						signature:
+							'type ReplayEvent = {\n    type: number;\n    timestamp: number;\n    data: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecordConfig',
+						signature:
+							"type RecordConfig = {\n    emit: (event: ReplayEvent) => void;\n    maskAllInputs?: boolean;\n    maskTextSelector?: string;\n    blockClass?: string;\n    blockSelector?: string;\n    maskTextClass?: string;\n    recordCanvas?: boolean;\n    /** Take a fresh FullSnapshot at least this often (ms). Keeps a recent\n     *  restore point in any bounded buffer so a tail that no longer contains\n     *  the session's first snapshot is still self-contained. */\n    checkoutEveryNms?: number;\n};"
+					},
+					{
+						description: "rrweb's record — returns a stop handler.",
+						kind: 'type',
+						name: 'RrwebRecord',
+						signature:
+							'type RrwebRecord = (config: RecordConfig) => (() => void) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RrwebReplayerInstance',
+						signature:
+							'type RrwebReplayerInstance = {\n    play: (timeOffset?: number) => void;\n    pause: () => void;\n    destroy?: () => void;\n};'
+					},
+					{
+						description: "rrweb's Replayer constructor.",
+						kind: 'type',
+						name: 'RrwebReplayerConstructor',
+						signature:
+							'type RrwebReplayerConstructor = new (events: ReplayEvent[], config?: {\n    root?: Element;\n    speed?: number;\n}) => RrwebReplayerInstance;'
+					},
+					{
+						description:
+							"A contiguous slice of a session's events — the unit uploaded to storage.",
+						kind: 'type',
+						name: 'ReplayChunk',
+						signature:
+							'type ReplayChunk = {\n    replayId: string;\n    project: string;\n    /** Monotonic chunk index within the session (0-based). */\n    seq: number;\n    /** First event timestamp in this chunk. */\n    from: number;\n    /** Last event timestamp in this chunk. */\n    to: number;\n    events: ReplayEvent[];\n};'
+					},
+					{
+						description:
+							'Session-level metadata — pair with the chunk keys to locate a replay.',
+						kind: 'type',
+						name: 'ReplayManifest',
+						signature:
+							'type ReplayManifest = {\n    replayId: string;\n    project: string;\n    startedAt: number;\n    release?: string;\n    environment?: string;\n    chunkCount: number;\n    durationMs: number;\n};'
+					},
+					{
+						description:
+							'Persist one chunk — wire @absolutejs/blob (or any object store) here.',
+						kind: 'type',
+						name: 'ChunkUpload',
+						signature:
+							'type ChunkUpload = (chunk: ReplayChunk) => void | Promise<void>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecorderOptions',
+						signature:
+							"type RecorderOptions = {\n    project: string;\n    /** Called for each chunk as it's flushed. */\n    upload: ChunkUpload;\n    /** Override the generated session id. */\n    replayId?: string;\n    release?: string;\n    environment?: string;\n    /** Flush a chunk at least this often (ms). Default 5000. */\n    chunkIntervalMs?: number;\n    /** Flush once this many events buffer. Default 200. */\n    chunkMaxEvents?: number;\n    /** Resume a prior session: start chunk `seq` here instead of 0, so a new\n     *  page load's chunks don't collide with the previous load's (storage is\n     *  idempotent on (replayId, seq) and would silently drop the duplicates).\n     *  Default 0. */\n    seqStart?: number;\n    /** Mask all input values (privacy). Default **true**. */\n    maskAllInputs?: boolean;\n    /** Mask all text content (high-sensitivity). Default false. */\n    maskAllText?: boolean;\n    /** CSS class whose subtrees are not recorded. Default `'rr-block'`. */\n    blockClass?: string;\n    /** CSS selector whose matching subtrees are not recorded. Use this for DOM\n     *  owned by browser extensions or embedded third-party widgets. */\n    blockSelector?: string;\n    /** CSS class whose text is"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Recorder',
+						signature:
+							"type Recorder = {\n    /** The session id — feed to `@absolutejs/beacon`'s `getReplayId`. */\n    replayId: string;\n    /** Current session metadata snapshot. */\n    manifest: () => ReplayManifest;\n    /** Force-flush the buffered events as a chunk now. */\n    flush: () => Promise<void>;\n    /** Stop recording and flush the final chunk. */\n    stop: () => Promise<void>;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRecorder',
+						signature:
+							'const createRecorder: (options: RecorderOptions) => Recorder;'
+					},
+					{
+						description:
+							'The per-chunk wire shape (the manifest carries replayId/project).',
+						kind: 'type',
+						name: 'WireChunk',
+						signature:
+							'type WireChunk = Pick<ReplayChunk, "events" | "from" | "seq" | "to">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReplayFetch',
+						signature:
+							'type ReplayFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReplayControllerOptions',
+						signature:
+							'type ReplayControllerOptions = {\n    /** Ingest route accepting `{ chunks: WireChunk[]; manifest: ReplayManifest }`. */\n    endpoint: string;\n    project: string;\n    release?: string;\n    environment?: string;\n    /** Chunks of context to retain (~10 min @ 5s/chunk). Default 120. */\n    maxRingChunks?: number;\n    /** Min ms between throttled auto-error flushes. Default 30000. */\n    flushThrottleMs?: number;\n    /** Max uncompressed bytes per upload batch. Default 700000. */\n    maxBatchBytes?: number;\n    /** Max bytes for the keepalive unload tail (stay under the ~64KB cap). Default 55000. */\n    maxTailBytes?: number;\n    /** Maximum replay batches uploaded at once. Default 2. */\n    maxUploadConcurrency?: number;\n    /** Deadline for each replay batch attempt. Default 10000ms. */\n    uploadTimeoutMs?: number;\n    /** sessionStorage key under which to persist `{ replayId, nextSeq }` so a\n     *  full page reload RESUMES the same replay session (same id, continuing seq)\n     *  instead of orphaning the prior recording and minting a fresh one. Matters\n     *  whenever the app can reload mid-session (e.g. a stale-chunk auto-reload).\n     *  Off by default; SSR-safe (no-op without'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReplayController',
+						signature:
+							"type ReplayController = {\n    /** The session id — feed to `@absolutejs/beacon`'s `getReplayId`. */\n    getReplayId: () => string;\n    /** Persist the full ring now (a bug report). Returns the replayId. */\n    flush: () => Promise<string | null>;\n    /** Persist the ring, but at most once per `flushThrottleMs` (auto-errors). */\n    flushThrottled: () => void;\n    /** Keepalive tail-flush on `pagehide` — no-op unless the session mattered. */\n    flushOnUnload: () => void;\n    /** Stop recording and flush the final chunk. */\n    stop: () => Promise<void>;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createReplayController',
+						signature:
+							'const createReplayController: (options: ReplayControllerOptions) => ReplayController;'
 					}
 				]
 			},
@@ -46013,12 +46812,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 		commands: [
 			{
 				command:
-					"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --sourcemap --target=browser --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external rrweb --external 'rrweb/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+					"rm -rf dist && bun build src/index.ts src/player.ts src/recorder.ts src/manifest.ts --outdir dist --root ./src --sourcemap --splitting --target=browser --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external rrweb --external 'rrweb/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
 				name: 'build'
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -46035,7 +46834,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			}
 		],
 		description:
-			'Session replay for the AbsoluteJS observability stack. A tiny zero-hard-dependency recorder (rrweb is an optional, lazy-loaded peer) that chunks DOM recordings and uploads them via a pluggable transport (@absolutejs/blob), privacy-masking by default. Plus chunk assembly + a framework-agnostic player. Stamps a replayId for @absolutejs/beacon to cross-link errors to the exact session.',
+			'Session replay for the AbsoluteJS observability stack. A tiny recorder that lazy-loads @rrweb/record, chunks DOM recordings, and uploads them via a pluggable transport (@absolutejs/blob), privacy-masking by default. Plus chunk assembly + a framework-agnostic player through the optional rrweb peer. Stamps a replayId for @absolutejs/beacon to cross-link errors to the exact session.',
 		directory: 'replay',
 		kind: 'package',
 		name: 'Replay',
@@ -46043,11 +46842,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 		private: false,
 		publicExports: [
 			'@absolutejs/replay',
+			'@absolutejs/replay/player',
+			'@absolutejs/replay/recorder',
 			'@absolutejs/replay/manifest',
 			'@absolutejs/replay/manifest.json'
 		],
 		readmeDigest:
-			'62c32198fbd89fd89ee5650bea7c8f4dd984548242161fdbf268a200b15a8171',
+			'2581e4c464ea7b0eb06c86862a45b9d3da112febe6d3fba04bef2d9f7952b298',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/replay rrweb',
@@ -46056,22 +46857,23 @@ export const ecosystemProjects: EcosystemProject[] = [
 				language: 'sh'
 			},
 			{
-				code: 'import { createRecorder } from "@absolutejs/replay";\nimport { initBeacon } from "@absolutejs/beacon";\n\nconst recorder = createRecorder({\n  project: "web",\n  release: import.meta.env.VITE_RELEASE,\n  upload: (chunk) =>\n    uploadToBlob(\n      `replays/${chunk.replayId}/${chunk.seq}.json`,\n      JSON.stringify(chunk),\n    ),\n  // privacy defaults: maskAllInputs: true, blockClass: \'rr-block\', maskTextClass: \'rr-mask\'\n});\n\n// Cross-link errors → this session:\ninitBeacon({ project: "web", getReplayId: () => recorder.replayId });\n\n// On error, flush the tail so the replay around it is stored:\nwindow.addEventListener("error", () => void recorder.flush());',
+				code: 'import { createRecorder } from "@absolutejs/replay/recorder";\nimport { initBeacon } from "@absolutejs/beacon";\n\nconst recorder = createRecorder({\n  project: "web",\n  release: import.meta.env.VITE_RELEASE,\n  upload: (chunk) =>\n    uploadToBlob(\n      `replays/${chunk.replayId}/${chunk.seq}.json`,\n      JSON.stringify(chunk),\n    ),\n  // privacy defaults: maskAllInputs: true, blockClass: \'rr-block\', maskTextClass: \'rr-mask\'\n  blockSelector: "[data-extension-owned]", // optional third-party DOM exclusion\n});\n\n// Cross-link errors → this session:\ninitBeacon({ project: "web", getReplayId: () => recorder.replayId });\n\n// On error, flush the tail so the replay around it is stored:\nwindow.addEventListener("error", () => void recorder.flush());',
 				description: 'Working example for Record.',
 				heading: 'Record',
 				language: 'typescript'
 			},
 			{
-				code: 'import { assembleReplay, createReplayPlayer } from "@absolutejs/replay";\n\nconst chunks = await loadChunksFromBlob(replayId); // your storage read\nconst player = await createReplayPlayer({\n  target: document.getElementById("replay")!,\n  events: assembleReplay(chunks), // ordered + flattened\n});\nplayer.pause();\nplayer.play(0);',
-				description: 'Working example for Play back.',
-				heading: 'Play back',
+				code: 'const replay = createReplayController({\n  endpoint: "/ingest/replay",\n  project: "web",\n  maxUploadConcurrency: 2,\n  uploadTimeoutMs: 10_000,\n});',
+				description:
+					'Add class="rr-block" to a node to skip recording it, or class="rr-mask" to mask its text. Use blockSelector for browser-extension or embedded third-party DOM that the application does not own. Use maskAllText: true for high-sensitivity apps.',
+				heading: 'Record 2',
 				language: 'typescript'
 			}
 		],
 		readmeTopics: [
 			{
 				description:
-					'Session replay for the AbsoluteJS observability stack. 1 KB of glue; rrweb is an optional, lazy-loaded peer.',
+					'Session replay for the AbsoluteJS observability stack. 1 KB of glue around a lazy-loaded recorder, plus an optional rrweb-powered player.',
 				details: [
 					'Records DOM sessions, chunks them, and uploads each chunk via a pluggable transport (wire @absolutejs/blob). Exposes a replayId so @absolutejs/beacon can stamp every error with the session — cross-linking an issue to the exact DOM replay around it. Re-assembles chunks for a framework-agnostic player.'
 				],
@@ -46079,9 +46881,9 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					'Zero hard dependencies. DOM recording genuinely needs a heavy engine, so',
+					'Capability-split engine. DOM recording genuinely needs a heavy engine, so',
 				details: [
-					"the recorder wraps rrweb — but rrweb is an optional peer, lazy-imported only when you start recording (and fully injectable). Replay is the one heavy feature; its weight never lands on a page that isn't recording.",
+					"the recorder lazy-loads the separately compiled @rrweb/record package only when recording starts (and remains fully injectable). Playback uses the optional rrweb peer through a separate /player entry. Apps that contain both capabilities do not merge the recorder into rrweb's full player bundle.",
 					"Plain TS, not Effect — like beacon, it's browser-first where bytes are",
 					"the cost. Replay's own code is 1 KB gz.",
 					'Private by default — inputs are masked (maskAllInputs: true). Recording',
@@ -46091,8 +46893,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					'Add class="rr-block" to a node to skip recording it, or class="rr-mask" to mask its text. Use maskAllText: true for high-sensitivity apps.',
-				details: [],
+					'Add class="rr-block" to a node to skip recording it, or class="rr-mask" to mask its text. Use blockSelector for browser-extension or embedded third-party DOM that the application does not own. Use maskAllText: true for high-sensitivity apps.',
+				details: [
+					'For application-level error/report capture, use createReplayController. It keeps an in-memory ring until the session matters, coalesces racing flushes, uploads at most two batches concurrently, applies a 10-second deadline to each attempt, removes acknowledged chunks, and retains failed chunks for retry.'
+				],
 				title: 'Record'
 			},
 			{
@@ -46104,7 +46908,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/replay',
 		subpackages: [],
-		version: '0.3.1'
+		version: '0.3.5'
 	},
 	{
 		api: [
@@ -46251,6 +47055,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
+							"How route() picks among the eligible shards. Added in 0.6.0. - 'sticky' (default, and the only 0.5.x behaviour) — consistent hash of the routing key through hashStrategy. The same key always lands on the same shard while the eligible set is unchanged. This is what you want when a shard OWNS the key's state (a sync engine, an in-memory room) and when you want session affinity: pass a per-client channelId so each client sticks to one shard while different clients spread out. - 'round-robin' — succ",
+						kind: 'type',
+						name: 'BalanceStrategy',
+						signature:
+							"type BalanceStrategy = 'sticky' | 'round-robin' | 'least-connections';"
+					},
+					{
+						description:
 							'Per-tenant token-bucket rate limit. tokens is the bucket capacity AND the starting balance; refillPerSecond is added continuously up to capacity. Defaults: Infinity tokens / 0 refill = no limit.',
 						kind: 'type',
 						name: 'RateLimit',
@@ -46278,7 +47090,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'RouterOptions',
 						signature:
-							"type RouterOptions = {\n    /** Initial shard set. Can be empty (every `route()` returns `no-shards`). */\n    shards: Shard[];\n    /** Hash strategy. Default `'jump'`. */\n    hashStrategy?: HashStrategy;\n    /**\n     * Max concurrent connections per tenant (counted via `acquire()` /\n     * `release()`). Default `Infinity` (no cap). When reached, `route()`\n     * returns `'capped'`.\n     */\n    perTenantConnectionCap?: number;\n    /**\n     * Per-tenant token bucket. Default `{ tokens: Infinity, refillPerSecond: 0 }`\n     * (no limit). When the tenant's bucket is empty, `route()` returns\n     * `'rate-limited'`. One `route()` call costs one token.\n     */\n    perTenantRateLimit?: RateLimit;\n    /**\n     * Per-route token buckets layered on top of the tenant-wide bucket.\n     * Keyed by route name; supplied by the caller via\n     * `route({ route: 'someRoute' })`. The tenant bucket AND the route bucket\n     * must both have a token available. When the route bucket is empty,\n     * `route()` returns `'rate-limited'` with `routeId` set.\n     */\n    perRouteRateLimits?: Record<string, RateLimit>;\n    /** Optional load hook biasing the rendezvous strategy. */\n    load?: ShardLoadFn;\n    /*"
+							"type RouterOptions = {\n    /** Initial shard set. Can be empty (every `route()` returns `no-shards`). */\n    shards: Shard[];\n    /** Hash strategy. Default `'jump'`. Only consulted for `'sticky'` balancing. */\n    hashStrategy?: HashStrategy;\n    /**\n     * Default shard-selection strategy for every `route()` call that does not\n     * override it. Default `'sticky'` — the 0.5.x behaviour. See\n     * {@link BalanceStrategy}. Added in 0.6.0.\n     */\n    balance?: BalanceStrategy;\n    /**\n     * Max concurrent connections per tenant (counted via `acquire()` /\n     * `release()`). Default `Infinity` (no cap). When reached, `route()`\n     * returns `'capped'`.\n     */\n    perTenantConnectionCap?: number;\n    /**\n     * Per-tenant token bucket. Default `{ tokens: Infinity, refillPerSecond: 0 }`\n     * (no limit). When the tenant's bucket is empty, `route()` returns\n     * `'rate-limited'`. One `route()` call costs one token.\n     */\n    perTenantRateLimit?: RateLimit;\n    /**\n     * Per-route token buckets layered on top of the tenant-wide bucket.\n     * Keyed by route name; supplied by the caller via\n     * `route({ route: 'someRoute' })`. The tenant bucket AND the route bucket\n     * "
 					},
 					{
 						description: '',
@@ -46293,14 +47105,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'RouterMetrics',
 						signature:
-							"type RouterMetrics = {\n    routes: number;\n    acquires: number;\n    rejectsByDecision: Record<Exclude<RouteDecision, 'allow'>, number>;\n    shardLoadDistribution: Record<string, number>;\n    lastRouteMs: number;\n};"
+							"type RouterMetrics = {\n    routes: number;\n    acquires: number;\n    rejectsByDecision: Record<Exclude<RouteDecision, 'allow'>, number>;\n    shardLoadDistribution: Record<string, number>;\n    shardActiveConnections: Record<string, number>;\n    lastRouteMs: number;\n};"
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'RouteRequest',
 						signature:
-							"type RouteRequest = {\n    tenantId: string;\n    /**\n     * Optional sub-key within a tenant for shardable channels. When set, the\n     * hash key is `${tenantId}:${channelId}`. Use this when a single tenant is\n     * too hot for one engine and its work can be partitioned (e.g. per-doc,\n     * per-room) across multiple engines. Different channels of the same\n     * tenant may land on different shards.\n     */\n    channelId?: string;\n    /**\n     * Optional per-route rate-limit key. Looked up in `perRouteRateLimits`.\n     * Unknown routes pass without per-route gating (only the tenant-wide\n     * bucket applies).\n     */\n    route?: string;\n    /**\n     * Optional region filter. When set, only shards whose `region` matches\n     * — plus region-less shards, for back-compat — are candidates. When\n     * the region has eligible shards registered but none are candidates,\n     * `route()` returns `'no-region-shards'` (distinguishable from the\n     * cluster-wide `'no-shards'`). The intended source is the paired\n     * directory: `route({ tenantId, region: directory.regionFor(tenantId) })`.\n     * Added in 0.4.0.\n     */\n    region?: string;\n};"
+							"type RouteRequest = {\n    tenantId: string;\n    /**\n     * Optional sub-key within a tenant for shardable channels. When set, the\n     * hash key is `${tenantId}:${channelId}`. Use this when a single tenant is\n     * too hot for one engine and its work can be partitioned (e.g. per-doc,\n     * per-room) across multiple engines. Different channels of the same\n     * tenant may land on different shards.\n     */\n    channelId?: string;\n    /**\n     * Optional per-route rate-limit key. Looked up in `perRouteRateLimits`.\n     * Unknown routes pass without per-route gating (only the tenant-wide\n     * bucket applies).\n     */\n    route?: string;\n    /**\n     * Optional region filter. When set, only shards whose `region` matches\n     * — plus region-less shards, for back-compat — are candidates. When\n     * the region has eligible shards registered but none are candidates,\n     * `route()` returns `'no-region-shards'` (distinguishable from the\n     * cluster-wide `'no-shards'`). The intended source is the paired\n     * directory: `route({ tenantId, region: directory.regionFor(tenantId) })`.\n     * Added in 0.4.0.\n     */\n    region?: string;\n    /**\n     * Per-call override of the router's"
 					},
 					{
 						description: '',
@@ -46328,7 +47140,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'Router',
 						signature:
-							'type Router = {\n    route: (request: RouteRequest) => RouteResult;\n    acquire: (tenantId: string) => AcquireHandle;\n    markHealthy: (shardId: string) => void;\n    markUnhealthy: (shardId: string) => void;\n    /**\n     * Begin draining a shard — exclude it from new routing decisions while\n     * leaving existing acquires alone. Semantically distinct from\n     * `markUnhealthy` (an operator-intentional state, not a failure).\n     * `markHealthy` cancels both states. Use this before a planned shard\n     * shutdown — tenants on the shard rehash to healthy non-draining shards\n     * on their next route, but in-flight requests are NOT torn down.\n     */\n    drainShard: (shardId: string) => void;\n    isHealthy: (shardId: string) => boolean;\n    isDraining: (shardId: string) => boolean;\n    addShard: (shard: Shard) => void;\n    removeShard: (shardId: string) => void;\n    shards: () => Shard[];\n    snapshot: () => RouterSnapshot;\n    restore: (snapshot: RouterSnapshot, options?: {\n        resetConnections?: boolean;\n    }) => void;\n    /**\n     * Operator-shaped point-in-time + cumulative metrics since\n     * `createRouter()`. Use for tier dashboards and "where am I\n     * shedding load" '
+							"type Router = {\n    route: (request: RouteRequest) => RouteResult;\n    /**\n     * Count one active connection against the tenant's cap. Pass the id of the\n     * shard the connection was routed to (0.6.0) so the router can maintain\n     * per-shard active counts — `'least-connections'` balancing and\n     * `metrics().shardActiveConnections` both read from them. Omitting it\n     * keeps the 0.5.x behaviour: the tenant cap is enforced, but the\n     * connection is invisible to per-shard accounting.\n     */\n    acquire: (tenantId: string, shardId?: string) => AcquireHandle;\n    markHealthy: (shardId: string) => void;\n    markUnhealthy: (shardId: string) => void;\n    /**\n     * Begin draining a shard — exclude it from new routing decisions while\n     * leaving existing acquires alone. Semantically distinct from\n     * `markUnhealthy` (an operator-intentional state, not a failure).\n     * `markHealthy` cancels both states. Use this before a planned shard\n     * shutdown — tenants on the shard rehash to healthy non-draining shards\n     * on their next route, but in-flight requests are NOT torn down.\n     */\n    drainShard: (shardId: string) => void;\n    isHealthy: (shardId: string) => bo"
 					},
 					{
 						description: '',
@@ -46406,7 +47218,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		private: false,
 		publicExports: ['@absolutejs/router', '@absolutejs/router/bun'],
 		readmeDigest:
-			'd5f61479a4fe538e41cb3c7bab63137b9ec3eb7b7e60c6f3e8445c398f5dafc1',
+			'50bcd5aa1a2c4c48727a52b4db8a41f4efd062abcb9ccc5c8af50f06e1041148',
 		readmeSamples: [
 			{
 				code: "import { createBunGateway } from '@absolutejs/router/bun';\n\nconst gateway = createBunGateway({\n\trouter,\n\tresolve: (request) => {\n\t\tconst hit = domainMap.resolve(request.headers.get('host') ?? '');\n\n\t\treturn hit\n\t\t\t? { route: new URL(request.url).pathname, tenantId: hit.tenantId }\n\t\t\t: null;\n\t}\n});\n\nBun.serve({ port: 3001, ...gateway });",
@@ -46421,16 +47233,17 @@ export const ecosystemProjects: EcosystemProject[] = [
 				language: 'typescript'
 			},
 			{
+				code: "const router = createRouter({ balance: 'round-robin', shards });\n\nrouter.route({ tenantId }); // round-robin across replicas\nrouter.route({ tenantId, balance: 'sticky', channelId: sessionId }); // affinity",
+				description:
+					'A hash strategy answers "which shard OWNS this key?". That is the right question when a shard holds the key\'s state, and the wrong one when the shards are interchangeable replicas of one stateless app — hashing pins all of a tenant\'s traffic to a single replica however many are registered. balance picks the question:',
+				heading: 'Balance strategies (0.6.0)',
+				language: 'typescript'
+			},
+			{
 				code: 'const meter = createMeter({ ... });\nconst router = createRouter({\n  shards,\n  allow: meter.allow,                // refuse routes for over-quota tenants\n  load: (id) => runtimeRoster.load(id), // and bias toward less-loaded shards\n});',
 				description:
 					"allow: (tenantId) => boolean is a caller-supplied gate. Returning false makes route() return { decision: 'denied' } immediately, before any bucket is touched. The intended pairing is @absolutejs/metering's meter.allow — pass it directly:",
 				heading: 'Allow hook (meter integration)',
-				language: 'typescript'
-			},
-			{
-				code: "const json = JSON.stringify(router.snapshot());\nawait persistToDisk('/var/lib/router/state.json', json);\n\n// On edge restart:\nconst restored = createRouter({ ... same config ... });\nrestored.restore(JSON.parse(await readFromDisk('/var/lib/router/state.json')));",
-				description: 'Working example for Snapshot + restore.',
-				heading: 'Snapshot + restore',
 				language: 'typescript'
 			}
 		],
@@ -46522,7 +47335,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/router',
 		subpackages: [],
-		version: '0.5.2'
+		version: '0.6.0'
 	},
 	{
 		api: [
@@ -47120,7 +47933,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'scopedState',
 						signature:
-							'const scopedState: <Setup extends Record<string, ScopedStateConfig<unknown>>>(setup: Setup) => Elysia<"", {\n    decorator: {};\n    store: {\n        scoped: ScopedRecord<{ [K in keyof ValueOnly<Setup>]: ValueOnly<Setup>[K]; }>;\n    };\n    derive: {\n        readonly scopedStore: { [K in keyof ValueOnly<Setup>]: ValueOnly<Setup>[K]; };\n        readonly resetScopedStore: (ignorePreserve?: boolean) => void;\n    };\n    resolve: {};\n}, {\n    typebox: {};\n    error: {};\n}, {\n    schema: import("elysia").MergeSchema<import("elysia").MergeSchema<{}, {}, "">, {}, "">;\n    standaloneSchema: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n}, {}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n}, {\n    derive: {};\n    resolve: {};\n    schema: {};\n    standaloneSchema: {};\n}>;'
+							'const scopedState: <Setup extends Record<string, ScopedStateConfig<unknown>>>(setup: Setup) => Elysia<"", "local", {\n    decorator: {};\n    store: {\n        scoped: ScopedRecord<{ [K in keyof ValueOnly<Setup>]: ValueOnly<Setup>[K]; }>;\n    };\n    derive: {\n        readonly scopedStore: { [K in keyof ValueOnly<Setup>]: ValueOnly<Setup>[K]; };\n        readonly resetScopedStore: (ignorePreserve?: boolean) => void;\n    };\n}, {\n    typebox: {};\n    error: [];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: import("elysia/types").ExtractErrorFromHandle<import("elysia").ElysiaStatus<"Bad Request", "Cookies not set properly", 400> | import("elysia").ElysiaStatus<"Internal Server Error", "Scoped store not found", 500> | {\n        readonly scopedStore: { [K in keyof ValueOnly<Setup>]: ValueOnly<Setup>[K]; };\n        readonly resetScopedStore: (ignorePreserve?: boolean) => void;\n    }>;\n}, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral>;'
 					}
 				]
 			},
@@ -47226,7 +48039,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/scoped-state',
 		subpackages: [],
-		version: '0.1.4'
+		version: '0.2.0'
 	},
 	{
 		api: [],
@@ -47930,7 +48743,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+					'bun run typecheck && bun run verify-package && bun run build && bun run test',
 				name: 'check:package'
 			},
 			{
@@ -48224,6 +49037,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'createSyncSocketController',
+						signature: 'createSyncSocketController'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'syncSocket',
 						signature: 'syncSocket'
 					},
@@ -48232,6 +49051,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'SlowConnectionEvent',
 						signature: 'SlowConnectionEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncSocketController',
+						signature: 'SyncSocketController'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncSocketDrainOptions',
+						signature: 'SyncSocketDrainOptions'
 					},
 					{
 						description: '',
@@ -50073,7 +50904,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/sync/platform'
 		],
 		readmeDigest:
-			'389c583193acdf8f8b28a881fbf6a2bbf779f3eb28eb242f03ab27a1a4de2b8c',
+			'2f0d7806529958ba1861b159e16db36db1e6063682e02e609c87b5a1f938654a',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/sync',
@@ -50192,14 +51023,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'createReactiveHub() — In-memory topic pub/sub (publish, subscribe, subscriberCount).',
 					'sync({ hub, path?, resolveTopics?, heartbeatMs? }) — Elysia plugin: SSE stream of hub events.',
 					'syncSocket({ engine, path?, resolveContext? }) — Elysia WebSocket plugin for the sync engine.',
+					'createSyncSocketController() — Host control plane for blue-green drains. Pass it as syncSocket({ controller, engine }), then call controller.drain() on the old slot to close current and late sockets with code 1012 while clients reconnect through the switched load balancer.',
 					"scheduled({ engine, prefix?, onError? }) _(/scheduled subpath)_ — Elysia plugin: fires the engine's registered schedules on their cron patterns (via @elysiajs/cron). Kept off the main entry so syncSocket needs no cron dep.",
 					'syncDevtools({ engine, path?, snapshotMs? }) — Elysia plugin: a live devtools dashboard (collections, subscription counts, mutations, schedules, change feed) over SSE. Backed by engine.inspect() + engine.onActivity(). 1.23 also exposes a Point-in-time replay panel (datetime picker + tables filter) and a GET /replay?at=&tables= JSON endpoint wrapping engine.replayTo.',
 					'createWriteBehindCache({ load, persist, remove?, debounceMs?, evict?, onPersistError? }) — In-memory cache + write-behind persistence.',
 					'createConnectionBroker({ create, maxTotal, maxPerTenant?, idleReleaseMs?, acquireTimeoutMs?, validate?, destroy?, onError?, now?, tracerProvider? }) — Multiplex one upstream connection budget across many tenants: lease/withLease/metrics/drain/dispose. Throws LeaseTimeoutError / ConnectionBrokerDrainedError (both exported).',
 					'@absolutejs/sync/client',
 					'Export — What it is',
-					'createSyncSubscriber({ topics, onEvent, url? }) — Browser SSE client.',
-					'createLiveQuery({ topics, fetcher, ... }) — Hydrate-once, refetch-on-event observable query store.'
+					'createSyncSubscriber({ topics, onEvent, url? }) — Browser SSE client.'
 				],
 				title: 'API'
 			},
@@ -50219,7 +51050,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/sync',
 		subpackages: [],
-		version: '2.13.0'
+		version: '2.13.3'
 	},
 	{
 		api: [],
@@ -52934,6 +53765,102 @@ export const ecosystemProjects: EcosystemProject[] = [
 						name: 'readActiveTraceId',
 						signature:
 							'const readActiveTraceId: () => Promise<string | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryTraceStore',
+						signature: 'createMemoryTraceStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createTraceStoreSpanExporter',
+						signature: 'createTraceStoreSpanExporter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'projectStoredSpan',
+						signature: 'projectStoredSpan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReadableSpanLike',
+						signature: 'type ReadableSpanLike'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SpanExportResult',
+						signature: 'type SpanExportResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StoredSpan',
+						signature: 'type StoredSpan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StoredSpanEvent',
+						signature: 'type StoredSpanEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StoredSpanLink',
+						signature: 'type StoredSpanLink'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StoredSpanProjectionOptions',
+						signature: 'type StoredSpanProjectionOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TelemetryAttributes',
+						signature: 'type TelemetryAttributes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TelemetryAttributeScalar',
+						signature: 'type TelemetryAttributeScalar'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TelemetryAttributeValue',
+						signature: 'type TelemetryAttributeValue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TraceFilter',
+						signature: 'type TraceFilter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TraceStore',
+						signature: 'type TraceStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TraceStoreSpanExporter',
+						signature: 'type TraceStoreSpanExporter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TraceSummary',
+						signature: 'type TraceSummary'
 					}
 				]
 			},
@@ -53024,13 +53951,46 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'const createAgentTelemetryObserver: (tracer: Tracer, options?: AgentTelemetryOptions) => (event: AgentTelemetryEvent) => Promise<void>;'
 					}
 				]
+			},
+			{
+				entryPoint: '@absolutejs/telemetry/drizzle',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'telemetrySpans',
+						signature:
+							'const telemetrySpans: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: "telemetry_spans";\n    schema: undefined;\n    columns: {\n        attributes: import("drizzle-orm/pg-core").PgBuildColumn<"telemetry_spans", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgCustomColumnBuilder<{\n            dataType: "custom";\n            data: TelemetryAttributes;\n            driverParam: unknown;\n        }>>, {\n            name: string;\n            tableName: "telemetry_spans";\n            dataType: "custom";\n            data: TelemetryAttributes;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        durationNano: import("drizzle-orm/pg-core").PgBuildColumn<"telemetry_spans", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgBigInt64Builder>, {\n            name: string;\n            tableName: "telemetry_spans";\n            dataType: "bigint int64";\n            data: bigint;\n'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'telemetryDrizzleSchema',
+						signature:
+							'const telemetryDrizzleSchema: {\n    telemetrySpans: import("drizzle-orm/pg-core").PgTableWithColumns<{\n        name: "telemetry_spans";\n        schema: undefined;\n        columns: {\n            attributes: import("drizzle-orm/pg-core").PgBuildColumn<"telemetry_spans", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgCustomColumnBuilder<{\n                dataType: "custom";\n                data: TelemetryAttributes;\n                driverParam: unknown;\n            }>>, {\n                name: string;\n                tableName: "telemetry_spans";\n                dataType: "custom";\n                data: TelemetryAttributes;\n                driverParam: unknown;\n                notNull: true;\n                hasDefault: false;\n                isPrimaryKey: false;\n                isAutoincrement: false;\n                hasRuntimeDefault: false;\n                enumValues: undefined;\n                identity: undefined;\n                generated: undefined;\n            }>;\n            durationNano: import("drizzle-orm/pg-core").PgBuildColumn<"telemetry_spans", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgBigInt64Builder>, {\n          '
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreateDrizzleTraceStoreOptions',
+						signature:
+							'type CreateDrizzleTraceStoreOptions<DB extends AnyPgDatabase> = {\n    db: DB;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDrizzleTraceStore',
+						signature:
+							'const createDrizzleTraceStore: <DB extends AnyPgDatabase>({ db, }: CreateDrizzleTraceStoreOptions<DB>) => TraceStore;'
+					}
+				]
 			}
 		],
 		category: 'Observability',
 		commands: [
 			{
 				command:
-					'rm -rf dist && bun build src/index.ts src/otlpHttp.ts src/agent.ts --outdir dist --root src --sourcemap --target=bun --external @absolutejs/handoff && tsc --project tsconfig.build.json',
+					"rm -rf dist && bun build src/index.ts src/otlpHttp.ts src/agent.ts src/store.ts src/drizzle.ts --outdir dist --root src --sourcemap --target=bun --external @absolutejs/handoff --external drizzle-orm --external 'drizzle-orm/*' && tsc --project tsconfig.build.json",
 				name: 'build'
 			},
 			{
@@ -53056,10 +54016,11 @@ export const ecosystemProjects: EcosystemProject[] = [
 		publicExports: [
 			'@absolutejs/telemetry',
 			'@absolutejs/telemetry/otlp-http',
-			'@absolutejs/telemetry/agent'
+			'@absolutejs/telemetry/agent',
+			'@absolutejs/telemetry/drizzle'
 		],
 		readmeDigest:
-			'cf6c8dd018c9a1cbd97cf1e01db56215216a411c0960df5fc600dca52d0de881',
+			'6c5bbc7c990748b55ca073ae0d76bd4fd9521cbafe8b569aa8aded94e6bcf946',
 		readmeSamples: [
 			{
 				code: "const tracer = tracerOrNoop(options.tracerProvider, '@absolutejs/<pkg>');",
@@ -53109,6 +54070,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Install'
 			},
 			{
+				description:
+					'@absolutejs/telemetry owns the provider-neutral TraceStore contract. createTraceStoreSpanExporter() projects OpenTelemetry SDK spans into a bounded, credential-safe stored shape and writes batches through that contract. It drops secret-bearing attribute keys, strips URL query/hash values, bounds attributes/events/links, and preserves nanosecond timestamps as strings.',
+				details: [
+					'Use createMemoryTraceStore() for tests. For production PostgreSQL/Neon storage, import createDrizzleTraceStore() and telemetryDrizzleSchema from @absolutejs/telemetry/drizzle. The exported table is intended for host-owned Drizzle migrations. Writes are idempotent on (trace_id, span_id); the store supports recent trace summaries, complete trace retrieval, and retention through prune() without prescribing a hosted observability vendor.'
+				],
+				title: 'Durable trace storage'
+			},
+			{
 				description: 'As a substrate-package author',
 				details: [
 					'Or use the convenience wrapper withSpan(tracer, name, options, fn) that auto-sets status + recordException + end() for the common case.',
@@ -53137,7 +54106,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/telemetry',
 		subpackages: [],
-		version: '0.2.1'
+		version: '0.3.0'
 	},
 	{
 		api: [
@@ -53492,7 +54461,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -53521,7 +54490,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/tour/manifest.json'
 		],
 		readmeDigest:
-			'4816baa94d327726238745223d7e8fea5b49c3db8aed943022d9c68cbc2ec6fa',
+			'7482577f603f6684a37686dd9e3a0407a4237390b73bb1bb4b402d97e236d336',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/tour',
@@ -53582,7 +54551,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Render an overlay component that consumes useSpotlight (style it however you like — the engine only computes geometry):',
 				details: [
-					'The host app owns: the data-tour anchors, the step content, and where the "seen" marker is stored (so finishing a first-visit run stamps it; a replay does not).'
+					'The host app owns: the data-tour anchors, the step content, and where the "seen" marker is stored (so finishing a first-visit run stamps it; a replay does not). If the overlay is exposed as an ARIA modal, the host also owns its initial focus, Tab containment, and close-time focus restoration. Tour\'s Enter shortcut ignores focused native controls so their own keyboard activation cannot advance a step twice.'
 				],
 				title: 'Wiring it up'
 			},
@@ -53649,7 +54618,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/tour',
 		subpackages: [],
-		version: '0.3.0-beta.6'
+		version: '0.3.0-beta.7'
 	},
 	{
 		api: [
@@ -56856,7 +57825,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -57716,7 +58685,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/voice',
 		subpackages: [],
-		version: '0.0.22-beta.665'
+		version: '0.0.22-beta.672'
 	},
 	{
 		api: [],
@@ -57850,7 +58819,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -58039,7 +59008,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -58247,7 +59216,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -58415,7 +59384,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -58441,7 +59410,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/voice-deepgram/manifest.json'
 				],
 				readmeDigest:
-					'ce77cf4dace804cfa4ab901776907e3aad0a83dd0819b477227194d6ac8c5ec8',
+					'96d2d07b2aa1b7249ee3becdc56b140594b63c79b380c2209059c6fab4694918',
 				readmeSamples: [
 					{
 						code: 'bun add @absolutejs/voice @absolutejs/voice-deepgram',
@@ -58450,7 +59419,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						language: 'bash'
 					},
 					{
-						code: 'import { deepgram } from "@absolutejs/voice-deepgram";\n\nconst stt = deepgram({\n  apiKey: process.env.DEEPGRAM_API_KEY!,\n  model: "nova-3",\n  language: "en-US",\n  punctuate: true,\n  smartFormat: true,\n});',
+						code: 'import { deepgram } from "@absolutejs/voice-deepgram";\n\nconst stt = deepgram({\n  apiKey: process.env.DEEPGRAM_API_KEY!,\n  model: "nova-3",\n  language: "en-US",\n  mipOptOut: true,\n  punctuate: true,\n  smartFormat: true,\n});',
 						description: 'Working example for Setup.',
 						heading: 'Setup',
 						language: 'typescript'
@@ -58518,7 +59487,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'deepgram',
-				version: '0.0.20-beta.104'
+				version: '0.0.20-beta.106'
 			},
 			{
 				api: [
@@ -58590,7 +59559,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -58746,7 +59715,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -58852,7 +59821,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -59048,7 +60017,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -59216,7 +60185,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -59374,7 +60343,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -59538,7 +60507,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -59705,7 +60674,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -59850,7 +60819,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -60003,7 +60972,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -60156,7 +61125,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -60290,7 +61259,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -60456,7 +61425,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -61043,7 +62012,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		private: false,
 		publicExports: [],
 		readmeDigest:
-			'009dc3e14267d7874ac279fced54c630635f14040b62f581527a653e6fd1cf68',
+			'18e99a881198e2ebbaf680be7d791ed65f35dce935167479ccddc07c3604c282',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/vue-composables vue',
@@ -61085,8 +62054,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'content-sized until a reactive maximum, then switches to internal scrolling.',
 					'isTextSubmitKey(event) — recognizes plain Enter while excluding',
 					'Shift+Enter and IME composition confirmation.',
-					'runAsyncAction(task, options) — the try/catch/finally + notify +',
-					'console.error + loading-flag wrapper. Inject your toast once with configureAsyncNotifier({ success, error }).'
+					'useClickOutside(target, handler) — fires handler on a capture-phase',
+					'pointerdown outside target; auto-removed on scope dispose. For a toggle-button + panel pair, pass the element wrapping both.'
 				],
 				title: 'Composables'
 			},
@@ -61098,7 +62067,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/vue-composables',
 		subpackages: [],
-		version: '0.3.3'
+		version: '0.4.0'
 	},
 	{
 		api: [
@@ -61480,7 +62449,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'VulnerabilityAlertKind',
 						signature:
-							'type VulnerabilityAlertKind = "evidence_checkpoint_stale" | "evidence_witness_backup_stale" | "evidence_witness_key_rotation_due" | "evidence_witness_quorum_failed" | "evidence_witness_unhealthy" | "emergency_finding" | "intelligence_failed" | "intelligence_stale" | "remediation_deadline" | "remediation_execution_overdue" | "remediation_plan_overdue" | "verification_overdue" | "vex_expiring" | "worker_failed" | "worker_stale";'
+							'type VulnerabilityAlertKind = "evidence_checkpoint_stale" | "evidence_witness_backup_stale" | "evidence_witness_certificate_expiring" | "evidence_witness_key_rotation_due" | "evidence_witness_quorum_failed" | "evidence_witness_unhealthy" | "emergency_finding" | "intelligence_failed" | "intelligence_stale" | "remediation_deadline" | "remediation_execution_overdue" | "remediation_plan_overdue" | "verification_overdue" | "vex_expiring" | "worker_failed" | "worker_stale";'
 					},
 					{
 						description: '',
@@ -61522,7 +62491,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'VulnerabilityEvidenceOperationalCondition',
 						signature:
-							'type VulnerabilityEvidenceOperationalCondition = {\n    body: string;\n    dueAt: string | null;\n    kind: "evidence_checkpoint_stale" | "evidence_witness_backup_stale" | "evidence_witness_key_rotation_due" | "evidence_witness_quorum_failed" | "evidence_witness_unhealthy";\n    observedAt: string;\n    severity: VulnerabilityAlertSeverity;\n    sourceId: string;\n    tenantId: string;\n};'
+							'type VulnerabilityEvidenceOperationalCondition = {\n    body: string;\n    dueAt: string | null;\n    kind: "evidence_checkpoint_stale" | "evidence_witness_backup_stale" | "evidence_witness_certificate_expiring" | "evidence_witness_key_rotation_due" | "evidence_witness_quorum_failed" | "evidence_witness_unhealthy";\n    observedAt: string;\n    severity: VulnerabilityAlertSeverity;\n    sourceId: string;\n    tenantId: string;\n};'
 					},
 					{
 						description: '',
@@ -62131,7 +63100,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 				name: 'check:package'
 			},
 			{
@@ -62237,7 +63206,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/vulnerabilities',
 		subpackages: [],
-		version: '0.14.1'
+		version: '0.15.0'
 	},
 	{
 		api: [],
@@ -62402,7 +63371,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -62448,7 +63417,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'epss',
-				version: '0.1.6'
+				version: '0.1.7'
 			},
 			{
 				api: [
@@ -62520,7 +63489,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -62566,7 +63535,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'kev',
-				version: '0.1.6'
+				version: '0.1.7'
 			},
 			{
 				api: [
@@ -62645,7 +63614,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -62691,7 +63660,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'osv',
-				version: '0.1.8'
+				version: '0.1.9'
 			},
 			{
 				api: [
@@ -63009,7 +63978,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -63066,7 +64035,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'postgres',
-				version: '0.9.3'
+				version: '0.9.4'
 			},
 			{
 				api: [
@@ -63139,7 +64108,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -63186,7 +64155,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'ubuntu',
-				version: '0.1.5'
+				version: '0.1.6'
 			}
 		],
 		version: null
@@ -63386,7 +64355,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -63412,10 +64381,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/vulnerabilities-report/manifest.json'
 				],
 				readmeDigest:
-					'2070128ed0ebab3663f1b8abda36a5ffd4db29fa33788b36a4d21322ebab20b3',
+					'8f2a5b8a0111e2cc127a3ff0862a1715fa3a485a1a6bcf1a9b1df529dcce00cc',
 				readmeSamples: [
 					{
-						code: "import {\n\tcreateVulnerabilitySecurityReport,\n\trenderVulnerabilitySecurityReportHtml\n} from '@absolutejs/vulnerabilities-report';\n\nconst report = createVulnerabilitySecurityReport({\n\tgeneratedAt: new Date().toISOString(),\n\tissues,\n\tpreparedBy: 'Security Operations',\n\tpreparedFor: 'Client',\n\treportId: 'security-report-2026-07',\n\tscope: 'Production web and host vulnerability posture',\n\tsource: {\n\t\tassessedAt: '2026-07-17T20:59:48.000Z',\n\t\tname: 'External vulnerability scan',\n\t\treference: 'scan-13747781'\n\t},\n\ttitle: 'Security Remediation Response'\n});\n\nconst html = renderVulnerabilitySecurityReportHtml(report);",
+						code: 'import {\n  createVulnerabilitySecurityReport,\n  renderVulnerabilitySecurityReportHtml,\n} from "@absolutejs/vulnerabilities-report";\n\nconst report = createVulnerabilitySecurityReport({\n  generatedAt: new Date().toISOString(),\n  issues,\n  preparedBy: "Security Operations",\n  preparedFor: "Client",\n  reportId: "security-report-2026-07",\n  scope: "Production web and host vulnerability posture",\n  source: {\n    assessedAt: "2026-07-17T20:59:48.000Z",\n    name: "External vulnerability scan",\n    reference: "scan-13747781",\n  },\n  title: "Security Remediation Response",\n});\n\nconst html = renderVulnerabilitySecurityReportHtml(report);',
 						description: '# @absolutejs/vulnerabilities-report',
 						heading:
 							'@absolutejs/vulnerabilities-report quick start',
@@ -63434,7 +64403,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'report',
-				version: '0.1.2'
+				version: '0.1.3'
 			},
 			{
 				api: [
@@ -63660,7 +64629,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -63734,7 +64703,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'witness',
-				version: '0.7.4'
+				version: '0.7.9'
 			},
 			{
 				api: [
@@ -63946,7 +64915,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run verify-package --artifacts',
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
 						name: 'check:package'
 					},
 					{
@@ -63994,7 +64963,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'worker',
-				version: '0.2.4'
+				version: '0.2.7'
 			}
 		],
 		version: null

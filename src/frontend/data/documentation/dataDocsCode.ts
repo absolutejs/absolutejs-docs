@@ -110,7 +110,7 @@ const app = new Elysia()
 export type Server = typeof app;`;
 export const edenTreatySetup = `\
 // src/frontend/eden/treaty.ts
-import { treaty } from '@elysiajs/eden';
+import { treaty } from '@elysia/eden';
 import type { Server } from '../../backend/server';
 
 const serverUrl =

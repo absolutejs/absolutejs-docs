@@ -19,7 +19,7 @@ export const ElysiaPageGuideList = ({ themeSprings }: ThemeProps) => (
 			{
 				description: (
 					<>
-						scheduled tasks with <code>@elysiajs/cron</code>
+						scheduled tasks with <code>@elysia/cron</code>
 					</>
 				),
 				term: 'Cron Jobs'

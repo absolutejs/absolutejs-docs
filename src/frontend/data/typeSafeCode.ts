@@ -66,7 +66,7 @@ export const Home = () => {
         </html>
     );
 };`;
-export const treatyCode = `import { treaty } from '@elysiajs/eden';
+export const treatyCode = `import { treaty } from '@elysia/eden';
 import type { Server } from '../../backend/server';
 
 const serverUrl =

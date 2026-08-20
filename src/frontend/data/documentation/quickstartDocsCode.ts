@@ -38,7 +38,7 @@ export const devCommand = `\
 absolute dev src/backend/server.ts`;
 export const edenTreatySetup = `\
 // src/frontend/eden/treaty.ts
-import { treaty } from '@elysiajs/eden';
+import { treaty } from '@elysia/eden';
 import type { App } from '../../backend/server';
 
 const url = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
@@ -135,7 +135,7 @@ import { prepare, asset, getEnv, networking } from '@absolutejs/absolute';
 import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import { absoluteAuth, instantiateUserSession } from '@absolutejs/auth';
 import { Elysia, t } from 'elysia';
-import { staticPlugin } from '@elysiajs/static';
+import { staticPlugin } from '@elysia/static';
 import { eq } from 'drizzle-orm';
 import { db } from '../../db';
 import { users, posts, type User, type Post } from '../../db/schema';

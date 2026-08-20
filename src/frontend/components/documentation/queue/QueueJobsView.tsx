@@ -187,7 +187,7 @@ export const QueueJobsView = ({
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
 						The queue deliberately does not reinvent cron — pair it
-						with <code>@elysiajs/cron</code> for recurring triggers.
+						with <code>@elysia/cron</code> for recurring triggers.
 						Cron decides <em>when</em>; the queue guarantees the
 						work <em>happens</em> — once, surviving restarts, with
 						retries and dead-lettering.
@@ -249,7 +249,7 @@ export const QueueJobsView = ({
 						variant="warning"
 					>
 						Importing the module that exports your Elysia plugin
-						pulls in <code>@elysiajs/cron</code>, whose timers keep
+						pulls in <code>@elysia/cron</code>, whose timers keep
 						the process alive and prevent a one-shot script from
 						exiting. Export the <code>registry</code> from a
 						separate file, or <code>process.exit(0)</code> at the

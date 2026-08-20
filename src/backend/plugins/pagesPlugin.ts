@@ -65,9 +65,7 @@ for (const project of ecosystemProjects) {
 
 export const pagesPlugin = (manifest: Record<string, string>) =>
 	new Elysia()
-		.guard({
-			cookie: pageCookie
-		})
+		.guard({ cookie: pageCookie, schema: 'merge' })
 		.use(protectRoutePlugin<User>())
 		.get(
 			'/',
@@ -132,6 +130,9 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 		)
 		.get(
 			'/blog/:slug',
+			{
+				params: t.Object({ slug: t.String() })
+			},
 			async ({
 				params: { slug },
 				cookie: { theme, user_session_id },
@@ -160,9 +161,6 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 						user
 					}
 				});
-			},
-			{
-				params: t.Object({ slug: t.String() })
 			}
 		)
 		.get('/profile', ({ cookie: { theme }, protectRoute, redirect }) =>
@@ -202,6 +200,7 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 		)
 		.get(
 			'/documentation/ecosystem-:legacy',
+			{ params: t.Object({ legacy: t.String() }) },
 			({ params: { legacy }, redirect, status }) => {
 				const canonicalView = legacyDocumentationRedirects.get(
 					`ecosystem-${legacy}`
@@ -218,11 +217,13 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 						: `/documentation/${canonicalView}`,
 					permanentRedirectStatus
 				);
-			},
-			{ params: t.Object({ legacy: t.String() }) }
+			}
 		)
 		.get(
 			'/documentation/:view?',
+			{
+				params: t.Object({ view: t.Optional(docsViewEnum) })
+			},
 			async ({
 				params: { view },
 				cookie: { breakpoint, theme, user_session_id },
@@ -263,9 +264,6 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 						user
 					}
 				});
-			},
-			{
-				params: t.Object({ view: t.Optional(docsViewEnum) })
 			}
 		)
 		.get(
@@ -296,6 +294,9 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 		)
 		.get(
 			'/demos/authentication',
+			{
+				query: t.Object({ provider: t.Optional(t.String()) })
+			},
 			async ({
 				cookie: { theme, user_session_id },
 				query,
@@ -324,26 +325,28 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 						user
 					}
 				});
-			},
-			{
-				query: t.Object({ provider: t.Optional(t.String()) })
 			}
 		)
 		.get('/testing', ({ redirect }) => redirect('/demos'))
 		.get(
 			'/testing/authentication',
+			{
+				query: t.Object({ provider: t.Optional(t.String()) })
+			},
 			({ query, redirect }) =>
 				redirect(
 					query.provider
 						? `/demos/authentication?provider=${encodeURIComponent(query.provider)}`
 						: '/demos/authentication'
-				),
-			{
-				query: t.Object({ provider: t.Optional(t.String()) })
-			}
+				)
 		)
 		.get(
 			'/telemetry/:view?',
+			{
+				params: t.Object({
+					view: t.Optional(telemetryViewEnum)
+				})
+			},
 			({ params: { view }, cookie: { theme }, protectRoute, redirect }) =>
 				protectRoute(
 					async (user) => {
@@ -362,10 +365,5 @@ export const pagesPlugin = (manifest: Record<string, string>) =>
 						});
 					},
 					async () => redirect('/signup/telemetry')
-				),
-			{
-				params: t.Object({
-					view: t.Optional(telemetryViewEnum)
-				})
-			}
+				)
 		);

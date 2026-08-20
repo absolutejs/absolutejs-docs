@@ -60,7 +60,7 @@ export const ElysiaCorsView = ({
 						CORS
 					</h1>
 					<p style={paragraphLargeStyle}>
-						Use <code>@elysiajs/cors</code> for predictable
+						Use <code>@elysia/cors</code> for predictable
 						cross-origin behavior in AbsoluteJS APIs.
 					</p>
 				</animated.div>

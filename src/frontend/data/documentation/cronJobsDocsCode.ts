@@ -1,6 +1,6 @@
 export const cronBasicUsage = `\
 import { Elysia } from 'elysia';
-import { cron } from '@elysiajs/cron';
+import { cron } from '@elysia/cron';
 
 new Elysia()
   .use(
@@ -15,7 +15,7 @@ new Elysia()
   .listen(3000);`;
 export const cronConfig = `\
 import { Elysia } from 'elysia';
-import { cron } from '@elysiajs/cron';
+import { cron } from '@elysia/cron';
 
 new Elysia()
   .use(
@@ -34,10 +34,10 @@ new Elysia()
     })
   );`;
 export const cronInstall = `\
-bun add @elysiajs/cron`;
+bun add @elysia/cron`;
 export const cronPatterns = `\
 import { Elysia } from 'elysia';
-import { cron, Patterns } from '@elysiajs/cron';
+import { cron, Patterns } from '@elysia/cron';
 
 new Elysia()
   .use(
@@ -60,7 +60,7 @@ new Elysia()
   );`;
 export const cronStopJob = `\
 import { Elysia } from 'elysia';
-import { cron } from '@elysiajs/cron';
+import { cron } from '@elysia/cron';
 
 const app = new Elysia()
   .use(

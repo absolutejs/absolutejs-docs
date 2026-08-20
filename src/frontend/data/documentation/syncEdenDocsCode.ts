@@ -1,4 +1,4 @@
-export const syncEdenClient = `import { treaty } from '@elysiajs/eden';
+export const syncEdenClient = `import { treaty } from '@elysia/eden';
 import type { App } from '../server'; // type-only — no server code shipped
 import { syncStore } from '@absolutejs/sync/client';
 
@@ -41,7 +41,7 @@ export default defineConfig({
 // In dev: visit http://localhost:3000/openapi for the Scalar UI.
 // Every Elysia route you declared shows up — including the sync hydrate /
 // mutate routes — with their TypeBox schemas, parameters, and response
-// types. No extra wiring; @absolutejs/absolute mounts @elysiajs/openapi
+// types. No extra wiring; @absolutejs/absolute mounts @elysia/openapi
 // for you.`;
 export const syncEdenReconnect = `// The runtime model under \`syncStore\`:
 //

@@ -63,7 +63,7 @@ export const syncVsConvexMatrixRows: ComparisonRow[] = [
 	},
 	{
 		feature: 'Scheduled functions / cron',
-		note: '@elysiajs/cron + registerSchedule',
+		note: '@elysia/cron + registerSchedule',
 		values: [true, true]
 	},
 	{

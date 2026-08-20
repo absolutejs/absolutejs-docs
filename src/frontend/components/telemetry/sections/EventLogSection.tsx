@@ -16,7 +16,7 @@ import {
 	sectionStyle,
 	sectionTitleStyle
 } from './eventLog/eventLogStyles';
-import { TelemetryEventRow } from './eventLog/eventLogTypes';
+import { EventLogResponse, TelemetryEventRow } from './eventLog/eventLogTypes';
 
 type EventLogSectionProps = {
 	themeSprings: ThemeSprings;
@@ -61,7 +61,28 @@ export const EventLogSection = ({
 		search
 	]);
 
+	const fetchEvents: () => Promise<EventLogResponse> = async () => {
+		const { data, error } = await server.api.v1.telemetry.events.get({
+			query: {
+				bun_version: bunVersionFilter || undefined,
+				event: eventFilter || undefined,
+				from: fromDate || undefined,
+				os: osFilter || undefined,
+				page: String(page),
+				pageSize: '50',
+				search: search || undefined,
+				to: toDate || undefined,
+				version: versionFilter || undefined
+			}
+		});
+		if (error) throw new Error('Failed to fetch events');
+		if (!('rows' in data)) throw new Error('Invalid events response');
+
+		return data;
+	};
+
 	const eventsQuery = useQuery({
+		queryFn: fetchEvents,
 		queryKey: [
 			'telemetry-events',
 			page,
@@ -72,26 +93,7 @@ export const EventLogSection = ({
 			bunVersionFilter,
 			fromDate,
 			toDate
-		],
-		queryFn: async () => {
-			const { data, error } = await server.api.v1.telemetry.events.get({
-				query: {
-					bun_version: bunVersionFilter || undefined,
-					event: eventFilter || undefined,
-					from: fromDate || undefined,
-					os: osFilter || undefined,
-					page: String(page),
-					pageSize: '50',
-					search: search || undefined,
-					to: toDate || undefined,
-					version: versionFilter || undefined
-				}
-			});
-			if (error) throw new Error('Failed to fetch events');
-			if (!('rows' in data)) throw new Error('Invalid events response');
-
-			return data;
-		}
+		]
 	});
 
 	const deleteMutation = useMutation({

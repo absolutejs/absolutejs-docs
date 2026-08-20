@@ -1,13 +1,13 @@
 export const corsBasic = `\
 import { Elysia } from 'elysia';
-import { cors } from '@elysiajs/cors';
+import { cors } from '@elysia/cors';
 
 new Elysia()
   .use(cors())
   .get('/api/ping', () => 'pong');`;
 export const corsDynamicOrigin = `\
 import { Elysia } from 'elysia';
-import { cors } from '@elysiajs/cors';
+import { cors } from '@elysia/cors';
 
 const allowlist = new Set([
   'https://app.example.com',
@@ -22,10 +22,10 @@ new Elysia()
     })
   );`;
 export const corsInstall = `\
-bun add @elysiajs/cors`;
+bun add @elysia/cors`;
 export const corsPerGroup = `\
 import { Elysia } from 'elysia';
-import { cors } from '@elysiajs/cors';
+import { cors } from '@elysia/cors';
 
 new Elysia()
   .group('/api/public', (app) =>
@@ -40,7 +40,7 @@ new Elysia()
   );`;
 export const corsRestrictedOrigins = `\
 import { Elysia } from 'elysia';
-import { cors } from '@elysiajs/cors';
+import { cors } from '@elysia/cors';
 
 new Elysia()
   .use(

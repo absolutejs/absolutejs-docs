@@ -66,7 +66,7 @@ const convexMapRows: ComparisonRow[] = [
 		feature: 'Cron triggers',
 		values: [
 			'Cron definitions',
-			'engine.registerSchedule + @elysiajs/cron (via the scheduled plugin)'
+			'engine.registerSchedule + @elysia/cron (via the scheduled plugin)'
 		]
 	},
 	{

@@ -23,13 +23,7 @@ const feedResponse = (body: string, contentType: string) =>
 		}
 	});
 
-// @absolutejs/auth grew enough OAuth2/OIDC/SSO/credentials/etc. routes since 0.22
-// that inlining its plugin into the Elysia .use() chain blows TS's union budget
-// (TS2590). Type-erase to a bare Elysia for this leg — the docs frontend doesn't
-// Eden-call any auth routes anyway (signout goes through plain fetch).
-const authPluginRich = await auth<User>(absoluteAuthConfig(db));
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- intentional type erasure to keep the Elysia .use() chain under TS's union budget; see comment above
-const authPlugin = authPluginRich as unknown as Elysia;
+const authPlugin = await auth<User>(absoluteAuthConfig(db));
 
 const builtApp = new Elysia()
 	.use(absolutejs)
@@ -44,8 +38,7 @@ const builtApp = new Elysia()
 	.use(authPlugin)
 	.use(telemetryPlugin(db))
 	.use(pagesPlugin(manifest))
-	.on('error', (error) => {
-		const { request } = error;
+	.error(({ error, request }) => {
 		console.error(
 			`Server error on ${request.method} ${request.url}: ${error.message}`
 		);

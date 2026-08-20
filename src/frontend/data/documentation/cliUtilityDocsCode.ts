@@ -39,17 +39,17 @@ absolute add vue --no-install`;
 export const addIntegrationCommand = `\
 # Install + wire an official Elysia plugin
 absolute add openapi      # config-driven: enables it in absolute.config.ts
-absolute add telemetry    # installs @elysiajs/opentelemetry + enables it
-absolute add cors         # installs @elysiajs/cors, prints the .use(...) to add
+absolute add telemetry    # installs @elysia/opentelemetry + enables it
+absolute add cors         # installs @elysia/cors, prints the .use(...) to add
 absolute add jwt
 absolute add cron`;
 export const addIntegrationOutput: TerminalSession = {
 	command: 'absolute add cors',
 	output: `\
-✓ Installed @elysiajs/cors.
+✓ Installed @elysia/cors.
 
   Add to your server:
-    import { cors } from '@elysiajs/cors';
+    import { cors } from '@elysia/cors';
     .use(cors())
 
   Next  wire it in, then run 'absolute dev'`
@@ -98,7 +98,7 @@ export const apiCommand = `\
 # Show the API surface from a running dev server
 absolute api
 
-# Open the OpenAPI UI (Scalar, served by @elysiajs/openapi at /openapi)
+# Open the OpenAPI UI (Scalar, served by @elysia/openapi at /openapi)
 absolute api --open
 
 # Print the OpenAPI spec the plugin generates from your typed routes

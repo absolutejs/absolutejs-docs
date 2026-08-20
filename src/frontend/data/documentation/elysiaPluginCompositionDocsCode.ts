@@ -1,17 +1,17 @@
 export const pluginCompositionBasic = `\
 import { Elysia } from 'elysia';
-import { cors } from '@elysiajs/cors';
-import { swagger } from '@elysiajs/swagger';
-import { staticPlugin } from '@elysiajs/static';
+import { cors } from '@elysia/cors';
+import { openapi } from '@elysia/openapi';
+import { staticPlugin } from '@elysia/static';
 
 new Elysia()
   .use(cors())
-  .use(swagger())
+  .use(openapi())
   .use(staticPlugin({ assets: './public' }));`;
 export const pluginCompositionEncapsulation = `\
 import { Elysia } from 'elysia';
-import { cors } from '@elysiajs/cors';
-import { cron } from '@elysiajs/cron';
+import { cors } from '@elysia/cors';
+import { cron } from '@elysia/cron';
 
 const apiPlugin = new Elysia({ prefix: '/api' })
   .use(cors({ origin: ['https://app.example.com'] }))
@@ -33,12 +33,12 @@ new Elysia()
   .use(jobsPlugin);`;
 export const pluginCompositionOrder = `\
 import { Elysia } from 'elysia';
-import { cors } from '@elysiajs/cors';
-import { swagger } from '@elysiajs/swagger';
+import { cors } from '@elysia/cors';
+import { openapi } from '@elysia/openapi';
 
 new Elysia()
   .use(cors())
-  .use(swagger())
+  .use(openapi())
   // register routes after plugins/hooks you want applied
   .get('/api/users', () => [])
   .listen(3000);`;

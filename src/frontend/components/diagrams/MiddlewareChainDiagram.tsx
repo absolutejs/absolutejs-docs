@@ -15,7 +15,7 @@ const steps: StepFlowStep[] = [
 	},
 	{
 		code: '.use(cors()).use(staticPlugin())',
-		description: 'cors(), static(), swagger() : extend server capabilities',
+		description: 'cors(), static(), openapi() : extend server capabilities',
 		title: 'Plugins'
 	},
 	{

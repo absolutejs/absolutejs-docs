@@ -49,7 +49,7 @@ await server.api.athlete.profile.get();`;
 export const edenTreatySubApp = `\
 // Elysia's recommendation: type Eden over a SUB-APP, not the whole Server.
 // You keep full end-to-end type safety — it just evaluates one plugin's type.
-import { treaty } from '@elysiajs/eden';
+import { treaty } from '@elysia/eden';
 import type { adminsPlugin } from '../../backend/plugins/adminsPlugin';
 
 // Plugins are \`(db) => Elysia<…>\`, so ReturnType is the app type.
@@ -59,7 +59,7 @@ export const adminApi = treaty<ReturnType<typeof adminsPlugin>>(url);
 await adminApi.api.admin.users.get(); // fully typed`;
 export const edenTreatyWholeApp = `\
 // The convenient default: one client typed over the WHOLE app.
-import { treaty } from '@elysiajs/eden';
+import { treaty } from '@elysia/eden';
 import type { Server } from '../../backend/server';
 
 export const server = treaty<Server>(window.location.origin);

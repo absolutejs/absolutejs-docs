@@ -40,8 +40,8 @@ new Elysia()
     )
   )`;
 export const corsHeaders = `\
-// Option 1: Use the @elysiajs/cors plugin (recommended)
-import { cors } from '@elysiajs/cors';
+// Option 1: Use the @elysia/cors plugin (recommended)
+import { cors } from '@elysia/cors';
 
 new Elysia()
   .use(cors())                      // sensible defaults

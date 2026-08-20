@@ -69,7 +69,7 @@ export const ApiView = ({
 						Usage
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						AbsoluteJS wires <code>@elysiajs/openapi</code> into the
+						AbsoluteJS wires <code>@elysia/openapi</code> into the
 						dev runtime, so a Scalar UI is live at{' '}
 						<code>/openapi</code> with zero setup.{' '}
 						<code>absolute api</code> reads that generated spec and
@@ -99,7 +99,7 @@ export const ApiView = ({
 					<p style={paragraphSpacedStyle}>
 						Because your params, query, body, and response are
 						Elysia <code>t.Object(...)</code> schemas — already JSON
-						Schema — <code>@elysiajs/openapi</code> turns them into
+						Schema — <code>@elysia/openapi</code> turns them into
 						accurate, importable API docs with zero annotation: the
 						types you wrote to validate requests become your docs.
 						Toggle and customize it with <code>openapi</code> in{' '}

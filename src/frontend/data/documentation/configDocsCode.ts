@@ -38,7 +38,7 @@ export default defineConfig({
   assetsDirectory: 'src/assets'  // Static assets like images, fonts
 });`;
 export const assetsStatic = `\
-import { staticPlugin } from '@elysiajs/static';
+import { staticPlugin } from '@elysia/static';
 
 new Elysia()
   .use(staticPlugin({

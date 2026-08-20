@@ -154,7 +154,7 @@ export const SyncEdenTypedView = ({
 			</AnchorHeading>
 			<p style={paragraphSpacedStyle}>
 				<code>@absolutejs/absolute</code> auto-mounts{' '}
-				<code>@elysiajs/openapi</code> in dev by default. Every Elysia
+				<code>@elysia/openapi</code> in dev by default. Every Elysia
 				route you declared — including the sync hydrate and mutate
 				routes — shows up at <code>/openapi</code> with the Scalar UI,
 				with its TypeBox schemas surfaced as parameters and response
