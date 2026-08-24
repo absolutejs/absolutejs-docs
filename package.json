@@ -31,7 +31,7 @@
 	},
 	"dependencies": {
 		"@absolutejs/absolute": "0.20.0-beta.0",
-		"@absolutejs/auth": "0.68.0",
+		"@absolutejs/auth": "0.68.1",
 		"@absolutejs/blog": "0.2.0",
 		"@elysia/eden": "2.0.0-beta.5",
 		"@elysia/static": "2.0.0-beta.2",
@@ -43,7 +43,7 @@
 		"@shikijs/langs": "^4.4.1",
 		"@shikijs/themes": "^4.4.1",
 		"@tanstack/react-query": "5.90.21",
-		"citra": "0.29.12",
+		"citra": "0.29.13",
 		"drizzle-orm": "1.0.0-rc.4",
 		"elysia": "2.0.0-beta.6",
 		"react": "19.2.4",

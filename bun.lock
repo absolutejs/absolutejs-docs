@@ -6,7 +6,7 @@
       "name": "@absolutejs/docs",
       "dependencies": {
         "@absolutejs/absolute": "0.20.0-beta.0",
-        "@absolutejs/auth": "0.66.0",
+        "@absolutejs/auth": "0.68.1",
         "@absolutejs/blog": "0.2.0",
         "@elysia/eden": "2.0.0-beta.5",
         "@elysia/static": "2.0.0-beta.2",
@@ -18,7 +18,7 @@
         "@shikijs/langs": "^4.4.1",
         "@shikijs/themes": "^4.4.1",
         "@tanstack/react-query": "5.90.21",
-        "citra": "0.29.11",
+        "citra": "0.29.13",
         "drizzle-orm": "1.0.0-rc.4",
         "elysia": "2.0.0-beta.6",
         "react": "19.2.4",
@@ -50,13 +50,13 @@
   "packages": {
     "@absolutejs/absolute": ["@absolutejs/absolute@0.20.0-beta.0", "", { "dependencies": { "@elysia/openapi": "2.0.0-beta.1", "@elysia/server-timing": "2.0.0-beta.1", "@elysia/static": "2.0.0-beta.2", "@tailwindcss/oxide": "^4.1.0", "exact-mirror": "1.2.4", "typebox": "1.3.16", "zustand": "^5.0.12" }, "optionalDependencies": { "@absolutejs/native-darwin-arm64": "0.20.0-beta.0", "@absolutejs/native-darwin-x64": "0.20.0-beta.0", "@absolutejs/native-linux-arm64": "0.20.0-beta.0", "@absolutejs/native-linux-x64": "0.20.0-beta.0", "@absolutejs/native-windows-arm64": "0.20.0-beta.0", "@absolutejs/native-windows-x64": "0.20.0-beta.0" }, "peerDependencies": { "@angular/animations": "^21.0.0", "@angular/common": "^21.0.0", "@angular/compiler": "^21.0.0", "@angular/compiler-cli": "^21.0.0", "@angular/core": "^21.0.0", "@angular/platform-browser": "^21.0.0", "@angular/platform-server": "^21.0.0", "@angular/router": "^21.0.0", "@angular/ssr": "^21.0.0", "@vue/compiler-sfc": "^3.5.27", "elysia": "^2.0.0-beta.6", "less": "^4.6.0", "postcss": "^8.5.0", "react": "^19.2.0", "react-dom": "^19.2.0", "react-router": "^7.0.0", "rxjs": "^7.8.0", "sass": "^1.99.0", "sharp": ">=0.33.0", "stylus": "^0.64.0", "svelte": "^5.35.2", "tailwindcss": "^4.1.0", "typescript": "^5.9.3", "vue": "^3.5.27", "vue-router": "^4.5.1" }, "optionalPeers": ["@angular/animations", "@angular/common", "@angular/compiler", "@angular/compiler-cli", "@angular/core", "@angular/platform-browser", "@angular/platform-server", "@angular/router", "@angular/ssr", "@vue/compiler-sfc", "less", "postcss", "react", "react-dom", "react-router", "rxjs", "sass", "sharp", "stylus", "svelte", "tailwindcss", "typescript", "vue", "vue-router"], "bin": { "absolute": "dist/cli/index.js" } }, "sha512-NNeNK1IaN0XwMZ6Hh0WTGTIF+97mcC2Ust11kUVqlbAB9tGMpEvIdvLuS2HO2cqW9IvSEehqOX0046nvMwepMg=="],
 
-    "@absolutejs/auth": ["@absolutejs/auth@0.66.0", "", { "dependencies": { "@absolutejs/linked-providers": "0.0.6", "@absolutejs/manifest": "^0.9.0", "@neondatabase/serverless": "1.0.0", "@sinclair/typebox": "^0.34.0", "citra": "0.29.10" }, "peerDependencies": { "@node-saml/node-saml": ">=5.1.0 <6", "@opentelemetry/api": ">=1.9.1 <2", "@simplewebauthn/browser": ">=13.3.0 <14", "@simplewebauthn/server": ">=13.3.2 <14", "drizzle-orm": ">=1.0.0-rc.4 <2", "elysia": "^2.0.0-beta.6", "react": ">=18 <20", "solid-js": ">=1.9.14 <2", "svelte": ">=5.56.7 <6", "vue": ">=3.5.40 <4" }, "optionalPeers": ["@node-saml/node-saml", "@opentelemetry/api", "@simplewebauthn/browser", "@simplewebauthn/server", "react", "solid-js", "svelte", "vue"], "bin": { "absolute-auth": "dist/cli/migrate.js" } }, "sha512-tydDVSqcPQpEWaalj/LzTjUtdRF5nrqK/PoR1rk6eb4IVHfiuJyzJN/AYSj4me9J7sRxAxTeUTC9IjSf/eCEIg=="],
+    "@absolutejs/auth": ["@absolutejs/auth@0.68.1", "", { "dependencies": { "@absolutejs/linked-providers": "0.0.6", "@absolutejs/manifest": "^0.10.0", "@neondatabase/serverless": "1.0.0", "citra": "0.29.13", "typebox": "^1.3.16" }, "peerDependencies": { "@node-saml/node-saml": ">=5.1.0 <6", "@opentelemetry/api": ">=1.9.1 <2", "@simplewebauthn/browser": ">=13.3.0 <14", "@simplewebauthn/server": ">=13.3.2 <14", "drizzle-orm": ">=1.0.0-rc.4 <2", "elysia": "^2.0.0-beta.6", "react": ">=18 <20", "solid-js": ">=1.9.14 <2", "svelte": ">=5.56.7 <6", "vue": ">=3.5.40 <4" }, "optionalPeers": ["@node-saml/node-saml", "@opentelemetry/api", "@simplewebauthn/browser", "@simplewebauthn/server", "react", "solid-js", "svelte", "vue"], "bin": { "absolute-auth": "dist/cli/migrate.js" } }, "sha512-830X3tHiUdum71YyA6w4banYRYI6W0e6u/NlckSJofEc5FHF5ro0A/znPBuDxDX0vsVw/bmVLhW1VpQ0mnkbsA=="],
 
     "@absolutejs/blog": ["@absolutejs/blog@0.2.0", "", { "dependencies": { "@absolutejs/manifest": "0.9.0", "@sinclair/typebox": "0.34.52" }, "peerDependencies": { "elysia": "^2.0.0-beta.6", "react": ">=18.0.0" }, "optionalPeers": ["elysia", "react"] }, "sha512-Sc81OIZppvjoy8mocJQiOXRdxtyFUEu8AuCHepB3nNspwIihGk1ziUJuR+DuCl71uzAwLPlfpg+odUJvSC7sqw=="],
 
     "@absolutejs/linked-providers": ["@absolutejs/linked-providers@0.0.6", "", {}, "sha512-mk9vZLqUowxHo4dGuKjOU+MwI4/PxwlR9SehMdkivQv2QzoIYOO0vnIfPhc3TdNy+8YFQJggxk3UyErujrAu2A=="],
 
-    "@absolutejs/manifest": ["@absolutejs/manifest@0.9.0", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-naNDdwNoWQgJ3HuFbAu1UcOVR7SGpLBJz/seO8MMX32vrxk6esgzY7OB1CL8YDOegtI/EqQfcvnulnP66A9aGg=="],
+    "@absolutejs/manifest": ["@absolutejs/manifest@0.10.0", "", { "peerDependencies": { "typebox": ">=1.3.0 <2" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-aBzi7PPFfEl51DdJfB2XXT5KHBiLlB0KeNHsU68XnfeqZmjOtFdxlcxYjbGep94sDTCgAbapNLCT+D4azDL5Eg=="],
 
     "@absolutejs/native-darwin-arm64": ["@absolutejs/native-darwin-arm64@0.20.0-beta.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-0VlR6AtUx0peNgFNme/1mGnAyv1W04qGRrCnVJG1D9x2VBTbHDhW5AWZ5gA6jpMQKyBrXLaiHQ+PE7vlmN/wRA=="],
 
@@ -378,7 +378,7 @@
 
     "character-entities-legacy": ["character-entities-legacy@3.0.0", "", {}, "sha512-RpPp0asT/6ufRm//AJVwpViZbGM/MkjQFxJccQRHmISF/22NBtsHqAWmL+/pmkPWoIUJdWyeVleTl1wydHATVQ=="],
 
-    "citra": ["citra@0.29.11", "", {}, "sha512-NNgY81t5d0sxeHL+wmMTuf4oPAx4fEcwhg6ty5plGdwW1X2mJAmxl+q+bPUsw8cjiFa47BEAW1v133+s0eGa/A=="],
+    "citra": ["citra@0.29.13", "", {}, "sha512-i1D6sZYNq1rgBi4E28ec4a6eKaLvKFx2z0VWryqgDgoHeiB6TdcrYful50Z+97Akr8qLchCkZW1pWUmQcLobvw=="],
 
     "comma-separated-tokens": ["comma-separated-tokens@2.0.3", "", {}, "sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg=="],
 
@@ -842,7 +842,7 @@
 
     "@absolutejs/auth/@neondatabase/serverless": ["@neondatabase/serverless@1.0.0", "", { "dependencies": { "@types/node": "^22.10.2", "@types/pg": "^8.8.0" } }, "sha512-XWmEeWpBXIoksZSDN74kftfTnXFEGZ3iX8jbANWBc+ag6dsiQuvuR4LgB0WdCOKMb5AQgjqgufc0TgAsZubUYw=="],
 
-    "@absolutejs/auth/citra": ["citra@0.29.10", "", {}, "sha512-XFa846o1nN19OzreTegklGXwth9pZ94G+S6VuAU50kq+Rz1bB7NBq8Wd0AkturhWIYQj2dqLKGGbfL6B/xsHlQ=="],
+    "@absolutejs/blog/@absolutejs/manifest": ["@absolutejs/manifest@0.9.0", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-naNDdwNoWQgJ3HuFbAu1UcOVR7SGpLBJz/seO8MMX32vrxk6esgzY7OB1CL8YDOegtI/EqQfcvnulnP66A9aGg=="],
 
     "@eslint-community/eslint-utils/eslint-visitor-keys": ["eslint-visitor-keys@3.4.3", "", {}, "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag=="],
 

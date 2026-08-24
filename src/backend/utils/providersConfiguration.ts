@@ -39,13 +39,12 @@ const absolutejsProvider =
 	absolutejsClientId && absolutejsClientSecret
 		? {
 				absolutejs: {
+					// No baseURL: this site talks to the hosted control plane,
+					// which is what the provider points at by default.
 					credentials: {
 						clientId: absolutejsClientId,
 						clientSecret: absolutejsClientSecret,
-						redirectUri: getEnvVar('OAUTH2_CALLBACK_URI'),
-						...(readEnvVar('ABSOLUTEJS_BASE_URL')
-							? { baseURL: getEnvVar('ABSOLUTEJS_BASE_URL') }
-							: {})
+						redirectUri: getEnvVar('OAUTH2_CALLBACK_URI')
 					},
 					// `credits:owner:read` is what lets a documentation example
 					// show the balance it is spending from.
