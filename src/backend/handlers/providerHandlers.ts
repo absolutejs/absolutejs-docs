@@ -80,6 +80,17 @@ export const handleStatusUpdate = async ({
 		throw new Error(`Invalid auth provider: ${authProvider}`);
 	}
 
+	// A provider added to the catalogue has no row until something writes one,
+	// and without a row this returned early -- recording nothing and logging
+	// nothing. A brand-new provider was therefore untrackable, and worse, a
+	// failed sign-in through it left no trace anywhere at all. Seeding the row
+	// at its declared defaults keeps the guard below meaningful while making
+	// the provider visible from its first use.
+	await db
+		.insert(schema.providers)
+		.values({ name: authProvider })
+		.onConflictDoNothing({ target: schema.providers.name });
+
 	const [{ [column]: currentStatus } = {}] = await db
 		.select({ [column]: schema.providers[column] })
 		.from(schema.providers)

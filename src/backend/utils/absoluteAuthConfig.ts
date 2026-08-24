@@ -9,6 +9,14 @@ export const absoluteAuthConfig = (db: DatabaseType) =>
 		providersConfiguration: providersConfiguration,
 		getUser: async (sub) => (await getDBUser({ authSub: sub, db })) ?? null,
 		onCallbackError: async ({ error, authProvider }) => {
+			// A sign-in that fails here redirects home with no session and no
+			// other outward sign, so without this the only evidence is a
+			// missing cookie. Log before the status update, which is guarded
+			// and can legitimately decide to record nothing.
+			console.error(
+				`[auth] ${authProvider} callback failed:`,
+				error instanceof Error ? error.stack ?? error.message : error
+			);
 			await handleStatusUpdate({
 				authProvider,
 				column: 'authorize_status',
