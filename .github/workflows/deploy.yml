@@ -19,6 +19,10 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # The droplet's .env is pulled and baked into the binary at build time, so a
+  # config change on the droplet needs a rebuild to take effect. Without this
+  # the only way to pick one up was to push a commit that changed nothing.
+  workflow_dispatch: {}
 
 concurrency:
   group: deploy-${{ github.ref }}
