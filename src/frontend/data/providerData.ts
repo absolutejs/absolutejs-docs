@@ -21,6 +21,13 @@ export const providerData: ProviderData = {
 		name: '42',
 		primaryColor: '#000000'
 	},
+	absolutejs: {
+		createNewCredentialsUrl: 'https://absolutejs.ai/dashboard',
+		logoUrl: '/assets/png/absolutejs-logo.png',
+		manageCredentialsUrl: 'https://absolutejs.ai/dashboard',
+		name: 'AbsoluteJS',
+		primaryColor: '#6366F1'
+	},
 	amazoncognito: {
 		createNewCredentialsUrl:
 			'https://console.aws.amazon.com/cognito/home#/user-pools',

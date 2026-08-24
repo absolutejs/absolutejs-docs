@@ -14,7 +14,48 @@ const getEnvVar = (key: string) => {
 	return environmentVariable;
 };
 
+const readEnvVar = (key: string) => {
+	const environmentVariable = env[key];
+
+	return typeof environmentVariable === 'string' &&
+		environmentVariable.length > 0
+		? environmentVariable
+		: undefined;
+};
+
+/**
+ * Signing in with an AbsoluteJS account, so this site and the PaaS are one
+ * account rather than two identities in two databases.
+ *
+ * Configured rather than required, unlike every other provider here. Those
+ * exist to exercise a third party we do not control, and a missing credential
+ * means a broken test. This one points at our own control plane, which serves
+ * OIDC only once it has been configured to -- so until then this site should
+ * come up without the button rather than refuse to boot.
+ */
+const absolutejsClientId = readEnvVar('ABSOLUTEJS_CLIENT_ID');
+const absolutejsClientSecret = readEnvVar('ABSOLUTEJS_CLIENT_SECRET');
+const absolutejsProvider =
+	absolutejsClientId && absolutejsClientSecret
+		? {
+				absolutejs: {
+					credentials: {
+						clientId: absolutejsClientId,
+						clientSecret: absolutejsClientSecret,
+						redirectUri: getEnvVar('OAUTH2_CALLBACK_URI'),
+						...(readEnvVar('ABSOLUTEJS_BASE_URL')
+							? { baseURL: getEnvVar('ABSOLUTEJS_BASE_URL') }
+							: {})
+					},
+					// `credits:owner:read` is what lets a documentation example
+					// show the balance it is spending from.
+					scope: ['openid', 'credits:owner:read']
+				}
+			}
+		: {};
+
 export const providersConfiguration = defineProvidersConfiguration({
+	...absolutejsProvider,
 	'42': {
 		credentials: {
 			clientId: getEnvVar('FORTY_TWO_CLIENT_ID'),
