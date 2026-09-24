@@ -1,3 +1,6 @@
+import { researchGuideData } from '../../../data/documentation/packages/research';
+import { webIndexGuideData } from '../../../data/documentation/packages/webIndex';
+import { searchPackageData } from '../../../data/documentation/packages/search';
 import { audiencePackageData } from '../../../data/documentation/packages/audience';
 import { attributionPackageData } from '../../../data/documentation/packages/attribution';
 import { autoscalerPackageData } from '../../../data/documentation/packages/autoscaler';
@@ -70,7 +73,9 @@ export const PwaPackageView = createPackageView(pwaPackageData);
 export const RagPackageView = createPackageView(ragPackageData);
 export const RenownPackageView = createPackageView(renownPackageData);
 export const ReplayPackageView = createPackageView(replayPackageData);
+export const ResearchGuideView = createPackageView(researchGuideData, false);
 export const RulesPackageView = createPackageView(rulesPackageData);
+export const SearchPackageView = createPackageView(searchPackageData);
 export const TourPackageView = createPackageView(tourPackageData);
 export const VscodeExtensionPackageView = createPackageView(
 	vscodeExtensionPackageData
@@ -78,3 +83,4 @@ export const VscodeExtensionPackageView = createPackageView(
 export const VueComposablesPackageView = createPackageView(
 	vueComposablesPackageData
 );
+export const WebIndexGuideView = createPackageView(webIndexGuideData, false);

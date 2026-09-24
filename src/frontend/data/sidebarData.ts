@@ -112,6 +112,9 @@ import {
 	PartnershipPackageView,
 	PwaPackageView,
 	RagPackageView,
+	ResearchGuideView,
+	WebIndexGuideView,
+	SearchPackageView,
 	RenownPackageView,
 	ReplayPackageView,
 	RulesPackageView,
@@ -426,7 +429,9 @@ const primaryDocsViews = definePortalViews({
 	'rag-ingestion': RagIngestionView,
 	'rag-overview': RagPackageView,
 	'rag-quality': RagQualityView,
+	'rag-research': ResearchGuideView,
 	'rag-retrieval': RagRetrievalView,
+	'rag-web-index': WebIndexGuideView,
 	'rate-limit': RateLimitOverviewView,
 	'react-ai': ReactAIView,
 	'react-components': ReactComponentsView,
@@ -442,6 +447,7 @@ const primaryDocsViews = definePortalViews({
 	rules: RulesPackageView,
 	runtime: RuntimeOverviewView,
 	'scoped-state': ScopedStateView,
+	search: SearchPackageView,
 	secrets: SecretsOverviewView,
 	'server-state': ServerStateView,
 	sitemap: SitemapView,
@@ -917,7 +923,9 @@ const baseSidebarCategories: SidebarCategory[] = [
 					{ id: 'rag-ingestion', label: 'Ingestion & Chunking' },
 					{ id: 'rag-retrieval', label: 'Retrieval & Adapters' },
 					{ id: 'rag-quality', label: 'Quality & Governance' },
-					{ id: 'rag-frameworks', label: 'Frameworks & Chat' }
+					{ id: 'rag-frameworks', label: 'Frameworks & Chat' },
+					{ id: 'rag-research', label: 'Web Research Workflows' },
+					{ id: 'rag-web-index', label: 'Owned Web Indexes' }
 				],
 				status: 'beta'
 			},

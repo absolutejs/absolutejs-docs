@@ -276,11 +276,16 @@ const SampleSection = ({
 
 type PackageOverviewTemplateProps = DocsViewProps & {
 	data: PackageDocData;
+	synchronize?: boolean;
 };
 
-export const createPackageView = (data: PackageDocData) => {
+export const createPackageView = (data: PackageDocData, synchronize = true) => {
 	const PackageView = (props: DocsViewProps) => (
-		<PackageOverviewTemplate data={data} {...props} />
+		<PackageOverviewTemplate
+			data={data}
+			synchronize={synchronize}
+			{...props}
+		/>
 	);
 
 	return PackageView;
@@ -293,9 +298,10 @@ export const PackageOverviewTemplate = ({
 	onNavigate,
 	onTocToggle,
 	themeSprings,
-	tocOpen
+	tocOpen,
+	synchronize = true
 }: PackageOverviewTemplateProps) => {
-	const currentData = synchronizePackageDocData(data);
+	const currentData = synchronize ? synchronizePackageDocData(data) : data;
 	const runnableSamples = currentData.samples.filter(
 		(sample) => sample.intent === 'runnable'
 	);

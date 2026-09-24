@@ -68,6 +68,7 @@ export const documentationViewByDirectory: Record<string, string> = {
 	rules: 'rules',
 	runtime: 'runtime',
 	'scoped-state': 'scoped-state',
+	search: 'search',
 	secrets: 'secrets',
 	sync: 'sync-overview',
 	'sync-adapters': 'sync-adapters',

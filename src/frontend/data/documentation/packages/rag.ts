@@ -30,8 +30,18 @@ export const ragPackageData: PackageDocData = {
 	],
 	category: 'AI',
 	description:
-		'A standalone RAG runtime for Bun and Elysia apps covering the full pipeline: document ingestion and chunking, embedding, hybrid retrieval with reranking, source sync, and retrieval-quality evaluation. Vector storage is pluggable behind a single RAGVectorStore contract, with published adapters for Postgres (pgvector), SQLite, and Pinecone alongside a built-in in-memory store. It pairs with @absolutejs/ai for the model side and ships framework bindings for React, Vue, Svelte, and Angular via subpath exports.',
+		'A standalone RAG runtime for Bun and Elysia apps covering the full pipeline: document ingestion and chunking, embedding, hybrid retrieval with reranking, source sync, and retrieval-quality evaluation. Vector storage is pluggable behind a single RAGVectorStore contract, with published adapters for Postgres (pgvector), SQLite, and Pinecone alongside a built-in in-memory store. It pairs with @absolutejs/ai for models and @absolutejs/search for web evidence. Web research and owned-index workflows share authorized plugins with React, Vue, Svelte, Angular, HTML and HTMX bindings.',
 	features: [
+		{
+			description:
+				'Bounded search and reading, schema extraction, field evidence review, company discovery, resumable batches and durable monitoring. Follow the Web Research Workflows guide for server configuration and all six presentation frameworks.',
+			title: 'Web research workflows'
+		},
+		{
+			description:
+				'Scoped public-site crawling, durable coordination, versioned evidence, PostgreSQL retrieval, takedowns and model-generation lifecycle. The index exposes a SearchProvider for the same research runtime.',
+			title: 'Owned web indexes'
+		},
 		{
 			description:
 				'One RAGVectorStore contract with an in-memory store built in and Postgres, SQLite, and Pinecone adapters published separately, so swapping backends does not touch retrieval code.',
@@ -65,6 +75,12 @@ export const ragPackageData: PackageDocData = {
 	],
 	installCommand: 'bun add @absolutejs/rag',
 	links: [
+		{
+			href: '/documentation/rag-research',
+			label: 'Web research workflows'
+		},
+		{ href: '/documentation/rag-web-index', label: 'Owned web indexes' },
+		{ href: '/documentation/search', label: 'Search provider' },
 		{
 			href: 'https://www.npmjs.com/package/@absolutejs/rag',
 			label: 'npm'
@@ -140,6 +156,6 @@ const { collection, store } = createPostgresRAG({
 	],
 	status: 'beta',
 	tagline:
-		'Standalone RAG runtime for Bun and Elysia apps: ingestion, hybrid retrieval, source sync, and evaluation over pluggable vector stores.',
-	version: '0.0.28'
+		'Document retrieval, web research, durable workflows and owned web indexes for Bun and Elysia apps.',
+	version: '0.22.1'
 };

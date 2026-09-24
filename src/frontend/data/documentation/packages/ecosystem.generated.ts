@@ -7783,6 +7783,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 				symbols: [
 					{
 						description: '',
+						kind: 'type',
+						name: 'OpenAIConfig',
+						signature:
+							'type OpenAIConfig = {\n    modelLimits?: (params: AIProviderStreamParams) => Promise<import("../inputCapacity").AIModelLimits>;\n    apiKey?: string;\n    baseUrl?: string;\n    fetch?: typeof globalThis.fetch;\n    headers?: HeadersInit | ((params: AIProviderStreamParams) => HeadersInit | Promise<HeadersInit>);\n    modelForCapabilities?: (model: string) => string;\n    providerName?: string;\n    tokenSource?: () => Promise<string> | string;\n    transformRequestBody?: (body: Record<string, unknown>, params: AIProviderStreamParams) => Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
 						kind: 'value',
 						name: 'openai',
 						signature:
@@ -7853,8 +7860,585 @@ export const ecosystemProjects: EcosystemProject[] = [
 				]
 			},
 			{
+				entryPoint: '@absolutejs/ai/openrouter',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterDataCollection',
+						signature:
+							'type OpenRouterDataCollection = "allow" | "deny";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterQuantization',
+						signature:
+							'type OpenRouterQuantization = "bf16" | "fp4" | "fp6" | "fp8" | "fp16" | "fp32" | "int4" | "int8" | "unknown";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterSortStrategy',
+						signature:
+							'type OpenRouterSortStrategy = "latency" | "price" | "throughput";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterSort',
+						signature:
+							'type OpenRouterSort = OpenRouterSortStrategy | {\n    by: OpenRouterSortStrategy;\n    partition?: "model" | "none";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterPerformancePreference',
+						signature:
+							'type OpenRouterPerformancePreference = number | {\n    p50?: number;\n    p75?: number;\n    p90?: number;\n    p99?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterMaxPrice',
+						signature:
+							'type OpenRouterMaxPrice = {\n    /** Maximum completion-token price in USD per million tokens. */\n    completion?: number;\n    /** Maximum price in USD per image. */\n    image?: number;\n    /** Maximum prompt-token price in USD per million tokens. */\n    prompt?: number;\n    /** Maximum price in USD per request. */\n    request?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterProviderRouting',
+						signature:
+							'type OpenRouterProviderRouting = {\n    allowFallbacks?: boolean;\n    dataCollection?: OpenRouterDataCollection;\n    enforceDistillableText?: boolean;\n    ignore?: readonly string[];\n    maxPrice?: OpenRouterMaxPrice;\n    only?: readonly string[];\n    order?: readonly string[];\n    preferredMaxLatency?: OpenRouterPerformancePreference;\n    preferredMinThroughput?: OpenRouterPerformancePreference;\n    quantizations?: readonly OpenRouterQuantization[];\n    requireParameters?: boolean;\n    sort?: OpenRouterSort;\n    zdr?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterServiceTier',
+						signature:
+							'type OpenRouterServiceTier = "auto" | "default" | "flex" | "priority" | "fast";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterResponseCache',
+						signature:
+							'type OpenRouterResponseCache = {\n    clear?: boolean;\n    enabled: boolean;\n    /** OpenRouter response-cache TTL in seconds (1-86400). */\n    ttlSeconds?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterCacheControl',
+						signature:
+							'type OpenRouterCacheControl = {\n    type: "ephemeral";\n    ttl?: "5m" | "1h";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterPromptCacheOptions',
+						signature:
+							'type OpenRouterPromptCacheOptions = {\n    mode: "explicit";\n    ttl?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterReasoning',
+						signature:
+							'type OpenRouterReasoning = {\n    context?: "all_turns" | "auto" | "current_turn";\n    effort?: "minimal" | "low" | "medium" | "high" | "max" | "xhigh";\n    enabled?: boolean;\n    exclude?: boolean;\n    maxTokens?: number;\n    mode?: "pro";\n    summary?: "auto" | "concise" | "detailed";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterTrace',
+						signature:
+							'type OpenRouterTrace = Record<string, unknown> & {\n    generation_name?: string;\n    parent_span_id?: string;\n    span_name?: string;\n    trace_id?: string;\n    trace_name?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterAudioOutput',
+						signature:
+							'type OpenRouterAudioOutput = {\n    format: "wav" | "mp3" | "flac" | "opus" | "pcm16";\n    voice: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterAutoRouterCostTier',
+						signature:
+							'type OpenRouterAutoRouterCostTier = "low" | "medium" | "high" | "xhigh" | "max";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterAutoRouterPlugin',
+						signature:
+							'type OpenRouterAutoRouterPlugin = {\n    id: "auto-router";\n    /** Restrict Auto Router candidates; omitted means the full catalog. */\n    allowed_models?: readonly string[];\n    cost_tier?: OpenRouterAutoRouterCostTier;\n    /** Legacy numeric control. When present, OpenRouter prioritizes it over cost_tier. */\n    cost_quality_tradeoff?: number;\n};'
+					},
+					{
+						deprecated:
+							'OpenRouter recommends the openrouter:web_search server tool.',
+						description:
+							'@deprecated OpenRouter recommends the openrouter:web_search server tool.',
+						kind: 'type',
+						name: 'OpenRouterWebSearchPlugin',
+						signature:
+							'type OpenRouterWebSearchPlugin = {\n    id: "web";\n    engine?: "native" | "exa" | "firecrawl" | "parallel" | "perplexity";\n    exclude_domains?: readonly string[];\n    include_domains?: readonly string[];\n    max_results?: number;\n    search_prompt?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterFusionPlugin',
+						signature:
+							'type OpenRouterFusionPlugin = {\n    id: "fusion";\n    analysis_models?: readonly string[];\n    enabled?: boolean;\n    max_tool_calls?: number;\n    model?: string;\n    preset?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterResponseHealingPlugin',
+						signature:
+							'type OpenRouterResponseHealingPlugin = {\n    id: "response-healing";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterPlugin',
+						signature:
+							'type OpenRouterPlugin = OpenRouterAutoRouterPlugin | OpenRouterFusionPlugin | OpenRouterResponseHealingPlugin | OpenRouterWebSearchPlugin | {\n    id: string;\n    [option: string]: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterWebSearchParameters',
+						signature:
+							'type OpenRouterWebSearchParameters = {\n    allowed_domains?: readonly string[];\n    engine?: "auto" | "native" | "exa" | "firecrawl" | "parallel" | "perplexity";\n    excluded_domains?: readonly string[];\n    max_characters?: number;\n    max_results?: number;\n    max_total_results?: number;\n    search_context_size?: "low" | "medium" | "high";\n    user_location?: {\n        city?: string;\n        country?: string;\n        region?: string;\n        timezone?: string;\n        type: "approximate";\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterWebFetchParameters',
+						signature:
+							'type OpenRouterWebFetchParameters = {\n    allowed_domains?: readonly string[];\n    blocked_domains?: readonly string[];\n    engine?: "auto" | "native" | "exa" | "openrouter" | "firecrawl" | "parallel";\n    max_content_tokens?: number;\n    max_uses?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterImageGenerationParameters',
+						signature:
+							'type OpenRouterImageGenerationParameters = {\n    aspect_ratio?: string;\n    background?: string;\n    model?: string;\n    moderation?: string;\n    output_compression?: number;\n    output_format?: string;\n    quality?: string;\n    size?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterSubagentParameters',
+						signature:
+							'type OpenRouterSubagentParameters = {\n    inherit_functions?: boolean;\n    inherited_function_names?: readonly string[];\n    instructions?: string;\n    max_completion_tokens?: number;\n    max_tool_calls?: number;\n    model?: string;\n    name?: string;\n    reasoning?: {\n        effort?: OpenRouterReasoning["effort"];\n        max_tokens?: number;\n    };\n    temperature?: number;\n    tools?: readonly Exclude<OpenRouterServerTool, {\n        type: "openrouter:subagent";\n    }>[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterAdvisorParameters',
+						signature:
+							'type OpenRouterAdvisorParameters = {\n    forward_transcript?: boolean;\n    instructions?: string;\n    max_completion_tokens?: number;\n    model?: string;\n    name?: string;\n    reasoning?: {\n        effort?: string;\n        max_tokens?: number;\n    };\n    stream?: boolean;\n    temperature?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterFusionServerToolParameters',
+						signature:
+							'type OpenRouterFusionServerToolParameters = {\n    analysis_models?: readonly string[];\n    cache_control?: OpenRouterCacheControl;\n    max_completion_tokens?: number;\n    max_tool_calls?: number;\n    model?: string;\n    reasoning?: {\n        effort?: string;\n        max_tokens?: number;\n    };\n    temperature?: number;\n    tools?: readonly OpenRouterServerTool[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterShellParameters',
+						signature:
+							'type OpenRouterShellParameters = {\n    engine?: "auto" | "openrouter";\n    environment?: {\n        type: "container_auto";\n    } | {\n        container_id: string;\n        type: "container_reference";\n    };\n    sleep_after_seconds?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterServerTool',
+						signature:
+							'type OpenRouterServerTool = {\n    type: "openrouter:web_search";\n    parameters?: OpenRouterWebSearchParameters;\n} | {\n    type: "openrouter:web_fetch";\n    parameters?: OpenRouterWebFetchParameters;\n} | {\n    type: "openrouter:datetime";\n    parameters?: {\n        timezone?: string;\n    };\n} | {\n    type: "openrouter:image_generation";\n    parameters?: OpenRouterImageGenerationParameters;\n} | {\n    type: "openrouter:apply_patch";\n    parameters?: {\n        engine?: "auto" | "native" | "openrouter";\n    };\n} | {\n    type: "openrouter:subagent";\n    parameters: OpenRouterSubagentParameters;\n} | {\n    type: "openrouter:advisor";\n    parameters?: OpenRouterAdvisorParameters;\n} | {\n    type: "openrouter:fusion";\n    parameters?: OpenRouterFusionServerToolParameters;\n} | {\n    type: "openrouter:shell";\n    parameters?: OpenRouterShellParameters;\n} | {\n    type: "openrouter:experimental__search_models";\n    parameters?: {\n        max_results?: number;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterRequestOptions',
+						signature:
+							'type OpenRouterRequestOptions = {\n    /** Stream text and synthesized audio from an audio-output chat model. */\n    audioOutput?: OpenRouterAudioOutput;\n    /** Automatic top-level prompt caching, including optional Anthropic TTL. */\n    cacheControl?: OpenRouterCacheControl;\n    /** Future OpenRouter fields. Security-sensitive routing fields are rejected. */\n    extraBody?: Record<string, unknown>;\n    fallbackModels?: readonly string[];\n    includeReasoning?: boolean;\n    maxToolCalls?: number;\n    /** Native `/messages` server-tool definitions and replayable tool shapes. */\n    messagesTools?: readonly Record<string, unknown>[];\n    plugins?: readonly OpenRouterPlugin[];\n    /** Stable cache identity used by compatible OpenAI-family models. */\n    promptCacheKey?: string;\n    /** OpenAI explicit-cache mode and TTL. */\n    promptCacheOptions?: OpenRouterPromptCacheOptions;\n    preset?: string;\n    responseCache?: OpenRouterResponseCache;\n    /** OpenRouter-native reasoning controls beyond the portable effort knob. */\n    reasoning?: OpenRouterReasoning;\n    routerMetadata?: boolean;\n    routing?: OpenRouterProviderRouting;\n    serverTools?: readonly OpenRouterServerTool[];\n    se'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterConfig',
+						signature:
+							"type OpenRouterConfig = {\n    /**\n     * Local model policy. Entries are exact model IDs or namespace wildcards such\n     * as `anthropic/*`. Requests outside the list fail before network access.\n     */\n    allowedModels?: readonly string[];\n    /** Preset slugs deliberately approved for use with this provider. */\n    allowedPresets?: readonly string[];\n    /**\n     * Inference-provider policy sent as OpenRouter's `provider.only`. When\n     * `routing.only` is also set, every entry must be allowed by this policy.\n     */\n    allowedProviders?: readonly string[];\n    apiKey?: string;\n    /** Up to two OpenRouter marketplace categories. */\n    appCategories?: readonly string[];\n    /** Public application name used for optional OpenRouter attribution. */\n    appName?: string;\n    /** Public application URL used for optional OpenRouter attribution. */\n    appUrl?: string;\n    baseUrl?: string;\n    fetch?: typeof globalThis.fetch;\n    headers?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    /** Default OpenRouter request options, overridable per call. */\n    requestOptions?: OpenRouterRequestOptions;\n    routing?: OpenRouterProviderRouting;\n    tokenSource?: () => Promis"
+					},
+					{
+						description:
+							'OpenRouter provider for the shared AbsoluteJS AI contract. Uses the existing OpenAI-compatible streaming implementation while adding OpenRouter attribution, typed provider routing, local model policy, provider allowlists, cost metadata, and OpenRouter-specific error attribution.',
+						kind: 'value',
+						name: 'openrouter',
+						signature:
+							'const openrouter: (config: OpenRouterConfig) => AIProviderConfig;'
+					},
+					{
+						description:
+							"OpenRouter's stateless OpenAI-compatible Responses API provider skin.",
+						kind: 'value',
+						name: 'openrouterResponses',
+						signature:
+							'const openrouterResponses: (config: OpenRouterConfig) => AIProviderConfig;'
+					},
+					{
+						description:
+							'OpenRouter provider using the native Anthropic Messages protocol skin.',
+						kind: 'value',
+						name: 'openrouterMessages',
+						signature:
+							'const openrouterMessages: (config: OpenRouterConfig) => AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOpenRouterAuthorizationUrl',
+						signature: 'createOpenRouterAuthorizationUrl'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOpenRouterClient',
+						signature: 'createOpenRouterClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOpenRouterKeyLinks',
+						signature: 'createOpenRouterKeyLinks'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'estimateOpenRouterCost',
+						signature: 'estimateOpenRouterCost'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'estimateOpenRouterModelCost',
+						signature: 'estimateOpenRouterModelCost'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'exchangeOpenRouterAuthCode',
+						signature: 'exchangeOpenRouterAuthCode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateOpenRouterPKCE',
+						signature: 'generateOpenRouterPKCE'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'openRouterModelMatchesRule',
+						signature: 'openRouterModelMatchesRule'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'verifyOpenRouterWebhookSignature',
+						signature: 'verifyOpenRouterWebhookSignature'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterActivityItem',
+						signature: 'OpenRouterActivityItem'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterActivityQuery',
+						signature: 'OpenRouterActivityQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAnalyticsMeta',
+						signature: 'OpenRouterAnalyticsMeta'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAnalyticsQuery',
+						signature: 'OpenRouterAnalyticsQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAnalyticsResponse',
+						signature: 'OpenRouterAnalyticsResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAuthCodeExchangeRequest',
+						signature: 'OpenRouterAuthCodeExchangeRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAuthCodeExchangeResponse',
+						signature: 'OpenRouterAuthCodeExchangeResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAuthorizationUrlOptions',
+						signature: 'OpenRouterAuthorizationUrlOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatch',
+						signature: 'OpenRouterBatch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatchEndpoint',
+						signature: 'OpenRouterBatchEndpoint'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatchRequest',
+						signature: 'OpenRouterBatchRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatchResult',
+						signature: 'OpenRouterBatchResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatchStatus',
+						signature: 'OpenRouterBatchStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterChatRequest',
+						signature: 'OpenRouterChatRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterChatResponse',
+						signature: 'OpenRouterChatResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterClient',
+						signature: 'OpenRouterClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterClientConfig',
+						signature: 'OpenRouterClientConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCostEstimate',
+						signature: 'OpenRouterCostEstimate'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCostUnits',
+						signature: 'OpenRouterCostUnits'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCreateAuthCodeRequest',
+						signature: 'OpenRouterCreateAuthCodeRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCreateAuthCodeResponse',
+						signature: 'OpenRouterCreateAuthCodeResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCreateBatchRequest',
+						signature: 'OpenRouterCreateBatchRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCreateWorkspaceRequest',
+						signature: 'OpenRouterCreateWorkspaceRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterEmbeddingRequest',
+						signature: 'OpenRouterEmbeddingRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterEmbeddingResponse',
+						signature: 'OpenRouterEmbeddingResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterFile',
+						signature: 'OpenRouterFile'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterFileList',
+						signature: 'OpenRouterFileList'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterHttpRequestOptions',
+						signature: 'OpenRouterHttpRequestOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageModelEndpoint',
+						signature: 'OpenRouterImageModelEndpoint'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageModelEndpoints',
+						signature: 'OpenRouterImageModelEndpoints'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageRequest',
+						signature: 'OpenRouterImageRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageResponse',
+						signature: 'OpenRouterImageResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageStreamEvent',
+						signature: 'OpenRouterImageStreamEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterModel',
+						signature: 'OpenRouterModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterModelList',
+						signature: 'OpenRouterModelList'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterModelQuery',
+						signature: 'OpenRouterModelQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterPreset',
+						signature: 'OpenRouterPreset'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterPresetInferenceRequest',
+						signature: 'OpenRouterPresetInferenceRequest'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/openrouter/sdk',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterSDKConfig',
+						signature:
+							'type OpenRouterSDKConfig = Omit<SDKOptions, "apiKey" | "appCategories" | "appTitle" | "httpReferer" | "serverURL"> & {\n    apiKey?: string;\n    /** Comma-separated marketplace categories are produced from this list. */\n    appCategories?: readonly string[];\n    appName?: string;\n    appUrl?: string;\n    baseUrl?: string;\n    tokenSource?: () => Promise<string> | string;\n};'
+					},
+					{
+						description:
+							"Create OpenRouter's generated SDK with AbsoluteJS-style configuration. Use this for the complete REST surface: API keys, BYOK, guardrails, observability, organizations, SCIM, datasets, benchmarks, and future OpenAPI-generated additions. Use openrouter() for policy-aware inference.",
+						kind: 'value',
+						name: 'createOpenRouterSDK',
+						signature:
+							'const createOpenRouterSDK: (config?: OpenRouterSDKConfig) => OfficialOpenRouterSDK;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterSDK',
+						signature: 'OfficialOpenRouterSDK as OpenRouterSDK'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OfficialOpenRouterSDKOptions',
+						signature: 'SDKOptions as OfficialOpenRouterSDKOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterSDKRequestOptions',
+						signature:
+							'RequestOptions as OpenRouterSDKRequestOptions'
+					}
+				]
+			},
+			{
 				entryPoint: '@absolutejs/ai/openai-responses',
 				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenAIResponsesConfig',
+						signature:
+							'type OpenAIResponsesConfig = {\n    modelLimits?: (params: AIProviderStreamParams) => Promise<import("../inputCapacity").AIModelLimits>;\n    apiKey?: string;\n    baseUrl?: string;\n    fetch?: typeof globalThis.fetch;\n    headers?: HeadersInit | ((params: AIProviderStreamParams) => HeadersInit | Promise<HeadersInit>);\n    imageModels?: Set<string> | string[];\n    modelForCapabilities?: (model: string) => string;\n    providerName?: string;\n    tokenSource?: () => Promise<string> | string;\n    transformRequestBody?: (body: Record<string, unknown>, params: AIProviderStreamParams) => Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildResponsesRequestBody',
+						signature:
+							'const buildResponsesRequestBody: (params: AIProviderStreamParams, isImageModel: boolean, capabilityModel?: string) => Record<string, unknown>;'
+					},
 					{
 						description: '',
 						kind: 'value',
@@ -8413,6 +8997,149 @@ export const ecosystemProjects: EcosystemProject[] = [
 						signature: 'type UiSvgTheme'
 					}
 				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/models',
+				symbols: [
+					{
+						description:
+							'Client-safe model discovery. Missing metadata means unknown, never unsupported.',
+						kind: 'type',
+						name: 'ModelModality',
+						signature:
+							'type ModelModality = "text" | "image" | "pdf" | "audio" | "video";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ModelFeature',
+						signature:
+							'type ModelFeature = "reasoning" | "tools" | "structured-output" | "prompt-cache" | "web-search";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ModelMetadata',
+						signature:
+							'type ModelMetadata = {\n    input: readonly ModelModality[];\n    output: readonly ModelModality[];\n    features: readonly ModelFeature[];\n    contextWindow?: number;\n    sources: readonly string[];\n    reviewedAt: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'MODEL_CAPABILITY_DESCRIPTIONS',
+						signature:
+							'const MODEL_CAPABILITY_DESCRIPTIONS: {\n    readonly Fast: "Suited to quick edits and lightweight tasks; actual speed varies with the request.";\n    readonly Reasoning: "Can spend extra thinking time on complex problems.";\n    readonly Tools: "Supports function calls for actions such as inspecting and editing code.";\n    readonly Vision: "Understands images. This does not mean it generates images.";\n    readonly PDF: "Accepts PDF documents, including their text and visual content.";\n    readonly Audio: "Understands audio input. This does not mean it generates speech.";\n    readonly Video: "Understands video input. This does not mean it generates videos.";\n    readonly "Image generation": "Produces images as model output.";\n    readonly "Speech generation": "Produces audio as model output.";\n    readonly "Video generation": "Produces video as model output.";\n    readonly Structured: "Supports schema-constrained output for reliable structured data.";\n    readonly Caching: "The provider can reuse matching prompt content to reduce repeated processing. Cache hits are not guaranteed.";\n    readonly Search: "Supports a provider-hosted web-search tool when enabled by the application.";\n    '
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ModelCapability',
+						signature:
+							'type ModelCapability = keyof typeof MODEL_CAPABILITY_DESCRIPTIONS;'
+					},
+					{
+						description:
+							'Derive badges from explicit evidence; do not infer support from model names.',
+						kind: 'value',
+						name: 'modelCapabilities',
+						signature:
+							'const modelCapabilities: (metadata?: ModelMetadata) => ModelCapability[];'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MODEL_METADATA',
+						signature: 'MODEL_METADATA'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getModelMetadata',
+						signature: 'getModelMetadata'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MODEL_REASONING',
+						signature: 'MODEL_REASONING'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'REASONING_EFFORTS',
+						signature: 'REASONING_EFFORTS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getModelReasoning',
+						signature: 'getModelReasoning'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isReasoningSelection',
+						signature: 'isReasoningSelection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'supportsReasoningSelection',
+						signature: 'supportsReasoningSelection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'reasoningSelectionLabel',
+						signature: 'reasoningSelectionLabel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ModelReasoning',
+						signature: 'type ModelReasoning'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReasoningSelection',
+						signature: 'type ReasoningSelection'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/research',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchFinding',
+						signature:
+							'type ResearchFinding = {\n    claim: string;\n    sourceId: string;\n    quote: string;\n    eventDate?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchEvidence',
+						signature:
+							'type ResearchEvidence = {\n    status: "grounded" | "partial" | "empty" | "unavailable";\n    text: string;\n    findings: ResearchFinding[];\n    sources: SearchSource[];\n    searches: SearchResult[];\n    limitations: string[];\n    generatedAt: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchSynthesis',
+						signature:
+							'type ResearchSynthesis = {\n    findings: ResearchFinding[];\n    limitations?: string[];\n};'
+					},
+					{
+						description:
+							'Retrieval and synthesis are separate injected capabilities. No hosted search is enabled here.',
+						kind: 'value',
+						name: 'researchWithEvidence',
+						signature:
+							'const researchWithEvidence: (input: {\n    query: string;\n    queries?: string[];\n    provider: SearchProvider;\n    signal?: AbortSignal;\n    maxQueries?: number;\n    maxTokens?: number;\n    freshness?: string;\n    /** Required literal entity phrases; defaults to quoted phrases in the question. */\n    requiredPhrases?: string[];\n    synthesize: (evidence: string, signal?: AbortSignal) => Promise<ResearchSynthesis>;\n}) => Promise<ResearchEvidence>;'
+					}
+				]
 			}
 		],
 		category: 'AI',
@@ -8422,12 +9149,20 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'build'
 			},
 			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
 				command: 'prettier --write .',
 				name: 'format'
 			},
 			{
 				command: 'eslint . --max-warnings 0',
 				name: 'lint'
+			},
+			{
+				command: 'bun scripts/verifyBuiltContext.ts',
+				name: 'test:built-context'
 			},
 			{
 				command: 'tsc --noEmit --project tsconfig.json',
@@ -8453,15 +9188,26 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/ai/ollama',
 			'@absolutejs/ai/openai',
 			'@absolutejs/ai/openai-compatible',
+			'@absolutejs/ai/openrouter',
+			'@absolutejs/ai/openrouter/sdk',
 			'@absolutejs/ai/openai-responses',
 			'@absolutejs/ai/providers',
 			'@absolutejs/ai/tools',
 			'@absolutejs/ai/tools/untrusted',
-			'@absolutejs/ai/ui'
+			'@absolutejs/ai/ui',
+			'@absolutejs/ai/models',
+			'@absolutejs/ai/research'
 		],
 		readmeDigest:
-			'947d32951e0b7c930f1f1cd7172b17f904b3662fe44676fab3ad8556ef972c22',
+			'f2440d3aa9a0fc0c29a757025ec5ce323a97f7a3e8f0898b003441880577461c',
 		readmeSamples: [
+			{
+				code: 'const result = await generateAI({\n  provider: anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }),\n  model: "claude-sonnet-4-6",\n  messages: [{ role: "user", content: "What changed today?" }],\n  providerOptions: {\n    anthropic: {\n      serverTools: [\n        {\n          type: "anthropic:web_search",\n          parameters: { maxUses: 3 },\n        },\n      ],\n    },\n  },\n});',
+				description:
+					'The Anthropic provider can request native hosted web search without a custom client tool. Search blocks are replayable provider data, citations are emitted as portable citation chunks, usage includes serverToolUse, and streamAIWithTools continues pause_turn responses automatically.',
+				heading: 'Anthropic hosted web search',
+				language: 'typescript'
+			},
 			{
 				code: 'import { createConversationTurnQueue } from "@absolutejs/ai/client";\n\nconst queue = createConversationTurnQueue({\n  execute: async (turn, { signal }) => runTurn(turn, signal),\n});\n\nqueue.enqueue({ content: "First" });\nqueue.enqueue({ content: "Send this after the first reply" });',
 				description:
@@ -8475,10 +9221,17 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'Standalone AI runtime and provider package extracted from AbsoluteJS.',
 				details: [
-					'This package currently focuses on generic AI/chat/provider functionality. RAG remains a separate package.',
-					'Provider traffic can cross a trusted control plane without reimplementing a vendor protocol. remoteProvider() carries normalized provider parameters and chunks over SSE, while createProviderProxyResponse() hosts any AIProviderConfig with pre-first-token and inter-token heartbeats. Provider callbacks and abort objects never cross the wire. The Anthropic provider also accepts an injectable fetch, allowing hosts to retain egress policy, tracing, and test transports.'
+					'This package currently focuses on generic AI/chat/provider functionality. RAG remains a separate package.'
 				],
 				title: 'Overview'
+			},
+			{
+				description:
+					'The Anthropic provider can request native hosted web search without a custom client tool. Search blocks are replayable provider data, citations are emitted as portable citation chunks, usage includes serverToolUse, and streamAIWithTools continues pause_turn responses automatically.',
+				details: [
+					'Provider traffic can cross a trusted control plane without reimplementing a vendor protocol. remoteProvider() carries normalized provider parameters and chunks over SSE, while createProviderProxyResponse() hosts any AIProviderConfig with pre-first-token and inter-token heartbeats. Provider callbacks and abort objects never cross the wire. The Anthropic provider also accepts an injectable fetch, allowing hosts to retain egress policy, tracing, and test transports.'
+				],
+				title: 'Anthropic hosted web search'
 			},
 			{
 				description:
@@ -8509,11 +9262,39 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'"max_turns" — "aborted". Exactly one terminal (complete / stopped /'
 				],
 				title: 'SSE event stream (streamAIToSSE)'
+			},
+			{
+				description:
+					'@absolutejs/ai/openrouter uses the shared provider contract and OpenAI-compatible stream parser while adding OpenRouter-specific routing, attribution, cost metadata, and local model-policy enforcement.',
+				details: [
+					'The adapter intentionally has no built-in geopolitical model list. Omitting allowedModels exposes the full OpenRouter catalog; applications that need a restricted catalog can define their own allowedModels and allowedProviders policy. Auto Router is fully supported with openrouter/auto (or openrouter/auto-beta), a sticky sessionId, and its typed plugin controls:',
+					"Under a strict policy, Auto Router's allowed_models is checked locally along with fallback, Fusion, advisor, subagent, and other indirectly selected models.",
+					"Provider usage callbacks include OpenRouter's reported costCredits, upstreamInferenceCostCredits, cache-read/write token counts, and reasoning tokens when those fields are present in the final streaming usage message. Hosted-tool counters are exposed as serverToolUse.",
+					'OpenRouter-specific features are available per request without weakening the portable provider contract:',
+					"Other typed request options include presets, plugins, per-call provider routing, message transforms, native reasoning controls, prompt and response caching, text-plus-audio output, verbosity, user attribution, and an extraBody escape hatch for new OpenRouter parameters. The escape hatch cannot replace models, fallbacks, providers, presets, messages, plugins, or tools; those fields use policy-aware typed options instead. Advisor, Fusion, Shell, Subagent, model search, web search/fetch, image generation, Datetime, and Apply Patch server tools have typed wire parameters and documented range checks. OpenRouter's old web plugin is deprecated; use openrouter:web_search instead.",
+					'URL images and PDFs, base64 audio, and URL/base64 video inputs use the ordinary AbsoluteJS content-block contract. URL citations are emitted as citation chunks. The final done chunk includes the generation ID, resolved model, selected inference provider, service tier, cache headers, and OpenRouter router metadata when reported.',
+					'OpenRouter platform client',
+					'createOpenRouterClient() covers model/provider discovery, embeddings, reranking, streamed and non-streamed image generation, reusable files, Responses, speech, typed transcription, video jobs and downloads, beta batches, presets, workspaces and budgets, activity/analytics, task classifications, credits, key metadata, and generation content. It also exports verifyOpenRouterWebhookSignature() for video completion webhooks. Its typed operations enforce the same model allowlist. request() and requestRaw() are forward-compatible access to new or administrative OpenRouter endpoints. User-filtered model discovery and ZDR endpoint previews honor the local model policy, so catalog UIs cannot accidentally reintroduce filtered models.',
+					"Batch traffic uses OpenRouter's separate /api/beta/batches API and returns inline typed results. estimateOpenRouterModelCost() calculates prompt, completion, request, image, web-search, reasoning, and cache costs directly from model-discovery pricing fields.",
+					'OAuth helpers cover S256 PKCE, web and headless authorization URLs, code exchange, authenticated code creation, and user key deep-links:',
+					'Complete OpenRouter management SDK',
+					"The inference adapter stays small and policy-aware. The separate @absolutejs/ai/openrouter/sdk entry point configures and exposes OpenRouter's official OpenAPI-generated TypeScript SDK for the complete administrative and data surface:"
+				],
+				title: 'OpenRouter'
+			},
+			{
+				description:
+					'@absolutejs/ai/models is a browser-safe, dependency-free catalog. Use getModelMetadata(provider, id) and modelCapabilities(metadata) to build model selectors. Metadata separates input modalities, output modalities, and provider features, with source URLs and a review date. Unknown IDs return undefined; absence of a badge is not evidence of unsupported functionality.',
+				details: [
+					'These are provider capabilities, not application enablement or account entitlement. Consumers must separately explain whether attachments, hosted search, structured output, and media generation are enabled in their UI and endpoint. Context windows are documented provider limits, not a substitute for runtime token budgeting. Regional features are omitted when they are not consistently supported.',
+					'@absolutejs/ai/research separates an injected SearchProvider from evidence-only synthesis. It returns sources, findings, searches, limitations and explicit availability, and excludes invented source references/quotes. Quotation checks establish provenance; they are not a substitute for claim entailment or entity review. Hosts can set maxRetries: 0 on one-shot or stream requests when they own attempt accounting, and independently bound maxRepairAttempts and disable context recovery.'
+				],
+				title: 'Model capability metadata'
 			}
 		],
 		repository: 'https://github.com/absolutejs/ai',
 		subpackages: [],
-		version: '0.0.49'
+		version: '0.2.7'
 	},
 	{
 		api: [],
@@ -8988,6 +9769,36 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'ArtifactBatchGenerationInput',
+						signature: 'type ArtifactBatchGenerationInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactBatchGenerationItem',
+						signature: 'type ArtifactBatchGenerationItem'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactBatchGeneratorService',
+						signature: 'type ArtifactBatchGeneratorService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactGenerationValidationIssue',
+						signature: 'type ArtifactGenerationValidationIssue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validateGeneratedArtifactFormats',
+						signature: 'validateGeneratedArtifactFormats'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'STANDARD_ARTIFACT_KIND_NAMES',
 						signature: 'STANDARD_ARTIFACT_KIND_NAMES'
 					},
@@ -9144,6 +9955,54 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'ArtifactBatchCommitMode',
+						signature: 'type ArtifactBatchCommitMode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactBatchCompletionReceipt',
+						signature: 'type ArtifactBatchCompletionReceipt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactBatchCreateInput',
+						signature: 'type ArtifactBatchCreateInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactBatchItemInput',
+						signature: 'type ArtifactBatchItemInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactBatchReceiptItem',
+						signature: 'type ArtifactBatchReceiptItem'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactBatchValidationIssue',
+						signature: 'type ArtifactBatchValidationIssue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactBatchValidationResult',
+						signature: 'type ArtifactBatchValidationResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactBatchValidator',
+						signature: 'type ArtifactBatchValidator'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'ArtifactBundleCreateInput',
 						signature: 'type ArtifactBundleCreateInput'
 					},
@@ -9182,6 +10041,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'ArtifactEventType',
 						signature: 'type ArtifactEventType'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ArtifactEvidenceReference',
+						signature: 'type ArtifactEvidenceReference'
 					},
 					{
 						description: '',
@@ -9284,6 +10149,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'JsonValue',
 						signature: 'type JsonValue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StagedArtifactBatch',
+						signature: 'type StagedArtifactBatch'
 					}
 				]
 			},
@@ -9295,7 +10166,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'manifest',
 						signature:
-							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, {\n    archive: (ownerId: string, artifactId: string) => Promise<import("./types").ArtifactRecord>;\n    attach: (ownerId: string, artifactId: string, input: import("./types").ArtifactAssetWriteInput, expectedRevision?: number) => Promise<import("./types").ArtifactRecord>;\n    attachBundle: (ownerId: string, artifactId: string, inputs: import("./types").ArtifactAssetWriteInput[], expectedRevision?: number) => Promise<import("./types").ArtifactRecord>;\n    collectAssetGarbage: (input: {\n        dryRun?: boolean;\n        minimumAgeMs?: number;\n    }) => Promise<import("./types").ArtifactGarbageCollectionResult>;\n    create: (ownerId: string, input: import("./types").ArtifactCreateInput) => Promise<import("./types").ArtifactRecord>;\n    createBundle: (ownerId: string, input: import("./types").ArtifactBundleCreateInput) => Promise<import("./types").ArtifactRecord>;\n    detach: (ownerId: string, artifactId: string, assetId: string, expectedRevision?: number) => Promise<import("./types").ArtifactRecord>;\n    get: (ownerId: string, artifactId: string) => Promise<import("./types").ArtifactRecord>;\n    '
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, {\n    archive: (ownerId: string, artifactId: string) => Promise<import("./types").ArtifactRecord>;\n    attach: (ownerId: string, artifactId: string, input: import("./types").ArtifactAssetWriteInput, expectedRevision?: number) => Promise<import("./types").ArtifactRecord>;\n    attachBundle: (ownerId: string, artifactId: string, inputs: import("./types").ArtifactAssetWriteInput[], expectedRevision?: number) => Promise<import("./types").ArtifactRecord>;\n    collectAssetGarbage: (input: {\n        dryRun?: boolean;\n        minimumAgeMs?: number;\n    }) => Promise<import("./types").ArtifactGarbageCollectionResult>;\n    create: (ownerId: string, input: import("./types").ArtifactCreateInput) => Promise<import("./types").ArtifactRecord>;\n    createBundle: (ownerId: string, input: import("./types").ArtifactBundleCreateInput) => Promise<import("./types").ArtifactRecord>;\n    stageBatch: (ownerId: string, input: import("./types").ArtifactBatchCreateInput, stageOptions?: {\n        validators?: import("./types").ArtifactBatchValidator[];\n    }) => Promise<import("./types").StagedArtifactBatch>;\n    detach: '
 					}
 				]
 			},
@@ -9431,7 +10302,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'ArtifactRAGIndexStateWriter',
 						signature:
-							'type ArtifactRAGIndexStateWriter = {\n    getIndexingState(ownerId: string, artifactId: string): Promise<{\n        documentIds: string[];\n    } | null>;\n    markIndexing(ownerId: string, artifactId: string, input: {\n        documentIds?: string[];\n        error?: string;\n        revision: number;\n        status: "failed" | "indexed" | "pending" | "stale";\n    }): Promise<unknown>;\n};'
+							'type ArtifactRAGIndexStateWriter = {\n    getIndexingState(ownerId: string, artifactId: string): Promise<{\n        documentIds: string[];\n    } | null>;\n    markIndexing(ownerId: string, artifactId: string, input: {\n        documentIds?: string[];\n        error?: string;\n        revision: number;\n        status: "failed" | "indexed" | "partial" | "pending" | "stale";\n    }): Promise<unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ArtifactRAGIndexFailure',
+						signature:
+							'type ArtifactRAGIndexFailure = {\n    contentType: string;\n    error: string;\n    name: string;\n    source: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ArtifactRAGIndexReceipt',
+						signature:
+							'type ArtifactRAGIndexReceipt = {\n    artifactId: string;\n    documentIds: string[];\n    failures: ArtifactRAGIndexFailure[];\n    indexedUploads: number;\n    revision: number;\n    status: "failed" | "indexed" | "partial";\n    totalUploads: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'ArtifactRAGPartialIndexError',
+						signature:
+							'class ArtifactRAGPartialIndexError extends Error {\n    readonly receipt: ArtifactRAGIndexReceipt;\n    constructor(receipt: ArtifactRAGIndexReceipt);\n}'
 					},
 					{
 						description:
@@ -9446,7 +10338,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'createArtifactRAGIndexCoordinator',
 						signature:
-							'const createArtifactRAGIndexCoordinator: (options: {\n    reader: ArtifactRAGAssetReader;\n    service: ArtifactRAGIndexStateWriter;\n    target: ArtifactRAGIndexTarget;\n}) => {\n    index: (artifact: ArtifactRecord) => Promise<{\n        documentIds: string[];\n    }>;\n};'
+							'const createArtifactRAGIndexCoordinator: (options: {\n    failureMode?: "fail_fast" | "isolate_uploads";\n    reader: ArtifactRAGAssetReader;\n    service: ArtifactRAGIndexStateWriter;\n    target: ArtifactRAGIndexTarget;\n}) => {\n    index: (artifact: ArtifactRecord) => Promise<ArtifactRAGIndexReceipt>;\n};'
 					},
 					{
 						description: '',
@@ -9462,8 +10354,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 		commands: [
 			{
 				command:
-					"rm -rf dist && bun build src/index.ts src/drizzle.ts src/manifest.ts src/rag.ts --outdir dist --root ./src --target=bun --external @absolutejs/rag --external @sinclair/typebox --external @sinclair/typebox/value --external drizzle-orm --external 'drizzle-orm/*' --external drizzle-typebox && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+					"rm -rf dist && bun build src/index.ts src/drizzle.ts src/manifest.ts src/rag.ts --outdir dist --root ./src --target=bun --external @absolutejs/rag --external @sinclair/typebox --external @sinclair/typebox/value --external typebox --external 'typebox/*' --external drizzle-orm --external 'drizzle-orm/*' --external drizzle-typebox && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
 				name: 'build'
+			},
+			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
 			},
 			{
 				command: 'prettier --write "./**/*.{ts,json,md}"',
@@ -9493,7 +10389,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/artifacts/rag'
 		],
 		readmeDigest:
-			'b9fa58325813858435b4eb13c7a4d0e5b412b8bac51575220841dcb00d5aa90b',
+			'57e37c35c92b35ee10d3f76c5b69e8ed8b32c04a9b3fde3783c7e2a16a8ae276',
 		readmeSamples: [
 			{
 				code: 'import {\n  artifactDrizzleSchema,\n  createDrizzleArtifactStore,\n} from "@absolutejs/artifacts/drizzle";\n\nconst store = createDrizzleArtifactStore({ db });',
@@ -9540,7 +10436,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'datasets, code, images, audio, video, email, archives, and generic files',
 					'An optional bridge to @absolutejs/rag ingestion',
 					'Provider-neutral generation registries with atomic multi-file bundles',
-					'Revision-pinned or explicitly live publications'
+					'Staged, validate-before-commit multi-artifact batches with completion receipts'
 				],
 				title: 'What it owns'
 			},
@@ -9564,21 +10460,26 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'Use the bundled definitions directly or compose them with application-specific kinds:',
 				details: [
 					'File bytes stay in host storage. Artifact records retain opaque references with name, media type, size, checksum, role, and storage URI. The URI is not treated as a public URL and the package reads it only through the configured asset store. Detaching a file does not delete its bytes because older immutable revisions may still reference it.',
-					'Multiple generated files should use one staged transaction and therefore one artifact revision:'
+					'Multiple generated files should use one staged transaction and therefore one artifact revision:',
+					'When one job must produce several artifacts together, stage the complete batch, run domain validators before persistence, and commit it through a store that implements createBatch (the package Drizzle and memory stores do):',
+					'Every artifact carries its batch id, item key, evidence, and provenance. commit() returns the durable reconciliation receipt: artifact ids, revisions, atomicity, validation outcome, and any archived compensation. The default mode requires an atomic ArtifactStore.createBatch. Hosts that cannot provide a transaction may explicitly select archive_on_failure; completed earlier writes are then archived and reported as rolled_back or partial_failure. Calling rollback() before commit releases all staged asset transactions.'
 				],
 				title: 'File-backed artifact kinds'
 			},
 			{
 				description:
 					'Generators are provider-neutral. They return validated structured content and zero or more file writes; the registry commits those outputs through the same artifact bundle lifecycle:',
-				details: [],
+				details: [
+					'Generators may expose a validate function. The bundled validateGeneratedArtifactFormats validator checks CSV row structure, RFC 822 headers, ZIP readability, and PPTX package/XML integrity before persistence. Generate several independent artifacts with one atomic receipt through the same registry:',
+					'Generation validators run after every output is staged and before anything is committed. Validation failures return a rolled-back completion receipt keyed to the invalid output.'
+				],
 				title: 'Generation'
 			},
 			{
 				description:
 					'The optional @absolutejs/artifacts/rag entry point resolves one current or historical artifact record into the upload contract already accepted by @absolutejs/rag. Structured content is included as JSON and every attached file is included without exposing its storage URI:',
 				details: [
-					'createArtifactRAGIndexCoordinator wraps that conversion with durable pending, indexed, and failed state. It removes document IDs from the previous indexed revision after the replacement succeeds.'
+					'createArtifactRAGIndexCoordinator wraps that conversion with durable pending, indexed, and failed state. It removes document IDs from the previous indexed revision after the replacement succeeds. Set failureMode to "isolate_uploads" to index structured content and assets independently. A bad asset then produces a typed partial receipt while preserving successful document ids; obsolete ids are removed only after a fully successful revision.'
 				],
 				title: 'RAG ingestion'
 			},
@@ -9611,7 +10512,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/artifacts',
 		subpackages: [],
-		version: '0.1.4'
+		version: '0.3.1'
 	},
 	{
 		api: [
@@ -27775,7 +28676,27 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'manifest',
 						signature:
-							'const manifest: import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>;'
+							'const manifest: PackageManifest<Record<string, never>, never>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/egress/transport',
+				symbols: [
+					{
+						description:
+							'Shared conservative public-address classifier; caller retains destination policy.',
+						kind: 'value',
+						name: 'isPublicNetworkAddress',
+						signature:
+							'const isPublicNetworkAddress: (input: string) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'pinnedPublicRequest',
+						signature:
+							'const pinnedPublicRequest: (request: Request, options: {\n    hostname: string;\n    address: string;\n    maxResponseBytes: number;\n    request?: typeof httpsRequest;\n}) => Promise<Response>;'
 					}
 				]
 			}
@@ -27784,12 +28705,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 		commands: [
 			{
 				command:
-					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --target=bun --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
+					'rm -rf dist && bun build src/index.ts src/transport.ts src/manifest.ts --outdir dist --target=bun --external @sinclair/typebox && tsc -p tsconfig.build.json && absolute-manifest emit',
 				name: 'build'
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run build',
+					'bun run format && bun run typecheck && bun run test && bun run build && absolute-changelog check',
 				name: 'check:package'
 			},
 			{
@@ -27815,10 +28736,11 @@ export const ecosystemProjects: EcosystemProject[] = [
 		publicExports: [
 			'@absolutejs/egress',
 			'@absolutejs/egress/manifest',
-			'@absolutejs/egress/manifest.json'
+			'@absolutejs/egress/manifest.json',
+			'@absolutejs/egress/transport'
 		],
 		readmeDigest:
-			'048fe45117be49475d83b9cf0c6ed84b42946bbc953daa7fd5ff13fd08b4993c',
+			'77965b179b84e131ca107530bcdf10d3caa16373383a79d3dfa70559413ef224',
 		readmeSamples: [
 			{
 				code: 'const policy = createEgressPolicy({\n  allowedHosts: ["api.stripe.com", "*.githubusercontent.com"],\n  resolver: resolvePublicDns,\n});\n\nconst agentFetch = createEgressFetch({\n  policy,\n  transport: createPinnedHttpsTransport(),\n  credentials: ({ url }) =>\n    url.hostname === "api.stripe.com"\n      ? { authorization: `Bearer ${stripeToken}` }\n      : undefined,\n  audit: writeSecurityEvent,\n});',
@@ -27843,13 +28765,15 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				description:
 					'Caller-supplied Authorization, Cookie, Host, and Proxy-Authorization headers are always stripped. Credentials come only from the scoped provider and are recomputed for each redirect destination.',
-				details: [],
+				details: [
+					'@absolutejs/egress/transport exposes conservative public-address classification and bounded DNS-pinned HTTP/HTTPS requests for packages such as RAG. This low-level API is not a policy engine: the caller owns hostname authorization, all-answer DNS validation, redirects, request limits and decompression. createPinnedHttpsTransport retains the existing allowlisted HTTPS egress contract.'
+				],
 				title: 'Credential isolation'
 			}
 		],
 		repository: 'https://github.com/absolutejs/egress',
 		subpackages: [],
-		version: '0.2.0'
+		version: '0.3.1'
 	},
 	{
 		api: [
@@ -42376,6 +43300,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'createRAGPagedPDFExtractor',
+						signature: 'createRAGPagedPDFExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGPagedPDFExtractorOptions',
+						signature: 'type RAGPagedPDFExtractorOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'ragChat',
 						signature: 'ragChat'
 					},
@@ -42840,18 +43776,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'createRAGChunkingRegistry',
 						signature: 'createRAGChunkingRegistry'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createRAGImageOCRExtractor',
-						signature: 'createRAGImageOCRExtractor'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createRAGMediaFileExtractor',
-						signature: 'createRAGMediaFileExtractor'
 					}
 				]
 			},
@@ -43127,6 +44051,85 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'runRAGEvaluationSuite',
 						signature: 'runRAGEvaluationSuite'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchRequest',
+						signature:
+							'type ResearchRequest = Pick<ResearchInput, "query" | "task" | "freshness">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchState',
+						signature:
+							'type ResearchState = {\n    status: "idle" | "running" | "complete" | "cancelled" | "error";\n    result: ResearchResult | null;\n    progress: ResearchProgress | null;\n    error: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchClientOptions',
+						signature:
+							'type ResearchClientOptions = {\n    path?: string;\n    fetch?: typeof fetch;\n    headers?: () => HeadersInit;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchClient',
+						signature:
+							'const createResearchClient: (options?: ResearchClientOptions) => {\n    run: (input: ResearchRequest) => Promise<ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description:
+							'HTML binding uses textContent, never model-produced HTML. Returns cleanup.',
+						kind: 'value',
+						name: 'bindResearchForm',
+						signature:
+							'const bindResearchForm: (form: HTMLFormElement, output: HTMLElement, options?: ResearchClientOptions) => {\n    dispose: () => void;\n    run: (input: ResearchRequest) => Promise<ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexRequests',
+						signature:
+							'type WebIndexRequests = {\n    stats: {\n        generation?: string;\n    };\n    history: {\n        url: string;\n        generation?: string;\n    };\n    search: {\n        query: string;\n        count?: number;\n        mode?: "web" | "context";\n    };\n    projections: {\n        kind: "company" | "person" | "event";\n        generation?: string;\n    };\n    enqueue: {\n        urls: string[];\n        generation?: string;\n    };\n    run: {\n        generation?: string;\n    };\n    remove: {\n        url: string;\n        generation?: string;\n    };\n    restore: {\n        url: string;\n        generation?: string;\n    };\n    rebuild: {\n        from: string;\n        to: string;\n        limit: number;\n        after?: string;\n    };\n    activate: {\n        generation: string;\n        expected: string;\n        evidence: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexResponses',
+						signature:
+							'type WebIndexResponses = {\n    stats: WebIndexStats;\n    history: WebIndexDocument[];\n    search: SearchResult;\n    projections: Array<WebIndexProjection & {\n        url: string;\n        version: string;\n        fetchedAt: string;\n    }>;\n    enqueue: {\n        enqueued: number;\n    };\n    run: WebIndexRun;\n    remove: {\n        removed: true;\n    };\n    restore: {\n        restored: true;\n    };\n    rebuild: {\n        enqueued: number;\n        next?: string;\n    };\n    activate: {\n        activated: boolean;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexClientState',
+						signature:
+							'type WebIndexClientState = {\n    status: "idle" | "running" | "complete" | "cancelled" | "error";\n    operation: keyof WebIndexRequests | null;\n    result: WebIndexResponses[keyof WebIndexResponses] | null;\n    error: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexClientOptions',
+						signature:
+							'type WebIndexClientOptions = {\n    path?: string;\n    fetch?: typeof fetch;\n    headers?: () => HeadersInit;\n};'
+					},
+					{
+						description:
+							'One foreground operation per client. Superseding a call cancels its request, not already committed work.',
+						kind: 'value',
+						name: 'createWebIndexClient',
+						signature:
+							'const createWebIndexClient: (options?: WebIndexClientOptions) => {\n    call: <K extends keyof WebIndexRequests>(operation: K, input: WebIndexRequests[K]) => Promise<WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'bindWebIndexSearchForm',
+						signature:
+							'const bindWebIndexSearchForm: (form: HTMLFormElement, output: HTMLElement, options?: WebIndexClientOptions) => {\n    dispose: () => void;\n    call: <K extends keyof WebIndexRequests>(operation: K, input: WebIndexRequests[K]) => Promise<WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n};'
 					}
 				]
 			},
@@ -44424,6 +45427,20 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'useRAGStatus',
 						signature: 'useRAGStatus'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useResearch',
+						signature:
+							'const useResearch: (path?: string) => {\n    state: import("../client").ResearchState;\n    run: (input: import("../client").ResearchRequest) => Promise<import("../research").ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useWebIndex',
+						signature:
+							'const useWebIndex: (path?: string) => {\n    state: import("../client").WebIndexClientState;\n    call: <K extends keyof import("../client").WebIndexRequests>(operation: K, input: import("../client").WebIndexRequests[K]) => Promise<import("../client").WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
 					}
 				]
 			},
@@ -44531,6 +45548,20 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'useRAGStatus',
 						signature: 'useRAGStatus'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useResearch',
+						signature:
+							'const useResearch: (path?: string) => {\n    state: import("vue").ShallowRef<import("../client").ResearchState, import("../client").ResearchState>;\n    run: (input: import("../client").ResearchRequest) => Promise<import("../research").ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useWebIndex',
+						signature:
+							'const useWebIndex: (path?: string) => {\n    state: import("vue").ShallowRef<import("../client").WebIndexClientState, import("../client").WebIndexClientState>;\n    call: <K extends keyof import("../client").WebIndexRequests>(operation: K, input: import("../client").WebIndexRequests[K]) => Promise<import("../client").WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
 					}
 				]
 			},
@@ -44638,6 +45669,20 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'CreateRAGStreamResult',
 						signature: 'CreateRAGStreamResult'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchStore',
+						signature:
+							'const createResearchStore: (path?: string) => {\n    state: import("svelte/store").Readable<import("../client").ResearchState>;\n    run: (input: import("../client").ResearchRequest) => Promise<import("../research").ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createWebIndexStore',
+						signature:
+							'const createWebIndexStore: (path?: string) => {\n    state: import("svelte/store").Readable<import("../client").WebIndexClientState>;\n    call: <K extends keyof import("../client").WebIndexRequests>(operation: K, input: import("../client").WebIndexRequests[K]) => Promise<import("../client").WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
 					}
 				]
 			},
@@ -44661,6 +45706,20 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'RAGClientService',
 						signature: 'RAGClientService'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'ResearchService',
+						signature:
+							'class ResearchService {\n    connect(path?: string, destroyRef?: DestroyRef): {\n        state: import("@angular/core").Signal<import("../client").ResearchState>;\n        dispose: () => void;\n        run: (input: import("../client").ResearchRequest) => Promise<import("../research").ResearchResult>;\n        cancel: () => void;\n        getSnapshot: () => import("../client").ResearchState;\n        subscribe: (listener: () => void) => () => void;\n        reset: () => void;\n    };\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'WebIndexService',
+						signature:
+							'class WebIndexService {\n    connect(path?: string, destroyRef?: DestroyRef): {\n        state: import("@angular/core").Signal<import("../client").WebIndexClientState>;\n        dispose: () => void;\n        call: <K extends keyof import("../client").WebIndexRequests>(operation: K, input: import("../client").WebIndexRequests[K]) => Promise<import("../client").WebIndexResponses[K]>;\n        cancel: () => void;\n        getSnapshot: () => import("../client").WebIndexClientState;\n        subscribe: (listener: () => void) => () => void;\n        reset: () => void;\n    };\n}'
 					}
 				]
 			},
@@ -44675,6 +45734,674 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<CreateRAGCollectionOptions, RAGCollection>, "tools" | "contract" | "settings"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<RAGCollection>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<RAGCollection>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        defaultCandidateMultiplier: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        defaultModel: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        defaultTopK: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
 					}
 				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/web',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebEvidence',
+						signature: 'WebEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebLink',
+						signature: 'WebLink'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebImage',
+						signature: 'WebImage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebMedia',
+						signature: 'WebMedia'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebRedirect',
+						signature: 'WebRedirect'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchPublicWebResource',
+						signature: 'fetchPublicWebResource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validatePublicWebUrl',
+						signature: 'validatePublicWebUrl'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isPublicWebAddress',
+						signature: 'isPublicWebAddress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebReadError',
+						signature: 'WebReadError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebFetchResult',
+						signature: 'WebFetchResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebFetchOptions',
+						signature: 'WebFetchOptions'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebReadAttempt',
+						signature:
+							'type WebReadAttempt = {\n    method: "http" | "browser";\n    status: string;\n    httpStatus?: number;\n    extractedChars?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebReadResult',
+						signature:
+							'type WebReadResult = {\n    status: "ok" | "partial" | "error";\n    url: string;\n    finalUrl: string;\n    title: string | null;\n    text: string;\n    method: "http" | "browser";\n    truncated: boolean;\n    attempts: WebReadAttempt[];\n    error?: {\n        code: string;\n        message: string;\n    };\n    fetchedAt: string;\n    redirects: WebRedirect[];\n    evidence: WebEvidence;\n    limitations: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebRenderer',
+						signature:
+							'type WebRenderer = (url: string, options: {\n    signal: AbortSignal;\n}) => Promise<{\n    html: string;\n    text?: string;\n    url: string;\n    status: number;\n    redirects?: WebRedirect[];\n    settled?: boolean;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReadWebpageOptions',
+						signature:
+							'type ReadWebpageOptions = {\n    url: string;\n    render?: WebRenderer;\n    signal?: AbortSignal;\n    maxChars?: number;\n    mode?: "auto" | "browser";\n    fetchResource?: typeof fetchPublicWebResource;\n};'
+					},
+					{
+						description:
+							'Read prepared evidence, escalating thin HTML shells to a host-supplied browser.',
+						kind: 'value',
+						name: 'readRAGWebpage',
+						signature:
+							'const readRAGWebpage: (options: ReadWebpageOptions) => Promise<WebReadResult>;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'readRAGWebsite',
+						signature: 'readRAGWebsite'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWebsiteReaderClient',
+						signature: 'createWebsiteReaderClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseWebsiteServiceResult',
+						signature: 'parseWebsiteServiceResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebsiteServiceResult',
+						signature: 'type WebsiteServiceResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWebpageReaderClient',
+						signature: 'createWebpageReaderClient'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/web/playwright',
+				symbols: [
+					{
+						description:
+							'Fresh contexts share a browser, never cookies; all HTTP traffic uses pinned public DNS.',
+						kind: 'value',
+						name: 'createPlaywrightWebRenderer',
+						signature:
+							'const createPlaywrightWebRenderer: (options?: {\n    executablePath?: string;\n}) => {\n    render: WebRenderer;\n    ready: () => Promise<void>;\n    close: () => Promise<void>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/research',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createResearch',
+						signature: 'createResearch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'researchPlugin',
+						signature: 'researchPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderResearchResult',
+						signature: 'renderResearchResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResearchPluginOptions',
+						signature: 'type ResearchPluginOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'bindResearchReview',
+						signature: 'bindResearchReview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'researchLeaves',
+						signature: 'researchLeaves'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResearchSchema',
+						signature: 'ResearchSchema'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResearchStatic',
+						signature: 'ResearchStatic'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchOperation',
+						signature:
+							'type ResearchOperation = "search" | "read" | "plan" | "extract" | "review";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchProgress',
+						signature:
+							'type ResearchProgress = {\n    phase: ResearchOperation | "complete";\n    completed: number;\n    limit: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchField',
+						signature:
+							'type ResearchField = {\n    /** RFC 6901 JSON pointer, including array indices. */\n    path: string;\n    value: string | number | boolean | null;\n    verdict: "supported" | "unsupported" | "conflicting" | "unknown";\n    citations: {\n        sourceId: string;\n        quote: string;\n    }[];\n    reason: string;\n    /** Model judgments, not independent verification; all must pass for support. */\n    checks?: {\n        answersQuestion: boolean;\n        correctEntity: boolean;\n        correctTime: boolean;\n        preservesScope: boolean;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchResult',
+						signature:
+							'type ResearchResult<T = unknown> = {\n    id: string;\n    status: "reviewed" | "partial" | "empty" | "unavailable";\n    /** Only populated when every primitive field passed evidence review. */\n    data: T | null;\n    fields: ResearchField[];\n    sources: SearchSource[];\n    searches: SearchResult[];\n    limitations: string[];\n    generatedAt: string;\n    operations: {\n        kind: ResearchOperation;\n        status: "fulfilled" | "unknown";\n        usage?: AIUsage;\n        durationMs: number;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchTask',
+						signature:
+							'type ResearchTask<S extends ResearchSchema = ResearchSchema> = {\n    schema: S;\n    instructions?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchInput',
+						signature:
+							'type ResearchInput = {\n    queries?: string[];\n    requiredPhrases?: string[];\n    query: string;\n    task?: string;\n    freshness?: string;\n    signal?: AbortSignal;\n    onProgress?: (event: ResearchProgress) => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchLimits',
+						signature:
+							'type ResearchLimits = {\n    searches: number;\n    reads: number;\n    rounds: number;\n    timeoutMs: number;\n    evidenceChars: number;\n    outputTokens: number;\n    fields: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchConfig',
+						signature:
+							'type ResearchConfig = {\n    /** Optional host accounting adapter; defaults to the standard AI generator. */\n    generateObject?: typeof import("@absolutejs/ai").generateObjectAI;\n    budget?: import("./budget").ResearchBudgetConfig;\n    search: SearchProvider;\n    provider: AIProviderConfig;\n    model: string;\n    /** Optional separate reviewer. Host reservations must price this model too. */\n    reviewer?: {\n        provider: AIProviderConfig;\n        model: string;\n    };\n    tasks?: Record<string, ResearchTask>;\n    limits?: Partial<ResearchLimits>;\n    /** Explicit shared-public or tenant scope. Omit to disable search caching. */\n    cache?: {\n        scope: string;\n        store?: SearchCacheStore;\n        ttlMs?: number;\n        capacity?: number;\n    };\n    reader?: (options: ReadWebpageOptions) => Promise<WebReadResult>;\n    render?: ReadWebpageOptions["render"];\n    /** Called before each operation. May atomically reserve tenant budget or deny. */\n    admit?: (operation: {\n        runId: string;\n        kind: ResearchOperation;\n        signal: AbortSignal;\n    }) => Promise<false | {\n        settle: (outcome: {\n            status: "fulfilled" | "unknown";\n            usage'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchRuntime',
+						signature:
+							'type ResearchRuntime = {\n    run: (input: ResearchInput) => Promise<ResearchResult>;\n    extract: <S extends ResearchSchema>(task: ResearchTask<S>, input: ResearchInput) => Promise<ResearchResult<ResearchStatic<S>>>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchCheckpoint',
+						signature:
+							'type ResearchCheckpoint = {\n    revision: number;\n    value: unknown;\n    fingerprint: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchClaim',
+						signature:
+							'type ResearchClaim = ResearchCheckpoint & {\n    token: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchDelivery',
+						signature:
+							'type ResearchDelivery = {\n    id: string;\n    key: string;\n    payload: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchWorkflowStore',
+						signature:
+							'type ResearchWorkflowStore = {\n    claim: (key: string, fingerprint: string, leaseMs: number) => Promise<ResearchClaim | null>;\n    /** Commit state and append delivery records atomically, fenced against lease expiry and takeover. */\n    commit: (key: string, claim: ResearchClaim, value: unknown, events?: ResearchDelivery[]) => Promise<boolean>;\n    release: (key: string, token: string) => Promise<void>;\n    deliveries: (key: string, limit: number) => Promise<ResearchDelivery[]>;\n    acknowledge: (key: string, id: string) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'researchKey',
+						signature:
+							'const researchKey: (value: unknown) => Promise<string>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMemoryResearchWorkflowStore',
+						signature:
+							'const createMemoryResearchWorkflowStore: (now?: () => number) => ResearchWorkflowStore;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchSqlClient',
+						signature:
+							'type ResearchSqlClient = {\n    unsafe: (query: string, parameters?: unknown[]) => PromiseLike<Record<string, unknown>[]>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'researchWorkflowPostgresSchemaSql',
+						signature:
+							'const researchWorkflowPostgresSchemaSql: () => string;'
+					},
+					{
+						description:
+							'SQL operations use database time and one fenced statement for state plus outbox.',
+						kind: 'value',
+						name: 'createPostgresResearchWorkflowStore',
+						signature:
+							'const createPostgresResearchWorkflowStore: (sql: ResearchSqlClient) => ResearchWorkflowStore;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchCriterion',
+						signature:
+							'type ResearchCriterion = {\n    id: string;\n    description: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchCandidate',
+						signature:
+							'type ResearchCandidate = {\n    name: string;\n    domain: string;\n    evidence: ResearchResult;\n    criteria: {\n        id: string;\n        verdict: "matched" | "not_matched" | "unknown";\n        evidence: ResearchResult;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'discoverResearchCompanies',
+						signature:
+							'const discoverResearchCompanies: (runtime: ResearchRuntime, input: {\n    query: string;\n    criteria: ResearchCriterion[];\n    limit?: number;\n    signal?: AbortSignal;\n}) => Promise<{\n    discovery: ResearchResult<{\n        companies: {\n            name: string;\n            domain: string;\n        }[];\n    }>;\n    candidates: ResearchCandidate[];\n    accepted: ResearchCandidate[];\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchBatchItem',
+						signature:
+							'type ResearchBatchItem = {\n    id: string;\n    query: string;\n    task?: string;\n    freshness?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchMonitorEvent',
+						signature:
+							'type ResearchMonitorEvent = {\n    id: string;\n    occurredAt: string;\n    fields: string[];\n    payload: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchWorkflows',
+						signature:
+							'const createResearchWorkflows: (options: {\n    runtime: ResearchRuntime;\n    store: ResearchWorkflowStore;\n    scope: string;\n    version: string;\n    leaseMs?: number;\n    now?: () => number;\n}) => {\n    batch(input: {\n        id: string;\n        items: ResearchBatchItem[];\n        signal?: AbortSignal;\n    }): Promise<{\n        id: string;\n        status: "complete" | "busy" | "lease_lost";\n        result?: ResearchResult;\n    }[]>;\n    /** Schedule this function using the existing Queue/cron infrastructure. It owns no timer. */\n    monitor(input: {\n        id: string;\n        query: string;\n        task?: string;\n        freshness?: string;\n        signal?: AbortSignal;\n        select: (result: ResearchResult) => ResearchMonitorEvent[];\n    }): Promise<{\n        status: "busy";\n        events: number;\n        result?: undefined;\n    } | {\n        status: "incomplete";\n        events: number;\n        result: ResearchResult<unknown>;\n    } | {\n        status: "updated" | "baseline" | "lease_lost";\n        events: number;\n        result: ResearchResult<unknown>;\n    }>;\n    /** Delivery is at-least-once: the receiver MUST deduplicate using event.id. */\n    deliverMonitor(id: string'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'researchMonitorTask',
+						signature:
+							'const researchMonitorTask: {\n    schema: import("@sinclair/typebox").TObject<{\n        events: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n            entity: import("@sinclair/typebox").TString;\n            type: import("@sinclair/typebox").TString;\n            occurredAt: import("@sinclair/typebox").TString;\n            summary: import("@sinclair/typebox").TString;\n        }>>;\n    }>;\n    instructions: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'selectResearchMonitorEvents',
+						signature:
+							'const selectResearchMonitorEvents: (result: ResearchResult) => ResearchMonitorEvent[];'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'researchManifest',
+						signature: 'researchManifest'
+					},
+					{
+						description:
+							'Feed research evidence into the existing @absolutejs/rag/quality evaluators.',
+						kind: 'value',
+						name: 'researchGroundingCase',
+						signature:
+							'const researchGroundingCase: (id: string, query: string, result: ResearchResult, expectedSources?: string[]) => RAGAnswerGroundingEvaluationCase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchAcceptance',
+						signature:
+							'type ResearchAcceptance = {\n    accepted: number;\n    rejected: number;\n    reviewMs: number;\n    reviewer: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchEvaluationCase',
+						signature:
+							'type ResearchEvaluationCase = {\n    id: string;\n    input: Pick<ResearchInput, "query" | "task" | "freshness">;\n    expectedSources?: string[];\n    publishedAfter?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evaluateResearch',
+						signature:
+							'const evaluateResearch: (options: {\n    runtime: ResearchRuntime;\n    cases: ResearchEvaluationCase[];\n    signal?: AbortSignal;\n    /** Supply independent human decisions; absence means unreviewed, never zero errors. */\n    review?: (test: ResearchEvaluationCase, result: ResearchResult) => Promise<ResearchAcceptance>;\n    /** Total cost must include search, reads, planning, extraction, review and failed attempts. */\n    cost?: (result: ResearchResult) => Promise<number | null>;\n}) => Promise<{\n    cases: {\n        id: string;\n        result: ResearchResult<unknown>;\n        durationMs: number;\n        acceptance: ResearchAcceptance | null;\n        costUsd: number | null;\n        costPerAcceptedFinding: number | null;\n        publicationFreshness: {\n            dated: number;\n            fresh: number;\n            unknown: number;\n        } | null;\n        groundingCase: RAGAnswerGroundingEvaluationCase;\n    }[];\n    independentlyReviewed: number;\n    totalCostUsd: number | null;\n}>;'
+					},
+					{
+						description:
+							'Structural adapter for @absolutejs/billing/provider-budget; no second ledger.',
+						kind: 'type',
+						name: 'ResearchBudgetConfig',
+						signature:
+							'type ResearchBudgetConfig = {\n    ledger: {\n        reserve: (input: {\n            id: string;\n            scope: string;\n            period: string;\n            reserveMicros: number;\n            maxMicros: number;\n            maxRequests: number;\n        }) => Promise<boolean>;\n        settle: (id: string, status: "fulfilled" | "rejected" | "unknown", actualMicros: number | null) => Promise<void>;\n    };\n    scope: string;\n    period: () => string;\n    maxMicros: number;\n    maxRequests: number;\n    /** Conservative ceilings for configured models, token limits, search and reader. */\n    reserveMicros: Record<ResearchOperation, number>;\n    actualMicros: (kind: ResearchOperation, outcome: Outcome) => number | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchBudgetAdmission',
+						signature:
+							'const createResearchBudgetAdmission: (config: ResearchBudgetConfig) => Admission;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/research/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchRequest',
+						signature:
+							'type ResearchRequest = Pick<ResearchInput, "query" | "task" | "freshness">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchState',
+						signature:
+							'type ResearchState = {\n    status: "idle" | "running" | "complete" | "cancelled" | "error";\n    result: ResearchResult | null;\n    progress: ResearchProgress | null;\n    error: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchClientOptions',
+						signature:
+							'type ResearchClientOptions = {\n    path?: string;\n    fetch?: typeof fetch;\n    headers?: () => HeadersInit;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchClient',
+						signature:
+							'const createResearchClient: (options?: ResearchClientOptions) => {\n    run: (input: ResearchRequest) => Promise<ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description:
+							'HTML binding uses textContent, never model-produced HTML. Returns cleanup.',
+						kind: 'value',
+						name: 'bindResearchForm',
+						signature:
+							'const bindResearchForm: (form: HTMLFormElement, output: HTMLElement, options?: ResearchClientOptions) => {\n    dispose: () => void;\n    run: (input: ResearchRequest) => Promise<ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/web-index',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWebIndex',
+						signature: 'createWebIndex'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresWebIndexStore',
+						signature: 'createPostgresWebIndexStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'webIndexPostgresSchemaSql',
+						signature: 'webIndexPostgresSchemaSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexDatabase',
+						signature: 'WebIndexDatabase'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexSql',
+						signature: 'WebIndexSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexScope',
+						signature: 'WebIndexScope'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexGeneration',
+						signature: 'WebIndexGeneration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexDocument',
+						signature: 'WebIndexDocument'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexPassage',
+						signature: 'WebIndexPassage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexProjection',
+						signature: 'WebIndexProjection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexStats',
+						signature: 'WebIndexStats'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexStore',
+						signature: 'WebIndexStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexOptions',
+						signature: 'WebIndexOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexRun',
+						signature: 'WebIndexRun'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexRuntime',
+						signature: 'WebIndexRuntime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'webIndexPlugin',
+						signature: 'webIndexPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderWebIndexStats',
+						signature: 'renderWebIndexStats'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexPluginOptions',
+						signature: 'WebIndexPluginOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexOperation',
+						signature: 'WebIndexOperation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'startWebIndexWorker',
+						signature: 'startWebIndexWorker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexWorkerOptions',
+						signature: 'WebIndexWorkerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWebIndexProjector',
+						signature: 'createWebIndexProjector'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexProjectorOptions',
+						signature: 'WebIndexProjectorOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/web-index/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexRequests',
+						signature:
+							'type WebIndexRequests = {\n    stats: {\n        generation?: string;\n    };\n    history: {\n        url: string;\n        generation?: string;\n    };\n    search: {\n        query: string;\n        count?: number;\n        mode?: "web" | "context";\n    };\n    projections: {\n        kind: "company" | "person" | "event";\n        generation?: string;\n    };\n    enqueue: {\n        urls: string[];\n        generation?: string;\n    };\n    run: {\n        generation?: string;\n    };\n    remove: {\n        url: string;\n        generation?: string;\n    };\n    restore: {\n        url: string;\n        generation?: string;\n    };\n    rebuild: {\n        from: string;\n        to: string;\n        limit: number;\n        after?: string;\n    };\n    activate: {\n        generation: string;\n        expected: string;\n        evidence: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexResponses',
+						signature:
+							'type WebIndexResponses = {\n    stats: WebIndexStats;\n    history: WebIndexDocument[];\n    search: SearchResult;\n    projections: Array<WebIndexProjection & {\n        url: string;\n        version: string;\n        fetchedAt: string;\n    }>;\n    enqueue: {\n        enqueued: number;\n    };\n    run: WebIndexRun;\n    remove: {\n        removed: true;\n    };\n    restore: {\n        restored: true;\n    };\n    rebuild: {\n        enqueued: number;\n        next?: string;\n    };\n    activate: {\n        activated: boolean;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexClientState',
+						signature:
+							'type WebIndexClientState = {\n    status: "idle" | "running" | "complete" | "cancelled" | "error";\n    operation: keyof WebIndexRequests | null;\n    result: WebIndexResponses[keyof WebIndexResponses] | null;\n    error: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexClientOptions',
+						signature:
+							'type WebIndexClientOptions = {\n    path?: string;\n    fetch?: typeof fetch;\n    headers?: () => HeadersInit;\n};'
+					},
+					{
+						description:
+							'One foreground operation per client. Superseding a call cancels its request, not already committed work.',
+						kind: 'value',
+						name: 'createWebIndexClient',
+						signature:
+							'const createWebIndexClient: (options?: WebIndexClientOptions) => {\n    call: <K extends keyof WebIndexRequests>(operation: K, input: WebIndexRequests[K]) => Promise<WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'bindWebIndexSearchForm',
+						signature:
+							'const bindWebIndexSearchForm: (form: HTMLFormElement, output: HTMLElement, options?: WebIndexClientOptions) => {\n    dispose: () => void;\n    call: <K extends keyof WebIndexRequests>(operation: K, input: WebIndexRequests[K]) => Promise<WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n};'
+					}
+				]
 			}
 		],
 		category: 'AI',
@@ -44682,6 +46409,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				command: 'bun run scripts/build.ts && absolute-manifest emit',
 				name: 'build'
+			},
+			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
 			},
 			{
 				command: 'prettier --write .',
@@ -44694,6 +46425,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				command: 'bun test',
 				name: 'test'
+			},
+			{
+				command: 'tsc --project tsconfig.research-types.json',
+				name: 'test:research-types'
 			},
 			{
 				command: 'tsc --noEmit --project tsconfig.json',
@@ -44719,10 +46454,16 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/rag/svelte',
 			'@absolutejs/rag/angular',
 			'@absolutejs/rag/manifest',
-			'@absolutejs/rag/manifest.json'
+			'@absolutejs/rag/manifest.json',
+			'@absolutejs/rag/web',
+			'@absolutejs/rag/web/playwright',
+			'@absolutejs/rag/research',
+			'@absolutejs/rag/research/client',
+			'@absolutejs/rag/web-index',
+			'@absolutejs/rag/web-index/client'
 		],
 		readmeDigest:
-			'c8895f0118ae1e3aa0ba50635bdd5a13ade734f9ce429fee70cdfe57cf07ecd6',
+			'd7a4b2ab2735afdfc91f63c16200f559acdedd2663122a596b04c0f2dbd22886',
 		readmeSamples: [
 			{
 				code: "import {\n\tcreateInMemoryRAGStore,\n\tcreateRAGCollection,\n\tingestRAGDocuments,\n\topenaiEmbeddings,\n\tsearchDocuments\n} from '@absolutejs/rag';\n\nconst collection = createRAGCollection({\n\tembedding: openaiEmbeddings({\n\t\tapiKey: process.env.OPENAI_API_KEY ?? '',\n\t\tdefaultModel: 'text-embedding-3-small'\n\t}),\n\tstore: createInMemoryRAGStore()\n});\n\nawait ingestRAGDocuments(collection, {\n\tdocuments: [{ id: 'intro', text: 'AbsoluteJS ships typed Bun primitives.' }]\n});\n\nconst results = await searchDocuments(collection, {\n\tquery: 'What does AbsoluteJS ship?',\n\ttopK: 3\n});",
@@ -44735,6 +46476,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description: 'Working example for Installation.',
 				heading: 'Installation',
 				language: 'sh'
+			},
+			{
+				code: "import { readRAGWebpage } from '@absolutejs/rag/web';\nimport { createPlaywrightWebRenderer } from '@absolutejs/rag/web/playwright';\n\nconst browser = createPlaywrightWebRenderer();\ntry {\n  const page = await readRAGWebpage({\n    url: 'https://example.com',\n    render: browser.render,\n  });\n  // Check page.status and page.error before treating page.text as complete evidence.\n} finally {\n  await browser.close();\n}",
+				description:
+					'loadRAGDocumentFromURL loads a document; use prepareRAGDocument(doc).normalizedText for readable text. URL loading now honors response MIME types on extensionless URLs. For public websites, @absolutejs/rag/web provides readRAGWebpage with bounded responses, timeouts, prepared text, final URL, title, truncation and per-attempt retrieval diagnostics. It tries static HTML first and requests a browser for thin or empty application shells. A missing renderer returns rendering_required, not a claim that the website contains no information.',
+				heading: 'Public websites and JavaScript rendering',
+				language: 'typescript'
 			}
 		],
 		readmeTopics: [
@@ -44747,13 +46495,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				description:
 					'The built-in memory store supports development and tests. Published adapters provide PostgreSQL with pgvector, SQLite with optional vec0 acceleration, and Pinecone behind the same RAGVectorStore contract. Lexical and vector results can be fused, transformed, and reranked with provider or heuristic rerankers.',
-				details: [],
+				details: [
+					'Retrieval channel requirements',
+					'Lexical and hybrid retrieval require a store implementing queryLexical. A backend without that capability raises an actionable error before vector embedding/search instead of silently returning vector-only or empty results. Explicit vector retrieval remains supported on vector-only backends. Configure a lexical-capable adapter before requesting hybrid retrieval; a mode flag does not add a missing backend capability.',
+					'The built-in heuristic strategy preserves the requested retrieval mode when a query is scoped by source or document ID. Scope narrows the searchable corpus; it does not remove the need for exact keyword matches within that corpus.'
+				],
 				title: 'Retrieval and storage'
 			},
 			{
 				description:
 					'The ingestion pipeline handles files, directories, uploads, URLs, PDFs, office documents, archives, images, and media transcripts. Scheduled connectors can keep collections synchronized from email, GitHub, sitemaps, feeds, directories, and S3-compatible storage.',
-				details: [],
+				details: [
+					"Feed, sitemap and site-discovery sync sources use the bounded, DNS-pinned public web transport through final document ingestion. Private addresses and unsafe redirect destinations are rejected. Site discovery identifies itself as AbsoluteJSReader/1.0, respects agent-specific robots rules, Allow, wildcards and query paths, and checks each page redirect against its destination's policy. A robots 4xx response permits crawling except 429; network errors, 429 and 5xx abort the sync before reconciliation, preserving previously indexed documents. Robots policies are cached only within one sync run. A trusted host can inject fetchResource for isolated readers or deterministic tests; that adapter must preserve DNS pinning, response bounds and redirect validation. Direct URL and GitHub sync behavior is unchanged. Durable scheduling and corpus-wide crawl budgets remain separate from these source-level protections.",
+					'PDF uploads use the built-in PDF.js reader to decode compressed streams and font encodings, with page numbers retained in native text blocks for citations. The reader processes pages sequentially and does not impose an application intake page count or character limit. Upload/storage budgets and model context budgets belong to their respective layers; RAG chunks the extracted text for retrieval rather than sending the whole PDF to a model.',
+					'Scanned or image-only PDFs need an explicitly configured OCR provider through createRAGPDFOCRExtractor({ provider }). Empty text layers fail clearly in the default extractor. Invalid or password-protected documents propagate reader errors; they are not indexed from raw PDF operators. The PDF worker is included in the server bundle, including compiled Bun applications.'
+				],
 				title: 'Ingestion and source sync'
 			},
 			{
@@ -44769,14 +46525,28 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/rag/react, /vue, /svelte, and /angular provide framework bindings.',
 					'@absolutejs/rag/adapter-kit exposes the contracts used by vector-store adapters.',
 					'@absolutejs/rag/ui exposes presentation-neutral UI contracts.',
-					'Pair the retrieval runtime with @absolutejs/ai when retrieved context should feed a model or streaming assistant.'
+					'Pair the retrieval runtime with @absolutejs/ai when retrieved context should feed a model or streaming assistant.',
+					'Verbatim original text evidence',
+					'Use chunkRAGOriginalText({ sourceId, version, text }, options) when citations must resolve against an immutable text original. This opt-in path preserves whitespace and Unicode instead of normalizing or extracting document formats. Each chunk includes metadata.sourceLocator with the source ID, immutable version and UTF-16 start/end offsets. readRAGOriginalText validates identity, version and range before returning the exact original slice. Store and authorize the original separately; a locator is not an access grant.',
+					'createRAGOriginalTextTools({ collection, filter, loadSource, budget }) provides search_text_source and read_text_source AI tools. It requests real hybrid retrieval with diversity and verifies evidence against originals. filter is a server-owned scope; loadSource(id, version) must reauthorize every read and return null for inaccessible/deleted versions. The tools require budget: { maxTokens, countTokens } using the model tokenizer and a budget reserved by the AI context policy. Whole passages are selected within that budget; omitted passages are flagged rather than silently truncated. Add the final tools/instructions before budgeting the model request. Search traces are available through onTrace; they contain retrieval metadata and should not be copied wholesale into public logs. Servers may set searchTopK to an integer from 1 to 48 (default 12) for a smaller initial evidence lookup. Candidate ranking still considers up to 48 matches; authorization and token-budget checks are unchanged. A small initial result set does not establish that other facts are absent: retain broader search/read tools for missing or ambiguous evidence.',
+					'Keyword matching uses Unicode word segmentation and canonical normalization. English suffix rules only apply to ASCII words. This improves multilingual exact matches; it does not replace evaluation of the selected embedding model.',
+					'AI context policy compatibility',
+					'With the AI 0.1 context-policy release, RAG chat validates the final assembled retrieval context before every model request. Its contextPolicy config is forwarded to both WebSocket and SSE generation. Use a working token target or a saved-source recovery callback when appropriate. Providers without capacity support require an explicit contextPolicy: false raw opt-out. Older supported AI peers retain their previous behavior; upgrading RAG alone does not add the AI 0.1 capacity policy. No model-capacity numbers are defined in RAG.',
+					'Reversible quote references',
+					'createRAGQuoteReferences() creates a request-scoped registry for compressing already-verified original-text tool results. encodeToolResult(json) replaces passage text with sentence entries { citation, text }; resolve(citation) restores the exact registered sentence. Repeated sentences reuse a reference, and unknown references throw. Search and single-range read envelopes are supported; unrecognized tool results pass through unchanged.'
 				],
 				title: 'Client and framework entry points'
+			},
+			{
+				description:
+					'See RESEARCH.md for the research plugin, six framework flows, schema extraction, field evidence review, company discovery, durable batches, monitoring, spending policy, agent tools, and evaluation.',
+				details: [],
+				title: 'Web research workflows'
 			}
 		],
 		repository: 'https://github.com/absolutejs/rag',
 		subpackages: [],
-		version: '0.7.0'
+		version: '0.22.1'
 	},
 	{
 		api: [],
@@ -44836,189 +46606,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Why a monorepo'
 			}
 		],
-		repository: 'https://github.com/absolutejs/rag-adapters',
+		repository: null,
 		subpackages: [
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/rag-pinecone',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'ABSOLUTE_PINECONE_RAG_PACKAGE_NAME',
-								signature:
-									'const ABSOLUTE_PINECONE_RAG_PACKAGE_NAME = "@absolutejs/rag-pinecone";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'PINECONE_DISTANCE_METRICS',
-								signature:
-									'const PINECONE_DISTANCE_METRICS: readonly ["cosine", "euclidean", "dotproduct"];'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PineconeDistanceMetric',
-								signature:
-									'type PineconeDistanceMetric = "cosine" | "euclidean" | "dotproduct";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PineconeRAGVectorConfig',
-								signature:
-									'type PineconeRAGVectorConfig = {\n    provider: "pinecone";\n    dimensions: number;\n    distanceMetric?: PineconeDistanceMetric;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PineconeRAGOptions',
-								signature:
-									'type PineconeRAGOptions = {\n    apiKey?: string;\n    indexName?: string;\n    indexHost?: string;\n    namespace?: string;\n    client?: PineconeIndexClient;\n    vector: PineconeRAGVectorConfig;\n    embedding?: RAGVectorStore["embed"];\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PineconeRAG',
-								signature:
-									'type PineconeRAG = {\n    store: RAGVectorStore;\n    collection: RAGCollection;\n    getCapabilities: () => RAGBackendCapabilities | undefined;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PineconeServerlessSpec',
-								signature:
-									'type PineconeServerlessSpec = {\n    serverless: {\n        cloud: "aws" | "gcp" | "azure";\n        region: string;\n    };\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PineconePodSpec',
-								signature:
-									'type PineconePodSpec = {\n    pod: {\n        environment: string;\n        podType: string;\n        pods?: number;\n        replicas?: number;\n        shards?: number;\n        metadataConfig?: {\n            indexed?: string[];\n        };\n        sourceCollection?: string;\n    };\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PineconeIndexSpec',
-								signature:
-									'type PineconeIndexSpec = PineconeServerlessSpec | PineconePodSpec;'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'DescribePineconeIndexOptions',
-								signature:
-									'type DescribePineconeIndexOptions = {\n    apiKey?: string;\n    indexName: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'EnsurePineconeIndexOptions',
-								signature:
-									'type EnsurePineconeIndexOptions = {\n    apiKey?: string;\n    indexName: string;\n    dimensions: number;\n    metric?: PineconeDistanceMetric;\n    spec?: PineconeIndexSpec;\n    deletionProtection?: "enabled" | "disabled";\n    waitUntilReady?: boolean;\n    waitTimeoutMs?: number;\n    pollIntervalMs?: number;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'EnsurePineconeIndexResult',
-								signature:
-									'type EnsurePineconeIndexResult = {\n    created: boolean;\n    description: IndexModel | undefined;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPineconeStore',
-								signature:
-									'const createPineconeStore: (options: PineconeRAGOptions) => RAGVectorStore;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'describePineconeIndex',
-								signature:
-									'const describePineconeIndex: (options: DescribePineconeIndexOptions) => Promise<IndexModel | undefined>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'ensurePineconeIndex',
-								signature:
-									'const ensurePineconeIndex: (options: EnsurePineconeIndexOptions) => Promise<EnsurePineconeIndexResult>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPineconeRAGCollection',
-								signature:
-									'const createPineconeRAGCollection: (options: PineconeRAGOptions) => RAGCollection;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPineconeRAG',
-								signature:
-									'const createPineconeRAG: (options: PineconeRAGOptions) => PineconeRAG;'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'CreateIndexOptions',
-								signature: 'CreateIndexOptions'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'Index',
-								signature: 'Index'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'IndexModel',
-								signature: 'IndexModel'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'PineconeRecord',
-								signature: 'PineconeRecord'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'QueryResponse',
-								signature: 'QueryResponse'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'RecordMetadata',
-								signature: 'RecordMetadata'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'ScoredPineconeRecord',
-								signature: 'ScoredPineconeRecord'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/rag-pinecone/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<never, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -45048,7 +46639,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/rag-pinecone/manifest.json'
 				],
 				readmeDigest:
-					'13796f9daa56578de8dd671e90f23ce3ae67f2bfdbc37cbf149e3382aee13f3c',
+					'c78d637e9e6f3d9b8ba97163e689568aba21fd72ec402b30ea7f99404dd13bb5',
 				readmeSamples: [
 					{
 						code: 'bun add @absolutejs/rag @absolutejs/rag-pinecone @pinecone-database/pinecone',
@@ -45057,13 +46648,13 @@ export const ecosystemProjects: EcosystemProject[] = [
 						language: 'bash'
 					},
 					{
-						code: 'import { createPineconeRAG } from "@absolutejs/rag-pinecone";\n\nconst rag = createPineconeRAG({\n  apiKey: process.env.PINECONE_API_KEY,\n  indexName: "absolute-rag-demo",\n  namespace: "production",\n  vector: {\n    provider: "pinecone",\n    dimensions: 1536,\n    distanceMetric: "cosine",\n  },\n});\n\nawait rag.store.upsert({\n  chunks: [\n    {\n      chunkId: "doc-1#0",\n      text: "Pinecone stores vectors with attached metadata.",\n      title: "Pinecone overview",\n      source: "https://docs.pinecone.io",\n      metadata: { tags: ["vector", "managed"] },\n    },\n  ],\n});\n\nconst hits = await rag.collection.search({ query: "vector database", topK: 4 });',
+						code: "import { createPineconeRAG } from '@absolutejs/rag-pinecone';\n\nconst rag = createPineconeRAG({\n\tapiKey: process.env.PINECONE_API_KEY,\n\tindexName: 'absolute-rag-demo',\n\tnamespace: 'production',\n\tvector: {\n\t\tprovider: 'pinecone',\n\t\tdimensions: 1536,\n\t\tdistanceMetric: 'cosine'\n\t}\n});\n\nawait rag.store.upsert({\n\tchunks: [\n\t\t{\n\t\t\tchunkId: 'doc-1#0',\n\t\t\ttext: 'Pinecone stores vectors with attached metadata.',\n\t\t\ttitle: 'Pinecone overview',\n\t\t\tsource: 'https://docs.pinecone.io',\n\t\t\tmetadata: { tags: ['vector', 'managed'] }\n\t\t}\n\t]\n});\n\nconst hits = await rag.collection.search({ query: 'vector database', topK: 4 });",
 						description: 'Working example for Usage.',
 						heading: 'Usage',
 						language: 'typescript'
 					},
 					{
-						code: 'import {\n  describePineconeIndex,\n  ensurePineconeIndex,\n} from "@absolutejs/rag-pinecone";\n\nawait ensurePineconeIndex({\n  apiKey: process.env.PINECONE_API_KEY,\n  indexName: "absolute-rag-demo",\n  dimensions: 1536,\n  metric: "cosine",\n  waitUntilReady: true,\n});',
+						code: "import {\n\tdescribePineconeIndex,\n\tensurePineconeIndex\n} from '@absolutejs/rag-pinecone';\n\nawait ensurePineconeIndex({\n\tapiKey: process.env.PINECONE_API_KEY,\n\tindexName: 'absolute-rag-demo',\n\tdimensions: 1536,\n\tmetric: 'cosine',\n\twaitUntilReady: true\n});",
 						description:
 							'The Pinecone index is not auto-provisioned at runtime. For explicit, opt-in provisioning use the exported helpers:',
 						heading: 'Index provisioning',
@@ -45234,204 +46825,60 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/rag-postgres/manifest.json'
 				],
 				readmeDigest:
-					'd6eb0a4d6379226c54d4a8e0a4c9d091a6efce31fe8c522fe2ad687d9cd1e9b2',
+					'44e101a280a892c05c44dd8c1856c6ecf677dc1cfc4b652ca55d718c2d7cb413',
 				readmeSamples: [
 					{
-						code: 'bun add @absolutejs/rag @absolutejs/rag-postgres postgres',
-						description: 'Working example for Install.',
-						heading: 'Install',
+						code: 'bun add @absolutejs/rag @absolutejs/rag-postgres',
+						description: '# @absolutejs/rag-postgres',
+						heading: '@absolutejs/rag-postgres quick start',
 						language: 'bash'
 					},
 					{
-						code: "import { createPostgresRAG } from '@absolutejs/rag-postgres';\nimport { ragPlugin } from '@absolutejs/rag';\n\nconst rag = createPostgresRAG({\n\tconnectionString: process.env.DATABASE_URL,\n\tvector: {\n\t\tprovider: 'pgvector',\n\t\tdimensions: 1536,\n\t\tdistanceMetric: 'cosine',\n\t\tautoCreateExtension: true,\n\t\tautoCreateSchema: true,\n\t\tautoCreateTables: true,\n\t\tautoCreateIndex: true,\n\t\tindex: { type: 'hnsw', efSearch: 100, efConstruction: 64, m: 16 }\n\t},\n\tschema: { schemaName: 'absolute_rag', chunkTableName: 'chunks' }\n});\n\napp.use(ragPlugin({ path: '/rag', collection: rag.collection }));",
-						description: 'Working example for Usage.',
-						heading: 'Usage',
+						code: "import { Elysia } from 'elysia';\nimport { createPostgresRAG } from '@absolutejs/rag-postgres';\nimport { ragPlugin } from '@absolutejs/rag';\n\nconst rag = createPostgresRAG({\n  storeOptions: {\n    connectionString: process.env.DATABASE_URL,\n    dimensions: 1536,\n    indexType: 'hnsw',\n    lexicalMode: 'native',\n  },\n});\nconst app = new Elysia().use(ragPlugin({ path: '/rag', collection: rag.collection }));",
+						description: '# @absolutejs/rag-postgres',
+						heading: '@absolutejs/rag-postgres quick start 2',
 						language: 'typescript'
 					},
 					{
-						code: 'const schemaPlan = rag.getSchemaPlan();\nconst migrationPlan = rag.getMigrationPlan();\nawait rag.applyMigrations();',
+						code: 'RAG_LEXICAL_TEST_URL=postgres://... bun postgres/benchmarks/lexical.ts\nRAG_LEXICAL_TEST_URL=postgres://... bun test postgres/tests',
 						description:
-							'Inspect the generated SQL or apply migrations explicitly:',
-						heading: 'Schema and migrations',
-						language: 'typescript'
+							'The reproducible benchmark uses a deterministic local PostgreSQL 15 corpus at 1K, 10K and 100K rows, one selective query with tenant filtering, one warmup and ten trials. It verifies expected matches and retains EXPLAIN ANALYZE plans in the results. At 100K rows, native median/p95 were 2.08/2.79 ms versus 683.03/752.49 ms for portable scoring. Native transferred 10 rows; portable transferred 50,000. These are local warm-query measurements, excluding ingestion/index construction, provider calls and network deployment effects. The 1K fixture has no matching row in the selected tenant. This is not an Exa comparison or a web-scale benchmark.',
+						heading: 'Measured retrieval',
+						language: 'bash'
 					}
 				],
 				readmeTopics: [
 					{
 						description:
-							'PostgreSQL vector-store adapter for @absolutejs/rag, with pgvector as the first vector implementation. Native vector search, server-side filtering, and inspectable schema/migration plans.',
-						details: [],
+							'PostgreSQL storage for AbsoluteJS RAG with pgvector similarity, native full-text retrieval, metadata filtering and reusable plugin integration.',
+						details: [
+							'The driver is Bun.SQL; no separate PostgreSQL client package is required. Use your model provider to generate embeddings with the configured dimensions.'
+						],
 						title: 'Overview'
 					},
 					{
-						description: 'Schema and migrations',
+						description:
+							'Native mode is the default. First use creates a GIN expression index over title, text, source and JSON metadata string values. Existing tables are indexed too; index creation can take time and block writes on a populated table, so initialize it during a planned migration window. Updates and deletions maintain the index through PostgreSQL.',
 						details: [
-							'Inspect the generated SQL or apply migrations explicitly:'
+							"Queries use PostgreSQL's simple configuration, match any query lexeme, rank with weighted ts_rank_cd, and break ties by chunk ID. They are parameterized; query punctuation is treated as text. Title, body, source and metadata receive successively lower weights. Only the requested top K rows cross into the app. Tenant and other supported metadata predicates run before ranking/limiting. Unsupported filters are rejected rather than partially applied. Native top K must be an integer between 0 and 10,000.",
+							"lexicalMode: 'portable' retains the existing RAG lexical scorer and its richer field-specific ranking. It loads filtered candidates into application memory. The engines have different tokenization and scores; native mode is not a claim of identical relevance ordering. Compare your corpus before relying on score thresholds. Vector retrieval remains unchanged."
 						],
-						title: 'Usage'
+						title: 'Lexical retrieval'
+					},
+					{
+						description:
+							'The reproducible benchmark uses a deterministic local PostgreSQL 15 corpus at 1K, 10K and 100K rows, one selective query with tenant filtering, one warmup and ten trials. It verifies expected matches and retains EXPLAIN ANALYZE plans in the results. At 100K rows, native median/p95 were 2.08/2.79 ms versus 683.03/752.49 ms for portable scoring. Native transferred 10 rows; portable transferred 50,000. These are local warm-query measurements, excluding ingestion/index construction, provider calls and network deployment effects. The 1K fixture has no matching row in the selected tenant. This is not an Exa comparison or a web-scale benchmark.',
+						details: [
+							'Run these from the repository root against an isolated test database. Fixture schemas are removed after execution. CI runs real PostgreSQL integration tests.'
+						],
+						title: 'Measured retrieval'
 					}
 				],
 				sourcePath: 'postgres',
-				version: '0.0.12'
+				version: '0.1.0'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/rag-sqlite',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'ABSOLUTE_SQLITE_RAG_PACKAGE_NAME',
-								signature:
-									'const ABSOLUTE_SQLITE_RAG_PACKAGE_NAME = "@absolutejs/rag-sqlite";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'SQLiteRAGCollectionOptions',
-								signature:
-									'type SQLiteRAGCollectionOptions = {\n    store?: RAGVectorStore;\n    storeOptions?: SQLiteRAGStoreOptions;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'SQLiteRAGOptions',
-								signature:
-									'type SQLiteRAGOptions = {\n    store?: RAGVectorStore;\n    collection?: RAGCollection;\n    storeOptions?: SQLiteRAGStoreOptions;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'SQLiteRAGSupportSummary',
-								signature:
-									'type SQLiteRAGSupportSummary = {\n    backendPackageName: typeof ABSOLUTE_SQLITE_RAG_PACKAGE_NAME;\n    recommendedInstallCommand: string;\n    resolution: SQLiteVecResolution;\n    status?: RAGVectorStoreStatus;\n    capabilities?: RAGBackendCapabilities;\n    nativeRequested: boolean;\n    nativeActive: boolean;\n    actionableMessage: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'SQLiteRAG',
-								signature:
-									'type SQLiteRAG = {\n    store: RAGVectorStore;\n    collection: RAGCollection;\n    getStatus: () => RAGVectorStoreStatus | undefined;\n    getCapabilities: () => RAGBackendCapabilities | undefined;\n    getNativeSupport: () => SQLiteRAGSupportSummary;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createSQLiteRAGStore',
-								signature:
-									'const createSQLiteRAGStore: typeof createLocalSQLiteRAGStore;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createSQLiteRAGCollection',
-								signature:
-									'const createSQLiteRAGCollection: (options?: SQLiteRAGCollectionOptions) => RAGCollection;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createSQLiteRAG',
-								signature:
-									'const createSQLiteRAG: (options?: SQLiteRAGOptions) => SQLiteRAG;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createSQLiteRAGBackend',
-								signature:
-									'const createSQLiteRAGBackend: typeof createSQLiteRAG;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'getSQLiteRAGNativeSupport',
-								signature:
-									'const getSQLiteRAGNativeSupport: typeof resolveAbsoluteSQLiteVec;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'summarizeSQLiteRAGSupport',
-								signature:
-									'const summarizeSQLiteRAGSupport: (target?: Pick<RAGCollection, "getStatus" | "getCapabilities"> | Pick<RAGVectorStore, "getStatus" | "getCapabilities">) => SQLiteRAGSupportSummary;'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'createRAGCollection',
-								signature: 'createRAGCollection'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'ragPlugin',
-								signature: 'ragPlugin'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'resolveAbsoluteSQLiteVec',
-								signature: 'resolveAbsoluteSQLiteVec'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'resolveAbsoluteSQLiteVecExtensionPath',
-								signature:
-									'resolveAbsoluteSQLiteVecExtensionPath'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'RAGBackendCapabilities',
-								signature: 'RAGBackendCapabilities'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'RAGCollection',
-								signature: 'RAGCollection'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'RAGVectorStore',
-								signature: 'RAGVectorStore'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'RAGVectorStoreStatus',
-								signature: 'RAGVectorStoreStatus'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'SQLiteRAGStoreOptions',
-								signature: 'SQLiteRAGStoreOptions'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'SQLiteVecResolution',
-								signature: 'SQLiteVecResolution'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/rag-sqlite/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<never, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -45491,7 +46938,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'sqlite',
-				version: '0.0.12'
+				version: '0.0.13'
 			}
 		],
 		version: null
@@ -48147,6 +49594,260 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/scripts',
 		subpackages: [],
 		version: '0.0.1'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/search',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchStatus',
+						signature:
+							'type SearchStatus = "ok" | "empty" | "partial" | "unavailable" | "rate_limited" | "quota_exceeded" | "cancelled" | "error";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchSource',
+						signature:
+							'type SearchSource = {\n    id: string;\n    url: string;\n    title: string;\n    excerpts: string[];\n    retrievedAt: string;\n    /** Date reported by the page/provider; never an event date inferred from a crawl. */\n    publishedAt?: string;\n    contentFetchedAt?: string;\n    metadata?: Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchRequest',
+						signature:
+							'type SearchRequest = {\n    filters?: SearchFilters;\n    query: string;\n    mode?: "web" | "context";\n    signal?: AbortSignal;\n    count?: number;\n    maxTokens?: number;\n    maxUrls?: number;\n    maxTokensPerUrl?: number;\n    freshness?: string;\n    country?: string;\n    language?: string;\n    threshold?: "strict" | "balanced" | "lenient" | "disabled";\n    goggles?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchAttempt',
+						signature:
+							'type SearchAttempt = {\n    id: string;\n    provider: string;\n    endpoint: string;\n    startedAt: string;\n    durationMs: number;\n    status: SearchStatus;\n    httpStatus?: number;\n    retryAfterMs?: number;\n    /** A successful HTTP response is billable even if parsing fails. */\n    billing: "fulfilled" | "rejected" | "unknown" | "not_sent";\n    costUsd: number | null;\n    providerRequestId?: string;\n    quota?: {\n        limit: string | null;\n        remaining: string | null;\n        reset: string | null;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchResult',
+						signature:
+							'type SearchResult = {\n    provider: string;\n    version: string;\n    query: string;\n    status: SearchStatus;\n    sources: SearchSource[];\n    attempts: SearchAttempt[];\n    limitations: string[];\n    cache?: {\n        hit: boolean;\n        originalAttemptIds: string[];\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchProvider',
+						signature:
+							'type SearchProvider = {\n    capabilities?: SearchCapabilities;\n    name: string;\n    version: string;\n    search: (request: SearchRequest) => Promise<SearchResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'searchCompleted',
+						signature:
+							'const searchCompleted: (result: SearchResult) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'searchUsable',
+						signature:
+							'const searchUsable: (result: SearchResult) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'unavailableSearch',
+						signature:
+							'const unavailableSearch: (provider: string, query: string, reason: string) => SearchResult;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evidenceText',
+						signature:
+							'const evidenceText: (sources: SearchSource[]) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'sourceSupportsQuote',
+						signature:
+							'const sourceSupportsQuote: (source: SearchSource, quote: string) => boolean;'
+					},
+					{
+						description:
+							'No truncation: split oversized questions into bounded chunks and retain every word.',
+						kind: 'value',
+						name: 'boundedQueries',
+						signature:
+							'const boundedQueries: (text: string, maxChars?: number, maxWords?: number) => string[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchCacheEntry',
+						signature:
+							'type SearchCacheEntry = {\n    expiresAt: number;\n    result: SearchResult;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchCacheStore',
+						signature:
+							'type SearchCacheStore = {\n    get: (key: string) => Promise<SearchCacheEntry | undefined>;\n    set: (key: string, entry: SearchCacheEntry) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'searchCacheKey',
+						signature:
+							'const searchCacheKey: (provider: SearchProvider, request: SearchRequest, scope: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'withSearchCache',
+						signature:
+							'const withSearchCache: (provider: SearchProvider, options: {\n    scope: string;\n    ttlMs?: number;\n    emptyTtlMs?: number;\n    capacity?: number;\n    now?: () => number;\n    store?: SearchCacheStore;\n}) => SearchProvider;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchCapabilities',
+						signature:
+							'type SearchCapabilities = {\n    modes: readonly ("web" | "context")[];\n    filters: readonly ("freshness" | "country" | "language" | "includeDomains" | "excludeDomains" | "publishedAfter" | "publishedBefore" | "category")[];\n    content: readonly ("excerpts" | "text")[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchFilters',
+						signature:
+							'type SearchFilters = {\n    includeDomains?: string[];\n    excludeDomains?: string[];\n    publishedAfter?: string;\n    publishedBefore?: string;\n    category?: string;\n};'
+					},
+					{
+						description:
+							'Reject unsupported constraints before provider work; never silently broaden a query.',
+						kind: 'value',
+						name: 'assertSearchCapabilities',
+						signature:
+							'const assertSearchCapabilities: (provider: Pick<SearchProvider, "capabilities">, request: SearchRequest) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'withSearchCapabilities',
+						signature:
+							'const withSearchCapabilities: (provider: SearchProvider) => SearchProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/search/brave',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'BraveOptions',
+						signature:
+							'type BraveOptions = {\n    apiKey: string;\n    fetch?: typeof fetch;\n    now?: () => number;\n    timeoutMs?: number;\n    apiVersion?: string;\n    /** Awaited before returning, including rejected and malformed responses. Does not expose credentials. */\n    observe?: (attempt: SearchAttempt) => Promise<void> | void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'braveSearchCapabilities',
+						signature:
+							'const braveSearchCapabilities: SearchCapabilities;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBraveSearch',
+						signature:
+							'const createBraveSearch: (options: BraveOptions) => SearchProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/search/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<BraveOptions, SearchProvider>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<SearchProvider>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<SearchProvider>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        timeoutMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+					}
+				]
+			}
+		],
+		category: 'AI',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts src/brave.ts src/manifest.ts --outdir dist --target bun --external @sinclair/typebox && tsc --emitDeclarationOnly && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Provider-neutral web search, grounded evidence, and replaceable search adapters',
+		directory: 'search',
+		kind: 'package',
+		name: 'Search',
+		packageName: '@absolutejs/search',
+		private: false,
+		publicExports: [
+			'@absolutejs/search',
+			'@absolutejs/search/brave',
+			'@absolutejs/search/manifest',
+			'@absolutejs/search/manifest.json'
+		],
+		readmeDigest:
+			'140609427489b9f4e188f7c7d5b9daf09303784e5f3bb0cfcda0baf49645f6d5',
+		readmeSamples: [
+			{
+				code: "import { createBraveSearch } from '@absolutejs/search/brave';\nconst search = createBraveSearch({ apiKey, observe: recordAttempt });\nconst result = await search.search({ query: 'company partnership program', mode: 'context', maxTokens: 4096 });",
+				description: '# @absolutejs/search',
+				heading: '@absolutejs/search quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral web evidence with a Brave Web Search / LLM Context adapter.',
+				details: [
+					'Successful empty results, partial evidence, provider outages, quota failures and cancellation remain distinct. Every network attempt carries billing disposition; unknown cost remains null. A 200 response remains fulfilled if its body cannot be parsed. The host owns retry/admission, prices, credentials and accounting. No hidden model calls or fallback providers.',
+					'Source excerpts are untrusted evidence. Publication and retrieval timestamps do not establish an event date. sourceSupportsQuote checks quotation presence, not entailment. withSearchCache requires an explicit scope, isolates provider/options/version, uses shorter empty-result retention, never caches failures, and optionally persists through a host store. Requests with caller-owned cancellation are not coalesced.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Providers may declare capabilities with supported modes, filters and content views. SearchRequest.filters carries domain/date/category constraints. assertSearchCapabilities and withSearchCapabilities reject unsupported constraints before provider work. Brave advertises web/context excerpts and freshness/country/language; unsupported domain/date/category filters are rejected, never silently ignored. Existing providers without metadata remain compatible with existing request fields, but must declare support before accepting the new filters.',
+				details: [
+					'The manifest exports a guarded search_web agent tool and a Brave configuration recipe using BRAVE_SEARCH_API_KEY. Bind the configured provider and host enforcer through the existing manifest AI/MCP bridges. Search spending and tenant authorization remain host-controlled. For complete research, extraction, monitoring and framework flows, compose with @absolutejs/rag/research.'
+				],
+				title: 'Capabilities and agent setup'
+			}
+		],
+		repository: 'https://github.com/absolutejs/search',
+		subpackages: [],
+		version: '0.2.0'
 	},
 	{
 		api: [

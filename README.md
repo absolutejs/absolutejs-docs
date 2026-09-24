@@ -20,6 +20,14 @@ bun run check:docs
 
 The generator reads package manifests, README sections, examples, commands, public exports, monorepo contents, versions, and repository links. Generated project and subpackage pages are registered as real documentation routes and included in sitemap generation.
 
+To refresh selected releases while retaining the other package snapshots:
+
+```sh
+bun run catalog:generate --only=rag,search,rag-adapters,artifacts
+```
+
+When a workspace contains unrelated edits, point the selected project at a clean released checkout with `--source=rag-adapters=/path/to/checkout`. Verify the package is available from npm before documenting it as an installable release. The local coverage check also compares every snapshot with sibling workspaces; run the deployment checks in a standalone checkout when deliberately retaining unrelated snapshots.
+
 ## Validation
 
 ```sh

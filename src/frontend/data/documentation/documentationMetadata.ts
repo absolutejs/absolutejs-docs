@@ -53,6 +53,17 @@ for (const project of ecosystemProjects) {
 	}
 }
 
+metadataByView.set('rag-research', {
+	description:
+		'Configure search, reading, extraction and field review, with six framework bindings, company discovery, durable batches and monitoring.',
+	title: 'Web Research Workflows | AbsoluteJS'
+});
+metadataByView.set('rag-web-index', {
+	description:
+		'Crawl selected public sites, retain versioned evidence, search PostgreSQL and reuse the same research workflows across six frameworks.',
+	title: 'Owned Web Indexes | AbsoluteJS'
+});
+
 metadataByView.set('packages', {
 	description:
 		'Explore every AbsoluteJS package, adapter, module, extension, example, and development tool.',
