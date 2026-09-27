@@ -9,12 +9,13 @@ export const DatabaseArticle = ({ themeSprings }: ThemeProps) => (
 			Flexible Database Connections
 		</animated.h2>
 		<animated.p style={paragraphStyle(themeSprings)}>
-			AbsoluteJS supports PostgreSQL, MySQL and SQLite with built in
-			database drivers. Use native connections for direct queries or
-			choose from our first party adapters for Drizzle or Prisma when you
-			want ORM features. Schema or query definitions automatically
-			generate models and types to keep your data layer in sync as your
-			application grows.
+			create-absolutejs scaffolds Drizzle for PostgreSQL, MySQL, MariaDB,
+			SQLite, Turso (libSQL), SingleStore, SQL Server and CockroachDB, and
+			Prisma for the same engines except SingleStore, plus MongoDB on
+			Prisma 6 — or no ORM at all. Every SQL scaffold ships a committed
+			initial migration with db:generate and db:migrate scripts, checked
+			against a real database. Once your app is running, absolute db backs
+			up, restores and seeds any of those SQL databases.
 		</animated.p>
 	</animated.article>
 );

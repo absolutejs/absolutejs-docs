@@ -46,19 +46,53 @@ const scripts: ScriptItem[] = [
 	},
 	{ description: 'Run TypeScript type checking', script: 'bun typecheck' },
 	{
-		description: 'Open database studio (if ORM configured)',
-		script: 'bun db:studio'
-	},
-	{
-		description: 'Push schema changes to database (if ORM configured)',
-		script: 'bun db:push'
+		description:
+			'Drizzle: diff db/schema.ts into a new committed migration. Prisma: run prisma generate',
+		script: 'bun db:generate'
 	},
 	{
 		description:
-			'Start local database container (if using local database without a host)',
+			'Apply committed migrations (drizzle-kit migrate or prisma migrate deploy; prisma db push on MongoDB)',
+		script: 'bun db:migrate'
+	},
+	{
+		description: 'Prisma on a SQL database: author a new migration',
+		script: 'bun db:migrate:dev'
+	},
+	{
+		description: 'Open Drizzle Studio or Prisma Studio',
+		script: 'bun db:studio'
+	},
+	{
+		description:
+			'Start, stop, or wipe the local Docker database (local engines other than SQLite)',
+		script: 'bun db:up / db:down / db:reset'
+	},
+	{
+		description:
+			'Open a shell in the local database container, e.g. bun db:postgresql',
 		script: 'bun db:<engine>'
 	}
 ];
+
+const databaseExamples = `\
+# Drizzle 1.0 on a local PostgreSQL container
+bun create absolutejs my-app --react --db postgresql --orm drizzle --skip --install
+cd my-app
+bun db:up        # start the Docker database
+bun db:migrate   # apply the committed initial migration
+
+# Prisma 7.10 on SQL Server
+bun create absolutejs my-app --react --db mssql --orm prisma --skip
+
+# Prisma 6.19 on MongoDB (Prisma 7 does not support MongoDB)
+bun create absolutejs my-app --react --db mongodb --orm prisma --skip
+
+# Drizzle on Turso (libSQL)
+bun create absolutejs my-app --react --db sqlite --db-host turso --orm drizzle --skip
+
+# Gel has no ORM scaffold
+bun create absolutejs my-app --react --db gel --orm none --skip`;
 
 type CliOption = {
 	description: string;
@@ -126,7 +160,7 @@ const cliOptions: CliOption[] = [
 	// Database options
 	{
 		description:
-			'Database engine: postgresql, mysql, sqlite, mongodb, mariadb, gel, singlestore, cockroachdb, mssql, or none',
+			'Database engine: postgresql, mysql, mariadb, sqlite, singlestore, cockroachdb, mssql, mongodb, gel, or none',
 		flag: '--db <engine>'
 	},
 	{
@@ -134,11 +168,13 @@ const cliOptions: CliOption[] = [
 		flag: '--db-dir <directory>'
 	},
 	{
-		description: 'Database host provider: neon, planetscale, or none',
+		description:
+			'Hosted database: neon (postgresql), planetscale (postgresql or mysql), turso (sqlite), or none',
 		flag: '--db-host <host>'
 	},
 	{
-		description: 'ORM to configure: drizzle, prisma, or none',
+		description:
+			'ORM to configure: drizzle (every engine except mongodb and gel), prisma (every engine except singlestore and gel), or none',
 		flag: '--orm <orm>'
 	},
 	// Auth options
@@ -274,13 +310,14 @@ export const CreateAbsoluteJSView = ({
 							themeSprings={themeSprings}
 							title="Databases"
 						>
-							PostgreSQL, MySQL, SQLite, MongoDB
+							PostgreSQL, MySQL, MariaDB, SQLite, Turso, SQL
+							Server, CockroachDB, SingleStore, MongoDB
 						</CreateAbsoluteJSFeatureCard>
 						<CreateAbsoluteJSFeatureCard
 							themeSprings={themeSprings}
 							title="Tooling"
 						>
-							Drizzle/Prisma, Tailwind, ESLint
+							Drizzle 1.0 or Prisma 7, Tailwind, ESLint or Biome
 						</CreateAbsoluteJSFeatureCard>
 					</div>
 				</section>
@@ -343,6 +380,19 @@ export const CreateAbsoluteJSView = ({
 						}))}
 						themeSprings={themeSprings}
 					/>
+					<p style={paragraphSpacedStyle}>
+						Pick an engine with <code>--db</code> and an ORM with{' '}
+						<code>--orm</code>. Combinations the CLI cannot scaffold
+						(Drizzle on MongoDB or Gel, Prisma on SingleStore or
+						Gel, a host with the wrong engine) are refused before
+						any file is written.
+					</p>
+					<PrismPlus
+						codeString={databaseExamples}
+						language="bash"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
 				</section>
 
 				<section style={sectionStyle}>
@@ -380,8 +430,10 @@ export const CreateAbsoluteJSView = ({
 							themeSprings={themeSprings}
 							title="Hosted Providers"
 						>
-							First-class support for Neon (PostgreSQL),
-							PlanetScale (MySQL), and Turso (SQLite).
+							Scaffolds connection code for Neon (PostgreSQL),
+							PlanetScale (PostgreSQL or MySQL), and Turso
+							(SQLite). These are type-checked but not yet
+							exercised against the live hosted services.
 						</CreateAbsoluteJSFeatureCard>
 					</div>
 
@@ -425,7 +477,12 @@ export const CreateAbsoluteJSView = ({
 							themeSprings={themeSprings}
 							title="ORM Integration"
 						>
-							Drizzle or Prisma with type-safe queries
+							Drizzle for PostgreSQL, MySQL, MariaDB, SQLite,
+							Turso, SingleStore, SQL Server and CockroachDB;
+							Prisma 7.10 for the same engines except SingleStore,
+							and Prisma 6.19 for MongoDB. Every SQL scaffold
+							ships a committed initial migration, and each engine
+							is checked against a real local database.
 						</CreateAbsoluteJSFeatureCard>
 					</div>
 				</section>

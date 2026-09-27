@@ -36,15 +36,27 @@ const CreateAbsoluteOptionsList = ({ themeSprings }: ThemeProps) => (
 	<DefinitionGrid
 		items={[
 			{
-				description: 'react, svelte, vue, html, htmx',
-				term: '--frontend'
+				description:
+					'Add React; --svelte, --vue, --angular, --html and --htmx add the others (combine several)',
+				term: '--react'
 			},
 			{
-				description: 'drizzle, prisma, none',
-				term: '--database'
+				description:
+					'postgresql, mysql, mariadb, sqlite, singlestore, cockroachdb, mssql, mongodb, gel, none',
+				term: '--db'
 			},
 			{
-				description: 'Include @absolutejs/auth setup',
+				description:
+					'drizzle (every engine except mongodb and gel), prisma (every engine except singlestore and gel), none',
+				term: '--orm'
+			},
+			{
+				description:
+					'neon (postgresql), planetscale (postgresql or mysql), turso (sqlite)',
+				term: '--db-host'
+			},
+			{
+				description: 'abs to include @absolutejs/auth setup, or none',
 				term: '--auth'
 			}
 		]}
