@@ -82,11 +82,10 @@ export const DbView = ({
 						<code>LIBSQL_URL</code>, <code>MSSQL_URL</code>), or
 						pass <code>--url</code>. The engine is read from the URL
 						scheme, falling back to the <code>dialect</code> in{' '}
-						<code>drizzle.config.ts</code> or the Prisma
-						datasource <code>provider</code> for a bare file path.
-						It talks to the database directly, so it behaves the
-						same whether you use Drizzle, Prisma, Kysely, or raw
-						SQL.
+						<code>drizzle.config.ts</code> or the Prisma datasource{' '}
+						<code>provider</code> for a bare file path. It talks to
+						the database directly, so it behaves the same whether
+						you use Drizzle, Prisma, Kysely, or raw SQL.
 					</p>
 					<PrismPlus
 						codeString={dbCommands}
@@ -115,10 +114,10 @@ export const DbView = ({
 						path to a <code>.db</code>/<code>.sqlite</code> file);
 						remote Turso (<code>libsql://</code>,{' '}
 						<code>https://</code>, <code>wss://</code>); and SQL
-						Server (<code>sqlserver://</code>,{' '}
-						<code>mssql://</code>). Remote Turso needs{' '}
-						<code>@libsql/client</code> installed and reads its
-						token from <code>TURSO_AUTH_TOKEN</code>,{' '}
+						Server (<code>sqlserver://</code>, <code>mssql://</code>
+						). Remote Turso needs <code>@libsql/client</code>{' '}
+						installed and reads its token from{' '}
+						<code>TURSO_AUTH_TOKEN</code>,{' '}
 						<code>LIBSQL_AUTH_TOKEN</code>, or{' '}
 						<code>DATABASE_AUTH_TOKEN</code>; SQL Server needs the{' '}
 						<code>mssql</code> package. MongoDB and Gel are refused
@@ -173,15 +172,14 @@ export const DbView = ({
 						<code>pragma_table_xinfo</code> on SQLite and libSQL,
 						and the <code>sys</code> views on SQL Server — to
 						discover tables, primary keys, and foreign keys. It
-						reads and writes rows with Bun’s built-in SQL and
-						SQLite clients, <code>@libsql/client</code> for remote
-						Turso, and <code>mssql</code> for SQL Server — no
-						coupling to your ORM. A backup records its engine, so
-						restoring it into a different engine re-encodes values
-						per column. Because
-						restore keys off the real primary key, it is safe to run
-						repeatedly and safe to bake a backup into your recovery
-						runbook.
+						reads and writes rows with Bun’s built-in SQL and SQLite
+						clients, <code>@libsql/client</code> for remote Turso,
+						and <code>mssql</code> for SQL Server — no coupling to
+						your ORM. A backup records its engine, so restoring it
+						into a different engine re-encodes values per column.
+						Because restore keys off the real primary key, it is
+						safe to run repeatedly and safe to bake a backup into
+						your recovery runbook.
 					</p>
 				</section>
 

@@ -382,10 +382,10 @@ export const CreateAbsoluteJSView = ({
 					/>
 					<p style={paragraphSpacedStyle}>
 						Pick an engine with <code>--db</code> and an ORM with{' '}
-						<code>--orm</code>. Combinations the CLI cannot
-						scaffold (Drizzle on MongoDB or Gel, Prisma on
-						SingleStore or Gel, a host with the wrong engine) are
-						refused before any file is written.
+						<code>--orm</code>. Combinations the CLI cannot scaffold
+						(Drizzle on MongoDB or Gel, Prisma on SingleStore or
+						Gel, a host with the wrong engine) are refused before
+						any file is written.
 					</p>
 					<PrismPlus
 						codeString={databaseExamples}
