@@ -27,6 +27,11 @@ export const opsCliPackageData: PackageDocData = {
 		},
 		{
 			description:
+				'Since 0.3.0-beta.1, absolutejs db check-drift, verify-contract, verify-schema, and contract-migrate gate expand/contract migrations on PostgreSQL, CockroachDB, MySQL, MariaDB, SingleStore, SQLite, Turso, and SQL Server, for Drizzle projects and Prisma 5-7 projects. SingleStore cannot run contract-migrate (no GET_LOCK, non-transactional DDL); Gel, MongoDB, and Prisma 8 are refused.',
+			title: 'Migration phase gates'
+		},
+		{
+			description:
 				'A global --json flag switches every verb to machine-readable output for scripting and CI pipelines.',
 			title: 'Machine-readable output'
 		}
@@ -122,6 +127,24 @@ export default defineConfig({
 				'Drop absolutejs.config.ts in your project root — the CLI walks up from the cwd to find it. target and deployer are lazy factories, so local-only verbs never touch the remote.',
 			heading: 'Config — absolutejs.config.ts',
 			language: 'typescript'
+		},
+		{
+			code: `\
+# Before building: do the committed migrations cover the schema?
+absolutejs db check-drift
+# Is anything destructive outside a contract.sql?
+absolutejs db verify-contract
+
+# After migrating, before activating the new build
+# (--schema names the Drizzle tables module; Prisma projects omit it)
+absolutejs db verify-schema --schema db/schema.ts
+
+# After the old build has drained: apply the destructive half
+absolutejs db contract-migrate`,
+			description:
+				'The engine comes from drizzle.config.* dialect or the Prisma datasource provider, then the DATABASE_URL scheme; --dialect and --orm drizzle|prisma override, and --since <migration-id> exempts migrations that predate the policy. Remote Turso needs @libsql/client and SQL Server needs mssql installed in the project. Requires @absolutejs/cli 0.3.0-beta.1 or later.',
+			heading: 'Database Migration Gates',
+			language: 'bash'
 		},
 		{
 			code: `\

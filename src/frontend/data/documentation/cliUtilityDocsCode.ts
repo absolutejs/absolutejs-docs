@@ -135,7 +135,7 @@ export const dbBackupOutput: TerminalSession = {
 	command: 'absolute db backup',
 	output: `\
   ✓ backup → backups/backup-2026-05-25T18-30-42-239Z.json
-    8 tables, 1240 rows`
+    postgres: 8 tables, 1240 rows`
 };
 export const dbCommands = `\
 # Back up every table to backups/<timestamp>.json (+ latest.json)

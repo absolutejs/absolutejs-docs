@@ -47,7 +47,7 @@ const features: Feature[] = [
 	},
 	{
 		description:
-			'PostgreSQL, MySQL, SQLite with Drizzle or Prisma adapters.',
+			'Drizzle or Prisma for PostgreSQL, MySQL, MariaDB, SQLite, SQL Server, CockroachDB and more, with committed migrations.',
 		icon: <FaDatabase />,
 		title: 'Flexible Database'
 	},

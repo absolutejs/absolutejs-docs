@@ -3,7 +3,7 @@ curl -fsSL https://bun.sh/install | bash`;
 export const createProject = `\
 bun create absolutejs my-app`;
 export const createProjectWithOptions = `\
-bun create absolutejs my-app --frontend react --database drizzle`;
+bun create absolutejs my-app --react --db postgresql --orm drizzle`;
 export const manualInstall = `\
 bun add @absolutejs/absolute elysia`;
 export const minimalConfig = `\
