@@ -1,4 +1,4 @@
-import { t } from 'elysia/type-system';
+import { t } from 'elysia';
 import { docsViews } from '../frontend/data/sidebarData';
 import { telemetryViewIds } from '../frontend/data/telemetrySidebarData';
 import { isValidViewId } from './typeGuards';

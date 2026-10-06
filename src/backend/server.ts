@@ -40,7 +40,7 @@ const builtApp = new Elysia()
 	.use(pagesPlugin(manifest))
 	.error(({ error, request }) => {
 		console.error(
-			`Server error on ${request.method} ${request.url}: ${error.message}`
+			`Server error on ${request.method} ${request.url}: ${error instanceof Error ? error.message : String(error)}`
 		);
 	});
 
