@@ -130,6 +130,11 @@ const environmentItems: DefinitionItem[] = [
 		description:
 			'Optional. bvm ls-remote lists releases through the GitHub API, which rate-limits anonymous use; install and self update do not need it.',
 		term: 'GITHUB_TOKEN'
+	},
+	{
+		description:
+			'Turns off colored output. CLICOLOR_FORCE=1 turns it on where bvm would not, such as a CI log.',
+		term: 'NO_COLOR'
 	}
 ];
 
@@ -225,6 +230,17 @@ export const BvmView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
+					<p style={paragraphSpacedStyle}>
+						<strong>Already have Bun?</strong> The installer finds
+						it (Bun&apos;s own installer, Homebrew, npm or Scoop),
+						installs that same version through bvm, verified, and
+						makes it your default, so <code>bun</code> keeps meaning
+						the version it meant and <code>bvm ls</code> is not
+						empty. bvm&apos;s shims go ahead of the old Bun on PATH;
+						you can remove the old install whenever you like.
+						Output is colored on a terminal; set{' '}
+						<code>NO_COLOR</code> to turn that off.
+					</p>
 					<p style={paragraphSpacedStyle}>
 						<strong>Windows (PowerShell).</strong> bvm works in the
 						same window right away, and in new ones: the script adds

@@ -30,7 +30,7 @@ bun --version                       # runs 1.4.2-absolute.1 here
 # { "engines": { "bun": ">=1.4.0" } }`;
 
 export const bvmQuickstart = `\
-bvm -v                              # bvm 0.1.2
+bvm -v                              # bvm 0.1.3
 bvm install latest --default        # newest official Bun, used everywhere
 bun --version                       # 1.4.2
 bvm install 1.4.2-absolute.1        # AbsoluteJS's patched build of 1.4.2
