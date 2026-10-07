@@ -30,7 +30,7 @@ bun --version                       # runs 1.4.2-absolute.1 here
 # { "engines": { "bun": ">=1.4.0" } }`;
 
 export const bvmQuickstart = `\
-bvm -v                              # bvm 0.1.3
+bvm -v                              # bvm 0.1.4
 bvm install latest --default        # newest official Bun, used everywhere
 bun --version                       # 1.4.2
 bvm install 1.4.2-absolute.1        # AbsoluteJS's patched build of 1.4.2
@@ -41,10 +41,10 @@ bvm self update                     # newest signed bvm release
 bvm uninstall 1.4.0                 # remove a Bun version`;
 
 export const bvmUninstall = `\
-# Remove bvm and every Bun it installed
-rm -rf ~/.bvm
-# then delete the "# bvm (Bun version manager)" lines from ~/.bashrc,
-# ~/.zshrc, ~/.bash_profile or ~/.config/fish/conf.d/bvm.fish`;
+bvm self uninstall                  # choose the Bun to keep, then confirm
+bvm self uninstall --keep-default --yes   # scripts: keep the default
+bvm self uninstall --keep 1.4.2 --yes     # keep a given version
+bvm self uninstall --remove-bun --yes     # remove Bun too`;
 
 export const bvmUseShell = `\
 bvm use 1.4.2                       # this shell only (needs the bvm shell function)

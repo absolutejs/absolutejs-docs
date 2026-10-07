@@ -53,8 +53,9 @@ const commandItems: DefinitionItem[] = [
 		term: 'bvm install <version> [--default]'
 	},
 	{
-		description: 'Remove an installed version.',
-		term: 'bvm uninstall <version>'
+		description:
+			'Remove an installed version. The default is refused unless you pass --force, since bun would stop working outside projects that pin a version.',
+		term: 'bvm uninstall <version> [--force]'
 	},
 	{
 		description:
@@ -103,6 +104,11 @@ const commandItems: DefinitionItem[] = [
 		description:
 			'Replace bvm with the newest release, after checking its signature.',
 		term: 'bvm self update'
+	},
+	{
+		description:
+			'Remove bvm, keeping one Bun in ~/.bun/bin. Choose it with the arrow keys, or pass --keep <version>, --keep-default or --remove-bun; --yes skips the confirmation (required without a terminal).',
+		term: 'bvm self uninstall'
 	},
 	{
 		description: 'Print the version of bvm itself.',
@@ -429,6 +435,21 @@ export const BvmView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
+					<p style={paragraphSpacedStyle}>
+						<code>bvm self uninstall</code> removes bvm and keeps
+						one Bun where Bun&apos;s own installer puts it (
+						<code>~/.bun/bin</code>, or <code>$BUN_INSTALL</code>),
+						with <code>bunx</code> beside it, so <code>bun</code>{' '}
+						and <code>bun upgrade</code> keep working. On a terminal
+						you choose it with the arrow keys: your default is
+						preselected, and a Bun you had before bvm is offered as
+						it is. bvm shows exactly what it will change and asks
+						before doing it. It takes its lines out of your shell
+						startup files (on Windows, the user PATH and PowerShell
+						profile) and leaves the rest of those files as they
+						were. Global packages in <code>~/.bun</code> are never
+						touched.
+					</p>
 					<PrismPlus
 						codeString={bvmUninstall}
 						language="bash"
