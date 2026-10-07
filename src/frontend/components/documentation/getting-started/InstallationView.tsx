@@ -19,6 +19,7 @@ import {
 	gradientHeadingStyle,
 	heroGradientStyle
 } from '../../../styles/gradientStyles';
+import { primaryColor } from '../../../styles/colors';
 import { AnchorHeading } from '../../utils/AnchorHeading';
 import { DefinitionGrid } from '../../utils/DefinitionGrid';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
@@ -115,6 +116,26 @@ export const InstallationView = ({
 						showLineNumbers={false}
 						themeSprings={themeSprings}
 					/>
+					<p style={paragraphSpacedStyle}>
+						To keep several Bun versions side by side, pin one per
+						project, or use AbsoluteJS&apos;s patched builds,
+						install Bun with{' '}
+						<animated.span
+							onClick={() => {
+								onNavigate('bvm');
+								window.scrollTo({ behavior: 'smooth', top: 0 });
+							}}
+							style={{
+								color: primaryColor,
+								cursor: 'pointer',
+								fontWeight: 500,
+								textDecoration: 'underline'
+							}}
+						>
+							bvm
+						</animated.span>{' '}
+						instead.
+					</p>
 				</section>
 
 				<section style={sectionStyle}>

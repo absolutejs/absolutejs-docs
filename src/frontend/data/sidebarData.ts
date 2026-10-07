@@ -46,6 +46,7 @@ import { HostingView } from '../components/documentation/deployment/HostingView'
 import { ProductionBuildView } from '../components/documentation/deployment/ProductionBuildView';
 import { StaticGenerationView } from '../components/documentation/deployment/StaticGenerationView';
 import { InstallationView } from '../components/documentation/getting-started/InstallationView';
+import { BvmView } from '../components/documentation/getting-started/BvmView';
 import { QuickstartView } from '../components/documentation/getting-started/QuickstartView';
 import { Overview } from '../components/documentation/overview/OverviewView';
 import { CitraView } from '../components/documentation/packages/CitraView';
@@ -287,6 +288,7 @@ const primaryDocsViews = definePortalViews({
 	blob: BlobPackageView,
 	'build-and-manifest': BuildManifestView,
 	'bun-build-options': BunBuildOptionsView,
+	bvm: BvmView,
 	citra: CitraView,
 	cli: OpsCliPackageView,
 	'cli-reference': CliReferenceView,
@@ -622,6 +624,7 @@ const baseSidebarCategories: SidebarCategory[] = [
 				label: 'Getting Started',
 				pages: [
 					{ id: 'installation', label: 'Installation' },
+					{ id: 'bvm', label: 'Bun versions (bvm)' },
 					{ id: 'quickstart', label: 'Quickstart' }
 				]
 			},
