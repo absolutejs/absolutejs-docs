@@ -514,12 +514,6 @@ const uncataloguedPackages: Record<string, string> = {
 	'@absolutejs/browser-session':
 		'Published from an unmerged agent-exchange-providers branch.',
 	'@absolutejs/bvm': 'Documented by its own page, /documentation/bvm.',
-	'@absolutejs/commerce-dubow':
-		'Published from source not yet committed to commerce-adapters.',
-	'@absolutejs/commerce-programs':
-		'Published from source not yet committed to commerce-adapters.',
-	'@absolutejs/commerce-wishes':
-		'Published from source not yet committed to commerce-adapters.',
 	'@absolutejs/drizzle-utils':
 		'Personal utility outside the AbsoluteJS repositories.'
 };

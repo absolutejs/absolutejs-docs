@@ -15,6 +15,7 @@ type MobileSidebarProps = {
 	themeSprings: ThemeSprings;
 	navigateToView: (newView: DocsView) => void;
 	openSections: Set<string>;
+	onOpenSearch: (query: string) => void;
 	onToggleSection: (key: string) => void;
 };
 
@@ -25,6 +26,7 @@ export const MobileSidebar = ({
 	themeSprings,
 	navigateToView,
 	openSections,
+	onOpenSearch,
 	onToggleSection
 }: MobileSidebarProps) => {
 	const handleClose = () => {
@@ -114,6 +116,10 @@ export const MobileSidebar = ({
 					navigateToView={(newView: DocsView) => {
 						navigateToView(newView);
 						handleClose();
+					}}
+					onOpenSearch={(query: string) => {
+						handleClose();
+						onOpenSearch(query);
 					}}
 					onToggleSection={onToggleSection}
 					openSections={openSections}

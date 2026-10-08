@@ -8,6 +8,7 @@ import { Sidebar } from './Sidebar';
 type SidebarSectionProps = {
 	isMobile: boolean;
 	navigateToView: (view: DocsView) => void;
+	onOpenSearch: (query: string) => void;
 	onToggleSection: (label: string) => void;
 	openSections: Set<string>;
 	spring: {
@@ -23,6 +24,7 @@ type SidebarSectionProps = {
 export const SidebarSection = ({
 	isMobile,
 	navigateToView,
+	onOpenSearch,
 	onToggleSection,
 	openSections,
 	spring,
@@ -39,6 +41,7 @@ export const SidebarSection = ({
 			/>
 			<MobileSidebar
 				navigateToView={navigateToView}
+				onOpenSearch={onOpenSearch}
 				onToggleSection={onToggleSection}
 				openSections={openSections}
 				spring={spring}
@@ -50,6 +53,7 @@ export const SidebarSection = ({
 	) : (
 		<Sidebar
 			navigateToView={navigateToView}
+			onOpenSearch={onOpenSearch}
 			onToggleSection={onToggleSection}
 			openSections={openSections}
 			themeSprings={themeSprings}

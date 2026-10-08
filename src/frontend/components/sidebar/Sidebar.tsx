@@ -8,6 +8,7 @@ type SidebarProps = {
 	themeSprings: ThemeSprings;
 	navigateToView: (newView: DocsView) => void;
 	openSections: Set<string>;
+	onOpenSearch: (query: string) => void;
 	onToggleSection: (key: string) => void;
 };
 
@@ -16,6 +17,7 @@ export const Sidebar = ({
 	themeSprings,
 	navigateToView,
 	openSections,
+	onOpenSearch,
 	onToggleSection
 }: SidebarProps) => (
 	<animated.aside
@@ -35,6 +37,7 @@ export const Sidebar = ({
 	>
 		<SidebarNav
 			navigateToView={navigateToView}
+			onOpenSearch={onOpenSearch}
 			onToggleSection={onToggleSection}
 			openSections={openSections}
 			themeSprings={themeSprings}

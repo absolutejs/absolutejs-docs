@@ -8,6 +8,7 @@ import { providerPlugin } from './plugins/providerPlugin';
 import { telemetryPlugin } from './plugins/telemetryPlugin';
 import { absoluteAuthConfig } from './utils/absoluteAuthConfig';
 import { pagesPlugin } from './plugins/pagesPlugin';
+import { searchPlugin } from './plugins/searchPlugin';
 import { blog } from '../shared/blog';
 
 const sql = neon(getEnv('DATABASE_URL'));
@@ -38,6 +39,7 @@ const builtApp = new Elysia()
 	.use(authPlugin)
 	.use(telemetryPlugin(db))
 	.use(pagesPlugin(manifest))
+	.use(searchPlugin)
 	.error(({ error, request }) => {
 		console.error(
 			`Server error on ${request.method} ${request.url}: ${error instanceof Error ? error.message : String(error)}`

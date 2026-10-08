@@ -23311,6 +23311,65 @@ export const ecosystemProjects: EcosystemProject[] = [
 				commands: [
 					{
 						command:
+							'bun build src/index.ts --outdir dist --target bun --external @absolutejs/commerce && tsc --noEmit false --emitDeclarationOnly --declaration --outDir dist',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Dubow design, catalog, pricing, and fulfillment integration for AbsoluteJS commerce',
+				name: '@absolutejs/commerce-dubow',
+				private: false,
+				publicExports: ['@absolutejs/commerce-dubow'],
+				readmeDigest:
+					'667b9979a695f4b5ef630839eb6675825a210d2725e00f6d6b9d4d6111b4e435',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Dubow catalog lookup, artwork, pricing and validated fulfillment serialization for AbsoluteJS commerce. Wire fields follow the official Dubow v2 documentation.',
+						details: [
+							'createDubowClient supports an injected fetch for isolated integration testing. createDubowCatalog preserves catalog identities but keeps variants unavailable until inventory, supplier SKU, price, imagery and decoration facts have been verified.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							'validateDubowOrder(request, config) returns { valid, errors }. Call before collecting payment and again before release. serializeDubowOrder(request, config) validates and returns the single object accepted by client.submitOrders([order]). It performs no provider calls.',
+						details: [
+							'Config requires customerId, contactId, shipMethod and an explicit procurementType of Contract or Custom, unless each line supplies its trusted procurement override. Contract means customer-supplied garments; Custom means the agreed vendor sourcing arrangement. No procurement default is invented. Optional methodNames contains account-approved mappings for methods outside the supported defaults.',
+							'Each line retains supplier SKU in Name, style/mill and exact garment color in IntegrationProduct, and exact size/quantity in LineItemSizes. Its trusted metadata must include brand, styleCode, title, color, size, methods[] and artworkMappings[], with one method and mapping per artwork placement. A mapping requires status: ready, the matching placement, and providerLocation from the approved provider setup. Existing designs require numeric providerDesignId and providerColorwayCode; URL designs require the approved customerDesignCode, customer providerColorwayCode, and an HTTPS artwork URL. Never build this metadata directly from untrusted shopper fields.',
+							'Mappings preserve embroidery, DTF, digital print, screen print and sublimation. Unknown methods, missing identities, and mismatched placements fail validation. Screen print requires 24 garments per approved design/colorway, counting combined sizes once per line. Account enablement, exact location values, source-art accessibility, and actual provider acceptance remain deployment checks.'
+						],
+						title: 'Fulfillment'
+					},
+					{
+						description:
+							'bun run check:package runs type checking, mocked outbound-request tests and build/declaration output. Tests send no real orders.',
+						details: [],
+						title: 'Validation'
+					}
+				],
+				sourcePath: 'dubow',
+				version: '0.2.0-beta.1'
+			},
+			{
+				api: [],
+				commands: [
+					{
+						command:
 							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce --external '@absolutejs/commerce/*' --external @absolutejs/manifest --external @sinclair/typebox --external @easypost/api --external '@easypost/api/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
 						name: 'build'
 					},
@@ -23525,6 +23584,49 @@ export const ecosystemProjects: EcosystemProject[] = [
 				commands: [
 					{
 						command:
+							'bun build src/index.ts --outdir dist --target bun && tsc --noEmit false --emitDeclarationOnly --declaration --outDir dist',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Commerce kit and employer-funded store-credit contracts for AbsoluteJS storefronts',
+				name: '@absolutejs/commerce-programs',
+				private: false,
+				publicExports: ['@absolutejs/commerce-programs'],
+				readmeDigest:
+					'1e8e7d0b5e2a08e4636bfd8d57ea752d3ec9cc3c0e0aedae7a33ebfa138195d2',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Reusable kit contracts, fixed-price allocation, cart membership validation and employer-funded store-credit calculations.',
+						details: [
+							'Hosts must resolve trusted products, variants and prices and persist ledger effects transactionally. Browser kit metadata is never price authority. kitCartIssues validates component membership, quantities and fixed variants; allocateFixedKitPrice distributes an authoritative total into exact line cents.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'programs',
+				version: '0.2.0-beta.0'
+			},
+			{
+				api: [],
+				commands: [
+					{
+						command:
 							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce --external '@absolutejs/commerce/*' --external @absolutejs/manifest --external @sinclair/typebox --external resend --external 'resend/*' && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
 						name: 'build'
 					},
@@ -23576,7 +23678,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'resend',
-				version: '0.19.19-beta.3'
+				version: '0.19.19-beta.4'
 			},
 			{
 				api: [],
@@ -23761,6 +23863,50 @@ export const ecosystemProjects: EcosystemProject[] = [
 				],
 				sourcePath: 'stripe',
 				version: '0.25.1-beta.11'
+			},
+			{
+				api: [],
+				commands: [
+					{
+						command:
+							'bun build src/index.ts --outdir dist --target bun --external @absolutejs/commerce && tsc --emitDeclarationOnly',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Tokenized Wishes/NMI payments, refunds and verified reconciliation for AbsoluteJS commerce',
+				name: '@absolutejs/commerce-wishes',
+				private: false,
+				publicExports: ['@absolutejs/commerce-wishes'],
+				readmeDigest:
+					'b452d10bbb6b235fdb0fd58cdf04e9d187da9bf4447dc43f9ea4b786dbf43231',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Wishes/NMI tokenized checkout and refund adapter. createWishesPayment accepts private/public keys and optional transaction/query URLs. Raw card details must be collected by the provider; pass only the resulting payment token to the sale operation.',
+						details: [
+							'verifySale({ orderId, amountCents }) queries the merchant report and requires one matching USD sale for the exact amount, with no successful refund/void action. Unknown or ambiguous results remain unresolved and must not be retried as new charges. Applications own durable payment-attempt IDs, access control, settlement ledgers, and webhook replay handling. An order reference alone is not a guarantee of gateway idempotency.',
+							'Query contract: https://docs.nmi.com/reference/query. Validate the merchant account’s Wishes endpoints and complete its approved sandbox procedure before enabling live payments. Never ship a private key to the browser.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'wishes',
+				version: '0.2.0-beta.1'
 			},
 			{
 				api: [],

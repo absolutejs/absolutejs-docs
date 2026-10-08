@@ -50,6 +50,15 @@ export const sidebarEntryKey = (category: string, entry: SidebarEntry) =>
 
 export type DocsView = Extract<keyof typeof docsViews, string>;
 
+export type DocsSearchResult = {
+	anchor: string | null;
+	breadcrumb: string[];
+	heading: string | null;
+	snippet: string;
+	title: string;
+	view: string;
+};
+
 export type UserFunctionProps = {
 	authProvider: string;
 	userIdentity: Record<string, unknown>;

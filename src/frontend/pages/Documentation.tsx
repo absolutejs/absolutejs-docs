@@ -1,6 +1,7 @@
 import { animated, useSpring } from '@react-spring/web';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+	DocsSearchResult,
 	DocsView,
 	isExpandableEntry,
 	SidebarEntry,
@@ -8,6 +9,7 @@ import {
 } from '../../types/types';
 import { isValidViewId } from '../../types/typeGuards';
 import { Navbar } from '../components/navbar/Navbar';
+import { DocsSearchDialog } from '../components/search/DocsSearchDialog';
 import { AuroraBackground } from '../components/utils/AuroraBackground';
 import { Head } from '../components/page/Head';
 import { SidebarSection } from '../components/sidebar/SidebarSection';
@@ -24,6 +26,7 @@ import {
 } from '../hooks/useMediaQuery';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
 import { htmlDefault, bodyDefault, mainDefault } from '../styles/styles';
+import { scrollToAnchor } from '../utils/scrollToAnchor';
 import { User } from '../../../db/schema';
 
 type DocumentationViewProps = {
@@ -57,6 +60,29 @@ const findOpenKeysForView = (view: DocsView) => {
 		: [category.label];
 };
 
+const isTypingTarget = (target: EventTarget | null) =>
+	target instanceof HTMLElement &&
+	(target.isContentEditable ||
+		['INPUT', 'SELECT', 'TEXTAREA'].includes(target.tagName));
+
+// ⌘K or Ctrl+K anywhere, or / outside a text field, opens search.
+const useSearchShortcut = (openSearch: () => void) => {
+	useEffect(() => {
+		const onKeyDown = (event: KeyboardEvent) => {
+			const commandK =
+				(event.metaKey || event.ctrlKey) &&
+				event.key.toLowerCase() === 'k';
+			const slash = event.key === '/' && !isTypingTarget(event.target);
+			if (!commandK && !slash) return;
+			event.preventDefault();
+			openSearch();
+		};
+		window.addEventListener('keydown', onKeyDown);
+
+		return () => window.removeEventListener('keydown', onKeyDown);
+	}, [openSearch]);
+};
+
 const DocumentationView = ({
 	user,
 	theme,
@@ -80,6 +106,16 @@ const DocumentationView = ({
 	}));
 
 	const [tocOpen, setTocOpen] = useState(false);
+	const [search, setSearch] = useState({ isOpen: false, query: '' });
+	const openSearch = useCallback(
+		(query = '') => setSearch({ isOpen: true, query: query.trim() }),
+		[]
+	);
+	const closeSearch = useCallback(
+		() => setSearch((current) => ({ ...current, isOpen: false })),
+		[]
+	);
+	useSearchShortcut(openSearch);
 
 	const handleNavigate = useCallback(
 		(newView: DocsView) => {
@@ -104,6 +140,15 @@ const DocumentationView = ({
 			return next;
 		});
 	}, []);
+
+	const openSearchResult = useCallback(
+		(result: DocsSearchResult) => {
+			closeSearch();
+			if (isValidViewId(result.view)) handleNavigate(result.view);
+			if (result.anchor) scrollToAnchor(result.anchor);
+		},
+		[closeSearch, handleNavigate]
+	);
 
 	const toggleSidebar = () => {
 		void sidebarSpringApi.start({
@@ -161,6 +206,7 @@ const DocumentationView = ({
 			<SidebarSection
 				isMobile={isMobile}
 				navigateToView={handleNavigate}
+				onOpenSearch={openSearch}
 				onToggleSection={handleToggleSection}
 				openSections={openSections}
 				spring={sidebarSpring}
@@ -205,6 +251,13 @@ const DocumentationView = ({
 				>
 					{documentationContent}
 				</main>
+				<DocsSearchDialog
+					initialQuery={search.query}
+					isOpen={search.isOpen}
+					onClose={closeSearch}
+					onSelect={openSearchResult}
+					themeSprings={themeSprings}
+				/>
 			</animated.body>
 		</html>
 	);

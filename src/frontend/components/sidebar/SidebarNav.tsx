@@ -4,6 +4,7 @@ import {
 	memo,
 	ReactNode,
 	useDeferredValue,
+	useEffect,
 	useMemo,
 	useState
 } from 'react';
@@ -21,6 +22,7 @@ import { primaryColor, secondaryColor } from '../../styles/colors';
 
 type SidebarNavProps = {
 	navigateToView: (view: DocsView) => void;
+	onOpenSearch: (query: string) => void;
 	onToggleSection: (key: string) => void;
 	openSections: Set<string>;
 	themeSprings: ThemeSprings;
@@ -429,14 +431,28 @@ const filterCategories = (query: string) => {
 		.filter((category) => category.entries.length > 0);
 };
 
-const SidebarFilter = ({
-	onChange,
-	value
-}: {
+type SidebarFilterProps = {
 	onChange: (value: string) => void;
+	onSubmit: (value: string) => void;
 	value: string;
-}) => {
+};
+
+// The platform's shortcut label is only known in the browser, so the server
+// renders none and the hint appears after hydration.
+const useSearchShortcutLabel = () => {
+	const [label, setLabel] = useState('');
+	useEffect(() => {
+		setLabel(
+			/mac|iphone|ipad/i.test(navigator.userAgent) ? '⌘K' : 'Ctrl K'
+		);
+	}, []);
+
+	return label;
+};
+
+const SidebarFilter = ({ onChange, onSubmit, value }: SidebarFilterProps) => {
 	const [focused, setFocused] = useState(false);
+	const shortcut = useSearchShortcutLabel();
 
 	return (
 		<div style={{ position: 'relative' }}>
@@ -457,7 +473,10 @@ const SidebarFilter = ({
 				onBlur={() => setFocused(false)}
 				onChange={(event) => onChange(event.target.value)}
 				onFocus={() => setFocused(true)}
-				placeholder="Filter docs…"
+				onKeyDown={(event) => {
+					if (event.key === 'Enter') onSubmit(value);
+				}}
+				placeholder="Filter or search docs…"
 				style={{
 					background: 'var(--sidebar-filter-bg)',
 					border: focused
@@ -468,19 +487,39 @@ const SidebarFilter = ({
 					fontSize: '0.875rem',
 					lineHeight: 1.5,
 					outline: 'none',
-					padding: '0.45rem 0.75rem 0.45rem 2rem',
+					padding: '0.45rem 3.25rem 0.45rem 2rem',
 					transition: 'border-color 0.15s ease',
 					width: '100%'
 				}}
 				type="text"
 				value={value}
 			/>
+			{shortcut && value === '' ? (
+				<kbd
+					style={{
+						border: '1px solid var(--sidebar-hairline)',
+						borderRadius: '0.35rem',
+						color: 'var(--sidebar-muted)',
+						fontFamily: 'inherit',
+						fontSize: '0.7rem',
+						padding: '0.05rem 0.35rem',
+						pointerEvents: 'none',
+						position: 'absolute',
+						right: '0.6rem',
+						top: '50%',
+						transform: 'translateY(-50%)'
+					}}
+				>
+					{shortcut}
+				</kbd>
+			) : null}
 		</div>
 	);
 };
 
 export const SidebarNav = ({
 	navigateToView,
+	onOpenSearch,
 	onToggleSection,
 	openSections,
 	themeSprings,
@@ -513,8 +552,20 @@ export const SidebarNav = ({
 				flexDirection: 'column'
 			}}
 		>
-			<SidebarFilter onChange={setQuery} value={query} />
+			<SidebarFilter
+				onChange={setQuery}
+				onSubmit={onOpenSearch}
+				value={query}
+			/>
 			<div style={{ height: '1rem' }} />
+			{isFiltering ? (
+				<NavRow
+					label={`Search all docs for “${deferredQuery.trim()}”`}
+					onClick={() => onOpenSearch(deferredQuery)}
+				>
+					<SearchIcon />
+				</NavRow>
+			) : null}
 			<NavRow
 				active={view === 'packages'}
 				label="All Packages"
@@ -539,7 +590,8 @@ export const SidebarNav = ({
 						padding: '1rem 0.65rem'
 					}}
 				>
-					Nothing matches “{deferredQuery}”.
+					No page titles match “{deferredQuery}”. Press Enter to
+					search the text of every page.
 				</span>
 			) : null}
 		</animated.nav>
