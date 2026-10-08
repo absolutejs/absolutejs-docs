@@ -105,10 +105,10 @@ const stopReceived = await pushNotifications.onReceived((notification) => {
   showToast(notification.title, notification.body);
 });
 
-// The user tapped a notification or one of its actions.
+// One of your notification's action buttons was pressed. A plain tap
+// already opens the notification's deepLink inside the app.
 const stopActions = await pushNotifications.onAction(({ actionId, notification }) => {
-  const link = notification.data.absoluteDeepLink;
-  if (actionId === 'tap' && typeof link === 'string') openInApp(link);
+  if (actionId === 'archive') archiveOrder(notification.data.orderId);
 });
 
 // When the component unmounts

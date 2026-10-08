@@ -310,6 +310,21 @@ export const NativeReleaseView = ({
 						<code>--unsigned</code> only for a build you will not
 						publish.
 					</Callout>
+					<Callout
+						themeSprings={themeSprings}
+						title="Apps that use push"
+					>
+						The iOS project is set up for development push so builds
+						from Xcode sign. The App Store distribution profile must
+						switch the exported app to production push, or Apple
+						rejects every device’s push token and nobody receives
+						notifications. The build reads the entitlements signed
+						into the exported IPA and stops if{' '}
+						<code>aps-environment</code> is not{' '}
+						<code>production</code>; enable Push Notifications on
+						your App ID and use a distribution profile that includes
+						it. Since 0.20.0-beta.136.
+					</Callout>
 				</section>
 
 				<section style={sectionStyle}>

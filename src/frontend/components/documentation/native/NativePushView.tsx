@@ -104,7 +104,7 @@ const messageRows = [
 	[{ code: 'title' }, 'The heading.'],
 	[
 		{ code: 'deepLink' },
-		'Where a tap should go. Arrives as data.absoluteDeepLink in the app, and opens that URL from a browser notification.'
+		'Where a tap should go. Tapping the notification opens it inside the app, even when the app was closed, and opens that URL from a browser notification. Only your app’s own hosts and URL scheme open.'
 	],
 	[
 		{ code: 'data' },
@@ -120,7 +120,7 @@ const platformRows = [
 	[
 		'iOS',
 		'An APNs key (.p8) from your Apple Developer account, with its key ID and your team ID.',
-		'The push entitlement and the code that receives the device address are added to the iOS project for you. For builds run from Xcode, create the APNs adapter with environment set to sandbox.'
+		'The push entitlement and the code that receives the device address are added to the iOS project for you. Release builds check that the app is signed for production push. For builds run from Xcode, create the APNs adapter with environment set to sandbox.'
 	],
 	[
 		'Android',
@@ -283,10 +283,10 @@ export const NativePushView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						Listen for notifications while the app is open, and for
-						taps. The <code>deepLink</code> you sent arrives in{' '}
-						<code>notification.data.absoluteDeepLink</code>; route
-						to it with your app’s own navigation.
+						Tapping a notification opens its <code>deepLink</code>{' '}
+						inside the app for you, whether the app was open or
+						closed. Listen for notifications that arrive while the
+						app is open, and for action buttons you add yourself.
 					</p>
 					<PrismPlus
 						codeString={pushReceive}
