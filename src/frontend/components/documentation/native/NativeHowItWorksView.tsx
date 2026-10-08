@@ -3,6 +3,7 @@ import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
 	howItWorksKeepReleases,
+	howItWorksReleaseStore,
 	howItWorksPageRequest,
 	howItWorksPageResponse,
 	howItWorksPageRoute
@@ -389,9 +390,22 @@ export const NativeHowItWorksView = ({
 						<code>build/.absolutejs/mobile-compatibility</code>{' '}
 						(under your <code>buildDirectory</code>). A build that
 						starts from an empty directory, as most CI builds do,
-						only knows the release it just made. Restore that folder
-						from the previous build first:
+						only knows the release it just made. Point{' '}
+						<code>mobile.compatibility.store</code> at a blob store
+						and every build reads the history from it and adds its
+						own release; releases an existing build directory
+						already has are copied in on the first build.
 					</Callout>
+					<PrismPlus
+						codeString={howItWorksReleaseStore}
+						language="typescript"
+						showLineNumbers={false}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						Without a store, restore the folder from the previous
+						build before building:
+					</p>
 					<PrismPlus
 						codeString={howItWorksKeepReleases}
 						language="yaml"

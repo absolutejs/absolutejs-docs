@@ -129,7 +129,7 @@ const assetsFlagItems: DefinitionItem[] = [
 const linkKindRows: ComparisonRow[] = [
 	{
 		feature: 'Example',
-		values: ['https://shop.example.com/orders/42', 'shop://orders/42']
+		values: ['https://shop.example.com/orders/42', 'shop://open/orders/42']
 	},
 	{
 		feature: 'Opens the app from a browser, email or message',
@@ -321,7 +321,11 @@ export const NativeBrandingLinksView = ({
 						<code>/orders/42</code>, whether the app was closed or
 						already running. Universal links on iOS and app links on
 						Android are the HTTPS kind; a custom scheme is the
-						shorter fallback.
+						shorter fallback. In a custom-scheme link the word right
+						after <code>shop://</code> is ignored and the path
+						follows it, so <code>shop://open/orders/42</code> opens{' '}
+						<code>/orders/42</code>; so does{' '}
+						<code>shop:///orders/42</code>.
 					</p>
 					<ComparisonTable
 						columns={['HTTPS links', 'Custom scheme']}

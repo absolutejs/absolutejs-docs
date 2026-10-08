@@ -357,9 +357,9 @@ export const NativeOverviewView = ({
 						fresh data when it opens; data that must be there
 						offline lives in <code>@absolutejs/sync</code>. When you
 						deploy a new server, apps already installed keep
-						working: as long as your build directory is kept between
-						builds, the server keeps answering the three most recent
-						releases, and asks for an update only when an installed
+						working: the server keeps answering the three most
+						recent releases, kept in a blob store or your build
+						directory, and asks for an update only when an installed
 						app is older than that.{' '}
 						<a href="/documentation/native-how-it-works">
 							How it works

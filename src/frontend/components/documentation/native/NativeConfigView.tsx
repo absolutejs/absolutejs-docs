@@ -98,6 +98,18 @@ const appRows: DocsTableCell[][] = [
 		'string',
 		"'.absolutejs/mobile/web'",
 		'Where the packaged interface is written before it is copied into the native projects. Must stay inside the project.'
+	],
+	[
+		field('compatibility.store'),
+		'string',
+		'None',
+		'Module whose default export is a blob store, such as awsS3BlobStore from @absolutejs/blob/aws-s3. Builds keep their release history there, so a fresh CI checkout still serves apps already installed. Since 0.20.0-beta.134.'
+	],
+	[
+		field('compatibility.prefix'),
+		'string',
+		"'absolutejs/mobile-compatibility'",
+		'Key prefix inside the store, for several apps or environments sharing one bucket.'
 	]
 ];
 
