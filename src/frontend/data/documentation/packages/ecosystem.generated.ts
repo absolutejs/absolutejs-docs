@@ -4151,6 +4151,2763 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.26.0'
 	},
 	{
+		api: [
+			{
+				entryPoint: '@absolutejs/agent-exchange',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentExchangeApprovalChallenge',
+						signature: 'agentExchangeApprovalChallenge'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentExchangeBinding',
+						signature: 'agentExchangeBinding'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentExchangeContext',
+						signature: 'agentExchangeContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentExchangeMandateApprovalChallenge',
+						signature: 'agentExchangeMandateApprovalChallenge'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AgentExchangeError',
+						signature: 'AgentExchangeError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'safeAgentExchangeError',
+						signature: 'safeAgentExchangeError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AgentExchangeErrorCode',
+						signature: 'type AgentExchangeErrorCode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'assertNoSensitiveValue',
+						signature: 'assertNoSensitiveValue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'containsSensitiveValue',
+						signature: 'containsSensitiveValue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AGENT_EXCHANGE_MANDATE_JWS_TYPE',
+						signature: 'AGENT_EXCHANGE_MANDATE_JWS_TYPE'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAgentExchangeStandingMandateAuthority',
+						signature: 'createAgentExchangeStandingMandateAuthority'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_MANDATE_APPROVAL_MAX_AGE_MS',
+						signature: 'DEFAULT_MANDATE_APPROVAL_MAX_AGE_MS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_MANDATE_MAX_GRANTS',
+						signature: 'DEFAULT_MANDATE_MAX_GRANTS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_MANDATE_MAX_PAYLOAD_BYTES',
+						signature: 'DEFAULT_MANDATE_MAX_PAYLOAD_BYTES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_MANDATE_MAX_TTL_MS',
+						signature: 'DEFAULT_MANDATE_MAX_TTL_MS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_MANDATE_MAX_USES',
+						signature: 'DEFAULT_MANDATE_MAX_USES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryAgentExchangeMandateStore',
+						signature: 'createMemoryAgentExchangeMandateStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MemoryAgentExchangeMandateStore',
+						signature: 'type MemoryAgentExchangeMandateStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAgentExchangeReceiver',
+						signature: 'createAgentExchangeReceiver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryAgentExchangeReplayStore',
+						signature: 'createMemoryAgentExchangeReplayStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MemoryAgentExchangeReplayStore',
+						signature: 'type MemoryAgentExchangeReplayStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAgentExchangeSender',
+						signature: 'createAgentExchangeSender'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryAgentExchangeStore',
+						signature: 'createMemoryAgentExchangeStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MemoryAgentExchangeStore',
+						signature: 'type MemoryAgentExchangeStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentExchangeErrorToTelemetry',
+						signature: 'agentExchangeErrorToTelemetry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentExchangeReceiptToTelemetry',
+						signature: 'agentExchangeReceiptToTelemetry'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExchangeIdentity',
+						signature:
+							'type ExchangeIdentity = {\n    readonly agentId: string;\n    readonly authority: string;\n    readonly delegationId?: string;\n    readonly deviceId?: string;\n    readonly subject: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExchangeRiskClass',
+						signature:
+							'type ExchangeRiskClass = "account-recovery" | "administrative" | "authentication" | "data-export" | "money-movement" | "routine" | "security-settings" | (string & {});'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeAssurance',
+						signature:
+							'type AgentExchangeAssurance = {\n    readonly approval: "policy";\n    readonly credential: "bearer" | "origin-bound" | "sender-constrained";\n    readonly execution: "general" | "purpose-bound";\n} | {\n    readonly approval: "webauthn-verifier-bound";\n    readonly credential: "origin-bound" | "sender-constrained" | "token-confined-broker";\n    readonly execution: "purpose-bound";\n} | {\n    readonly approval: "standing-mandate";\n    readonly credential: "token-confined-broker";\n    readonly execution: "purpose-bound";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeMandatePrincipal',
+						signature:
+							'type AgentExchangeMandatePrincipal = {\n    readonly authority: string;\n    readonly subject: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeMandateActor',
+						signature:
+							'type AgentExchangeMandateActor = AgentExchangeMandatePrincipal & {\n    readonly agentId: string;\n    readonly delegationId?: string;\n    readonly deviceId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeMandateGrant',
+						signature:
+							'type AgentExchangeMandateGrant = {\n    readonly accountRef: string;\n    readonly operation: string;\n    readonly origin: string;\n    readonly provider: string;\n    readonly purpose: string;\n    readonly risk: ExchangeRiskClass;\n    readonly secretKind: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeStandingMandate',
+						signature:
+							'type AgentExchangeStandingMandate = {\n    readonly approval: {\n        readonly credentialIdHash: string;\n        readonly method: "webauthn-verifier-bound";\n        readonly rpId: string;\n        readonly userVerified: true;\n        readonly verifiedAt: number;\n        readonly verifierOrigin: string;\n    };\n    readonly audience: AgentExchangeMandateActor;\n    readonly expiresAt: number;\n    readonly grants: readonly AgentExchangeMandateGrant[];\n    readonly issuedAt: number;\n    readonly issuer: AgentExchangeMandatePrincipal;\n    readonly mandateId: string;\n    readonly maximumUses: number;\n    readonly notBefore: number;\n    readonly requester: AgentExchangeMandateActor;\n    readonly version: 1;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeStandingMandateInput',
+						signature:
+							'type AgentExchangeStandingMandateInput = Omit<AgentExchangeStandingMandate, "issuedAt" | "version">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeStandingMandateDraft',
+						signature:
+							'type AgentExchangeStandingMandateDraft = Omit<AgentExchangeStandingMandateInput, "approval">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SignedAgentExchangeStandingMandate',
+						signature:
+							'type SignedAgentExchangeStandingMandate = {\n    readonly compactJws: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeMandateJwsSigner',
+						signature:
+							'type AgentExchangeMandateJwsSigner = {\n    readonly sign: (input: {\n        readonly payload: Uint8Array;\n        readonly type: "absolute-agent-exchange-mandate+jws";\n    }) => Promise<string> | string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeMandateJwsVerifier',
+						signature:
+							'type AgentExchangeMandateJwsVerifier = {\n    readonly verify: (input: {\n        readonly compactJws: string;\n        readonly expectedIssuer: AgentExchangeMandatePrincipal;\n        readonly type: "absolute-agent-exchange-mandate+jws";\n    }) => Promise<{\n        readonly algorithm: string;\n        readonly keyId: string;\n        readonly payload: Uint8Array;\n    }> | {\n        readonly algorithm: string;\n        readonly keyId: string;\n        readonly payload: Uint8Array;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeMandateRegistration',
+						signature:
+							'type AgentExchangeMandateRegistration = {\n    readonly expiresAt: number;\n    readonly issuer: AgentExchangeMandatePrincipal;\n    readonly mandateId: string;\n    readonly maximumUses: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeMandateConsumeResult',
+						signature:
+							'type AgentExchangeMandateConsumeResult = "consumed" | "exhausted" | "replay" | "revoked" | "unknown";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeMandateStore',
+						signature:
+							'type AgentExchangeMandateStore = {\n    readonly consume: (input: {\n        readonly exchangeId: string;\n        readonly mandateId: string;\n        readonly now: number;\n    }) => Promise<AgentExchangeMandateConsumeResult>;\n    readonly register: (registration: AgentExchangeMandateRegistration) => Promise<boolean>;\n    readonly revoke: (input: {\n        readonly issuer: AgentExchangeMandatePrincipal;\n        readonly mandateId: string;\n        readonly now: number;\n    }) => Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeMandateAuthorization',
+						signature:
+							'type AgentExchangeMandateAuthorization = {\n    readonly algorithm: string;\n    readonly keyId: string;\n    readonly mandateId: string;\n    readonly remainingUses?: number;\n    readonly status: "authorized";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeStandingMandateAuthority',
+						signature:
+							'type AgentExchangeStandingMandateAuthority = {\n    readonly authorize: (input: {\n        readonly expectedIssuer: AgentExchangeMandatePrincipal;\n        readonly request: AgentExchangeRequest;\n        readonly signedMandate: SignedAgentExchangeStandingMandate;\n    }) => Promise<AgentExchangeMandateAuthorization>;\n    readonly issue: (input: AgentExchangeStandingMandateInput) => Promise<{\n        readonly mandate: AgentExchangeStandingMandate;\n        readonly signedMandate: SignedAgentExchangeStandingMandate;\n    }>;\n    readonly revoke: (input: {\n        readonly issuer: AgentExchangeMandatePrincipal;\n        readonly mandateId: string;\n    }) => Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExchangeResource',
+						signature:
+							'type ExchangeResource = {\n    readonly accountRef: string;\n    readonly challengeId?: string;\n    readonly operation: string;\n    readonly origin: string;\n    readonly provider: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeRequestInput',
+						signature:
+							'type AgentExchangeRequestInput = {\n    readonly assurance: AgentExchangeAssurance;\n    readonly expiresAt: number;\n    readonly idempotencyKey?: string;\n    readonly mandateId?: string;\n    readonly processingMode?: SecretProcessingMode;\n    readonly purpose: string;\n    readonly recipient: ExchangeIdentity;\n    readonly requester: ExchangeIdentity;\n    readonly resource: ExchangeResource;\n    readonly risk: ExchangeRiskClass;\n    readonly secretKind: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeRequest',
+						signature:
+							'type AgentExchangeRequest = Omit<AgentExchangeRequestInput, "processingMode"> & {\n    readonly actionId: string;\n    readonly createdAt: number;\n    readonly exchangeId: string;\n    readonly maximumUses: 1;\n    readonly nonce: string;\n    readonly processingMode: SecretProcessingMode;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RequestedAgentExchange',
+						signature:
+							'type RequestedAgentExchange = {\n    readonly decision: ActionDecision;\n    readonly exchange: AgentExchangeRequest;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SensitiveValue',
+						signature:
+							'type SensitiveValue = {\n    readonly bytes: Uint8Array;\n    readonly evidence?: {\n        readonly matchedAt: number;\n        readonly messageId: string;\n        readonly parserId: string;\n        readonly provider: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SensitiveValueSource',
+						signature:
+							'type SensitiveValueSource = {\n    readonly read: (request: AgentExchangeRequest) => Promise<SensitiveValue> | SensitiveValue;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SensitiveValueSinkResult',
+						signature:
+							'type SensitiveValueSinkResult = {\n    readonly reference?: string;\n    readonly status: "submitted";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SensitiveValueSink',
+						signature:
+							'type SensitiveValueSink = {\n    readonly submit: (input: {\n        readonly plaintext: Uint8Array;\n        readonly request: AgentExchangeRequest;\n    }) => Promise<SensitiveValueSinkResult> | SensitiveValueSinkResult;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecipientKey',
+						signature:
+							'type RecipientKey = {\n    readonly keyId: string;\n    readonly publicKey: Uint8Array;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecipientKeyDirectory',
+						signature:
+							'type RecipientKeyDirectory = {\n    readonly resolve: (request: AgentExchangeRequest) => Promise<RecipientKey> | RecipientKey;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeDelivery',
+						signature:
+							'type AgentExchangeDelivery = {\n    readonly authenticatedContext: AuthenticatedContext;\n    readonly envelope: Uint8Array;\n    readonly recipientKeyId: string;\n    readonly request: AgentExchangeRequest;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeReceipt',
+						signature:
+							'type AgentExchangeReceipt = {\n    readonly assurance: AgentExchangeAssurance;\n    readonly completedAt: number;\n    readonly consentId: string;\n    readonly exchangeId: string;\n    readonly maximumUses: 1;\n    readonly modelObservedSecret: false;\n    readonly processingMode: "tool-confined";\n    readonly reference?: string;\n    readonly status: "submitted";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeWebAuthnApprovalEvidence',
+						signature:
+							'type AgentExchangeWebAuthnApprovalEvidence = {\n    readonly challenge: string;\n    readonly credentialIdHash: string;\n    readonly requestDigest: string;\n    readonly rpId: string;\n    readonly subject: string;\n    readonly userVerified: true;\n    readonly verifiedAt: number;\n    readonly verifierOrigin: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeApprovalProvider',
+						signature:
+							'type AgentExchangeApprovalProvider = {\n    readonly begin: (input: {\n        readonly challenge: string;\n        readonly request: AgentExchangeRequest;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly challenge: string;\n        readonly options: unknown;\n    }> | {\n        readonly challenge: string;\n        readonly options: unknown;\n    };\n    readonly verify: (input: {\n        readonly challenge: string;\n        readonly request: AgentExchangeRequest;\n        readonly response: unknown;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly credentialId: string;\n        readonly rpId: string;\n        readonly subject: string;\n        readonly userVerified: true;\n        readonly verifierOrigin: string;\n    }> | {\n        readonly credentialId: string;\n        readonly rpId: string;\n        readonly subject: string;\n        readonly userVerified: true;\n        readonly verifierOrigin: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeTransport',
+						signature:
+							'type AgentExchangeTransport = {\n    readonly deliver: (delivery: AgentExchangeDelivery) => Promise<AgentExchangeReceipt>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecipientConsent',
+						signature:
+							'type RecipientConsent = {\n    readonly consentId: string;\n    readonly expiresAt: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecipientConsentVerifier',
+						signature:
+							'type RecipientConsentVerifier = {\n    readonly assertAllows: (request: AgentExchangeRequest) => Promise<RecipientConsent> | RecipientConsent;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeReplayStore',
+						signature:
+							'type AgentExchangeReplayStore = {\n    readonly consume: (input: {\n        readonly exchangeId: string;\n        readonly expiresAt: number;\n        readonly nonce: string;\n        readonly now: number;\n    }) => Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeStore',
+						signature:
+							'type AgentExchangeStore = {\n    readonly get: (exchangeId: string) => Promise<AgentExchangeRequest | undefined>;\n    readonly getByActionId: (actionId: string) => Promise<AgentExchangeRequest | undefined>;\n    readonly getReceipt: (exchangeId: string) => Promise<AgentExchangeReceipt | undefined>;\n    readonly save: (request: AgentExchangeRequest) => Promise<boolean>;\n    readonly saveReceipt: (receipt: AgentExchangeReceipt) => Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeSenderOptions',
+						signature:
+							'type AgentExchangeSenderOptions = {\n    readonly approvalProvider?: AgentExchangeApprovalProvider;\n    readonly agency: Agency;\n    readonly allowHighRisk?: (input: AgentExchangeRequestInput) => Promise<boolean> | boolean;\n    readonly allowInsecureLocalhost?: boolean;\n    readonly allowedProcessingModes?: readonly SecretProcessingMode[];\n    readonly e2ee: EnvelopeProvider;\n    readonly keyDirectory: RecipientKeyDirectory;\n    readonly maxSecretBytes?: number;\n    readonly maxTtlMs?: number;\n    readonly now?: () => number;\n    readonly source: SensitiveValueSource;\n    readonly store: AgentExchangeStore;\n    readonly transport: AgentExchangeTransport;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeReceiverOptions',
+						signature:
+							'type AgentExchangeReceiverOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly consent: RecipientConsentVerifier;\n    readonly e2ee: EnvelopeProvider;\n    readonly maxSecretBytes?: number;\n    readonly maxTtlMs?: number;\n    readonly now?: () => number;\n    readonly replay: AgentExchangeReplayStore;\n    readonly sink: SensitiveValueSink;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeSender',
+						signature:
+							'type AgentExchangeSender = {\n    readonly approve: (input: {\n        readonly exchangeId: string;\n        readonly response: unknown;\n    }) => Promise<AgentExchangeWebAuthnApprovalEvidence>;\n    readonly beginApproval: (exchangeId: string) => Promise<{\n        readonly challenge: string;\n        readonly options: unknown;\n    }>;\n    readonly execute: (input: {\n        readonly exchangeId: string;\n        readonly leaseId: string;\n    }) => Promise<{\n        readonly agencyReceipt: ActionReceipt;\n        readonly receipt: AgentExchangeReceipt;\n    }>;\n    readonly issueLease: (exchangeId: string) => Promise<ExecutionLease>;\n    readonly request: (input: AgentExchangeRequestInput) => Promise<RequestedAgentExchange>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeReceiver',
+						signature:
+							'type AgentExchangeReceiver = {\n    readonly receive: (delivery: AgentExchangeDelivery) => Promise<AgentExchangeReceipt>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentExchangeTelemetry',
+						signature:
+							'type AgentExchangeTelemetry = {\n    readonly attributes: Readonly<Record<string, boolean | number | string>>;\n    readonly name: "agent_exchange.completed" | "agent_exchange.failed";\n};'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_BLOCKED_RISKS',
+						signature: 'DEFAULT_BLOCKED_RISKS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_EXCHANGE_MAX_TTL_MS',
+						signature: 'DEFAULT_EXCHANGE_MAX_TTL_MS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_MAX_SECRET_BYTES',
+						signature: 'DEFAULT_MAX_SECRET_BYTES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isAgentExchangeAssurance',
+						signature: 'isAgentExchangeAssurance'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validateAgentExchangeInput',
+						signature: 'validateAgentExchangeInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validateAgentExchangeRequest',
+						signature: 'validateAgentExchangeRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validateSensitiveValue',
+						signature: 'validateSensitiveValue'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/agent-exchange/a2a',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'ABSOLUTE_AGENT_EXCHANGE_EXTENSION',
+						signature:
+							'const ABSOLUTE_AGENT_EXCHANGE_EXTENSION: "https://github.com/absolutejs/agent-exchange/extensions/a2a/v1";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AGENT_EXCHANGE_REQUEST_MEDIA_TYPE',
+						signature:
+							'const AGENT_EXCHANGE_REQUEST_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-reference+json";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'A2aAgentExchangeReference',
+						signature:
+							'type A2aAgentExchangeReference = {\n    readonly actionId: string;\n    readonly assurance: AgentExchangeAssurance;\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly mandateId?: string;\n    readonly operation: string;\n    readonly origin: string;\n    readonly processingMode: "tool-confined";\n    readonly provider: string;\n    readonly purpose: string;\n    readonly recipientAgentId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'withAgentExchangeExtension',
+						signature:
+							'const withAgentExchangeExtension: (card: A2aAgentCard) => A2aAgentCard;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'toA2aAgentExchangeReference',
+						signature:
+							'const toA2aAgentExchangeReference: (request: AgentExchangeRequest) => A2aAgentExchangeReference;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'toA2aAgentExchangeMessage',
+						signature:
+							'const toA2aAgentExchangeMessage: (request: AgentExchangeRequest) => A2aMessage;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseA2aAgentExchangeReference',
+						signature:
+							'const parseA2aAgentExchangeReference: (message: A2aMessage) => A2aAgentExchangeReference;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/agent-exchange/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    maxSecretBytes?: number;\n    maxTtlMs?: number;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        maxSecretBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maxTtlMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+					}
+				]
+			}
+		],
+		category: 'AI',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/a2a.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agency --external '@absolutejs/agency/*' --external @absolutejs/a2a --external '@absolutejs/a2a/*' --external @absolutejs/e2ee --external '@absolutejs/e2ee/*' --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Verified, model-blind sensitive-value exchange for humans and agents using Agency, A2A, and E2EE.',
+		directory: 'agent-exchange',
+		kind: 'package',
+		name: 'Agent Exchange',
+		packageName: '@absolutejs/agent-exchange',
+		private: false,
+		publicExports: [
+			'@absolutejs/agent-exchange',
+			'@absolutejs/agent-exchange/a2a',
+			'@absolutejs/agent-exchange/manifest',
+			'@absolutejs/agent-exchange/manifest.json'
+		],
+		readmeDigest:
+			'a823f7d8fe1c1de45bb0f35cbdef1aa4b609434a3187e16b43e3add664090420',
+		readmeSamples: [
+			{
+				code: 'Auth identity and delegation\n        ↓\nAgency approval and single-use execution lease\n        ↓\ndeterministic source tool → E2EE envelope → deterministic recipient sink\n        ↓\nA2A carries an opaque exchange reference and redacted receipt',
+				description: '# @absolutejs/agent-exchange',
+				heading: '@absolutejs/agent-exchange quick start',
+				language: 'text'
+			},
+			{
+				code: 'assurance: {\n  approval: "webauthn-verifier-bound",\n  credential: "sender-constrained",\n  execution: "purpose-bound",\n}',
+				description:
+					'Every request declares three independent assurances. The phishing-resistant shape is intentionally unrepresentable with a bearer credential or general execution:',
+				heading: 'Explicit assurance',
+				language: 'typescript'
+			},
+			{
+				code: 'assurance: {\n  approval: "webauthn-verifier-bound",\n  credential: "token-confined-broker",\n  execution: "purpose-bound",\n}',
+				description:
+					'Every request declares three independent assurances. The phishing-resistant shape is intentionally unrepresentable with a bearer credential or general execution:',
+				heading: 'Explicit assurance 2',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Verified, purpose-bound, model-blind sensitive-value exchange for humans and agents. It composes existing AbsoluteJS primitives instead of creating another permission or transport system:',
+				details: [
+					'The default processing mode is tool-confined. Protected bytes are supplied to trusted tools, wiped on every completion path, and excluded from the request, Agency ledger, A2A task history, errors, telemetry, and receipts.',
+					'This is an experimental 0.x release and has not been independently audited. Phishing resistance is available only when every declared assurance requirement is actually satisfied; email and SMS codes remain bearer credentials.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Every request declares three independent assurances. The phishing-resistant shape is intentionally unrepresentable with a bearer credential or general execution:',
+				details: [
+					"For this mode, beginApproval() derives a domain-separated SHA-256 challenge from the complete immutable exchange. approve() accepts only a configured approval provider's verified WebAuthn result for the requester's exact subject and authority origin. The resulting Agency approval stores a hash of the credential identifier, never the assertion or raw identifier. Both lease issuance and execution re-check that evidence against the current request.",
+					"This follows WebAuthn's requirements to validate the challenge, origin, RP ID hash, user-presence flag, and—when requested—the user-verification flag. The provider must request user verification and perform the cryptographic assertion validation.",
+					'When an upstream provider issues bearer access tokens but Absolute PaaS confines them to a deterministic broker, the request uses a separate, deliberately weaker shape:',
+					'This means the token is inaccessible to both agents and restricted to one approved tool operation, but the upstream resource itself does not cryptographically bind the access token to the broker. It must never be described as equivalent to a sender-constrained DPoP or mTLS token.',
+					'Standing mandates',
+					'Long-running agent-to-agent automation uses a separate assurance value:',
+					"createAgentExchangeStandingMandateAuthority() issues and verifies a compact JWS whose canonical payload binds the owner, requesting agent, executing agent, exact OAuth agent delegation, account, provider, origin, operation, purpose, risk class, secret kind, activation window, expiry, and total use limit. Issuance requires fresh, user-verified WebAuthn evidence. Authorization additionally requires the request's delegationId to be present as its independently authenticated agent delegation, requires the request's separate mandateId to equal the signed mandate ID, and atomically consumes the exchange ID in a revocation store. The JWS is not placed in A2A task history.",
+					'The core accepts interchangeable JWS signer, verifier, and durable store implementations. Production verifiers must authenticate the trusted issuer and key ID, enforce the explicit JWS type and allowed algorithm, and reject unknown or revoked registrations. The memory store is for tests and local development only.',
+					'This design uses the signed-payload format from RFC 7515, canonical JSON rules from RFC 8785, the narrow actions and locations model from RFC 9396, and the separate subject/actor semantics described by RFC 8693. It does not make the wire contract depend on an unfinished transaction-token or chain-delegation draft.'
+				],
+				title: 'Explicit assurance'
+			},
+			{
+				description:
+					'Every request binds requester, recipient, purpose, service origin, account',
+				details: [
+					'reference, operation, assurance, expiry, nonce, processing mode, and maximumUses: 1.',
+					'Agency authorizes the metadata-only action and consumes the execution lease',
+					'before a source is read.',
+					'Recipient consent is checked against the same request.',
+					'The receiver authenticates the envelope, then atomically consumes the nonce',
+					'before sink execution. Invalid ciphertext cannot burn a legitimate exchange.',
+					'Source, envelope, transport, and sink failures become allowlisted error codes;',
+					'dependency error messages never cross the boundary.',
+					'Receipts and sink references are scanned for direct, UTF-8, hexadecimal, base64,',
+					'and base64url representations of the protected value.',
+					'High-risk recovery, administrative, security-setting, money movement, and export',
+					'flows are denied unless the host explicitly opts them in.'
+				],
+				title: 'Security invariants'
+			},
+			{
+				description:
+					'@absolutejs/agent-exchange/a2a adds the Agent Exchange extension to an Agent Card and creates request messages containing only an opaque exchange reference and safe metadata. Envelopes are delivered through the configured exchange transport, not persisted in ordinary A2A task history.',
+				details: ['See SECURITY.md before using real protected data.'],
+				title: 'A2A boundary'
+			},
+			{
+				description:
+					'Source integrations live in the public absolutejs/agent-exchange-sources monorepo so this core never depends on mailbox, SMS, vault, or device-provider SDKs.',
+				details: [
+					'The first adapter is @absolutejs/agent-exchange-email. It binds deterministic Gmail, Microsoft Graph, or IMAP retrieval from @absolutejs/email to the same SensitiveValueSource API:',
+					'Verification-code retrieval remains absent from model-facing manifests. The adapter hands mutable bytes directly to this package for encryption, and this package wipes them after delivery.'
+				],
+				title: 'Interchangeable sources'
+			},
+			{
+				description:
+					"The 0.5.x line uses the version-bound @absolutejs/e2ee@0.5.x certification contract and the separately certified provider runtimes. Provider admission remains the host's responsibility; a compatible type does not replace release-specific security evidence.",
+				details: [],
+				title: 'Release compatibility'
+			}
+		],
+		repository: 'https://github.com/absolutejs/agent-exchange',
+		subpackages: [],
+		version: '0.5.0'
+	},
+	{
+		api: [],
+		category: 'AI',
+		commands: [
+			{
+				command:
+					'bun run --cwd conformance build && bun run --cwd destinations build && bun run --cwd oauth build && bun run --cwd broker build && bun run --cwd a2a build && bun run --cwd webauthn build && bun run --cwd oauth-webcrypto build && bun run --cwd oauth-stores build && bun run --cwd mandate-webcrypto build && bun run --cwd mandate-stores build && bun run --cwd google build && bun run --cwd microsoft build && bun run --cwd http-destination build && bun run --cwd secure-messaging build && bun run --cwd secure-messaging-stores build',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format:check && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Interchangeable, security-profiled providers for @absolutejs/agent-exchange.',
+		directory: 'agent-exchange-providers',
+		kind: 'monorepo',
+		name: 'Agent Exchange Providers',
+		packageName: '@absolutejs/agent-exchange-providers',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'89bfc7db9e551d292eb98e6f273020b0e3c8f13b4eeb8f6e6870f6434c81e446',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Interchangeable, security-profiled providers for @absolutejs/agent-exchange.',
+				details: [
+					'@absolutejs/agent-exchange-webauthn verifies a request-bound,',
+					'user-verified WebAuthn approval.',
+					'@absolutejs/agent-exchange-oauth implements a hardened OAuth grant',
+					'handoff using PAR, PKCE, issuer identification, resource indicators, RAR, and DPoP.',
+					'@absolutejs/agent-exchange-oauth-webcrypto supplies a',
+					'non-exportable ES256 DPoP signer.',
+					'@absolutejs/agent-exchange-oauth-stores supplies one-time',
+					'memory, Redis, and PostgreSQL authorization-session stores.',
+					'@absolutejs/agent-exchange-provider-conformance evaluates',
+					'provider security capabilities, verifies DPoP proofs, and actively tests A2A sandboxes for negotiation, preparation, credential separation, replay safety, and task/receipt redaction.',
+					'@absolutejs/agent-exchange-broker confines an upstream bearer',
+					'token to one tenant, exchange, provider, purpose, and deterministic operation.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/agent-exchange-providers',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-a2a',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE',
+								signature:
+									'const AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-receipt+json";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_A2A_SKILL_ID',
+								signature:
+									'const AGENT_EXCHANGE_A2A_SKILL_ID: "absolute-agent-exchange";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE',
+								signature:
+									'const AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-preparation+json";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aReceipt',
+								signature:
+									'type AgentExchangeA2aReceipt = {\n    readonly completedAt: number;\n    readonly exchangeId: string;\n    readonly mandateId?: string;\n    readonly modelObservedSecret: false;\n    readonly processingMode: "tool-confined";\n    readonly reference?: string;\n    readonly status: "submitted";\n    readonly usesRemaining?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aExecutionContext',
+								signature:
+									'type AgentExchangeA2aExecutionContext<Caller> = {\n    readonly caller: Caller;\n    readonly reference: A2aAgentExchangeReference;\n    readonly request: Request;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aServerOptions',
+								signature:
+									'type AgentExchangeA2aServerOptions<Caller> = {\n    readonly agentCard: A2aAgentCard;\n    readonly authorize: (request: Request) => Promise<A2aAuthResult<Caller>> | A2aAuthResult<Caller>;\n    readonly execute: (context: AgentExchangeA2aExecutionContext<Caller>) => Promise<AgentExchangeA2aReceipt> | AgentExchangeA2aReceipt;\n    readonly maxRequestBytes?: number;\n    readonly path?: string;\n    readonly preparationEndpoint?: string;\n    readonly taskStore: A2aTaskStore;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aClient',
+								signature:
+									'type AgentExchangeA2aClient = {\n    readonly agentCard: A2aAgentCard;\n    readonly send: (request: AgentExchangeRequest) => Promise<AgentExchangeA2aReceipt>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aPreparationContext',
+								signature:
+									'type AgentExchangeA2aPreparationContext = {\n    readonly agentCard: A2aAgentCard;\n    readonly reference: A2aAgentExchangeReference;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aPrepare',
+								signature:
+									'type AgentExchangeA2aPrepare = (request: AgentExchangeRequest, context: AgentExchangeA2aPreparationContext) => Promise<unknown> | unknown;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aProfileOptions',
+								signature:
+									'type AgentExchangeA2aProfileOptions = {\n    readonly preparationEndpoint?: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'toAgentExchangeA2aTask',
+								signature:
+									'const toAgentExchangeA2aTask: (input: {\n    readonly message: Parameters<typeof parseA2aAgentExchangeReference>[0];\n    readonly receipt: AgentExchangeA2aReceipt;\n    readonly reference: A2aAgentExchangeReference;\n}) => A2aTask;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'withAgentExchangeA2aProfile',
+								signature:
+									'const withAgentExchangeA2aProfile: (card: A2aAgentCard, options?: AgentExchangeA2aProfileOptions) => A2aAgentCard;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeA2aHandler',
+								signature:
+									'const createAgentExchangeA2aHandler: <Caller>(options: AgentExchangeA2aServerOptions<Caller>) => (request: Request) => Promise<Response | null>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeA2aClient',
+								signature:
+									'const createAgentExchangeA2aClient: (options: {\n    readonly agentCard: A2aAgentCard;\n    readonly fetch?: A2aFetch;\n    readonly headers?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly maxResponseBytes?: number;\n    readonly preparationHeaders?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly prepare?: AgentExchangeA2aPrepare;\n    readonly timeoutMs?: number;\n}) => AgentExchangeA2aClient;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'connectAgentExchangeA2a',
+								signature:
+									'const connectAgentExchangeA2a: (options: {\n    readonly discoveryHeaders?: HeadersInit;\n    readonly fetch?: A2aFetch;\n    readonly headers?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly maxResponseBytes?: number;\n    readonly origin: string;\n    readonly preparationHeaders?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly prepare?: AgentExchangeA2aPrepare;\n    readonly timeoutMs?: number;\n}) => Promise<AgentExchangeA2aClient>;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --target=node --external @absolutejs/a2a --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Negotiated, authenticated A2A client and server adapters for model-blind AbsoluteJS Agent Exchange.',
+				name: '@absolutejs/agent-exchange-a2a',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-a2a'],
+				readmeDigest:
+					'27e6c0e860587354074e801c8167c2b2fc5df90ededf0d283ecc6deb774c0b52',
+				readmeSamples: [
+					{
+						code: 'import {\n  connectAgentExchangeA2a,\n  createAgentExchangeA2aHandler,\n} from "@absolutejs/agent-exchange-a2a";',
+						description: '# @absolutejs/agent-exchange-a2a',
+						heading: '@absolutejs/agent-exchange-a2a quick start',
+						language: 'typescript'
+					},
+					{
+						code: 'const handler = createAgentExchangeA2aHandler({\n  agentCard,\n  authorize,\n  execute,\n  preparationEndpoint: "https://recipient.example/agent-exchange/requests",\n  taskStore,\n});',
+						description:
+							'A recipient that needs the complete request before the opaque A2A signal can advertise a same-origin preparation endpoint in the extension parameters:',
+						heading: 'Prepared exchanges',
+						language: 'typescript'
+					},
+					{
+						code: 'const client = await connectAgentExchangeA2a({\n  headers: () => a2aAuthorizationHeaders(),\n  origin: "https://recipient.example",\n  preparationHeaders: () => preparationAuthorizationHeaders(),\n});\n\nconst receipt = await client.send(request);',
+						description:
+							'A recipient that needs the complete request before the opaque A2A signal can advertise a same-origin preparation endpoint in the extension parameters:',
+						heading: 'Prepared exchanges 2',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							"Interoperable A2A client and server adapters for Agent Exchange. The adapter discovers an A2A 1.0 Agent Card, requires the Agent Exchange extension to be advertised, activates it through A2A-Extensions, and places only the core package's opaque safe reference in task history. Dedicated cards can require the extension; shared cards can advertise it as optional.",
+						details: [
+							'The server authenticates the caller through the host-supplied A2A authorization function, then passes that verified caller and opaque reference to a deterministic executor. The executor must resolve the full request from trusted server state, verify the OAuth delegation and any signed standing mandate, and authorize it before source access. Results are projected into a bounded redacted receipt.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							'A recipient that needs the complete request before the opaque A2A signal can advertise a same-origin preparation endpoint in the extension parameters:',
+						details: [
+							'connectAgentExchangeA2a() discovers that endpoint. Each send(request) posts the complete request there and verifies that the response contains the exact derived opaque reference before sending anything on A2A. Preparation and A2A credentials remain separate:',
+							'The preparation endpoint uses application/vnd.absolutejs.agent-exchange-preparation+json, accepts { request }, and returns { reference }. It must authenticate the delegated caller, validate and durably protect the request, reject replay, and return Cache-Control: no-store. The adapter rejects cross-origin preparation URLs, redirects, response media-type substitution, extra response fields, and any reference that differs from the request.',
+							'Hosts with an existing trusted preparation channel can instead supply a prepare(request, context) callback. Omitting both an advertised endpoint and a callback retains out-of-band preparation mode.',
+							'The adapter intentionally does not transmit signed mandates, OAuth tokens, mailbox credentials, encrypted envelopes, account references, or verification codes through A2A. See the extension specification.',
+							'This is an experimental 0.x package and has not been independently audited.'
+						],
+						title: 'Prepared exchanges'
+					}
+				],
+				sourcePath: 'a2a',
+				version: '0.3.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-broker',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedBrokerClaim',
+								signature:
+									'type TokenConfinedBrokerClaim = {\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly provider: string;\n    readonly tenantId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedBrokerClaimResult',
+								signature:
+									'type TokenConfinedBrokerClaimResult = "claimed" | "completed" | "conflict" | "revoked";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedBrokerStore',
+								signature:
+									'type TokenConfinedBrokerStore = {\n    readonly claim: (claim: TokenConfinedBrokerClaim) => Promise<TokenConfinedBrokerClaimResult>;\n    readonly complete: (input: {\n        readonly exchangeId: string;\n        readonly reference?: string;\n        readonly tenantId: string;\n    }) => Promise<boolean>;\n    readonly fail: (input: {\n        readonly exchangeId: string;\n        readonly tenantId: string;\n    }) => Promise<void>;\n    readonly revoke: (input: {\n        readonly exchangeId: string;\n        readonly tenantId: string;\n    }) => Promise<boolean>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedCredential',
+								signature:
+									'type TokenConfinedCredential = {\n    readonly accessToken: string;\n    readonly expiresAt?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedCredentialResolver',
+								signature:
+									'type TokenConfinedCredentialResolver = {\n    readonly resolve: (input: {\n        readonly accountRef: string;\n        readonly exchangeId: string;\n        readonly provider: string;\n        readonly subject: string;\n        readonly tenantId: string;\n    }) => Promise<TokenConfinedCredential>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedProviderExecutor',
+								signature:
+									'type TokenConfinedProviderExecutor = {\n    readonly execute: (input: {\n        readonly accessToken: string;\n        readonly request: AgentExchangeRequest;\n        readonly tenantId: string;\n    }) => Promise<SensitiveValueSinkResult>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedBrokerReceipt',
+								signature:
+									'type TokenConfinedBrokerReceipt = {\n    readonly assurance: AgentExchangeRequest["assurance"];\n    readonly brokerMode: "token-confined-broker";\n    readonly completedAt: number;\n    readonly exchangeId: string;\n    readonly maximumUses: 1;\n    readonly modelObservedSecret: false;\n    readonly processingMode: "tool-confined";\n    readonly provider: string;\n    readonly reference?: string;\n    readonly status: "submitted";\n    readonly tenantId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createTokenConfinedBroker',
+								signature:
+									'const createTokenConfinedBroker: (options: {\n    readonly credentials: TokenConfinedCredentialResolver;\n    readonly now?: () => number;\n    readonly providers: Readonly<Record<string, TokenConfinedProviderExecutor>>;\n    readonly store: TokenConfinedBrokerStore;\n}) => Readonly<{\n    execute: (input: {\n        readonly request: AgentExchangeRequest;\n        readonly tenantId: string;\n    }) => Promise<TokenConfinedBrokerReceipt>;\n}>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMemoryTokenConfinedBrokerStore',
+								signature:
+									'const createMemoryTokenConfinedBrokerStore: () => TokenConfinedBrokerStore;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --target=node --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Tenant-fenced, one-time token-confined broker contracts for AbsoluteJS Agent Exchange.',
+				name: '@absolutejs/agent-exchange-broker',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-broker'],
+				readmeDigest:
+					'42161d2d2835927bbc44a71dab9143a70e0cf2439b2c4710acc2346fa605de80',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Executes one passkey-approved, purpose-bound Agent Exchange operation while confining an upstream bearer access token to deterministic provider code. The token is never returned to either agent, placed in the request, or serialized in the receipt.',
+						details: [
+							'This assurance is deliberately weaker than a DPoP or mTLS sender-constrained access token: compromise of the broker process can expose a live bearer token. Use tenant-isolated encrypted credential storage, an atomic durable store, restricted egress, short expiries, revocation, and aggressive rate limits.',
+							"The broker also accepts standing-mandate + token-confined-broker + purpose-bound after the host has cryptographically authorized and atomically consumed the request's separate mandateId. The broker does not verify mandates itself."
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'broker',
+				version: '0.3.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-destinations',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeDestinationDescriptor',
+								signature:
+									'type AgentExchangeDestinationDescriptor = {\n    readonly id: string;\n    readonly operations: readonly string[];\n    readonly origin: string;\n    readonly secretKinds: readonly string[];\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeDestinationInput',
+								signature:
+									'type AgentExchangeDestinationInput = {\n    readonly plaintext: Uint8Array;\n    readonly request: AgentExchangeRequest;\n    readonly tenantId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeDestinationAdapter',
+								signature:
+									'type AgentExchangeDestinationAdapter = {\n    readonly descriptor: AgentExchangeDestinationDescriptor;\n    readonly submit: (input: AgentExchangeDestinationInput) => Promise<SensitiveValueSinkResult> | SensitiveValueSinkResult;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeDestinationRegistry',
+								signature:
+									'type AgentExchangeDestinationRegistry = {\n    readonly submit: (input: AgentExchangeDestinationInput) => Promise<SensitiveValueSinkResult>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeDestinationRegistry',
+								signature:
+									'const createAgentExchangeDestinationRegistry: (adapters: readonly AgentExchangeDestinationAdapter[]) => AgentExchangeDestinationRegistry;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Interchangeable, deterministic destination adapter contract for Agent Exchange.',
+				name: '@absolutejs/agent-exchange-destinations',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-destinations'],
+				readmeDigest:
+					'492afacffcec6f79160392802dfab24e51be775311b82df577e84df3f7ac9b32',
+				readmeSamples: [
+					{
+						code: 'import { createAgentExchangeDestinationRegistry } from "@absolutejs/agent-exchange-destinations";\n\nconst destinations = createAgentExchangeDestinationRegistry([myAdapter]);\nawait destinations.submit({ plaintext, request, tenantId });',
+						description:
+							'# @absolutejs/agent-exchange-destinations',
+						heading:
+							'@absolutejs/agent-exchange-destinations quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Deterministic, interchangeable destination adapters for Agent Exchange.',
+						details: [
+							"The registry selects exactly one adapter using the request's exact HTTPS origin, operation, and secret kind. Duplicate routes, origin lookalikes, non-tool-confined requests, and results that reflect the protected value fail closed.",
+							'Adapters receive an isolated mutable copy of the protected bytes. The registry clears that copy after submission; the caller remains responsible for clearing its own buffer.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'destinations',
+				version: '0.3.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-google',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'GOOGLE_GMAIL_READONLY_SCOPE',
+								signature:
+									'const GOOGLE_GMAIL_READONLY_SCOPE = "https://www.googleapis.com/auth/gmail.readonly";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'GOOGLE_GMAIL_OAUTH_PROVIDER',
+								signature:
+									'const GOOGLE_GMAIL_OAUTH_PROVIDER: Readonly<{\n    readonly authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth";\n    readonly capabilities: {\n        readonly authorizationCode: "supported";\n        readonly issuerIdentification: "supported";\n        readonly par: "unsupported";\n        readonly pkceS256: "supported";\n        readonly rar: "unsupported";\n        readonly resourceIndicators: "unsupported";\n        readonly senderConstrainedAccessTokens: "unsupported";\n    };\n    readonly documentationUrl: "https://developers.google.com/identity/protocols/oauth2/resources/dpop-adoption";\n    readonly issuer: "https://accounts.google.com";\n    readonly notes: readonly ["Google\'s documented DPoP mode binds refresh tokens, while access tokens remain Bearer.", "gmail.readonly is a restricted scope and may require Google verification and a security assessment."];\n    readonly provider: "google-gmail";\n    readonly recommendedScopes: readonly ["https://www.googleapis.com/auth/gmail.readonly"];\n    readonly resource: "https://gmail.googleapis.com/";\n    readonly tokenEndpoint: "https://oauth2.googleapis.com/token";\n}>;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange-provider-conformance && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Capability-declared BYO Google Gmail OAuth adapter for Agent Exchange.',
+				name: '@absolutejs/agent-exchange-google',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-google'],
+				readmeDigest:
+					'629dfbf46ee3843b38bc6a7efec3258567d24c38a76105153b039c1ef18507e8',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Capability-declared Google/Gmail OAuth configuration for BYO deployments.',
+						details: [
+							'Google supports authorization-code flows, S256 PKCE, RFC 9207 issuer responses, and a DPoP mode that binds refresh tokens in confidential BFFs. Its documented access tokens remain bearer tokens and the flow does not expose the complete PAR/RAR/resource-indicator profile required by AbsoluteJS.',
+							'Consequently this adapter intentionally fails the phishing-resistant provider conformance check. Use it only behind a trusted token-confined broker or PaaS boundary, and do not expose Gmail tokens to an agent model.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'google',
+				version: '0.2.0'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-http-destination',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeHttpAuthorizationResolver',
+								signature:
+									'type AgentExchangeHttpAuthorizationResolver = (input: Readonly<{\n    exchangeId: string;\n    tenantId: string;\n}>) => Promise<string> | string;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeHttpFetch',
+								signature:
+									'type AgentExchangeHttpFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeHttpDestinationOptions',
+								signature:
+									'type AgentExchangeHttpDestinationOptions = {\n    readonly authorization?: AgentExchangeHttpAuthorizationResolver;\n    readonly challengeField?: string;\n    readonly endpoint: string;\n    readonly fetcher?: AgentExchangeHttpFetch;\n    readonly id: string;\n    readonly operations: readonly string[];\n    readonly reference?: string;\n    readonly secretField?: string;\n    readonly timeoutMs?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeHttpDestination',
+								signature:
+									'const createAgentExchangeHttpDestination: (options: AgentExchangeHttpDestinationOptions) => AgentExchangeDestinationAdapter;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange-destinations && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Fixed-endpoint HTTPS verification-code destination adapter for Agent Exchange.',
+				name: '@absolutejs/agent-exchange-http-destination',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-http-destination'],
+				readmeDigest:
+					'a85e953a08c4e509d51b2898df4958f8c5f61f4ecd1b72ba0e873276d59bcc6b',
+				readmeSamples: [
+					{
+						code: 'import { createAgentExchangeHttpDestination } from "@absolutejs/agent-exchange-http-destination";\n\nconst adapter = createAgentExchangeHttpDestination({\n  authorization: ({ tenantId }) => credentials.forTenant(tenantId),\n  challengeField: "challenge",\n  endpoint: "https://accounts.example.com/api/verify",\n  id: "accounts-example",\n  operations: ["verification.submit"],\n});',
+						description:
+							'# @absolutejs/agent-exchange-http-destination',
+						heading:
+							'@absolutejs/agent-exchange-http-destination quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'A fixed-endpoint HTTPS adapter for submitting a six-digit email verification code without exposing that code to an agent or returning it in the receipt.',
+						details: [
+							'The endpoint is deployment configuration, never a per-request URL. It must use HTTPS and cannot contain URL credentials, a query, or a fragment. Requests omit ambient browser credentials, disable referrers and caching, reject redirects, carry an idempotency key, and time out. Response bodies are discarded and never become agent-visible output.',
+							'authorization is a BYO credential resolver. Paid hosted credential custody belongs in AbsoluteJS PaaS; the open package does not include third-party secrets.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'http-destination',
+				version: '0.3.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-mandate-stores',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'MandatePostgresClient',
+								signature:
+									'type MandatePostgresClient = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<{\n        readonly rowCount: number;\n        readonly rows: readonly Row[];\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'MandateRedisClient',
+								signature:
+									'type MandateRedisClient = {\n    readonly eval: (script: string, keys: readonly string[], arguments_: readonly string[]) => Promise<unknown>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_MANDATE_POSTGRES_MIGRATION',
+								signature:
+									'const AGENT_EXCHANGE_MANDATE_POSTGRES_MIGRATION: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresAgentExchangeMandateStore',
+								signature:
+									'const createPostgresAgentExchangeMandateStore: (options: {\n    readonly client: MandatePostgresClient;\n}) => AgentExchangeMandateStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_MANDATE_REDIS_REGISTER_SCRIPT',
+								signature:
+									'const AGENT_EXCHANGE_MANDATE_REDIS_REGISTER_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_MANDATE_REDIS_CONSUME_SCRIPT',
+								signature:
+									'const AGENT_EXCHANGE_MANDATE_REDIS_CONSUME_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_MANDATE_REDIS_REVOKE_SCRIPT',
+								signature:
+									'const AGENT_EXCHANGE_MANDATE_REDIS_REVOKE_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createRedisAgentExchangeMandateStore',
+								signature:
+									'const createRedisAgentExchangeMandateStore: (options: {\n    readonly client: MandateRedisClient;\n    readonly keyPrefix?: string;\n}) => AgentExchangeMandateStore;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Atomic PostgreSQL and Redis stores for Agent Exchange standing mandates.',
+				name: '@absolutejs/agent-exchange-mandate-stores',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-mandate-stores'],
+				readmeDigest:
+					'82c38b8439f83bd31694cc16d44e2385925efa15aea84114df13c54b05d04d45',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Atomic PostgreSQL and Redis implementations of the AgentExchangeMandateStore contract. They register signed mandates, reject unknown or expired records, consume each exchange ID once, enforce total use limits, and make revocation effective before later execution.',
+						details: [
+							'Apply AGENT_EXCHANGE_MANDATE_POSTGRES_MIGRATION before constructing the PostgreSQL adapter. The Redis adapter uses single Lua scripts for each state transition and expiry at the mandate deadline.',
+							'This is an experimental 0.x package and has not been independently audited.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'mandate-stores',
+				version: '0.2.0'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-mandate-webcrypto',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeMandatePublicKeyResolver',
+								signature:
+									'type AgentExchangeMandatePublicKeyResolver = {\n    readonly resolve: (input: {\n        readonly issuer: AgentExchangeMandatePrincipal;\n        readonly keyId: string;\n    }) => Promise<CryptoKey> | CryptoKey;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoMandateJwsSigner',
+								signature:
+									'const createWebCryptoMandateJwsSigner: (options: {\n    readonly keyId: string;\n    readonly privateKey: CryptoKey;\n}) => AgentExchangeMandateJwsSigner;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoMandateJwsVerifier',
+								signature:
+									'const createWebCryptoMandateJwsVerifier: (options: {\n    readonly keys: AgentExchangeMandatePublicKeyResolver;\n}) => AgentExchangeMandateJwsVerifier;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Non-exportable WebCrypto ES256 JWS provider for Agent Exchange standing mandates.',
+				name: '@absolutejs/agent-exchange-mandate-webcrypto',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-mandate-webcrypto'],
+				readmeDigest:
+					'2bffd7ac4b900822ff5166b0e2f488cb5600f695d56973f46da2cb09c5ee8987',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Interchangeable WebCrypto ES256 compact-JWS signer and verifier for @absolutejs/agent-exchange standing mandates.',
+						details: [
+							'The signer requires a non-exportable P-256 private key. The verifier resolves a public key only from the independently trusted issuer and the protected kid, then enforces alg: ES256, the AbsoluteJS mandate typ, strict compact encoding, and a 64-byte JWS ECDSA signature.',
+							'This experimental 0.x package has not been independently audited. Production services should keep signing keys in a KMS or HSM; implement the same core signer contract with that service instead of exporting key material.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'mandate-webcrypto',
+				version: '0.2.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-microsoft',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'MICROSOFT_GRAPH_MAIL_READ_SCOPE',
+								signature:
+									'const MICROSOFT_GRAPH_MAIL_READ_SCOPE = "https://graph.microsoft.com/Mail.Read";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMicrosoftGraphOAuthProvider',
+								signature:
+									'const createMicrosoftGraphOAuthProvider: (tenantId: string) => OAuthProviderDescriptor;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange-provider-conformance && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Capability-declared BYO Microsoft Graph OAuth adapter for Agent Exchange.',
+				name: '@absolutejs/agent-exchange-microsoft',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-microsoft'],
+				readmeDigest:
+					'71719fe79289fd21393e77b818cbc379a47421af3490320409ad924f315f1eb2',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Tenant-bound Microsoft Graph OAuth configuration for BYO deployments. The adapter refuses common, organizations, and consumers; callers provide one exact tenant UUID to avoid authority mix-up.',
+						details: [
+							'Microsoft documents authorization code + S256 PKCE for Graph. The generally available Graph flow does not document the complete PAR/RAR/resource-indicator and sender-constrained access-token profile required by AbsoluteJS, so this adapter intentionally fails the strongest conformance check.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'microsoft',
+				version: '0.2.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-oauth',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthAuthorizationDetails',
+								signature:
+									'type OAuthAuthorizationDetails = {\n    readonly actions: readonly string[];\n    readonly identifier?: string;\n    readonly locations: readonly string[];\n    readonly type: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'HardenedOAuthProfile',
+								signature:
+									'type HardenedOAuthProfile = {\n    readonly authorizationDetails: OAuthAuthorizationDetails;\n    readonly authorizationEndpoint: string;\n    readonly clientId: string;\n    readonly issuer: string;\n    readonly pushedAuthorizationRequestEndpoint: string;\n    readonly redirectUri: string;\n    readonly resource: string;\n    readonly scopes: readonly string[];\n    readonly tokenEndpoint: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthAuthorizationSession',
+								signature:
+									'type OAuthAuthorizationSession = {\n    readonly codeVerifier: string;\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly issuer: string;\n    readonly state: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthAuthorizationSessionStore',
+								signature:
+									'type OAuthAuthorizationSessionStore = {\n    readonly consume: (state: string) => Promise<OAuthAuthorizationSession | undefined>;\n    readonly save: (session: OAuthAuthorizationSession) => Promise<boolean>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthGrant',
+								signature:
+									'type OAuthGrant = {\n    readonly code: string;\n    readonly codeVerifier: string;\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly issuer: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DpopProofSigner',
+								signature:
+									'type DpopProofSigner = {\n    readonly createProof: (input: {\n        readonly accessToken?: string;\n        readonly htm: string;\n        readonly htu: string;\n        readonly nonce?: string;\n    }) => Promise<string> | string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthFetch',
+								signature:
+									'type OAuthFetch = (input: string, init: RequestInit) => Promise<Response>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createHardenedOAuthAuthorizationClient',
+								signature:
+									'const createHardenedOAuthAuthorizationClient: (options: {\n    readonly fetch?: OAuthFetch;\n    readonly now?: () => number;\n    readonly profile: HardenedOAuthProfile;\n    readonly sessionStore: OAuthAuthorizationSessionStore;\n}) => {\n    begin: (request: AgentExchangeRequest) => Promise<{\n        expiresAt: number;\n        url: string;\n    }>;\n    complete: (input: {\n        readonly code: string;\n        readonly iss: string;\n        readonly state: string;\n    }) => Promise<{\n        code: string;\n        codeVerifier: string;\n        exchangeId: string;\n        expiresAt: number;\n        issuer: string;\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'encodeOAuthGrant',
+								signature:
+									'const encodeOAuthGrant: (grant: OAuthGrant) => Uint8Array;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'decodeOAuthGrant',
+								signature:
+									'const decodeOAuthGrant: (bytes: Uint8Array) => OAuthGrant;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'redeemOAuthGrant',
+								signature:
+									'const redeemOAuthGrant: <Result>(options: {\n    readonly dpop: DpopProofSigner;\n    readonly execute: (input: {\n        readonly accessToken: string;\n        readonly createDpopProof: DpopProofSigner["createProof"];\n    }) => Promise<Result>;\n    readonly fetch?: OAuthFetch;\n    readonly grant: OAuthGrant;\n    readonly now?: () => number;\n    readonly profile: HardenedOAuthProfile;\n    readonly request: AgentExchangeRequest;\n}) => Promise<Result>;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Hardened OAuth grant exchange using PAR, PKCE, RAR, resource indicators, issuer validation, and DPoP.',
+				name: '@absolutejs/agent-exchange-oauth',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-oauth'],
+				readmeDigest:
+					'622a291dc419fb16bcb971cbce887ecd4c9eee7ae34d40565ccafb8605701eb4',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'A deliberately strict OAuth authorization-code handoff for Agent Exchange.',
+						details: [
+							'The client requires HTTPS metadata, PAR (RFC 9126), S256 PKCE (RFC 7636), an exact authorization-server issuer (RFC 9207), one exact resource indicator (RFC 8707), Rich Authorization Requests (RFC 9396), and a DPoP-bound access token (RFC 9449). The recipient redeems the one-time grant and immediately performs a purpose-bound operation; the access token is never returned by this package.',
+							'This profile is intentionally not a general OAuth client. Provider-specific compatibility belongs in explicit adapters or the paid AbsoluteJS PaaS; the open package remains BYO authorization server and DPoP signer.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'oauth',
+				version: '0.3.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-oauth-stores',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthSessionSealer',
+								signature:
+									'type OAuthSessionSealer = {\n    readonly open: (sealed: Uint8Array) => Promise<Uint8Array>;\n    readonly seal: (plaintext: Uint8Array) => Promise<Uint8Array>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AtomicRedisSessionClient',
+								signature:
+									'type AtomicRedisSessionClient = {\n    readonly putIfAbsent: (input: {\n        readonly key: string;\n        readonly ttlMs: number;\n        readonly value: string;\n    }) => Promise<boolean>;\n    readonly take: (key: string) => Promise<string | undefined>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'PostgresSessionClient',
+								signature:
+									'type PostgresSessionClient = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<{\n        readonly rowCount: number;\n        readonly rows: readonly Row[];\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'OAUTH_SESSION_POSTGRES_MIGRATION',
+								signature:
+									'const OAUTH_SESSION_POSTGRES_MIGRATION: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMemoryOAuthAuthorizationSessionStore',
+								signature:
+									'const createMemoryOAuthAuthorizationSessionStore: () => OAuthAuthorizationSessionStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createRedisOAuthAuthorizationSessionStore',
+								signature:
+									'const createRedisOAuthAuthorizationSessionStore: (options: {\n    readonly client: AtomicRedisSessionClient;\n    readonly keyPrefix?: string;\n    readonly now?: () => number;\n    readonly sealer: OAuthSessionSealer;\n}) => OAuthAuthorizationSessionStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresOAuthAuthorizationSessionStore',
+								signature:
+									'const createPostgresOAuthAuthorizationSessionStore: (options: {\n    readonly client: PostgresSessionClient;\n    readonly now?: () => number;\n    readonly sealer: OAuthSessionSealer;\n}) => OAuthAuthorizationSessionStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoOAuthSessionSealer',
+								signature:
+									'const createWebCryptoOAuthSessionSealer: (key: CryptoKey) => OAuthSessionSealer;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange-oauth && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Memory, Redis, and PostgreSQL one-time OAuth session stores for Agent Exchange.',
+				name: '@absolutejs/agent-exchange-oauth-stores',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-oauth-stores'],
+				readmeDigest:
+					'186a0528a1887b3ee0878b1e1b9f257dc4c227f2ec6e1c8b93a690b5ecea5c8c',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'One-time authorization session stores for the hardened OAuth flow:',
+						details: [
+							'in-memory for tests and single-process development;',
+							'Redis through a minimal atomic putIfAbsent / take client;',
+							'PostgreSQL through a minimal parameterized query client.',
+							'Durable stores require a session sealer. State values are hashed before becoming storage keys, and code verifiers are sealed before persistence.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'oauth-stores',
+				version: '0.2.0'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-oauth-webcrypto',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoDpopProofSigner',
+								signature:
+									'type WebCryptoDpopProofSigner = DpopProofSigner & {\n    readonly publicJwk: Readonly<JsonWebKey>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoDpopProofSignerOptions',
+								signature:
+									'type WebCryptoDpopProofSignerOptions = {\n    readonly keyPair?: CryptoKeyPair;\n    readonly now?: () => number;\n    readonly randomBytes?: (length: number) => Uint8Array;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoDpopProofSigner',
+								signature:
+									'const createWebCryptoDpopProofSigner: (options?: WebCryptoDpopProofSignerOptions) => Promise<WebCryptoDpopProofSigner>;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange-oauth --external @absolutejs/agent-exchange-provider-conformance && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Non-exportable WebCrypto ES256 DPoP signer for Agent Exchange OAuth.',
+				name: '@absolutejs/agent-exchange-oauth-webcrypto',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-oauth-webcrypto'],
+				readmeDigest:
+					'a7803abc15d68f4ae0be24295c520a961b7db5ef6f4e16967636789687c926cc',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'An ES256 DPoP signer backed by WebCrypto. Generated private keys are non-exportable. Every proof uses a fresh 128-bit jti, normalized htu, current iat, optional server nonce, and ath when an access token is supplied.',
+						details: [
+							'Version 0.2.1 uses the canonical-base64url-enforcing 0.3.1 conformance verifier so alternate compact proof encodings cannot alias the same signature.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'oauth-webcrypto',
+				version: '0.2.1'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-provider-conformance',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthFeatureStatus',
+								signature:
+									'type OAuthFeatureStatus = "supported" | "unknown" | "unsupported";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthProviderCapabilities',
+								signature:
+									'type OAuthProviderCapabilities = {\n  readonly authorizationCode: OAuthFeatureStatus;\n  readonly issuerIdentification: OAuthFeatureStatus;\n  readonly par: OAuthFeatureStatus;\n  readonly pkceS256: OAuthFeatureStatus;\n  readonly rar: OAuthFeatureStatus;\n  readonly resourceIndicators: OAuthFeatureStatus;\n  readonly senderConstrainedAccessTokens:\n    "dpop" | "mtls" | "unknown" | "unsupported";\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthProviderDescriptor',
+								signature:
+									'type OAuthProviderDescriptor = {\n  readonly authorizationEndpoint: string;\n  readonly capabilities: OAuthProviderCapabilities;\n  readonly documentationUrl: string;\n  readonly issuer: string;\n  readonly notes?: readonly string[];\n  readonly provider: string;\n  readonly recommendedScopes: readonly string[];\n  readonly resource: string;\n  readonly tokenEndpoint: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthConformanceReport',
+								signature:
+									'type OAuthConformanceReport = {\n  readonly eligibleForPhishingResistantProfile: boolean;\n  readonly failures: readonly string[];\n  readonly provider: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'evaluateOAuthProviderConformance',
+								signature:
+									'const evaluateOAuthProviderConformance: (\n  descriptor: OAuthProviderDescriptor,\n) => OAuthConformanceReport;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'assertPhishingResistantOAuthProvider',
+								signature:
+									'const assertPhishingResistantOAuthProvider: (\n  descriptor: OAuthProviderDescriptor,\n) => void;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'normalizeDpopHtu',
+								signature:
+									'const normalizeDpopHtu: (value: string) => string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'verifyDpopProof',
+								signature:
+									'const verifyDpopProof: (input: {\n  readonly accessToken?: string;\n  readonly htm: string;\n  readonly htu: string;\n  readonly maxAgeSeconds?: number;\n  readonly nonce?: string;\n  readonly now?: () => number;\n  readonly proof: string;\n}) => Promise<JsonWebKey>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_A2A_SKILL_ID',
+								signature:
+									'const AGENT_EXCHANGE_A2A_SKILL_ID: "absolute-agent-exchange";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE',
+								signature:
+									'const AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-preparation+json";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE',
+								signature:
+									'const AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-receipt+json";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceCheck',
+								signature:
+									'type AgentExchangeA2aConformanceCheck =\n  | "authentication-before-parsing"\n  | "credential-separation"\n  | "discovery"\n  | "negotiation"\n  | "prepared-execution"\n  | "profile"\n  | "replay-convergence"\n  | "task-redaction";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceFinding',
+								signature:
+									'type AgentExchangeA2aConformanceFinding = {\n  readonly check: AgentExchangeA2aConformanceCheck;\n  readonly detail?: string;\n  readonly passed: boolean;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceReport',
+								signature:
+									'type AgentExchangeA2aConformanceReport = {\n  readonly conformant: boolean;\n  readonly findings: readonly AgentExchangeA2aConformanceFinding[];\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceRequestPurpose',
+								signature:
+									'type AgentExchangeA2aConformanceRequestPurpose =\n  "credential-separation" | "negotiation" | "prepared-execution";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceTarget',
+								signature:
+									'type AgentExchangeA2aConformanceTarget = {\n  readonly acknowledgeExecution: "sandbox-only";\n  readonly additionalSensitiveMarkers?: readonly string[];\n  readonly a2aHeaders: (input: {\n    readonly method: "POST";\n    readonly purpose: "a2a";\n    readonly url: string;\n  }) => HeadersInit | Promise<HeadersInit>;\n  readonly createRequest: (\n    purpose: AgentExchangeA2aConformanceRequestPurpose,\n  ) => AgentExchangeRequest | Promise<AgentExchangeRequest>;\n  readonly fetch?: (\n    input: RequestInfo | URL,\n    init?: RequestInit,\n  ) => Promise<Response>;\n  readonly maxResponseBytes?: number;\n  readonly origin: string;\n  readonly preparationHeaders: (input: {\n    readonly method: "POST";\n    readonly purpose: "preparation";\n    readonly url: string;\n  }) => HeadersInit | Promise<HeadersInit>;\n  readonly timeoutMs?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'evaluateAgentExchangeA2aConformance',
+								signature:
+									'const evaluateAgentExchangeA2aConformance: (\n  target: AgentExchangeA2aConformanceTarget,\n) => Promise<AgentExchangeA2aConformanceReport>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'assertAgentExchangeA2aConformance',
+								signature:
+									'const assertAgentExchangeA2aConformance: (\n  target: AgentExchangeA2aConformanceTarget,\n) => Promise<AgentExchangeA2aConformanceReport>;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange --external '@absolutejs/agent-exchange/*' && tsc --project tsconfig.build.json && prettier --write --ignore-path /dev/null 'dist/*.d.ts'",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'OAuth, DPoP, and black-box A2A security conformance checks for Agent Exchange providers.',
+				name: '@absolutejs/agent-exchange-provider-conformance',
+				private: false,
+				publicExports: [
+					'@absolutejs/agent-exchange-provider-conformance'
+				],
+				readmeDigest:
+					'17f9294e199ce959cb61c4634b6ded9d748344c306e128d473d1dc6e22c34fe3',
+				readmeSamples: [
+					{
+						code: 'import {\n  assertAgentExchangeA2aConformance,\n  type AgentExchangeA2aConformanceTarget,\n} from "@absolutejs/agent-exchange-provider-conformance";\n\nconst target: AgentExchangeA2aConformanceTarget = {\n  acknowledgeExecution: "sandbox-only",\n  additionalSensitiveMarkers: [sandboxVerificationCode],\n  a2aHeaders: ({ url }) => a2aTokenFor(url),\n  createRequest: (purpose) => sandboxRequest(purpose),\n  origin: "https://sandbox-recipient.example",\n  preparationHeaders: ({ url }) => preparationTokenFor(url),\n};\n\nconst report = await assertAgentExchangeA2aConformance(target);',
+						description:
+							'evaluateAgentExchangeA2aConformance() performs eight active checks:',
+						heading: 'A2A prepared-profile conformance',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Shared capability checks, cryptographic DPoP verification, and black-box A2A security tests for Agent Exchange providers. Provider adapters publish facts; this package decides whether those facts meet the phishing-resistant OAuth profile. A2A servers are exercised over their public protocol boundary without depending on their implementation.',
+						details: [
+							'Unknown or unavailable features are failures, not optimistic defaults.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							'evaluateAgentExchangeA2aConformance() performs eight active checks:',
+						details: [
+							'Agent Card discovery and same-origin A2A 1.0 JSON-RPC routing;',
+							'extension parameters, skill media types, and declared authentication;',
+							'authentication before parsing malformed A2A and preparation requests;',
+							'distinct preparation and A2A credentials;',
+							'A2A-Extensions negotiation;',
+							'protected preparation followed by exact-reference execution;',
+							'raw, hexadecimal, base64, and base64url leakage detection in tasks and',
+							'receipts; and',
+							'safe replay rejection or convergence on the original task.',
+							'The suite executes the supplied request. It requires the literal acknowledgeExecution: "sandbox-only" and must never be aimed at production or an endpoint that can submit a real credential:',
+							'createRequest() receives a purpose identifier and must return a fresh exchange each time. The sandbox must use separate audience-bound credentials for the preparation and A2A URLs. Put any simulated protected value that is not already part of the request—such as a sandbox six-digit code—in additionalSensitiveMarkers.',
+							'The report demonstrates observable protocol behavior for that sandbox run. It is not a cryptographic audit, production authorization, penetration test, or claim that an email/SMS bearer code is phishing-resistant.'
+						],
+						title: 'A2A prepared-profile conformance'
+					},
+					{
+						description:
+							'evaluateOAuthProviderConformance() evaluates declared authorization-code, issuer-identification, PAR, S256 PKCE, RAR, resource-indicator, and sender-constraint capabilities. verifyDpopProof() independently validates the ES256 proof, public key, method, normalized target URI, timestamp, nonce, and access-token hash. JWT segments must use canonical unpadded base64url encoding; alternate strings that decode to the same bytes are rejected so proof identity cannot be aliased through unused padding bits.',
+						details: [],
+						title: 'OAuth provider conformance'
+					}
+				],
+				sourcePath: 'conformance',
+				version: '0.3.1'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-secure-messaging',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_SECURE_MESSAGING_CONTRACT',
+								signature:
+									'const AGENT_EXCHANGE_SECURE_MESSAGING_CONTRACT: 2;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_SECURE_MESSAGING_REQUEST_PURPOSE',
+								signature:
+									'const AGENT_EXCHANGE_SECURE_MESSAGING_REQUEST_PURPOSE: "org.absolutejs.agent-exchange.request.v2";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_SECURE_MESSAGING_RECEIPT_PURPOSE',
+								signature:
+									'const AGENT_EXCHANGE_SECURE_MESSAGING_RECEIPT_PURPOSE: "org.absolutejs.agent-exchange.receipt.v2";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingRoute',
+								signature:
+									'type AgentExchangeSecureMessagingRoute = {\n    readonly conversationId: string;\n    readonly recipientDeviceId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingReceiptSaveResult',
+								signature:
+									'type AgentExchangeSecureMessagingReceiptSaveResult = "conflict" | "duplicate" | "saved";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingReceiptRecord',
+								signature:
+									'type AgentExchangeSecureMessagingReceiptRecord = {\n    readonly expiresAt: number;\n    readonly receipt: AgentExchangeReceipt;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingReceiptStore',
+								signature:
+									'type AgentExchangeSecureMessagingReceiptStore = {\n    readonly get: (input: {\n        readonly exchangeId: string;\n        readonly now: number;\n    }) => Promise<AgentExchangeSecureMessagingReceiptRecord | undefined>;\n    readonly save: (input: AgentExchangeSecureMessagingReceiptRecord & {\n        readonly now: number;\n    }) => Promise<AgentExchangeSecureMessagingReceiptSaveResult>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingTransportOptions',
+								signature:
+									'type AgentExchangeSecureMessagingTransportOptions = {\n    readonly client: Pick<SecureMessagingClient, "send">;\n    readonly maximumEnvelopeBytes?: number;\n    readonly maximumJwsBytes?: number;\n    readonly maximumTtlMs?: number;\n    readonly now?: () => number;\n    readonly pollIntervalMs?: number;\n    readonly receipts: AgentExchangeSecureMessagingReceiptStore;\n    readonly resolveRoute: (request: AgentExchangeRequest) => Promise<AgentExchangeSecureMessagingRoute> | AgentExchangeSecureMessagingRoute;\n    readonly resolveSignedMandate?: (request: AgentExchangeRequest) => Promise<SignedAgentExchangeStandingMandate | undefined> | SignedAgentExchangeStandingMandate | undefined;\n    readonly sleep?: (milliseconds: number) => Promise<void>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingRequestAuthorization',
+								signature:
+									'type AgentExchangeSecureMessagingRequestAuthorization = {\n    readonly conversationId: string;\n    readonly delivery: AgentExchangeDelivery;\n    readonly senderCredential: Uint8Array;\n    readonly senderDeviceId: string;\n    readonly signedMandate?: SignedAgentExchangeStandingMandate;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingHandlerOptions',
+								signature:
+									'type AgentExchangeSecureMessagingHandlerOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly authorizeRequest: (input: AgentExchangeSecureMessagingRequestAuthorization) => Promise<unknown> | unknown;\n    readonly localDeviceId: string;\n    readonly maximumEnvelopeBytes?: number;\n    readonly maximumJwsBytes?: number;\n    readonly maximumOuterExpirySkewMs?: number;\n    readonly maximumTtlMs?: number;\n    readonly now?: () => number;\n    readonly receipts: AgentExchangeSecureMessagingReceiptStore;\n    readonly receiver: AgentExchangeReceiver;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMemoryAgentExchangeSecureMessagingReceiptStore',
+								signature:
+									'const createMemoryAgentExchangeSecureMessagingReceiptStore: () => AgentExchangeSecureMessagingReceiptStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeSecureMessagingTransport',
+								signature:
+									'const createAgentExchangeSecureMessagingTransport: (options: AgentExchangeSecureMessagingTransportOptions) => AgentExchangeTransport;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeSecureMessagingHandler',
+								signature:
+									'const createAgentExchangeSecureMessagingHandler: (options: AgentExchangeSecureMessagingHandlerOptions) => SecureMessagingApplicationHandler;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --target=node --external @absolutejs/agent-exchange --external @absolutejs/secure-messaging && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Strict-E2EE request and receipt transport for model-blind AbsoluteJS Agent Exchange.',
+				name: '@absolutejs/agent-exchange-secure-messaging',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-secure-messaging'],
+				readmeDigest:
+					'b9c01c1506de058692153c98a5dea7d25cc08391af9f9c50f7030000ddad5254',
+				readmeSamples: [
+					{
+						code: 'const receipts = createMemoryAgentExchangeSecureMessagingReceiptStore();\n\nconst transport = createAgentExchangeSecureMessagingTransport({\n  client: requesterMessaging,\n  receipts,\n  resolveRoute: (request) => ({\n    conversationId: conversationFor(request.recipient),\n    recipientDeviceId: request.recipient.deviceId!,\n  }),\n  resolveSignedMandate: (request) => mandates.get(request.mandateId!),\n});\n\nconst handler = createAgentExchangeSecureMessagingHandler({\n  authorizeRequest: ({ delivery, signedMandate }) =>\n    mandateAuthority.authorize({\n      expectedIssuer: owner,\n      request: delivery.request,\n      signedMandate,\n    }),\n  localDeviceId: "recipient-device",\n  receipts,\n  receiver,\n});\n\nawait recipientMessaging.receiveAndHandle(handler);\nawait requesterMessaging.receiveAndHandle(handler);',
+						description:
+							'# @absolutejs/agent-exchange-secure-messaging',
+						heading:
+							'@absolutejs/agent-exchange-secure-messaging quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'An interchangeable Agent Exchange transport over authenticated AbsoluteJS secure messaging. It carries the complete request, the already protected Agent Exchange envelope, and a standing-mandate JWS inside a strict-e2ee conversation. Only a redacted receipt returns.',
+						details: [
+							'Protocol contract 2 binds the original request expiry into the authenticated receipt and durable record. It is intentionally incompatible with contract 1.',
+							'Both request and receipt purposes are fixed authenticated MLS metadata. The adapter requires request.requester.deviceId and request.recipient.deviceId, checks them against the authenticated sending and local devices, validates a strict no-extension wire format, and bounds every identifier, JWS, envelope, and frame lifetime.',
+							'createMemoryAgentExchangeSecureMessagingReceiptStore() is for examples and tests. Production deployments should use @absolutejs/agent-exchange-secure-messaging-stores. The store contract carries the authenticated request expiry and an explicit current time so backends can reject expired writes, hide expired reads, and expire durable records.',
+							'The recipient must use receiveAndHandle(), not ordinary receive(). This atomically queues the encrypted receipt with the inbound replay receipt and advanced MLS state before acknowledging delivery. Deterministic sinks must use the exchange ID as their downstream idempotency key so a crash immediately before that commit remains safe.',
+							'Licensed under Apache-2.0.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'secure-messaging',
+				version: '0.1.0'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-secure-messaging-stores',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeReceiptRedisClient',
+								signature:
+									'type AgentExchangeReceiptRedisClient = {\n    readonly eval: (script: string, keys: readonly string[], arguments_: readonly string[]) => Promise<unknown>;\n    readonly get: (key: string) => Promise<string | undefined | null>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeReceiptPostgresClient',
+								signature:
+									'type AgentExchangeReceiptPostgresClient = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<{\n        readonly rowCount: number;\n        readonly rows: readonly Row[];\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeReceiptPostgresStore',
+								signature:
+									'type AgentExchangeReceiptPostgresStore = AgentExchangeSecureMessagingReceiptStore & {\n    readonly deleteExpired: (input: {\n        readonly batchSize?: number;\n        readonly now: number;\n    }) => Promise<number>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_RECEIPT_POSTGRES_MIGRATION',
+								signature:
+									'const AGENT_EXCHANGE_RECEIPT_POSTGRES_MIGRATION: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_RECEIPT_REDIS_SAVE_SCRIPT',
+								signature:
+									'const AGENT_EXCHANGE_RECEIPT_REDIS_SAVE_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMemoryAgentExchangeReceiptStore',
+								signature:
+									'const createMemoryAgentExchangeReceiptStore: (options: {\n    readonly tenantId: string;\n}) => AgentExchangeSecureMessagingReceiptStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createRedisAgentExchangeReceiptStore',
+								signature:
+									'const createRedisAgentExchangeReceiptStore: (options: {\n    readonly client: AgentExchangeReceiptRedisClient;\n    readonly keyPrefix?: string;\n    readonly tenantId: string;\n}) => AgentExchangeSecureMessagingReceiptStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresAgentExchangeReceiptStore',
+								signature:
+									'const createPostgresAgentExchangeReceiptStore: (options: {\n    readonly client: AgentExchangeReceiptPostgresClient;\n    readonly tenantId: string;\n}) => AgentExchangeReceiptPostgresStore;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange --external @absolutejs/agent-exchange-secure-messaging && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Tenant-scoped atomic memory, Redis, and PostgreSQL receipt stores for Agent Exchange secure messaging.',
+				name: '@absolutejs/agent-exchange-secure-messaging-stores',
+				private: false,
+				publicExports: [
+					'@absolutejs/agent-exchange-secure-messaging-stores',
+					'@absolutejs/agent-exchange-secure-messaging-stores/migrations/postgres.sql'
+				],
+				readmeDigest:
+					'6d699fc62e65be6bb1c168bf42e5d543ed7a5911ab169ab47eceae7b95f5b30c',
+				readmeSamples: [
+					{
+						code: 'const receipts = createRedisAgentExchangeReceiptStore({\n  client: redisAdapter,\n  tenantId: authenticatedTenant.id,\n});',
+						description:
+							'# @absolutejs/agent-exchange-secure-messaging-stores',
+						heading:
+							'@absolutejs/agent-exchange-secure-messaging-stores quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Tenant-scoped, atomic receipt stores for @absolutejs/agent-exchange-secure-messaging. The package provides memory, Redis, and PostgreSQL implementations behind the same receipt-store contract.',
+						details: [
+							'The tenant is bound when a store is constructed; callers cannot select a tenant per operation. Tenant and exchange identifiers are SHA-256 digested before use in keys. Receipts are strictly parsed, size bounded, expiration aware, and compared as canonical JSON. Saving an identical receipt and expiry returns duplicate; any different receipt or expiry for that live key returns conflict.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							'Implement get(key) and eval(script, keys, arguments_) with the official client of your choice. The exported Lua script performs compare-or-insert and absolute expiration (PXAT) as one Redis operation. Do not replace it with a client-side GET followed by SET.',
+						details: [],
+						title: 'Redis adapter'
+					},
+					{
+						description:
+							'Run AGENT_EXCHANGE_RECEIPT_POSTGRES_MIGRATION through your normal migration system before constructing the store. The same idempotent SQL ships at the exported ./migrations/postgres.sql package subpath for migration tools. Pass a client with a parameterized query(text, values) method. Save uses one INSERT ... ON CONFLICT ... RETURNING statement, including a random per-attempt token, to distinguish a new write from duplicate and conflicting concurrent writes without a read/write race.',
+						details: [
+							'Call deleteExpired({ now }) from a repeatable maintenance job until it returns zero. It deletes at most 1,000 rows per call by default; batchSize is bounded to 10,000. Redis expiry is automatic.',
+							'The memory store is process-local and intended for tests and examples only.',
+							'Licensed under Apache-2.0.'
+						],
+						title: 'PostgreSQL adapter and migration'
+					}
+				],
+				sourcePath: 'secure-messaging-stores',
+				version: '0.0.1'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-webauthn',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebAuthnAgentExchangeApprovalProviderOptions',
+								signature:
+									'type WebAuthnAgentExchangeApprovalProviderOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly adapter: WebAuthnAdapter;\n    readonly credentialStore: WebAuthnCredentialStore;\n    readonly now?: () => number;\n    readonly origin: string;\n    readonly resolveUserId: (input: {\n        readonly request: AgentExchangeRequest;\n        readonly subject: string;\n    }) => Promise<string> | string;\n    readonly rpId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeMandateApprovalProvider',
+								signature:
+									'type AgentExchangeMandateApprovalProvider = {\n    readonly begin: (input: {\n        readonly challenge: string;\n        readonly draft: AgentExchangeStandingMandateDraft;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly challenge: string;\n        readonly options: unknown;\n    }>;\n    readonly verify: (input: {\n        readonly challenge: string;\n        readonly draft: AgentExchangeStandingMandateDraft;\n        readonly response: unknown;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly credentialId: string;\n        readonly rpId: string;\n        readonly subject: string;\n        readonly userVerified: true;\n        readonly verifierOrigin: string;\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebAuthnAgentExchangeMandateApprovalProviderOptions',
+								signature:
+									'type WebAuthnAgentExchangeMandateApprovalProviderOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly adapter: WebAuthnAdapter;\n    readonly credentialStore: WebAuthnCredentialStore;\n    readonly now?: () => number;\n    readonly origin: string;\n    readonly resolveUserId: (input: {\n        readonly draft: AgentExchangeStandingMandateDraft;\n        readonly subject: string;\n    }) => Promise<string> | string;\n    readonly rpId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebAuthnAgentExchangeApprovalProvider',
+								signature:
+									'const createWebAuthnAgentExchangeApprovalProvider: (options: WebAuthnAgentExchangeApprovalProviderOptions) => AgentExchangeApprovalProvider;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebAuthnAgentExchangeMandateApprovalProvider',
+								signature:
+									'const createWebAuthnAgentExchangeMandateApprovalProvider: (options: WebAuthnAgentExchangeMandateApprovalProviderOptions) => AgentExchangeMandateApprovalProvider;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange --external @absolutejs/auth && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Request-bound, user-verified WebAuthn approvals for @absolutejs/agent-exchange.',
+				name: '@absolutejs/agent-exchange-webauthn',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-webauthn'],
+				readmeDigest:
+					'1dd6360e9c49c560748a9606c1bfa7b97ce42158d96adb7c5fdf689467fea421',
+				readmeSamples: [
+					{
+						code: 'const approvalProvider = createWebAuthnAgentExchangeApprovalProvider({\n  adapter,\n  credentialStore,\n  origin: "https://app.example.com",\n  resolveUserId: async ({ subject }) => subject,\n  rpId: "example.com",\n});',
+						description: '# @absolutejs/agent-exchange-webauthn',
+						heading:
+							'@absolutejs/agent-exchange-webauthn quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'An interchangeable AgentExchangeApprovalProvider that binds a user-verified WebAuthn assertion to the exact Agent Exchange request digest.',
+						details: [
+							'It also provides createWebAuthnAgentExchangeMandateApprovalProvider() for standing mandates. That provider recomputes the domain-separated challenge over the complete mandate draft and requires the issuer authority and subject to match the verifier before beginning or verifying the ceremony.',
+							'The provider requires HTTPS, an RP ID valid for the configured verifier origin, an exact caller-provided challenge, user verification, credential ownership, and safe signature-counter progression. It does not persist raw assertions.',
+							'Use the resulting provider with the phishing-resistant assurance profile in @absolutejs/agent-exchange@0.4.',
+							'For local development only, allowInsecureLocalhost: true permits an HTTP localhost origin and RP ID. It does not permit arbitrary HTTP hosts.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'webauthn',
+				version: '0.4.1'
+			}
+		],
+		version: null
+	},
+	{
+		api: [],
+		category: 'AI',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command:
+					"bun run format:check && bun run typecheck && bun run test && bun run build && bun run --filter './*' verify-package",
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Interchangeable deterministic source adapters for @absolutejs/agent-exchange.',
+		directory: 'agent-exchange-sources',
+		kind: 'monorepo',
+		name: 'Agent Exchange Sources',
+		packageName: '@absolutejs/agent-exchange-sources',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'fda9a3210dfef7ecfe1d8054d494b1bc20b6b92fd64cc7c15b9083e3c7cdbac8',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Interchangeable deterministic source adapters for @absolutejs/agent-exchange.',
+				details: [
+					'This repository follows the same layout as voice-adapters and e2ee-providers: each directory is an independently versioned npm package that implements one common Agent Exchange source API.',
+					'Directory — Package — Purpose',
+					'email/ — @absolutejs/agent-exchange-email — Retrieve an exact, profile-bound email verification code through @absolutejs/email without exposing it to either model',
+					'Planned adapters such as device approval, vault, or SMS belong here only when they implement the same trusted SensitiveValueSource boundary. Provider API mechanics remain in their domain packages; this repository owns the narrow binding into Agent Exchange.',
+					'All packages remain 0.x. Source adapters must fail closed, return mutable bytes for immediate encryption, emit only non-secret evidence, and never register a model-facing tool that returns the protected value.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/agent-exchange-sources',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-email',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'EmailAgentExchangeCorrelation',
+								signature:
+									'type EmailAgentExchangeCorrelation = {\n    readonly mode: "challenge-text";\n} | {\n    readonly mode: "temporal-only";\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'EmailAgentExchangeProfile',
+								signature:
+									'type EmailAgentExchangeProfile = EmailVerificationProfile & {\n    readonly correlation: EmailAgentExchangeCorrelation;\n    readonly operations: readonly string[];\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'EmailAgentExchangeSourceOptions',
+								signature:
+									'type EmailAgentExchangeSourceOptions = {\n    readonly allowTemporalOnlyCorrelation?: boolean;\n    readonly clockSkewMs?: number;\n    readonly lookup: EmailVerificationMessageLookup;\n    readonly maxBodyBytes?: number;\n    readonly maxCandidates?: number;\n    readonly maxLookbackMs?: number;\n    readonly now?: () => number;\n    readonly profiles: readonly EmailAgentExchangeProfile[];\n    readonly resolveAccountEmail: (request: AgentExchangeRequest) => Promise<string> | string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createEmailVerificationCodeSource',
+								signature:
+									'const createEmailVerificationCodeSource: (options: EmailAgentExchangeSourceOptions) => SensitiveValueSource;'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'EmailVerificationMessageLookup',
+								signature: 'EmailVerificationMessageLookup'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'EmailVerificationProfile',
+								signature: 'EmailVerificationProfile'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST',
+								signature:
+									'EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'AgentExchangeSourceManifest',
+								signature: 'AgentExchangeSourceManifest'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-email/source-manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSourceManifest',
+								signature:
+									'type AgentExchangeSourceManifest = {\n    readonly assurance: "experimental";\n    readonly correlationModes: readonly ["challenge-text", "temporal-only"];\n    readonly modelCanObserveSecret: false;\n    readonly packageName: `@absolutejs/agent-exchange-${string}`;\n    readonly processingModes: readonly ["tool-confined"];\n    readonly providers: readonly string[];\n    readonly role: "source";\n    readonly secretKinds: readonly string[];\n    readonly senderAuthentication: "trusted-authserv-dmarc";\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST',
+								signature:
+									'const EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST: Readonly<{\n    readonly assurance: "experimental";\n    readonly correlationModes: readonly ["challenge-text", "temporal-only"];\n    readonly modelCanObserveSecret: false;\n    readonly packageName: "@absolutejs/agent-exchange-email";\n    readonly processingModes: readonly ["tool-confined"];\n    readonly providers: readonly ["gmail", "microsoft", "imap"];\n    readonly role: "source";\n    readonly secretKinds: readonly ["email-one-time-code"];\n    readonly senderAuthentication: "trusted-authserv-dmarc";\n}>;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/agent-exchange-email/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>>;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>>;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/source-manifest.ts src/manifest.ts --outdir dist --root src --sourcemap --target=bun --external @absolutejs/agent-exchange --external '@absolutejs/agent-exchange/*' --external @absolutejs/email --external '@absolutejs/email/*' --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Deterministic, model-blind email verification-code source for @absolutejs/agent-exchange.',
+				name: '@absolutejs/agent-exchange-email',
+				private: false,
+				publicExports: [
+					'@absolutejs/agent-exchange-email',
+					'@absolutejs/agent-exchange-email/source-manifest',
+					'@absolutejs/agent-exchange-email/manifest',
+					'@absolutejs/agent-exchange-email/manifest.json'
+				],
+				readmeDigest:
+					'830b8ceb2f34e1b520d9c028557ec99673d7e34583114b6667e40bfb1d146a43',
+				readmeSamples: [
+					{
+						code: 'bun add @absolutejs/agent-exchange @absolutejs/agent-exchange-email @absolutejs/email',
+						description: '# @absolutejs/agent-exchange-email',
+						heading: '@absolutejs/agent-exchange-email quick start',
+						language: 'bash'
+					},
+					{
+						code: 'import { createEmailVerificationCodeSource } from "@absolutejs/agent-exchange-email";\nimport { createGmailVerificationMessageLookup } from "@absolutejs/email/verification";\n\nconst source = createEmailVerificationCodeSource({\n  lookup: createGmailVerificationMessageLookup({ accountEmail, client: gmail }),\n  profiles: [\n    {\n      bodyMarkers: ["verification code"],\n      correlation: { mode: "challenge-text" },\n      id: "accounts-example-six-digit-v1",\n      operations: ["verification.submit"],\n      origins: ["https://accounts.example.com"],\n      providers: ["gmail"],\n      senderAddresses: ["security@example.com"],\n      senderAuthentication: {\n        allowedHeaderFromDomains: ["example.com"],\n        trustedAuthservIds: ["mx.mailbox.example"],\n      },\n      subjectIncludesAny: ["sign in"],\n    },\n  ],\n  resolveAccountEmail: (request) =>\n    mailboxDirectory.get(request.resource.accountRef),\n});',
+						description: '# @absolutejs/agent-exchange-email',
+						heading:
+							'@absolutejs/agent-exchange-email quick start 2',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Email one-time codes are bearer credentials. This source accepts either the explicit policy + bearer + purpose-bound profile or webauthn-verifier-bound + token-confined-broker + purpose-bound. The latter confines provider credentials and OTP processing to a trusted broker but does not make the upstream bearer credential phishing-resistant.',
+						details: [
+							'The 0.5.x line also accepts an exact, passkey-enrolled standing-mandate with the same token-confined and purpose-bound requirements. The signed mandate never broadens the host-owned mailbox profile.',
+							'An interchangeable, deterministic email source for @absolutejs/agent-exchange. It uses @absolutejs/email/verification to locate one exact verification message and returns the protected value directly to Agent Exchange for encryption.',
+							'Gmail and Microsoft Graph lookups are browser-safe. IMAP is server-only and is created from @absolutejs/email/verification/imap before being passed here.',
+							'Pass source to createAgentExchangeSender. Do not register it as an MCP, A2A, manifest, or general agent tool. The source deliberately returns no string API; Agent Exchange encrypts its mutable byte result and clears it after delivery.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							'Only tool-confined, single-use, email-one-time-code requests are accepted.',
+						details: [
+							"The request's exact provider, HTTPS origin, and operation must select exactly",
+							'one profile.',
+							"challenge-text correlation is the default-safe profile mode: the request's",
+							'challengeId must occur exactly in the selected message body.',
+							'temporal-only profiles require both an explicit profile mode and',
+							'allowTemporalOnlyCorrelation: true; use this weaker mode only when an upstream email cannot echo a challenge.',
+							'The visible sender must have exactly one aligned DMARC pass from a configured,',
+							'mailbox-trusted RFC 8601 authserv-id.',
+							'The mailbox account reference is resolved through a host-owned directory; it',
+							'is never assumed to be an email address.',
+							'The default lookup window begins 30 seconds before the Agency request and ends',
+							'at the earlier of execution time or request expiry. Future clock skew must be enabled explicitly.'
+						],
+						title: 'Fail-closed rules'
+					}
+				],
+				sourcePath: 'email',
+				version: '0.5.0'
+			}
+		],
+		version: null
+	},
+	{
 		api: [],
 		category: 'AI',
 		commands: [
@@ -15424,6 +18181,107 @@ export const ecosystemProjects: EcosystemProject[] = [
 	{
 		api: [
 			{
+				entryPoint: '@absolutejs/auth-expo',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteExpoAuthDependencies',
+						signature:
+							"type AbsoluteExpoAuthDependencies = {\n    appState: {\n        addEventListener(type: 'change', listener: (state: string) => void): AppStateSubscription;\n    };\n    linking: {\n        addEventListener(type: 'url', listener: (event: {\n            url: string;\n        }) => void): LinkSubscription;\n        getInitialURL(): Promise<string | null>;\n    };\n    secureStore: {\n        AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY: number;\n        deleteItemAsync(key: string, options?: Record<string, unknown>): Promise<void>;\n        getItemAsync(key: string, options?: Record<string, unknown>): Promise<string | null>;\n        isAvailableAsync(): Promise<boolean>;\n        setItemAsync(key: string, value: string, options?: Record<string, unknown>): Promise<void>;\n    };\n    webBrowser: {\n        openAuthSessionAsync(url: string, redirectUrl: string): Promise<{\n            type: string;\n            url?: string;\n        }>;\n    };\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteExpoAuthAdapterOptions',
+						signature:
+							'type AbsoluteExpoAuthAdapterOptions = {\n    launchUrlTimeoutMs?: number;\n    redirectUri: string;\n    storagePrefix?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteExpoAuthClientConfig',
+						signature:
+							"type AbsoluteExpoAuthClientConfig = Omit<MobileAuthClientConfig, 'lifecycle' | 'links' | 'storage'> & {\n    storagePrefix?: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'absoluteExpoAuthCrypto',
+						signature:
+							'const absoluteExpoAuthCrypto: MobileAuthCrypto;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAbsoluteExpoAuthAdapters',
+						signature:
+							'const createAbsoluteExpoAuthAdapters: (options: AbsoluteExpoAuthAdapterOptions, dependencies?: AbsoluteExpoAuthDependencies) => {\n    lifecycle: MobileAuthLifecycle;\n    links: MobileAuthLinks;\n    storage: MobileAuthSecureStorage;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAbsoluteExpoAuthClient',
+						signature:
+							'const createAbsoluteExpoAuthClient: (config: AbsoluteExpoAuthClientConfig, dependencies?: AbsoluteExpoAuthDependencies) => {\n    fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n    fetchOptional: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n    handleCallback: (value: string) => Promise<import("@absolutejs/auth/client/mobile").MobileAuthTokens>;\n    onPrincipalChange: (listener: (principal: import("@absolutejs/auth/client/mobile").MobileAuthPrincipal | null) => void) => () => void;\n    principal: () => Promise<import("@absolutejs/auth/client/mobile").MobileAuthPrincipal | null>;\n    refresh: () => Promise<string>;\n    signIn: (options?: import("@absolutejs/auth/client/mobile").MobileAuthSignInOptions) => Promise<import("@absolutejs/auth/client/mobile").MobileAuthTokens>;\n    signOut: () => Promise<void>;\n    socketTicket: (audience?: string) => Promise<string>;\n    start: () => Promise<void>;\n    status: () => Promise<{\n        sub: string;\n    } | null>;\n    stop: () => Promise<void>;\n};'
+					}
+				]
+			}
+		],
+		category: 'Auth & Identity',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts --outdir dist --target=browser --external @absolutejs/auth --external @noble/curves --external expo-crypto --external expo-linking --external expo-secure-store --external expo-web-browser --external react-native && tsc -p tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run test && bun run build && npm pack --dry-run',
+				name: 'check'
+			},
+			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description: 'Expo native runtime adapter for @absolutejs/auth',
+		directory: 'auth-expo',
+		kind: 'package',
+		name: 'Auth Expo',
+		packageName: '@absolutejs/auth-expo',
+		private: false,
+		publicExports: ['@absolutejs/auth-expo'],
+		readmeDigest:
+			'bfa0cc1a8ef6dbfa709a66c82a51f6c778898665411af3bb6631667ebe7ebef9',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Expo native-runtime adapter for @absolutejs/auth.',
+				details: [
+					"AbsoluteJS provisions this package automatically for mobile.engine: 'expo' applications that depend on @absolutejs/auth. It connects the existing native OAuth client to Expo WebBrowser, Linking, SecureStore, and AppState while keeping access and refresh credentials outside embedded WebViews.",
+					'Application code continues to use @absolutejs/auth/client; it does not import this adapter directly.',
+					'The package is experimental while AbsoluteJS Expo support remains experimental.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/auth-expo',
+		subpackages: [],
+		version: '0.0.6'
+	},
+	{
+		api: [
+			{
 				entryPoint: '@absolutejs/autoscaler',
 				symbols: [
 					{
@@ -17348,6 +20206,748 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/blog',
 		subpackages: [],
 		version: '0.2.0'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/calendar',
+				symbols: [
+					{
+						description:
+							'Date-only arithmetic is UTC internally; it never treats a date as a local instant.',
+						kind: 'function',
+						name: 'isCalendarDate',
+						signature:
+							'function isCalendarDate(value: unknown): value is string;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'addDays',
+						signature:
+							'function addDays(value: string, days: number): string;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'addMonths',
+						signature:
+							'function addMonths(value: string, months: number): string;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'dateInZone',
+						signature:
+							'function dateInZone(now?: Date, timeZone?: string): string;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'weekDates',
+						signature:
+							'function weekDates(value: string, weekStartsOn?: number): string[];'
+					},
+					{
+						description:
+							'Six stable rows include adjacent-month days; default week starts Sunday.',
+						kind: 'function',
+						name: 'monthDates',
+						signature:
+							'function monthDates(value: string, weekStartsOn?: number): string[];'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'formatCalendarDate',
+						signature:
+							'function formatCalendarDate(value: string, options?: Intl.DateTimeFormatOptions, locale?: string): string;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'groupByDate',
+						signature:
+							'function groupByDate<T>(items: readonly T[], getDate: (item: T) => string | null | undefined): {\n    days: Map<string, T[]>;\n    undated: T[];\n};'
+					}
+				]
+			}
+		],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts --outdir dist --target browser && tsc --declaration --emitDeclarationOnly --target ES2022 --module ESNext --moduleResolution bundler --skipLibCheck --outDir dist src/index.ts',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			}
+		],
+		description:
+			'Date-only calendar ranges and layouts for AbsoluteJS applications',
+		directory: 'calendar',
+		kind: 'package',
+		name: 'Calendar',
+		packageName: '@absolutejs/calendar',
+		private: false,
+		publicExports: ['@absolutejs/calendar'],
+		readmeDigest:
+			'29fdef05e2845c54d0b098858dac170e9c5207b009f25cbf56d8c5eeffc8e89a',
+		readmeSamples: [
+			{
+				code: "import { monthDates, groupByDate } from '@absolutejs/calendar';\nconst cells = monthDates('2026-09-24');\nconst { days, undated } = groupByDate(tasks, task => task.due);",
+				description: '# @absolutejs/calendar',
+				heading: '@absolutejs/calendar quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Framework-independent, date-only calendar mechanics for AbsoluteJS apps. Apps own event models, permissions, interactions and persistence.',
+				details: [
+					'Exports: isCalendarDate, addDays, addMonths (clamps the day), dateInZone, weekDates, monthDates (42 cells), formatCalendarDate, and groupByDate (includes an undated bucket). Dates use YYYY-MM-DD; arithmetic and display avoid local-time/DST shifts. Week starts are configurable from Sunday (0) through Saturday (6). dateInZone is the explicit bridge from an instant to a calendar day.',
+					'No provider calendars, timers, React or storage dependencies are required. Invalid date input throws for arithmetic and is retained in the undated bucket when grouping.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/calendar',
+		subpackages: [],
+		version: '0.1.0'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/changelog',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'applyMigration',
+						signature: 'applyMigration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'applyMigrations',
+						signature: 'applyMigrations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MigrationResult',
+						signature: 'type MigrationResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'change',
+						signature: 'change'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'manual',
+						signature: 'manual'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'moved',
+						signature: 'moved'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renamed',
+						signature: 'renamed'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildIsStale',
+						signature: 'buildIsStale'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'builtSurface',
+						signature: 'builtSurface'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'changelogPaths',
+						signature: 'changelogPaths'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'loadUnreleased',
+						signature: 'loadUnreleased'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'readJsonFile',
+						signature: 'readJsonFile'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LoadedEntries',
+						signature: 'type LoadedEntries'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LoadedEntry',
+						signature: 'type LoadedEntry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'changesBetween',
+						signature: 'changesBetween'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'disruptiveBetween',
+						signature: 'disruptiveBetween'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mechanicalMigrations',
+						signature: 'mechanicalMigrations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'migrationsBetween',
+						signature: 'migrationsBetween'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseChangelog',
+						signature: 'parseChangelog'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'releasesBetween',
+						signature: 'releasesBetween'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'symbolsDisturbedBetween',
+						signature: 'symbolsDisturbedBetween'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validateChange',
+						signature: 'validateChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChangeAt',
+						signature: 'type ChangeAt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChangelogRead',
+						signature: 'type ChangelogRead'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MigrationAt',
+						signature: 'type MigrationAt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'describeReconciliation',
+						signature: 'describeReconciliation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'reconcile',
+						signature: 'reconcile'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Reconciliation',
+						signature: 'type Reconciliation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Unannounced',
+						signature: 'type Unannounced'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'forgetRegistry',
+						signature: 'forgetRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isPackageName',
+						signature: 'isPackageName'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'packageArchive',
+						signature: 'packageArchive'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'packageVersions',
+						signature: 'packageVersions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'publishedChangelog',
+						signature: 'publishedChangelog'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'publishedSurface',
+						signature: 'publishedSurface'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PackageVersions',
+						signature: 'type PackageVersions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RegistryOptions',
+						signature: 'type RegistryOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'changeShape',
+						signature: 'changeShape'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'declaresTypes',
+						signature: 'declaresTypes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'diffSurface',
+						signature: 'diffSurface'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'notable',
+						signature: 'notable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'surfaceOfArchive',
+						signature: 'surfaceOfArchive'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'surfaceOfFiles',
+						signature: 'surfaceOfFiles'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'typeEntriesOf',
+						signature: 'typeEntriesOf'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChangeShape',
+						signature: 'type ChangeShape'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PackageSurface',
+						signature: 'type PackageSurface'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SurfaceChange',
+						signature: 'type SurfaceChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SurfaceDiff',
+						signature: 'type SurfaceDiff'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SurfaceName',
+						signature: 'type SurfaceName'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TypeEntry',
+						signature: 'type TypeEntry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Withdrawal',
+						signature: 'type Withdrawal'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'asText',
+						signature: 'asText'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'readTar',
+						signature: 'readTar'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TarLimits',
+						signature: 'type TarLimits'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHANGELOG_CONTRACT',
+						signature: 'CHANGELOG_CONTRACT'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHANGELOG_FILE',
+						signature: 'CHANGELOG_FILE'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHANGELOG_MARKDOWN',
+						signature: 'CHANGELOG_MARKDOWN'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHANGE_KINDS',
+						signature: 'CHANGE_KINDS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DISRUPTIVE_KINDS',
+						signature: 'DISRUPTIVE_KINDS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isDisruptive',
+						signature: 'isDisruptive'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isMechanical',
+						signature: 'isMechanical'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UNRELEASED_DIRECTORY',
+						signature: 'UNRELEASED_DIRECTORY'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Change',
+						signature: 'type Change'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChangeKind',
+						signature: 'type ChangeKind'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Changelog',
+						signature: 'type Changelog'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DisruptiveChange',
+						signature: 'type DisruptiveChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DisruptiveKind',
+						signature: 'type DisruptiveKind'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Migration',
+						signature: 'type Migration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NonEmpty',
+						signature: 'type NonEmpty'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OrdinaryChange',
+						signature: 'type OrdinaryChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Release',
+						signature: 'type Release'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'compareVersions',
+						signature: 'compareVersions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isPrerelease',
+						signature: 'isPrerelease'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'nextVersion',
+						signature: 'nextVersion'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseVersion',
+						signature: 'parseVersion'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'releaseKindFor',
+						signature: 'releaseKindFor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReleaseKind',
+						signature: 'type ReleaseKind'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderChangelogJson',
+						signature: 'renderChangelogJson'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderMarkdown',
+						signature: 'renderMarkdown'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MarkdownOptions',
+						signature: 'type MarkdownOptions'
+					}
+				]
+			}
+		],
+		category: 'Dev Tools',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/cli.ts --outdir dist --root src --sourcemap --target=bun --external typescript && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run lint && bun run test && bun run build && bun src/cli.ts check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'eslint . --max-warnings 0',
+				name: 'lint'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			"The changelog contract for the AbsoluteJS packages. Changes are written as typed entries the compiler checks, the release gate reconciles them against the package's own published types so a change nobody wrote down cannot ship, and migrations are data rather than prose so an upgrade can be applied instead of read.",
+		directory: 'changelog',
+		kind: 'package',
+		name: 'Changelog',
+		packageName: '@absolutejs/changelog',
+		private: false,
+		publicExports: ['@absolutejs/changelog'],
+		readmeDigest:
+			'1cee8e2e8ebe62648c33f6c0596bec5c98a71e71237ac5c7f1fa761b4e08c032',
+		readmeSamples: [
+			{
+				code: 'bun add -d @absolutejs/changelog\nbunx absolute-changelog adopt',
+				description: 'Working example for Adopting it.',
+				heading: 'Adopting it',
+				language: 'sh'
+			},
+			{
+				code: '"check:package": "bun run typecheck && bun run build && bun run test && absolute-changelog check"',
+				description:
+					"adopt creates changelog/unreleased/, keeps whatever CHANGELOG.md already said as changelog/history.md, adds changelog.json and CHANGELOG.md to the package's files, and makes sure your tsconfig compiles the entries — that last one matters, because an entry nothing compiles is an entry nobody checks.",
+				heading: 'Adopting it 2',
+				language: 'json'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'The changelog contract for the AbsoluteJS packages.',
+				details: [
+					'A changelog is worth having when it can be trusted and acted on. Prose changelogs manage neither: they rot because writing them is a discipline, and they cannot be acted on because "refactored the server options" is a true sentence that does not say which export moved or what to write instead.',
+					'This package makes both possible.',
+					'Entries are typed. A change is written as TypeScript, so the compiler',
+					'insists that a breaking change names the exports it breaks and says how to migrate. The entries that cost somebody an afternoon are the ones that cannot be filed empty.',
+					'The release gate checks them against the package. Before a release goes',
+					'out, the exports that vanished or changed shape are compared with the exports the entries name. Forget an entry and the release stops. Nobody has to remember.',
+					'Migrations are data. A rename and a move are the overwhelming majority',
+					'of real breaking changes, and both are mechanical. Written as data they can be applied — by a CLI, an editor, or a hosted upgrade button — without running a line of code that came from a registry.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					"adopt creates changelog/unreleased/, keeps whatever CHANGELOG.md already said as changelog/history.md, adds changelog.json and CHANGELOG.md to the package's files, and makes sure your tsconfig compiles the entries — that last one matters, because an entry nothing compiles is an entry nobody checks.",
+				details: [
+					'Then add the gate to the release chain:',
+					'Put it after build: the check compares the types you are about to publish against the ones you published last time, and it needs dist to exist.'
+				],
+				title: 'Adopting it'
+			},
+			{
+				description:
+					'One file per change, so two branches adding one do not meet over the same line:',
+				details: [
+					'Which writes changelog/unreleased/start-is-now-listen.ts:',
+					'The import is type-only, so an entry has nothing to resolve at run time and the gate works in a checkout with no dependencies installed.',
+					'Checked where you type it',
+					"An entry can be written against the package's own API, and add scaffolds it that way when it finds one:",
+					'Suggested rather than required, for two reasons: a removed entry names something that has just stopped existing, and typeof Api cannot see type-only exports at all. The gate is the certain half — it reads the published .d.ts, which carries them.',
+					'The kinds',
+					'breaking and removed cost a consumer work, and the type refuses them without symbols and a migration. added, changed, deprecated, fixed, security and internal do not.',
+					'The migrations',
+					'Shape — What it means — Applied',
+					'rename: { from, to } — An export kept its meaning and changed its name — yes',
+					'moved: { symbol, from, to } — An export moved to another entry point — yes',
+					'resubpath: { from, to } — A whole entry point moved — yes'
+				],
+				title: 'Writing a change'
+			},
+			{
+				description:
+					'Works out the version from the entries — a breaking change moves the minor below 1.0.0 and the major above it, and a version already on a prerelease line moves along that line — then writes changelog.json and CHANGELOG.md, bumps package.json, and deletes the entries it consumed.',
+				details: [
+					'--as major|minor|patch|prerelease overrides the inference, --version x.y.z overrides it entirely, and --dry shows the release without writing anything.'
+				],
+				title: 'Releasing'
+			},
+			{
+				description:
+					'every entry parses, and the disruptive ones carry what they must;',
+				details: [
+					'CHANGELOG.md is what the entries say it should be — it is generated, and',
+					'editing it is how the two copies drift;',
+					'the version in package.json and the newest release agree;',
+					'package.json still ships both documents, and nothing is sitting in the',
+					'entry directory that no release will read;',
+					'the entries name every export that moved since the newest published',
+					'version — not the one in package.json, which between release and publish is a version nobody can fetch;',
+					'and every migration describes what actually happened: a rename whose',
+					'destination this version does not export, a rename whose source is still exported, a move to an entry point the package does not have, a removal of something still there.',
+					'That last one is what makes an applicable migration safe to apply. A migration that reads correctly and rewrites working code into something that does not compile is the whole risk of automating an upgrade, and it fails the release instead.',
+					'--offline skips the two that talk to the registry.',
+					'adopt also writes prepublishOnly, so the gate runs however a publish was started — a release script, a bare npm publish, a CI job. A rule that can be walked around eventually is.'
+				],
+				title: 'The gate'
+			},
+			{
+				description:
+					'Anything deciding whether an upgrade is safe reads the published document:',
+				details: [
+					'For a package that has not adopted this yet, publishedSurface and diffSurface compare the published types of two versions instead — less than a changelog, and much more than nothing.'
+				],
+				title: "Reading somebody else's"
+			},
+			{
+				description: 'MIT.',
+				details: [],
+				title: 'Licence'
+			}
+		],
+		repository: 'https://github.com/absolutejs/changelog',
+		subpackages: [],
+		version: '0.7.1'
 	},
 	{
 		api: [],
@@ -19602,7 +23202,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		private: true,
 		publicExports: [],
 		readmeDigest:
-			'977df1e652df60ecf38ee88cfce942059ea56e97a5d5cbc38b0ec06b3eb8d8a7',
+			'ff8f4d1b756d6510e87b5359ff2bb189f861dcac5b15118a59e4a3f237212960',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/commerce @absolutejs/commerce-stripe @absolutejs/commerce-easypost',
@@ -19625,6 +23225,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/commerce-easypost — shipping rates + labels (EasyPost)',
 					'@absolutejs/commerce-resend — transactional email (Resend)',
 					'@absolutejs/commerce-customcat — print-on-demand fulfillment (CustomCat)',
+					'@absolutejs/commerce-machines — machine registry, stitch codecs, send-to-machine transports',
+					'@absolutejs/machines-bridge — shop-LAN bridge agent (CLI) for the transports above',
 					'Each adapter is an independently versioned npm package (Apache-2.0). This repository is the source monorepo.'
 				],
 				title: 'Packages'
@@ -19638,119 +23240,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Installation'
 			}
 		],
-		repository: 'https://github.com/absolutejs/commerce-adapters',
+		repository: null,
 		subpackages: [
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/commerce-customcat',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'CustomCatCatalogConfig',
-								signature:
-									'type CustomCatCatalogConfig = CustomCatHttpConfig & {\n    category?: string;\n    categories?: "all" | string[];\n    subcategory?: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'CustomCatCatalogProvider',
-								signature:
-									'type CustomCatCatalogProvider = CatalogSourceProvider & FulfillmentCostQuoteProvider & FulfillmentShippingMethodProvider & {\n    listTaxonomy(): Promise<CatalogTaxon[]>;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createCustomCatCatalog',
-								signature:
-									'const createCustomCatCatalog: (config: CustomCatCatalogConfig) => CustomCatCatalogProvider;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'CUSTOMCAT_API_BASE_URL',
-								signature:
-									'const CUSTOMCAT_API_BASE_URL = "https://customcat-beta.mylocker.net/api/v1";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'CUSTOMCAT_EFFECT_ADAPTER_ID',
-								signature:
-									'const CUSTOMCAT_EFFECT_ADAPTER_ID = "absolutejs.commerce-customcat";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'CUSTOMCAT_EFFECT_API_DESTINATION',
-								signature:
-									'const CUSTOMCAT_EFFECT_API_DESTINATION = "https://customcat-beta.mylocker.net";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'CUSTOMCAT_FULFILLMENT_EFFECT',
-								signature:
-									'const CUSTOMCAT_FULFILLMENT_EFFECT = "fulfillment.submit";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'customCatEffectAdapterDescriptor',
-								signature:
-									'const customCatEffectAdapterDescriptor: EffectAdapterDescriptor;'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'CustomCatConfig',
-								signature:
-									'type CustomCatConfig = {\n    apiKey: string;\n    baseUrl?: string;\n    sandbox?: boolean;\n    shippingMethod?: string;\n    /** Injectable for tests, proxies, and edge runtimes. */\n    fetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'validateCustomCatOrder',
-								signature:
-									'const validateCustomCatOrder: (order: FulfillmentOrderRequest) => FulfillmentValidation;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createCustomCatFulfillment',
-								signature:
-									'const createCustomCatFulfillment: (config: CustomCatConfig) => FulfillmentProvider;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createCustomCatEffectAdapterDriver',
-								signature:
-									'const createCustomCatEffectAdapterDriver: (providerForKey: (apiKey: string) => CustomCatEffectProvider) => EffectAdapterDriver<FulfillmentOrderRequest, FulfillmentOrder>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createCustomCatEffectQueryDriver',
-								signature:
-									'const createCustomCatEffectQueryDriver: (providerForKey: (apiKey: string) => CustomCatEffectProvider) => EffectAdapterQueryDriver;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/commerce-customcat/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<CustomCatConfig, FulfillmentProvider>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<FulfillmentProvider>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<FulfillmentProvider>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -19785,7 +23278,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/commerce-customcat/manifest.json'
 				],
 				readmeDigest:
-					'af30b82608d4535473eb22e4c43f1cda0123ac790697c2e871b291b92662faca',
+					'ce4d52d781e272f46b1e967294b35fa7a9319fd8e64332957c4c8fe716d7e39f',
 				readmeSamples: [
 					{
 						code: 'import { createCustomCatFulfillment } from "@absolutejs/commerce-customcat";\n\nconst fulfillment = createCustomCatFulfillment({\n  apiKey: process.env.CUSTOMCAT_API_KEY!,\n  sandbox: true,\n});\n\nawait fulfillment.submitOrder({\n  externalOrderId: "ORDER-1001",\n  recipient,\n  lines,\n  shippingMethod: "Economy",\n});',
@@ -19801,49 +23294,20 @@ export const ecosystemProjects: EcosystemProject[] = [
 						details: [
 							'Use createCustomCatCatalog() for normalized catalog browsing, live SKU availability, and read-only fulfillment cost preflight. Preflight refreshes the selected SKUs and shipping cost, includes CustomCat\'s documented back-print adjustment, and returns item/shipping/adjustment totals. It does not reserve inventory or price; refresh it immediately before creating spend authority. The same provider exposes paginated free-text catalog search and destination- aware shipping-method discovery. CustomCat does not expose server-side catalog search, so a search walks its paginated catalog before returning normalized matches; ordinary browsing remains a single provider page request. Set categories: "all" to discover CustomCat\'s category/subcategory taxonomy and traverse every returned category with opaque cursors instead of hardcoding its current category list.',
 							"The adapter uses CustomCat's external-design workflow: every line supplies an exact catalog_sku plus a public PNG/JPG artwork URL. Front and back artwork are supported. Set sandbox: true until the account is ready to create paid production orders.",
-							'API keys are merchant scoped. Multi-tenant platforms should resolve the key from their secret store per fulfillment account; never persist keys in catalog or fulfillment settings JSON.'
+							'API keys are merchant scoped. Multi-tenant platforms should resolve the key from their secret store per fulfillment account; never persist keys in catalog or fulfillment settings JSON.',
+							'Catalog synchronization preserves closeouts with no orderable SKUs as archived products with zero variants. Supplier color hex values and retail prices are retained when present; no SKU, price, stock, or decoration calibration is fabricated.',
+							"getProductInventory(externalId) returns stock for every SKU of one product in one request. Use it with commerce's refreshCatalogInventory for efficient, bounded background refreshes. getInventory(skus) remains available for targeted SKU lookups. Missing stock fields are not converted into positive observations; stock results include the time the API response was received. HTTP requests have a configurable timeoutMs (30 seconds by default).",
+							'Complete inventory refresh',
+							'getCatalogInventory() reads a fresh, paginated catalog snapshot. Unlike product-detail lookups, this includes discontinued variants with explicit zero stock. Unknown stock remains unknown. Commerce 0.40.1-beta.56 or later uses this snapshot once per refresh; earlier runners keep their existing per-product behavior.'
 						],
 						title: 'Overview'
 					}
 				],
 				sourcePath: 'customcat',
-				version: '0.6.20-beta.2'
+				version: '0.6.20-beta.6'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/commerce-easypost',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'EasyPostConfig',
-								signature:
-									'type EasyPostConfig = {\n    apiKey: string;\n};'
-							},
-							{
-								description:
-									'Build a ShippingProvider backed by an EasyPost account.',
-								kind: 'value',
-								name: 'createEasyPostProvider',
-								signature:
-									'const createEasyPostProvider: (config: EasyPostConfig) => ShippingProvider;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/commerce-easypost/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<EasyPostConfig, ShippingProvider>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<ShippingProvider>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<ShippingProvider>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -19901,40 +23365,163 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.19.19-beta.3'
 			},
 			{
-				api: [
+				api: [],
+				commands: [
 					{
-						entryPoint: '@absolutejs/commerce-resend',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'ResendConfig',
-								signature:
-									'type ResendConfig = {\n    apiKey: string;\n    /** Verified-domain sender, e.g. "The Embroidery Place <hi@shop.com>". */\n    from: string;\n    /** Route provider failures into the host\'s safe error tracker. */\n    onError?: (error: unknown) => void;\n};'
-							},
-							{
-								description:
-									"Build an EmailProvider backed by Resend. Sends are best-effort: failures are logged, never thrown, so a flaky mail provider can't break fulfilment.",
-								kind: 'value',
-								name: 'createResendEmailProvider',
-								signature:
-									'const createResendEmailProvider: (config: ResendConfig) => EmailProvider;'
-							}
-						]
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts ./src/transports.ts ./src/bridge.ts ./src/telemetry.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce --external '@absolutejs/commerce/*' --external @absolutejs/manifest --external @sinclair/typebox && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
 					},
 					{
-						entryPoint: '@absolutejs/commerce-resend/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<ResendConfig, EmailProvider>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<EmailProvider>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<EmailProvider>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
 					}
 				],
+				description:
+					'Machine registry (embroidery, DTG, DTF, sublimation, vinyl, laser, label, heat press), DST/EXP/PES/JEF stitch codecs, send-to-machine transports (folder, raw TCP 9100, IPP, PrintNode, shop bridge) and machine run telemetry (production reports, Zebra alerts, SNMP traps, RIP webhooks) for @absolutejs/commerce',
+				name: '@absolutejs/commerce-machines',
+				private: false,
+				publicExports: [
+					'@absolutejs/commerce-machines',
+					'@absolutejs/commerce-machines/manifest',
+					'@absolutejs/commerce-machines/transports',
+					'@absolutejs/commerce-machines/bridge',
+					'@absolutejs/commerce-machines/telemetry',
+					'@absolutejs/commerce-machines/manifest.json'
+				],
+				readmeDigest:
+					'66e28c1d13a6bbaed647fa54acf7644b084db7f415e4fe276df379e3fc05e38f',
+				readmeSamples: [
+					{
+						code: 'import {\n  decodeStitchProgram,\n  encodeStitchProgram,\n  exportForMachine,\n  getMachineProvider,\n  listMachineProviders,\n  machineChecklist,\n} from "@absolutejs/commerce-machines";\n\nlistMachineProviders("embroidery"); // Tajima, Brother PR, Barudan, Ricoma, Melco…\n\nconst brother = getMachineProvider("brother-pr")!;\nconst files = exportForMachine(brother, {\n  reference: "ORD-1042-L1",\n  stitchFile: { bytes: dstBytes, filename: "logo.dst" },\n});\n// → [{ filename: "ORD-1042-L1.pes", mime: "application/x-brother-pes", bytes, format: "pes" }]\n\nconst program = decodeStitchProgram(dstBytes, "logo.dst");\n// program.stitchCount, colorChanges, widthMm, heightMm, stitches[]\nconst jef = encodeStitchProgram(program!, "jef");\n\nmachineChecklist("dtg"); // art-ready, pretreated, printed, cured, qc',
+						description: '# @absolutejs/commerce-machines',
+						heading: '@absolutejs/commerce-machines quick start',
+						language: 'typescript'
+					},
+					{
+						code: 'import {\n  createTransports,\n  sendToMachine,\n  probeMachine,\n  transportFieldsFor,\n  transportHelp,\n  TRANSPORT_LABELS,\n} from "@absolutejs/commerce-machines/transports";\n\nconst result = await sendToMachine(\n  files, // MachineExport[] from exportForMachine\n  { transport: "raw-tcp", host: "192.168.1.50" }, // port defaults to 9100\n  { reference: "ORD-1042-L1" },\n);\n// → { ok: true, detail: "sent ORD-1042-L1.zpl (312 bytes) to 192.168.1.50:9100" }\n//   | { ok: false, error: "192.168.1.50:9100 unreachable: Failed to connect" }',
+						description:
+							'Working example for Send straight to the machine (@absolutejs/commerce-machines/transports).',
+						heading:
+							'Send straight to the machine (@absolutejs/commerce-machines/transports)',
+						language: 'typescript'
+					},
+					{
+						code: 'import {\n  parseMachineReport,\n  readingsToRuns,\n  decodeZebraAlert,\n  decodeSnmpPrinterStatus,\n  telemetryKindsFor,\n  telemetryFieldsFor,\n  telemetryHelp,\n  telemetryDelivery,\n  TELEMETRY_LABELS,\n} from "@absolutejs/commerce-machines/telemetry";\n\nconst reading = parseMachineReport(tajimaReportText, "tajima-report");\n// → { at, state: "idle", jobName: "288C8286-L1-1.DST", stitches: 12480,\n//     pieces: 6, elapsedSeconds: 1064, detail: "Completed", raw }\n\nreadingsToRuns(readings, { idleGapSeconds: 300 });\n// → [{ startedAt, finishedAt, seconds: 1064, stitches: 12480, pieces: 6 }]',
+						description:
+							"Measure the minutes a machine actually ran instead of asking an operator to type them. Commercial embroidery and DTG machines rarely expose an open API, so telemetry is pluggable per machine — and every path is event-driven. The shop's machines push; nothing here is on a timer.",
+						heading:
+							'Machine run telemetry (@absolutejs/commerce-machines/telemetry)',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'"Support every machine as a provider." A print / embroidery shop configures the machines it owns; each provider knows the file formats and connection methods that make and model accepts, and the package can export a job in that format. The core is pure data plus file encoding — no network I/O. The optional ./transports, ./bridge and ./telemetry subpaths add "send straight to the machine" delivery, the live bridge protocol, and machine run telemetry.',
+						details: [],
+						title: 'Overview'
+					},
+					{
+						description:
+							'MACHINE_PROVIDERS — embroidery (Tajima, Brother PR, Barudan, Ricoma,',
+						details: [
+							'Melco, SWF, Happy, ZSK, Janome MB, Bernina E16, Baby Lock), DTG (Brother GTX, Epson SureColor F2, Kornit, Ricoh Ri, Polyprint TexJet), DTF, sublimation (Epson F, Sawgrass), cutters (Cricut, Silhouette, Roland, Graphtec), screen, laser (Glowforge, xTool, Epilog), labels (Zebra, Rollo, Dymo, Brother QL) and generic fallbacks. Each carries accepted formats (preferred first), connections, hoops, plain-English setup and developerNotes listing what to ask the shop before wiring a direct integration.',
+							'Stitch codecs: full decode and encode for Tajima DST, Melco EXP,',
+							'Brother PES (v1 truncated writer; reader follows the PEC pointer of any PES version) and Janome JEF. Bare .pec files decode too. VP3 and XXX are recognised as formats but not decoded or written.',
+							'convertMachineFile, exportForMachine, MIME_BY_FORMAT, machineChecklist',
+							'and a createMachineRegistry factory for the manifest wiring.'
+						],
+						title: 'What is in the box'
+					},
+					{
+						description:
+							'Coordinates are absolute 0.1 mm units, x right / y up (DST convention);',
+						details: [
+							'PEC and JEF y-down axes are flipped on the way in and out.',
+							'DST has no trim record; trims are written as zero-length jumps.',
+							'The PES writer produces the truncated version-1 layout (header + PEC block,',
+							'no CEmbOne/CSewSeg section). Machines and most software sew from the PEC block; a few editors that only read the design section will show it empty.',
+							'Thread names come from the Brother PEC and Janome JEF palettes when a file',
+							'carries indices; writers match threads by name and otherwise cycle.'
+						],
+						title: 'Notes on the codecs'
+					},
+					{
+						description: 'transport — Target — Where it works',
+						details: [
+							'download — — — Everywhere; staff carry the file to the machine.',
+							'folder — { path } — Server can see the hot folder (local path or mounted share).',
+							'raw-tcp — { host, port? } (default 9100) — Server can reach the printer IP (Zebra, most label printers, RIP spoolers).',
+							'ipp — { url, username?, password? } — Server can reach ipp://host:631/ipp/print (CUPS, AirPrint, office printers).',
+							"printnode — { apiKey, printerId, title? } — Anywhere — PrintNode's paid cloud service relays to its client on a shop PC.",
+							'bridge — { bridgeId, action } — Anywhere — the free bridge agent on the shop LAN executes action (see below).',
+							'createTransports({ fetch?, bridge?, timeoutMs? }) returns one',
+							'MachineTransport per kind (kind, describe, optional probe, send); pass a custom fetch in tests. sendToMachine, probeMachine and describeTarget dispatch on target.transport.',
+							'folder sanitises filenames to their base name and refuses paths containing',
+							"... raw-tcp opens one connection per file, streams with back-pressure and closes (10 s timeout; probe just connects). ipp encodes an IPP/1.1 Print-Job (application/ipp, document-format = the export's MIME) and returns the printer's job-id; probe is Get-Printer-Attributes. Basic auth is sent when a username is set. printnode posts raw_base64 (ZPL, EPL, TSPL, DST, EXP, PES, JEF…) or pdf_base64 (PDF) to https://api.printnode.com/printjobs; probe fetches /printers/:id.",
+							'transportFieldsFor(kind), TRANSPORT_LABELS and transportHelp(kind) feed',
+							'a settings form: fields with type: "text" | "password" | "number", a label, and plain-English help on when to use each and what to ask the shop.'
+						],
+						title: 'Send straight to the machine (@absolutejs/commerce-machines/transports)'
+					},
+					{
+						description:
+							"Measure the minutes a machine actually ran instead of asking an operator to type them. Commercial embroidery and DTG machines rarely expose an open API, so telemetry is pluggable per machine — and every path is event-driven. The shop's machines push; nothing here is on a timer.",
+						details: [
+							'kind — Delivery — Where the reading comes from — What it cannot see',
+							"report-folder — watch — The machine software's production report per run, caught by filesystem events (Tajima DG/Network Manager, Melco OS, Barudan LEM, Ricoma panels, DTG/DTF RIP job logs). — Anything live — the run appears when the report is written.",
+							'raw-tcp-status — push — Zebra unsolicited alerts (SX / alerts.add) over a held-open socket. — Which order is printing; non-Zebra printers.',
+							'http-status — push — The RIP or controller POSTs to a webhook the bridge agent serves. — Anything, if the software cannot notify — then it is manual.',
+							'snmp-printer — push — SNMP v1/v2c traps and informs (Host Resources + Printer MIB). — Stitches, pieces, job names.',
+							'manual — manual — An operator types the time. — Everything — and it says so.',
+							'telemetryKindsFor(provider) suggests the paths worth offering for a machine',
+							'from its connections and formats. It is a suggestion for the settings screen, never a claim the machine was tested; manual is always included and is always the safe answer. telemetryDelivery(kind) says whether that path is pushed, watched or manual, and telemetryHelp(kind) explains in plain English what it needs, which machines it suits and what it cannot see. telemetryFieldsFor(kind) + TELEMETRY_LABELS build the form.',
+							'parseMachineReport(text, parser, { now? }) reads Tajima and Melco',
+							'production reports (Label: value and header-row CSV), generic key/value and JSON, through one field vocabulary; an unexpected layout degrades to the generic reader instead of throwing, and returns null when nothing job-shaped is found. referenceFromJobName pulls 288C8286-L1-1 out of a design name.',
+							'readingsToRuns(readings, { idleGapSeconds }) collapses a stream into runs:',
+							'consecutive running samples make one run, a non-running sample or a gap longer than idleGapSeconds (default 300) closes it, a run is never credited more than one gap past its last running signal, and a non-running reading carrying elapsedSeconds (a finished production report) becomes a run of its own. For push-only machines that can run for hours between signals, pass a larger idleGapSeconds. eventsToRuns does the same over MachineRunEvent[].'
+						],
+						title: 'Machine run telemetry (@absolutejs/commerce-machines/telemetry)'
+					},
+					{
+						description:
+							'Apps run in the cloud; machines sit on the shop LAN. The shop installs @absolutejs/machines-bridge on any PC or Raspberry Pi. It holds one persistent socket to the app (an @absolutejs/sync connection, no inbound ports on the shop side): the server pushes jobs and telemetry sources down, the agent pushes results and run events up. Nothing polls. The agent executes a fixed set of typed actions — never arbitrary commands:',
+						details: [
+							'Server side — register the collections and mutations on your sync engine and point syncSocket at the bridge tokens:',
+							'Protocol:',
+							'The agent opens the socket and sends its bridge token as the first',
+							"authenticate frame, then subscribes to bridgeJobs and bridgeTelemetrySources. Both are scoped to its bridgeId by the collections' authorize/match.",
+							'A queued job arrives as an insert diff with its files inline',
+							'({ filename, mime, bytesBase64 }). The agent runs it and calls the bridge.report mutation; the job leaves the collection.',
+							'Run telemetry goes up in small batches through bridge.telemetry',
+							'(MachineRunEvent[], stored via BridgeStore.record). bridge.heartbeat carries { version, platform, hostname, capabilities, printers?, telemetry? } once per connection — with a live socket, presence IS the socket.',
+							'BridgeStore is the persistence seam: enqueue, claim, complete,',
+							'heartbeat, status, and the optional list, pending, readings, record, records. Everything telemetry-related is optional, so an existing store keeps working.',
+							'Legacy fallback: createBridgeHandlers(store, { authenticate }) still',
+							'returns poll / report / telemetry handlers to mount on POST /bridge/poll, /bridge/report and /bridge/telemetry for shops whose network blocks WebSockets. The poll response carries sources so a fallback agent needs no extra round-trip. It is supported, but it is not the default path and it is the only place anything is polled.'
+						],
+						title: 'Live bridge (@absolutejs/commerce-machines/bridge)'
+					}
+				],
+				sourcePath: 'machines',
+				version: '0.3.0-beta.2'
+			},
+			{
+				api: [],
 				commands: [
 					{
 						command:
@@ -19992,61 +23579,131 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.19.19-beta.3'
 			},
 			{
-				api: [
+				api: [],
+				commands: [
 					{
-						entryPoint: '@absolutejs/commerce-stripe',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'StripeConfig',
-								signature:
-									'type StripeConfig = {\n    onWebhookSecretVerified?: (index: number) => Promise<void> | void;\n    secretKey: string;\n    webhookSecret?: string;\n    webhookSecrets?: readonly string[];\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'verifyStripeWebhookSigningSecret',
-								signature:
-									'const verifyStripeWebhookSigningSecret: (secret: string) => Promise<boolean>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createStripeWebhookEndpointManager',
-								signature:
-									'const createStripeWebhookEndpointManager: (config: {\n    secretKey: string;\n}) => PaymentWebhookEndpointManager;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'stripeDisputeEvidenceReconciliation',
-								signature:
-									'const stripeDisputeEvidenceReconciliation: (dispute: {\n    evidence: object;\n    evidence_details: {\n        has_evidence: boolean;\n        submission_count: number;\n    };\n    status: string;\n}, input: Parameters<NonNullable<PaymentProvider["reconcileDisputeEvidence"]>>[0]) => {\n    applied: boolean;\n    diagnostics: {\n        hasEvidence: boolean;\n        mismatches: {\n            field: string;\n            reason: "different" | "missing";\n            scope: "file" | "text";\n        }[];\n    };\n    providerFileIds: Record<string, string>;\n    providerStatus: string;\n    submissionCount: number;\n    submitted: boolean;\n};'
-							},
-							{
-								description:
-									'Build a PaymentProvider backed by Stripe (stripe-node, Basil API).',
-								kind: 'value',
-								name: 'createStripePayment',
-								signature:
-									'const createStripePayment: (config: StripeConfig) => PaymentProvider;'
-							}
-						]
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/manifest.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce --external '@absolutejs/commerce/*' --external @absolutejs/manifest --external @sinclair/typebox && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit",
+						name: 'build'
 					},
 					{
-						entryPoint: '@absolutejs/commerce-stripe/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<StripeConfig, PaymentProvider>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<PaymentProvider>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<PaymentProvider>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
 					}
 				],
+				description:
+					"Square Terminal adapter for @absolutejs/commerce — take a card at the counter on the shop's own hardware",
+				name: '@absolutejs/commerce-square',
+				private: false,
+				publicExports: [
+					'@absolutejs/commerce-square',
+					'@absolutejs/commerce-square/manifest',
+					'@absolutejs/commerce-square/manifest.json'
+				],
+				readmeDigest:
+					'c11625a24faa6a1ea1ca004fb2dee8fbf3b78106b0c7d245d19def75b8a0d041',
+				readmeSamples: [
+					{
+						code: 'import { createSquareTerminal } from "@absolutejs/commerce-square";\n\nconst terminal = createSquareTerminal({\n  accessToken: process.env.SQUARE_ACCESS_TOKEN ?? "",\n  environment: "sandbox",\n  webhookSignatureKey: process.env.SQUARE_WEBHOOK_SIGNATURE_KEY,\n  webhookUrl: "https://yourshop.com/api/square/webhook",\n});\n\nconst devices = await terminal.listDevices();\nconst checkout = await terminal.startCheckout({\n  amountCents: 4500,\n  deviceId: devices[0].id,\n  idempotencyKey: saleId,\n  reference: "walk-in-88",\n});\n// …the customer taps; Square posts terminal.checkout.updated\nconst { checkout: done } = await terminal.verifyWebhook(body, signature);',
+						description: '# @absolutejs/commerce-square',
+						heading: '@absolutejs/commerce-square quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Square Terminal as a TerminalProvider for @absolutejs/commerce.',
+						details: [
+							'Online checkout and the counter are different shapes. Online, the browser goes to the provider and comes back. At the counter, the customer taps a card on a piece of hardware the shop owns, and the till waits for it. This adapter is that second shape: list the paired Terminals, send an amount to one, watch the checkout, cancel it, and verify the webhook Square sends when it changes.',
+							'Money is integer cents, like everywhere else in commerce.',
+							'No SDK. Four REST calls and an HMAC; fetchImpl is injectable, so the',
+							'whole flow is testable without a network.',
+							'Webhooks are refused, not trusted, without a signature key. Square signs',
+							'the notification URL followed by the raw body — both must match.',
+							'A cancel with a reason (timed out, buyer walked away) reads as failed',
+							'rather than canceled, because those are different things to a shop.',
+							'Pairing a Terminal happens on the device itself. The access token needs PAYMENTS_WRITE and DEVICE_CREDENTIAL_MANAGEMENT.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'square',
+				version: '0.1.0-beta.1'
+			},
+			{
+				api: [],
+				commands: [
+					{
+						command:
+							'bun build src/index.ts --outdir dist --target bun --external @absolutejs/commerce && tsc --emitDeclarationOnly',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Reusable store policies, themes, releases, earnings and exact-media previews for AbsoluteJS commerce',
+				name: '@absolutejs/commerce-stores',
+				private: false,
+				publicExports: ['@absolutejs/commerce-stores'],
+				readmeDigest:
+					'e4397f65f4111233755ce505b6d92e18e63fec97c6732c99365ed604a679c5a1',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Provider-neutral contracts for white-label store identity, theme review and releases, membership permissions, earnings, validated commercial policies, shipping regions and surcharges, margin/extra-impression pricing, and exact supplier-media artwork previews.',
+						details: [
+							'All monetary values are integer cents. defaultStoreOperatingPolicy() creates isolated defaults; commercial enforcement is opt-in through commercialConfigured. parseStoreOperatingPolicy and parseStoreProductPolicy validate untrusted input. storeMockups emits overlays only when the matching supplier color/view photo and a bounded placement calibration exist.',
+							'Applications own persistence, authorization, payment settlement and approval of business terms. No database or provider credentials are included.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							'StoreTheme.hero.slides optionally adds up to seven campaigns after the primary hero. Each slide has a unique ID, headline, optional image/accessible image description, and optional button. Theme validation bounds content and rejects unsafe destinations. Applications render manual navigation and retain their existing draft/release approval flow; this contract does not imply automatic rotation or vertical inheritance.',
+						details: [],
+						title: 'Homepage campaigns'
+					},
+					{
+						description:
+							'StoreProductPolicy.mockupOverrides stores optional preview overrides by exact color and decoration placement. parseStoreMockupOverrides validates a maximum of 240 unique pairs, safe image URLs and normalized image bounds. A layout includes artworkUrl, photoUrl and [x, y, width, height]; a prepared preview instead includes finishedImageUrl.',
+						details: [
+							'Pass overrides to storeMockups. Layouts require the exact supplier photo/color and current artwork URL; incompatible decoration methods/placements remain excluded. Overrides from older artwork stop applying. A finished preview includes finishedImageUrl in the returned mockup: render that image without overlaying artwork a second time. Applications must authorize edits and validate saved overrides against the product and approved store artwork. These settings never alter production dimensions or instructions.'
+						],
+						title: 'Manual product mockups'
+					}
+				],
+				sourcePath: 'stores',
+				version: '0.4.0-beta.4'
+			},
+			{
+				api: [],
 				commands: [
 					{
 						command:
@@ -20103,7 +23760,136 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'stripe',
-				version: '0.25.1-beta.7'
+				version: '0.25.1-beta.11'
+			},
+			{
+				api: [],
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build ./src/index.ts ./src/cli.ts --root ./src --outdir dist --target bun --external @absolutejs/commerce-machines --external '@absolutejs/commerce-machines/*' --external @absolutejs/sync --external '@absolutejs/sync/*' && tsc --emitDeclarationOnly --project tsconfig.json && chmod +x dist/cli.js",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{js,ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Shop-LAN bridge agent for @absolutejs/commerce-machines: holds one live socket to your app, delivers pushed print/embroidery jobs to a hot folder, a printer port (TCP 9100), an IPP printer or the OS print queue, and pushes machine run telemetry back (production reports, Zebra alerts, SNMP traps, RIP webhooks). No polling, no arbitrary command execution.',
+				name: '@absolutejs/machines-bridge',
+				private: false,
+				publicExports: ['@absolutejs/machines-bridge'],
+				readmeDigest:
+					'8d261f132279cf5cf58e5f714ab71155d6a5a0bf337eba8e5d93856219650d30',
+				readmeSamples: [
+					{
+						code: 'bunx @absolutejs/machines-bridge --server https://shop.example --token XXXX',
+						description: '# @absolutejs/machines-bridge',
+						heading: '@absolutejs/machines-bridge quick start',
+						language: 'sh'
+					},
+					{
+						code: 'bunx @absolutejs/machines-bridge --probe report-folder --path /mnt/reports --parser tajima-report\nbunx @absolutejs/machines-bridge --probe raw-tcp-status --host 192.168.1.50\nbunx @absolutejs/machines-bridge --probe snmp-printer --host 192.168.1.60\nbunx @absolutejs/machines-bridge --telemetry-help snmp-printer',
+						description:
+							"Alongside the jobs, the agent watches whatever telemetry sources the app pushes down for this bridge, so the shop's real machine minutes are measured instead of typed. Every path is event-driven — the agent never asks a machine for its status on a timer:",
+						heading: 'Machine run telemetry',
+						language: 'sh'
+					},
+					{
+						code: 'import {\n  runBridge,\n  connectBridge,\n  executeJob,\n  listPrinters,\n  probeSource,\n} from "@absolutejs/machines-bridge";\n\nawait runBridge({\n  server: "https://shop.example",\n  token: process.env.ABS_BRIDGE_TOKEN!,\n  signal: controller.signal, // closes the socket\n  log: (line) => console.log(line),\n  // transport: "http-poll", intervalSeconds: 3 — legacy fallback only\n});\n\n// Or drive the connection yourself:\nconst connection = await connectBridge({ server, token });\nawait connection.ready; // first snapshots have landed\nconnection.counters(); // { executed, failed, events }\nconnection.close();\n\n// executeJob(job) runs one BridgeJob locally; listPrinters() lists OS queues;\n// probeSource(source) takes one reading for a settings screen.',
+						description: 'Working example for Programmatic use.',
+						heading: 'Programmatic use',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'The shop-side half of "send straight to the machine" for @absolutejs/commerce-machines. Your app runs in the cloud; the embroidery heads, DTG printers and label printers sit on the shop\'s LAN. The shop runs this small agent on any always-on PC or Raspberry Pi. It holds one persistent socket to your app (no inbound ports, no VPN): the app pushes jobs down it, the agent delivers each one locally and pushes the result — and the machines\' run telemetry — back up the same connection. Nothing is polled.',
+						details: [
+							'Options: --once (do one pass of work and exit), --list-printers, --no-printers, --no-telemetry, --webhook-port 8787, --socket-path /sync/ws, --probe , --telemetry-help , and the legacy --http-poll / --interval 3; env ABS_BRIDGE_SERVER / ABS_BRIDGE_TOKEN. Needs Bun ≥ 1.1. See install.md for running it as a service on Linux, macOS, Windows and Raspberry Pi, and for the per-machine telemetry setup.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							'The bridge executes exactly four typed actions and nothing else. There is no "run this command" action, jobs are validated with a type guard before they run, and every process it spawns is an argv array (never a shell string). The telemetry watchers only ever read: report files are parsed and never moved or deleted, and the local webhook/trap/alert listeners accept data, never commands:',
+						details: [
+							'Action — What happens locally',
+							'folder — Files are written into the folder (created if missing). Filenames are reduced to a safe base name; .. paths are refused.',
+							'raw-tcp — Bytes are streamed to host:port (default 9100) over one TCP connection per file — Zebra, most label printers, RIP spoolers.',
+							'ipp — An IPP/1.1 Print-Job is posted to the printer URL (ipp://host:631/ipp/print), with Basic auth when a username is set.',
+							'os-print — Linux/macOS: lp -d [-o raw] (-o raw for ZPL/EPL/TSPL). Windows: PowerShell Get-Content -Raw \\ — Out-Printer -Name for ZPL/EPL/TSPL and Start-Process -FilePath -Verb PrintTo for PDF and everything else. The printer name and file path are passed as environment variables, not interpolated into the script.',
+							'On connect it sends one heartbeat (version, platform, hostname, capabilities, discovered printers, telemetry) so the app can show the printer list in its settings — with a live socket, presence is the socket itself. Printers come from lpstat -p (CUPS) or Get-Printer (Windows).'
+						],
+						title: 'What it will and will not do'
+					},
+					{
+						description:
+							"One WebSocket to the app's @absolutejs/sync socket (wss:///sync/ws",
+						details: [
+							'by default; --socket-path if you mounted it elsewhere). The bridge token is sent as the first authenticate frame — never in the URL.',
+							'The agent subscribes to bridgeJobs and bridgeTelemetrySources. A queued',
+							'job arrives as a diff the moment the app queues it, files inline as base64; the agent runs it and calls the bridge.report mutation, which removes it from the collection. Telemetry events go up through bridge.telemetry in batches of at most 500, coalesced over 1 s, retried with backoff.',
+							'A dropped connection is reopened with backoff (500 ms → 10 s) and the',
+							'subscriptions resume; unfinished jobs are still in the collection, so nothing is lost. Malformed jobs and sources are ignored and logged.',
+							'Legacy fallback: --http-poll polls POST /bridge/poll every',
+							'3 s with { token, info } and reports to /bridge/report, pushing telemetry to /bridge/telemetry. Use it only where WebSockets are blocked.',
+							'The server side is createBridgeSync (+ createMemoryBridgeStore, withBridgeSyncPublishing) from @absolutejs/commerce-machines/bridge — see that README for the store interface and the socket wiring.'
+						],
+						title: 'Protocol'
+					},
+					{
+						description:
+							"Alongside the jobs, the agent watches whatever telemetry sources the app pushes down for this bridge, so the shop's real machine minutes are measured instead of typed. Every path is event-driven — the agent never asks a machine for its status on a timer:",
+						details: [
+							'Source — How it works locally',
+							'report-folder — fs.watch on the folder, events coalesced over 250 ms, then each new matching file is parsed and emitted as a finish event with the design reference, stitches, pieces and run time. A 5-minute rescan runs only to heal filesystem events the OS dropped (common on network shares). Files present the first time are adopted, not replayed; nothing is ever moved or deleted, and a .absolutejs-seen sidecar keeps a restart from re-importing history.',
+							"raw-tcp-status — Holds a connection to the printer's port open and reads unsolicited Zebra alerts (PAPER OUT SET, HEAD OPEN SET, PQ COMPLETED, and their CLEARs), and also listens on the alert port (default 9200) for printers configured to dial the bridge PC. A repeated condition does not emit twice. Reconnects with backoff.",
+							'snmp-printer — Binds UDP 162 (trapPort) and decodes SNMP v1/v2c traps and informs with a built-in BER codec — no dependency. Informs are acknowledged with a Response. Traps are mapped through the Host Resources / Printer MIB OIDs to state and lifetime page count.',
+							'http-status — Serves a small local endpoint (http://:8787/telemetry/ by default) for the RIP or controller to POST to, secret-checked. JSON bodies are read through the same field vocabulary as production reports; a plain status word works too.',
+							'manual — No watcher. The operator types the time.',
+							'State transitions are collapsed into runs on the server (readingsToRuns), not here — the agent only reports what it saw and when. --no-telemetry turns the whole thing off. --probe runs a single reading and prints it, for setup:',
+							'A probe is the only time this agent queries a machine.'
+						],
+						title: 'Machine run telemetry'
+					},
+					{
+						description:
+							"Bun tests cover: the folder and raw-tcp executors against a temp dir and a local Bun.listen; the os-print executor with a fake spawner (asserting the exact lp argv, the PowerShell script shape and that the printer name never enters the script); lpstat parsing; the full socket path — a fake WebSocket speaking the sync wire protocol against the reference bridge collections and mutations, pushing a job down, running it, reporting it and pushing a telemetry event back; the report-folder watcher over a temp dir with a fake clock and a driven watcher (baseline, new file, duplicate notification, sidecar restart, files left untouched); the Zebra alert stream over a fake connection; the SNMP BER encode/decode round-trip and trap/inform handling against a fake UDP socket; the webhook receiver's routing, secret check and body parsing; the legacy HTTP-poll loop against the reference handlers over a fake fetch; CLI and probe argument parsing.",
+						details: [
+							'Not tested here — no real hardware was in the loop:',
+							'No Tajima, Melco, Barudan or Ricoma machine wrote a report into the watched',
+							"folder. The parsers follow the layouts those packages export; confirm against the shop's own file before trusting a number.",
+							'No Zebra printer pushed an alert. The HS decode follows the ZPL II',
+							'programming guide field by field; the alert decode is keyword-based because the message wording varies by firmware, and an unrecognised message is logged, not guessed. SX alert configuration has not been exercised on a device.',
+							'No printer sent an SNMP trap. The codec round-trips against itself and the',
+							'OIDs are the standard Host Resources / Printer MIB ones.',
+							'No RIP posted to the webhook. The endpoint is exercised with synthetic',
+							'requests only.',
+							'The Windows executors have not been run against a live spooler (the',
+							"PowerShell path follows Microsoft's documented cmdlets), nor lp against a real CUPS queue, nor IPP against a physical printer. Raw ZPL through Out-Printer on Windows depends on the driver passing text through; for Zebra printers on Windows prefer raw-tcp to port 9100.",
+							"Until a path is confirmed on the shop's actual machine, leave that machine on manual: it measures nothing, and it says so."
+						],
+						title: 'What is tested, and what is not'
+					}
+				],
+				sourcePath: 'bridge',
+				version: '0.2.0-beta.0'
 			}
 		],
 		version: null
@@ -20564,6 +24350,342 @@ export const ecosystemProjects: EcosystemProject[] = [
 			}
 		],
 		version: null
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/consent',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'countryFromTimeZone',
+						signature: 'countryFromTimeZone'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_CONSENT_RULES',
+						signature: 'DEFAULT_CONSENT_RULES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EEA_COUNTRIES',
+						signature: 'EEA_COUNTRIES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'normalizeCountry',
+						signature: 'normalizeCountry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OPT_IN_REQUIRED_COUNTRIES',
+						signature: 'OPT_IN_REQUIRED_COUNTRIES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveRegion',
+						signature: 'resolveRegion'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'US_TIME_ZONES',
+						signature: 'US_TIME_ZONES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConsentRegime',
+						signature: 'ConsentRegime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConsentRules',
+						signature: 'ConsentRules'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RegionInput',
+						signature: 'RegionInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RegionResolution',
+						signature: 'RegionResolution'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RegionSource',
+						signature: 'RegionSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createConsentStore',
+						signature: 'createConsentStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'readGpc',
+						signature: 'readGpc'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'readTimeZone',
+						signature: 'readTimeZone'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConsentChoices',
+						signature: 'ConsentChoices'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConsentDecision',
+						signature: 'ConsentDecision'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConsentState',
+						signature: 'ConsentState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConsentStorage',
+						signature: 'ConsentStorage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConsentStore',
+						signature: 'ConsentStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConsentStoreOptions',
+						signature: 'ConsentStoreOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/consent/server',
+				symbols: [
+					{
+						description:
+							'Country headers set by common CDNs. Only pass a header your edge proxy always overwrites; a client can send any of these itself.',
+						kind: 'value',
+						name: 'CDN_COUNTRY_HEADERS',
+						signature:
+							'const CDN_COUNTRY_HEADERS: readonly string[];'
+					},
+					{
+						description:
+							'Sec-GPC: 1 is the Global Privacy Control request signal.',
+						kind: 'value',
+						name: 'readGpcHeader',
+						signature:
+							'const readGpcHeader: (headers: HeaderSource) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'countryFromHeaders',
+						signature:
+							'const countryFromHeaders: (headers: HeaderSource, trustedHeaders: readonly string[]) => string | null;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ClientIpOptions',
+						signature:
+							'type ClientIpOptions = {\n    /** A header your proxy sets to the connecting address, overwriting any\n     *  client value (nginx `proxy_set_header X-Real-IP $remote_addr`). */\n    trustedHeader?: string;\n    /** Proxies that append to X-Forwarded-For. The client address is this\n     *  many entries from the right; entries further left are client-supplied. */\n    trustedProxyHops?: number;\n};'
+					},
+					{
+						description:
+							'The visitor address as reported by trusted proxies, or null.',
+						kind: 'value',
+						name: 'clientIpFromHeaders',
+						signature:
+							'const clientIpFromHeaders: (headers: HeaderSource, { trustedHeader, trustedProxyHops }: ClientIpOptions) => string | null;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseIpv4',
+						signature:
+							'const parseIpv4: (value: string) => number | null;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseIpv6',
+						signature:
+							'const parseIpv6: (input: string) => bigint | null;'
+					},
+					{
+						description:
+							"Builds an in-memory IP→country index from DB-IP's country CSV (start,end,CC rows, ascending, IPv4 then IPv6). Synchronous; prefer {@link buildIpCountryIndex} for a full database inside a server.",
+						kind: 'value',
+						name: 'createIpCountryIndex',
+						signature:
+							'const createIpCountryIndex: (csv: string) => {\n    size: number;\n    /** Country for an IPv4/IPv6 address string, or null if unlisted. */\n    lookup: (address: string) => string | null;\n};'
+					},
+					{
+						description:
+							'Same as {@link createIpCountryIndex} but yields to the event loop between chunks, so indexing the full 700k-row database (about 2s of CPU) never stalls in-flight requests.',
+						kind: 'value',
+						name: 'buildIpCountryIndex',
+						signature:
+							'const buildIpCountryIndex: (csv: string, chunkLines?: number) => Promise<{\n    size: number;\n    /** Country for an IPv4/IPv6 address string, or null if unlisted. */\n    lookup: (address: string) => string | null;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IpCountryIndex',
+						signature:
+							'type IpCountryIndex = ReturnType<typeof createIpCountryIndex>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DbIpResolverOptions',
+						signature:
+							'type DbIpResolverOptions = {\n    /** Directory for the downloaded monthly database. */\n    cacheDir: string;\n    fetch?: typeof fetch;\n    /** Reported whenever a download or parse fails; lookups return null\n     *  until a database loads. */\n    onError?: (error: unknown) => void;\n    now?: () => number;\n    /** Re-download once the cached file is older than this. */\n    refreshAfterMs?: number;\n};'
+					},
+					{
+						description:
+							'IP→country using the free DB-IP "IP to Country Lite" database (CC BY 4.0 — show "IP Geolocation by DB-IP" with a link to https://db-ip.com where you disclose it). Loads the newest cached copy, downloads a fresh one when it is missing or stale, and never blocks a lookup on the network.',
+						kind: 'value',
+						name: 'createDbIpCountryResolver',
+						signature:
+							'const createDbIpCountryResolver: ({ cacheDir, fetch: fetcher, now, onError, refreshAfterMs }: DbIpResolverOptions) => {\n    /** Country for an address; null until a database has loaded. */\n    lookup: (address: string | null | undefined) => string | null;\n    /** Resolves once the first load (cache or download) settles. */\n    ready: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RequestRegionOptions',
+						signature:
+							'type RequestRegionOptions = ClientIpOptions & {\n    /** Trusted edge country headers, checked before the IP lookup. */\n    countryHeaders?: readonly string[];\n    lookup?: (address: string | null) => string | null;\n    rules?: ConsentRules;\n    /** Browser zone if the client sent one (e.g. a cookie). */\n    timeZone?: string | null;\n};'
+					},
+					{
+						description:
+							'Region and GPC for a request, for seeding the browser store during SSR so the right banner renders on first paint.',
+						kind: 'value',
+						name: 'resolveRequestRegion',
+						signature:
+							'const resolveRequestRegion: (headers: HeaderSource, { countryHeaders, lookup, rules, timeZone, ...ipOptions }: RequestRegionOptions) => {\n    gpc: boolean;\n    country: string | null;\n    regime: import("./regions").ConsentRegime;\n    source: import("./regions").RegionSource;\n};'
+					}
+				]
+			}
+		],
+		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --outdir dist --root ./src --target=browser --format=esm && bun build src/server.ts --outdir dist --root ./src --target=node --format=esm && tsc --emitDeclarationOnly --project tsconfig.json',
+				name: 'build'
+			},
+			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Region-aware tracking consent: opt-out where the law allows it, opt-in where it requires it, Global Privacy Control, and IP-to-country resolution.',
+		directory: 'consent',
+		kind: 'package',
+		name: 'Consent',
+		packageName: '@absolutejs/consent',
+		private: false,
+		publicExports: [
+			'@absolutejs/consent',
+			'@absolutejs/consent/package.json',
+			'@absolutejs/consent/server'
+		],
+		readmeDigest:
+			'37f22a0403f86d9858efab717b52727824ab41ff2f2a87afec675ff5843fd503',
+		readmeSamples: [
+			{
+				code: "import { createConsentStore, readGpc, readTimeZone, resolveRegion } from '@absolutejs/consent';\n\nconst store = createConsentStore({\n\tcategories: ['analytics', 'marketing'],\n\tgpc: readGpc(),\n\t// Seed from SSR (see below) so the right UI renders on first paint;\n\t// otherwise fall back to the browser time zone.\n\tregion: ssrRegion ?? resolveRegion({ timeZone: readTimeZone() })\n});\n\nstore.subscribe((state) => {\n\tif (state.choices.analytics) startAnalytics();\n\telse stopAnalytics();\n});\n\nstore.getState().needsPrompt; // opt-in region, undecided → show the banner\nstore.getState().needsNotice; // opt-out region, undecided → show a notice\nstore.acceptAll();\nstore.rejectAll();\nstore.decide({ analytics: true });\nstore.dismissNotice(); // hides the notice, records no decision\nstore.applyRemote({ choices: { analytics: false }, decidedAt }); // from the account",
+				description: 'Working example for Browser.',
+				heading: 'Browser',
+				language: 'typescript'
+			},
+			{
+				code: "import { createDbIpCountryResolver, resolveRequestRegion } from '@absolutejs/consent/server';\n\nconst geo = createDbIpCountryResolver({ cacheDir: '.cache/geo', onError: console.error });\nvoid geo.ready();\n\nconst region = resolveRequestRegion(request.headers, {\n\tlookup: geo.lookup,\n\t// nginx: proxy_set_header X-Real-IP $remote_addr;\n\ttrustedHeader: 'x-real-ip'\n});\n// { country: 'US', regime: 'opt-out', source: 'country', gpc: false }",
+				description: 'Working example for Server.',
+				heading: 'Server',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Region-aware tracking consent for AbsoluteJS apps.',
+				details: [
+					'Opt-out where the law allows it, opt-in where it requires it. The',
+					'default rules give confirmed US visitors tracking-on with a notice and a way to opt out, and everyone else — the EEA, the UK, Switzerland, every other country, and anyone whose location is unknown — an opt-in prompt with everything off until they choose.',
+					'Global Privacy Control. A Sec-GPC: 1 request or',
+					'navigator.globalPrivacyControl turns opt-out defaults off.',
+					'Location without a CDN. An IP→country index built from the free DB-IP',
+					'Lite database, downloaded and cached by the server, with the browser time zone as a fallback. A trusted CDN country header can be used instead.',
+					'Decisions follow the account. A choice saved on one device can be',
+					'applied on another; the newer decision always wins.',
+					'This package decides defaults. It is not legal advice; choose rules with counsel for the jurisdictions you serve.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Decisions persist in localStorage under absolute-consent. Pass migrate to read an older storage format, storage: null for memory only.',
+				details: [],
+				title: 'Browser'
+			},
+			{
+				description:
+					'Only name headers your own proxy overwrites. X-Forwarded-For entries left of your trusted hops, and CDN country headers your edge does not set, are client-controlled.',
+				details: [
+					'The resolver loads the newest cached database, downloads the current month from DB-IP when the cache is missing or older than 35 days (falling back to the previous month early in a month), indexes it in chunks that yield to the event loop, and returns null until it has loaded — never blocking a request on the network.',
+					'Attribution',
+					'DB-IP Lite is licensed under CC BY 4.0. Where you disclose the lookup (for example your privacy policy), include: IP Geolocation by DB-IP.'
+				],
+				title: 'Server'
+			},
+			{
+				description:
+					'OPT_IN_REQUIRED_COUNTRIES (EEA + GB + CH) is exported for apps that choose the inverse policy: opt-out everywhere except those countries.',
+				details: [],
+				title: 'Rules'
+			}
+		],
+		repository: 'https://github.com/absolutejs/consent',
+		subpackages: [],
+		version: '0.2.1'
 	},
 	{
 		api: [],
@@ -24531,6 +28653,2538 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/deploy',
 		subpackages: [],
 		version: '0.21.2'
+	},
+	{
+		api: [],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					'bun run --cwd packages/devices build && bun run --cwd packages/devices-capacitor build && bun run --cwd packages/devices-expo build',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun test && bun run build && bun run verify:dist',
+				name: 'check'
+			},
+			{
+				command: 'prettier --write .',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: "bun run --filter '@absolutejs/devices*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Provider-neutral device capabilities for AbsoluteJS applications.',
+		directory: 'devices',
+		kind: 'monorepo',
+		name: 'Devices',
+		packageName: 'absolutejs-devices-workspace',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'c0430873ddbdd16ce09a5caad079c11f7ec3b6987631c5102d76a88a3b994860',
+		readmeSamples: [
+			{
+				code: 'import {\n  back,\n  clipboard,\n  haptics,\n  keyboard,\n  lifecycle,\n  links,\n  network,\n  platform,\n  secureStorage,\n  share,\n  systemBars,\n} from "@absolutejs/devices";\n\nconst info = await platform.info();\nconst launchLink = await links.getLaunchLink();\nconst connection = await network.status();\n\nconst removeResume = await lifecycle.onResume(() => {\n  // Refresh ephemeral UI. Durable application synchronization belongs to\n  // @absolutejs/sync rather than the device lifecycle adapter.\n});\n\nif ((await back.capability()).available) {\n  const removeBack = await back.onPress(({ canGoBack }) => {\n    if (canGoBack) history.back();\n  });\n}\n\nif ((await secureStorage.capability()).available) {\n  await secureStorage.set("credential", "provider-owned-secret");\n}\n\nawait clipboard.writeText("Copied everywhere");\nawait share.share({ text: "Shared everywhere", url: "https://absolutejs.com" });\nawait haptics.impact("light");\nawait keyboard.dismiss();\nawait systemBars.setAppearance("light", "status");',
+				description: '# AbsoluteJS Devices',
+				heading: 'AbsoluteJS Devices quick start',
+				language: 'typescript'
+			},
+			{
+				code: 'bun install\nbun run check',
+				description: 'Working example for Development.',
+				heading: 'Development',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral device capabilities for AbsoluteJS applications.',
+				details: [
+					'The repository publishes two deliberately separate packages:',
+					'@absolutejs/devices — dependency-light contracts plus web, SSR, and test adapters.',
+					'@absolutejs/devices-capacitor — Capacitor implementations selected by an AbsoluteJS mobile build.',
+					'Application code imports capabilities from @absolutejs/devices; it does not branch on Capacitor or call vendor plugins directly. AbsoluteJS selects the runtime adapter for web, SSR, tests, and installed apps.',
+					'The adapter registry is realm-scoped rather than module-scoped. This is required because an embedded page and the AbsoluteJS native shell can be compiled as independent bundles while sharing one WebView global realm.',
+					'This repository does not own emulator orchestration. Target provisioning, native builds, HMR transport, and app launch are host-side responsibilities of the AbsoluteJS mobile CLI and must never enter an application bundle.',
+					'The core implementation covers platform information, lifecycle/resume/restored operations, normalized links, network state, Android-style back events, ordinary key/value storage, clipboard, system sharing, haptics, local notifications, a portable keyboard/system-bars surface, and a deliberately separate secure-storage seam. Provider features are isolated, tree-shakeable slices: an app that never imports clipboard, share, or haptics does not need the corresponding native plugin.',
+					"AbsoluteJS discovers these named application imports at mobile initialization and reads the selected provider's declarative package metadata. It installs only the exact native plugin packages the app uses and generates the adapter wiring; application code never edits Capacitor bootstrap code. Capability discovery does not request a permission or execute native code.",
+					'Sensitive permissions are never requested by importing a module or calling a capability query. Every future permission-owning feature uses the normalized PermissionState contract and exposes an explicit requestPermission() method that applications call from a user action.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'The project is pre-1.0. Public contracts may change while the mobile runtime is being proven.',
+				details: [],
+				title: 'Development'
+			}
+		],
+		repository: 'https://github.com/absolutejs/devices',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/devices',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceRuntime',
+								signature:
+									'type DeviceRuntime = "web" | "ssr" | "capacitor" | "expo" | "test";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceCapabilityFidelity',
+								signature:
+									'type DeviceCapabilityFidelity = "native" | "web" | "emulated";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceCapabilityUnavailableReason',
+								signature:
+									'type DeviceCapabilityUnavailableReason = "unsupported" | "unavailable" | "permission-required" | "policy-blocked";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceCapabilityStatus',
+								signature:
+									'type DeviceCapabilityStatus = {\n    available: true;\n    fidelity: DeviceCapabilityFidelity;\n    native?: unknown;\n} | {\n    available: false;\n    reason: DeviceCapabilityUnavailableReason;\n    message?: string;\n    native?: unknown;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'PermissionState',
+								signature:
+									'type PermissionState = "prompt" | "granted" | "denied" | "blocked" | "limited" | "unavailable";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePermissionStatus',
+								signature:
+									'type DevicePermissionStatus = {\n    canRequest: boolean;\n    native?: unknown;\n    state: PermissionState;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePermissionCapability',
+								signature:
+									'type DevicePermissionCapability = {\n    queryPermission(): Promise<DevicePermissionStatus>;\n    requestPermission(): Promise<DevicePermissionStatus>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceErrorCode',
+								signature:
+									'type DeviceErrorCode = "unsupported" | "unavailable" | "permission-required" | "permission-denied" | "permission-blocked" | "cancelled" | "temporarily-unavailable" | "failed";'
+							},
+							{
+								description: '',
+								kind: 'class',
+								name: 'DeviceError',
+								signature:
+									'class DeviceError extends Error {\n    readonly code: DeviceErrorCode;\n    readonly cause?: unknown;\n    constructor(code: DeviceErrorCode, message: string, options?: {\n        cause?: unknown;\n    });\n}'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceSubscription',
+								signature:
+									'type DeviceSubscription = () => void | Promise<void>;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceSafeAreaInsets',
+								signature:
+									'type DeviceSafeAreaInsets = {\n    bottom: number;\n    left: number;\n    right: number;\n    top: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePlatformInfo',
+								signature:
+									'type DevicePlatformInfo = {\n    appBuild?: string;\n    appVersion?: string;\n    formFactor: "phone" | "tablet" | "desktop" | "unknown";\n    isNative: boolean;\n    language?: string;\n    locale?: string;\n    os: "android" | "ios" | "linux" | "macos" | "windows" | "unknown";\n    prefersReducedMotion?: boolean;\n    runtime: DeviceRuntime;\n    safeAreaInsets?: DeviceSafeAreaInsets;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLifecycleState',
+								signature:
+									'type DeviceLifecycleState = "active" | "inactive" | "background";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceNetworkStatus',
+								signature:
+									'type DeviceNetworkStatus = {\n    connected: boolean;\n    connectionType: "wifi" | "cellular" | "ethernet" | "unknown" | "none";\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceRestoredOperation',
+								signature:
+									'type DeviceRestoredOperation = {\n    data?: unknown;\n    error?: {\n        code?: string;\n        message: string;\n    };\n    method: string;\n    native?: unknown;\n    plugin: string;\n    success: boolean;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceBackEvent',
+								signature:
+									'type DeviceBackEvent = {\n    canGoBack: boolean;\n    native?: unknown;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLink',
+								signature:
+									'type DeviceLink = {\n    fragment: string;\n    href: string;\n    host: string;\n    pathname: string;\n    query: URLSearchParams;\n    scheme: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePlatformCapability',
+								signature:
+									'type DevicePlatformCapability = {\n    getInfo(): Promise<DevicePlatformInfo>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLifecycleCapability',
+								signature:
+									'type DeviceLifecycleCapability = {\n    getState(): Promise<DeviceLifecycleState>;\n    onChange(listener: (state: DeviceLifecycleState) => void): Promise<DeviceSubscription>;\n    onRestoredOperation?(listener: (operation: DeviceRestoredOperation) => void): Promise<DeviceSubscription>;\n    onResume?(listener: () => void): Promise<DeviceSubscription>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLinksCapability',
+								signature:
+									'type DeviceLinksCapability = {\n    getLaunchUrl(): Promise<string | null>;\n    onOpen(listener: (url: string) => void): Promise<DeviceSubscription>;\n    openExternal(url: string): Promise<void>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceBackCapability',
+								signature:
+									'type DeviceBackCapability = {\n    capability(): Promise<DeviceCapabilityStatus>;\n    onPress(listener: (event: DeviceBackEvent) => void): Promise<DeviceSubscription>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceNetworkCapability',
+								signature:
+									'type DeviceNetworkCapability = {\n    getStatus(): Promise<DeviceNetworkStatus>;\n    onChange(listener: (status: DeviceNetworkStatus) => void): Promise<DeviceSubscription>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceStorageCapability',
+								signature:
+									'type DeviceStorageCapability = {\n    clear(): Promise<void>;\n    get(key: string): Promise<string | null>;\n    keys(): Promise<string[]>;\n    remove(key: string): Promise<void>;\n    set(key: string, value: string): Promise<void>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceClipboardOperation',
+								signature:
+									'type DeviceClipboardOperation = "read" | "write";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceClipboardCapability',
+								signature:
+									'type DeviceClipboardCapability = {\n    capability(operation?: DeviceClipboardOperation): Promise<DeviceCapabilityStatus>;\n    readText(): Promise<string>;\n    writeText(value: string): Promise<void>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceShareContent',
+								signature:
+									'type DeviceShareContent = {\n    dialogTitle?: string;\n    text?: string;\n    title?: string;\n    url?: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceShareResult',
+								signature:
+									'type DeviceShareResult = {\n    activity?: string;\n    native?: unknown;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceShareCapability',
+								signature:
+									'type DeviceShareCapability = {\n    capability(content?: DeviceShareContent): Promise<DeviceCapabilityStatus>;\n    share(content: DeviceShareContent): Promise<DeviceShareResult>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'DEFAULT_DEVICE_DOCUMENT_MAX_BYTES',
+								signature:
+									'const DEFAULT_DEVICE_DOCUMENT_MAX_BYTES: number;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceDocumentOperation',
+								signature:
+									'type DeviceDocumentOperation = "pick" | "export" | "open";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceDocument',
+								signature:
+									'type DeviceDocument = {\n    blob: Blob;\n    lastModifiedMs?: number;\n    mimeType: string;\n    name: string;\n    sizeBytes: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePickDocumentsOptions',
+								signature:
+									'type DevicePickDocumentsOptions = {\n    /** MIME types or file extensions accepted by the system picker. */\n    accept?: string[];\n    /** Maximum number of documents returned. Defaults to one. */\n    limit?: number;\n    /** Per-document byte ceiling. Defaults to 64 MiB. */\n    maximumBytes?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceDocumentContent',
+								signature:
+									'type DeviceDocumentContent = Blob | string;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceWriteDocumentOptions',
+								signature:
+									'type DeviceWriteDocumentOptions = {\n    content: DeviceDocumentContent;\n    /** Safe leaf filename shown to the user. Paths are rejected. */\n    name: string;\n    mimeType?: string;\n    /** Content byte ceiling. Defaults to 64 MiB. */\n    maximumBytes?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceExportDocumentResult',
+								signature:
+									'type DeviceExportDocumentResult = {\n    activity?: string;\n    mimeType: string;\n    name: string;\n    native?: unknown;\n    sizeBytes: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceDocumentsCapability',
+								signature:
+									'type DeviceDocumentsCapability = {\n    capability(operation?: DeviceDocumentOperation): Promise<DeviceCapabilityStatus>;\n    export(options: DeviceWriteDocumentOptions): Promise<DeviceExportDocumentResult>;\n    open(options: DeviceWriteDocumentOptions): Promise<void>;\n    pick(options?: DevicePickDocumentsOptions): Promise<DeviceDocument[]>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocalNotificationData',
+								signature:
+									'type DeviceLocalNotificationData = Record<string, string>;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocalNotification',
+								signature:
+									'type DeviceLocalNotification = {\n    body: string;\n    data?: DeviceLocalNotificationData;\n    /** Stable positive 32-bit integer shared by web, iOS, and Android. */\n    id: number;\n    native?: unknown;\n    /** Best-effort delivery time as Unix milliseconds. Omit for immediate delivery. */\n    scheduledAtMs?: number;\n    title: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceScheduleLocalNotification',
+								signature:
+									'type DeviceScheduleLocalNotification = Omit<DeviceLocalNotification, "native">;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocalNotificationAction',
+								signature:
+									'type DeviceLocalNotificationAction = {\n    /** `tap` represents selecting the notification body. */\n    actionId: string;\n    inputValue?: string;\n    native?: unknown;\n    notification: DeviceLocalNotification;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocalNotificationsCapability',
+								signature:
+									'type DeviceLocalNotificationsCapability = DevicePermissionCapability & {\n    capability(): Promise<DeviceCapabilityStatus>;\n    cancel(ids: number[]): Promise<void>;\n    onAction(listener: (action: DeviceLocalNotificationAction) => void): Promise<DeviceSubscription>;\n    onReceived(listener: (notification: DeviceLocalNotification) => void): Promise<DeviceSubscription>;\n    pending(): Promise<DeviceLocalNotification[]>;\n    schedule(notification: DeviceScheduleLocalNotification): Promise<DeviceLocalNotification>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePushNotificationData',
+								signature:
+									'type DevicePushNotificationData = Record<string, unknown>;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePushNotification',
+								signature:
+									'type DevicePushNotification = {\n    body?: string;\n    data: DevicePushNotificationData;\n    /** Provider notification identifier. This is not a device token. */\n    id: string;\n    native?: unknown;\n    subtitle?: string;\n    title?: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePushNotificationAction',
+								signature:
+									'type DevicePushNotificationAction = {\n    /** `tap` represents selecting the notification body. */\n    actionId: string;\n    inputValue?: string;\n    native?: unknown;\n    notification: DevicePushNotification;\n};'
+							},
+							{
+								description:
+									'Portable push-receipt surface. Provider registration credentials are kept behind the adapter boundary and are intentionally absent from this contract.',
+								kind: 'type',
+								name: 'DevicePushNotificationsCapability',
+								signature:
+									'type DevicePushNotificationsCapability = DevicePermissionCapability & {\n    capability(): Promise<DeviceCapabilityStatus>;\n    disable(): Promise<void>;\n    enable(): Promise<void>;\n    onAction(listener: (action: DevicePushNotificationAction) => void): Promise<DeviceSubscription>;\n    onReceived(listener: (notification: DevicePushNotification) => void): Promise<DeviceSubscription>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceHapticImpactStyle',
+								signature:
+									'type DeviceHapticImpactStyle = "heavy" | "light" | "medium";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceHapticNotificationType',
+								signature:
+									'type DeviceHapticNotificationType = "error" | "success" | "warning";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceHapticsCapability',
+								signature:
+									'type DeviceHapticsCapability = {\n    capability(): Promise<DeviceCapabilityStatus>;\n    impact(style?: DeviceHapticImpactStyle): Promise<void>;\n    notification(type?: DeviceHapticNotificationType): Promise<void>;\n    selectionChanged(): Promise<void>;\n    vibrate(durationMs?: number): Promise<void>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceKeyboardState',
+								signature:
+									'type DeviceKeyboardState = {\n    /** Best available keyboard height in CSS pixels. */\n    heightPx: number;\n    visible: boolean;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceKeyboardCapability',
+								signature:
+									'type DeviceKeyboardCapability = {\n    capability(): Promise<DeviceCapabilityStatus>;\n    dismiss(): Promise<void>;\n    getState(): Promise<DeviceKeyboardState>;\n    onChange(listener: (state: DeviceKeyboardState) => void): Promise<DeviceSubscription>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceSystemBar',
+								signature:
+									'type DeviceSystemBar = "all" | "navigation" | "status";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceSystemBarAppearance',
+								signature:
+									'type DeviceSystemBarAppearance = "automatic" | "dark" | "light";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceSystemBarsOperation',
+								signature:
+									'type DeviceSystemBarsOperation = "appearance" | "visibility";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceSystemBarsCapability',
+								signature:
+									'type DeviceSystemBarsCapability = {\n    capability(operation?: DeviceSystemBarsOperation): Promise<DeviceCapabilityStatus>;\n    /** Sets the foreground icon/text appearance, not a background color. */\n    setAppearance(appearance: DeviceSystemBarAppearance, bar?: DeviceSystemBar): Promise<void>;\n    setVisible(visible: boolean, bar?: DeviceSystemBar): Promise<void>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocationPrecision',
+								signature:
+									'type DeviceLocationPrecision = "coarse" | "precise";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocationPermissionStatus',
+								signature:
+									'type DeviceLocationPermissionStatus = DevicePermissionStatus & {\n    precision: DeviceLocationPrecision | "unknown";\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocationPermissionOptions',
+								signature:
+									'type DeviceLocationPermissionOptions = {\n    precision?: DeviceLocationPrecision;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocationOptions',
+								signature:
+									'type DeviceLocationOptions = {\n    accuracy?: "balanced" | "high";\n    maximumAgeMs?: number;\n    timeoutMs?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocationWatchOptions',
+								signature:
+									'type DeviceLocationWatchOptions = DeviceLocationOptions & {\n    intervalMs?: number;\n    minimumUpdateIntervalMs?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocationPosition',
+								signature:
+									'type DeviceLocationPosition = {\n    accuracyMeters: number;\n    altitudeAccuracyMeters?: number;\n    altitudeMeters?: number;\n    headingDegrees?: number;\n    latitude: number;\n    longitude: number;\n    native?: unknown;\n    speedMetersPerSecond?: number;\n    timestampMs: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocationEvent',
+								signature:
+									'type DeviceLocationEvent = {\n    position: DeviceLocationPosition;\n    type: "position";\n} | {\n    error: DeviceError;\n    type: "error";\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceLocationCapability',
+								signature:
+									'type DeviceLocationCapability = {\n    capability(): Promise<DeviceCapabilityStatus>;\n    current(options?: DeviceLocationOptions): Promise<DeviceLocationPosition>;\n    queryPermission(): Promise<DeviceLocationPermissionStatus>;\n    requestPermission(options?: DeviceLocationPermissionOptions): Promise<DeviceLocationPermissionStatus>;\n    watch(listener: (event: DeviceLocationEvent) => void, options?: DeviceLocationWatchOptions): Promise<DeviceSubscription>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceCameraDirection',
+								signature:
+									'type DeviceCameraDirection = "front" | "rear";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePhoto',
+								signature:
+									'type DevicePhoto = {\n    format?: string;\n    height?: number;\n    name?: string;\n    sizeBytes?: number;\n    uri?: string;\n    webPath: string;\n    width?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePhotoTransform',
+								signature:
+									'type DevicePhotoTransform = {\n    height: number;\n    quality?: number;\n    width: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceTakePhotoOptions',
+								signature:
+									'type DeviceTakePhotoOptions = {\n    direction?: DeviceCameraDirection;\n    transform?: DevicePhotoTransform;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePickPhotosOptions',
+								signature:
+									'type DevicePickPhotosOptions = {\n    limit?: number;\n    transform?: DevicePhotoTransform;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceCameraCapability',
+								signature:
+									'type DeviceCameraCapability = DevicePermissionCapability & {\n    capability(): Promise<DeviceCapabilityStatus>;\n    takePhoto(options?: DeviceTakePhotoOptions): Promise<DevicePhoto>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DevicePhotosCapability',
+								signature:
+									'type DevicePhotosCapability = {\n    capability(): Promise<DeviceCapabilityStatus>;\n    pick(options?: DevicePickPhotosOptions): Promise<DevicePhoto[]>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceSecureStorageCapability',
+								signature:
+									'type DeviceSecureStorageCapability = DeviceStorageCapability & {\n    capability(): Promise<DeviceCapabilityStatus>;\n    /** Serialize a sensitive read/network/write exchange with native workers. */\n    withLock?<T>(key: string, run: () => Promise<T>): Promise<T>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceAdapter',
+								signature:
+									'type DeviceAdapter = {\n    back?: DeviceBackCapability;\n    camera?: DeviceCameraCapability;\n    clipboard?: DeviceClipboardCapability;\n    documents?: DeviceDocumentsCapability;\n    haptics?: DeviceHapticsCapability;\n    keyboard?: DeviceKeyboardCapability;\n    lifecycle: DeviceLifecycleCapability;\n    links: DeviceLinksCapability;\n    localNotifications?: DeviceLocalNotificationsCapability;\n    pushNotifications?: DevicePushNotificationsCapability;\n    location?: DeviceLocationCapability;\n    network: DeviceNetworkCapability;\n    platform: DevicePlatformCapability;\n    photos?: DevicePhotosCapability;\n    runtime: DeviceRuntime;\n    secureStorage?: DeviceSecureStorageCapability;\n    share?: DeviceShareCapability;\n    storage: DeviceStorageCapability;\n    systemBars?: DeviceSystemBarsCapability;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'availableCapability',
+								signature:
+									'const availableCapability: (fidelity: DeviceCapabilityFidelity, native?: unknown) => DeviceCapabilityStatus;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'unavailableCapability',
+								signature:
+									'const unavailableCapability: (reason: DeviceCapabilityUnavailableReason, message?: string, native?: unknown) => DeviceCapabilityStatus;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'isDeviceError',
+								signature:
+									'const isDeviceError: (error: unknown) => error is DeviceError;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'normalizeDeviceError',
+								signature:
+									'const normalizeDeviceError: (error: unknown, options: {\n    code?: DeviceErrorCode;\n    message: string;\n}) => DeviceError;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'validateDeviceLocationOptions',
+								signature:
+									'const validateDeviceLocationOptions: (options?: DeviceLocationOptions | DeviceLocationWatchOptions) => DeviceLocationOptions | DeviceLocationWatchOptions | undefined;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'normalizeDeviceLocalNotification',
+								signature:
+									'const normalizeDeviceLocalNotification: (notification: DeviceScheduleLocalNotification) => DeviceLocalNotification;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'runtimeCapability',
+								signature:
+									'const runtimeCapability: (runtime: DeviceRuntime) => DeviceCapabilityStatus;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'normalizeDeviceShareContent',
+								signature:
+									'const normalizeDeviceShareContent: (content: DeviceShareContent) => DeviceShareContent;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'parseDeviceLink',
+								signature:
+									'const parseDeviceLink: (input: string | URL, base?: string | URL) => DeviceLink;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices/runtime',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'getDeviceAdapter',
+								signature:
+									'const getDeviceAdapter: () => DeviceAdapter;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'installDeviceAdapter',
+								signature:
+									'const installDeviceAdapter: (next: DeviceAdapter) => () => void;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices/ssr',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'createSsrDeviceAdapter',
+								signature:
+									'const createSsrDeviceAdapter: () => import("./contracts").DeviceAdapter;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices/testing',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'DeviceAdapterConformanceHarness',
+								signature:
+									'type DeviceAdapterConformanceHarness = {\n    adapter: DeviceAdapter;\n    emitBack?: (event: DeviceBackEvent) => MaybePromise;\n    emitLifecycle: (state: DeviceLifecycleState) => MaybePromise;\n    emitLink: (url: string) => MaybePromise;\n    emitLocation?: (position: DeviceLocationPosition) => MaybePromise;\n    emitNetwork: (status: DeviceNetworkStatus) => MaybePromise;\n    emitRestoredOperation?: (operation: DeviceRestoredOperation) => MaybePromise;\n    storage?: boolean;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'inspectDeviceAdapterConformance',
+								signature:
+									'const inspectDeviceAdapterConformance: (harness: DeviceAdapterConformanceHarness) => Promise<string[]>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'assertDeviceAdapterConformance',
+								signature:
+									'const assertDeviceAdapterConformance: (harness: DeviceAdapterConformanceHarness) => Promise<void>;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TestDeviceController',
+								signature:
+									'type TestDeviceController = {\n    adapter: DeviceAdapter;\n    emitBack(event?: DeviceBackEvent): void;\n    emitLifecycle(state: DeviceLifecycleState): void;\n    emitKeyboard(state: DeviceKeyboardState): void;\n    emitLink(url: string): void;\n    emitLocation(position?: DeviceLocationPosition): void;\n    emitLocationError(error?: DeviceError): void;\n    emitLocalNotification(id: number): void;\n    emitLocalNotificationAction(id: number, actionId?: string, inputValue?: string): void;\n    emitNetwork(status: DeviceNetworkStatus): void;\n    emitRestoredOperation(operation: DeviceRestoredOperation): void;\n    clipboardText: string;\n    cameraPermission: TestPermissionController;\n    hapticEvents: string[];\n    keyboardState: DeviceKeyboardState;\n    locationPermission: TestPermissionController;\n    notificationPermission: TestPermissionController;\n    locations: DeviceLocationPosition[];\n    pickedPhotos: DevicePhoto[];\n    pickedDocuments: DeviceDocument[];\n    exportedDocuments: DeviceWriteDocumentOptions[];\n    openedDocuments: DeviceWriteDocumentOptions[];\n    openedExternalUrls: string[];\n    pendingNotifications: DeviceLocalNotification[];\n    sharedContent: DeviceShareContent[];\n'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TestPermissionController',
+								signature:
+									'type TestPermissionController = {\n    permission: DevicePermissionCapability;\n    readonly requests: number;\n    setStatus(status: DevicePermissionStatus): void;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createTestPermission',
+								signature:
+									'const createTestPermission: (initial?: DevicePermissionStatus, requested?: DevicePermissionStatus) => TestPermissionController;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createTestDeviceAdapter',
+								signature:
+									'const createTestDeviceAdapter: (options?: {\n    launchUrl?: string | null;\n    lifecycle?: DeviceLifecycleState;\n    network?: DeviceNetworkStatus;\n    platform?: Partial<DevicePlatformInfo>;\n}) => TestDeviceController;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices/web',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebDeviceAdapter',
+								signature:
+									'const createWebDeviceAdapter: () => import("./contracts").DeviceAdapter;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'bun build src/index.ts --outdir dist --target=browser && bun build src/runtime.ts --outdir dist --target=browser && bun build src/ssr.ts --outdir dist --target=browser && bun build src/testing.ts --outdir dist --target=browser && bun build src/web.ts --outdir dist --target=browser && tsc --emitDeclarationOnly -p tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Provider-neutral device capability contracts and web, SSR, and test adapters for AbsoluteJS',
+				name: '@absolutejs/devices',
+				private: false,
+				publicExports: [
+					'@absolutejs/devices',
+					'@absolutejs/devices/runtime',
+					'@absolutejs/devices/ssr',
+					'@absolutejs/devices/testing',
+					'@absolutejs/devices/web'
+				],
+				readmeDigest:
+					'906315e0c5f986e3da94793d4b956a71d7b5b59585fd839ae9884561f5c382d5',
+				readmeSamples: [
+					{
+						code: 'import {\n  camera,\n  clipboard,\n  documents,\n  haptics,\n  keyboard,\n  location,\n  localNotifications,\n  photos,\n  pushNotifications,\n  share,\n  systemBars,\n} from "@absolutejs/devices";\n\nawait clipboard.writeText("Copied");\nawait share.share({ text: "Hello from AbsoluteJS" });\nawait haptics.impact("light");\nconst removeKeyboard = await keyboard.onChange(({ visible, heightPx }) => {\n  document.documentElement.style.setProperty(\n    "--absolute-keyboard-height",\n    visible ? `${heightPx}px` : "0px",\n  );\n});\nawait systemBars.setAppearance("light", "status");\nconst [document] = await documents.pick({\n  accept: ["application/pdf", ".csv"],\n  limit: 1,\n});\nif (document) await upload(document.blob);\nawait documents.export({ content: "Portable report", name: "report.txt" });\nconst permission = await camera.requestPermission();\nif (permission.state === "granted") {\n  const capture = await camera.takePhoto({ direction: "rear" });\n  image.src = capture.webPath;\n}\n\n// Call from an intentional user action. The returned value contains no token;\n// AbsoluteJS registers the installation through its authenticated shell.\nawait pushNotifications.enable();\nconst removePushAction = await pushNotifications.onAction(\n  ({ notification }) => {\n    console.log(notification.data);\n  },\n);\nconst [chosen] = await photos.pick({ limit: 1 });\n\nconst notificationPermission = await localNotifications.requestPermission();\nif (notificationPermission.state === "granted") {\n  await localNotifications.schedule({\n    body: "Your report is ready.",\n    data: { route: "/reports/42" },\n    id: 42,\n    title: "AbsoluteJS",\n  });\n}\n\nconst locationPermission = await location.requestPermission({\n  precision: "coarse",\n});\nif (locationPermission.state === "granted") {\n  const current = await location.current();\n  const stop = await location.watch((event) => {\n    if (event.type === "position") console.log(event.position);\n  });\n  // Stop promptly when the owning view no longer needs location updates.\n  await stop();\n}',
+						description: '# @absolutejs/devices',
+						heading: '@absolutejs/devices quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Application-facing device capability contracts for AbsoluteJS. Runtime adapters are selected by AbsoluteJS; application code does not branch on its native provider.',
+						details: [
+							'The pre-1.0 core includes:',
+							'discriminated capability availability and normalized device errors;',
+							'shared permission states without implicit permission requests;',
+							'platform, safe-area, reduced-motion, lifecycle, resume, restored-operation,',
+							'normalized link, network, and back contracts;',
+							'provider-neutral clipboard, system-share, safely degrading haptic, explicit',
+							'camera-permission, item-scoped photo-picker, and foreground location contracts;',
+							'portable keyboard visibility/height/dismissal and modern edge-to-edge system',
+							'bar appearance/visibility contracts;',
+							'bounded document selection, export, and preview without exposing native',
+							'filesystem paths;',
+							'explicit-permission local notification scheduling, cancellation, pending'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'packages/devices',
+				version: '0.7.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/devices-capacitor',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AbsoluteSecureStorageBackend',
+								signature:
+									'type AbsoluteSecureStorageBackend = "keychain" | "keystore" | "unavailable";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AbsoluteSecureStorageStatus',
+								signature:
+									'type AbsoluteSecureStorageStatus = {\n    backend: AbsoluteSecureStorageBackend;\n    hardwareBacked: boolean;\n    persistent: boolean;\n    secure: boolean;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AbsoluteSecureStoragePlugin',
+								signature:
+									'type AbsoluteSecureStoragePlugin = {\n    acquireLease(options: {\n        key: string;\n        ttlMs: number;\n    }): Promise<{\n        leaseId: string | null;\n    }>;\n    clear(options: {\n        prefix: string;\n    }): Promise<void>;\n    get(options: {\n        key: string;\n    }): Promise<{\n        value: string | null;\n    }>;\n    keys(options: {\n        prefix: string;\n    }): Promise<{\n        keys: string[];\n    }>;\n    remove(options: {\n        key: string;\n    }): Promise<void>;\n    releaseLease(options: {\n        key: string;\n        leaseId: string;\n    }): Promise<void>;\n    set(options: {\n        key: string;\n        value: string;\n        leaseId?: string;\n    }): Promise<void>;\n    status(): Promise<AbsoluteSecureStorageStatus>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorSecureStorageOptions',
+								signature:
+									'type CapacitorSecureStorageOptions = {\n    plugin?: AbsoluteSecureStoragePlugin;\n    prefix?: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AbsoluteSecureStorage',
+								signature:
+									'const AbsoluteSecureStorage: AbsoluteSecureStoragePlugin;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorSecureStorage',
+								signature:
+									'const createCapacitorSecureStorage: (options?: CapacitorSecureStorageOptions) => DeviceSecureStorageCapability;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorRuntimeBindings',
+								signature:
+									'type CapacitorRuntimeBindings = {\n    getPlatform(): string;\n    isNativePlatform(): boolean;\n    isPluginAvailable(name: string): boolean;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorDeviceBindings',
+								signature:
+									'type CapacitorDeviceBindings = {\n    app: AppPlugin;\n    browser: BrowserPlugin;\n    capacitor: CapacitorRuntimeBindings;\n    network: NetworkPlugin;\n    preferences: PreferencesPlugin;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorDeviceAdapterOptions',
+								signature:
+									'type CapacitorDeviceAdapterOptions = {\n    bindings?: CapacitorDeviceBindings;\n    camera?: DeviceCameraCapability;\n    clipboard?: DeviceClipboardCapability;\n    documents?: DeviceDocumentsCapability;\n    haptics?: DeviceHapticsCapability;\n    keyboard?: DeviceKeyboardCapability;\n    location?: DeviceLocationCapability;\n    localNotifications?: DeviceLocalNotificationsCapability;\n    pushNotifications?: DevicePushNotificationsCapability;\n    photos?: DevicePhotosCapability;\n    secureStorage?: DeviceSecureStorageCapability;\n    share?: DeviceShareCapability;\n    storagePrefix?: string;\n    systemBars?: DeviceSystemBarsCapability;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorDeviceAdapter',
+								signature:
+									'const createCapacitorDeviceAdapter: (options?: CapacitorDeviceAdapterOptions) => DeviceAdapter;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'installCapacitorDeviceAdapter',
+								signature:
+									'const installCapacitorDeviceAdapter: (options?: CapacitorDeviceAdapterOptions) => () => void;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'installCapacitorDeviceAdapterIfNative',
+								signature:
+									'const installCapacitorDeviceAdapterIfNative: (options?: CapacitorDeviceAdapterOptions) => (() => void) | null;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-capacitor/clipboard',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorClipboardBindings',
+								signature:
+									'type CapacitorClipboardBindings = {\n    capacitor: CapacitorRuntimeBindings;\n    clipboard: ClipboardPlugin;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorClipboardCapability',
+								signature:
+									'const createCapacitorClipboardCapability: (bindings?: CapacitorClipboardBindings) => DeviceClipboardCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-capacitor/camera',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorCameraBindings',
+								signature:
+									'type CapacitorCameraBindings = {\n    camera: CameraPlugin;\n    capacitor: CapacitorRuntimeBindings & {\n        convertFileSrc?(path: string): string;\n    };\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorCameraCapability',
+								signature:
+									'const createCapacitorCameraCapability: (bindings?: CapacitorCameraBindings) => DeviceCameraCapability;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorPhotosCapability',
+								signature:
+									'const createCapacitorPhotosCapability: (bindings?: CapacitorCameraBindings) => DevicePhotosCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-capacitor/haptics',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorHapticsBindings',
+								signature:
+									'type CapacitorHapticsBindings = {\n    capacitor: CapacitorRuntimeBindings;\n    haptics: HapticsPlugin;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorHapticsCapability',
+								signature:
+									'const createCapacitorHapticsCapability: (bindings?: CapacitorHapticsBindings) => DeviceHapticsCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-capacitor/keyboard',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorKeyboardBindings',
+								signature:
+									'type CapacitorKeyboardBindings = {\n    capacitor: CapacitorRuntimeBindings;\n    keyboard: KeyboardPlugin;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorKeyboardCapability',
+								signature:
+									'const createCapacitorKeyboardCapability: (bindings?: CapacitorKeyboardBindings) => DeviceKeyboardCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-capacitor/location',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorLocationBindings',
+								signature:
+									'type CapacitorLocationBindings = {\n    capacitor: CapacitorRuntimeBindings;\n    geolocation: GeolocationPlugin;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorLocationCapability',
+								signature:
+									'const createCapacitorLocationCapability: (bindings?: CapacitorLocationBindings) => DeviceLocationCapability;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/devices-capacitor/local-notifications',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorLocalNotificationsBindings',
+								signature:
+									'type CapacitorLocalNotificationsBindings = {\n    capacitor: CapacitorRuntimeBindings;\n    localNotifications: LocalNotificationsPlugin;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorLocalNotificationsCapability',
+								signature:
+									'const createCapacitorLocalNotificationsCapability: (bindings?: CapacitorLocalNotificationsBindings) => DeviceLocalNotificationsCapability;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/devices-capacitor/push-notifications',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorPushRegistration',
+								signature:
+									'type CapacitorPushRegistration = {\n    platform: "apns" | "fcm";\n    token: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorPushNotificationsBindings',
+								signature:
+									'type CapacitorPushNotificationsBindings = {\n    capacitor: CapacitorRuntimeBindings;\n    pushNotifications: PushNotificationsPlugin;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorPushNotificationsOptions',
+								signature:
+									'type CapacitorPushNotificationsOptions = {\n    bindings?: CapacitorPushNotificationsBindings;\n    /** Internal registration sink. Raw tokens must be sent only to a trusted backend. */\n    onRegistration?: (registration: CapacitorPushRegistration) => Promise<void> | void;\n    /** Remove the current installation from the trusted backend before unregistering. */\n    onUnregistration?: () => Promise<void> | void;\n    registrationTimeoutMs?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorPushNotificationsCapability',
+								signature:
+									'const createCapacitorPushNotificationsCapability: (options?: CapacitorPushNotificationsOptions) => DevicePushNotificationsCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-capacitor/documents',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorDocumentsBindings',
+								signature:
+									'type CapacitorDocumentsBindings = {\n    capacitor: CapacitorRuntimeBindings;\n    fileViewer: FileViewerPlugin;\n    filesystem: FilesystemPlugin;\n    share: SharePlugin;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorDocumentsCapability',
+								signature:
+									'const createCapacitorDocumentsCapability: (bindings?: CapacitorDocumentsBindings) => DeviceDocumentsCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-capacitor/share',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorShareBindings',
+								signature:
+									'type CapacitorShareBindings = {\n    capacitor: CapacitorRuntimeBindings;\n    share: SharePlugin;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorShareCapability',
+								signature:
+									'const createCapacitorShareCapability: (bindings?: CapacitorShareBindings) => DeviceShareCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-capacitor/system-bars',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'CapacitorSystemBarsBindings',
+								signature:
+									'type CapacitorSystemBarsBindings = {\n    capacitor: CapacitorRuntimeBindings;\n    systemBars: typeof SystemBars;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createCapacitorSystemBarsCapability',
+								signature:
+									'const createCapacitorSystemBarsCapability: (bindings?: CapacitorSystemBarsBindings) => DeviceSystemBarsCapability;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'bun build src/index.ts src/camera.ts src/clipboard.ts src/documents.ts src/haptics.ts src/keyboard.ts src/localNotifications.ts src/location.ts src/pushNotifications.ts src/share.ts src/systemBars.ts --root src --outdir dist --target=browser --external @absolutejs/devices --external @capacitor/core --external @capacitor/app --external @capacitor/browser --external @capacitor/camera --external @capacitor/clipboard --external @capacitor/file-viewer --external @capacitor/filesystem --external @capacitor/geolocation --external @capacitor/haptics --external @capacitor/keyboard --external @capacitor/local-notifications --external @capacitor/network --external @capacitor/preferences --external @capacitor/push-notifications --external @capacitor/share && tsc --emitDeclarationOnly -p tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Capacitor runtime adapter for @absolutejs/devices',
+				name: '@absolutejs/devices-capacitor',
+				private: false,
+				publicExports: [
+					'@absolutejs/devices-capacitor',
+					'@absolutejs/devices-capacitor/clipboard',
+					'@absolutejs/devices-capacitor/camera',
+					'@absolutejs/devices-capacitor/haptics',
+					'@absolutejs/devices-capacitor/keyboard',
+					'@absolutejs/devices-capacitor/location',
+					'@absolutejs/devices-capacitor/local-notifications',
+					'@absolutejs/devices-capacitor/push-notifications',
+					'@absolutejs/devices-capacitor/documents',
+					'@absolutejs/devices-capacitor/share',
+					'@absolutejs/devices-capacitor/system-bars'
+				],
+				readmeDigest:
+					'f595e371f34551d117142e8e669e8aa7ba9a2ec15f9a402200aba841b2b9765b',
+				readmeSamples: [
+					{
+						code: 'import { installCapacitorDeviceAdapterIfNative } from "@absolutejs/devices-capacitor";\n\nconst remove = installCapacitorDeviceAdapterIfNative();',
+						description: '# @absolutejs/devices-capacitor',
+						heading: '@absolutejs/devices-capacitor quick start',
+						language: 'typescript'
+					},
+					{
+						code: 'import { createCapacitorClipboardCapability } from "@absolutejs/devices-capacitor/clipboard";\nimport {\n  createCapacitorCameraCapability,\n  createCapacitorPhotosCapability,\n} from "@absolutejs/devices-capacitor/camera";\nimport { createCapacitorHapticsCapability } from "@absolutejs/devices-capacitor/haptics";\nimport { createCapacitorKeyboardCapability } from "@absolutejs/devices-capacitor/keyboard";\nimport { createCapacitorLocationCapability } from "@absolutejs/devices-capacitor/location";\nimport { createCapacitorLocalNotificationsCapability } from "@absolutejs/devices-capacitor/local-notifications";\nimport { createCapacitorPushNotificationsCapability } from "@absolutejs/devices-capacitor/push-notifications";\nimport { createCapacitorDocumentsCapability } from "@absolutejs/devices-capacitor/documents";\nimport { createCapacitorShareCapability } from "@absolutejs/devices-capacitor/share";\nimport { createCapacitorSystemBarsCapability } from "@absolutejs/devices-capacitor/system-bars";',
+						description: '# @absolutejs/devices-capacitor',
+						heading: '@absolutejs/devices-capacitor quick start 2',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Capacitor implementations for the provider-neutral @absolutejs/devices contracts. AbsoluteJS installs this adapter in the generated mobile shell; application code continues to import from @absolutejs/devices.',
+						details: [
+							'The release-candidate adapter covers:',
+							'app metadata and native platform identity;',
+							'app state, native resume, and Android restored-operation delivery;',
+							'launch URLs, inbound links, and audited HTTP(S) external browser opening;',
+							'native network status and change events;',
+							'Android hardware-back events with an explicit capability check; and',
+							"namespaced ordinary preferences that never clear another package's keys; and",
+							'an Absolute-owned native credential vault backed by iOS Keychain and Android',
+							'Keystore AES-256-GCM encryption; plus',
+							'opt-in Clipboard, Share, Haptics, Camera, and scoped photo-picker provider',
+							'slices; and',
+							'opt-in foreground Geolocation with approximate/precise permission reporting,'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'packages/devices-capacitor',
+				version: '0.8.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/devices-expo',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoDeviceAdapterOptions',
+								signature:
+									'type ExpoDeviceAdapterOptions = {\n    camera?: DeviceCameraCapability;\n    clipboard?: DeviceClipboardCapability;\n    documents?: DeviceDocumentsCapability;\n    haptics?: DeviceHapticsCapability;\n    keyboard?: DeviceKeyboardCapability;\n    localNotifications?: DeviceLocalNotificationsCapability;\n    location?: DeviceLocationCapability;\n    photos?: DevicePhotosCapability;\n    pushNotifications?: DevicePushNotificationsCapability;\n    share?: DeviceShareCapability;\n    storagePrefix?: string;\n    systemBars?: DeviceSystemBarsCapability;\n    takeActivityResultCancellation?: () => boolean | Promise<boolean>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoDeviceAdapter',
+								signature:
+									'const createExpoDeviceAdapter: (options?: ExpoDeviceAdapterOptions) => DeviceAdapter;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'installExpoDeviceAdapter',
+								signature:
+									'const installExpoDeviceAdapter: (options?: ExpoDeviceAdapterOptions) => () => void;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-expo/bridge',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoDevicesBridgeEvent',
+								signature:
+									'type ExpoDevicesBridgeEvent = (event: string, payload: Record<string, unknown>) => void;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoDevicesBridgeTransport',
+								signature:
+									'type ExpoDevicesBridgeTransport = {\n    on(event: string, listener: (payload: Record<string, unknown>) => void): DeviceSubscription;\n    request(method: string, params: Record<string, unknown>): Promise<unknown>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoDevicesBridgeHost',
+								signature:
+									'const createExpoDevicesBridgeHost: (adapter: DeviceAdapter, emit: ExpoDevicesBridgeEvent) => Promise<{\n    close: () => Promise<void>;\n    request: (method: string, params: Record<string, unknown>) => Promise<unknown>;\n}>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoWebViewDeviceAdapter',
+								signature:
+									'const createExpoWebViewDeviceAdapter: (transport: ExpoDevicesBridgeTransport, capabilities: readonly string[]) => DeviceAdapter;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'installExpoWebViewDeviceAdapter',
+								signature:
+									'const installExpoWebViewDeviceAdapter: (transport: ExpoDevicesBridgeTransport, capabilities: readonly string[]) => () => void;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-expo/camera',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoCameraBindings',
+								signature:
+									'type ExpoCameraBindings = Pick<typeof ImagePicker, "getCameraPermissionsAsync" | "getMediaLibraryPermissionsAsync" | "getPendingResultAsync" | "launchCameraAsync" | "launchImageLibraryAsync" | "requestCameraPermissionsAsync"> & {\n    manipulateAsync: typeof ImageManipulator.manipulateAsync;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoCameraCapability',
+								signature:
+									'type ExpoCameraCapability = DeviceCameraCapability & ExpoRestoredOperationSource;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoPhotosCapability',
+								signature:
+									'type ExpoPhotosCapability = DevicePhotosCapability & ExpoRestoredOperationSource;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoCameraCapability',
+								signature:
+									'const createExpoCameraCapability: (bindings?: ExpoCameraBindings) => ExpoCameraCapability;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoPhotosCapability',
+								signature:
+									'const createExpoPhotosCapability: (bindings?: ExpoCameraBindings) => ExpoPhotosCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-expo/clipboard',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoClipboardBindings',
+								signature:
+									'type ExpoClipboardBindings = Pick<typeof Clipboard, "getStringAsync" | "hasStringAsync" | "setStringAsync">;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoClipboardCapability',
+								signature:
+									'const createExpoClipboardCapability: (bindings?: ExpoClipboardBindings) => DeviceClipboardCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-expo/documents',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoDocumentsCapability',
+								signature:
+									'const createExpoDocumentsCapability: () => DeviceDocumentsCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-expo/haptics',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoHapticsBindings',
+								signature:
+									'type ExpoHapticsBindings = Pick<typeof Haptics, "impactAsync" | "notificationAsync" | "selectionAsync">;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoHapticsCapability',
+								signature:
+									'const createExpoHapticsCapability: (bindings?: ExpoHapticsBindings) => DeviceHapticsCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-expo/keyboard',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoKeyboardBindings',
+								signature:
+									'type ExpoKeyboardBindings = Pick<typeof Keyboard, "addListener" | "dismiss" | "isVisible" | "metrics">;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoKeyboardCapability',
+								signature:
+									'const createExpoKeyboardCapability: (bindings?: ExpoKeyboardBindings) => DeviceKeyboardCapability;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/devices-expo/local-notifications',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoLocalNotificationsCapability',
+								signature:
+									'const createExpoLocalNotificationsCapability: () => DeviceLocalNotificationsCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-expo/location',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoLocationBindings',
+								signature:
+									'type ExpoLocationBindings = Pick<typeof Location, "getCurrentPositionAsync" | "getForegroundPermissionsAsync" | "getLastKnownPositionAsync" | "requestForegroundPermissionsAsync" | "watchPositionAsync">;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoLocationCapability',
+								signature:
+									'const createExpoLocationCapability: (bindings?: ExpoLocationBindings) => DeviceLocationCapability;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/devices-expo/push-notifications',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoPushRegistration',
+								signature:
+									'type ExpoPushRegistration = {\n    platform: "apns" | "fcm";\n    token: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoPushNotificationsOptions',
+								signature:
+									'type ExpoPushNotificationsOptions = {\n    onRegistration?(registration: ExpoPushRegistration): Promise<void> | void;\n    onUnregistration?(): Promise<void> | void;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoPushNotificationsCapability',
+								signature:
+									'const createExpoPushNotificationsCapability: (options?: ExpoPushNotificationsOptions) => DevicePushNotificationsCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-expo/share',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoShareBindings',
+								signature:
+									'type ExpoShareBindings = Pick<typeof Share, "share">;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoShareCapability',
+								signature:
+									'const createExpoShareCapability: (bindings?: ExpoShareBindings) => DeviceShareCapability;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/devices-expo/system-bars',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'ExpoSystemBarsBindings',
+								signature:
+									'type ExpoSystemBarsBindings = {\n    os: string;\n    setNavigationAppearance(appearance: "dark" | "light"): void;\n    setNavigationVisible(visible: boolean): Promise<void>;\n    setStatusAppearance(appearance: "auto" | "dark" | "light"): void;\n    setStatusVisible(visible: boolean): void;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createExpoSystemBarsCapability',
+								signature:
+									'const createExpoSystemBarsCapability: (bindings?: ExpoSystemBarsBindings) => DeviceSystemBarsCapability;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'bun build src/index.ts src/bridge.ts src/camera.ts src/clipboard.ts src/documents.ts src/haptics.ts src/keyboard.ts src/localNotifications.ts src/location.ts src/pushNotifications.ts src/share.ts src/systemBars.ts --root src --outdir dist --target=browser --external @absolutejs/devices --external @react-native-async-storage/async-storage --external expo-application --external expo-clipboard --external expo-device --external expo-document-picker --external expo-file-system --external expo-haptics --external expo-image-manipulator --external expo-image-picker --external expo-linking --external expo-localization --external expo-location --external expo-navigation-bar --external expo-network --external expo-notifications --external expo-sharing --external expo-status-bar --external react-native && tsc --emitDeclarationOnly -p tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description: 'Expo runtime adapter for @absolutejs/devices',
+				name: '@absolutejs/devices-expo',
+				private: false,
+				publicExports: [
+					'@absolutejs/devices-expo',
+					'@absolutejs/devices-expo/bridge',
+					'@absolutejs/devices-expo/camera',
+					'@absolutejs/devices-expo/clipboard',
+					'@absolutejs/devices-expo/documents',
+					'@absolutejs/devices-expo/haptics',
+					'@absolutejs/devices-expo/keyboard',
+					'@absolutejs/devices-expo/local-notifications',
+					'@absolutejs/devices-expo/location',
+					'@absolutejs/devices-expo/push-notifications',
+					'@absolutejs/devices-expo/share',
+					'@absolutejs/devices-expo/system-bars',
+					'@absolutejs/devices-expo/package.json'
+				],
+				readmeDigest:
+					'528aa48b998c1826657c8776b8f85086ff6212d1139b5861483fad40addc6481',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Expo SDK 57 provider for the framework-neutral @absolutejs/devices contracts. AbsoluteJS provisions this package and only the detected optional Expo modules. Application code continues to import capabilities from @absolutejs/devices.',
+						details: [
+							'The root entry installs platform, lifecycle, links, Android Back, network, and namespaced ordinary storage. Optional capabilities are exposed through isolated subpaths so unused permissions and native modules are not added to an app.',
+							'On Android, the photo provider consumes Expo Image Picker\'s pending result when the system recreates the host activity. The normalized result is replayed once per subscriber through lifecycle.onRestoredOperation; embedded routes receive photo bytes through the same bounded transfer bridge as an ordinary pick. Native paths and Expo result objects are not exposed across that bridge. This recovery uses a short, bounded retry window so a result published just after activity recreation is still recovered without application-owned Android code or continuous polling. A restored operation uses plugin: "expo-image-picker", method: "pick", and carries either normalized DevicePhoto[] data or a public error.',
+							'If Android destroys the JavaScript process and the user then cancels the external picker, Expo has no successful result to retain. AbsoluteJS can inject its generated native activity-result cancellation signal; the adapter then turns an inherited in-flight descriptor into one public cancelled operation and deletes the descriptor. Elapsed time is never treated as proof of cancellation, and a picker still owned by the current JavaScript process is never abandoned.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'packages/devices-expo',
+				version: '0.0.11'
+			}
+		],
+		version: null
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/diagnostics',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'BrowserDiagnosticsOptions',
+						signature:
+							'type BrowserDiagnosticsOptions = {\n    bodyCapture?: DiagnosticBodyCapturePolicy;\n    environment?: string;\n    ignoredUrlSubstrings?: string[];\n    maxBytes?: number;\n    maxConsoleEntries?: number;\n    maxNetworkEntries?: number;\n    preserveQueryValues?: string[];\n    project: string;\n    /** Add the diagnostic id to same-origin requests. Off by default because\n     * request mutation can affect caches, signatures, and CORS behavior. */\n    propagateDiagnosticId?: boolean;\n    release?: string;\n    replayId?: () => string | undefined;\n    traceId?: () => string | undefined;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StartBrowserDiagnosticOptions',
+						signature:
+							'type StartBrowserDiagnosticOptions = {\n    reason?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BrowserDiagnosticSession',
+						signature:
+							'type BrowserDiagnosticSession = {\n    downloadHar: (filename?: string) => void;\n    id: string;\n    serializeHar: () => string;\n    snapshot: () => DiagnosticArchive;\n    stop: () => Promise<DiagnosticArchive>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BrowserDiagnostics',
+						signature:
+							'type BrowserDiagnostics = {\n    active: () => BrowserDiagnosticSession | undefined;\n    start: (options?: StartBrowserDiagnosticOptions) => BrowserDiagnosticSession;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBrowserDiagnostics',
+						signature:
+							'const createBrowserDiagnostics: (options: BrowserDiagnosticsOptions) => BrowserDiagnostics;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'DIAGNOSTIC_ARCHIVE_VERSION',
+						signature: 'const DIAGNOSTIC_ARCHIVE_VERSION: 1;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticCompleteness',
+						signature:
+							'type DiagnosticCompleteness = "devtools-complete" | "in-page-partial";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticHeader',
+						signature:
+							'type DiagnosticHeader = {\n    name: string;\n    value: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticRequest',
+						signature:
+							'type DiagnosticRequest = {\n    body?: string;\n    bodyMimeType?: string;\n    headers?: DiagnosticHeader[];\n    method: string;\n    url: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticResponse',
+						signature:
+							'type DiagnosticResponse = {\n    body?: string;\n    bodyMimeType?: string;\n    contentSize?: number;\n    headers?: DiagnosticHeader[];\n    protocol?: string;\n    status: number;\n    statusText?: string;\n    transferSize?: number;\n    serverTiming?: DiagnosticServerTiming[];\n    trace?: DiagnosticTraceContext;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticServerTiming',
+						signature:
+							'type DiagnosticServerTiming = {\n    description?: string;\n    duration?: number;\n    name: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticTraceContext',
+						signature:
+							'type DiagnosticTraceContext = {\n    flags: string;\n    parentId: string;\n    traceId: string;\n    version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticNetworkEntry',
+						signature:
+							'type DiagnosticNetworkEntry = {\n    durationMs?: number;\n    error?: {\n        message: string;\n        name: string;\n    };\n    id: string;\n    initiator: "fetch" | "resource" | "xhr";\n    request: DiagnosticRequest;\n    response?: DiagnosticResponse;\n    startedAt: number;\n    trace?: DiagnosticTraceContext;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticConsoleEntry',
+						signature:
+							'type DiagnosticConsoleEntry = {\n    at: number;\n    level: "debug" | "error" | "info" | "log" | "warn";\n    message: string;\n    source?: {\n        column?: number;\n        line?: number;\n        url?: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticTruncation',
+						signature:
+							'type DiagnosticTruncation = {\n    bodies: number;\n    console: number;\n    network: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticManifest',
+						signature:
+							'type DiagnosticManifest = {\n    cacheDisabled: boolean;\n    completeness: DiagnosticCompleteness;\n    consoleEntries: number;\n    endedAt?: number;\n    environment?: string;\n    id: string;\n    maxBytes: number;\n    networkEntries: number;\n    preserveLog: boolean;\n    project: string;\n    reason?: string;\n    redacted: true;\n    release?: string;\n    replayId?: string;\n    startedAt: number;\n    traceId?: string;\n    truncation: DiagnosticTruncation;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticArchive',
+						signature:
+							'type DiagnosticArchive = {\n    console: DiagnosticConsoleEntry[];\n    manifest: DiagnosticManifest;\n    network: DiagnosticNetworkEntry[];\n    version: typeof DIAGNOSTIC_ARCHIVE_VERSION;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticAuditFinding',
+						signature:
+							'type DiagnosticAuditFinding = {\n    code: "authorization-value" | "cookie-value" | "credential-query" | "jwt" | "payment-card-number" | "sensitive-field";\n    location: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticAuditResult',
+						signature:
+							'type DiagnosticAuditResult = {\n    findings: DiagnosticAuditFinding[];\n    safeToShare: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticBodyCapturePolicy',
+						signature:
+							'type DiagnosticBodyCapturePolicy = {\n    /** Decide per request whether bodies may be inspected. Required so body\n     * capture can never be enabled globally by a single boolean. */\n    allow: (request: {\n        method: string;\n        sameOrigin: boolean;\n        url: string;\n    }) => boolean;\n    maxBodyBytes?: number;\n    request?: boolean;\n    response?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'SUPPORT_BUNDLE_VERSION',
+						signature: 'const SUPPORT_BUNDLE_VERSION: 1;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportMarker',
+						signature:
+							'type SupportMarker = {\n    at: number;\n    data?: Record<string, boolean | number | string>;\n    label: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportCorrelations',
+						signature:
+							'type SupportCorrelations = {\n    diagnosticId: string;\n    issueFingerprints?: string[];\n    replayId?: string;\n    traceIds?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportBundleManifest',
+						signature:
+							'type SupportBundleManifest = {\n    endedAt: number;\n    environment?: string;\n    expiresAt?: number;\n    id: string;\n    project: string;\n    reason?: string;\n    redacted: true;\n    release?: string;\n    startedAt: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportBundle',
+						signature:
+							'type SupportBundle = {\n    archive: DiagnosticArchive;\n    audit: DiagnosticAuditResult;\n    context?: Record<string, unknown>;\n    correlations: SupportCorrelations;\n    har: string;\n    manifest: SupportBundleManifest;\n    markers: SupportMarker[];\n    version: typeof SUPPORT_BUNDLE_VERSION;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HarNameValue',
+						signature:
+							'type HarNameValue = {\n    name: string;\n    value: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HarEntry',
+						signature:
+							'type HarEntry = {\n    _absolutejs?: {\n        error?: {\n            message: string;\n            name: string;\n        };\n        initiator: DiagnosticNetworkEntry["initiator"];\n    };\n    cache: Record<string, never>;\n    request: {\n        bodySize: number;\n        cookies: HarNameValue[];\n        headers: HarNameValue[];\n        headersSize: number;\n        httpVersion: string;\n        method: string;\n        postData?: {\n            mimeType: string;\n            text: string;\n        };\n        queryString: HarNameValue[];\n        url: string;\n    };\n    response: {\n        bodySize: number;\n        content: {\n            mimeType: string;\n            size: number;\n            text?: string;\n        };\n        cookies: HarNameValue[];\n        headers: HarNameValue[];\n        headersSize: number;\n        httpVersion: string;\n        redirectURL: string;\n        status: number;\n        statusText: string;\n    };\n    startedDateTime: string;\n    time: number;\n    timings: {\n        blocked: number;\n        connect: number;\n        dns: number;\n        receive: number;\n        send: number;\n        ssl: number;\n        wait: number;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HarArchive',
+						signature:
+							'type HarArchive = {\n    log: {\n        _absolutejs: DiagnosticArchive["manifest"];\n        browser?: {\n            name: string;\n            version: string;\n        };\n        creator: {\n            name: string;\n            version: string;\n        };\n        entries: HarEntry[];\n        pages: Array<{\n            id: string;\n            pageTimings: Record<string, never>;\n            startedDateTime: string;\n            title: string;\n        }>;\n        version: "1.2";\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'diagnosticArchiveToHar',
+						signature:
+							'const diagnosticArchiveToHar: (input: DiagnosticArchive, options?: RedactionOptions) => HarArchive;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'serializeDiagnosticHar',
+						signature:
+							'const serializeDiagnosticHar: (archive: DiagnosticArchive, options?: RedactionOptions & {\n    space?: number;\n}) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'downloadDiagnosticHar',
+						signature:
+							'const downloadDiagnosticHar: (archive: DiagnosticArchive, filename?: string) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'REDACTED',
+						signature: 'const REDACTED = "[REDACTED]";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RedactionOptions',
+						signature:
+							'type RedactionOptions = {\n    maxBodyBytes?: number;\n    /** Query parameter names whose values may remain. All other values are\n     * removed, even when the parameter name does not look credential-bearing. */\n    preserveQueryValues?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HarRedactionOptions',
+						signature:
+							'type HarRedactionOptions = RedactionOptions & {\n    retainRequestBody?: (context: {\n        mimeType: string;\n        url: string;\n    }) => boolean;\n    retainResponseBody?: (context: {\n        mimeType: string;\n        url: string;\n    }) => boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactText',
+						signature:
+							'const redactText: (value: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactUrl',
+						signature:
+							'const redactUrl: (value: string, options?: RedactionOptions) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactHeaders',
+						signature:
+							'const redactHeaders: (headers: readonly DiagnosticHeader[] | undefined) => DiagnosticHeader[] | undefined;'
+					},
+					{
+						description:
+							'Redact arbitrary support context before it is retained in an artifact.',
+						kind: 'value',
+						name: 'redactValue',
+						signature:
+							'const redactValue: (value: unknown) => unknown;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactBody',
+						signature:
+							'const redactBody: (value: string, mimeType?: string, options?: RedactionOptions) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactDiagnosticArchive',
+						signature:
+							'const redactDiagnosticArchive: (archive: DiagnosticArchive, options?: RedactionOptions) => DiagnosticArchive;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'auditDiagnosticText',
+						signature:
+							'const auditDiagnosticText: (value: string) => DiagnosticAuditResult;'
+					},
+					{
+						description:
+							'Redact a DevTools/Playwright HAR without flattening its protocol timings. Bodies are removed by default and can only be retained through an explicit per-request allow function.',
+						kind: 'value',
+						name: 'redactHarObject',
+						signature:
+							'const redactHarObject: (input: unknown, options?: HarRedactionOptions) => unknown;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactHarText',
+						signature:
+							'const redactHarText: (value: string, options?: HarRedactionOptions) => {\n    audit: DiagnosticAuditResult;\n    text: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreateSupportBundleOptions',
+						signature:
+							'type CreateSupportBundleOptions = {\n    archive: DiagnosticArchive;\n    context?: Record<string, unknown>;\n    expiresAt?: number;\n    issueFingerprints?: string[];\n    markers?: SupportMarker[];\n    redaction?: RedactionOptions;\n    traceIds?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createSupportBundle',
+						signature:
+							'const createSupportBundle: (options: CreateSupportBundleOptions) => SupportBundle;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'serializeSupportBundle',
+						signature:
+							'const serializeSupportBundle: (bundle: SupportBundle, space?: number) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'downloadSupportBundle',
+						signature:
+							'const downloadSupportBundle: (bundle: SupportBundle, filename?: string) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseTraceparent',
+						signature:
+							'const parseTraceparent: (value: string | null | undefined) => DiagnosticTraceContext | undefined;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseServerTiming',
+						signature:
+							'const parseServerTiming: (value: string | null | undefined) => DiagnosticServerTiming[] | undefined;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/browser',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'BrowserDiagnosticsOptions',
+						signature:
+							'type BrowserDiagnosticsOptions = {\n    bodyCapture?: DiagnosticBodyCapturePolicy;\n    environment?: string;\n    ignoredUrlSubstrings?: string[];\n    maxBytes?: number;\n    maxConsoleEntries?: number;\n    maxNetworkEntries?: number;\n    preserveQueryValues?: string[];\n    project: string;\n    /** Add the diagnostic id to same-origin requests. Off by default because\n     * request mutation can affect caches, signatures, and CORS behavior. */\n    propagateDiagnosticId?: boolean;\n    release?: string;\n    replayId?: () => string | undefined;\n    traceId?: () => string | undefined;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StartBrowserDiagnosticOptions',
+						signature:
+							'type StartBrowserDiagnosticOptions = {\n    reason?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BrowserDiagnosticSession',
+						signature:
+							'type BrowserDiagnosticSession = {\n    downloadHar: (filename?: string) => void;\n    id: string;\n    serializeHar: () => string;\n    snapshot: () => DiagnosticArchive;\n    stop: () => Promise<DiagnosticArchive>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BrowserDiagnostics',
+						signature:
+							'type BrowserDiagnostics = {\n    active: () => BrowserDiagnosticSession | undefined;\n    start: (options?: StartBrowserDiagnosticOptions) => BrowserDiagnosticSession;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBrowserDiagnostics',
+						signature:
+							'const createBrowserDiagnostics: (options: BrowserDiagnosticsOptions) => BrowserDiagnostics;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/har',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'HarNameValue',
+						signature:
+							'type HarNameValue = {\n    name: string;\n    value: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HarEntry',
+						signature:
+							'type HarEntry = {\n    _absolutejs?: {\n        error?: {\n            message: string;\n            name: string;\n        };\n        initiator: DiagnosticNetworkEntry["initiator"];\n    };\n    cache: Record<string, never>;\n    request: {\n        bodySize: number;\n        cookies: HarNameValue[];\n        headers: HarNameValue[];\n        headersSize: number;\n        httpVersion: string;\n        method: string;\n        postData?: {\n            mimeType: string;\n            text: string;\n        };\n        queryString: HarNameValue[];\n        url: string;\n    };\n    response: {\n        bodySize: number;\n        content: {\n            mimeType: string;\n            size: number;\n            text?: string;\n        };\n        cookies: HarNameValue[];\n        headers: HarNameValue[];\n        headersSize: number;\n        httpVersion: string;\n        redirectURL: string;\n        status: number;\n        statusText: string;\n    };\n    startedDateTime: string;\n    time: number;\n    timings: {\n        blocked: number;\n        connect: number;\n        dns: number;\n        receive: number;\n        send: number;\n        ssl: number;\n        wait: number;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HarArchive',
+						signature:
+							'type HarArchive = {\n    log: {\n        _absolutejs: DiagnosticArchive["manifest"];\n        browser?: {\n            name: string;\n            version: string;\n        };\n        creator: {\n            name: string;\n            version: string;\n        };\n        entries: HarEntry[];\n        pages: Array<{\n            id: string;\n            pageTimings: Record<string, never>;\n            startedDateTime: string;\n            title: string;\n        }>;\n        version: "1.2";\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'diagnosticArchiveToHar',
+						signature:
+							'const diagnosticArchiveToHar: (input: DiagnosticArchive, options?: RedactionOptions) => HarArchive;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'serializeDiagnosticHar',
+						signature:
+							'const serializeDiagnosticHar: (archive: DiagnosticArchive, options?: RedactionOptions & {\n    space?: number;\n}) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'downloadDiagnosticHar',
+						signature:
+							'const downloadDiagnosticHar: (archive: DiagnosticArchive, filename?: string) => void;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/redact',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'REDACTED',
+						signature: 'const REDACTED = "[REDACTED]";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RedactionOptions',
+						signature:
+							'type RedactionOptions = {\n    maxBodyBytes?: number;\n    /** Query parameter names whose values may remain. All other values are\n     * removed, even when the parameter name does not look credential-bearing. */\n    preserveQueryValues?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HarRedactionOptions',
+						signature:
+							'type HarRedactionOptions = RedactionOptions & {\n    retainRequestBody?: (context: {\n        mimeType: string;\n        url: string;\n    }) => boolean;\n    retainResponseBody?: (context: {\n        mimeType: string;\n        url: string;\n    }) => boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactText',
+						signature:
+							'const redactText: (value: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactUrl',
+						signature:
+							'const redactUrl: (value: string, options?: RedactionOptions) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactHeaders',
+						signature:
+							'const redactHeaders: (headers: readonly DiagnosticHeader[] | undefined) => DiagnosticHeader[] | undefined;'
+					},
+					{
+						description:
+							'Redact arbitrary support context before it is retained in an artifact.',
+						kind: 'value',
+						name: 'redactValue',
+						signature:
+							'const redactValue: (value: unknown) => unknown;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactBody',
+						signature:
+							'const redactBody: (value: string, mimeType?: string, options?: RedactionOptions) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactDiagnosticArchive',
+						signature:
+							'const redactDiagnosticArchive: (archive: DiagnosticArchive, options?: RedactionOptions) => DiagnosticArchive;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'auditDiagnosticText',
+						signature:
+							'const auditDiagnosticText: (value: string) => DiagnosticAuditResult;'
+					},
+					{
+						description:
+							'Redact a DevTools/Playwright HAR without flattening its protocol timings. Bodies are removed by default and can only be retained through an explicit per-request allow function.',
+						kind: 'value',
+						name: 'redactHarObject',
+						signature:
+							'const redactHarObject: (input: unknown, options?: HarRedactionOptions) => unknown;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'redactHarText',
+						signature:
+							'const redactHarText: (value: string, options?: HarRedactionOptions) => {\n    audit: DiagnosticAuditResult;\n    text: string;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/playwright',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'PlaywrightHarCaptureOptions',
+						signature:
+							'type PlaywrightHarCaptureOptions = {\n    cacheDisabled?: boolean;\n    channel?: string;\n    consoleOutputPath?: string;\n    harRedaction?: HarRedactionOptions;\n    headless?: boolean;\n    metadataOutputPath?: string;\n    outputPath: string;\n    /** Existing Chrome profile. Omit for an isolated temporary context. */\n    userDataDir?: string;\n    url: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PlaywrightCaptureMarker',
+						signature:
+							'type PlaywrightCaptureMarker = {\n    atUtc: string;\n    data?: Record<string, boolean | number | string>;\n    label: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PlaywrightHarCaptureResult',
+						signature:
+							'type PlaywrightHarCaptureResult = {\n    audit: DiagnosticAuditResult;\n    console: DiagnosticConsoleEntry[];\n    endedAtUtc: string;\n    markers: PlaywrightCaptureMarker[];\n    outputPath: string;\n    startedAtUtc: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PlaywrightHarCaptureSession',
+						signature:
+							'type PlaywrightHarCaptureSession = {\n    context: BrowserContext;\n    mark: (label: string, data?: Record<string, boolean | number | string>) => void;\n    page: Page;\n    startedAtUtc: string;\n    stop: () => Promise<PlaywrightHarCaptureResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'launchPlaywrightHarCapture',
+						signature:
+							'const launchPlaywrightHarCapture: (options: PlaywrightHarCaptureOptions) => Promise<PlaywrightHarCaptureSession>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/blob',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticBlob',
+						signature:
+							'type DiagnosticBlob = {\n    key: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticBlobList',
+						signature:
+							'type DiagnosticBlobList = {\n    cursor?: string;\n    objects: DiagnosticBlob[];\n    truncated: boolean;\n};'
+					},
+					{
+						description:
+							'Structural subset implemented by every @absolutejs/blob adapter.',
+						kind: 'type',
+						name: 'DiagnosticBlobStore',
+						signature:
+							'type DiagnosticBlobStore = {\n    delete: (key: string) => Promise<void>;\n    get: (key: string) => Promise<Uint8Array | null>;\n    list: (options?: {\n        cursor?: string;\n        limit?: number;\n        prefix?: string;\n    }) => Promise<DiagnosticBlobList>;\n    put: (key: string, body: string | Uint8Array, options?: {\n        contentType?: string;\n        maxBytes?: number;\n        metadata?: Record<string, string>;\n    }) => Promise<unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticBlobCaptureStore',
+						signature:
+							'type DiagnosticBlobCaptureStore = DiagnosticCaptureStore & {\n    purgeExpired: (at?: number) => Promise<number>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticBlobCaptureStoreOptions',
+						signature:
+							'type DiagnosticBlobCaptureStoreOptions = {\n    blob: DiagnosticBlobStore;\n    clock?: () => number;\n    maxBytes?: number;\n    onLifecycleEvent?: (event: DiagnosticLifecycleEvent) => Promise<void> | void;\n    prefix?: string;\n    /** Enable the in-process serialized consume implementation only when one\n     * application process owns downloads for this prefix. Clustered hosts must\n     * provide a transactional DiagnosticCaptureStore.consume implementation. */\n    singleWriter?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDiagnosticBlobCaptureStore',
+						signature:
+							'const createDiagnosticBlobCaptureStore: (options: DiagnosticBlobCaptureStoreOptions) => DiagnosticBlobCaptureStore;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/support',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreateSupportBundleOptions',
+						signature:
+							'type CreateSupportBundleOptions = {\n    archive: DiagnosticArchive;\n    context?: Record<string, unknown>;\n    expiresAt?: number;\n    issueFingerprints?: string[];\n    markers?: SupportMarker[];\n    redaction?: RedactionOptions;\n    traceIds?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createSupportBundle',
+						signature:
+							'const createSupportBundle: (options: CreateSupportBundleOptions) => SupportBundle;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'serializeSupportBundle',
+						signature:
+							'const serializeSupportBundle: (bundle: SupportBundle, space?: number) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'downloadSupportBundle',
+						signature:
+							'const downloadSupportBundle: (bundle: SupportBundle, filename?: string) => void;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/trace',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseTraceparent',
+						signature:
+							'const parseTraceparent: (value: string | null | undefined) => DiagnosticTraceContext | undefined;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseServerTiming',
+						signature:
+							'const parseServerTiming: (value: string | null | undefined) => DiagnosticServerTiming[] | undefined;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/ui',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportModePhase',
+						signature:
+							'type SupportModePhase = "idle" | "recording" | "reviewing" | "sending" | "sent";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportModeSnapshot',
+						signature:
+							'type SupportModeSnapshot = {\n    bundle?: SupportBundle;\n    error?: string;\n    markers: SupportMarker[];\n    phase: SupportModePhase;\n    endsAt?: number;\n    startedAt?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportModeControllerOptions',
+						signature:
+							'type SupportModeControllerOptions = {\n    context?: () => Promise<Record<string, unknown> | undefined> | Record<string, unknown> | undefined;\n    diagnostics: BrowserDiagnostics;\n    expiresInMs?: number;\n    issueFingerprints?: () => Promise<string[]> | string[];\n    maxDurationMs?: number;\n    submit?: (bundle: SupportBundle) => Promise<{\n        id?: string;\n    } | void>;\n    traceIds?: () => Promise<string[]> | string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportModeController',
+						signature:
+							'type SupportModeController = {\n    discard: () => void;\n    download: (filename?: string) => void;\n    mark: (label: string, data?: Record<string, boolean | number | string>) => void;\n    send: () => Promise<SupportBundle>;\n    snapshot: () => SupportModeSnapshot;\n    start: (reason: string) => SupportModeSnapshot;\n    stop: () => Promise<SupportBundle>;\n    subscribe: (listener: (state: SupportModeSnapshot) => void) => () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createSupportModeController',
+						signature:
+							'const createSupportModeController: (options: SupportModeControllerOptions) => SupportModeController;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportReportElement',
+						signature:
+							'type SupportReportElement = HTMLElement & {\n    controller?: SupportModeController;\n};'
+					},
+					{
+						description:
+							'Define an accessible native support-report element without imposing a UI framework on the host application. Calling this function is SSR-safe.',
+						kind: 'value',
+						name: 'defineSupportReportElement',
+						signature:
+							'const defineSupportReportElement: (tagName?: string) => CustomElementConstructor | undefined;'
+					},
+					{
+						description:
+							'Connect existing and subsequently-added support-report elements.',
+						kind: 'value',
+						name: 'connectSupportReportElements',
+						signature:
+							'const connectSupportReportElements: (controller: SupportModeController, options?: {\n    root?: Document | HTMLElement;\n    tagName?: string;\n}) => (() => void);'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/viewer',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportTimelineItem',
+						signature:
+							'type SupportTimelineItem = {\n    at: number;\n    entry: DiagnosticConsoleEntry;\n    kind: "console";\n} | {\n    at: number;\n    entry: DiagnosticNetworkEntry;\n    kind: "network";\n} | {\n    at: number;\n    entry: SupportMarker;\n    kind: "marker";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SupportBundleComparison',
+						signature:
+							'type SupportBundleComparison = {\n    consoleDelta: number;\n    durationDeltaMs: number;\n    failedRequestDelta: number;\n    markerDelta: number;\n    networkDelta: number;\n    onlyInLeft: string[];\n    onlyInRight: string[];\n    statusChanges: Array<{\n        from: number;\n        method: string;\n        to: number;\n        url: string;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildSupportTimeline',
+						signature:
+							'const buildSupportTimeline: (bundle: SupportBundle) => SupportTimelineItem[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'compareSupportBundles',
+						signature:
+							'const compareSupportBundles: (left: SupportBundle, right: SupportBundle) => SupportBundleComparison;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'renderSupportBundleViewer',
+						signature:
+							'const renderSupportBundleViewer: (target: HTMLElement, bundle: SupportBundle) => (() => void);'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/elysia',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticRequestCorrelation',
+						signature:
+							'type DiagnosticRequestCorrelation = {\n    diagnosticId?: string;\n    startedAt: number;\n    trace?: DiagnosticTraceContext;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticCorrelationPluginOptions',
+						signature:
+							'type DiagnosticCorrelationPluginOptions = {\n    exposeTraceparent?: boolean;\n    onRequest?: (correlation: DiagnosticRequestCorrelation, request: Request) => Promise<void> | void;\n    serverTiming?: boolean;\n};'
+					},
+					{
+						description:
+							'Make the browser diagnostic id and W3C trace context available to Elysia handlers without accepting arbitrary user data as correlation metadata.',
+						kind: 'value',
+						name: 'diagnosticCorrelationPlugin',
+						signature:
+							'const diagnosticCorrelationPlugin: (options?: DiagnosticCorrelationPluginOptions) => import("elysia/types").PluginHookReturn<"", "local", import("elysia/types").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia/types").DefaultMetadata, {}, {\n    derive: {\n        readonly diagnosticCorrelation: DiagnosticRequestCorrelation;\n    };\n    schema: {};\n    schemas: {};\n    response: import("elysia/types").ExtractErrorFromHandle<{\n        readonly diagnosticCorrelation: DiagnosticRequestCorrelation;\n    }>;\n    error: [];\n}, import("elysia/types").DefaultEphemeral, {}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StoredDiagnosticCapture',
+						signature:
+							'type StoredDiagnosticCapture = {\n    archive?: DiagnosticArchive;\n    downloadCount?: number;\n    expiresAt?: number;\n    har?: string;\n    id: string;\n    maxDownloads?: number;\n    receivedAt: number;\n    supportBundle?: SupportBundle;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticCaptureStore',
+						signature:
+							'type DiagnosticCaptureStore = {\n    get?: (id: string) => Promise<StoredDiagnosticCapture | null>;\n    put: (capture: StoredDiagnosticCapture) => Promise<void>;\n    /** Atomically enforce expiry/download limits when supported by the store. */\n    consume?: (id: string, at: number) => Promise<StoredDiagnosticCapture | null>;\n    delete?: (id: string) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticLifecycleEvent',
+						signature:
+							'type DiagnosticLifecycleEvent = {\n    at: number;\n    id: string;\n    kind: "diagnostic.captured" | "diagnostic.deleted" | "diagnostic.downloaded" | "diagnostic.expired";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticsPluginOptions',
+						signature:
+							'type DiagnosticsPluginOptions = {\n    authorize?: (request: Request) => boolean | Promise<boolean>;\n    clock?: () => number;\n    harRedaction?: HarRedactionOptions;\n    downloadSigningKey?: string | Uint8Array;\n    downloadTtlMs?: number;\n    maxUploadBytes?: number;\n    maxDownloads?: number;\n    path?: string;\n    onLifecycleEvent?: (event: DiagnosticLifecycleEvent) => Promise<void> | void;\n    redaction?: RedactionOptions;\n    retentionMs?: number;\n    store: DiagnosticCaptureStore;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'diagnosticsPlugin',
+						signature:
+							'const diagnosticsPlugin: (options: DiagnosticsPluginOptions) => import("elysia/types").AddRoute<"", "local", import("elysia/types").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia/types").DefaultMetadata, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral, "post", string, import("elysia/types").IntersectIfObjectSchema<import("elysia").UnwrapRoute<{\n    body: import("typebox").TObject<{\n        archive: import("typebox").TOptional<import("typebox").TUnknown>;\n        bundle: import("typebox").TOptional<import("typebox").TUnknown>;\n        har: import("typebox").TOptional<import("typebox").TString>;\n    }>;\n}, {}, `/${string}`>, import("elysia/types").MergeScopedSchemas<{}, {}, {}>>, {}, ({ body, request, set }: {\n    body: {\n        archive?: unknown;\n        bundle?: unknown;\n        har?: string;\n    };\n    query: Record<string, string | undefined>;\n    params: {};\n    headers: Record<string, string | undefined>;\n    cookie: Record<string, import("elysia").Cookie<unknown>>;\n    server: import("elysia").Server | null;\n    redirect: import("elysia").redirect;\n    set: {\n        headers: import("elysia").HTTPHeaders;\n        sta'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<BrowserDiagnosticsOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>>;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>>;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        maxBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maxConsoleEntries: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maxNetworkEntries: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        propagateDiagnosticId: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        project: import("@sinclair/typebox").TString;\n    }>;\n});'
+					}
+				]
+			}
+		],
+		category: 'Observability',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/browser.ts src/har.ts src/redact.ts src/support.ts src/trace.ts src/ui.ts src/viewer.ts --outdir dist --root ./src --splitting --sourcemap --target=browser && bun build src/playwright.ts src/elysia.ts src/blob.ts src/manifest.ts --outdir dist --root ./src --splitting --sourcemap --target=bun --external playwright --external elysia --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Privacy-first AbsoluteJS Support Mode: bounded browser diagnostics, redacted HAR capture, correlated support bundles, secure lifecycle storage, native UI, and operator tooling.',
+		directory: 'diagnostics',
+		kind: 'package',
+		name: 'Diagnostics',
+		packageName: '@absolutejs/diagnostics',
+		private: false,
+		publicExports: [
+			'@absolutejs/diagnostics',
+			'@absolutejs/diagnostics/browser',
+			'@absolutejs/diagnostics/har',
+			'@absolutejs/diagnostics/redact',
+			'@absolutejs/diagnostics/playwright',
+			'@absolutejs/diagnostics/blob',
+			'@absolutejs/diagnostics/support',
+			'@absolutejs/diagnostics/trace',
+			'@absolutejs/diagnostics/ui',
+			'@absolutejs/diagnostics/viewer',
+			'@absolutejs/diagnostics/elysia',
+			'@absolutejs/diagnostics/manifest',
+			'@absolutejs/diagnostics/manifest.json'
+		],
+		readmeDigest:
+			'241da08ee960cc0c7641860b1fc3fd890885c116d5216e6b92faca8ae26e773a',
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/diagnostics',
+				description: 'Working example for Install.',
+				heading: 'Install',
+				language: 'sh'
+			},
+			{
+				code: 'bun add playwright # complete Chromium HAR capture\nbun add elysia     # upload/retrieval relay',
+				description: 'Install only the optional capability you use:',
+				heading: 'Install 2',
+				language: 'sh'
+			},
+			{
+				code: 'import { createBrowserDiagnostics } from "@absolutejs/diagnostics/browser";\n\nconst diagnostics = createBrowserDiagnostics({\n  project: "web",\n  release: APP_RELEASE,\n  replayId: () => replay.getReplayId(),\n  traceId: () => currentTraceId(),\n  ignoredUrlSubstrings: ["/api/diagnostics"],\n});\n\n// Call only after an explicit support/operator action.\nconst session = diagnostics.start({ reason: "payment provider reproduction" });\n\n// Reproduce the problem, then stop and download a redacted HAR.\nconst archive = await session.stop();\nsession.downloadHar("payment-provider.redacted.har");',
+				description: 'Creating a controller does not start recording:',
+				heading: 'In-page diagnostics',
+				language: 'typescript'
+			},
+			{
+				code: 'const diagnostics = createBrowserDiagnostics({\n  project: "web",\n  bodyCapture: {\n    request: true,\n    response: true,\n    maxBodyBytes: 16_384,\n    allow: ({ sameOrigin, url }) =>\n      sameOrigin && new URL(url).pathname.startsWith("/api/support-safe/"),\n  },\n});',
+				description:
+					'There is no captureBodies: true switch. Supply a per-request allow function and select request and/or response explicitly:',
+				heading: 'Body capture is deliberately difficult to enable',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Privacy-first, on-demand browser diagnostics for AbsoluteJS applications.',
+				details: [
+					'It records a bounded network and console timeline only after an explicit support/operator action, exports a redacted HAR 1.2 document, and provides a Playwright/CDP path when a vendor needs a complete DevTools capture. Request and response bodies are off by default. Redaction happens before in-page entries are retained and again at export or server ingest.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'@absolutejs/beacon stays tiny and always-on. It records redacted request',
+				details: [
+					'breadcrumbs and actionable failures, not complete protocol archives.',
+					'@absolutejs/errors groups and persists issues. It should link a diagnostic',
+					'id, not own large support artifacts.',
+					'@absolutejs/replay records privacy-masked DOM state. A DOM recording is not',
+					'an HTTP archive.',
+					'@absolutejs/observability can compose all four capabilities and correlate',
+					'the diagnostic id with Beacon session, Replay, Errors, and traces.'
+				],
+				title: 'Why this is separate from Beacon, Errors, and Replay'
+			},
+			{
+				description: 'Install only the optional capability you use:',
+				details: [],
+				title: 'Install'
+			},
+			{
+				description: 'Creating a controller does not start recording:',
+				details: [
+					'The recorder wraps the current fetch, XHR, and console functions, so it can coexist with Beacon. It also consumes Resource Timing entries for static and third-party resources visible to the page. stop() restores only wrappers it still owns.',
+					'The in-page manifest always declares completeness: "in-page-partial" and cacheDisabled: false. Application JavaScript cannot truthfully claim a full HAR.',
+					'Body capture is deliberately difficult to enable',
+					'There is no captureBodies: true switch. Supply a per-request allow function and select request and/or response explicitly:',
+					'Strings and URL-encoded/JSON bodies are redacted immediately. Blob, stream, multipart, and other binary request bodies are never inspected by the in-page recorder.'
+				],
+				title: 'In-page diagnostics'
+			},
+			{
+				description:
+					'Use the Playwright entry point when a payment processor, identity provider, or other vendor requests a real HAR with Preserve Log and Disable Cache:',
+				details: [
+					'Playwright first records to a uniquely named raw temporary file. stop() closes the context so Playwright flushes the HAR, creates the redacted output, runs the sharing audit, and removes the raw temporary file in a finally block. Call stop() rather than closing the browser window at the OS level.',
+					'The metadata declares completeness: "devtools-complete", whether cache was disabled, exact UTC start/end times, and any operator markers.'
+				],
+				title: 'Complete HAR capture with Playwright/CDP'
+			},
+			{
+				description:
+					'createSupportModeController provides a consent-shaped state machine: idle → recording → reviewing → sending → sent. Creating it never starts a recording. A host can use the headless controller directly or connect the framework-neutral native element.',
+				details: [
+					'The element explains what will be recorded, requires an explicit Start click, shows a persistent recording state, supports named markers, and exposes the privacy-audit result before send.'
+				],
+				title: 'Support Mode controller and native UI'
+			},
+			{
+				description:
+					'createSupportBundle() produces one audited JSON artifact containing the redacted in-page archive and HAR plus marker, replay, release, environment, issue-fingerprint, and W3C trace correlations. It does not embed Replay data, server logs, or issue records; those remain in their purpose-built stores and are joined by id.',
+				details: [
+					'Request-level trace correlation recognizes valid traceparent headers and records exposed Server-Timing metrics. Diagnostic-id propagation is same-origin, opt-in, and off by default because mutating requests can affect caches or signed requests.',
+					'The optional Elysia correlation plugin makes the bounded correlation available to handlers and appends server timing:'
+				],
+				title: 'Correlated support bundles'
+			},
+			{
+				description: 'Defaults remove or mask:',
+				details: [
+					'Authorization, Cookie, Set-Cookie, proxy credentials, and API-key',
+					'headers',
+					'every URL query value and every fragment',
+					'bearer values and JWT-shaped strings',
+					'tokens, sessions, credentials, passwords, signatures, wallet payloads,',
+					'payment fields, card fields, and common personal-contact fields',
+					'request and response bodies in DevTools HAR captures',
+					'body content beyond the configured byte limit',
+					'The sharing audit reports finding codes and locations, never the suspected secret value.'
+				],
+				title: 'Redaction and audit'
+			},
+			{
+				description:
+					'The relay defaults closed. A host must provide authorization and storage:',
+				details: [
+					'The relay enforces a byte limit, validates the archive shape, redacts again, audits the serialized HAR, and only then calls the store. Wire storage to @absolutejs/blob or another private store with an explicit retention policy.',
+					'Secure lifecycle storage',
+					'createDiagnosticBlobCaptureStore() adapts any @absolutejs/blob store. The relay can enforce retention, atomic download limits, short-lived HMAC-signed download URLs, explicit deletion, and mandatory lifecycle audit hooks.',
+					'maxDownloads is accepted only when the store implements atomic consume(); the plugin refuses unsafe configuration rather than pretending a normal get() is sufficient. The Blob adapter exposes serialized consume() only with singleWriter: true. Clustered applications must supply a transactional store implementation instead of relying on an object-store read/modify/write race.'
+				],
+				title: 'Elysia relay'
+			},
+			{
+				description:
+					'@absolutejs/diagnostics/viewer builds a chronological network, console, and marker timeline. compareSupportBundles(left, right) reports request-set, status, failure-count, timing, console, and marker differences—useful for comparing a successful card attempt with a failed wallet attempt.',
+				details: [],
+				title: 'Operator viewer and comparison'
+			},
+			{
+				description: 'A normal webpage cannot observe:',
+				details: [
+					'protected cookies and browser-owned authorization data',
+					'most cross-origin response headers or bodies',
+					'native Apple Pay or browser-wallet network traffic',
+					'browser cache, connection, and service-worker protocol details with DevTools',
+					'fidelity',
+					'requests made by another device during a QR handoff',
+					"Therefore an in-page export is useful but partial. Use Playwright/CDP for a complete desktop-browser HAR. Capturing native iPhone Safari with Web Inspector still requires Apple's supported Mac-connected workflow; this package cannot bypass platform security boundaries."
+				],
+				title: 'Browser limitations'
+			}
+		],
+		repository: 'https://github.com/absolutejs/diagnostics',
+		subpackages: [],
+		version: '0.2.1'
 	},
 	{
 		api: [
@@ -28502,6 +35156,1209 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.0.1'
 	},
 	{
+		api: [
+			{
+				entryPoint: '@absolutejs/e2ee',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'E2EE_CERTIFICATION_CONTRACT',
+						signature: 'const E2EE_CERTIFICATION_CONTRACT: 1;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'E2EE_CERTIFICATION_SUITE',
+						signature:
+							'const E2EE_CERTIFICATION_SUITE = "absolutejs-e2ee-certification/1";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationClaim',
+						signature:
+							'type E2EECertificationClaim = "adversarial-lifecycle" | "cross-implementation" | "independent-audit" | "known-answer-vectors" | "provider-conformance" | "runtime-browser" | "runtime-bun" | "runtime-node";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationImplementation',
+						signature:
+							'type E2EECertificationImplementation = {\n    readonly name: string;\n    readonly version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationVectorEvidence',
+						signature:
+							'type E2EECertificationVectorEvidence = {\n    readonly digestSha256: string;\n    readonly sourceUrl: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEAuditScope',
+						signature:
+							'type E2EEAuditScope = {\n    readonly packageName: string;\n    readonly version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEIndependentAuditEvidence',
+						signature:
+							'type E2EEIndependentAuditEvidence = {\n    readonly auditor: {\n        readonly id: string;\n        readonly name: string;\n    };\n    readonly completedAt: string;\n    readonly findings: {\n        readonly unresolvedCritical: number;\n        readonly unresolvedHigh: number;\n    };\n    readonly reportDigestSha256: string;\n    readonly reportUrl: string;\n    readonly scope: readonly E2EEAuditScope[];\n    readonly validUntil: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationReport',
+						signature:
+							'type E2EECertificationReport = {\n    readonly audits?: readonly E2EEIndependentAuditEvidence[];\n    readonly claims: readonly E2EECertificationClaim[];\n    readonly completedAt: string;\n    readonly contract: typeof E2EE_CERTIFICATION_CONTRACT;\n    readonly evidenceDigestSha256: string;\n    readonly implementations: readonly E2EECertificationImplementation[];\n    readonly provider: {\n        readonly id: string;\n        readonly packageName: E2EEProviderManifest["packageName"];\n        readonly version: string;\n    };\n    readonly runtime: E2EERuntime;\n    readonly scenarios: readonly string[];\n    readonly suite: typeof E2EE_CERTIFICATION_SUITE;\n    readonly vectors: readonly E2EECertificationVectorEvidence[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationPolicy',
+						signature:
+							'type E2EECertificationPolicy = {\n    readonly manifest: E2EEProviderManifest;\n    readonly maximumAgeMs: number;\n    readonly now?: Date;\n    readonly requiredClaims: readonly E2EECertificationClaim[];\n    readonly runtime: E2EERuntime;\n    readonly trustedAuditorIds?: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationResult',
+						signature:
+							'type E2EECertificationResult = {\n    readonly issues: readonly string[];\n    readonly passed: boolean;\n    readonly report: E2EECertificationReport;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'defineE2EECertificationReport',
+						signature:
+							'const defineE2EECertificationReport: (report: E2EECertificationReport) => E2EECertificationReport;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'checkE2EECertification',
+						signature:
+							'const checkE2EECertification: (report: E2EECertificationReport, policy: E2EECertificationPolicy) => E2EECertificationResult;'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'E2EEConfigurationError',
+						signature:
+							'class E2EEConfigurationError extends Error {\n    readonly name = "E2EEConfigurationError";\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'E2EEProviderSelectionError',
+						signature:
+							'class E2EEProviderSelectionError extends Error {\n    readonly rejected: Readonly<Record<string, readonly string[]>>;\n    readonly name = "E2EEProviderSelectionError";\n    constructor(message: string, rejected: Readonly<Record<string, readonly string[]>>);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'defineE2EEProviderManifest',
+						signature:
+							'const defineE2EEProviderManifest: (manifest: E2EEProviderManifest) => E2EEProviderManifest;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'explainProviderCompatibility',
+						signature:
+							'const explainProviderCompatibility: (manifest: E2EEProviderManifest, requirements: E2EEProviderRequirements) => ProviderCompatibility;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'selectE2EEProvider',
+						signature:
+							'const selectE2EEProvider: <Provider extends E2EEProvider>(providers: readonly Provider[], requirements: E2EEProviderRequirements) => Provider;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'DEFAULT_SECRET_PROCESSING_MODE',
+						signature:
+							'const DEFAULT_SECRET_PROCESSING_MODE: SecretProcessingMode;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'planSecurityModeTransition',
+						signature:
+							'const planSecurityModeTransition: (from: SecurityMode, to: SecurityMode) => SecurityModeTransition;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'requireMessagingSessionMode',
+						signature:
+							'const requireMessagingSessionMode: (session: Pick<MessagingSession, "securityMode">, expected: SecurityMode) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateAuthenticatedContext',
+						signature:
+							'const validateAuthenticatedContext: (context: AuthenticatedContext, now?: number) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateDeviceCredential',
+						signature:
+							'const validateDeviceCredential: (credential: DeviceCredential, now?: number) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateKeyPackage',
+						signature:
+							'const validateKeyPackage: (keyPackage: E2EEKeyPackage, now?: number) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateConversationState',
+						signature:
+							'const validateConversationState: (state: ConversationState) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateRecoveryRequest',
+						signature:
+							'const validateRecoveryRequest: (request: RecoveryRequest, maximumTtlMs: number, now?: number) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateRecoveryGrant',
+						signature:
+							'const validateRecoveryGrant: (grant: RecoveryGrant, request: RecoveryRequest, now?: number) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'E2EE_PROVIDER_CONTRACT',
+						signature: 'const E2EE_PROVIDER_CONTRACT: 1;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecurityMode',
+						signature:
+							'type SecurityMode = "managed-recovery" | "strict-e2ee";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecretProcessingMode',
+						signature:
+							'type SecretProcessingMode = "endpoint-visible" | "model-visible" | "tool-confined";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEProviderRole',
+						signature:
+							'type E2EEProviderRole = "envelope" | "key-custody" | "messaging" | "recovery" | "transport";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EERuntime',
+						signature:
+							'type E2EERuntime = "browser" | "bun" | "capacitor-android" | "capacitor-ios" | "node";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AssuranceLevel',
+						signature:
+							'type AssuranceLevel = "audited" | "experimental" | "reviewed";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CostModel',
+						signature:
+							'type CostModel = "byo" | "free" | "paid-paas";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PrivateKeyProtection',
+						signature:
+							'type PrivateKeyProtection = "exportable" | "non-exportable" | "provider-managed";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEProviderSecurity',
+						signature:
+							'type E2EEProviderSecurity = {\n    readonly assurance: AssuranceLevel;\n    readonly auditUrls?: readonly string[];\n    readonly forwardSecrecy: boolean;\n    readonly operatorCanDecrypt: boolean;\n    readonly postCompromiseSecurity: boolean;\n    readonly postQuantum: boolean;\n    readonly privateKeyProtection: PrivateKeyProtection;\n    readonly supportedModes: readonly SecurityMode[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEProviderManifest',
+						signature:
+							'type E2EEProviderManifest = {\n    readonly contract: typeof E2EE_PROVIDER_CONTRACT;\n    readonly costModel: CostModel;\n    readonly description: string;\n    readonly id: string;\n    readonly packageName: `@absolutejs/e2ee-${string}`;\n    readonly protocols: readonly string[];\n    readonly roles: readonly E2EEProviderRole[];\n    readonly runtimes: readonly E2EERuntime[];\n    readonly security: E2EEProviderSecurity;\n    readonly version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEProviderRequirements',
+						signature:
+							'type E2EEProviderRequirements = {\n    readonly allowPostQuantumClaim?: boolean;\n    readonly minimumAssurance?: AssuranceLevel;\n    readonly operatorCanDecrypt?: boolean;\n    readonly pinnedProviderId?: string;\n    readonly privateKeyProtection?: readonly PrivateKeyProtection[];\n    readonly protocols?: readonly string[];\n    readonly requireForwardSecrecy?: boolean;\n    readonly requirePostCompromiseSecurity?: boolean;\n    readonly roles: readonly E2EEProviderRole[];\n    readonly runtime: E2EERuntime;\n    readonly securityMode: SecurityMode;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEProvider',
+						signature:
+							'type E2EEProvider = {\n    readonly manifest: E2EEProviderManifest;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProviderCompatibility',
+						signature:
+							'type ProviderCompatibility = {\n    readonly compatible: boolean;\n    readonly reasons: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecurityModeTransition',
+						signature:
+							'type SecurityModeTransition = {\n    readonly from: SecurityMode;\n    readonly reinitializationRequired: true;\n    readonly requiresParticipantNotification: true;\n    readonly to: SecurityMode;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthenticatedContext',
+						signature:
+							'type AuthenticatedContext = {\n    readonly conversationId: string;\n    readonly expiresAt?: number;\n    readonly purpose: string;\n    readonly securityEpoch: number;\n    readonly senderId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProtectedMessage',
+						signature:
+							'type ProtectedMessage = {\n    readonly authenticatedContext: AuthenticatedContext;\n    readonly bytes: Uint8Array;\n    readonly protocol: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DecryptedMessage',
+						signature:
+							'type DecryptedMessage = {\n    readonly authenticatedContext: AuthenticatedContext;\n    readonly plaintext: Uint8Array;\n    readonly senderCredential: Uint8Array;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeviceCredential',
+						signature:
+							'type DeviceCredential = {\n    readonly bytes: Uint8Array;\n    readonly deviceId: string;\n    readonly expiresAt?: number;\n    readonly identityId: string;\n    readonly issuedAt: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'LocalDeviceCredential',
+						signature:
+							'type LocalDeviceCredential = DeviceCredential & {\n    /** Opaque provider-owned reference. This is never private key material. */\n    readonly keyHandle: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CredentialValidation',
+						signature:
+							'type CredentialValidation = {\n    readonly identityId: string;\n    readonly status: "invalid" | "revoked" | "valid";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthenticationService',
+						signature:
+							'type AuthenticationService = {\n    issueDeviceCredential(input: {\n        readonly deviceId: string;\n        readonly identityId: string;\n        readonly publicKey: Uint8Array;\n    }): Promise<DeviceCredential>;\n    sameIdentity(left: DeviceCredential, right: DeviceCredential): Promise<boolean>;\n    validateDeviceCredential(input: {\n        readonly credential: DeviceCredential;\n        readonly publicKey: Uint8Array;\n    }): Promise<CredentialValidation>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEKeyPackage',
+						signature:
+							'type E2EEKeyPackage = {\n    readonly bytes: Uint8Array;\n    readonly credential: DeviceCredential;\n    readonly expiresAt: number;\n    readonly id: string;\n    readonly protocol: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyPackageDirectory',
+						signature:
+							'type KeyPackageDirectory = {\n    claim(identityId: string): Promise<E2EEKeyPackage | undefined>;\n    publish(keyPackage: E2EEKeyPackage): Promise<void>;\n    remove(input: {\n        readonly deviceId: string;\n        readonly id: string;\n    }): Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeliveryMessageKind',
+						signature:
+							'type DeliveryMessageKind = "application" | "commit" | "proposal" | "welcome";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeliveryMessage',
+						signature:
+							'type DeliveryMessage = {\n    readonly bytes: Uint8Array;\n    readonly conversationId: string;\n    readonly id: string;\n    readonly kind: DeliveryMessageKind;\n    readonly recipientDeviceId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeliveryCursor',
+						signature:
+							'type DeliveryCursor = {\n    readonly deviceId: string;\n    readonly value?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeliveryBatch',
+						signature:
+							'type DeliveryBatch = {\n    readonly cursor?: string;\n    readonly messages: readonly DeliveryMessage[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeliveryService',
+						signature:
+							'type DeliveryService = {\n    acknowledge(input: {\n        readonly cursor: string;\n        readonly deviceId: string;\n    }): Promise<void>;\n    receive(cursor: DeliveryCursor): Promise<DeliveryBatch>;\n    send(messages: readonly DeliveryMessage[]): Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ConversationState',
+						signature:
+							'type ConversationState = {\n    readonly bytes: Uint8Array;\n    readonly conversationId: string;\n    readonly revision: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ConversationStateStore',
+						signature:
+							'type ConversationStateStore = {\n    load(conversationId: string): Promise<ConversationState | undefined>;\n    remove(conversationId: string, expectedRevision: number): Promise<boolean>;\n    save(input: {\n        readonly expectedRevision?: number;\n        readonly state: ConversationState;\n    }): Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecoveryRequest',
+						signature:
+							'type RecoveryRequest = {\n    readonly conversationId: string;\n    readonly expiresAt: number;\n    readonly id: string;\n    readonly issuedAt: number;\n    readonly lostDeviceIds: readonly string[];\n    readonly replacementCredential: DeviceCredential;\n    readonly securityMode: "managed-recovery";\n    readonly subjectIdentityId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecoveryGrant',
+						signature:
+							'type RecoveryGrant = {\n    readonly authorityId: string;\n    /** Opaque signed or MAC-authenticated proof over the complete request. */\n    readonly bytes: Uint8Array;\n    readonly expiresAt: number;\n    readonly issuedAt: number;\n    readonly requestId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecoveryGrantVerifier',
+						signature:
+							'type RecoveryGrantVerifier = {\n    readonly authorityId: string;\n    verify(input: {\n        readonly grant: RecoveryGrant;\n        readonly request: RecoveryRequest;\n    }): Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RecoveryAuthority',
+						signature:
+							"type RecoveryAuthority = RecoveryGrantVerifier & {\n    /** Issuance is expected to enforce the authority's approval ceremony. */\n    issue(request: RecoveryRequest): Promise<RecoveryGrant>;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ConversationMember',
+						signature:
+							'type ConversationMember = {\n    readonly credential: DeviceCredential;\n    readonly index: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MembershipChange',
+						signature:
+							'type MembershipChange = {\n    readonly epoch: number;\n    readonly handshake: readonly ProtectedMessage[];\n    readonly welcomes: readonly {\n        readonly deviceId: string;\n        readonly bytes: Uint8Array;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingProcessResult',
+						signature:
+							'type MessagingProcessResult = {\n    readonly kind: "application";\n    readonly message: DecryptedMessage;\n} | {\n    readonly epoch: number;\n    readonly kind: "membership-change" | "state-change";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingSession',
+						signature:
+							"type MessagingSession = {\n    readonly conversationId: string;\n    readonly epoch: number;\n    /** Mode authenticated by the provider's conversation state. */\n    readonly securityMode: SecurityMode;\n    addMembers(keyPackages: readonly E2EEKeyPackage[]): Promise<MembershipChange>;\n    close(): Promise<void>;\n    members(): Promise<readonly ConversationMember[]>;\n    protect(plaintext: Uint8Array, authenticatedContext: AuthenticatedContext): Promise<ProtectedMessage>;\n    process(message: ProtectedMessage): Promise<MessagingProcessResult | undefined>;\n    removeMembers(deviceIds: readonly string[]): Promise<MembershipChange>;\n    replaceMembers(input: {\n        readonly add: readonly E2EEKeyPackage[];\n        readonly removeDeviceIds: readonly string[];\n    }): Promise<MembershipChange>;\n    selfUpdate(): Promise<MembershipChange>;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingProvider',
+						signature:
+							'type MessagingProvider = E2EEProvider & {\n    createDeviceCredential(input: {\n        readonly deviceId: string;\n        readonly identityId: string;\n    }): Promise<LocalDeviceCredential>;\n    createKeyPackage(input: {\n        readonly credential: LocalDeviceCredential;\n        readonly expiresAt: number;\n    }): Promise<E2EEKeyPackage>;\n    createConversation(input: {\n        readonly conversationId: string;\n        readonly creatorCredential: LocalDeviceCredential;\n        readonly securityMode: SecurityMode;\n    }): Promise<MessagingSession>;\n    joinConversation(input: {\n        readonly credential: LocalDeviceCredential;\n        readonly expectedSecurityMode: SecurityMode;\n        readonly welcome: Uint8Array;\n    }): Promise<MessagingSession>;\n    restoreConversation(input: {\n        readonly sealedState: Uint8Array;\n    }): Promise<MessagingSession>;\n    sealConversationState(session: MessagingSession): Promise<Uint8Array>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EnvelopeProvider',
+						signature:
+							'type EnvelopeProvider = E2EEProvider & {\n    open(input: {\n        readonly envelope: Uint8Array;\n        readonly expectedContext: AuthenticatedContext;\n        readonly recipientKeyHandle: string;\n    }): Promise<Uint8Array>;\n    seal(input: {\n        readonly authenticatedContext: AuthenticatedContext;\n        readonly plaintext: Uint8Array;\n        readonly recipientPublicKey: Uint8Array;\n    }): Promise<Uint8Array>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/e2ee/conformance',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProviderConformanceOptions',
+						signature:
+							'type ProviderConformanceOptions = {\n    readonly createProvider: () => E2EEProvider | Promise<E2EEProvider>;\n    readonly validRequirement: E2EEProviderRequirements;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProviderConformanceResult',
+						signature:
+							'type ProviderConformanceResult = {\n    readonly issues: readonly string[];\n    readonly manifest?: E2EEProviderManifest;\n    readonly passed: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingProviderConformanceOptions',
+						signature:
+							'type MessagingProviderConformanceOptions = {\n    readonly createProvider: () => MessagingProvider | Promise<MessagingProvider>;\n};'
+					},
+					{
+						description:
+							'Runs test-runner-neutral checks shared by every E2EE provider package. Provider test suites should fail when passed is false and print issues.',
+						kind: 'value',
+						name: 'checkE2EEProviderConformance',
+						signature:
+							'const checkE2EEProviderConformance: (options: ProviderConformanceOptions) => Promise<ProviderConformanceResult>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'checkMessagingProviderConformance',
+						signature:
+							'const checkMessagingProviderConformance: (options: MessagingProviderConformanceOptions) => Promise<ProviderConformanceResult>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/e2ee/certification',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'E2EE_CERTIFICATION_CONTRACT',
+						signature: 'const E2EE_CERTIFICATION_CONTRACT: 1;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'E2EE_CERTIFICATION_SUITE',
+						signature:
+							'const E2EE_CERTIFICATION_SUITE = "absolutejs-e2ee-certification/1";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationClaim',
+						signature:
+							'type E2EECertificationClaim = "adversarial-lifecycle" | "cross-implementation" | "independent-audit" | "known-answer-vectors" | "provider-conformance" | "runtime-browser" | "runtime-bun" | "runtime-node";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationImplementation',
+						signature:
+							'type E2EECertificationImplementation = {\n    readonly name: string;\n    readonly version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationVectorEvidence',
+						signature:
+							'type E2EECertificationVectorEvidence = {\n    readonly digestSha256: string;\n    readonly sourceUrl: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEAuditScope',
+						signature:
+							'type E2EEAuditScope = {\n    readonly packageName: string;\n    readonly version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EEIndependentAuditEvidence',
+						signature:
+							'type E2EEIndependentAuditEvidence = {\n    readonly auditor: {\n        readonly id: string;\n        readonly name: string;\n    };\n    readonly completedAt: string;\n    readonly findings: {\n        readonly unresolvedCritical: number;\n        readonly unresolvedHigh: number;\n    };\n    readonly reportDigestSha256: string;\n    readonly reportUrl: string;\n    readonly scope: readonly E2EEAuditScope[];\n    readonly validUntil: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationReport',
+						signature:
+							'type E2EECertificationReport = {\n    readonly audits?: readonly E2EEIndependentAuditEvidence[];\n    readonly claims: readonly E2EECertificationClaim[];\n    readonly completedAt: string;\n    readonly contract: typeof E2EE_CERTIFICATION_CONTRACT;\n    readonly evidenceDigestSha256: string;\n    readonly implementations: readonly E2EECertificationImplementation[];\n    readonly provider: {\n        readonly id: string;\n        readonly packageName: E2EEProviderManifest["packageName"];\n        readonly version: string;\n    };\n    readonly runtime: E2EERuntime;\n    readonly scenarios: readonly string[];\n    readonly suite: typeof E2EE_CERTIFICATION_SUITE;\n    readonly vectors: readonly E2EECertificationVectorEvidence[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationPolicy',
+						signature:
+							'type E2EECertificationPolicy = {\n    readonly manifest: E2EEProviderManifest;\n    readonly maximumAgeMs: number;\n    readonly now?: Date;\n    readonly requiredClaims: readonly E2EECertificationClaim[];\n    readonly runtime: E2EERuntime;\n    readonly trustedAuditorIds?: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'E2EECertificationResult',
+						signature:
+							'type E2EECertificationResult = {\n    readonly issues: readonly string[];\n    readonly passed: boolean;\n    readonly report: E2EECertificationReport;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'defineE2EECertificationReport',
+						signature:
+							'const defineE2EECertificationReport: (report: E2EECertificationReport) => E2EECertificationReport;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'checkE2EECertification',
+						signature:
+							'const checkE2EECertification: (report: E2EECertificationReport, policy: E2EECertificationPolicy) => E2EECertificationResult;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/e2ee/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+					}
+				]
+			}
+		],
+		category: 'Messaging',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/certification.ts src/conformance.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Provider-neutral E2EE contracts, security modes, assurance manifests, and conformance tools for AbsoluteJS.',
+		directory: 'e2ee',
+		kind: 'package',
+		name: 'E2EE',
+		packageName: '@absolutejs/e2ee',
+		private: false,
+		publicExports: [
+			'@absolutejs/e2ee',
+			'@absolutejs/e2ee/conformance',
+			'@absolutejs/e2ee/certification',
+			'@absolutejs/e2ee/manifest',
+			'@absolutejs/e2ee/manifest.json'
+		],
+		readmeDigest:
+			'195b8e39a59cf7873d34b89d430f1aa969e098db320515b5120f9da4afad193f',
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/e2ee',
+				description: 'Working example for Install.',
+				heading: 'Install',
+				language: 'bash'
+			},
+			{
+				code: 'import { selectE2EEProvider } from "@absolutejs/e2ee";\n\nconst selected = selectE2EEProvider(providers, {\n  minimumAssurance: "reviewed",\n  operatorCanDecrypt: false,\n  protocols: ["MLS-1.0"],\n  roles: ["messaging"],\n  runtime: "browser",\n  securityMode: "strict-e2ee",\n});\n\nconsole.log(selected.manifest.packageName);',
+				description:
+					'Working example for Select a provider explicitly.',
+				heading: 'Select a provider explicitly',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral E2EE contracts, explicit security modes, assurance manifests, provider selection, and conformance tools for AbsoluteJS.',
+				details: [
+					'This package is the stable seam between applications and implementations in the e2ee-providers repository. It does not invent cryptography, silently select a provider, or claim that unlike providers have equivalent security.',
+					'This is an early 0.x release. The core package does not itself encrypt data, and no provider is production-approved until its published assurance and audit gates pass.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Selection fails closed and explains why each provider was rejected. Applications may pin a provider ID when they need deterministic deployment rather than accepting the highest compatible assurance level.',
+				details: [],
+				title: 'Select a provider explicitly'
+			},
+			{
+				description:
+					'strict-e2ee: only verified participant devices can decrypt conversation',
+				details: [
+					'history. Losing all verified devices and exports may permanently lose history.',
+					'managed-recovery: a visibly identified recovery authority may authorize a',
+					'new verified device to replace lost device leaves. It is never enabled silently, and the authority does not receive serialized live MLS state through this API.',
+					'Sensitive agent exchange additionally declares whether a value is tool-confined, endpoint-visible, or model-visible. tool-confined is the recommended default.'
+				],
+				title: 'Explicit modes'
+			},
+			{
+				description:
+					'The 0.2.x line adds the application boundaries required around an MLS engine: device credentials, KeyPackages, membership changes, delivery, durable compare-and-set state, and an explicit recovery authority. These are contracts, not hosted services. Implementations remain in provider packages.',
+				details: [
+					"MLS deliberately does not define an application's Authentication Service or Delivery Service. AbsoluteJS keeps those dependencies visible so a cryptographic engine cannot silently become the identity authority, transport, or recovery authority. Strict E2EE never receives a RecoveryAuthority; managed recovery must identify and configure a RecoveryGrantVerifier explicitly. Recovery after state loss follows RFC 9750's rejoin-and-remove model: bind a short-lived grant to the replacement credential, add it, and remove the lost leaves in one commit.",
+					'Changing modes is not a session mutation. Call planSecurityModeTransition(), create a new conversation in the requested mode, re-add verified devices, and visibly retire the prior conversation. New conversations begin with their creator only; add every other device through addMembers() so its Welcome message cannot be accidentally discarded. Joining a Welcome requires expectedSecurityMode, and the returned session exposes the mode authenticated by provider state. Callers must reject any strict/managed mismatch instead of trusting delivery metadata.',
+					'Public TypeScript contracts use type aliases rather than interfaces so unions, intersections, and provider capability composition stay explicit.',
+					'See SECURITY.md before relying on this package for protected data.'
+				],
+				title: 'Scope'
+			},
+			{
+				description:
+					'Provider capability claims and provider certification are separate. A certification report binds the provider ID, package name, exact package version, runtime, suite, scenarios, implementation identities, vector sources, and an evidence digest. checkE2EECertification() rejects stale reports, reports for another release or runtime, and missing policy claims.',
+				details: [
+					"An independent-audit claim additionally requires an HTTPS report and SHA-256 digest, an exact package/version scope, an auditor identity, a future validity date, and zero unresolved critical or high findings. Deployments can set trustedAuditorIds; the library does not pretend that a provider's self-declaration proves reviewer independence. Any provider release or scoped engine change requires new audit evidence.",
+					'The claims deliberately distinguish shared conformance, known-answer vectors, and cross-implementation testing. Passing the MLS Working Group vectors does not by itself prove application interoperability: RFC 9750 leaves Authentication Service, Delivery Service, identity, and application framing choices to deployments.'
+				],
+				title: 'Version-bound certification'
+			}
+		],
+		repository: 'https://github.com/absolutejs/e2ee',
+		subpackages: [],
+		version: '0.8.0'
+	},
+	{
+		api: [],
+		category: 'Messaging',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command:
+					"bun run format:check && bun run typecheck && bun run test && bun run build && bun run --filter './*' verify-package",
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: "bun test scripts && bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Interchangeable implementations for @absolutejs/e2ee, organized like voice-adapters. The repository root is private; every provider is an independently versioned public package named @absolutejs/e2ee-.',
+		directory: 'e2ee-providers',
+		kind: 'monorepo',
+		name: 'E2EE Providers',
+		packageName: '@absolutejs/e2ee-providers',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'8708c7d9a5c042be1f8bbe2b45a826d6a9ccb80b3995744065d38682256cf58f',
+		readmeSamples: [
+			{
+				code: 'bun install\nbun run check:package',
+				description: 'Working example for Development.',
+				heading: 'Development',
+				language: 'bash'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Interchangeable implementations for @absolutejs/e2ee, organized like voice-adapters. The repository root is private; every provider is an independently versioned public package named @absolutejs/e2ee-.',
+				details: [
+					'Provider roles are explicit. Messaging engines, envelope implementations, key custodians, recovery authorities, and transports do not claim equivalent security merely because they share one selection API.'
+				],
+				title: 'Overview'
+			},
+			{
+				description: 'Package — Role — Status',
+				details: [
+					'@absolutejs/e2ee-mls — RFC 9420 messaging using the pure TypeScript ts-mls engine — Experimental',
+					'@absolutejs/e2ee-webcrypto — RFC 9180 single-recipient envelopes using WebCrypto-backed HPKE — Experimental',
+					'Every provider publishes a machine-readable capability and assurance manifest and runs the shared @absolutejs/e2ee/conformance checks.',
+					'Provider releases also export an exact-version certification report. Reports keep shared conformance, adversarial lifecycle coverage, official vectors, and true cross-implementation interoperability as separate claims. See CERTIFICATION.md for the threat model and audit boundary. Interoperability receipts are sanitized summaries; raw Working Group transcripts are not retained because they contain ephemeral private key material.'
+				],
+				title: 'Providers'
+			},
+			{
+				description:
+					"All providers are 0.x. Read each package's security limitations before using it. An experimental manifest is not a production recommendation.",
+				details: [],
+				title: 'Security'
+			}
+		],
+		repository: 'https://github.com/absolutejs/e2ee-providers',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/e2ee-mls',
+						symbols: [
+							{
+								description: '',
+								kind: 'export',
+								name: 'MLS_BROWSER_CERTIFICATION_SCENARIOS',
+								signature: 'MLS_BROWSER_CERTIFICATION_SCENARIOS'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'MLS_CERTIFICATION_SCENARIOS',
+								signature: 'MLS_CERTIFICATION_SCENARIOS'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'MLS_MESSAGE_VECTOR_SHA256',
+								signature: 'MLS_MESSAGE_VECTOR_SHA256'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'MLS_WORKING_GROUP_VECTOR_REVISION',
+								signature: 'MLS_WORKING_GROUP_VECTOR_REVISION'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'mlsBrowserProviderCertification',
+								signature: 'mlsBrowserProviderCertification'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'mlsProviderCertification',
+								signature: 'mlsProviderCertification'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'createMlsMessagingProvider',
+								signature: 'createMlsMessagingProvider'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'MlsMembershipAuthorization',
+								signature: 'MlsMembershipAuthorization'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'MlsMessagingProviderOptions',
+								signature: 'MlsMessagingProviderOptions'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'MlsStateProtection',
+								signature: 'MlsStateProtection'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'mlsProviderManifest',
+								signature: 'mlsProviderManifest'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/e2ee-mls/provider-manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'mlsProviderManifest',
+								signature:
+									'const mlsProviderManifest: import("@absolutejs/e2ee").E2EEProviderManifest;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/e2ee-mls/certification',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'MLS_WORKING_GROUP_VECTOR_REVISION',
+								signature:
+									'const MLS_WORKING_GROUP_VECTOR_REVISION = "cfd450286d1bfd9cd2519b95c80f9771f94a5b1a";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'MLS_MESSAGE_VECTOR_SHA256',
+								signature:
+									'const MLS_MESSAGE_VECTOR_SHA256 = "b194abe1561995223482dbad51c180146920dc2f637e74d01e07a388308791fb";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'MLS_ADAPTER_INTEROP_RECEIPT_SHA256',
+								signature:
+									'const MLS_ADAPTER_INTEROP_RECEIPT_SHA256 = "9dff8de14e42eb789420331ac57c067657a55fd204402c4df4bf2a987373917a";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'MLS_CERTIFICATION_SCENARIOS',
+								signature:
+									'const MLS_CERTIFICATION_SCENARIOS: readonly ["manifest-conformance", "official-message-wire-vector", "authenticated-context-substitution", "welcome-keypackage-single-use", "encrypted-state-tamper", "security-mode-binding", "membership-removal", "membership-replacement", "openmls-external-keypackage-admission", "openmls-welcome-join", "openmls-bidirectional-application-message", "openmls-authenticated-context-round-trip"];'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'MLS_BROWSER_CERTIFICATION_SCENARIOS',
+								signature:
+									'const MLS_BROWSER_CERTIFICATION_SCENARIOS: readonly ["browser-encrypted-group-round-trip", "browser-authenticated-context-substitution"];'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'mlsProviderCertification',
+								signature:
+									'const mlsProviderCertification: import("@absolutejs/e2ee").E2EECertificationReport;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'mlsBrowserProviderCertification',
+								signature:
+									'const mlsBrowserProviderCertification: import("@absolutejs/e2ee").E2EECertificationReport;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/e2ee-mls/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/certification.ts src/provider-manifest.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/e2ee --external '@absolutejs/e2ee/*' --external @absolutejs/manifest --external @sinclair/typebox --external ts-mls --external 'ts-mls/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Experimental RFC 9420 MLS messaging provider for @absolutejs/e2ee.',
+				name: '@absolutejs/e2ee-mls',
+				private: false,
+				publicExports: [
+					'@absolutejs/e2ee-mls',
+					'@absolutejs/e2ee-mls/provider-manifest',
+					'@absolutejs/e2ee-mls/certification',
+					'@absolutejs/e2ee-mls/manifest',
+					'@absolutejs/e2ee-mls/manifest.json'
+				],
+				readmeDigest:
+					'04a1db1f0dada86fe34a245461a0a700ded818fb90dcf5c267ee3a69f6134f70',
+				readmeSamples: [
+					{
+						code: 'import { createMlsMessagingProvider } from "@absolutejs/e2ee-mls";\n\nconst provider = await createMlsMessagingProvider({\n  authenticationService,\n  stateProtection,\n});\nconst alice = await provider.createDeviceCredential({\n  deviceId: "alice-phone",\n  identityId: "alice",\n});\nconst conversation = await provider.createConversation({\n  conversationId: crypto.randomUUID(),\n  creatorCredential: alice,\n  securityMode: "strict-e2ee",\n});',
+						description: 'Working example for Usage.',
+						heading: 'Usage',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Experimental RFC 9420 messaging provider for @absolutejs/e2ee, backed by the pure TypeScript ts-mls@2.0.0-rc.16 engine.',
+						details: [
+							'This package exercises the complete AbsoluteJS messaging boundary with real MLS messages: per-device credentials, KeyPackages, Welcome messages, encrypted application data, membership commits, self-updates, and sealed group state. It uses the mandatory-to-implement MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519 ciphersuite.',
+							'This provider is not production-approved. ts-mls has not received a formal security audit, and this adapter has not received an independent review. Read SECURITY.md.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							'The provider requires an AuthenticationService; it does not accept anonymous or self-asserted device credentials. The service issues credentials bound to the generated MLS signature public key and validates that same binding when a remote KeyPackage or membership change is processed.',
+						details: [
+							"KeyPackage directory, delivery, durable state, and recovery services remain the application's responsibility through the contracts in @absolutejs/e2ee. Strict E2EE clients must keep sealed state on participant-controlled devices. stateProtection is required and must encrypt and authenticate exported MLS state using a device-controlled key. A managed recovery authority may wrap that already-sealed result separately.",
+							'Remote add, remove, and other sensitive membership proposals fail closed unless authorizeMembershipChange explicitly approves them. Applications should bind that callback to conversation roles and the current verified device roster.'
+						],
+						title: 'Explicit application services'
+					},
+					{
+						description:
+							"Create every additional device's KeyPackage, call addMembers(), deliver its returned Welcome exactly once, and deliver the returned handshake to existing members. Authenticated message context must use the local device ID as senderId and the session's current epoch.",
+						details: [
+							'Changing between strict-e2ee and managed-recovery requires a new conversation. Never relabel or wrap an existing strict conversation in place. For state-loss recovery, use a request-bound recovery grant and replaceMembers() to add the fresh device and remove the lost leaves in one epoch. Do not restore an old serialized MLS snapshot as a second live client.'
+						],
+						title: 'Usage'
+					}
+				],
+				sourcePath: 'mls',
+				version: '0.5.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/e2ee-webcrypto',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'webcryptoProviderCertification',
+								signature:
+									'const webcryptoProviderCertification: import("@absolutejs/e2ee").E2EECertificationReport;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'WEBCRYPTO_BROWSER_CERTIFICATION_SCENARIOS',
+								signature:
+									'const WEBCRYPTO_BROWSER_CERTIFICATION_SCENARIOS: readonly ["browser-purpose-bound-round-trip", "browser-context-substitution", "browser-ciphertext-tamper", "browser-non-exportable-private-key"];'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'webcryptoBrowserProviderCertification',
+								signature:
+									'const webcryptoBrowserProviderCertification: import("@absolutejs/e2ee").E2EECertificationReport;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'webcryptoProviderManifest',
+								signature:
+									'const webcryptoProviderManifest: import("@absolutejs/e2ee").E2EEProviderManifest;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoRecipientKeyMaterial',
+								signature:
+									'type WebCryptoRecipientKeyMaterial = {\n    readonly privateKey: Readonly<CryptoKey>;\n    readonly publicKey: Readonly<CryptoKey>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoRecipientKeyPair',
+								signature:
+									'type WebCryptoRecipientKeyPair = {\n    readonly keyMaterial: WebCryptoRecipientKeyMaterial;\n    readonly publicKey: Uint8Array;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoEnvelopeProviderOptions',
+								signature:
+									'type WebCryptoEnvelopeProviderOptions = {\n    readonly allowExtractablePrivateKeys?: boolean;\n    readonly maxPlaintextBytes?: number;\n    readonly resolveRecipientPrivateKey: (keyHandle: string) => Promise<WebCryptoRecipientKeyMaterial | undefined>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'generateWebCryptoRecipientKeyPair',
+								signature:
+									'const generateWebCryptoRecipientKeyPair: (extractable?: boolean) => Promise<WebCryptoRecipientKeyPair>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoEnvelopeProvider',
+								signature:
+									'const createWebCryptoEnvelopeProvider: (options: WebCryptoEnvelopeProviderOptions) => EnvelopeProvider;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/e2ee-webcrypto/provider-manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'webcryptoProviderManifest',
+								signature:
+									'const webcryptoProviderManifest: import("@absolutejs/e2ee").E2EEProviderManifest;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/e2ee-webcrypto/certification',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'webcryptoProviderCertification',
+								signature:
+									'const webcryptoProviderCertification: import("@absolutejs/e2ee").E2EECertificationReport;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'WEBCRYPTO_BROWSER_CERTIFICATION_SCENARIOS',
+								signature:
+									'const WEBCRYPTO_BROWSER_CERTIFICATION_SCENARIOS: readonly ["browser-purpose-bound-round-trip", "browser-context-substitution", "browser-ciphertext-tamper", "browser-non-exportable-private-key"];'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'webcryptoBrowserProviderCertification',
+								signature:
+									'const webcryptoBrowserProviderCertification: import("@absolutejs/e2ee").E2EECertificationReport;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/e2ee-webcrypto/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    maxPlaintextBytes?: number;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        maxPlaintextBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							"rm -rf dist && bun build src/index.ts src/certification.ts src/provider-manifest.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/e2ee --external '@absolutejs/e2ee/*' --external @absolutejs/manifest --external @sinclair/typebox --external hpke && tsc --project tsconfig.build.json && absolute-manifest emit",
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Experimental RFC 9180 HPKE envelope provider for @absolutejs/e2ee using WebCrypto-backed primitives.',
+				name: '@absolutejs/e2ee-webcrypto',
+				private: false,
+				publicExports: [
+					'@absolutejs/e2ee-webcrypto',
+					'@absolutejs/e2ee-webcrypto/provider-manifest',
+					'@absolutejs/e2ee-webcrypto/certification',
+					'@absolutejs/e2ee-webcrypto/manifest',
+					'@absolutejs/e2ee-webcrypto/manifest.json'
+				],
+				readmeDigest:
+					'048cb4fd422a69ac82cd8cddbc03f4c1b1a94479e61063e61f024ad519f64ee2',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Experimental RFC 9180 HPKE envelope provider for @absolutejs/e2ee, using the WebCrypto-backed primitives in hpke.',
+						details: [
+							'This 0.x package has not been independently audited by AbsoluteJS. It provides isolated single-recipient envelopes, not MLS or a secure messaging protocol.',
+							'The initial suite is DHKEM(P-256, HKDF-SHA256), HKDF-SHA256, and AES-128-GCM for broad WebCrypto runtime support. The suite and wire version are explicit and authenticated context is supplied as both HPKE info and AEAD additional data.',
+							'See SECURITY.md for limitations.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'webcrypto',
+				version: '0.2.4'
+			}
+		],
+		version: null
+	},
+	{
 		api: [],
 		category: 'Data & Sync',
 		commands: [
@@ -31133,6 +38990,484 @@ export const ecosystemProjects: EcosystemProject[] = [
 				],
 				sourcePath: 'postgres',
 				version: '0.1.4'
+			}
+		],
+		version: null
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/esign',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ESignStatus',
+						signature:
+							'type ESignStatus = "draft" | "pending" | "completed" | "declined" | "cancelled" | "expired";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SignerStatus',
+						signature:
+							'type SignerStatus = "pending" | "signed" | "declined";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ESignSigner',
+						signature:
+							'type ESignSigner = {\n    id: string;\n    name: string;\n    email: string;\n    order?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SignatureField',
+						signature:
+							'type SignatureField = {\n    signerId: string;\n    documentId: string;\n    page: number;\n    x: number;\n    y: number;\n    width: number;\n    height: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ESignDocument',
+						signature:
+							'type ESignDocument = {\n    id: string;\n    name: string;\n    bytes: Uint8Array;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreateSignatureRequest',
+						signature:
+							"type CreateSignatureRequest = {\n    reference: string;\n    title: string;\n    documents: ESignDocument[];\n    signers: ESignSigner[];\n    /** Coordinates in each provider's 72-DPI document coordinate space; page is one-based. */\n    fields: SignatureField[];\n    returnUrl: string;\n    webhookUrl?: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SignatureRequest',
+						signature:
+							'type SignatureRequest = {\n    id: string;\n    provider: string;\n    reference?: string;\n    status: ESignStatus;\n    signers: {\n        id: string;\n        name: string;\n        email: string;\n        status: SignerStatus;\n        signedAt?: string;\n    }[];\n    completedAt?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SigningSession',
+						signature:
+							'type SigningSession = {\n    url: string;\n    expiresAt?: string;\n    mode: "redirect" | "embedded";\n    clientId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebhookEvent',
+						signature:
+							'type WebhookEvent = {\n    id: string;\n    requestId: string;\n    type: string;\n    occurredAt: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProviderCapabilities',
+						signature:
+							'type ProviderCapabilities = {\n    embeddedSigning: boolean;\n    orderedSigning: boolean;\n    cancellation: boolean;\n    separateAuditDownload: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ESignProvider',
+						signature:
+							'type ESignProvider = {\n    id: string;\n    capabilities: ProviderCapabilities;\n    createRequest(input: CreateSignatureRequest): Promise<SignatureRequest>;\n    getRequest(id: string): Promise<SignatureRequest>;\n    createSigningSession(input: {\n        requestId: string;\n        signerId: string;\n        returnUrl: string;\n    }): Promise<SigningSession>;\n    downloadCompleted(id: string, artifact?: "document" | "audit"): Promise<Uint8Array>;\n    cancelRequest(id: string, reason: string): Promise<void>;\n    /** A verified callback is a reconciliation hint, never proof that a document is signed. */\n    verifyWebhook(body: string, headers: Headers): WebhookEvent | null;\n    webhookAcknowledgement: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AccessTokenSource',
+						signature:
+							'type AccessTokenSource = string | (() => string | Promise<string>);'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProviderHttpOptions',
+						signature:
+							'type ProviderHttpOptions = {\n    fetch?: typeof fetch;\n    timeoutMs?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'ESignError',
+						signature:
+							'class ESignError extends Error {\n    readonly provider: string;\n    readonly code: "invalid_input" | "unauthorized" | "not_found" | "rate_limited" | "provider_error" | "unsupported" | "not_completed" | "invalid_response";\n    readonly httpStatus?: number | undefined;\n    constructor(provider: string, code: "invalid_input" | "unauthorized" | "not_found" | "rate_limited" | "provider_error" | "unsupported" | "not_completed" | "invalid_response", message: string, httpStatus?: number | undefined);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'providerToken',
+						signature:
+							'const providerToken: (source: AccessTokenSource) => Promise<string>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'requestProvider',
+						signature:
+							'const requestProvider: (provider: string, url: string, init: RequestInit, options?: ProviderHttpOptions) => Promise<Response>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateRequest',
+						signature:
+							'const validateRequest: (input: CreateSignatureRequest) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateReturnUrl',
+						signature:
+							'const validateReturnUrl: (value: string) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'secureDigestMatch',
+						signature:
+							'const secureDigestMatch: (actual: string, expected: string) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'hmacDigest',
+						signature:
+							'const hmacDigest: (secret: string, input: string, encoding: "hex" | "base64") => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'documentDigest',
+						signature:
+							'const documentDigest: (bytes: Uint8Array) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'webhookDigest',
+						signature:
+							'const webhookDigest: (body: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'reconcileSignatureRequest',
+						signature:
+							'const reconcileSignatureRequest: (provider: ESignProvider, id: string, expectedReference?: string) => Promise<SignatureRequest>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveESignProvider',
+						signature:
+							'const resolveESignProvider: (providers: readonly ESignProvider[], id: string) => ESignProvider;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OAuthTokens',
+						signature:
+							'type OAuthTokens = {\n    accessToken: string;\n    refreshToken?: string;\n    expiresAt: string;\n};'
+					},
+					{
+						description:
+							"Reuse the host's linked-provider resolver, including its ownership checks and token refresh.",
+						kind: 'value',
+						name: 'linkedESignProvider',
+						signature:
+							'const linkedESignProvider: (resolver: import("@absolutejs/linked-providers").LinkedProviderCredentialResolver, input: {\n    ownerRef: string;\n    provider: string;\n    bindingId?: string;\n}, factory: (credential: import("@absolutejs/linked-providers").ResolvedLinkedProviderCredential, token: AccessTokenSource) => ESignProvider) => Promise<ESignProvider>;'
+					}
+				]
+			}
+		],
+		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					"bun build src/index.ts --outdir dist --target node --external '@absolutejs/esign' && tsc --project tsconfig.build.json",
+				name: 'build'
+			},
+			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Provider-neutral e-signature requests, sessions, status reconciliation, and webhook contracts',
+		directory: 'esign',
+		kind: 'package',
+		name: 'E-Sign',
+		packageName: '@absolutejs/esign',
+		private: false,
+		publicExports: ['@absolutejs/esign'],
+		readmeDigest:
+			'd02962adaa3c2703313179a6068c76ef3986768322bbf608de723bdd7ff448eb',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral electronic signing for Node.js and Bun. Own agreement versions, identities, permissions, persistence, and billing in your application; swap providers through the same signing contract.',
+				details: [
+					'The initial adapters are @absolutejs/esign-docusign and @absolutejs/esign-dropbox-sign. Install only the adapters you use. This package has no provider SDK, database, UI framework, or implicit network initialization.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'createRequest: PDFs, signer identities, signature field placement, and an application reference.',
+				details: [
+					'getRequest: current provider state and individual signer status.',
+					'createSigningSession: short-lived access for a server-authorized signer already on that request.',
+					'downloadCompleted: completed PDF; separate audit certificate when supported.',
+					'cancelRequest: cancel the provider request.',
+					"verifyWebhook: verify the provider's authentication and return a reconciliation hint.",
+					'capabilities: embedded signing, ordered signing, cancellation, and separate audit downloads.',
+					'Signature fields use one-based pages and provider document coordinates (72 DPI). Document/signer IDs are local identifiers; persist the provider signer IDs returned by createRequest. Always authorize by your saved participant-to-provider-signer mapping, never a caller-supplied email or signer ID.'
+				],
+				title: 'Contract'
+			},
+			{
+				description:
+					'linkedESignProvider(resolver, { ownerRef, provider, bindingId }, factory) accepts the existing @absolutejs/linked-providers resolver. It resolves the binding for that owner and supplies a fresh token callback to the adapter. The host stores and encrypts grants, refreshes tokens, and handles revocation. Provider OAuth helpers are also exported by each adapter; their caller must generate unpredictable state, bind it to the signed-in account, validate and consume it once, and persist tokens securely.',
+				details: [],
+				title: 'Account connections'
+			},
+			{
+				description:
+					'Save an immutable document revision and SHA-256 digest (documentDigest) before sending.',
+				details: [
+					'Persist a creation operation before calling the provider. Do not automatically retry an ambiguous POST timeout; reconcile the operation before allowing another send.',
+					'Save provider request and signer IDs against that revision. Do not change providers after a request is sent; cancel and create a new revision instead.',
+					'Check ownership and recipient role before issuing a signing session.',
+					'Verify callback authentication, deduplicate callback IDs, and call reconcileSignatureRequest using the saved request ID and reference. Callback bodies and browser return URLs never establish completion.',
+					'Retrieve and persist the completed PDF and audit artifact when available. A completed request can precede PDF generation; retry artifact retrieval separately without re-sending.',
+					"Dropbox Sign's event hash authenticates event time and type, not every payload field. Re-fetching the saved request is mandatory. Preserve terminal state against out-of-order callbacks; an interrupted refresh must not erase a known completed state.",
+					"HTTP errors exclude vendor response bodies and access tokens. Creation POSTs are never automatically retried. All HTTP requests have bounded timeouts. Callback routes should enforce body-size limits and return each adapter's webhookAcknowledgement after durable processing."
+				],
+				title: 'Durable workflow'
+			},
+			{
+				description:
+					'bun run build, bun run typecheck; adapter contract tests live in ../esign-adapters/test. Tests inject fetch and make no external requests. Live account and sandbox acceptance tests are required before enabling a provider for real agreements.',
+				details: [],
+				title: 'Development'
+			}
+		],
+		repository: 'https://github.com/absolutejs/esign',
+		subpackages: [],
+		version: '0.0.1'
+	},
+	{
+		api: [],
+		category: 'Commerce & Growth',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command: 'bun test test',
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Independent packages implementing @absolutejs/esign. Mirrors the voice / voice-adapters arrangement.',
+		directory: 'esign-adapters',
+		kind: 'monorepo',
+		name: 'E-Sign Adapters',
+		packageName: '@absolutejs/esign-adapters',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'456e04419e0a715b9e0bac7578c263a1a3b03e174d797ef7c34820813eff2334',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Independent packages implementing @absolutejs/esign. Mirrors the voice / voice-adapters arrangement.',
+				details: [
+					'Package — Signing session — Separate audit file — Callback configuration',
+					'@absolutejs/esign-docusign — Redirect to embedded recipient view — Yes — Connect HMAC, JSON events; per-envelope URL supported',
+					'@absolutejs/esign-dropbox-sign — Embedded session via the provider client — Audit included in completed PDF — API app callback URL',
+					'Run bun install to install the published @absolutejs/esign core, then run bun run build. Run bun test test for mocked provider-contract tests. The implementation is tested without credentials; no live signing requests have been sent.',
+					'Provider account connection and request creation are separate: users connect their own accounts through OAuth, then the application authorizes which party can send or sign each agreement. Signers do not need an onSpark account merely to participate.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/esign-adapters',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/esign-docusign',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'docusign',
+								signature:
+									'const docusign: (options: DocuSignOptions) => ESignProvider;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DocuSignOAuthOptions',
+								signature:
+									'type DocuSignOAuthOptions = ProviderHttpOptions & {\n    clientId: string;\n    clientSecret: string;\n    environment: "sandbox" | "production";\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'docusignOAuth',
+								signature:
+									'const docusignOAuth: (options: DocuSignOAuthOptions) => {\n    authorizationUrl(input: {\n        redirectUri: string;\n        state: string;\n    }): string;\n    exchangeCode(input: {\n        code: string;\n        redirectUri: string;\n    }): Promise<OAuthTokens>;\n    refresh(refreshToken: string): Promise<OAuthTokens>;\n    accounts(accessToken: string): Promise<{\n        sub: string;\n        accounts: {\n            account_id: string;\n            account_name: string;\n            is_default: boolean;\n            base_uri: string;\n        }[];\n    }>;\n};'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							"bun build src/index.ts --outdir dist --target node --external '@absolutejs/esign' && tsc --project tsconfig.build.json",
+						name: 'build'
+					},
+					{
+						command: 'absolute-changelog check',
+						name: 'check:package'
+					},
+					{
+						command: 'bun test ../test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description: 'DocuSign adapter for @absolutejs/esign',
+				name: '@absolutejs/esign-docusign',
+				private: false,
+				publicExports: ['@absolutejs/esign-docusign'],
+				readmeDigest:
+					'8bd9501236080e388ce0ab4737e6b5f5f942aeff1724b854c937766e5063853d',
+				readmeSamples: [
+					{
+						code: "import { docusign } from '@absolutejs/esign-docusign';\nconst provider = docusign({\n  accountId: connectedAccount.accountId,\n  baseUri: connectedAccount.baseUri,\n  accessToken: () => tokenResolver.getFreshToken(),\n  hmacSecrets: [process.env.DOCUSIGN_CONNECT_HMAC_SECRET!],\n});",
+						description: '# @absolutejs/esign-docusign',
+						heading: '@absolutejs/esign-docusign quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'The base URI must be the HTTPS base_uri for the selected account returned by OAuth /userinfo, not a user-entered API URL. Sandbox uses https://account-d.docusign.com; production OAuth uses https://account.docusign.com. docusignOAuth provides authorization URL construction, code exchange, refresh, and account discovery. The application must validate OAuth state and authorize the selected account.',
+						details: [
+							'Use a DocuSign integration key with an approved redirect URI and configure Connect HMAC secrets. Pass the exact raw JSON callback body and headers to verifyWebhook; key rotation is supported by passing multiple secrets. Reconcile the saved envelope afterward. authenticationMethod: none records that the application provides recipient authorization; it does not add provider identity verification.',
+							'Signature requests use embedded recipients. Open createSigningSession().url as a top-level navigation, then reconcile after returning. Both combined PDF and completion certificate downloads require a completed envelope.',
+							'References: Create envelope, recipient view, Connect HMAC.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'docusign',
+				version: '0.0.1'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/esign-dropbox-sign',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'dropboxSign',
+								signature:
+									'const dropboxSign: (options: DropboxSignOptions) => ESignProvider;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DropboxSignOAuthOptions',
+								signature:
+									'type DropboxSignOAuthOptions = ProviderHttpOptions & {\n    clientId: string;\n    clientSecret: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'dropboxSignOAuth',
+								signature:
+									'const dropboxSignOAuth: (options: DropboxSignOAuthOptions) => {\n    authorizationUrl(input: {\n        redirectUri: string;\n        state: string;\n    }): string;\n    exchangeCode(input: {\n        code: string;\n        state: string;\n    }): Promise<OAuthTokens>;\n    refresh(refreshToken: string): Promise<OAuthTokens>;\n    account(accessToken: string): Promise<{\n        account_id: string;\n        email_address: string;\n    }>;\n};'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							"bun build src/index.ts --outdir dist --target node --external '@absolutejs/esign' && tsc --project tsconfig.build.json",
+						name: 'build'
+					},
+					{
+						command: 'absolute-changelog check',
+						name: 'check:package'
+					},
+					{
+						command: 'bun test ../test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description: 'Dropbox Sign adapter for @absolutejs/esign',
+				name: '@absolutejs/esign-dropbox-sign',
+				private: false,
+				publicExports: ['@absolutejs/esign-dropbox-sign'],
+				readmeDigest:
+					'7a90f9b6b28dd7801a542b4fb98115e78557d2b471c2e3c2e98f3d9894d1a3a8',
+				readmeSamples: [
+					{
+						code: "import { dropboxSign } from '@absolutejs/esign-dropbox-sign';\nconst provider = dropboxSign({\n  clientId: process.env.DROPBOX_SIGN_CLIENT_ID!,\n  accessToken: () => tokenResolver.getFreshToken(),\n  webhookApiKey: process.env.DROPBOX_SIGN_WEBHOOK_API_KEY!,\n  testMode: true,\n});",
+						description: '# @absolutejs/esign-dropbox-sign',
+						heading: '@absolutejs/esign-dropbox-sign quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Supports OAuth bearer tokens or an explicitly configured API key. OAuth tokens are distinct from the API key used to verify callback event hashes. dropboxSignOAuth provides authorization URLs, code exchange, refresh, and account discovery. The host must validate OAuth state and persist grants securely.',
+						details: [
+							"Configure the API app's callback URL and allowed embedded domain. App approval is required for production embedded/OAuth use. Keep testMode: true until the app is approved and live verification is complete. Test-mode requests are not production signatures.",
+							'Use the official hellosign-embedded browser client to open the returned signing URL with clientId; honor its documented domain checks and configured return flow. Do not treat a browser sign or close event as completion. Reconcile the saved request with the backend.',
+							'Dropbox sends callbacks as multipart form data. Pass the exact json field to verifyWebhook. Return Hello API Event Received after processing. The HMAC covers event time/type only; always fetch the saved request again before updating agreement state. Completed-document downloads contain the audit trail; a separate audit endpoint is not offered by this adapter.',
+							'References: Embedded signing, callback verification, OAuth, field placement.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'dropbox-sign',
+				version: '0.0.1'
 			}
 		],
 		version: null
@@ -34520,6 +42855,127 @@ export const ecosystemProjects: EcosystemProject[] = [
 	{
 		api: [
 			{
+				entryPoint: '@absolutejs/hcss',
+				symbols: [
+					{
+						description:
+							'HCSS HeavyJob read API. Raw provider units are intentionally preserved.',
+						kind: 'class',
+						name: 'HcssError',
+						signature:
+							"class HcssError extends Error {\n    readonly code: 'INVALID_INPUT' | 'INVALID_RESPONSE' | 'UNAVAILABLE' | 'UNAUTHORIZED' | 'FORBIDDEN' | 'RATE_LIMITED' | 'LIMIT_EXCEEDED';\n    readonly httpStatus?: number | undefined;\n    constructor(code: 'INVALID_INPUT' | 'INVALID_RESPONSE' | 'UNAVAILABLE' | 'UNAUTHORIZED' | 'FORBIDDEN' | 'RATE_LIMITED' | 'LIMIT_EXCEEDED', httpStatus?: number | undefined);\n}"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BusinessUnit',
+						signature:
+							'type BusinessUnit = ReturnType<typeof businessUnit>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Job',
+						signature: 'type Job = ReturnType<typeof job>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CostCode',
+						signature:
+							'type CostCode = ReturnType<typeof costCode>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'JobMaterial',
+						signature:
+							'type JobMaterial = ReturnType<typeof jobMaterial>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MaterialBudget',
+						signature:
+							'type MaterialBudget = ReturnType<typeof materialBudget>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HcssOptions',
+						signature:
+							'type HcssOptions = {\n    clientId: string;\n    clientSecret: string;\n    /** Injectable for testing; requests always target the documented HCSS host. */\n    fetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n    timeoutMs?: number;\n    maxResponseBytes?: number;\n    maxItems?: number;\n    maxPages?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'createHcssClient',
+						signature:
+							'function createHcssClient(options: HcssOptions): {\n    businessUnits: () => Promise<{\n        id: string;\n        code: string;\n        description: string | null;\n    }[]>;\n    jobs: (businessUnitId: string) => Promise<{\n        businessUnitId: string;\n        status: string;\n        isDeleted: boolean | null;\n        id: string;\n        code: string;\n        description: string | null;\n    }[]>;\n    jobMaterials: (jobId: string) => Promise<{\n        jobId: string;\n        materialId: string;\n        unitOfMeasure: string | null;\n        unitCost: number | null;\n        isDeleted: boolean | null;\n        isDiscontinued: boolean | null;\n        id: string;\n        code: string;\n        description: string | null;\n    }[]>;\n    materialBudgets: (jobId: string) => Promise<{\n        id: string;\n        costCodeId: string;\n        jobMaterialId: string;\n        purchaseOrderDetailId: string;\n        purchaseOrderId: string | null;\n        quantity: number | null;\n        unitOfMeasure: string | null;\n        unitCost: number | null;\n        status: string | null;\n        isDeleted: boolean | null;\n    }[]>;\n    costCodes: (jobId: string) => Promise<{\n        jobId: string;\n        busi'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HcssClient',
+						signature:
+							'type HcssClient = ReturnType<typeof createHcssClient>;'
+					}
+				]
+			}
+		],
+		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts --outdir dist --target=bun && tsc -p tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Typed HCSS HeavyJob read client with client credentials, bounded transport, and validated pagination.',
+		directory: 'hcss',
+		kind: 'package',
+		name: 'HCSS',
+		packageName: '@absolutejs/hcss',
+		private: false,
+		publicExports: ['@absolutejs/hcss'],
+		readmeDigest:
+			'5bf17929eb5a5683cf0680e52e1cd0c6545045cd67bc4ef98329fb3e7c52ba6c',
+		readmeSamples: [
+			{
+				code: "import { createHcssClient } from '@absolutejs/hcss';\nconst hcss = createHcssClient({ clientId: process.env.HCSS_CLIENT_ID!, clientSecret: process.env.HCSS_CLIENT_SECRET! });\nconst units = await hcss.businessUnits();\nconst jobs = await hcss.jobs(units[0]!.id);",
+				description: '# @absolutejs/hcss',
+				heading: '@absolutejs/hcss quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Read-only HeavyJob client for Bun / fetch-compatible runtimes. No Dirt Tracker business rules.',
+				details: [
+					'Supports business units, jobs, v2 cursor-paginated cost codes, job materials, and material advanced budgets. Uses only heavyjob:read. Tokens are cached in memory, with concurrent acquisition coalesced. HTTP bodies, requests, pagination and item counts are bounded; redirects are rejected; errors never include credentials or provider bodies. No automatic retries. A failed or truncated read never returns a partial list. Create a client per credential set. Do not expose it to browsers.',
+					'HCSS sandbox is a separate company credential context, not an assumed different API hostname. The caller must establish the correct company and authorization. Unknown units are preserved verbatim. Missing amounts and flags remain null, never zero/false. Budget IDs identify cost-code/material/purchase-order-detail relationships. Unknown response fields are discarded. This initial release has contract tests; live sandbox validation is pending access. No write endpoints are provided.',
+					'Sources: credentials, business units, jobs, cost codes, materials, budgets.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/hcss',
+		subpackages: [],
+		version: '0.1.0'
+	},
+	{
+		api: [
+			{
 				entryPoint: '@absolutejs/health',
 				symbols: [
 					{
@@ -35024,6 +43480,287 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/hotkeys',
 		subpackages: [],
 		version: '0.1.1'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/http',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpRuntime',
+						signature:
+							"type AbsoluteHttpRuntime = 'native' | 'ssr' | 'test' | 'web';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpFetch',
+						signature:
+							'type AbsoluteHttpFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpTransport',
+						signature:
+							'type AbsoluteHttpTransport = {\n    /** The only origin that receives requests through this transport. */\n    origin: string;\n    /** Provider fetch. Native providers inject renewable credentials internally. */\n    fetch: AbsoluteHttpFetch;\n    runtime: AbsoluteHttpRuntime;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpErrorCode',
+						signature:
+							"type AbsoluteHttpErrorCode = 'aborted' | 'body' | 'http' | 'network' | 'not-configured' | 'origin' | 'response';"
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'AbsoluteHttpError',
+						signature:
+							'class AbsoluteHttpError extends Error {\n    readonly code: AbsoluteHttpErrorCode;\n    readonly cause: unknown;\n    readonly status: number | undefined;\n    readonly url: string | undefined;\n    constructor(code: AbsoluteHttpErrorCode, message: string, options?: {\n        cause?: unknown;\n        status?: number;\n        url?: string;\n    });\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpRequestOptions',
+						signature:
+							"type AbsoluteHttpRequestOptions = Omit<RequestInit, 'credentials' | 'redirect'>;"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpJsonRequestOptions',
+						signature:
+							"type AbsoluteHttpJsonRequestOptions = Omit<AbsoluteHttpRequestOptions, 'body'> & {\n    body?: unknown;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpClientOptions',
+						signature:
+							'type AbsoluteHttpClientOptions = {\n    transport?: AbsoluteHttpTransport;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpClient',
+						signature:
+							'type AbsoluteHttpClient = {\n    delete<T = unknown>(target: string | URL, options?: AbsoluteHttpJsonRequestOptions): Promise<T>;\n    fetch(input: RequestInfo | URL, init?: AbsoluteHttpRequestOptions): Promise<Response>;\n    get<T = unknown>(target: string | URL, options?: AbsoluteHttpRequestOptions): Promise<T>;\n    json<T = unknown>(target: string | URL, options?: AbsoluteHttpRequestOptions): Promise<T>;\n    origin(): string;\n    patch<T = unknown>(target: string | URL, body?: unknown, options?: AbsoluteHttpRequestOptions): Promise<T>;\n    post<T = unknown>(target: string | URL, body?: unknown, options?: AbsoluteHttpRequestOptions): Promise<T>;\n    put<T = unknown>(target: string | URL, body?: unknown, options?: AbsoluteHttpRequestOptions): Promise<T>;\n    request(target: string | URL, options?: AbsoluteHttpRequestOptions): Promise<Response>;\n    text(target: string | URL, options?: AbsoluteHttpRequestOptions): Promise<string>;\n};'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAbsoluteHttpClient',
+						signature: 'createAbsoluteHttpClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAbsoluteHttpTransport',
+						signature: 'createAbsoluteHttpTransport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'http',
+						signature: 'http'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'installAbsoluteHttpTransport',
+						signature: 'installAbsoluteHttpTransport'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/http/conformance',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpConformanceHarness',
+						signature:
+							'type AbsoluteHttpConformanceHarness = {\n    inspect(request: Request): Promise<void> | void;\n    transport: AbsoluteHttpTransport;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'inspectAbsoluteHttpConformance',
+						signature:
+							'const inspectAbsoluteHttpConformance: (harness: AbsoluteHttpConformanceHarness) => Promise<string[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'assertAbsoluteHttpConformance',
+						signature:
+							'const assertAbsoluteHttpConformance: (harness: AbsoluteHttpConformanceHarness) => Promise<void>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/http/runtime',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'getAbsoluteHttpTransport',
+						signature:
+							'const getAbsoluteHttpTransport: () => AbsoluteHttpTransport;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'installAbsoluteHttpTransport',
+						signature:
+							'const installAbsoluteHttpTransport: (transport: AbsoluteHttpTransport) => () => void;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/http/ssr',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSsrHttpTransport',
+						signature: 'createSsrHttpTransport'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/http/testing',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteHttpTestRequest',
+						signature:
+							'type AbsoluteHttpTestRequest = {\n    request: Request;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createTestHttpTransport',
+						signature:
+							'const createTestHttpTransport: (options: {\n    handler: (input: AbsoluteHttpTestRequest) => Promise<Response> | Response;\n    origin?: string;\n}) => import("./contracts").AbsoluteHttpTransport;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/http/web',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWebHttpTransport',
+						signature: 'createWebHttpTransport'
+					}
+				]
+			}
+		],
+		category: 'Data & Sync',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts --root src --outdir dist --target=browser --sourcemap && bun build src/conformance.ts --root src --outdir dist --target=browser --sourcemap && bun build src/runtime.ts --root src --outdir dist --target=browser --sourcemap && bun build src/ssr.ts --root src --outdir dist --target=browser --sourcemap && bun build src/testing.ts --root src --outdir dist --target=browser --sourcemap && bun build src/web.ts --root src --outdir dist --target=browser --sourcemap && tsc --emitDeclarationOnly -p tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun test && bun run build && bun run verify:dist',
+				name: 'check'
+			},
+			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write .',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Origin-locked, authentication-aware HTTP transport for AbsoluteJS applications',
+		directory: 'http',
+		kind: 'package',
+		name: 'HTTP',
+		packageName: '@absolutejs/http',
+		private: false,
+		publicExports: [
+			'@absolutejs/http',
+			'@absolutejs/http/conformance',
+			'@absolutejs/http/runtime',
+			'@absolutejs/http/ssr',
+			'@absolutejs/http/testing',
+			'@absolutejs/http/web'
+		],
+		readmeDigest:
+			'b975279d56d27d279e65a023599a82310b1bdf38dea2968bc7188c4e81a2c3e9',
+		readmeSamples: [
+			{
+				code: "import { http } from '@absolutejs/http';\n\nconst orders = await http.get<Order[]>('/api/orders');\nawait http.post('/api/orders', { sku: 'absolute-shirt', quantity: 1 });",
+				description: '# @absolutejs/http',
+				heading: '@absolutejs/http quick start',
+				language: 'typescript'
+			},
+			{
+				code: "import { createAbsoluteHttpClient } from '@absolutejs/http';\nimport { createSsrHttpTransport } from '@absolutejs/http/ssr';\n\nconst http = createAbsoluteHttpClient({\n\ttransport: createSsrHttpTransport({\n\t\torigin: 'https://app.example.com'\n\t})\n});",
+				description:
+					'SSR code must install or construct a request-scoped transport rather than guessing a public origin:',
+				heading: 'Explicit transports',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral, origin-locked HTTP for AbsoluteJS applications.',
+				details: [
+					"Application code stays the same across browser, PWA, and Capacitor builds. The browser transport uses same-origin HTTP-only cookies. AbsoluteJS installs the Capacitor transport with the native Auth client's renewable bearer credential; tokens never enter page code."
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Relative URLs resolve against one configured application origin.',
+				details: [
+					'Absolute URLs must match that exact origin.',
+					'HTTPS is required outside loopback development.',
+					'Application-provided Authorization, Cookie, and Proxy-Authorization',
+					'headers are rejected. The runtime provider owns credentials.',
+					'Redirect following is disabled for trusted requests, preventing a server',
+					'redirect from becoming a credential or request-body forwarding channel.',
+					'HTTP errors expose status and URL but do not automatically copy a private',
+					'response body into an exception or diagnostic.',
+					'Use http.request() when you need a raw Response, http.text() for text, and http.json() or the method helpers for JSON. @absolutejs/sync remains the durable local-first API; ordinary HTTP is connected-first.',
+					'Type parameters describe the decoded result at the call site. For end-to-end route inference, pass http.fetch into the Elysia Eden client used by your application so Eden retains the server route types while AbsoluteJS owns the runtime transport.'
+				],
+				title: 'Security contract'
+			},
+			{
+				description:
+					'SSR code must install or construct a request-scoped transport rather than guessing a public origin:',
+				details: [
+					'Tests can use createTestHttpTransport() from @absolutejs/http/testing.'
+				],
+				title: 'Explicit transports'
+			}
+		],
+		repository: 'https://github.com/absolutejs/http',
+		subpackages: [],
+		version: '0.0.1'
 	},
 	{
 		api: [
@@ -35870,6 +44607,740 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/isolated-jsc',
 		subpackages: [],
 		version: '0.12.4'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/key-transparency',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'keyTransparencyLabelDigest',
+						signature:
+							'const keyTransparencyLabelDigest: (label: KeyTransparencyLabel) => Promise<string>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'keyTransparencyValueDigest',
+						signature:
+							'const keyTransparencyValueDigest: (value: Uint8Array) => Promise<string>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMemoryKeyTransparencyViewStore',
+						signature:
+							'const createMemoryKeyTransparencyViewStore: () => KeyTransparencyViewStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createKeyTransparencyClient',
+						signature:
+							'const createKeyTransparencyClient: (options: {\n    readonly clockSkewMs?: number;\n    readonly maxEvidenceAgeMs?: number;\n    readonly now?: () => number;\n    readonly provider: KeyTransparencyProvider;\n    readonly store: KeyTransparencyViewStore;\n}) => KeyTransparencyClient;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'KEY_TRANSPARENCY_CERTIFICATION_CONTRACT',
+						signature:
+							'const KEY_TRANSPARENCY_CERTIFICATION_CONTRACT: 1;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'KEY_TRANSPARENCY_CERTIFICATION_SUITE',
+						signature:
+							'const KEY_TRANSPARENCY_CERTIFICATION_SUITE: "absolutejs-key-transparency-certification/1";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationClaim',
+						signature:
+							'type KeyTransparencyCertificationClaim = "adversarial-lifecycle" | "cross-implementation" | "independent-audit" | "official-vectors" | "provider-conformance" | "runtime-browser" | "runtime-bun" | "runtime-node" | "split-view-drill";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationImplementation',
+						signature:
+							'type KeyTransparencyCertificationImplementation = {\n    readonly name: string;\n    readonly version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationVectorEvidence',
+						signature:
+							'type KeyTransparencyCertificationVectorEvidence = {\n    readonly digestSha256: string;\n    readonly sourceUrl: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationAuditEvidence',
+						signature:
+							'type KeyTransparencyCertificationAuditEvidence = {\n    readonly digestSha256: string;\n    readonly reportUrl: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationReport',
+						signature:
+							'type KeyTransparencyCertificationReport = {\n    readonly audits: readonly KeyTransparencyCertificationAuditEvidence[];\n    readonly claims: readonly KeyTransparencyCertificationClaim[];\n    readonly completedAt: string;\n    readonly contract: typeof KEY_TRANSPARENCY_CERTIFICATION_CONTRACT;\n    readonly evidenceDigestSha256: string;\n    readonly implementations: readonly KeyTransparencyCertificationImplementation[];\n    readonly protocolRevision: string;\n    readonly provider: {\n        readonly id: string;\n        readonly packageName: KeyTransparencyProviderManifest["packageName"];\n        readonly version: string;\n    };\n    readonly runtime: KeyTransparencyRuntime;\n    readonly scenarios: readonly string[];\n    readonly suite: typeof KEY_TRANSPARENCY_CERTIFICATION_SUITE;\n    readonly vectors: readonly KeyTransparencyCertificationVectorEvidence[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationPolicy',
+						signature:
+							'type KeyTransparencyCertificationPolicy = {\n    readonly manifest: KeyTransparencyProviderManifest;\n    readonly maximumAgeMs: number;\n    readonly now?: Date;\n    readonly requiredClaims: readonly KeyTransparencyCertificationClaim[];\n    readonly runtime: KeyTransparencyRuntime;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationResult',
+						signature:
+							'type KeyTransparencyCertificationResult = {\n    readonly issues: readonly string[];\n    readonly passed: boolean;\n    readonly report: KeyTransparencyCertificationReport;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'defineKeyTransparencyCertificationReport',
+						signature:
+							'const defineKeyTransparencyCertificationReport: (report: KeyTransparencyCertificationReport) => KeyTransparencyCertificationReport;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'checkKeyTransparencyCertification',
+						signature:
+							'const checkKeyTransparencyCertification: (report: KeyTransparencyCertificationReport, policy: KeyTransparencyCertificationPolicy) => KeyTransparencyCertificationResult;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyProviderConformanceResult',
+						signature:
+							'type KeyTransparencyProviderConformanceResult = {\n    readonly issues: readonly string[];\n    readonly passed: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'checkKeyTransparencyProviderConformance',
+						signature:
+							'const checkKeyTransparencyProviderConformance: (options: {\n    readonly createProvider: () => KeyTransparencyProvider | Promise<KeyTransparencyProvider>;\n    readonly fixtureLabel: Uint8Array;\n    readonly now?: () => number;\n}) => Promise<KeyTransparencyProviderConformanceResult>;'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'KeyTransparencyError',
+						signature:
+							'class KeyTransparencyError extends Error {\n    readonly code: "configuration" | "evidence-invalid" | "fork-detected" | "state-conflict";\n    constructor(code: KeyTransparencyError["code"], message: string);\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'KeyTransparencyProviderSelectionError',
+						signature:
+							'class KeyTransparencyProviderSelectionError extends Error {\n    readonly rejected: Readonly<Record<string, readonly string[]>>;\n    constructor(rejected: Readonly<Record<string, readonly string[]>>);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'defineKeyTransparencyProviderManifest',
+						signature:
+							'const defineKeyTransparencyProviderManifest: (manifest: KeyTransparencyProviderManifest) => KeyTransparencyProviderManifest;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'explainKeyTransparencyProviderCompatibility',
+						signature:
+							'const explainKeyTransparencyProviderCompatibility: (manifest: KeyTransparencyProviderManifest, requirements: KeyTransparencyProviderRequirements) => KeyTransparencyProviderCompatibility;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'selectKeyTransparencyProvider',
+						signature:
+							'const selectKeyTransparencyProvider: <Provider extends KeyTransparencyProvider>(providers: readonly Provider[], requirements: KeyTransparencyProviderRequirements) => Provider;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'KEY_TRANSPARENCY_ARCHITECTURE_REVISION',
+						signature:
+							'const KEY_TRANSPARENCY_ARCHITECTURE_REVISION: "draft-ietf-keytrans-architecture-09";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'KEY_TRANSPARENCY_PROTOCOL_REVISION',
+						signature:
+							'const KEY_TRANSPARENCY_PROTOCOL_REVISION: "draft-ietf-keytrans-protocol-05";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'KEY_TRANSPARENCY_PROVIDER_CONTRACT',
+						signature:
+							'const KEY_TRANSPARENCY_PROVIDER_CONTRACT: 1;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyAssurance',
+						signature:
+							'type KeyTransparencyAssurance = "audited" | "experimental" | "reviewed";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCostModel',
+						signature:
+							'type KeyTransparencyCostModel = "byo" | "free" | "paid-paas";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyRuntime',
+						signature:
+							'type KeyTransparencyRuntime = "browser" | "bun" | "capacitor-android" | "capacitor-ios" | "node";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyRole',
+						signature:
+							'type KeyTransparencyRole = "auditor" | "client" | "log" | "monitor";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyProviderSecurity',
+						signature:
+							'type KeyTransparencyProviderSecurity = {\n    readonly assurance: KeyTransparencyAssurance;\n    readonly auditUrls?: readonly string[];\n    readonly contactMonitoring: boolean;\n    readonly independentlyOperatedAuditor: boolean;\n    readonly ownerMonitoring: boolean;\n    readonly privateLookups: boolean;\n    readonly splitViewDetection: boolean;\n    readonly thirdPartyAuditing: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyProviderManifest',
+						signature:
+							'type KeyTransparencyProviderManifest = {\n    readonly contract: typeof KEY_TRANSPARENCY_PROVIDER_CONTRACT;\n    readonly costModel: KeyTransparencyCostModel;\n    readonly description: string;\n    readonly id: string;\n    readonly logId: string;\n    readonly packageName: `@absolutejs/key-transparency-${string}`;\n    readonly protocolRevision: string;\n    readonly roles: readonly KeyTransparencyRole[];\n    readonly runtimes: readonly KeyTransparencyRuntime[];\n    readonly security: KeyTransparencyProviderSecurity;\n    readonly version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyProviderRequirements',
+						signature:
+							'type KeyTransparencyProviderRequirements = {\n    readonly minimumAssurance?: KeyTransparencyAssurance;\n    readonly pinnedProviderId?: string;\n    readonly protocolRevision: string;\n    readonly requireContactMonitoring?: boolean;\n    readonly requireIndependentAuditor?: boolean;\n    readonly requireOwnerMonitoring?: boolean;\n    readonly requirePrivateLookups?: boolean;\n    readonly requireSplitViewDetection?: boolean;\n    readonly requireThirdPartyAuditing?: boolean;\n    readonly roles: readonly KeyTransparencyRole[];\n    readonly runtime: KeyTransparencyRuntime;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyProviderCompatibility',
+						signature:
+							'type KeyTransparencyProviderCompatibility = {\n    readonly compatible: boolean;\n    readonly reasons: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyLabel',
+						signature:
+							'type KeyTransparencyLabel = {\n    /** Opaque, application-derived label bytes. Do not pass a raw email address. */\n    readonly bytes: Uint8Array;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyTreeHead',
+						signature:
+							'type KeyTransparencyTreeHead = {\n    readonly logId: string;\n    readonly rootHash: Uint8Array;\n    readonly signedTreeHead: Uint8Array;\n    readonly timestamp: number;\n    readonly treeSize: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyVerifiedView',
+						signature:
+							'type KeyTransparencyVerifiedView = {\n    readonly fullTreeHead: Uint8Array;\n    readonly head: KeyTransparencyTreeHead;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyStoredView',
+						signature:
+							'type KeyTransparencyStoredView = {\n    readonly revision: number;\n    readonly view: KeyTransparencyVerifiedView;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyEvidenceOperation',
+						signature:
+							'type KeyTransparencyEvidenceOperation = "contact-monitor" | "owner-monitor" | "search" | "update";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyAuditorReceipt',
+						signature:
+							'type KeyTransparencyAuditorReceipt = {\n    readonly auditorId: string;\n    readonly signature: Uint8Array;\n    readonly treeHeadHash: string;\n    readonly verifiedAt: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyEvidence',
+						signature:
+							'type KeyTransparencyEvidence = {\n    readonly auditorReceipts: readonly KeyTransparencyAuditorReceipt[];\n    readonly operation: KeyTransparencyEvidenceOperation;\n    readonly protocolRevision: string;\n    readonly providerId: string;\n    readonly subjectDigests: readonly string[];\n    readonly treeHeadHash: string;\n    readonly verifiedAt: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencySearchResult',
+						signature:
+							'type KeyTransparencySearchResult = {\n    readonly evidence: KeyTransparencyEvidence;\n    readonly value?: Uint8Array;\n    readonly version?: number;\n    readonly view: KeyTransparencyVerifiedView;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyUpdateResult',
+						signature:
+							'type KeyTransparencyUpdateResult = {\n    readonly evidence: KeyTransparencyEvidence;\n    readonly valueDigest: string;\n    readonly version: number;\n    readonly view: KeyTransparencyVerifiedView;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyMonitoredChange',
+						signature:
+							'type KeyTransparencyMonitoredChange = {\n    readonly currentValueDigest?: string;\n    readonly labelDigest: string;\n    readonly previousValueDigest?: string;\n    readonly version: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyMonitorResult',
+						signature:
+							'type KeyTransparencyMonitorResult = {\n    readonly changes: readonly KeyTransparencyMonitoredChange[];\n    readonly evidence: KeyTransparencyEvidence;\n    readonly status: "consistent" | "fork-detected";\n    readonly view: KeyTransparencyVerifiedView;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyProvider',
+						signature:
+							'type KeyTransparencyProvider = {\n    readonly manifest: KeyTransparencyProviderManifest;\n    readonly monitor: (input: {\n        readonly labels: readonly KeyTransparencyLabel[];\n        readonly mode: "contact" | "owner";\n        readonly priorView?: KeyTransparencyVerifiedView;\n    }) => Promise<KeyTransparencyMonitorResult>;\n    readonly search: (input: {\n        readonly label: KeyTransparencyLabel;\n        readonly priorView?: KeyTransparencyVerifiedView;\n    }) => Promise<KeyTransparencySearchResult>;\n    readonly update: (input: {\n        readonly authorization: Uint8Array;\n        readonly label: KeyTransparencyLabel;\n        readonly priorView?: KeyTransparencyVerifiedView;\n        readonly value: Uint8Array;\n    }) => Promise<KeyTransparencyUpdateResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyViewStore',
+						signature:
+							'type KeyTransparencyViewStore = {\n    readonly load: (logId: string) => Promise<KeyTransparencyStoredView | undefined>;\n    readonly save: (input: {\n        readonly expectedRevision?: number;\n        readonly state: KeyTransparencyStoredView;\n    }) => Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyClient',
+						signature:
+							'type KeyTransparencyClient = {\n    readonly monitorContacts: (input: {\n        readonly labels: readonly KeyTransparencyLabel[];\n    }) => Promise<KeyTransparencyMonitorResult>;\n    readonly monitorOwner: (input: {\n        readonly labels: readonly KeyTransparencyLabel[];\n    }) => Promise<KeyTransparencyMonitorResult>;\n    readonly search: (input: {\n        readonly label: KeyTransparencyLabel;\n    }) => Promise<KeyTransparencySearchResult>;\n    readonly update: (input: {\n        readonly authorization: Uint8Array;\n        readonly label: KeyTransparencyLabel;\n        readonly value: Uint8Array;\n    }) => Promise<KeyTransparencyUpdateResult>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/key-transparency/conformance',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyProviderConformanceResult',
+						signature:
+							'type KeyTransparencyProviderConformanceResult = {\n    readonly issues: readonly string[];\n    readonly passed: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'checkKeyTransparencyProviderConformance',
+						signature:
+							'const checkKeyTransparencyProviderConformance: (options: {\n    readonly createProvider: () => KeyTransparencyProvider | Promise<KeyTransparencyProvider>;\n    readonly fixtureLabel: Uint8Array;\n    readonly now?: () => number;\n}) => Promise<KeyTransparencyProviderConformanceResult>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/key-transparency/certification',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'KEY_TRANSPARENCY_CERTIFICATION_CONTRACT',
+						signature:
+							'const KEY_TRANSPARENCY_CERTIFICATION_CONTRACT: 1;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'KEY_TRANSPARENCY_CERTIFICATION_SUITE',
+						signature:
+							'const KEY_TRANSPARENCY_CERTIFICATION_SUITE: "absolutejs-key-transparency-certification/1";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationClaim',
+						signature:
+							'type KeyTransparencyCertificationClaim = "adversarial-lifecycle" | "cross-implementation" | "independent-audit" | "official-vectors" | "provider-conformance" | "runtime-browser" | "runtime-bun" | "runtime-node" | "split-view-drill";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationImplementation',
+						signature:
+							'type KeyTransparencyCertificationImplementation = {\n    readonly name: string;\n    readonly version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationVectorEvidence',
+						signature:
+							'type KeyTransparencyCertificationVectorEvidence = {\n    readonly digestSha256: string;\n    readonly sourceUrl: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationAuditEvidence',
+						signature:
+							'type KeyTransparencyCertificationAuditEvidence = {\n    readonly digestSha256: string;\n    readonly reportUrl: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationReport',
+						signature:
+							'type KeyTransparencyCertificationReport = {\n    readonly audits: readonly KeyTransparencyCertificationAuditEvidence[];\n    readonly claims: readonly KeyTransparencyCertificationClaim[];\n    readonly completedAt: string;\n    readonly contract: typeof KEY_TRANSPARENCY_CERTIFICATION_CONTRACT;\n    readonly evidenceDigestSha256: string;\n    readonly implementations: readonly KeyTransparencyCertificationImplementation[];\n    readonly protocolRevision: string;\n    readonly provider: {\n        readonly id: string;\n        readonly packageName: KeyTransparencyProviderManifest["packageName"];\n        readonly version: string;\n    };\n    readonly runtime: KeyTransparencyRuntime;\n    readonly scenarios: readonly string[];\n    readonly suite: typeof KEY_TRANSPARENCY_CERTIFICATION_SUITE;\n    readonly vectors: readonly KeyTransparencyCertificationVectorEvidence[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationPolicy',
+						signature:
+							'type KeyTransparencyCertificationPolicy = {\n    readonly manifest: KeyTransparencyProviderManifest;\n    readonly maximumAgeMs: number;\n    readonly now?: Date;\n    readonly requiredClaims: readonly KeyTransparencyCertificationClaim[];\n    readonly runtime: KeyTransparencyRuntime;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyTransparencyCertificationResult',
+						signature:
+							'type KeyTransparencyCertificationResult = {\n    readonly issues: readonly string[];\n    readonly passed: boolean;\n    readonly report: KeyTransparencyCertificationReport;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'defineKeyTransparencyCertificationReport',
+						signature:
+							'const defineKeyTransparencyCertificationReport: (report: KeyTransparencyCertificationReport) => KeyTransparencyCertificationReport;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'checkKeyTransparencyCertification',
+						signature:
+							'const checkKeyTransparencyCertification: (report: KeyTransparencyCertificationReport, policy: KeyTransparencyCertificationPolicy) => KeyTransparencyCertificationResult;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/key-transparency/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+					}
+				]
+			}
+		],
+		category: 'Messaging',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/certification.ts src/conformance.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Provider-neutral key transparency contracts, local rollback protection, provider selection, and conformance tools for AbsoluteJS.',
+		directory: 'key-transparency',
+		kind: 'package',
+		name: 'Key Transparency',
+		packageName: '@absolutejs/key-transparency',
+		private: false,
+		publicExports: [
+			'@absolutejs/key-transparency',
+			'@absolutejs/key-transparency/conformance',
+			'@absolutejs/key-transparency/certification',
+			'@absolutejs/key-transparency/manifest',
+			'@absolutejs/key-transparency/manifest.json'
+		],
+		readmeDigest:
+			'9d28e20688303783184f5e97ecaf31b2536961c65f2955ed909a5ca026fedad1',
+		readmeSamples: [
+			{
+				code: 'import {\n  createKeyTransparencyClient,\n  createMemoryKeyTransparencyViewStore,\n  selectKeyTransparencyProvider,\n} from "@absolutejs/key-transparency";\n\nconst provider = selectKeyTransparencyProvider(providers, {\n  minimumAssurance: "reviewed",\n  protocolRevision: "draft-ietf-keytrans-protocol-05",\n  requireContactMonitoring: true,\n  requireOwnerMonitoring: true,\n  requireSplitViewDetection: true,\n  roles: ["client", "monitor"],\n  runtime: "browser",\n});\n\nconst client = createKeyTransparencyClient({\n  provider,\n  store: createMemoryKeyTransparencyViewStore(),\n});',
+				description:
+					'Providers live in key-transparency-providers and follow the package pattern @absolutejs/key-transparency-. A provider owns draft-specific proof parsing and cryptographic verification. This package additionally enforces:',
+				heading: 'Provider boundary',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral key-transparency contracts, local rollback protection, provider selection, and conformance tools for AbsoluteJS.',
+				details: [
+					"This is an early 0.x foundation. It does not implement the IETF KEYTRANS cryptography and it does not turn an ordinary key directory into a transparency log. Providers must verify the protocol's proofs and signatures before returning results through these contracts."
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'MLS protects conversation content, but its Authentication Service binds identities to device signature keys. A compromised or malicious Authentication Service can issue a valid credential for a ghost device. Key transparency makes those key bindings append-only, searchable, monitorable, and capable of exposing inconsistent views.',
+				details: [
+					'Keeping @absolutejs/key-transparency separate from @absolutejs/e2ee prevents the encryption provider or identity authority from silently acting as its own independent verifier.'
+				],
+				title: 'Why this is separate from E2EE'
+			},
+			{
+				description:
+					'Providers live in key-transparency-providers and follow the package pattern @absolutejs/key-transparency-. A provider owns draft-specific proof parsing and cryptographic verification. This package additionally enforces:',
+				details: [
+					'an exact protocol revision rather than a floating “KEYTRANS compatible” claim;',
+					'operation, label, value, provider, and tree-head binding for evidence;',
+					'monotonically increasing locally persisted tree views;',
+					'compare-and-set persistence so concurrent clients cannot overwrite newer views;',
+					'explicit contact monitoring, owner monitoring, auditor, privacy, and assurance',
+					'capabilities;',
+					'independent audit evidence before an audited claim is accepted.',
+					'Applications pass opaque, application-derived label bytes. Raw email addresses, phone numbers, usernames, and other enumerable identifiers should not cross this boundary.',
+					'The memory view store is for tests and short-lived demos. Production clients need durable, rollback-resistant storage.'
+				],
+				title: 'Provider boundary'
+			},
+			{
+				description:
+					'Provider manifests are claims; certification reports are evidence tied to one exact provider version, protocol revision, runtime, completion time, scenario set, and evidence digest. Production admission should require fresh conformance and adversarial claims. Official vectors, cross-implementation behavior, and an independent audit are separate claims and cannot be declared without their corresponding evidence.',
+				details: [],
+				title: 'Version-bound certification'
+			},
+			{
+				description:
+					'The package currently pins draft-ietf-keytrans-protocol-05 and draft-ietf-keytrans-architecture-09. Internet-Drafts are works in progress and can change. Providers must publish a new 0.x version when changing protocol revision; the selector never silently treats revisions as equivalent.',
+				details: [
+					'Protocol:',
+					'Architecture:',
+					'MLS architecture:',
+					'Public TypeScript contracts use type aliases rather than interfaces.'
+				],
+				title: 'Standards status'
+			}
+		],
+		repository: 'https://github.com/absolutejs/key-transparency',
+		subpackages: [],
+		version: '0.2.0'
+	},
+	{
+		api: [],
+		category: 'Messaging',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command:
+					"bun run format:check && bun run typecheck && bun run test && bun run build && bun run --filter './*' verify-package",
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Interchangeable providers for @absolutejs/key-transparency.',
+		directory: 'key-transparency-providers',
+		kind: 'monorepo',
+		name: 'Key Transparency Providers',
+		packageName: '@absolutejs/key-transparency-providers',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'5d8ee47ca0925278a1ae9a9a94aa0f3d39e913f65307864bec599c01b6f88471',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Interchangeable providers for @absolutejs/key-transparency.',
+				details: [
+					'The first provider is intentionally narrow:',
+					'@absolutejs/key-transparency-memory is a process-local development and',
+					'conformance provider. It produces signed append-only log views and requires host-supplied update authorization, but it is not an implementation of the IETF KEYTRANS draft and cannot provide independent split-view detection.',
+					'Production IETF providers will be added only with pinned draft revisions, cryptographic proof verification, official vectors where available, and version-bound certification evidence. A provider boundary must never be used to upgrade a development key directory into a production transparency claim.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/key-transparency-providers',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/key-transparency-memory',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'MEMORY_KEY_TRANSPARENCY_PROTOCOL',
+								signature:
+									'const MEMORY_KEY_TRANSPARENCY_PROTOCOL: "absolute-memory-key-transparency-v1";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'MemoryKeyTransparencyProviderOptions',
+								signature:
+									'type MemoryKeyTransparencyProviderOptions = {\n    readonly logId: string;\n    readonly now?: () => number;\n    readonly verifyUpdateAuthorization: (input: {\n        readonly authorization: Uint8Array;\n        readonly label: KeyTransparencyLabel;\n        readonly value: Uint8Array;\n    }) => boolean | Promise<boolean>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMemoryKeyTransparencyProvider',
+								signature:
+									'const createMemoryKeyTransparencyProvider: (options: MemoryKeyTransparencyProviderOptions) => Promise<KeyTransparencyProvider>;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/key-transparency-memory/certification',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'memoryKeyTransparencyCertification',
+								signature:
+									'const memoryKeyTransparencyCertification: Readonly<{\n    readonly audits: readonly [];\n    readonly claims: readonly ["provider-conformance", "adversarial-lifecycle", "runtime-bun"];\n    readonly completedAt: "2026-08-26T20:58:00.000Z";\n    readonly contract: 1;\n    readonly evidenceDigestSha256: "923fd75fa1239796d0804f984d163b987fa2da6473148ce3fa9cc0ef22a8ff9d";\n    readonly implementations: readonly [{\n        readonly name: "absolute-memory-key-transparency";\n        readonly version: "0.2.0";\n    }];\n    readonly protocolRevision: "absolute-memory-key-transparency-v1";\n    readonly provider: {\n        readonly id: "memory";\n        readonly packageName: "@absolutejs/key-transparency-memory";\n        readonly version: "0.2.0";\n    };\n    readonly runtime: "bun";\n    readonly scenarios: readonly ["manifest-claims", "update-authorization", "prior-view-integrity", "input-byte-cloning", "provider-conformance"];\n    readonly suite: "absolutejs-key-transparency-certification/1";\n    readonly vectors: readonly [];\n}>;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/key-transparency-memory/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/certification.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/key-transparency --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Development-only in-memory key transparency provider for AbsoluteJS.',
+				name: '@absolutejs/key-transparency-memory',
+				private: false,
+				publicExports: [
+					'@absolutejs/key-transparency-memory',
+					'@absolutejs/key-transparency-memory/certification',
+					'@absolutejs/key-transparency-memory/manifest',
+					'@absolutejs/key-transparency-memory/manifest.json'
+				],
+				readmeDigest:
+					'e3aea72d296a48a025df44da157afd16061fb9eb74129345c85d408a7d316dfa',
+				readmeSamples: [
+					{
+						code: 'import { createMemoryKeyTransparencyProvider } from "@absolutejs/key-transparency-memory";\n\nconst provider = await createMemoryKeyTransparencyProvider({\n  logId: "local-development-log",\n  verifyUpdateAuthorization: ({ authorization }) => authorization.length === 32,\n});',
+						description: '# @absolutejs/key-transparency-memory',
+						heading:
+							'@absolutejs/key-transparency-memory quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Development-only, process-local provider for @absolutejs/key-transparency.',
+						details: [
+							'It maintains an append-only log view, signs every tree head with an ephemeral Ed25519 key, requires host-supplied update authorization, clones all sensitive byte inputs, and rejects prior views it did not issue. It is useful for tests, examples, and provider-neutral conformance.',
+							'It is intentionally not an implementation of the IETF KEYTRANS draft. It has no durable history, combined tree, VRF, commitments, private remote queries, independent monitor, or third-party auditor. Its manifest therefore uses the distinct absolute-memory-key-transparency-v1 protocol and does not claim split-view detection.',
+							'Never use this provider for production identities.',
+							'The package publishes a version-bound Bun certification report for its limited conformance and adversarial lifecycle. It deliberately claims no official IETF vectors, cross-implementation behavior, split-view drill, or independent audit.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'memory',
+				version: '0.2.0'
+			}
+		],
+		version: null
 	},
 	{
 		api: [
@@ -41496,6 +50967,504 @@ export const ecosystemProjects: EcosystemProject[] = [
 	{
 		api: [
 			{
+				entryPoint: '@absolutejs/performance',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'perfIssues',
+						signature: 'perfIssues'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'performanceDrizzleSchema',
+						signature: 'performanceDrizzleSchema'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resourcePerformance',
+						signature: 'resourcePerformance'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'routeLatencyWindows',
+						signature: 'routeLatencyWindows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'webVitalDaily',
+						signature: 'webVitalDaily'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'webVitals',
+						signature: 'webVitals'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'databaseHealth',
+						signature: 'databaseHealth'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AnyPgDatabase',
+						signature: 'type AnyPgDatabase'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionState',
+						signature: 'type ConnectionState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DatabaseHealth',
+						signature: 'type DatabaseHealth'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SlowQuery',
+						signature: 'type SlowQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TableScan',
+						signature: 'type TableScan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UnusedIndex',
+						signature: 'type UnusedIndex'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ratingFor',
+						signature: 'ratingFor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recordWebVital',
+						signature: 'recordWebVital'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'rollUpWebVitals',
+						signature: 'rollUpWebVitals'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VITAL_BUDGETS',
+						signature: 'VITAL_BUDGETS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VITAL_THRESHOLDS',
+						signature: 'VITAL_THRESHOLDS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'webVitalMatrix',
+						signature: 'webVitalMatrix'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'webVitalTrend',
+						signature: 'webVitalTrend'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VitalCell',
+						signature: 'type VitalCell'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VitalRating',
+						signature: 'type VitalRating'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebVitalInput',
+						signature: 'type WebVitalInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRouteTimingCollector',
+						signature: 'createRouteTimingCollector'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'routeLatency',
+						signature: 'routeLatency'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'routeShape',
+						signature: 'routeShape'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'routeTrend',
+						signature: 'routeTrend'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateRouteTimingOptions',
+						signature: 'type CreateRouteTimingOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RouteLatencyRow',
+						signature: 'type RouteLatencyRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RouteShapeOptions',
+						signature: 'type RouteShapeOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RouteTimingCollector',
+						signature: 'type RouteTimingCollector'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RouteTimingInput',
+						signature: 'type RouteTimingInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recordResourceTimings',
+						signature: 'recordResourceTimings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resourceTimings',
+						signature: 'resourceTimings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResourceRow',
+						signature: 'type ResourceRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResourceTimingInput',
+						signature: 'type ResourceTimingInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'performanceOverview',
+						signature: 'performanceOverview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'performanceProblems',
+						signature: 'performanceProblems'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'setPerfDecision',
+						signature: 'setPerfDecision'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'startPerformanceRollup',
+						signature: 'startPerformanceRollup'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DecidedPerfProblem',
+						signature: 'type DecidedPerfProblem'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PerfDecisionInput',
+						signature: 'type PerfDecisionInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PerfProblem',
+						signature: 'type PerfProblem'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PerformanceOverview',
+						signature: 'type PerformanceOverview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PerformanceThresholds',
+						signature: 'type PerformanceThresholds'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StartRollupOptions',
+						signature: 'type StartRollupOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/performance/client',
+				symbols: [
+					{
+						description:
+							'The browser half: sampling static asset loads and sending them home. Separate entry point, no server imports, no dependencies. This runs on every page load, so it batches, sends on idle, and gives up quietly rather than competing with the page it is measuring.',
+						kind: 'type',
+						name: 'ResourceSample',
+						signature:
+							'type ResourceSample = {\n    at: number;\n    cacheHit: boolean;\n    durationMs: number;\n    initiatorType: string;\n    page: string;\n    protocol?: string;\n    target: string;\n    transferSize: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StartResourceTimingOptions',
+						signature:
+							"type StartResourceTimingOptions = {\n    /** Where samples are POSTed. */\n    endpoint: string;\n    environment?: string;\n    release?: string;\n    /** Paths whose loads are not measured. The collector's own endpoint belongs\n     *  here, along with any other telemetry: left in, they are reliably the\n     *  busiest assets on the page and tell you nothing. */\n    ignorePaths?: readonly string[];\n    /** Samples buffered before a flush is forced. Default 60. */\n    maxBatch?: number;\n    /** Quiet period before a buffered batch is sent. Default 4s. */\n    flushMs?: number;\n};"
+					},
+					{
+						description:
+							"Drop query strings and the page's own origin from an asset URL. Query strings carry ids and cache-busters that would fragment one asset into thousands of rows. The origin is dropped for same-origin files because keeping it ties every row to the hostname it was served from, so the day an application moves to a different domain its whole history stops matching. Third-party origins stay: telling one vendor's script from another's is the point.",
+						kind: 'value',
+						name: 'assetKey',
+						signature:
+							'const assetKey: (value: string, origin?: string) => string;'
+					},
+					{
+						description:
+							'Sample every static asset the page loads. Everything, not only what crossed a threshold: a threshold can say a file was slow, but never that a fast file loaded on every page is the one worth caching. Returns a stop handle; a no-op where PerformanceObserver does not exist.',
+						kind: 'value',
+						name: 'startResourceTiming',
+						signature:
+							'const startResourceTiming: (options: StartResourceTimingOptions) => (() => void);'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/performance/drizzle',
+				symbols: [
+					{
+						description:
+							'One Core Web Vitals sample, as the browser reported it.',
+						kind: 'value',
+						name: 'webVitals',
+						signature:
+							'const webVitals: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: "web_vitals";\n    schema: undefined;\n    columns: {\n        at: import("drizzle-orm/pg-core").PgBuildColumn<"web_vitals", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgBigInt53Builder>, {\n            name: string;\n            tableName: "web_vitals";\n            dataType: "number int53";\n            data: number;\n            driverParam: string | number;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        attribution: import("drizzle-orm/pg-core").PgBuildColumn<"web_vitals", import("drizzle-orm/pg-core").Set$Type<import("drizzle-orm/pg-core").PgJsonbBuilder, Record<string, unknown>>, {\n            name: string;\n            tableName: "web_vitals";\n            dataType: "object json";\n            data: Record<string, unknown>;\n            driverParam: unknown;\n            notNull: false;\n            hasDefault: false;\n            isPrimaryKey: false'
+					},
+					{
+						description:
+							'Daily percentiles per page and metric. A trend cannot be drawn from raw samples without scanning every one of them on every render, and the raw table is the busiest in this set. Rolled up once, read cheaply forever.',
+						kind: 'value',
+						name: 'webVitalDaily',
+						signature:
+							'const webVitalDaily: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: "web_vital_daily";\n    schema: undefined;\n    columns: {\n        day: import("drizzle-orm/pg-core").PgBuildColumn<"web_vital_daily", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgTimestampBuilder>, {\n            name: string;\n            tableName: "web_vital_daily";\n            dataType: "object date";\n            data: Date;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        id: import("drizzle-orm/pg-core").PgBuildColumn<"web_vital_daily", import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgBigSerial53Builder>, {\n            name: string;\n            tableName: "web_vital_daily";\n            dataType: "number int53";\n            data: number;\n            driverParam: number;\n            notNull: true;\n            hasDefault: true;\n            isPrimaryKey: false;\n            isAutoi'
+					},
+					{
+						description:
+							'One static asset load, as Resource Timing reported it.',
+						kind: 'value',
+						name: 'resourcePerformance',
+						signature:
+							'const resourcePerformance: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: "resource_performance";\n    schema: undefined;\n    columns: {\n        at: import("drizzle-orm/pg-core").PgBuildColumn<"resource_performance", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgBigInt53Builder>, {\n            name: string;\n            tableName: "resource_performance";\n            dataType: "number int53";\n            data: number;\n            driverParam: string | number;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        cache_hit: import("drizzle-orm/pg-core").PgBuildColumn<"resource_performance", import("drizzle-orm/pg-core").SetHasDefault<import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgBooleanBuilder>>, {\n            name: string;\n            tableName: "resource_performance";\n            dataType: "boolean";\n            data: boolean;\n            driverParam: boolean;\n            notNull: true;\n '
+					},
+					{
+						description:
+							'Server latency, one counter per route per method per minute. A row per request would put a database write in the path of every request, making the thing being measured slower, and leave millions of rows to scan. A counter per window costs one upsert per route per flush and answers the same questions. The unique index is what lets two processes flushing the same minute sum rather than overwrite each other.',
+						kind: 'value',
+						name: 'routeLatencyWindows',
+						signature:
+							'const routeLatencyWindows: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: "route_latency_windows";\n    schema: undefined;\n    columns: {\n        count: import("drizzle-orm/pg-core").PgBuildColumn<"route_latency_windows", import("drizzle-orm/pg-core").SetHasDefault<import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgIntegerBuilder>>, {\n            name: string;\n            tableName: "route_latency_windows";\n            dataType: "number int32";\n            data: number;\n            driverParam: string | number;\n            notNull: true;\n            hasDefault: true;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        error_count: import("drizzle-orm/pg-core").PgBuildColumn<"route_latency_windows", import("drizzle-orm/pg-core").SetHasDefault<import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgIntegerBuilder>>, {\n            name: string;\n            tableName: "route_latency_windows";\n            dataType: "number int32";\n            data: number;\n     '
+					},
+					{
+						description:
+							'A decision somebody made about a finding: seen and accepted, or fixed.',
+						kind: 'value',
+						name: 'perfIssues',
+						signature:
+							'const perfIssues: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: "perf_issues";\n    schema: undefined;\n    columns: {\n        acknowledged_at: import("drizzle-orm/pg-core").PgBuildColumn<"perf_issues", import("drizzle-orm/pg-core").PgTimestampBuilder, {\n            name: string;\n            tableName: "perf_issues";\n            dataType: "object date";\n            data: Date;\n            driverParam: string;\n            notNull: false;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        acknowledged_by: import("drizzle-orm/pg-core").PgBuildColumn<"perf_issues", import("drizzle-orm/pg-core").PgVarcharBuilder<[string, ...string[]]>, {\n            name: string;\n            tableName: "perf_issues";\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: false;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enum'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'performanceDrizzleSchema',
+						signature:
+							'const performanceDrizzleSchema: {\n    perfIssues: import("drizzle-orm/pg-core").PgTableWithColumns<{\n        name: "perf_issues";\n        schema: undefined;\n        columns: {\n            acknowledged_at: import("drizzle-orm/pg-core").PgBuildColumn<"perf_issues", import("drizzle-orm/pg-core").PgTimestampBuilder, {\n                name: string;\n                tableName: "perf_issues";\n                dataType: "object date";\n                data: Date;\n                driverParam: string;\n                notNull: false;\n                hasDefault: false;\n                isPrimaryKey: false;\n                isAutoincrement: false;\n                hasRuntimeDefault: false;\n                enumValues: undefined;\n                identity: undefined;\n                generated: undefined;\n            }>;\n            acknowledged_by: import("drizzle-orm/pg-core").PgBuildColumn<"perf_issues", import("drizzle-orm/pg-core").PgVarcharBuilder<[string, ...string[]]>, {\n                name: string;\n                tableName: "perf_issues";\n                dataType: "string";\n                data: string;\n                driverParam: string;\n                notNull: false;\n                hasDef'
+					}
+				]
+			}
+		],
+		category: 'Observability',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/drizzle.ts --outdir dist --root ./src --sourcemap --target=bun --external drizzle-orm --external 'drizzle-orm/*' && bun build src/client.ts --outdir dist --root ./src --sourcemap --target=browser --format esm && tsc --project tsconfig.build.json",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Core Web Vitals, server route latency, static asset timing and Postgres health for AbsoluteJS applications — four measurements, one console, Drizzle-native.',
+		directory: 'performance',
+		kind: 'package',
+		name: 'Performance',
+		packageName: '@absolutejs/performance',
+		private: false,
+		publicExports: [
+			'@absolutejs/performance',
+			'@absolutejs/performance/client',
+			'@absolutejs/performance/drizzle'
+		],
+		readmeDigest:
+			'5ef2de7051ec58428c62d27ef71452e12b6d2a6d41942daf60f4697fc37f6cb3',
+		readmeSamples: [
+			{
+				code: 'bun add @absolutejs/performance',
+				description: 'Working example for Install.',
+				heading: 'Install',
+				language: 'bash'
+			},
+			{
+				code: 'export {\n  webVitals,\n  webVitalDaily,\n  resourcePerformance,\n  routeLatencyWindows,\n  perfIssues,\n} from "@absolutejs/performance";',
+				description:
+					'Five tables, exported as Drizzle definitions — register them in your own schema so your migrations own them:',
+				heading: 'Schema',
+				language: 'typescript'
+			},
+			{
+				code: 'const timings = createRouteTimingCollector();\ntimings.start(db, releaseSha); // periodic flush + drain on SIGTERM/SIGINT\n\napp.request(({ request }) => start.set(request, performance.now()));\napp.afterResponse(({ request, response }) => {\n  timings.record({\n    durationMs: performance.now() - start.get(request)!,\n    method: request.method,\n    pathname: new URL(request.url).pathname,\n    status: response.status,\n  });\n});',
+				description:
+					'Every response is timed and folded into a per-route counter. A row per request would put a database write in the path of every request — making the thing being measured slower — and leave millions of rows to scan; a counter per route per minute costs one upsert per flush and answers the same questions.',
+				heading: 'Server route latency',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Core Web Vitals, server route latency, static asset timing and Postgres health — the four measurements behind a performance console, Drizzle-native.',
+				details: [
+					"Four measurements of one question: is this fast enough to use? Vitals are what a person's browser felt, resources are what the page had to download, routes are what the server took, and the database numbers are where server time usually goes. They stay separate because the fix for each is different."
+				],
+				title: 'Overview'
+			},
+			{
+				description: 'Peer: drizzle-orm >= 1.0.0-rc.4. Postgres.',
+				details: [],
+				title: 'Install'
+			},
+			{
+				description:
+					'Five tables, exported as Drizzle definitions — register them in your own schema so your migrations own them:',
+				details: [
+					'The database section additionally reads pg_stat_activity, pg_stat_user_tables, pg_stat_user_indexes, and — if the extension is installed — pg_stat_statements. Each read is guarded independently, so a managed provider without the extension loses the slow-query list and keeps the rest.'
+				],
+				title: 'Schema'
+			},
+			{
+				description:
+					'Every response is timed and folded into a per-route counter. A row per request would put a database write in the path of every request — making the thing being measured slower — and leave millions of rows to scan; a counter per route per minute costs one upsert per flush and answers the same questions.',
+				details: [
+					'routeShape collapses ids so /orders/1042 and /orders/1043 are one route rather than two — UUIDs, long hex, numeric segments and prefixed object ids (cs_test_…) out of the box, plus any idPatterns you pass.',
+					"start installs the interval and a beforeExit flush, and deliberately does not touch SIGTERM/SIGINT. Registering a signal listener replaces the runtime's default terminate behaviour: unless the handler itself exits, the process survives the signal. A library that quietly does that to its host turns every kill, every orchestrator stop, and every build step that starts the app and signals it afterwards into a hang. If you want a true shutdown drain, you own your shutdown — call flush() from your own handler and then exit or re-raise the signal."
+				],
+				title: 'Server route latency'
+			},
+			{
+				description:
+					"Budgets are Google's published thresholds — the numbers search ranking is scored against, so they are not yours to invent. ratingFor scores a value the same way the browser does, which is what makes a backfilled or synthetic sample comparable with a real one.",
+				details: [
+					'p75 is the headline because that is what Core Web Vitals is judged on; p50 and p95 sit either side so a page whose median is fine but whose tail is bad is visible as what it is.'
+				],
+				title: 'Web Vitals'
+			},
+			{
+				description:
+					'Everything is sampled, not only what crossed a threshold: a threshold can say a file was slow, but never that a fast file loaded on every page is the one worth caching. cacheRate is that answer.',
+				details: [],
+				title: 'Static assets'
+			},
+			{
+				description:
+					'Findings are derived live rather than stored, so nothing on the list can be stale — a page that got fixed stops appearing because it got fixed. The only stored half is the human decision, joined on, so a known and accepted slow page stops shouting without disappearing. state: "open" deletes the decision outright rather than leaving a tombstone that would keep the finding looking handled.',
+				details: [
+					"Thresholds are the caller's: slowRouteMeanMs, slowResourceMs, slowQueryMeanMs, errorRateLimit, poorRateLimit, minRouteCalls, minVitalSamples.",
+					'startPerformanceRollup exists because a console that is only correct when a host crontab exists is a console that quietly goes stale — the one failure a health dashboard cannot afford. The rollup is idempotent, so an endpoint your scheduler also calls costs a duplicate scan and nothing else.'
+				],
+				title: 'The console'
+			},
+			{
+				description:
+					"Read from Postgres' own statistics: no query wrapping, nothing on the hot path, zero cost until the page is opened. Slow queries are ordered by mean time, but mean × calls is reported too — that column is what exposes an N+1, where a 2ms query called forty thousand times is the actual problem and no single call looks slow.",
+				details: [],
+				title: 'Database health'
+			}
+		],
+		repository: 'https://github.com/absolutejs/performance',
+		subpackages: [],
+		version: '0.1.1-beta.0'
+	},
+	{
+		api: [
+			{
 				entryPoint: '@absolutejs/policy',
 				symbols: [
 					{
@@ -41866,6 +51835,477 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/policy',
 		subpackages: [],
 		version: '0.3.1'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/procore',
+				symbols: [
+					{
+						description: '',
+						kind: 'class',
+						name: 'ProcoreError',
+						signature:
+							'class ProcoreError extends Error {\n    readonly code: string;\n    readonly outcome: "rejected" | "unknown";\n    readonly httpStatus?: number | undefined;\n    constructor(code: string, outcome?: "rejected" | "unknown", httpStatus?: number | undefined);\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProcoreEnvironment',
+						signature:
+							'type ProcoreEnvironment = "sandbox" | "production";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Reference',
+						signature:
+							'type Reference = {\n    id: string;\n    name: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Project',
+						signature:
+							'type Project = Reference & {\n    companyId: string;\n    active: boolean | null;\n    number: string | null;\n    timeZone: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CostCode',
+						signature:
+							'type CostCode = Reference & {\n    code: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Contract',
+						signature:
+							'type Contract = {\n    id: string;\n    title: string | null;\n    number: string | null;\n    status: string | null;\n    type: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeliveryLogInput',
+						signature:
+							'type DeliveryLogInput = {\n    date: string;\n    contents: string;\n    comments: string;\n    deliveryFrom: string;\n    trackingNumber: string;\n    timeHour: number;\n    timeMinute: number;\n    uploadIds?: string[];\n    vendorId?: string;\n    locationId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeliveryLog',
+						signature:
+							'type DeliveryLog = DeliveryLogInput & {\n    id: string;\n    status: string | null;\n    attachments: {\n        id: string;\n        name: string;\n        uploadId: string | null;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'deliveryLogPayload',
+						signature:
+							'function deliveryLogPayload(input: DeliveryLogInput): {\n    delivery_log: {\n        location_id?: string | undefined;\n        vendor_id?: string | undefined;\n        contents: string;\n        comments: string;\n        delivery_from: string;\n        tracking_number: string;\n        upload_ids?: string[] | undefined;\n        date: string;\n        time_hour: number;\n        time_minute: number;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProcoreOptions',
+						signature:
+							'type ProcoreOptions = {\n    environment: ProcoreEnvironment;\n    signal?: AbortSignal;\n    accessToken: () => Promise<string>;\n    fetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n    timeoutMs?: number;\n    maxBytes?: number;\n    maxPages?: number;\n    maxItems?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'createProcoreClient',
+						signature:
+							'function createProcoreClient(options: ProcoreOptions): {\n    uploadFile: (companyId: string, projectId: string, file: {\n        name: string;\n        contentType: string;\n        bytes: Uint8Array;\n    }) => Promise<{\n        id: string;\n    }>;\n    companies: () => Promise<Reference[]>;\n    projects: (companyId: string) => Promise<Project[]>;\n    users: (companyId: string, projectId: string) => Promise<Reference[]>;\n    vendors: (companyId: string, projectId: string) => Promise<Reference[]>;\n    locations: (companyId: string, projectId: string) => Promise<Reference[]>;\n    costCodes: (companyId: string, projectId: string) => Promise<CostCode[]>;\n    purchaseOrders: (companyId: string, projectId: string) => Promise<Contract[]>;\n    contracts: (companyId: string, projectId: string) => Promise<Contract[]>;\n    deliveryLogs: (companyId: string, projectId: string, logDate: string) => Promise<DeliveryLog[]>;\n    deliveryLog: (companyId: string, projectId: string, logId: string) => Promise<DeliveryLog>;\n    createDeliveryLog: (companyId: string, projectId: string, input: DeliveryLogInput) => Promise<DeliveryLog>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProcoreClient',
+						signature:
+							'type ProcoreClient = ReturnType<typeof createProcoreClient>;'
+					}
+				]
+			}
+		],
+		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts --outdir dist --target=bun && tsc -p tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Typed Procore catalog and delivery-log adapter with bounded transport and explicit uncertain write outcomes.',
+		directory: 'procore',
+		kind: 'package',
+		name: 'Procore',
+		packageName: '@absolutejs/procore',
+		private: false,
+		publicExports: ['@absolutejs/procore'],
+		readmeDigest:
+			'd1087d1d094d384b461976dad4f59e870a84d2df4c86a6a76ffd0a23825f243b',
+		readmeSamples: [
+			{
+				code: 'import { createProcoreClient } from "@absolutejs/procore";\nconst procore = createProcoreClient({\n  environment: "sandbox",\n  accessToken: async () => tokenFromYourCredentialResolver,\n});\nconst projects = await procore.projects(selectedCompanyId);\nconst logs = await procore.deliveryLogs(\n  selectedCompanyId,\n  selectedProjectId,\n  "2026-10-07",\n);',
+				description: '# @absolutejs/procore',
+				heading: '@absolutejs/procore quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					"A typed Procore adapter for Bun and AbsoluteJS applications. Authentication is supplied by the caller; use Citra's procore provider and Absolute Auth's encrypted grants/coordinated refresh for OAuth.",
+				details: [
+					'Supports companies, projects, project users/vendors/locations, cost codes, purchase orders, commitment contracts, and delivery-log reads/creation. Catalog results deliberately contain only the fields required for explicit mapping. Imported users do not grant application permissions.',
+					'Requests use fixed Procore origins, company headers, explicit project IDs, bounded response bodies and pagination, and reject redirects. Provider-supplied pagination URLs are never followed with credentials. Incomplete, duplicate, or capped catalogs fail instead of silently returning partial results. Callers remain responsible for authorization and matching a selected project to its company.',
+					"ProcoreError exposes a sanitized code and outcome. An unknown write outcome means the request may have succeeded: do not automatically retry it. Persist intent before creating a delivery log, include a stable tracking number, and reconcile the receipt using an explicit log date. The adapter does not promise provider idempotency or automatically approve logs. It does not calculate business quantities, select mappings, or enforce a customer's approval policy.",
+					'The access-token callback must implement its own bounded execution. HTTP requests default to 15 seconds, 4 MiB, 20 pages, and 10,000 items. Sandbox and the default production API origin are supported; region-specific production routing needs separate configuration work before deployment to a regional tenant.',
+					'API contracts: Procore REST reference, OAuth endpoints, daily logs.',
+					'Run bun run typecheck, bun test, and bun run build.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'uploadFile(companyId, projectId, {name, contentType, bytes}) supports PDF, JPEG, PNG and UTF-8 plain text up to 2 MiB. It obtains project-scoped Procore upload instructions and sends signed form fields and file bytes to the returned S3 destination without an OAuth header. Redirects and non-S3 destinations are rejected. It returns the upload ID for DeliveryLogInput.uploadIds. Unassociated uploads may expire; persist your upload receipts and associate them promptly. An interrupted upload may leave an orphan; it does not establish a delivery log.',
+				details: [
+					'Delivery writes require timeHour and timeMinute. Use the reviewed date/time and retain the time zone in your business snapshot. Receipts expose attachment names, record IDs, and upload IDs when identifiable from Procore download paths; signed download URLs are omitted. Missing attachment identity must not be treated as proof of a matching attachment. signal cancels in-flight requests and prevents sends after asynchronous credential resolution.'
+				],
+				title: 'Delivery files'
+			}
+		],
+		repository: 'https://github.com/absolutejs/procore',
+		subpackages: [],
+		version: '0.2.0'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/product-analytics',
+				symbols: [
+					{
+						description:
+							'Auth sessions and product visits are deliberately separate concepts.',
+						kind: 'value',
+						name: 'SESSION_TIMEOUT_MS',
+						signature: 'const SESSION_TIMEOUT_MS: number;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'IDLE_TIMEOUT_MS',
+						signature: 'const IDLE_TIMEOUT_MS = 60000;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'HEARTBEAT_MS',
+						signature: 'const HEARTBEAT_MS = 15000;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'MAX_SESSION_MS',
+						signature: 'const MAX_SESSION_MS: number;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EngagementSnapshot',
+						signature:
+							'type EngagementSnapshot = {\n    id: string;\n    sessionId: string;\n    area: string;\n    activeMs: number;\n    pageView: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VisitSession',
+						signature:
+							'type VisitSession = {\n    id: string;\n    lastActivity: number;\n    startedAt: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveVisitSession',
+						signature:
+							'const resolveVisitSession: (previous: VisitSession | null, now: number, newId: () => string) => VisitSession;'
+					},
+					{
+						description:
+							'Count only the intersection with a foreground, recently interactive interval. Cap long timer gaps so sleeping devices cannot add hours of engagement.',
+						kind: 'value',
+						name: 'activeIntervalMs',
+						signature:
+							'const activeIntervalMs: (from: number, to: number, lastInteraction: number, focused: boolean) => number;'
+					},
+					{
+						description:
+							'Server-side bound for cumulative snapshots; MAX makes retries/reordering idempotent.',
+						kind: 'value',
+						name: 'acceptedActiveMs',
+						signature:
+							'const acceptedActiveMs: (previous: number, incoming: number, elapsed: number) => number;'
+					},
+					{
+						description:
+							'Per-document cumulative delivery counters, reported only with consented data.',
+						kind: 'type',
+						name: 'DeliveryHealth',
+						signature:
+							'type DeliveryHealth = {\n    id: string;\n    attempted: number;\n    failed: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PeriodComparison',
+						signature:
+							'type PeriodComparison = {\n    current: number;\n    previous: number;\n    delta: number | null;\n    percent: number | null;\n    comparable: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'comparePeriods',
+						signature:
+							'const comparePeriods: (current: number, previous: number, comparable: boolean) => PeriodComparison;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FunnelStep',
+						signature:
+							'type FunnelStep = {\n    label: string;\n    reached: number;\n    dropped: number;\n    conversionPercent: number | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'funnelSteps',
+						signature:
+							'const funnelSteps: (labels: readonly string[], counts: readonly number[]) => FunnelStep[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'retentionCell',
+						signature:
+							'const retentionCell: (cohortDay: string, offset: number, asOf: number, cohortSize: number, returned: number) => {\n    day: number;\n    mature: boolean;\n    returned: number | null;\n    eligible: number;\n    percent: number | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'accountHealth',
+						signature: 'accountHealth'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'nextSummaryAt',
+						signature: 'nextSummaryAt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'trackingSignals',
+						signature: 'trackingSignals'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AccountHealthEvidence',
+						signature: 'AccountHealthEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReportCadence',
+						signature: 'ReportCadence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrackingSignalInput',
+						signature: 'TrackingSignalInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineTrackingCatalog',
+						signature: 'defineTrackingCatalog'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validateTrackingEvent',
+						signature: 'validateTrackingEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'trackingCoverage',
+						signature: 'trackingCoverage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrackingDefinition',
+						signature: 'TrackingDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrackingField',
+						signature: 'TrackingField'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrackingViolation',
+						signature: 'TrackingViolation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'experimentVariant',
+						signature: 'experimentVariant'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'conversionInterval',
+						signature: 'conversionInterval'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'experimentEvidence',
+						signature: 'experimentEvidence'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/product-analytics/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProductAnalyticsOptions',
+						signature:
+							'type ProductAnalyticsOptions = {\n    /** Opaque account key namespaces sessions. Never sent as trusted identity. */\n    identity: string;\n    endpoint: string;\n    /** Return an allowlisted area, never a raw URL or document title. */\n    getArea: () => string | null;\n};'
+					},
+					{
+						description:
+							'Start only after consent; call stop on revocation/account change. SSR safe. Visits are per browser tab. Only the focused tab accrues active time. Transport is best-effort; repeated cumulative snapshots heal dropped pulses.',
+						kind: 'value',
+						name: 'startProductAnalytics',
+						signature:
+							'const startProductAnalytics: (options: ProductAnalyticsOptions) => (() => void);'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'startWorkflowTracking',
+						signature: 'startWorkflowTracking'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WorkflowObservation',
+						signature: 'WorkflowObservation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WorkflowTrackingOptions',
+						signature: 'WorkflowTrackingOptions'
+					}
+				]
+			}
+		],
+		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts src/client.ts --outdir dist --target browser && tsc -p tsconfig.json',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun test && bun run build && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'node tests/browser.cjs',
+				name: 'test:browser'
+			},
+			{
+				command: 'tsc --noEmit --emitDeclarationOnly false',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Consent-aware first-party product engagement collection and session contracts.',
+		directory: 'product-analytics',
+		kind: 'package',
+		name: 'Product Analytics',
+		packageName: '@absolutejs/product-analytics',
+		private: false,
+		publicExports: [
+			'@absolutejs/product-analytics',
+			'@absolutejs/product-analytics/client'
+		],
+		readmeDigest:
+			'a219dd802a1f531fb1fed2d711af25d94c5b999dfb0c8b95f9dfd36907ab2964',
+		readmeSamples: [
+			{
+				code: "import { startProductAnalytics } from '@absolutejs/product-analytics/client';\nconst stop = startProductAnalytics({\n  identity: account.id,\n  endpoint: '/product-analytics/engagement',\n  getArea: () => 'dashboard', // use an allowlist, not raw URLs\n});\n// Start only after analytics consent. Stop on revocation or identity changes.\nstop();",
+				description: '# AbsoluteJS product analytics',
+				heading: 'AbsoluteJS product analytics quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'First-party browser engagement collection. This package is separate from @absolutejs/analytics, whose aggregate contracts intentionally exclude identities. Hosts own authenticated ingestion, database storage, authorization, retention and erasure.',
+				details: [
+					'The collector sends cumulative EngagementSnapshot values with a random segment ID. A host must authenticate every request, derive the user from the server session, validate areas and sizes, enforce same-origin ingestion, and update duration with MAX instead of SUM. Neither the opaque browser identity nor the session ID is an authorization credential. No personal profile data, DOM content, titles, query parameters, IP addresses or authentication tokens are included.',
+					'Sessions are per browser tab, preserved over reload/navigation in sessionStorage, expire after 30 minutes without activity, and have a 24-hour maximum. A copied tab can inherit sessionStorage; session counts are approximate and are not concurrent-user counts. Engagement accrues only while visible and focused and for up to 60 seconds after interaction. Samples run every 15 seconds, flush on focus/visibility/pagehide, and cap suspended timer gaps. UTC midnight starts a fresh segment without an extra page view. Transports are best-effort: subsequent cumulative snapshots recover dropped pulses within the same segment; a final unload delivery may be lost. SPA hosts should dispatch absolute:product-navigation after successful navigation for immediate page tracking; pathname polling is a fallback.',
+					'stop() discards pending time and session state rather than sending after consent revocation. A restored page must initialize a fresh collector. Server-side authentication events are a separate source: never infer logins from page views or token refreshes. The host should exclude impersonation and anonymous authentication sessions.',
+					'Exports from the root include the snapshot/session contracts, interval accounting, session expiration and server cumulative-duration bounds. The browser entry has no dependencies. Build with Bun and TypeScript; test with bun test.',
+					'Version 0.2 adds DeliveryHealth (per-document cumulative attempted/failed counts), comparePeriods, funnelSteps and retentionCell. Delivery counters are included in each snapshot; persist their MAX per document/account. Non-2xx and {accepted:false} responses count as failures, visible after a later successful delivery. Permanently offline clients remain unobservable. Hosts should return JSON {accepted:true} after ingestion.',
+					"comparePeriods(current, previous, comparable) suppresses deltas without complete coverage and suppresses percentage change for a zero baseline. funnelSteps(labels, orderedCounts) requires non-increasing nonnegative integer counts. retentionCell(cohortDay, offsetDays, asOfMs, cohortSize, returned) waits until the entire UTC return day ends; immature cells have null returns/percent and zero eligible accounts. Hosts own ordered-event queries, cohort definitions and retained-history coverage. These pure helpers do not collect business payloads or assume an application's event taxonomy.",
+					'Version 0.3 adds nextSummaryAt(afterMs, cadence) for strictly-next daily/weekly 09:00 UTC report slots (weekly Monday), accountHealth(evidence) for explicit observed-activity classifications, and trackingSignals(evidence) for sample/coverage-gated missing-collection, delivery-failure and missing-action signals. These are pure rules: the package does not deliver email or push, retain reports, authorize recipients or run a scheduler. Hosts must recheck permissions at execution, persist/deduplicate slots, expose failures, and distinguish observations from customer/churn predictions. Unknown consent or incomplete comparison coverage suppresses account-health conclusions.',
+					"Version 0.4 adds startWorkflowTracking({endpoint, resolveWorkflow}) from the browser entry. This optional, consent-scoped fetch observer reports only host-allowlisted same-origin requests, random receipt IDs, workflow labels, failure flags and duration to response headers. It does not inspect bodies or transmit URLs. Aborts are excluded; stop() suppresses pending receipts and restores fetch when it still owns the wrapper. Transport is best effort. The host must validate category/duration, authenticate the user, reject impersonation and declined consent, and distinguish HTTP observations from successful business outcomes. Header latency does not measure a streaming response's completion.",
+					'Version 0.5 adds defineTrackingCatalog, validateTrackingEvent, and trackingCoverage. Definitions describe versioned, bounded events with source, ownership, meaning, consent and retention. Validation returns a fixed rejection category without echoing submitted data. Hosts enforce authentication and authorization separately. Missing observations only imply missing collection when the host explicitly marks collection as expected. Existing records without a version are version 1; collectors now declare version 1 explicitly.',
+					"Version 0.6 adds experimentVariant, conversionInterval, and experimentEvidence. SHA-256 assignment is stable for an experiment/account pair and divides accounts 50/50. Wilson 95% conversion intervals, minimum mature samples of 100 per arm, and a 1% chi-squared allocation imbalance check provide conservative descriptive evidence. These are not sequential testing or sample-size planning. Hosts must freeze definitions, predeclare duration and outcome windows, record actual exposure, assess guardrails, exclude unfinished windows, and require human interpretation. The package neither publishes variants nor enrolls users. Dealroom's opt-in integration uses in-app help cards and never sends email or push."
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Run bun install --frozen-lockfile, bun run typecheck, bun test, bun run build, and bun run test:browser (install Chromium with bunx playwright install chromium first). bun run package writes the distributable archive and its SHA-256 checksum to artifacts/.',
+				details: [
+					'Install from npm with bun add @absolutejs/product-analytics. To release, add entries with bunx absolute-changelog add, run bunx absolute-changelog release, commit and push to main, then bun publish. prepublishOnly runs the typecheck, tests, build and changelog check, so a release cannot skip them.'
+				],
+				title: 'Development and releases'
+			}
+		],
+		repository: 'https://github.com/absolutejs/product-analytics',
+		subpackages: [],
+		version: '0.6.2'
 	},
 	{
 		api: [
@@ -43291,6 +53731,130 @@ export const ecosystemProjects: EcosystemProject[] = [
 			}
 		],
 		version: null
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/quickbooks',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'QuickBooksEnvironment',
+						signature:
+							'type QuickBooksEnvironment = "sandbox" | "production";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CatalogEntity',
+						signature:
+							'type CatalogEntity = "Vendor" | "Account" | "Customer";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CatalogRecord',
+						signature:
+							'type CatalogRecord = {\n    id: string;\n    name: string;\n    active: boolean;\n    accountType?: string;\n    currency?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BillInput',
+						signature:
+							'type BillInput = {\n    vendorId: string;\n    documentNumber: string;\n    date: string;\n    dueDate?: string;\n    note: string;\n    currency: "USD";\n    lines: {\n        amount: string;\n        description: string;\n        accountId: string;\n        customerId?: string;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BillReceipt',
+						signature:
+							'type BillReceipt = {\n    id: string;\n    syncToken: string;\n    total: number;\n    currency?: string;\n    documentNumber?: string;\n    note?: string;\n    vendorId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BillState',
+						signature:
+							'type BillState = BillReceipt & {\n    balance: string;\n    date: string;\n    lines: BillInput["lines"];\n    linkedTransactions: {\n        id: string;\n        type: string;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'QuickBooksError',
+						signature:
+							'class QuickBooksError extends Error {\n    readonly code: string;\n    readonly outcome: "rejected" | "unknown";\n    readonly httpStatus?: number | undefined;\n    constructor(code: string, outcome: "rejected" | "unknown", httpStatus?: number | undefined);\n}'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'billPayload',
+						signature:
+							'function billPayload(input: BillInput): {\n    PrivateNote: string;\n    Line: {\n        Amount: number;\n        Description: string;\n        DetailType: string;\n        AccountBasedExpenseLineDetail: {\n            CustomerRef?: {\n                value: string;\n            } | undefined;\n            BillableStatus?: string | undefined;\n            AccountRef: {\n                value: string;\n            };\n        };\n    }[];\n    DueDate?: string | undefined;\n    VendorRef: {\n        value: string;\n    };\n    CurrencyRef: {\n        value: "USD";\n    };\n    DocNumber: string;\n    TxnDate: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'createQuickBooksClient',
+						signature:
+							'function createQuickBooksClient(options: {\n    environment: QuickBooksEnvironment;\n    realmId: string;\n    accessToken: () => Promise<string>;\n    fetch?: typeof globalThis.fetch;\n}): {\n    company: (signal?: AbortSignal) => Promise<{\n        id: string;\n        name: string;\n        country: string;\n    }>;\n    catalog: (entity: CatalogEntity, start?: number, signal?: AbortSignal) => Promise<{\n        records: CatalogRecord[];\n        next: number | null;\n    }>;\n    reference: (entity: CatalogEntity, referenceId: string, signal?: AbortSignal) => Promise<CatalogRecord>;\n    createBill: (input: BillInput, requestId: string, signal?: AbortSignal) => Promise<BillReceipt>;\n    getBillState: (billId: string, signal?: AbortSignal) => Promise<BillState>;\n    getBill: (billId: string, signal?: AbortSignal) => Promise<BillReceipt>;\n};'
+					}
+				]
+			}
+		],
+		category: 'Commerce & Growth',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts --outdir dist --target=bun && tsc -p tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Typed QuickBooks Online accounting adapter with bounded transport and explicit uncertain-write outcomes.',
+		directory: 'quickbooks',
+		kind: 'package',
+		name: 'QuickBooks',
+		packageName: '@absolutejs/quickbooks',
+		private: false,
+		publicExports: ['@absolutejs/quickbooks'],
+		readmeDigest:
+			'f84b05e22cb06ebd2a82735e99fadd1016cdd75e7e564a5cad8f4cf514d8a97b',
+		readmeSamples: [
+			{
+				code: "import { createQuickBooksClient } from '@absolutejs/quickbooks';\n\nconst quickbooks = createQuickBooksClient({\n  environment: 'sandbox',\n  realmId: 'YOUR_NUMERIC_COMPANY_ID',\n  accessToken: async () => obtainAccessToken(),\n});\nconst vendors = await quickbooks.catalog('Vendor');\n// Persist a stable operation ID and the intended payload before this call.\nconst receipt = await quickbooks.createBill({\n  vendorId: '56', documentNumber: 'INV-001', date: '2026-10-07',\n  currency: 'USD', note: 'Your stable export reference',\n  lines: [{ amount: '26.23', description: 'Materials', accountId: '7' }],\n}, 'your-stable-operation-id');",
+				description: '# @absolutejs/quickbooks',
+				heading: '@absolutejs/quickbooks quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'A typed QuickBooks Online adapter for company information, paginated vendors/accounts/customers, and USD account-based vendor bills. MIT licensed; no application-specific approval or construction workflow.',
+				details: [
+					'company(), catalog(entity, start?), reference(entity, id), createBill(input, requestId) and getBill(id) accept an optional final AbortSignal. Catalog pages contain at most 100 records and an explicit next offset. Tokens are supplied by the caller, allowing Citra and AbsoluteJS linked-provider grants to manage OAuth independently.',
+					"Transport uses fixed Intuit origins, refuses redirects, limits responses to 2 MB, and applies a 20-second request timeout. Errors contain bounded codes, never provider response bodies. No automatic retries occur. A QuickBooksError with outcome: 'unknown' means a write may have succeeded: persist that state and reconcile against the provider before any new write. Request IDs alone are not a replacement for a durable execution record. Read failures cannot create bills; invalid bill receipts are conservatively classified as unknown.",
+					'This initial version supports positive decimal USD expense lines (up to 100), an optional customer reference, and no tax mapping. It does not create payments, authorize users, store credentials, approve invoices, or schedule work. Those policies belong to the host application. Explicitly select sandbox or production; the adapter never infers this from NODE_ENV.',
+					'Run bun install, bun run typecheck, bun test, and bun run build. Tests use synthetic responses and require no provider credentials.',
+					'API reference: https://developer.intuit.com/app/developer/qbo/docs/develop/basic-implementations/basic-billing-implementation',
+					'getBillState(id, signal?) reads the current balance as a decimal string, bill date, expense lines and linked transaction IDs/types. A zero balance means the bill is settled; it is not proof of a cash payment (credits and adjustments can also settle it). The host application must compare the returned bill with its frozen export, authorize access, and retain observation history. No payment creation API is exposed.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/quickbooks',
+		subpackages: [],
+		version: '0.2.0'
 	},
 	{
 		api: [
@@ -48360,6 +58924,124 @@ export const ecosystemProjects: EcosystemProject[] = [
 	{
 		api: [
 			{
+				entryPoint: '@absolutejs/reports',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'CsvValue',
+						signature:
+							'type CsvValue = string | number | boolean | null | undefined;'
+					},
+					{
+						description:
+							'Always quote cells and neutralize spreadsheet formulas, including leading control/space characters.',
+						kind: 'function',
+						name: 'csvCell',
+						signature: 'function csvCell(value: CsvValue): string;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'toCsv',
+						signature:
+							'function toCsv(headers: readonly string[], rows: readonly (readonly CsvValue[])[]): string;'
+					},
+					{
+						description:
+							'Browser-only, called from a user action. Authorization and columns belong to the host.',
+						kind: 'function',
+						name: 'downloadText',
+						signature:
+							'function downloadText(text: string, filename: string, mime?: string): void;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ChartDatum',
+						signature:
+							'type ChartDatum = {\n    id: string;\n    label: string;\n    value: number;\n    color?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'chartValues',
+						signature:
+							'function chartValues(data: readonly ChartDatum[]): {\n    value: number;\n    id: string;\n    label: string;\n    color?: string;\n}[];'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/reports/react',
+				symbols: [
+					{
+						description:
+							'Native buttons provide keyboard activation, labels and a non-SVG fallback. Host styles abs-chart classes.',
+						kind: 'function',
+						name: 'BarChart',
+						signature:
+							'function BarChart({ data, label, onSelect, selected }: Props): import("react").JSX.Element;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'DonutChart',
+						signature:
+							'function DonutChart({ data, label, onSelect, selected }: Props): import("react").JSX.Element;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'TrendChart',
+						signature:
+							'function TrendChart({ data, label, onSelect, selected }: Props): import("react").JSX.Element;'
+					}
+				]
+			}
+		],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts src/react.tsx --outdir dist --target browser --external react --external react/* && tsc --declaration --emitDeclarationOnly --target ES2022 --module ESNext --moduleResolution bundler --jsx react-jsx --skipLibCheck --outDir dist src/index.ts src/react.tsx',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			}
+		],
+		description:
+			'Accessible SVG report charts and spreadsheet-safe CSV exports for AbsoluteJS',
+		directory: 'reports',
+		kind: 'package',
+		name: 'Reports',
+		packageName: '@absolutejs/reports',
+		private: false,
+		publicExports: ['@absolutejs/reports', '@absolutejs/reports/react'],
+		readmeDigest:
+			'ed515d2e5d7e0bc488b412af9221271f218e73cf0496f9020e5ae263c9956bec',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Reusable accessible SVG charts and spreadsheet-safe CSV mechanics. Hosts own metrics, authorized records, filters, column selection and styling.',
+				details: [
+					'toCsv(headers, rows) emits quoted UTF-8 BOM/CRLF CSV and neutralizes string formulas, including leading whitespace/control characters. Real numeric negatives stay numeric. Row widths must match headers.',
+					'downloadText(text, filename, mime?) downloads an already authorized response in the browser.',
+					'@absolutejs/reports/react exports BarChart, DonutChart and TrendChart. Pass {data:[{id,label,value,color?}],label,onSelect,selected?}. Selection works with mouse and keyboard, with labels/values outside the SVG. Use the abs-chart classes to match your application theme. Nonfinite/negative values display as zero.',
+					"CSV exports must reauthorize current access on the server. Do not export stale client caches after a user's membership changes. Chart callbacks return IDs only; chart primitives never fetch or infer permissions."
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/reports',
+		subpackages: [],
+		version: '0.1.1'
+	},
+	{
+		api: [
+			{
 				entryPoint: '@absolutejs/router',
 				symbols: [
 					{
@@ -50560,6 +61242,3058 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.9.6'
 	},
 	{
+		api: [
+			{
+				entryPoint: '@absolutejs/secure-messaging',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'createSecureMessagingClient',
+						signature:
+							'const createSecureMessagingClient: (options: SecureMessagingClientOptions) => SecureMessagingClient;'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'SecureMessagingError',
+						signature:
+							'class SecureMessagingError extends Error {\n    readonly name: string;\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'SecureMessagingConfigurationError',
+						signature:
+							'class SecureMessagingConfigurationError extends SecureMessagingError {\n    readonly name = "SecureMessagingConfigurationError";\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'SecureMessagingProtocolError',
+						signature:
+							'class SecureMessagingProtocolError extends SecureMessagingError {\n    readonly name = "SecureMessagingProtocolError";\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'SecureMessagingDurabilityUncertainError',
+						signature:
+							'class SecureMessagingDurabilityUncertainError extends SecureMessagingError {\n    readonly name = "SecureMessagingDurabilityUncertainError";\n    readonly outcome: "unknown";\n    constructor(options?: ErrorOptions);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'encodeSecureMessagingFrame',
+						signature:
+							'const encodeSecureMessagingFrame: (frame: SecureMessagingFrame) => Uint8Array;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'decodeSecureMessagingFrame',
+						signature:
+							'const decodeSecureMessagingFrame: (bytes: Uint8Array) => SecureMessagingFrame;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateSecureMessagingFrame',
+						signature:
+							'const validateSecureMessagingFrame: (frame: SecureMessagingFrame) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'encodeSecureMessagingWelcomeFrame',
+						signature:
+							'const encodeSecureMessagingWelcomeFrame: (frame: SecureMessagingWelcomeFrame) => Uint8Array;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'decodeSecureMessagingWelcomeFrame',
+						signature:
+							'const decodeSecureMessagingWelcomeFrame: (bytes: Uint8Array) => SecureMessagingWelcomeFrame;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateSecureMessagingWelcomeFrame',
+						signature:
+							'const validateSecureMessagingWelcomeFrame: (frame: SecureMessagingWelcomeFrame) => void;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingCommitResolution',
+						signature:
+							'type SecureMessagingCommitResolution = "applied" | "conflict" | "retry";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveSecureMessagingStoreCommit',
+						signature:
+							'const resolveSecureMessagingStoreCommit: (store: SecureMessagingStore, input: {\n    readonly conversation: SecureMessagingStoredConversation;\n    readonly expectedRevision?: number;\n}) => Promise<SecureMessagingCommitResolution>;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SECURE_MESSAGING_FRAME_CONTRACT',
+						signature: 'SECURE_MESSAGING_FRAME_CONTRACT'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingFrame',
+						signature:
+							'type SecureMessagingFrame = {\n    readonly authenticatedContext: AuthenticatedContext;\n    readonly contract: typeof SECURE_MESSAGING_FRAME_CONTRACT;\n    readonly createdAt: number;\n    readonly expiresAt: number;\n    readonly id: string;\n    readonly kind: "application" | "commit" | "proposal";\n    readonly protectedBytes: Uint8Array;\n    readonly protocol: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingWelcomeFrame',
+						signature:
+							'type SecureMessagingWelcomeFrame = {\n    readonly contract: typeof SECURE_MESSAGING_FRAME_CONTRACT;\n    readonly conversationId: string;\n    readonly createdAt: number;\n    readonly expiresAt: number;\n    readonly id: string;\n    readonly kind: "welcome";\n    readonly recipientDeviceId: string;\n    readonly securityMode: SecurityMode;\n    readonly welcomeBytes: Uint8Array;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingStoredConversation',
+						signature:
+							'type SecureMessagingStoredConversation = {\n    readonly conversationId: string;\n    readonly revision: number;\n    readonly sealedState: Uint8Array;\n    readonly securityMode: SecurityMode;\n    readonly status: "active" | "pending-invitation";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingInboundReceipt',
+						signature:
+							'type SecureMessagingInboundReceipt = {\n    readonly conversationId: string;\n    readonly digest: string;\n    readonly expiresAt: number;\n    readonly messageId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingOutboxEntry',
+						signature:
+							'type SecureMessagingOutboxEntry = {\n    readonly message: import("@absolutejs/e2ee").DeliveryMessage;\n    readonly queueId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingInboundStatus',
+						signature:
+							'type SecureMessagingInboundStatus = "conflict" | "duplicate" | "new";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingStoreCommitResult',
+						signature:
+							'type SecureMessagingStoreCommitResult = "committed" | "replay-conflict" | "state-conflict";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingStore',
+						signature:
+							'type SecureMessagingStore = {\n    /** Atomically commits state, a replay receipt, and queued delivery entries. */\n    readonly commit: (input: {\n        readonly conversation: SecureMessagingStoredConversation;\n        readonly expectedRevision?: number;\n        readonly inbound?: SecureMessagingInboundReceipt;\n        readonly outbox?: readonly SecureMessagingOutboxEntry[];\n    }) => Promise<SecureMessagingStoreCommitResult>;\n    readonly inspectInbound: (input: {\n        readonly conversationId: string;\n        readonly digest: string;\n        readonly messageId: string;\n    }) => Promise<SecureMessagingInboundStatus>;\n    readonly listOutbox: (limit: number) => Promise<readonly SecureMessagingOutboxEntry[]>;\n    readonly loadConversation: (conversationId: string) => Promise<SecureMessagingStoredConversation | undefined>;\n    readonly recordInbound: (receipt: SecureMessagingInboundReceipt) => Promise<Exclude<SecureMessagingInboundStatus, "new"> | "recorded">;\n    readonly removeConversation: (conversationId: string, expectedRevision: number) => Promise<boolean>;\n    readonly removeOutbox: (queueIds: readonly string[]) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingDirection',
+						signature:
+							'type SecureMessagingDirection = "inbound" | "outbound";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingPolicyInput',
+						signature:
+							'type SecureMessagingPolicyInput = {\n    readonly conversationId: string;\n    readonly direction: SecureMessagingDirection;\n    readonly expiresAt: number;\n    readonly messageBytes: number;\n    readonly messageId: string;\n    /** Authenticated application purpose bound into the MLS additional data. */\n    readonly purpose: string;\n    /** MLS epoch bound into the authenticated frame. */\n    readonly securityEpoch: number;\n    readonly senderDeviceId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingPolicy',
+						signature:
+							'type SecureMessagingPolicy = {\n    readonly authorize: (input: SecureMessagingPolicyInput) => boolean | Promise<boolean>;\n    readonly maximumFrameBytes: number;\n    readonly maximumFutureSkewMs: number;\n    readonly maximumMessageBytes: number;\n    readonly maximumTtlMs: number;\n    readonly securityMode: SecurityMode;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingMembershipAuthorization',
+						signature:
+							'type SecureMessagingMembershipAuthorization = {\n    readonly action: "invite" | "remove" | "self-update";\n    readonly conversationId: string;\n    readonly members: readonly DeviceCredential[];\n    readonly target: DeviceCredential;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingRecoveryAuthorization',
+						signature:
+							'type SecureMessagingRecoveryAuthorization = {\n    readonly action: "recover";\n    readonly authorityId: string;\n    readonly conversationId: string;\n    readonly lostDeviceIds: readonly string[];\n    readonly members: readonly DeviceCredential[];\n    readonly requestId: string;\n    readonly target: DeviceCredential;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingInvitationDisposition',
+						signature:
+							'type SecureMessagingInvitationDisposition = "accept" | "pending" | "reject";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingClientBaseOptions',
+						signature:
+							'type SecureMessagingClientBaseOptions = {\n    readonly delivery: DeliveryService;\n    readonly deviceCredential: LocalDeviceCredential;\n    readonly idFactory?: () => string;\n    readonly keyPackageDirectory: KeyPackageDirectory;\n    readonly membershipPolicy: {\n        readonly authorize: (input: SecureMessagingMembershipAuthorization | SecureMessagingRecoveryAuthorization) => boolean | Promise<boolean>;\n        readonly reviewInvitation: (input: Omit<SecureMessagingMembershipAuthorization, "action">) => SecureMessagingInvitationDisposition | Promise<SecureMessagingInvitationDisposition>;\n    };\n    readonly now?: () => number;\n    readonly provider: MessagingProvider;\n    readonly store: SecureMessagingStore;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingClientOptions',
+						signature:
+							'type SecureMessagingClientOptions = SecureMessagingClientBaseOptions & ({\n    readonly policy: SecureMessagingPolicy & {\n        readonly securityMode: "managed-recovery";\n    };\n    readonly recovery: RecoveryGrantVerifier;\n} | {\n    readonly policy: SecureMessagingPolicy & {\n        readonly securityMode: "strict-e2ee";\n    };\n    readonly recovery?: never;\n});'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingInviteInput',
+						signature:
+							'type SecureMessagingInviteInput = {\n    readonly conversationId: string;\n    readonly identityId: string;\n    readonly ttlMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingMembershipDeliveryResult',
+						signature:
+							'type SecureMessagingMembershipDeliveryResult = {\n    readonly delivery: "delivered" | "queued";\n    readonly epoch: number;\n    readonly messageIds: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingSendInput',
+						signature:
+							'type SecureMessagingSendInput = {\n    readonly conversationId: string;\n    /** Fail instead of sending if the conversation has advanced to another epoch. */\n    readonly expectedSecurityEpoch?: number;\n    readonly id: string;\n    readonly plaintext: Uint8Array;\n    readonly purpose: string;\n    readonly recipientDeviceId?: string;\n    readonly ttlMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingReceiveResult',
+						signature:
+							'type SecureMessagingReceiveResult = {\n    readonly cursor?: string;\n    readonly duplicates: readonly string[];\n    readonly expired: readonly string[];\n    readonly joined: readonly string[];\n    readonly messages: readonly MessagingProcessResult[];\n    readonly pendingInvitations: readonly string[];\n    readonly rejected: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingApplicationMessage',
+						signature:
+							'type SecureMessagingApplicationMessage = {\n    readonly id: string;\n    readonly message: DecryptedMessage;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingApplicationReply',
+						signature:
+							'type SecureMessagingApplicationReply = Omit<SecureMessagingSendInput, "conversationId" | "expectedSecurityEpoch">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingApplicationHandler',
+						signature:
+							'type SecureMessagingApplicationHandler = (input: SecureMessagingApplicationMessage) => Promise<readonly SecureMessagingApplicationReply[]> | readonly SecureMessagingApplicationReply[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingHandledReceiveResult',
+						signature:
+							'type SecureMessagingHandledReceiveResult = Omit<SecureMessagingReceiveResult, "messages"> & {\n    readonly handled: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingRemoveInput',
+						signature:
+							'type SecureMessagingRemoveInput = {\n    readonly conversationId: string;\n    readonly deviceIds: readonly string[];\n    readonly ttlMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingRecoverInput',
+						signature:
+							'type SecureMessagingRecoverInput = {\n    readonly grant: RecoveryGrant;\n    readonly request: RecoveryRequest;\n    readonly ttlMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingDeliveryResult',
+						signature:
+							'type SecureMessagingDeliveryResult = {\n    readonly delivery: "delivered" | "queued";\n    readonly id: string;\n    readonly securityEpoch: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingFlushResult',
+						signature:
+							'type SecureMessagingFlushResult = {\n    readonly delivered: readonly string[];\n    readonly hasMore: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureMessagingClient',
+						signature:
+							'type SecureMessagingClient = {\n    readonly acceptInvitation: (conversationId: string) => Promise<void>;\n    readonly closeConversation: (conversationId: string) => Promise<void>;\n    readonly createConversation: (conversationId: string) => Promise<void>;\n    readonly flushOutbox: (limit?: number) => Promise<SecureMessagingFlushResult>;\n    readonly invite: (input: SecureMessagingInviteInput) => Promise<SecureMessagingMembershipDeliveryResult>;\n    readonly loadConversation: (conversationId: string) => Promise<void>;\n    readonly receive: (cursor?: string) => Promise<SecureMessagingReceiveResult>;\n    /**\n     * Runs application handling before the inbound receipt is committed and\n     * atomically queues returned replies with the advanced conversation state.\n     * Ownership of inbound and reply plaintext transfers to this method and the\n     * buffers are wiped before it returns.\n     */\n    readonly receiveAndHandle: (handler: SecureMessagingApplicationHandler, cursor?: string) => Promise<SecureMessagingHandledReceiveResult>;\n    readonly recoverMember: (input: SecureMessagingRecoverInput) => Promise<SecureMessagingMembershipDeliveryResult>;\n    readonly rejectInvitation: (conve'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/secure-messaging/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    maximumFrameBytes?: number;\n    maximumFutureSkewMs?: number;\n    maximumMessageBytes?: number;\n    maximumTtlMs?: number;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        maximumFrameBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maximumFutureSkewMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maximumMessageBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maximumTtlMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+					}
+				]
+			}
+		],
+		category: 'Messaging',
+		commands: [
+			{
+				command:
+					"rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/e2ee --external '@absolutejs/e2ee/*' --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Provider-neutral secure conversation orchestration for AbsoluteJS E2EE providers and untrusted delivery services.',
+		directory: 'secure-messaging',
+		kind: 'package',
+		name: 'Secure Messaging',
+		packageName: '@absolutejs/secure-messaging',
+		private: false,
+		publicExports: [
+			'@absolutejs/secure-messaging',
+			'@absolutejs/secure-messaging/manifest',
+			'@absolutejs/secure-messaging/manifest.json'
+		],
+		readmeDigest:
+			'c647aaea743bfdd6f1326256ac9e4ca908c1d25e8389d4bfd49a913d078a436e',
+		readmeSamples: [
+			{
+				code: 'import { createSecureMessagingClient } from "@absolutejs/secure-messaging";\n\nconst messaging = createSecureMessagingClient({\n  delivery,\n  deviceCredential,\n  keyPackageDirectory,\n  membershipPolicy: {\n    authorize: ({ target }) => approvedIdentities.has(target.identityId),\n    reviewInvitation: ({ members }) =>\n      members.every(({ identityId }) => approvedIdentities.has(identityId))\n        ? "accept"\n        : "pending",\n  },\n  policy: {\n    authorize: ({ direction, purpose, securityEpoch, senderDeviceId }) =>\n      allowedPurposes.has(purpose) &&\n      securityEpoch >= minimumEpoch &&\n      (direction === "outbound" || trustedDevices.has(senderDeviceId)),\n    maximumFrameBytes: 1_572_864,\n    maximumFutureSkewMs: 300_000,\n    maximumMessageBytes: 1_048_576,\n    maximumTtlMs: 86_400_000,\n    securityMode: "strict-e2ee",\n  },\n  provider,\n  store,\n});',
+				description: '# @absolutejs/secure-messaging',
+				heading: '@absolutejs/secure-messaging quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral secure conversation orchestration for AbsoluteJS. It composes a MessagingProvider, untrusted DeliveryService, application policy, and durable atomic state/outbox/replay store behind one API. Cryptography remains in interchangeable @absolutejs/e2ee- providers.',
+				details: [
+					'The confidentiality mode is mandatory and explicit. strict-e2ee means only verified participant devices may decrypt. managed-recovery is a separate conversation contract and requires a visibly identified recovery authority in the surrounding application. This package never silently changes modes.',
+					'For managed-recovery, also provide exactly one recovery verifier. A recovery request is short-lived and binds the conversation, subject identity, replacement device credential, and every lost device ID. After the configured authority and local membership policy both approve it, recoverMember() adds the replacement KeyPackage and removes the lost leaves in one MLS commit. Strict-E2EE clients reject recovery-authority configuration.',
+					"Version 0.3.0 includes an explicit invitation inbox, durable MLS membership maintenance. A cryptographically valid Welcome can be accepted immediately, held as an inert pending-invitation, or durably rejected. Pending conversations cannot send, invite, remove members, self-update, or process conversation traffic. Member removal and self-update policy checks occur before MLS mutation, and the resulting group state and retryable commit messages use one atomic store commit. Managed state-loss recovery uses RFC 9750's recovery-after-state-loss model and never hands serialized live group state to the recovery authority. Attachments, abuse reports and federation live in separate packages and are not claimed by this core package.",
+					"Version 0.4.0 adds expectedSecurityEpoch for sensitive application messages. Use the epoch returned by removeMembers(), recoverMember(), or selfUpdate() when sending an attachment replacement or another action that must occur in that exact post-commit roster. The client checks the precondition before protecting or persisting the message and returns the authenticated securityEpoch on success. This follows RFC 9420's epoch model: fresh Commit entropy is available only to members of the new epoch. The real MLS integration suite sends a strict @absolutejs/secure-transfer replacement in that epoch, verifies the replacement device can decode it, and verifies the removed device cannot process the same application ciphertext.",
+					'Version 0.5.0 runs inbound application authorization only after the selected E2EE provider has authenticated and processed the frame. The policy receives the authenticated purpose and security epoch; for application messages, messageBytes is the decrypted plaintext size. A rejection discards the mutated in-memory session and requires a durable reload, so an unauthenticated envelope cannot trigger authorization side effects.',
+					'Version 0.5.1 adds receiveAndHandle() for request/receipt protocols. Its handler runs after MLS authentication and application policy, but before the inbound replay receipt or transport cursor is committed. Replies returned by the handler are protected at the same MLS epoch and placed in the durable outbox in the same store commit as the inbound receipt and advanced provider state. The method wipes inbound and reply plaintext and returns message IDs rather than plaintext. Use the authenticated request ID as the downstream idempotency key: an application side effect can be retried if the process exits before the atomic commit.',
+					'Version 0.6.0 exports SecureMessagingDurabilityUncertainError for the storage boundary where a mutation may have applied but its durability acknowledgement was lost. Callers must resolve the authoritative store, reload state, and retry only when the expected revision or effect is absent. The error contains no conversation, message, queue, or provider data.',
+					"Version 0.6.1 adds resolveSecureMessagingStoreCommit(). After selecting the authoritative store, pass it the intended conversation and expected revision. It returns applied only when the complete stored conversation—including sealed state—matches, retry only when the prior revision is still authoritative, and conflict for every other state. Associated replay and outbox effects follow the store's atomic commit contract."
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Delivery sees ciphertext and minimum routing metadata, never conversation keys.',
+				details: [
+					'Unknown fields, malformed frames, metadata substitution, replay-ID conflicts,',
+					'unauthorized messages, and processing errors fail closed without acknowledgement.',
+					'Inbound policy.authorize may perform audit or approval effects because it is',
+					'called only after cryptographic authentication. Treat delivery metadata and pre-decryption frame fields as untrusted everywhere else.',
+					"receiveAndHandle() transfers ownership of its handler's reply buffers to the",
+					'client and wipes them. Handler side effects must be idempotent because a crash after the effect but before the store commit causes safe redelivery.',
+					'Exact duplicates and already-expired frames can be acknowledged without being',
+					'processed.',
+					'The store must atomically commit sealed provider state, its compare-and-set',
+					'revision, an inbound replay receipt, and outbound queue entries. Splitting these writes can cause message loss, replay lockout, or MLS state divergence.',
+					'recordInbound must durably preserve a rejected Welcome receipt without',
+					'creating conversation state. removeConversation must compare-and-delete the exact revision while preserving replay receipts. These properties prevent a rejected invite from reappearing and prevent acceptance/rejection races.'
+				],
+				title: 'Security boundaries'
+			}
+		],
+		repository: 'https://github.com/absolutejs/secure-messaging',
+		subpackages: [],
+		version: '0.6.1'
+	},
+	{
+		api: [],
+		category: 'Messaging',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format:check && bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command:
+					'bun run --cwd postgres test:integration && bun run --cwd redis test:integration',
+				name: 'test:integration'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Durable storage adapters and repeatable conformance drills for @absolutejs/secure-messaging.',
+		directory: 'secure-messaging-adapters',
+		kind: 'monorepo',
+		name: 'Secure Messaging Adapters',
+		packageName: '@absolutejs/secure-messaging-adapters',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'06f57e16398f7585b23839bb7e8a6146a875991fe8d3d0363dcfae66b9c2b46e',
+		readmeSamples: [
+			{
+				code: 'SECURE_MESSAGING_TEST_POSTGRES_URL=postgresql://... bun run --cwd postgres test:integration\nSECURE_MESSAGING_TEST_REDIS_URL=redis://... bun run --cwd redis test:integration',
+				description: '# AbsoluteJS secure-messaging adapters',
+				heading: 'AbsoluteJS secure-messaging adapters quick start',
+				language: 'sh'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Durable storage adapters and repeatable conformance drills for @absolutejs/secure-messaging.',
+				details: [
+					'@absolutejs/secure-messaging-store-conformance checks the atomic store',
+					'contract, real acknowledgement-loss ambiguity, and crash boundaries without selecting a database.',
+					'@absolutejs/secure-messaging-postgres is the recommended production store.',
+					'@absolutejs/secure-messaging-redis is available for operators who configure',
+					'Redis as durable, non-evicting primary storage.',
+					'All packages are early 0.x releases. No adapter changes the explicit E2EE security mode or makes plaintext available to the database.',
+					'Run the real-backend drills with isolated databases:',
+					'Licensed under Apache-2.0.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/secure-messaging-adapters',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/secure-messaging-postgres',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingPostgresQueryResult',
+								signature:
+									'type SecureMessagingPostgresQueryResult<Row> = {\n    readonly rowCount: number;\n    readonly rows: readonly Row[];\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingPostgresTransaction',
+								signature:
+									'type SecureMessagingPostgresTransaction = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<SecureMessagingPostgresQueryResult<Row>>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingPostgresClient',
+								signature:
+									'type SecureMessagingPostgresClient = SecureMessagingPostgresTransaction & {\n    readonly transaction: <Result>(operation: (transaction: SecureMessagingPostgresTransaction) => Promise<Result>) => Promise<Result>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'PostgresJsLike',
+								signature:
+									'type PostgresJsLike = {\n    readonly begin: <Result>(operation: (transaction: PostgresJsQueryLike) => Promise<Result>) => Promise<Result>;\n    readonly unsafe: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<readonly Row[] & {\n        readonly count?: number;\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'PostgresJsQueryLike',
+								signature:
+									'type PostgresJsQueryLike = Pick<PostgresJsLike, "unsafe">;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'NodePostgresPoolLike',
+								signature:
+									'type NodePostgresPoolLike = {\n    readonly connect: () => Promise<NodePostgresPoolClientLike>;\n    readonly query: <Row extends Record<string, unknown> = Record<string, unknown>>(text: string, values?: readonly unknown[]) => Promise<{\n        readonly rowCount: number | null;\n        readonly rows: readonly Row[];\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'NodePostgresPoolClientLike',
+								signature:
+									'type NodePostgresPoolClientLike = Pick<NodePostgresPoolLike, "query"> & {\n    readonly release: () => void;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingPostgresStore',
+								signature:
+									'type SecureMessagingPostgresStore = SecureMessagingStore & {\n    readonly deleteExpiredInbound: (input: {\n        readonly batchSize?: number;\n        readonly now?: number;\n    }) => Promise<number>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingPostgresDurability',
+								signature:
+									'type SecureMessagingPostgresDurability = "local-wal" | "synchronous-replica";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'SECURE_MESSAGING_POSTGRES_MIGRATION',
+								signature:
+									'const SECURE_MESSAGING_POSTGRES_MIGRATION: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresJsSecureMessagingClient',
+								signature:
+									'const createPostgresJsSecureMessagingClient: (value: unknown) => SecureMessagingPostgresClient;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createNodePostgresSecureMessagingClient',
+								signature:
+									'const createNodePostgresSecureMessagingClient: (value: unknown) => SecureMessagingPostgresClient;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresSecureMessagingStore',
+								signature:
+									'const createPostgresSecureMessagingStore: (options: {\n    readonly client: SecureMessagingPostgresClient;\n    readonly durability: SecureMessagingPostgresDurability;\n    readonly maximumOutboxBytes?: number;\n    readonly maximumStateBytes?: number;\n    readonly now?: () => number;\n    readonly deviceId: string;\n    readonly tenantId: string;\n}) => SecureMessagingPostgresStore;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/secure-messaging && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'bun test tests/postgres.test.ts',
+						name: 'test:integration'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Tenant-scoped atomic PostgreSQL SecureMessagingStore for AbsoluteJS.',
+				name: '@absolutejs/secure-messaging-postgres',
+				private: false,
+				publicExports: [
+					'@absolutejs/secure-messaging-postgres',
+					'@absolutejs/secure-messaging-postgres/migrations/postgres.sql'
+				],
+				readmeDigest:
+					'7407017cf874d212730a1a3c537f3a269f0d128e559ae6588051fe7bb0df8b58',
+				readmeSamples: [
+					{
+						code: 'import postgres from "postgres";\nimport {\n  createPostgresJsSecureMessagingClient,\n  createPostgresSecureMessagingStore,\n} from "@absolutejs/secure-messaging-postgres";\n\nconst sql = postgres(process.env.DATABASE_URL!);\nconst store = createPostgresSecureMessagingStore({\n  client: createPostgresJsSecureMessagingClient(sql),\n  deviceId: authenticatedDevice.id,\n  durability: "local-wal",\n  tenantId: authenticatedTenant.id,\n});',
+						description: '# @absolutejs/secure-messaging-postgres',
+						heading:
+							'@absolutejs/secure-messaging-postgres quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'The recommended production SecureMessagingStore for AbsoluteJS. One database transaction atomically commits sealed MLS state, an inbound replay receipt, and encrypted outbox entries. Conversation updates use revision compare-and-swap.',
+						details: [
+							'createNodePostgresSecureMessagingClient(pool) supports pg pools without making either driver a runtime dependency.',
+							'durability is mandatory. local-wal forces synchronous_commit=on for every adapter transaction, regardless of a weaker session or database default. synchronous-replica forces synchronous_commit=remote_apply and must only be used with an intentionally configured synchronous standby. It can block when that standby is unavailable, so rehearse failover and define an operator-owned availability policy instead of weakening durability silently. Both modes fail closed when PostgreSQL reports fsync=off; the replica mode also rejects an empty synchronous_standby_names setting.',
+							'Apply the exported SECURE_MESSAGING_POSTGRES_MIGRATION or the packaged ./migrations/postgres.sql through your migration system. The migration is idempotent. Call deleteExpiredInbound() repeatedly from a maintenance job until it returns zero.',
+							'Tenant/device scope, conversation, message, and queue identifiers are SHA-256 digested before use as keys. Device scope is mandatory because two devices hold different MLS state for the same conversation. Delivery routing metadata and encrypted frames remain visible to the database; message plaintext and unsealed MLS state do not.',
+							'Run @absolutejs/secure-messaging-store-conformance against an isolated tenant after database upgrades and restore drills.',
+							'This release accepts the @absolutejs/secure-messaging@0.6 store contract and classifies mutation response loss as SecureMessagingDurabilityUncertainError. Reconnect to the authoritative database and call resolveSecureMessagingStoreCommit() before retrying a conversation commit.',
+							'Licensed under Apache-2.0.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'postgres',
+				version: '0.2.1'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/secure-messaging-redis',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'SECURE_MESSAGING_REDIS_DEFAULT_KEY_PREFIX',
+								signature:
+									'const SECURE_MESSAGING_REDIS_DEFAULT_KEY_PREFIX: "absolute:secure-messaging:";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'SECURE_MESSAGING_REDIS_ACL_COMMANDS',
+								signature:
+									'const SECURE_MESSAGING_REDIS_ACL_COMMANDS: readonly ["client|setinfo", "client|setname", "del", "eval", "get", "hget", "hgetall", "hset", "info", "ping", "set", "wait", "waitaof", "zadd", "zrange", "zrem"];'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createSecureMessagingRedisAclRules',
+								signature:
+									'const createSecureMessagingRedisAclRules: (options?: {\n    readonly keyPrefix?: string;\n}) => readonly string[];'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingRedisClient',
+								signature:
+									'type SecureMessagingRedisClient = {\n    readonly eval: (script: string, keys: readonly string[], arguments_: readonly string[]) => Promise<unknown>;\n    readonly get: (key: string) => Promise<string | null | undefined>;\n    readonly hgetall: (key: string) => Promise<Record<string, string> | null>;\n    readonly zrange: (key: string, start: number, stop: number) => Promise<readonly string[]>;\n    readonly wait: (replicas: number, timeoutMilliseconds: number) => Promise<unknown>;\n    readonly waitaof: (localFsyncs: number, replicaFsyncs: number, timeoutMilliseconds: number) => Promise<unknown>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingRedisDurability',
+								signature:
+									'type SecureMessagingRedisDurability = {\n    readonly mode: "memory";\n} | {\n    readonly mode: "replicated";\n    readonly replicas: number;\n    readonly timeoutMilliseconds: number;\n} | {\n    readonly mode: "aof";\n    readonly replicaFsyncs: number;\n    readonly timeoutMilliseconds: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'NodeRedisLike',
+								signature:
+									'type NodeRedisLike = {\n    readonly eval: (script: string, options: {\n        readonly arguments: readonly string[];\n        readonly keys: readonly string[];\n    }) => Promise<unknown>;\n    readonly get: (key: string) => Promise<string | null>;\n    readonly hGetAll: (key: string) => Promise<Record<string, string>>;\n    readonly zRange: (key: string, start: number, stop: number) => Promise<string[]>;\n    readonly sendCommand: (arguments_: readonly string[]) => Promise<unknown>;\n    readonly wait: (replicas: number, timeoutMilliseconds: number) => Promise<unknown>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'IoRedisLike',
+								signature:
+									'type IoRedisLike = {\n    readonly call: (...arguments_: string[]) => Promise<unknown>;\n    readonly eval: (script: string, numberOfKeys: number, ...keysAndArguments: string[]) => Promise<unknown>;\n    readonly get: (key: string) => Promise<string | null>;\n    readonly hgetall: (key: string) => Promise<Record<string, string>>;\n    readonly zrange: (key: string, start: number, stop: number) => Promise<string[]>;\n    readonly wait: (replicas: number, timeoutMilliseconds: number) => Promise<unknown>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createNodeRedisSecureMessagingClient',
+								signature:
+									'const createNodeRedisSecureMessagingClient: (value: unknown) => SecureMessagingRedisClient;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createIoRedisSecureMessagingClient',
+								signature:
+									'const createIoRedisSecureMessagingClient: (value: unknown) => SecureMessagingRedisClient;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'SECURE_MESSAGING_REDIS_COMMIT_SCRIPT',
+								signature:
+									'const SECURE_MESSAGING_REDIS_COMMIT_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'SECURE_MESSAGING_REDIS_RECORD_INBOUND_SCRIPT',
+								signature:
+									'const SECURE_MESSAGING_REDIS_RECORD_INBOUND_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'SECURE_MESSAGING_REDIS_REMOVE_CONVERSATION_SCRIPT',
+								signature:
+									'const SECURE_MESSAGING_REDIS_REMOVE_CONVERSATION_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'SECURE_MESSAGING_REDIS_REMOVE_OUTBOX_SCRIPT',
+								signature:
+									'const SECURE_MESSAGING_REDIS_REMOVE_OUTBOX_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createRedisSecureMessagingStore',
+								signature:
+									'const createRedisSecureMessagingStore: (options: {\n    readonly client: SecureMessagingRedisClient;\n    readonly durability: SecureMessagingRedisDurability;\n    readonly keyPrefix?: string;\n    readonly maximumOutboxBytes?: number;\n    readonly maximumStateBytes?: number;\n    readonly now?: () => number;\n    readonly deviceId: string;\n    readonly tenantId: string;\n}) => SecureMessagingStore;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/secure-messaging && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'bun test tests/redis.test.ts',
+						name: 'test:integration'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Tenant-scoped atomic Redis SecureMessagingStore for explicitly durable Redis deployments.',
+				name: '@absolutejs/secure-messaging-redis',
+				private: false,
+				publicExports: ['@absolutejs/secure-messaging-redis'],
+				readmeDigest:
+					'3997894ad27bacf09af7b301e443fc29fd073e98de1a6c11a959d132a577e687',
+				readmeSamples: [
+					{
+						code: 'const redis = createClient({ url: process.env.REDIS_URL });\nawait redis.connect();\n\nconst store = createRedisSecureMessagingStore({\n  client: createNodeRedisSecureMessagingClient(redis),\n  deviceId: authenticatedDevice.id,\n  durability: {\n    mode: "aof",\n    replicaFsyncs: 1,\n    timeoutMilliseconds: 5_000,\n  },\n  tenantId: authenticatedTenant.id,\n});',
+						description: '# @absolutejs/secure-messaging-redis',
+						heading:
+							'@absolutejs/secure-messaging-redis quick start',
+						language: 'typescript'
+					},
+					{
+						code: 'const permissions = createSecureMessagingRedisAclRules();\nawait admin.call(\n  "ACL",\n  "SETUSER",\n  username,\n  "reset",\n  "on",\n  `>${generatedPassword}`,\n  ...permissions,\n);',
+						description: '# @absolutejs/secure-messaging-redis',
+						heading:
+							'@absolutejs/secure-messaging-redis quick start 2',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'An atomic Redis SecureMessagingStore for operators deliberately using Redis as durable primary storage. Lua scripts commit sealed MLS state, replay receipts, and encrypted outbox entries as one transition. Every tenant uses a Redis Cluster hash tag so all transaction keys occupy one slot.',
+						details: [
+							'An ioredis wrapper is also exported. Configure AOF and RDB persistence, replication, backups, and maxmemory-policy noeviction. A cache or evicting Redis deployment is unsafe for MLS state. PostgreSQL is the default recommendation.',
+							'Durability is mandatory and explicit. aof uses Redis 7.2+ WAITAOF after each successful mutation and fails closed unless the local AOF plus the requested replica AOF count acknowledge it. replicated uses WAIT, which reduces but does not eliminate failover data loss. memory performs no acknowledgement and must be limited to tests or deliberately lossy development environments. A durability timeout is an ambiguous commit: reload state before retrying. The adapter reports this boundary as SecureMessagingDurabilityUncertainError. Resolve the authoritative primary and call resolveSecureMessagingStoreCommit() with the intended conversation and expected revision; retry only when it returns retry. applied means the exact conversation and its atomic replay/outbox effects already committed, while conflict must never be overwritten.',
+							'Sentinel operators should also configure min-replicas-to-write and min-replicas-max-lag so an isolated former primary stops accepting mutations. That admission gate reduces the unsafe partition window but does not replace WAIT/WAITAOF, authoritative-primary resolution, or uncertainty handling.',
+							'Create application users from the exported least-privilege contract instead of granting command categories or using the legacy default user:',
+							'The default profile grants no Pub/Sub channels, scopes keys to absolute:secure-messaging:, denies every command category, and restores only the connection, read, Lua-internal mutation, and durability commands used by this adapter. Custom prefixes must contain only ASCII letters, digits, colon, underscore, and hyphen so ACL glob metacharacters cannot widen key access.',
+							'The built-in node-redis and ioredis wrappers are for a direct standalone or Sentinel-managed primary connection. Although the hash tag keeps Lua keys in one Redis Cluster slot, a keyless WAIT or WAITAOF sent through a generic Cluster router is not proven to use that same primary connection. Cluster operators must provide a custom SecureMessagingRedisClient that pins eval and durability acknowledgement to the same shard connection; this is an independent-review target, not an inferred guarantee.',
+							'Inbound replay receipts use absolute expiry. Tenant and device IDs jointly bind the Redis Cluster namespace because each device has distinct MLS state. Conversation state and outbox entries do not expire and must never be evicted. Run the shared conformance suite after failover and restore drills.',
+							'Licensed under Apache-2.0.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'redis',
+				version: '0.4.0'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/secure-messaging-store-conformance',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingStoreConformanceOptions',
+								signature:
+									'type SecureMessagingStoreConformanceOptions = {\n    readonly createStore: (scenario: string) => Promise<SecureMessagingStore> | SecureMessagingStore;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingStoreConformanceResult',
+								signature:
+									'type SecureMessagingStoreConformanceResult = {\n    readonly scenarios: readonly string[];\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingDurabilityUncertaintyConformanceOptions',
+								signature:
+									'type SecureMessagingDurabilityUncertaintyConformanceOptions = {\n    readonly commitWithLostAcknowledgement: (input: SecureMessagingStoreCommitInput) => Promise<unknown>;\n    readonly resolveAuthoritativeStore: () => Promise<SecureMessagingStore> | SecureMessagingStore;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingDurabilityUncertaintyConformanceResult',
+								signature:
+									'type SecureMessagingDurabilityUncertaintyConformanceResult = {\n    readonly initialResolution: "applied" | "retry";\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureMessagingStoreRecoveryFixture',
+								signature:
+									'type SecureMessagingStoreRecoveryFixture = {\n    readonly conversationId: string;\n    readonly digest: string;\n    readonly expiresAt: number;\n    readonly messageId: string;\n    readonly queueId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'runSecureMessagingDurabilityUncertaintyConformance',
+								signature:
+									'const runSecureMessagingDurabilityUncertaintyConformance: (options: SecureMessagingDurabilityUncertaintyConformanceOptions) => Promise<SecureMessagingDurabilityUncertaintyConformanceResult>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'runSecureMessagingStoreConformance',
+								signature:
+									'const runSecureMessagingStoreConformance: (options: SecureMessagingStoreConformanceOptions) => Promise<SecureMessagingStoreConformanceResult>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'seedSecureMessagingStoreRecovery',
+								signature:
+									'const seedSecureMessagingStoreRecovery: (store: SecureMessagingStore, runId: string) => Promise<SecureMessagingStoreRecoveryFixture>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'mutateSecureMessagingStoreAfterRecoveryPoint',
+								signature:
+									'const mutateSecureMessagingStoreAfterRecoveryPoint: (store: SecureMessagingStore, fixture: SecureMessagingStoreRecoveryFixture) => Promise<void>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'verifySecureMessagingStoreRecovery',
+								signature:
+									'const verifySecureMessagingStoreRecovery: (store: SecureMessagingStore, fixture: SecureMessagingStoreRecoveryFixture) => Promise<void>;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/secure-messaging && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Repeatable atomicity, replay, concurrency, and crash-boundary drills for SecureMessagingStore adapters.',
+				name: '@absolutejs/secure-messaging-store-conformance',
+				private: false,
+				publicExports: [
+					'@absolutejs/secure-messaging-store-conformance'
+				],
+				readmeDigest:
+					'4549be286f7123999baace1e212957451d3e91fe4f4a2b11bb37fc45e9dad559',
+				readmeSamples: [
+					{
+						code: 'await runSecureMessagingStoreConformance({\n  createStore: (scenario) => createStoreForIsolatedTenant(scenario),\n});',
+						description:
+							'# @absolutejs/secure-messaging-store-conformance',
+						heading:
+							'@absolutejs/secure-messaging-store-conformance quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Framework-neutral, repeatable drills for every SecureMessagingStore adapter. The runner checks atomic state/replay/outbox commits, revision compare-and-swap, replay conflicts, rollback, concurrent writers, idempotent outbox acknowledgement, revision rollback rejection, revision-checked deletion, cloning, and ambiguous commit retries.',
+						details: [
+							'runSecureMessagingDurabilityUncertaintyConformance() injects the real post-mutation acknowledgement-loss boundary. It requires the adapter to throw SecureMessagingDurabilityUncertainError, resolves the authoritative store, handles both the already-applied and safe-to-retry outcomes, and proves the final state and outbox effect exist exactly once.',
+							'Use an isolated tenant or freshly reset database for every scenario. Run this suite in adapter CI, before PaaS releases, and during scheduled durability drills.',
+							'Backup drills can call seedSecureMessagingStoreRecovery, capture an operator-controlled backup, call mutateSecureMessagingStoreAfterRecoveryPoint against the source, restore into an isolated target, and then call verifySecureMessagingStoreRecovery against that target. The fixture contains only synthetic identifiers and encrypted bytes, so drill evidence never needs tenant data or key material.',
+							'Licensed under Apache-2.0.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'conformance',
+				version: '0.2.0'
+			}
+		],
+		version: null
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/secure-messaging-federation',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'createFederationAbuseReport',
+						signature:
+							'const createFederationAbuseReport: (input: {\n    readonly allegedSender: string;\n    readonly authorization: FederationAbuseAuthorization;\n    readonly createdAt: number;\n    readonly evidence: Uint8Array;\n    readonly evidenceProvider: FederationAbuseEvidenceProvider;\n    readonly expiresAt: number;\n    readonly maximumEvidenceBytes: number;\n    readonly maximumSealedEvidenceBytes: number;\n    readonly maximumTtlMs: number;\n    readonly messageIds: readonly string[];\n    readonly reason: FederationAbuseReason;\n    readonly recipientKeyId: string;\n    readonly reportId: string;\n    readonly roomId: string;\n}) => Promise<FederationAbuseReport>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'toBase64Url',
+						signature:
+							'const toBase64Url: (bytes: Uint8Array) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'canonicalBytes',
+						signature:
+							'const canonicalBytes: (value: unknown) => Uint8Array;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'digestCanonical',
+						signature:
+							'const digestCanonical: (value: unknown) => Promise<string>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'signFederationEnvelope',
+						signature:
+							'const signFederationEnvelope: (input: {\n    readonly envelope: FederationEnvelope;\n    readonly limits: FederationLimits;\n    readonly localDomain: string;\n    readonly now: number;\n    readonly session: FederationSession;\n    readonly signatureProvider: FederationSignatureProvider;\n}) => Promise<SignedFederationEnvelope>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyFederationEnvelope',
+						signature:
+							'const verifyFederationEnvelope: (input: {\n    readonly limits: FederationLimits;\n    readonly localDomain: string;\n    readonly now: number;\n    readonly replayStore: FederationReplayStore;\n    readonly session: FederationSession;\n    readonly signatureProvider: FederationSignatureProvider;\n    readonly signed: SignedFederationEnvelope;\n}) => Promise<FederationEnvelope>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationErrorCode',
+						signature:
+							'type FederationErrorCode = "authentication-failed" | "downgrade-detected" | "expired" | "invalid-input" | "policy-rejected" | "replay" | "unsupported";'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'FederationError',
+						signature:
+							'class FederationError extends Error {\n    readonly code: FederationErrorCode;\n    constructor(code: FederationErrorCode, message: string);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'negotiateFederation',
+						signature:
+							'const negotiateFederation: (input: {\n    readonly initiatorOffer: FederationOffer;\n    readonly limits: FederationLimits;\n    readonly now: number;\n    readonly preferredProfileIds: readonly string[];\n    readonly responderOffer: FederationOffer;\n    readonly sessionId: string;\n}) => Promise<FederationTranscript>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'confirmFederationTranscript',
+						signature:
+							'const confirmFederationTranscript: (input: {\n    readonly destinationDomain: string;\n    readonly domain: string;\n    readonly signatureProvider: FederationSignatureProvider;\n    readonly transcript: FederationTranscript;\n}) => Promise<FederationConfirmation>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'activateFederationSession',
+						signature:
+							'const activateFederationSession: (input: {\n    readonly initiatorConfirmation: FederationConfirmation;\n    readonly initiatorOffer: FederationOffer;\n    readonly now: number;\n    readonly responderConfirmation: FederationConfirmation;\n    readonly responderOffer: FederationOffer;\n    readonly signatureProvider: FederationSignatureProvider;\n    readonly transcript: FederationTranscript;\n}) => Promise<FederationSession>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'requireToken',
+						signature:
+							'const requireToken: (value: string, label: string) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'requireDomain',
+						signature:
+							'const requireDomain: (value: string, label: string) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateProfile',
+						signature:
+							'const validateProfile: (profile: FederationProfile, limits?: Pick<FederationLimits, "maximumFrameBytes">) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateOffer',
+						signature:
+							'const validateOffer: (offer: FederationOffer, now: number, limits: FederationLimits) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'encodeSignedFederationEnvelope',
+						signature:
+							'const encodeSignedFederationEnvelope: (signed: SignedFederationEnvelope) => Uint8Array;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'decodeSignedFederationEnvelope',
+						signature:
+							'const decodeSignedFederationEnvelope: (bytes: Uint8Array, limits: {\n    readonly maximumEnvelopeBytes: number;\n    readonly maximumPayloadBytes: number;\n    readonly maximumSignatureBytes: number;\n}) => SignedFederationEnvelope;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'FEDERATION_CONTRACT',
+						signature: 'const FEDERATION_CONTRACT: 1;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationSecurityMode',
+						signature:
+							'type FederationSecurityMode = {\n    readonly mode: "strict-e2ee";\n} | {\n    readonly mode: "managed-recovery";\n    readonly recoveryAuthority: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationProfile',
+						signature:
+							'type FederationProfile = {\n    readonly contentTypes: readonly string[];\n    readonly e2eeProtocol: string;\n    readonly features: readonly string[];\n    readonly federationProtocol: string;\n    readonly id: string;\n    readonly maximumFrameBytes: number;\n    readonly revision: string;\n    readonly security: FederationSecurityMode;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationOffer',
+						signature:
+							'type FederationOffer = {\n    readonly contract: typeof FEDERATION_CONTRACT;\n    readonly createdAt: number;\n    readonly destinationDomain: string;\n    readonly expiresAt: number;\n    readonly offerId: string;\n    readonly originDomain: string;\n    readonly profiles: readonly FederationProfile[];\n    readonly role: "initiator" | "responder";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationTranscript',
+						signature:
+							'type FederationTranscript = {\n    readonly contract: typeof FEDERATION_CONTRACT;\n    readonly initiatorOfferHash: string;\n    readonly profile: FederationProfile;\n    readonly responderOfferHash: string;\n    readonly sessionId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationSignature',
+						signature:
+							'type FederationSignature = {\n    readonly algorithm: string;\n    readonly keyId: string;\n    readonly signature: Uint8Array;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationConfirmation',
+						signature:
+							'type FederationConfirmation = {\n    readonly domain: string;\n    readonly signature: FederationSignature;\n    readonly transcriptHash: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationSignatureProvider',
+						signature:
+							'type FederationSignatureProvider = {\n    readonly id: string;\n    readonly sign: (input: {\n        readonly destinationDomain: string;\n        readonly payload: Uint8Array;\n        readonly purpose: "federation-envelope" | "federation-transcript";\n    }) => Promise<FederationSignature>;\n    readonly verify: (input: {\n        readonly destinationDomain: string;\n        readonly expectedDomain: string;\n        readonly payload: Uint8Array;\n        readonly purpose: "federation-envelope" | "federation-transcript";\n        readonly signature: FederationSignature;\n    }) => Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationSession',
+						signature:
+							'type FederationSession = {\n    readonly expiresAt: number;\n    readonly initiatorDomain: string;\n    readonly profile: FederationProfile;\n    readonly responderDomain: string;\n    readonly sessionId: string;\n    readonly transcriptHash: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationEnvelope',
+						signature:
+							'type FederationEnvelope = {\n    readonly contract: typeof FEDERATION_CONTRACT;\n    readonly createdAt: number;\n    readonly destinationDomain: string;\n    readonly expiresAt: number;\n    readonly id: string;\n    readonly kind: "application" | "commit" | "proposal" | "welcome";\n    /** Opaque provider-local route. Do not put a user identifier here. */\n    readonly routeId: string;\n    readonly originDomain: string;\n    readonly payload: Uint8Array;\n    readonly sessionId: string;\n    readonly transcriptHash: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SignedFederationEnvelope',
+						signature:
+							'type SignedFederationEnvelope = {\n    readonly envelope: FederationEnvelope;\n    readonly signature: FederationSignature;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationTransportAdapter',
+						signature:
+							'type FederationTransportAdapter = {\n    readonly id: string;\n    readonly acknowledge: (input: {\n        readonly cursor: string;\n        readonly localDomain: string;\n    }) => Promise<void>;\n    readonly receive: (input: {\n        readonly cursor?: string;\n        readonly localDomain: string;\n        readonly maximumMessages: number;\n    }) => Promise<{\n        readonly cursor?: string;\n        readonly messages: readonly SignedFederationEnvelope[];\n    }>;\n    readonly send: (messages: readonly SignedFederationEnvelope[]) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationReplayStore',
+						signature:
+							'type FederationReplayStore = {\n    readonly claim: (input: {\n        readonly expiresAt: number;\n        readonly id: string;\n        readonly originDomain: string;\n        readonly sessionId: string;\n    }) => Promise<"claimed" | "duplicate">;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationLimits',
+						signature:
+							'type FederationLimits = {\n    readonly maximumClockSkewMs: number;\n    readonly maximumFrameBytes: number;\n    readonly maximumMessagesPerBatch: number;\n    readonly maximumOfferTtlMs: number;\n    readonly maximumTtlMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationAbuseReason',
+						signature:
+							'type FederationAbuseReason = "child-safety" | "fraud" | "harassment" | "impersonation" | "malware" | "spam" | "threat";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationAbuseAuthorization',
+						signature:
+							'type FederationAbuseAuthorization = {\n    readonly approvalId: string;\n    readonly method: "user-approved";\n} | {\n    readonly mandateId: string;\n    readonly method: "standing-policy";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SealedFederationAbuseEvidence',
+						signature:
+							'type SealedFederationAbuseEvidence = {\n    readonly bytes: Uint8Array;\n    readonly evidenceId: string;\n    readonly providerId: string;\n    readonly protocol: string;\n    readonly recipientKeyId: string;\n    readonly senderAuthenticity: "franked" | "receiver-asserted";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationAbuseEvidenceProvider',
+						signature:
+							'type FederationAbuseEvidenceProvider = {\n    readonly id: string;\n    readonly seal: (input: {\n        readonly allegedSender: string;\n        readonly authorization: FederationAbuseAuthorization;\n        readonly evidence: Uint8Array;\n        readonly messageIds: readonly string[];\n        readonly recipientKeyId: string;\n        readonly reportId: string;\n    }) => Promise<SealedFederationAbuseEvidence>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FederationAbuseReport',
+						signature:
+							'type FederationAbuseReport = {\n    readonly allegedSender: string;\n    readonly authorization: FederationAbuseAuthorization;\n    readonly contract: typeof FEDERATION_CONTRACT;\n    readonly createdAt: number;\n    readonly evidence: SealedFederationAbuseEvidence;\n    readonly expiresAt: number;\n    readonly messageIds: readonly string[];\n    readonly reason: FederationAbuseReason;\n    readonly reportId: string;\n    readonly roomId: string;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/secure-messaging-federation/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    maximumFrameBytes?: number;\n    maximumOfferTtlMs?: number;\n    maximumTtlMs?: number;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        maximumFrameBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maximumOfferTtlMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maximumTtlMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+					}
+				]
+			}
+		],
+		category: 'Messaging',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Provider-neutral, downgrade-resistant secure messaging federation for AbsoluteJS.',
+		directory: 'secure-messaging-federation',
+		kind: 'package',
+		name: 'Secure Messaging Federation',
+		packageName: '@absolutejs/secure-messaging-federation',
+		private: false,
+		publicExports: [
+			'@absolutejs/secure-messaging-federation',
+			'@absolutejs/secure-messaging-federation/manifest',
+			'@absolutejs/secure-messaging-federation/manifest.json'
+		],
+		readmeDigest:
+			'b27794221d27ee789270333b3da84dbfaa9fa04a83eda833a77ab5239a3d784e',
+		readmeSamples: [
+			{
+				code: 'const transcript = await negotiateFederation({\n  initiatorOffer,\n  responderOffer,\n  preferredProfileIds: ["abs.mls.strict.v1"],\n  sessionId: "random-session-id",\n  limits,\n  now: Date.now(),\n});\n\n// Each domain signs the exact transcript through a signature provider.\nconst session = await activateFederationSession({\n  initiatorOffer,\n  responderOffer,\n  transcript,\n  initiatorConfirmation,\n  responderConfirmation,\n  signatureProvider,\n  now: Date.now(),\n});',
+				description: '# @absolutejs/secure-messaging-federation',
+				heading: '@absolutejs/secure-messaging-federation quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral secure messaging federation for AbsoluteJS. The stable core keeps domain authentication, transports, and abuse-evidence cryptography behind interchangeable contracts while enforcing one downgrade-resistant API.',
+				details: [
+					'The first release provides:',
+					'exact bilateral profile matching; profiles bind the federation protocol and',
+					'revision, E2EE protocol, content types, feature set, frame limit, and explicit strict-e2ee or managed-recovery security mode;',
+					'transcript hashes over both offers and mutual domain signatures before a',
+					'session becomes active;',
+					'signed opaque envelopes bound to that transcript, with expiry, clock-skew,',
+					'size, local-domain, route, and durable replay checks;',
+					'strict bounded wire codecs and explicit transport acknowledgement, allowing a',
+					'delivery bridge to acknowledge only after durable MLS processing;',
+					'confidential abuse-evidence contracts that require a concrete user approval',
+					'or standing-policy mandate and disclose only ciphertext to federation code.',
+					'There is deliberately no plaintext, legacy, or weaker-mode fallback. If peers do not advertise an exactly matching locally preferred profile, negotiation fails. Managed recovery also has to name the same recovery authority on both sides.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'The IETF MIMI architecture and protocol are active Internet-Drafts, not finished standards. This core therefore does not claim MIMI interoperability. A MIMI adapter must identify and pin the exact draft revision, expose it in the negotiated profile, require explicit experimental opt-in, and fail when the peer does not match. The separation lets AbsoluteJS track MIMI without destabilizing the application API.',
+				details: [
+					"The model follows MLS's authenticated epoch and group-state boundaries from RFC 9420, the federation roles and minimal-provider-access direction in the MIMI architecture draft, and bilateral capability/message-franking work in the MIMI protocol draft."
+				],
+				title: 'Standards position'
+			},
+			{
+				description:
+					'Evidence sealing happens at the endpoint. The report object carries sealed bytes and bounded metadata, never a plaintext field. receiver-asserted means a recipient supplied the evidence and could have fabricated it; only a provider that actually validates a sender-bound cryptographic frank may return franked. Message franking in MIMI remains draft work.',
+				details: [
+					'An agent must not infer permission from the content it sees. It must supply either a phishing-resistant user-approved approval ID or an exact standing-policy mandate ID before evidence can be sealed. Applications should show the recipient, reason, messages, destination moderation key, and disclosure scope outside model-controlled content.'
+				],
+				title: 'Abuse and AI safety'
+			}
+		],
+		repository: 'https://github.com/absolutejs/secure-messaging-federation',
+		subpackages: [],
+		version: '0.1.0'
+	},
+	{
+		api: [],
+		category: 'Messaging',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command: "bun run --filter './*' check:package",
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Interchangeable implementations for @absolutejs/secure-messaging-federation:',
+		directory: 'secure-messaging-federation-adapters',
+		kind: 'monorepo',
+		name: 'Secure Messaging Federation Adapters',
+		packageName: '@absolutejs/secure-messaging-federation-adapters',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'6ce6c897e0eab5aeec2d2f1e4738cc3c6abe35216557d03398f57ea0ae1be872',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Interchangeable implementations for @absolutejs/secure-messaging-federation:',
+				details: [
+					'@absolutejs/secure-messaging-federation-delivery bridges real protected',
+					'secure-messaging/MLS frames to a negotiated federation transport.',
+					'@absolutejs/secure-messaging-federation-https provides a hardened HTTPS and',
+					'mutual-TLS hop with authenticated discovery, certificate pins, bounded responses, and SSRF/DNS-rebinding defenses.',
+					'@absolutejs/secure-messaging-federation-webcrypto provides domain signatures',
+					'and endpoint-sealed abuse evidence with standard Web Crypto keys.',
+					'@absolutejs/secure-messaging-federation-mimi pins and validates an explicit',
+					'experimental profile for the current MIMI Internet-Drafts. It does not claim completed wire interoperability.',
+					'All releases remain 0.x until the relevant APIs and standards stabilize.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository:
+			'https://github.com/absolutejs/secure-messaging-federation-adapters',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/secure-messaging-federation-delivery',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'SECURE_MESSAGING_FEDERATION_CONTENT_TYPE',
+								signature:
+									'const SECURE_MESSAGING_FEDERATION_CONTENT_TYPE: "application/absolute-secure-message";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationDeliveryOutboundRoute',
+								signature:
+									'type FederationDeliveryOutboundRoute = {\n    readonly expiresAt: number;\n    readonly routeId: string;\n    readonly securityMode: SecurityMode;\n    readonly session: FederationSession;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationDeliveryInboundSession',
+								signature:
+									'type FederationDeliveryInboundSession = {\n    readonly securityMode: SecurityMode;\n    readonly session: FederationSession;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationDeliveryInboundRoute',
+								signature:
+									'type FederationDeliveryInboundRoute = {\n    readonly conversationId: string;\n    readonly recipientDeviceId?: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationDeliveryDirectory',
+								signature:
+									'type FederationDeliveryDirectory = {\n    /** Resolve only preconfigured opaque IDs. This runs before signature verification. */\n    readonly resolveInboundSession: (input: {\n        readonly originDomain: string;\n        readonly routeId: string;\n        readonly sessionId: string;\n    }) => Promise<FederationDeliveryInboundSession | undefined>;\n    /** Resolve application routing only after the envelope signature verifies. */\n    readonly resolveVerifiedInboundRoute: (envelope: FederationEnvelope) => Promise<FederationDeliveryInboundRoute | undefined>;\n    readonly resolveOutboundRoute: (message: DeliveryMessage) => Promise<FederationDeliveryOutboundRoute | undefined>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createFederatedDeliveryService',
+								signature:
+									'const createFederatedDeliveryService: (input: {\n    readonly directory: FederationDeliveryDirectory;\n    readonly limits: FederationLimits;\n    readonly localDomain: string;\n    readonly maximumMessagesPerReceive: number;\n    readonly now?: () => number;\n    readonly replayStore: FederationReplayStore;\n    readonly signatureProvider: FederationSignatureProvider;\n    readonly transport: FederationTransportAdapter;\n}) => DeliveryService;'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'manifest',
+								signature: 'manifest'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/secure-messaging-federation-delivery/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    maximumMessagesPerReceive?: number;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        maximumMessagesPerReceive: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/e2ee --external @absolutejs/secure-messaging-federation --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'DeliveryService bridge from AbsoluteJS secure messaging to authenticated federation transports.',
+				name: '@absolutejs/secure-messaging-federation-delivery',
+				private: false,
+				publicExports: [
+					'@absolutejs/secure-messaging-federation-delivery',
+					'@absolutejs/secure-messaging-federation-delivery/manifest',
+					'@absolutejs/secure-messaging-federation-delivery/manifest.json'
+				],
+				readmeDigest:
+					'4f0826d020ee5557742952eb39c8a356b41a4d4e7cacbd9b8c169855ab85cb14',
+				readmeSamples: [
+					{
+						code: 'import { createFederatedDeliveryService } from "@absolutejs/secure-messaging-federation-delivery";\n\nconst delivery = createFederatedDeliveryService({\n  directory,\n  limits,\n  localDomain: "alice.example",\n  maximumMessagesPerReceive: 100,\n  replayStore,\n  signatureProvider,\n  transport,\n});',
+						description: 'Working example for Usage.',
+						heading: 'Usage',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							"An adapter from AbsoluteJS secure messaging's DeliveryService to an authenticated, interchangeable federation transport. It carries the actual protected messaging frame as opaque bytes; it does not replace MLS or decrypt application content.",
+						details: [],
+						title: 'Overview'
+					},
+					{
+						description:
+							'Outbound application routing is converted into a provider-local opaque routeId. Inbound code resolves only a preconfigured session before checking the remote-domain signature. The application conversation and recipient route are resolved only after authentication and replay checks succeed.',
+						details: [
+							'The selected strict-e2ee or managed-recovery mode must exactly match the negotiated federation session. Modes are never inferred or silently downgraded.',
+							'Use random, non-semantic conversation and route identifiers. MLS authenticated data can be visible to a delivery provider even though application plaintext is encrypted; do not place email addresses, usernames, or other personal data in identifiers.'
+						],
+						title: 'Security boundary'
+					},
+					{
+						description:
+							'Pass delivery to createSecureMessagingClient. The directory is the policy boundary: it must return negotiated, unexpired sessions and opaque routes for the current tenant.',
+						details: [],
+						title: 'Usage'
+					},
+					{
+						description:
+							'This package is an AbsoluteJS bridge, not a claim of independent MIMI interoperability. Use the revision-pinned MIMI adapter for experiments with the active Internet-Drafts and the HTTPS adapter for the hardened network hop.',
+						details: [],
+						title: 'Protocol position'
+					}
+				],
+				sourcePath: 'delivery',
+				version: '0.0.1'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/secure-messaging-federation-https',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'isPublicFederationAddress',
+								signature:
+									'const isPublicFederationAddress: (address: string) => boolean;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'NodeMutualTlsFederationClientOptions',
+								signature:
+									'type NodeMutualTlsFederationClientOptions = {\n    readonly addressPolicy?: "allow-private" | "public-only";\n    readonly ca: string | Uint8Array;\n    readonly certificate: string | Uint8Array;\n    readonly key: string | Uint8Array;\n    readonly maximumResponseBytes: number;\n    readonly requestTimeoutMs: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createNodeMutualTlsFederationClient',
+								signature:
+									'const createNodeMutualTlsFederationClient: (options: NodeMutualTlsFederationClientOptions) => FederationMutualTlsClient;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'discoverFederationHttpsPeer',
+								signature:
+									'const discoverFederationHttpsPeer: (input: {\n    readonly addresses: readonly string[];\n    readonly client: FederationMutualTlsClient;\n    readonly domain: string;\n    readonly maximumAdvertisementBytes: number;\n    readonly maximumAdvertisementTtlMs: number;\n    readonly maximumClockSkewMs: number;\n    readonly now: number;\n    readonly port?: number;\n}) => Promise<FederationHttpsPeer>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createFederationHttpsPeerDirectory',
+								signature:
+									'const createFederationHttpsPeerDirectory: (input: {\n    readonly client: FederationMutualTlsClient;\n    readonly maximumAdvertisementBytes: number;\n    readonly maximumAdvertisementTtlMs: number;\n    readonly maximumClockSkewMs: number;\n    readonly now?: () => number;\n    readonly resolveAddresses: (domain: string) => Promise<readonly string[]>;\n    readonly resolvePort?: (domain: string) => number;\n}) => FederationHttpsPeerDirectory;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'encodeFederationHttpsAdvertisement',
+								signature:
+									'const encodeFederationHttpsAdvertisement: (advertisement: FederationHttpsAdvertisement) => Uint8Array;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'decodeFederationHttpsAdvertisement',
+								signature:
+									'const decodeFederationHttpsAdvertisement: (bytes: Uint8Array, input: {\n    readonly expectedDomain: string;\n    readonly maximumBytes: number;\n    readonly maximumClockSkewMs: number;\n    readonly maximumTtlMs: number;\n    readonly now: number;\n}) => FederationHttpsAdvertisement;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'encodeFederationHttpsBatch',
+								signature:
+									'const encodeFederationHttpsBatch: (messages: readonly SignedFederationEnvelope[], limits: Pick<FederationHttpsLimits, "maximumBatchBytes" | "maximumBatchMessages">) => Uint8Array;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'decodeFederationHttpsBatch',
+								signature:
+									'const decodeFederationHttpsBatch: (bytes: Uint8Array, limits: Pick<FederationHttpsLimits, "maximumBatchBytes" | "maximumBatchMessages" | "maximumEnvelopeBytes" | "maximumPayloadBytes" | "maximumSignatureBytes">) => readonly SignedFederationEnvelope[];'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createHttpsFederationTransportAdapter',
+								signature:
+									'const createHttpsFederationTransportAdapter: (input: {\n    readonly client: FederationMutualTlsClient;\n    readonly inbox: Pick<FederationHttpsInbox, "acknowledge" | "receive">;\n    readonly limits: FederationHttpsLimits;\n    readonly localDomain: string;\n    readonly peers: FederationHttpsPeerDirectory;\n}) => FederationTransportAdapter;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationHttpsServerRequest',
+								signature:
+									'type FederationHttpsServerRequest = {\n    readonly authenticatedPeerDomain: string;\n    readonly body: Uint8Array;\n    readonly headers: Readonly<Record<string, string | undefined>>;\n    readonly method: string;\n    readonly path: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'acceptFederationHttpsRequest',
+								signature:
+									'const acceptFederationHttpsRequest: (input: {\n    readonly inbox: Pick<FederationHttpsInbox, "enqueue">;\n    readonly limits: FederationHttpsLimits;\n    readonly localDomain: string;\n    readonly request: FederationHttpsServerRequest;\n}) => Promise<{\n    readonly body: Uint8Array;\n    readonly status: 202;\n}>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'HTTPS_FEDERATION_PROTOCOL',
+								signature:
+									'const HTTPS_FEDERATION_PROTOCOL: "ABS-FED-HTTPS-1";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'HTTPS_FEDERATION_WELL_KNOWN_PATH',
+								signature:
+									'const HTTPS_FEDERATION_WELL_KNOWN_PATH: "/.well-known/absolutejs-secure-messaging-federation";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'HTTPS_FEDERATION_MESSAGES_PATH',
+								signature:
+									'const HTTPS_FEDERATION_MESSAGES_PATH: "/.well-known/absolutejs-secure-messaging-federation/v1/messages";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationHttpsAdvertisement',
+								signature:
+									'type FederationHttpsAdvertisement = {\n    readonly certificateFingerprintsSha256: readonly string[];\n    readonly contract: 1;\n    readonly createdAt: number;\n    readonly domain: string;\n    readonly expiresAt: number;\n    readonly maximumBatchBytes: number;\n    readonly maximumBatchMessages: number;\n    readonly messagesPath: typeof HTTPS_FEDERATION_MESSAGES_PATH;\n    readonly protocol: typeof HTTPS_FEDERATION_PROTOCOL;\n    readonly requiresMutualTls: true;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationHttpsPeer',
+								signature:
+									'type FederationHttpsPeer = FederationHttpsAdvertisement & {\n    /** Addresses resolved once and pinned for this peer record. */\n    readonly addresses: readonly string[];\n    readonly port: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationHttpsPeerDirectory',
+								signature:
+									'type FederationHttpsPeerDirectory = {\n    readonly resolve: (domain: string) => Promise<FederationHttpsPeer>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationMutualTlsRequest',
+								signature:
+									'type FederationMutualTlsRequest = {\n    readonly body?: Uint8Array;\n    readonly headers: Readonly<Record<string, string>>;\n    readonly method: "GET" | "POST";\n    readonly path: string;\n    readonly peer: FederationHttpsPeer;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationMutualTlsResponse',
+								signature:
+									'type FederationMutualTlsResponse = {\n    readonly body: Uint8Array;\n    readonly certificateFingerprintSha256: string;\n    readonly headers: Readonly<Record<string, string>>;\n    readonly status: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationMutualTlsClient',
+								signature:
+									'type FederationMutualTlsClient = {\n    readonly request: (input: FederationMutualTlsRequest) => Promise<FederationMutualTlsResponse>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationHttpsInbox',
+								signature:
+									'type FederationHttpsInbox = Pick<FederationTransportAdapter, "acknowledge" | "receive"> & {\n    readonly enqueue: (input: {\n        readonly authenticatedPeerDomain: string;\n        readonly messages: readonly SignedFederationEnvelope[];\n    }) => Promise<"accepted" | "duplicate">;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'FederationHttpsLimits',
+								signature:
+									'type FederationHttpsLimits = {\n    readonly maximumBatchBytes: number;\n    readonly maximumBatchMessages: number;\n    readonly maximumEnvelopeBytes: number;\n    readonly maximumPayloadBytes: number;\n    readonly maximumResponseBytes: number;\n    readonly maximumSignatureBytes: number;\n    readonly requestTimeoutMs: number;\n};'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/secure-messaging-federation-https/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    addressPolicy?: "allow-private" | "public-only";\n    maximumBatchBytes?: number;\n    requestTimeoutMs?: number;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        addressPolicy: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"public-only">, import("@sinclair/typebox").TLiteral<"allow-private">]>>;\n        maximumBatchBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        requestTimeoutMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=node --external @absolutejs/secure-messaging-federation --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Hardened HTTPS and mutual-TLS transport adapter for AbsoluteJS secure messaging federation.',
+				name: '@absolutejs/secure-messaging-federation-https',
+				private: false,
+				publicExports: [
+					'@absolutejs/secure-messaging-federation-https',
+					'@absolutejs/secure-messaging-federation-https/manifest',
+					'@absolutejs/secure-messaging-federation-https/manifest.json'
+				],
+				readmeDigest:
+					'a397e969dce30eab6e4d94311e78c441b34f55dea78a5a168c1fce54843b5a59',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Hardened HTTPS transport for @absolutejs/secure-messaging-federation.',
+						details: [
+							'Provider discovery is fixed at',
+							'/.well-known/absolutejs-secure-messaging-federation.',
+							'Delivery is fixed at the advertised protocol path and never follows redirects.',
+							'The Node/Bun client presents its certificate and key, validates the server CA',
+							'and DNS identity, pins the resolved addresses for the request, and then enforces advertised SHA-256 certificate rotation pins. Up to 16 addresses are attempted with bounded 250 ms staggering; the first authenticated HTTPS response wins and every remaining attempt is aborted.',
+							'Private, loopback, link-local, metadata-service, and special-use addresses are',
+							'rejected by default. allow-private is an explicit development/private-mesh mode and must never be enabled for public tenant-controlled domains.',
+							'Strict bounded batches carry only already-signed federation envelopes.',
+							'The package does not terminate inbound TLS itself. A server or PaaS gateway must require and validate client certificates, derive authenticatedPeerDomain from the verified certificate, and pass that identity to acceptFederationHttpsRequest. The function checks it against both the request origin header and every envelope origin before enqueueing.',
+							'This is the stable AbsoluteJS ABS-FED-HTTPS-1 transport, not a claim of MIMI wire interoperability. MIMI tracking remains in the revision-pinned adapter. Address ordering and staggered connection attempts follow the operational model in RFC 8305 without performing a second DNS lookup or weakening certificate identity checks.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'https',
+				version: '0.0.3'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/secure-messaging-federation-mimi',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'MIMI_DRAFT_OPT_IN',
+								signature:
+									'const MIMI_DRAFT_OPT_IN: "I understand MIMI drafts are work in progress";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'MIMI_DRAFT_REVISIONS',
+								signature:
+									'const MIMI_DRAFT_REVISIONS: Readonly<{\n    architecture: "draft-ietf-mimi-arch-03";\n    content: "draft-ietf-mimi-content-09";\n    protocol: "draft-ietf-mimi-protocol-06";\n    roomPolicy: "draft-ietf-mimi-room-policy-04";\n}>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'MIMI_DRAFT_PROFILE_ID',
+								signature:
+									'const MIMI_DRAFT_PROFILE_ID: "mimi.protocol-06.content-09.policy-04.mls10.strict";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'MimiDraftAdvertisement',
+								signature:
+									'type MimiDraftAdvertisement = {\n    readonly architecture: typeof MIMI_DRAFT_REVISIONS.architecture;\n    readonly content: typeof MIMI_DRAFT_REVISIONS.content;\n    /** Draft-06 still describes its binary encoding as a placeholder. */\n    readonly encodingStatus: "draft-placeholder";\n    /** Draft-06 describes some identifier syntax as notional. */\n    readonly identifierStatus: "notional";\n    readonly mutualTlsRequired: true;\n    readonly protocol: typeof MIMI_DRAFT_REVISIONS.protocol;\n    readonly roomPolicy: typeof MIMI_DRAFT_REVISIONS.roomPolicy;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'MimiDraftProfileOptions',
+								signature:
+									'type MimiDraftProfileOptions = {\n    readonly contentTypes: readonly string[];\n    readonly experimentalOptIn: typeof MIMI_DRAFT_OPT_IN;\n    readonly features?: readonly string[];\n    readonly maximumFrameBytes: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'assertMimiDraftAdvertisement',
+								signature:
+									'const assertMimiDraftAdvertisement: (advertisement: MimiDraftAdvertisement) => void;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMimiDraftProfile',
+								signature:
+									'const createMimiDraftProfile: (options: MimiDraftProfileOptions) => FederationProfile;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/secure-messaging-federation-mimi/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    experimentalOptIn?: string;\n    maximumFrameBytes?: number;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        experimentalOptIn: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        maximumFrameBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/secure-messaging-federation --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Revision-pinned experimental MIMI profile adapter for AbsoluteJS federation.',
+				name: '@absolutejs/secure-messaging-federation-mimi',
+				private: false,
+				publicExports: [
+					'@absolutejs/secure-messaging-federation-mimi',
+					'@absolutejs/secure-messaging-federation-mimi/manifest',
+					'@absolutejs/secure-messaging-federation-mimi/manifest.json'
+				],
+				readmeDigest:
+					'20861fb9605c11a4e10423a9c91fb4795fd60843614c349d00df642e7ca36f8f',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'An explicitly experimental profile adapter for active MIMI Internet-Drafts. It pins:',
+						details: [
+							'draft-ietf-mimi-arch-03',
+							'draft-ietf-mimi-protocol-06',
+							'draft-ietf-mimi-content-09',
+							'draft-ietf-mimi-room-policy-04',
+							'This is not a wire transport and does not claim MIMI interoperability. Protocol draft-06 says its example binary encoding is a placeholder, calls some identifier syntax notional, and lists known gaps. The adapter makes those limitations machine-visible and requires a literal experimental opt-in. A different revision fails instead of silently falling back.',
+							'MIMI draft-06 requires HTTPS over mutually authenticated TLS between providers and MLS for end-to-end message protection. Actual transport work should begin when the working group settles the relevant wire encoding, identifiers, authentication, discovery, and capability behavior.',
+							'Track the official MIMI working-group documents and protocol draft-06.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'mimi',
+				version: '0.0.1'
+			},
+			{
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/secure-messaging-federation-webcrypto',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoFederationSignatureOptions',
+								signature:
+									'type WebCryptoFederationSignatureOptions = {\n    readonly keyId: string;\n    readonly localDomain: string;\n    readonly privateKey: CryptoKey;\n    readonly resolvePublicKey: (input: {\n        readonly algorithm: typeof SIGNATURE_ALGORITHM;\n        readonly domain: string;\n        readonly keyId: string;\n    }) => Promise<CryptoKey | undefined>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoFederationSignatureProvider',
+								signature:
+									'const createWebCryptoFederationSignatureProvider: (options: WebCryptoFederationSignatureOptions) => FederationSignatureProvider;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoAbuseEvidenceContext',
+								signature:
+									'type WebCryptoAbuseEvidenceContext = {\n    readonly allegedSender: string;\n    readonly authorization: FederationAbuseAuthorization;\n    readonly messageIds: readonly string[];\n    readonly recipientKeyId: string;\n    readonly reportId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoFederationAbuseEvidenceOptions',
+								signature:
+									'type WebCryptoFederationAbuseEvidenceOptions = {\n    readonly createEvidenceId: () => string;\n    readonly resolveRecipientPublicKey: (keyId: string) => Promise<CryptoKey | undefined>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoFederationAbuseEvidenceProvider',
+								signature:
+									'const createWebCryptoFederationAbuseEvidenceProvider: (options: WebCryptoFederationAbuseEvidenceOptions) => FederationAbuseEvidenceProvider;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'openWebCryptoFederationAbuseEvidence',
+								signature:
+									'const openWebCryptoFederationAbuseEvidence: (input: {\n    readonly context: WebCryptoAbuseEvidenceContext;\n    readonly maximumSealedBytes: number;\n    readonly privateKey: CryptoKey;\n    readonly sealed: Uint8Array;\n}) => Promise<Uint8Array>;'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'WEBCRYPTO_FEDERATION_EVIDENCE_PROTOCOL',
+								signature:
+									'EVIDENCE_PROTOCOL as WEBCRYPTO_FEDERATION_EVIDENCE_PROTOCOL'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'WEBCRYPTO_FEDERATION_SIGNATURE_ALGORITHM',
+								signature:
+									'SIGNATURE_ALGORITHM as WEBCRYPTO_FEDERATION_SIGNATURE_ALGORITHM'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/secure-messaging-federation-webcrypto/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    evidenceRecipientKeyId?: string;\n    signatureKeyId?: string;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        evidenceRecipientKeyId: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        signatureKeyId: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n    }>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/secure-messaging-federation --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Web Crypto domain signatures and confidential abuse evidence for AbsoluteJS federation.',
+				name: '@absolutejs/secure-messaging-federation-webcrypto',
+				private: false,
+				publicExports: [
+					'@absolutejs/secure-messaging-federation-webcrypto',
+					'@absolutejs/secure-messaging-federation-webcrypto/manifest',
+					'@absolutejs/secure-messaging-federation-webcrypto/manifest.json'
+				],
+				readmeDigest:
+					'ce924981bbc19ae631cde2cb6b17fa5f27100617bba305658b7b970c1ced8eae',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Standard Web Crypto providers for AbsoluteJS federation:',
+						details: [
+							'ECDSA P-256/SHA-256 domain signatures; and',
+							'RSA-OAEP/SHA-256 key wrapping plus AES-256-GCM confidential abuse evidence.',
+							'The application owns key generation, private-key custody, domain discovery, rotation, revocation, and the public-key directory. Prefer non-exportable private keys or an HSM/KMS-backed adapter in production.',
+							'Evidence is encrypted at the endpoint directly to the chosen moderation public key. The report ID, alleged sender, selected message IDs, authorization, recipient key ID, and format version are authenticated as AES-GCM AAD. This provider emits receiver-asserted; it does not implement or claim cryptographic message franking.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'webcrypto',
+				version: '0.0.1'
+			}
+		],
+		version: null
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/secure-transfer',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'createSecureTransferClient',
+						signature:
+							'const createSecureTransferClient: (options: SecureTransferClientOptions) => SecureTransferClient;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'hashSecureTransferDescriptor',
+						signature:
+							'const hashSecureTransferDescriptor: (descriptor: SecureTransferDescriptor) => Promise<Uint8Array>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'encodeSecureTransferRevocation',
+						signature:
+							'const encodeSecureTransferRevocation: (revocation: SecureTransferRevocation) => Uint8Array;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'decodeSecureTransferRevocation',
+						signature:
+							'const decodeSecureTransferRevocation: (bytes: Uint8Array, maximumBytes: number) => SecureTransferRevocation;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'encodeSecureTransferDescriptor',
+						signature:
+							'const encodeSecureTransferDescriptor: (descriptor: SecureTransferDescriptor) => Uint8Array;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'decodeSecureTransferDescriptor',
+						signature:
+							'const decodeSecureTransferDescriptor: (bytes: Uint8Array, maximumBytes: number) => SecureTransferDescriptor;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'encodeSecureTransferReplacement',
+						signature:
+							'const encodeSecureTransferReplacement: (replacement: SecureTransferReplacement) => Uint8Array;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'decodeSecureTransferReplacement',
+						signature:
+							'const decodeSecureTransferReplacement: (bytes: Uint8Array, maximumBytes: number, maximumDescriptorBytes: number) => SecureTransferReplacement;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'encodeSecureTransferUploadReceipt',
+						signature:
+							'const encodeSecureTransferUploadReceipt: (receipt: SecureTransferUploadReceipt) => Uint8Array;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'decodeSecureTransferUploadReceipt',
+						signature:
+							'const decodeSecureTransferUploadReceipt: (bytes: Uint8Array, maximumBytes: number, maximumDescriptorBytes: number) => SecureTransferUploadReceipt;'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'SecureTransferError',
+						signature:
+							'class SecureTransferError extends Error {\n    readonly name: string;\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'SecureTransferConfigurationError',
+						signature:
+							'class SecureTransferConfigurationError extends SecureTransferError {\n    readonly name = "SecureTransferConfigurationError";\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'SecureTransferProtocolError',
+						signature:
+							'class SecureTransferProtocolError extends SecureTransferError {\n    readonly name = "SecureTransferProtocolError";\n}'
+					},
+					{
+						description:
+							'The transfer must restart with a fresh capability to preserve nonce uniqueness.',
+						kind: 'class',
+						name: 'SecureTransferResumeUnsafeError',
+						signature:
+							'class SecureTransferResumeUnsafeError extends SecureTransferError {\n    readonly name = "SecureTransferResumeUnsafeError";\n}'
+					},
+					{
+						description:
+							'A trusted policy tombstone forbids this client from fetching the transfer.',
+						kind: 'class',
+						name: 'SecureTransferRevokedError',
+						signature:
+							'class SecureTransferRevokedError extends SecureTransferError {\n    readonly name = "SecureTransferRevokedError";\n}'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SECURE_TRANSFER_CONTRACT',
+						signature: 'SECURE_TRANSFER_CONTRACT'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SECURE_TRANSFER_REPLACEMENT_CONTRACT',
+						signature: 'SECURE_TRANSFER_REPLACEMENT_CONTRACT'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SECURE_TRANSFER_REVOCATION_CONTRACT',
+						signature: 'SECURE_TRANSFER_REVOCATION_CONTRACT'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SECURE_TRANSFER_UPLOAD_RECEIPT_CONTRACT',
+						signature: 'SECURE_TRANSFER_UPLOAD_RECEIPT_CONTRACT'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferRecordContext',
+						signature:
+							'type SecureTransferRecordContext = {\n    readonly attachmentId: string;\n    readonly conversationId: string;\n    readonly expiresAt: number;\n    readonly final: boolean;\n    readonly plaintextBytes: number;\n    readonly recordCount: number;\n    readonly recordIndex: number;\n    readonly senderDeviceId: string;\n    readonly transferId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferCapability',
+						signature:
+							'type SecureTransferCapability = {\n    readonly bytes: Uint8Array;\n    readonly protocol: string;\n    readonly providerId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferCryptoProvider',
+						signature:
+							'type SecureTransferCryptoProvider = {\n    readonly id: string;\n    readonly maximumRecordCiphertextBytes: number;\n    readonly maximumRecordPlaintextBytes: number;\n    readonly protocol: string;\n    createCapability(): Promise<SecureTransferCapability>;\n    openRecord(input: {\n        readonly capability: SecureTransferCapability;\n        readonly ciphertext: Uint8Array;\n        readonly context: SecureTransferRecordContext;\n    }): Promise<Uint8Array>;\n    sealRecord(input: {\n        readonly capability: SecureTransferCapability;\n        readonly context: SecureTransferRecordContext;\n        readonly plaintext: Uint8Array;\n    }): Promise<Uint8Array>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferStore',
+						signature:
+							'type SecureTransferStore = {\n    readonly id: string;\n    getRecord(input: {\n        readonly recordIndex: number;\n        readonly transferId: string;\n    }): Promise<Uint8Array | undefined>;\n    putRecord(input: {\n        readonly bytes: Uint8Array;\n        readonly expiresAt: number;\n        readonly recordIndex: number;\n        readonly transferId: string;\n    }): Promise<"created" | "exists">;\n    removeTransfer(transferId: string): Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferExpirySweepInput',
+						signature:
+							'type SecureTransferExpirySweepInput = {\n    /** Opaque continuation returned by the previous bounded sweep. */\n    readonly cursor?: string;\n    /** Delete records whose storage expiry is at or before this time. */\n    readonly expiresAtOrBefore: number;\n    /** Bound provider work performed by one repeatable sweep. */\n    readonly maximumRecords: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferExpirySweepResult',
+						signature:
+							'type SecureTransferExpirySweepResult = {\n    /** Pass this to the next sweep when `truncated` is true. */\n    readonly cursor?: string;\n    readonly examinedRecords: number;\n    readonly removedRecords: number;\n    /** Continue sweeping until this is false. */\n    readonly truncated: boolean;\n};'
+					},
+					{
+						description:
+							'Optional lifecycle capability implemented by production storage adapters.',
+						kind: 'type',
+						name: 'SecureTransferLifecycleStore',
+						signature:
+							'type SecureTransferLifecycleStore = SecureTransferStore & {\n    sweepExpired(input: SecureTransferExpirySweepInput): Promise<SecureTransferExpirySweepResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferDescriptor',
+						signature:
+							'type SecureTransferDescriptor = {\n    readonly attachmentId: string;\n    readonly capability: SecureTransferCapability;\n    readonly contentType?: string;\n    readonly contract: typeof SECURE_TRANSFER_CONTRACT;\n    readonly conversationId: string;\n    readonly createdAt: number;\n    readonly expiresAt: number;\n    readonly fileName?: string;\n    readonly plaintextBytes: number;\n    readonly recordCount: number;\n    readonly recordPlaintextBytes: number;\n    readonly senderDeviceId: string;\n    readonly storeId: string;\n    readonly transferId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferPolicy',
+						signature:
+							'type SecureTransferPolicy = {\n    readonly maximumAttachmentBytes: number;\n    readonly maximumDescriptorBytes: number;\n    readonly maximumFutureSkewMs: number;\n    readonly maximumMetadataBytes: number;\n    readonly maximumRecordPlaintextBytes: number;\n    readonly maximumRecords: number;\n    readonly maximumTtlMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferClientOptions',
+						signature:
+							'type SecureTransferClientOptions = {\n    readonly cryptoProvider: SecureTransferCryptoProvider;\n    readonly now?: () => number;\n    readonly policy: SecureTransferPolicy;\n    readonly store: SecureTransferStore;\n    /** Trusted policy state. Downloads fail closed when this store is unavailable. */\n    readonly revocations?: SecureTransferRevocationStore;\n    readonly transferIdFactory?: () => string;\n    readonly resumable?: SecureTransferResumableOptions;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferByteRange',
+						signature:
+							'type SecureTransferByteRange = {\n    /** Inclusive plaintext byte offset. */\n    readonly start: number;\n    /** Exclusive plaintext byte offset. */\n    readonly endExclusive: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferRevocationReason',
+						signature:
+							'type SecureTransferRevocationReason = "access-revoked" | "member-removed" | "superseded" | "user-request";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferReplacementReason',
+						signature:
+							'type SecureTransferReplacementReason = "device-recovery" | "manual-rotation" | "membership-change" | "self-update";'
+					},
+					{
+						description:
+							'An immutable revocation notice intended for authenticated E2EE delivery. It prevents future cooperating-client fetches; it cannot recall copied keys, ciphertext, or plaintext.',
+						kind: 'type',
+						name: 'SecureTransferRevocation',
+						signature:
+							'type SecureTransferRevocation = {\n    readonly contract: typeof SECURE_TRANSFER_REVOCATION_CONTRACT;\n    readonly descriptorHash: Uint8Array;\n    readonly revokedAt: number;\n    readonly revokerDeviceId: string;\n    readonly transferId: string;\n    readonly reason?: SecureTransferRevocationReason;\n};'
+					},
+					{
+						description:
+							'One MLS application payload: install the fresh descriptor and supersede old.',
+						kind: 'type',
+						name: 'SecureTransferReplacement',
+						signature:
+							'type SecureTransferReplacement = {\n    readonly contract: typeof SECURE_TRANSFER_REPLACEMENT_CONTRACT;\n    readonly reason: SecureTransferReplacementReason;\n    readonly replacementDescriptor: SecureTransferDescriptor;\n    readonly securityEpoch: number;\n    readonly supersession: SecureTransferRevocation & {\n        readonly reason: "superseded";\n    };\n};'
+					},
+					{
+						description:
+							'Structural subset of an authenticated secure-messaging application context.',
+						kind: 'type',
+						name: 'SecureTransferReplacementAuthenticatedContext',
+						signature:
+							'type SecureTransferReplacementAuthenticatedContext = {\n    readonly conversationId: string;\n    readonly purpose: "secure-transfer.replacement";\n    readonly securityEpoch: number;\n    readonly senderId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferRevocationStore',
+						signature:
+							'type SecureTransferRevocationStore = {\n    readonly id: string;\n    has(input: {\n        readonly descriptorHash: Uint8Array;\n        readonly transferId: string;\n    }): Promise<boolean>;\n    put(input: {\n        readonly descriptorHash: Uint8Array;\n        /** Tombstones must remain available through this time. */\n        readonly retainUntil: number;\n        readonly revokedAt: number;\n        readonly transferId: string;\n    }): Promise<"created" | "exists">;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferRevocationExpirySweepInput',
+						signature:
+							'type SecureTransferRevocationExpirySweepInput = {\n    readonly cursor?: string;\n    readonly maximumRevocations: number;\n    /** Remove tombstones whose required retention ended at or before this time. */\n    readonly retainUntilOrBefore: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferRevocationExpirySweepResult',
+						signature:
+							'type SecureTransferRevocationExpirySweepResult = {\n    readonly cursor?: string;\n    readonly examinedRevocations: number;\n    readonly removedRevocations: number;\n    readonly truncated: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferRevocationLifecycleStore',
+						signature:
+							'type SecureTransferRevocationLifecycleStore = SecureTransferRevocationStore & {\n    sweepExpiredRevocations(input: SecureTransferRevocationExpirySweepInput): Promise<SecureTransferRevocationExpirySweepResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferUploadInput',
+						signature:
+							'type SecureTransferUploadInput = {\n    readonly attachmentId: string;\n    readonly body: ReadableStream<Uint8Array> | Uint8Array;\n    readonly byteLength: number;\n    readonly contentType?: string;\n    readonly conversationId: string;\n    readonly expiresAt: number;\n    readonly fileName?: string;\n    readonly recordPlaintextBytes?: number;\n    readonly senderDeviceId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferUploadMetadata',
+						signature:
+							'type SecureTransferUploadMetadata = Omit<SecureTransferUploadInput, "body">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferUploadReceipt',
+						signature:
+							'type SecureTransferUploadReceipt = {\n    readonly contract: typeof SECURE_TRANSFER_UPLOAD_RECEIPT_CONTRACT;\n    readonly descriptor: SecureTransferDescriptor;\n    readonly nextRecordIndex: number;\n    /** `sealing` means encryption began but durable record creation is unconfirmed. */\n    readonly phase: "ready" | "sealing";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferReceiptProtector',
+						signature:
+							'type SecureTransferReceiptProtector = {\n    readonly id: string;\n    open(input: {\n        readonly protectedBytes: Uint8Array;\n        readonly receiptId: string;\n    }): Promise<Uint8Array>;\n    protect(input: {\n        readonly plaintext: Uint8Array;\n        readonly receiptId: string;\n    }): Promise<Uint8Array>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferProtectedReceiptStore',
+						signature:
+							'type SecureTransferProtectedReceiptStore = {\n    readonly id: string;\n    acquire(input: {\n        readonly leaseExpiresAt: number;\n        readonly leaseId: string;\n        readonly now: number;\n        readonly receiptId: string;\n    }): Promise<{\n        readonly protectedBytes: Uint8Array;\n        readonly status: "acquired";\n        readonly version: string;\n    } | {\n        readonly status: "busy" | "missing";\n    }>;\n    create(input: {\n        readonly expiresAt: number;\n        readonly protectedBytes: Uint8Array;\n        readonly receiptId: string;\n    }): Promise<"created" | "exists">;\n    release(input: {\n        readonly leaseId: string;\n        readonly now: number;\n        readonly receiptId: string;\n        readonly version: string;\n    }): Promise<void>;\n    remove(input: {\n        readonly leaseId: string;\n        readonly now: number;\n        readonly receiptId: string;\n        readonly version: string;\n    }): Promise<"removed" | "conflict">;\n    update(input: {\n        readonly expiresAt: number;\n        readonly leaseExpiresAt: number;\n        readonly leaseId: string;\n        readonly now: number;\n        readonly protectedBytes: Uint8Array;\n        readonly'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferReceiptExpirySweepInput',
+						signature:
+							'type SecureTransferReceiptExpirySweepInput = {\n    readonly cursor?: string;\n    readonly expiresAtOrBefore: number;\n    readonly maximumReceipts: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferReceiptExpirySweepResult',
+						signature:
+							'type SecureTransferReceiptExpirySweepResult = {\n    readonly cursor?: string;\n    readonly examinedReceipts: number;\n    readonly removedReceipts: number;\n    readonly truncated: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferProtectedReceiptLifecycleStore',
+						signature:
+							'type SecureTransferProtectedReceiptLifecycleStore = SecureTransferProtectedReceiptStore & {\n    sweepExpiredReceipts(input: SecureTransferReceiptExpirySweepInput): Promise<SecureTransferReceiptExpirySweepResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferResumableOptions',
+						signature:
+							'type SecureTransferResumableOptions = {\n    readonly leaseDurationMs: number;\n    readonly leaseIdFactory?: () => string;\n    readonly protector: SecureTransferReceiptProtector;\n    readonly receiptIdFactory?: () => string;\n    readonly store: SecureTransferProtectedReceiptStore;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferResumeSource',
+						signature:
+							'type SecureTransferResumeSource = (byteOffset: number, remainingBytes: number) => Promise<ReadableStream<Uint8Array> | Uint8Array> | ReadableStream<Uint8Array> | Uint8Array;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferSink',
+						signature:
+							'type SecureTransferSink = {\n    readonly abort: (reason: unknown) => Promise<void>;\n    readonly commit: (descriptor: SecureTransferDescriptor) => Promise<void>;\n    readonly write: (record: Uint8Array, recordIndex: number) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferRangeSink',
+						signature:
+							'type SecureTransferRangeSink = {\n    readonly abort: (reason: unknown) => Promise<void>;\n    readonly commit: (descriptor: SecureTransferDescriptor, range: SecureTransferByteRange) => Promise<void>;\n    readonly write: (bytes: Uint8Array, recordIndex: number, plaintextOffset: number) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SecureTransferClient',
+						signature:
+							'type SecureTransferClient = {\n    readonly activateReplacement: (input: {\n        readonly authenticatedContext: SecureTransferReplacementAuthenticatedContext;\n        /** Must durably and idempotently protect the new bearer descriptor. */\n        readonly persistReplacement: (descriptor: SecureTransferDescriptor) => Promise<void>;\n        readonly previousDescriptor: SecureTransferDescriptor;\n        /** Sender-side cleanup only; recipients normally leave this false. */\n        readonly removeSupersededCiphertext?: boolean;\n        readonly replacement: SecureTransferReplacement;\n    }) => Promise<{\n        readonly ciphertextRemoved?: boolean;\n        readonly revocation: "created" | "exists";\n    }>;\n    /** Apply only after the E2EE sender is authenticated and authorized to revoke. */\n    readonly applyRevocation: (input: {\n        readonly descriptor: SecureTransferDescriptor;\n        readonly revocation: SecureTransferRevocation;\n    }) => Promise<"created" | "exists">;\n    readonly beginResumableUpload: (input: SecureTransferUploadMetadata) => Promise<{\n        readonly receiptId: string;\n    }>;\n    readonly download: (descriptor: SecureTransferDescriptor, sink: SecureTrans'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/secure-transfer/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    maximumAttachmentBytes?: number;\n    maximumRecordPlaintextBytes?: number;\n    maximumTtlMs?: number;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        maximumAttachmentBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maximumRecordPlaintextBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maximumTtlMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+					}
+				]
+			}
+		],
+		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: 'bun test tests/',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Provider-neutral encrypted, record-oriented large-object transfer for AbsoluteJS.',
+		directory: 'secure-transfer',
+		kind: 'package',
+		name: 'Secure Transfer',
+		packageName: '@absolutejs/secure-transfer',
+		private: false,
+		publicExports: [
+			'@absolutejs/secure-transfer',
+			'@absolutejs/secure-transfer/manifest',
+			'@absolutejs/secure-transfer/manifest.json'
+		],
+		readmeDigest:
+			'70289f2420892ddaca88633e3289e1ae3b1da370bac8371147e823fb3577d554',
+		readmeSamples: [
+			{
+				code: 'const transfer = createSecureTransferClient({\n  cryptoProvider,\n  store,\n  policy: {\n    maximumAttachmentBytes: 1024 ** 4,\n    maximumDescriptorBytes: 16 * 1024,\n    maximumFutureSkewMs: 300_000,\n    maximumMetadataBytes: 4 * 1024,\n    maximumRecordPlaintextBytes: 1024 * 1024,\n    maximumRecords: 1_048_576,\n    maximumTtlMs: 7 * 24 * 60 * 60 * 1000,\n  },\n});\n\nconst descriptor = await transfer.upload({\n  attachmentId: crypto.randomUUID(),\n  body: file.stream(),\n  byteLength: file.size,\n  contentType: file.type,\n  conversationId,\n  expiresAt: Date.now() + 86_400_000,\n  fileName: file.name,\n  senderDeviceId,\n});\n\nawait messaging.send({\n  conversationId,\n  id: crypto.randomUUID(),\n  plaintext: encodeSecureTransferDescriptor(descriptor),\n  purpose: "secure-transfer.descriptor",\n  ttlMs: 86_400_000,\n});',
+				description: '# @absolutejs/secure-transfer',
+				heading: '@absolutejs/secure-transfer quick start',
+				language: 'typescript'
+			},
+			{
+				code: 'await transfer.downloadRange(\n  descriptor,\n  { start: 1_048_576, endExclusive: 2_097_152 },\n  rangeSink,\n);',
+				description:
+					"downloadRange() authenticates every complete encrypted record covering the requested interval, then passes only the selected plaintext bytes to a transactional range sink. The range is [start, endExclusive) and must be non-empty and within the descriptor's declared plaintext size.",
+				heading: 'Authenticated byte ranges',
+				language: 'typescript'
+			},
+			{
+				code: 'const { revocation, ciphertextRemoved } = await transfer.revoke({\n  descriptor,\n  reason: "member-removed",\n  revokerDeviceId,\n});\n\nawait messaging.send({\n  conversationId,\n  id: crypto.randomUUID(),\n  plaintext: encodeSecureTransferRevocation(revocation),\n  purpose: "secure-transfer.revocation",\n  ttlMs,\n});',
+				description:
+					'Configure a trusted SecureTransferRevocationStore, then create the durable tombstone before attempting ciphertext cleanup:',
+				heading: 'Honest revocation',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral encrypted large-object transfer for AbsoluteJS. It splits a known-length source into bounded, independently authenticated records, writes only ciphertext to an untrusted store, and downloads into a transactional sink.',
+				details: [],
+				title: 'Overview'
+			},
+			{
+				description:
+					"downloadRange() authenticates every complete encrypted record covering the requested interval, then passes only the selected plaintext bytes to a transactional range sink. The range is [start, endExclusive) and must be non-empty and within the descriptor's declared plaintext size.",
+				details: [
+					'This proves the authenticity and position of the requested records against the descriptor. It intentionally does not fetch or prove the current availability of records outside the range.'
+				],
+				title: 'Authenticated byte ranges'
+			},
+			{
+				description:
+					'Configure a trusted SecureTransferRevocationStore, then create the durable tombstone before attempting ciphertext cleanup:',
+				details: [
+					'Recipients must authenticate the E2EE sender, authorize that device to revoke the attachment, strictly decode the notice, and only then call applyRevocation(). The notice is bound to the exact descriptor by a SHA-256 hash. Downloads consult trusted policy state before and throughout retrieval and fail closed when that store errors. Keep tombstones at least through the descriptor expiry; ciphertextRemoved: false means cleanup must be retried even though cooperating clients already block the transfer.',
+					'Revocation is not retroactive cryptographic erasure. A bearer capability, ciphertext, or plaintext already copied by a recipient cannot be recalled. After an MLS member removal, use a fresh capability for replacement content and deliver its descriptor only in the new epoch; removal protects future epoch traffic, not secrets the former member already received. This follows the epoch and member-removal model in RFC 9420. Where a deployment uses cryptographic erase for storage cleanup, follow the key sanitization program in NIST SP 800-88 Rev. 2; that still does not sanitize independently held recipient copies.'
+				],
+				title: 'Honest revocation'
+			},
+			{
+				description:
+					'An MLS removal changes who receives future epoch secrets, but it does not change an attachment capability already delivered in an earlier epoch. For retained attachments that a removed device must no longer fetch, upload a new encrypted copy with a fresh capability and send the replacement only in the new epoch:',
+				details: [
+					"The secure-messaging send persists advanced MLS state and its retryable outbox entry before returning, even when delivery is queued. Only then should the sender activate supersession and remove old ciphertext. A recipient strictly decodes the same payload and passes the message's authenticated context to activateReplacement(). Activation verifies the old descriptor hash, fresh transfer ID and capability, attachment, conversation, sender, purpose, and exact epoch. Its persistReplacement callback runs before the old tombstone is installed and must be durable, idempotent, and protect the bearer descriptor.",
+					'If activation crashes after descriptor persistence but before supersession, retry the same payload. This temporarily leaves the old transfer usable instead of stranding the replacement. Expiry sweeps clean abandoned new ciphertext when a message can never be durably queued. Rate-limit rotations and prioritize only attachments that remain useful; membership churn must not become an unbounded re-encryption denial of service.'
+				],
+				title: 'Post-membership capability replacement'
+			},
+			{
+				description:
+					'Configure a SecureTransferReceiptProtector and SecureTransferProtectedReceiptStore, then persist the initial protected receipt before reading the source:',
+				details: [
+					"Receipts contain the transfer's bearer decryption capability. Core passes only protected opaque bytes to receipt storage and binds protection to receiptId. Use an authenticated protector backed by a key that is separate from object storage credentials. Never implement the protector as plaintext or reversible encoding.",
+					'Receipt stores must implement atomic lease acquisition and compare-and-swap updates. Core checkpoints phase: "sealing" before invoking record encryption. If a crash occurs after ciphertext storage, resume authenticates that ciphertext against the source before advancing. If encryption might have happened but no ciphertext is durable, SecureTransferResumeUnsafeError requires a new transfer and capability rather than risking nonce reuse. Receipt adapters should implement SecureTransferProtectedReceiptLifecycleStore; run sweepExpiredReceipts() with its returned cursor until truncated is false.',
+					'The descriptor contains the decryption capability and sensitive metadata. It is plaintext until the caller protects it with @absolutejs/secure-messaging or an E2EE envelope. Never place it in object metadata, logs, URLs, push payloads, or a normal chat message.'
+				],
+				title: 'Resumable uploads'
+			},
+			{
+				description:
+					'Storage receives opaque transfer IDs, record indexes, ciphertext sizes, and',
+				details: [
+					'expiry. It does not receive filenames, media types, conversation IDs, or keys.',
+					'Every record is bound to the transfer, attachment, conversation, sender,',
+					'position, total count, expected plaintext size, final-record marker, and expiry.',
+					'Record creation is create-only. A collision must never overwrite ciphertext.',
+					'Missing, reordered, substituted, duplicated, truncated, and extended records',
+					'fail authentication or descriptor validation.',
+					'Downloads target a staging sink. commit() occurs only after every record is',
+					'authenticated; failure calls abort() so partial plaintext is not mistaken for a complete file.',
+					'Range downloads preserve the same staging rule but authenticate only records',
+					'intersecting the requested byte interval.',
+					'Revocation stores are trusted authorization state and should use credentials',
+					'and retention controls distinct from untrusted ciphertext storage.'
+				],
+				title: 'Security model'
+			},
+			{
+				description:
+					'Version 0.2.0 provides upload, strict descriptor, receipt, and revocation encoding, full and byte-range authenticated download, resumable crash recovery, transactional sinks, honest future-fetch revocation, cleanup, and provider/store contracts. Concrete local and S3/R2 storage adapters live in secure-transfer-adapters. Version 0.3.0 adds epoch-bound fresh-capability replacement and staged supersession after MLS membership changes.',
+				details: [],
+				title: 'Scope'
+			}
+		],
+		repository: 'https://github.com/absolutejs/secure-transfer',
+		subpackages: [],
+		version: '0.3.0'
+	},
+	{
+		api: [],
+		category: 'Platform & Infra',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command: "bun run --filter './*' check:package",
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Interchangeable storage adapters for @absolutejs/secure-transfer.',
+		directory: 'secure-transfer-adapters',
+		kind: 'monorepo',
+		name: 'Secure Transfer Adapters',
+		packageName: '@absolutejs/secure-transfer-adapters',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'fda6c5fc5d0694299b95cf46e2d7eb0a087860e6b701f3536f0b75edd3d3dacc',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Interchangeable storage adapters for @absolutejs/secure-transfer.',
+				details: [
+					'Package — Backend — Atomic create-only primitive',
+					'@absolutejs/secure-transfer-local — Local filesystem — same-filesystem hard link',
+					'@absolutejs/secure-transfer-s3 — AWS S3, Cloudflare R2, MinIO, and compatible stores — PutObject with If-None-Match:',
+					'Both packages implement bounded, repeatable expiry sweeps for ciphertext left by crashed uploads. They deliberately do not emulate conditional creation with a HEAD followed by PUT; that sequence has a time-of-check/time-of-use race. They also provide trusted revocation stores with immutable, opaque tombstones and bounded retention sweeps. Keep their policy state separately permissioned from untrusted ciphertext storage.',
+					"The S3 behavior follows AWS's conditional-write guidance. Cloudflare's current R2 S3 compatibility table lists conditional PutObject operations, including If-None-Match, as supported."
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Storage sees opaque transfer IDs, record positions, sizes, and expiry times. It does not receive decryption capabilities or attachment metadata. Treat storage credentials as infrastructure secrets and restrict them to the configured prefix.',
+				details: [],
+				title: 'Security'
+			}
+		],
+		repository: 'https://github.com/absolutejs/secure-transfer-adapters',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/secure-transfer-local',
+						symbols: [
+							{
+								description: '',
+								kind: 'export',
+								name: 'localProtectedReceiptStore',
+								signature: 'localProtectedReceiptStore'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'LocalProtectedReceiptStoreOptions',
+								signature: 'LocalProtectedReceiptStoreOptions'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'localSecureTransferRevocationStore',
+								signature: 'localSecureTransferRevocationStore'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'LocalSecureTransferRevocationStoreOptions',
+								signature:
+									'LocalSecureTransferRevocationStoreOptions'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'LocalSecureTransferStoreOptions',
+								signature:
+									'type LocalSecureTransferStoreOptions = {\n    readonly id?: string;\n    /** Private directory controlled by this process. */\n    readonly root: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'localSecureTransferStore',
+								signature:
+									'const localSecureTransferStore: (options: LocalSecureTransferStoreOptions) => SecureTransferLifecycleStore;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/secure-transfer-local/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    id?: string;\n    root?: string;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        id: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        root: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n    }>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=bun --external @absolutejs/secure-transfer --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Atomic local-filesystem storage adapter for @absolutejs/secure-transfer.',
+				name: '@absolutejs/secure-transfer-local',
+				private: false,
+				publicExports: [
+					'@absolutejs/secure-transfer-local',
+					'@absolutejs/secure-transfer-local/manifest',
+					'@absolutejs/secure-transfer-local/manifest.json'
+				],
+				readmeDigest:
+					'549cd82d052aaa722ffb6fede647cb711e7d34a979891b32f56b7bd6202d96a0',
+				readmeSamples: [
+					{
+						code: 'import {\n  localProtectedReceiptStore,\n  localSecureTransferRevocationStore,\n  localSecureTransferStore,\n} from "@absolutejs/secure-transfer-local";\n\nconst store = localSecureTransferStore({ root: "/srv/private/ciphertext" });\nconst receiptStore = localProtectedReceiptStore({\n  root: "/srv/private/ciphertext",\n});\nconst revocations = localSecureTransferRevocationStore({\n  root: "/srv/private/policy",\n});',
+						description: '# @absolutejs/secure-transfer-local',
+						heading:
+							'@absolutejs/secure-transfer-local quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Local-filesystem SecureTransferLifecycleStore for development, tests, and single-host deployments.',
+						details: [
+							'Records are atomically installed with a same-filesystem hard link. Existing records are never overwritten. Each record carries a private binary expiry header so an interrupted write cannot leave ciphertext without cleanup data.',
+							'Run sweepExpired() on a schedule and repeat while truncated is true. The adapter validates transfer IDs and never follows caller-controlled paths. Expiry-stamped temporary writes are swept too, including partial files left by a process crash before the atomic link.',
+							'The receipt store persists only bytes already protected by a SecureTransferReceiptProtector. It uses cross-process lock directories, lease expiry, version checks, and atomic rename. Run sweepExpiredReceipts() for abandoned resumable-upload state.',
+							"The revocation store creates immutable SHA-256 descriptor tombstones without placing transfer IDs in paths or plaintext files. Use a policy root protected from ciphertext-storage credentials. Run sweepExpiredRevocations() repeatedly with its cursor only after each tombstone's required retention has ended."
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'local',
+				version: '0.2.2'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/secure-transfer-s3',
+						symbols: [
+							{
+								description: '',
+								kind: 'export',
+								name: 's3ProtectedReceiptStore',
+								signature: 's3ProtectedReceiptStore'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 's3SecureTransferRevocationStore',
+								signature: 's3SecureTransferRevocationStore'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'S3SecureTransferRevocationStoreOptions',
+								signature:
+									'S3SecureTransferRevocationStoreOptions'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'S3SecureTransferStoreOptions',
+								signature:
+									'type S3SecureTransferStoreOptions = {\n    readonly bucket: string;\n    readonly client: Pick<S3Client, "send">;\n    readonly id?: string;\n    /** Retries for S3\'s transient 409 conditional-write conflict. Default 2. */\n    readonly maximumConditionalRetries?: number;\n    /** Key namespace. Defaults to `secure-transfer/`. */\n    readonly prefix?: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 's3SecureTransferStore',
+								signature:
+									'const s3SecureTransferStore: (options: S3SecureTransferStoreOptions) => SecureTransferLifecycleStore;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/secure-transfer-s3/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    bucket?: string;\n    id?: string;\n    prefix?: string;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        bucket: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        id: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        prefix: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n    }>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root src --sourcemap --target=bun --external @absolutejs/secure-transfer --external @aws-sdk/client-s3 --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Atomic AWS S3 and Cloudflare R2 storage adapter for @absolutejs/secure-transfer.',
+				name: '@absolutejs/secure-transfer-s3',
+				private: false,
+				publicExports: [
+					'@absolutejs/secure-transfer-s3',
+					'@absolutejs/secure-transfer-s3/manifest',
+					'@absolutejs/secure-transfer-s3/manifest.json'
+				],
+				readmeDigest:
+					'76a598bfbe33921ca7247d0d79fd530c05741113641471fdd9cd558efa37af89',
+				readmeSamples: [
+					{
+						code: 'import { S3Client } from "@aws-sdk/client-s3";\nimport {\n  s3ProtectedReceiptStore,\n  s3SecureTransferRevocationStore,\n  s3SecureTransferStore,\n} from "@absolutejs/secure-transfer-s3";\n\nconst store = s3SecureTransferStore({\n  bucket: "private-ciphertext",\n  client: new S3Client({ region: "us-east-1" }),\n  prefix: "secure-transfer/",\n});\nconst receiptStore = s3ProtectedReceiptStore({\n  bucket: "private-ciphertext",\n  client: new S3Client({ region: "us-east-1" }),\n  prefix: "secure-transfer/",\n});\nconst revocations = s3SecureTransferRevocationStore({\n  bucket: "trusted-transfer-policy",\n  client: new S3Client({ region: "us-east-1" }),\n});',
+						description: '# @absolutejs/secure-transfer-s3',
+						heading: '@absolutejs/secure-transfer-s3 quick start',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							"AWS SDK storage adapter for @absolutejs/secure-transfer. It also works with S3-compatible services such as Cloudflare R2 when the SDK client is configured with that service's endpoint and credentials.",
+						details: [
+							'Writes use If-None-Match: ; a precondition failure becomes "exists" and is never retried as an unconditional write. Transient 409 conflicts are retried with the condition still attached, following AWS guidance. Configure bucket lifecycle expiration as defense in depth, and run sweepExpired() with its continuation cursor for a testable application-level cleanup path.',
+							'Protected receipts use ETags as compare-and-swap versions. Lease acquisition and checkpoint updates use If-Match; creation uses If-None-Match: . Completion first installs a conditional tombstone so a stale resumer cannot revive state, then removes it. Run sweepExpiredReceipts() for abandoned receipt state.',
+							'Revocation tombstones use conditional create-only writes, opaque SHA-256 keys, and required-retention metadata. Prefer a separately permissioned policy bucket; download authorization fails safely only when clients can trust this state. Run sweepExpiredRevocations() until its cursor is exhausted after retention ends.',
+							'Cloud credentials and paid object storage are bring-your-own. Managed credentials and scheduled lifecycle operations belong in AbsoluteJS PaaS.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 's3',
+				version: '0.2.2'
+			}
+		],
+		version: null
+	},
+	{
+		api: [],
+		category: 'Platform & Infra',
+		commands: [
+			{
+				command: "bun run --filter './*' build",
+				name: 'build'
+			},
+			{
+				command:
+					"bun run format:check && bun run typecheck && bun run test && bun run build && bun run --filter './*' verify-package",
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'prettier --check "./**/*.{ts,json,md}"',
+				name: 'format:check'
+			},
+			{
+				command: "bun run --filter './*' test",
+				name: 'test'
+			},
+			{
+				command: "bun run --filter './*' typecheck",
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Interchangeable cryptographic providers for @absolutejs/secure-transfer.',
+		directory: 'secure-transfer-providers',
+		kind: 'monorepo',
+		name: 'Secure Transfer Providers',
+		packageName: '@absolutejs/secure-transfer-providers',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'1798a7e1e2ab0d4060444c9dbfa0d3bbe22002e719bcca30f87bb52252c971b3',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Interchangeable cryptographic providers for @absolutejs/secure-transfer.',
+				details: [
+					'Package — Protocol — Runtimes — Cost',
+					'@absolutejs/secure-transfer-webcrypto — ABS-A256GCM-RECORDS-1 — Browser, Bun, Node — Free',
+					'Provider packages expose the same SecureTransferCryptoProvider contract. The core owns bounded transfer orchestration and untrusted-store semantics; providers own record cryptography and capability format.',
+					'Run bun run check:package for the complete workspace gate and bun run certify:browser for the executable Chromium round-trip and context-substitution gate.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/secure-transfer-providers',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/secure-transfer-webcrypto',
+						symbols: [
+							{
+								description: '',
+								kind: 'class',
+								name: 'SecureTransferWebcryptoError',
+								signature:
+									'class SecureTransferWebcryptoError extends Error {\n    readonly name = "SecureTransferWebcryptoError";\n}'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createSecureTransferWebcryptoProvider',
+								signature:
+									'const createSecureTransferWebcryptoProvider: () => SecureTransferCryptoProvider;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'secureTransferWebcryptoProviderManifest',
+								signature:
+									'const secureTransferWebcryptoProviderManifest: Readonly<{\n    assurance: "experimental";\n    costModel: "free";\n    description: "Browser-native AES-256-GCM authenticated records with a fresh content key and nonce base per transfer.";\n    id: "absolutejs.secure-transfer.webcrypto";\n    packageName: "@absolutejs/secure-transfer-webcrypto";\n    protocol: "ABS-A256GCM-RECORDS-1";\n    runtimes: readonly ["browser", "bun", "node"];\n    version: "0.0.1";\n}>;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'SecureTransferWebcryptoReceiptProtectorOptions',
+								signature:
+									'type SecureTransferWebcryptoReceiptProtectorOptions = {\n    /** HKDF root key, or exactly 32 random bytes imported as a non-exportable key. */\n    readonly key: CryptoKey | Uint8Array;\n    readonly id?: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'class',
+								name: 'SecureTransferReceiptProtectionError',
+								signature:
+									'class SecureTransferReceiptProtectionError extends Error {\n    readonly name = "SecureTransferReceiptProtectionError";\n}'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createSecureTransferWebcryptoReceiptProtector',
+								signature:
+									'const createSecureTransferWebcryptoReceiptProtector: (options: SecureTransferWebcryptoReceiptProtectorOptions) => Promise<SecureTransferReceiptProtector>;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/secure-transfer-webcrypto/provider-manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'secureTransferWebcryptoProviderManifest',
+								signature:
+									'const secureTransferWebcryptoProviderManifest: Readonly<{\n    assurance: "experimental";\n    costModel: "free";\n    description: "Browser-native AES-256-GCM authenticated records with a fresh content key and nonce base per transfer.";\n    id: "absolutejs.secure-transfer.webcrypto";\n    packageName: "@absolutejs/secure-transfer-webcrypto";\n    protocol: "ABS-A256GCM-RECORDS-1";\n    runtimes: readonly ["browser", "bun", "node"];\n    version: "0.0.1";\n}>;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/secure-transfer-webcrypto/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts src/provider-manifest.ts src/manifest.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/secure-transfer --external @absolutejs/manifest --external @sinclair/typebox && tsc --project tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format && bun run typecheck && bun run test && bun run build && bun run verify-package',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'WebCrypto AES-256-GCM authenticated-record provider for @absolutejs/secure-transfer.',
+				name: '@absolutejs/secure-transfer-webcrypto',
+				private: false,
+				publicExports: [
+					'@absolutejs/secure-transfer-webcrypto',
+					'@absolutejs/secure-transfer-webcrypto/provider-manifest',
+					'@absolutejs/secure-transfer-webcrypto/manifest',
+					'@absolutejs/secure-transfer-webcrypto/manifest.json'
+				],
+				readmeDigest:
+					'698c578d16133d0f8a3a64b6c789e05ead200e26ba7f2ee0230ee54d18b8f8ff',
+				readmeSamples: [
+					{
+						code: 'import { createSecureTransferWebcryptoProvider } from "@absolutejs/secure-transfer-webcrypto";\n\nconst cryptoProvider = createSecureTransferWebcryptoProvider();',
+						description: '# @absolutejs/secure-transfer-webcrypto',
+						heading:
+							'@absolutejs/secure-transfer-webcrypto quick start',
+						language: 'typescript'
+					},
+					{
+						code: 'const receiptProtector = await createSecureTransferWebcryptoReceiptProtector({\n  key: crypto.getRandomValues(new Uint8Array(32)),\n});',
+						description: '# @absolutejs/secure-transfer-webcrypto',
+						heading:
+							'@absolutejs/secure-transfer-webcrypto quick start 2',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Interchangeable WebCrypto provider for @absolutejs/secure-transfer. Each transfer receives fresh random AES-256-GCM key material and a 96-bit nonce base. Every record nonce is derived by XORing that base with the record sequence, following the construction used by RFC 8188. Record metadata is authenticated as additional data.',
+						details: [
+							'Protect resumable-upload receipts with a separate root key:',
+							'Persist that root key in a platform keystore rather than regenerating it. It is imported as a non-exportable HKDF key, derives an isolated AES-256-GCM key for each receipt ID, and uses a fresh 96-bit nonce for every checkpoint. Do not reuse the transfer content key as the receipt root key.',
+							'The capability contains the content key and nonce base. It is a bearer secret and must only appear inside an E2EE-protected transfer descriptor. This provider does not store or distribute capabilities.',
+							'The provider caps plaintext records at 16 MiB and the number of records at 1,048,576. Applications should normally choose smaller records for bounded memory and resumability.',
+							'This is an experimental 0.x release without an independent audit. Run bun run certify:browser from the repository root to repeat the real Chromium round-trip and context-substitution gate.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'webcrypto',
+				version: '0.1.1'
+			}
+		],
+		version: null
+	},
+	{
 		api: [],
 		category: 'Platform & Infra',
 		commands: [
@@ -50627,6 +64361,764 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/slo',
 		subpackages: [],
 		version: '0.1.0'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/stock-images',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'searchInputSchema',
+						signature:
+							'const searchInputSchema: z.ZodObject<{\n    query: z.ZodString;\n    page: z.ZodDefault<z.ZodNumber>;\n    perPage: z.ZodDefault<z.ZodNumber>;\n    orientation: z.ZodOptional<z.ZodEnum<{\n        landscape: "landscape";\n        portrait: "portrait";\n        square: "square";\n    }>>;\n}, z.core.$strict>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StockImageSearch',
+						signature:
+							'type StockImageSearch = z.input<typeof searchInputSchema>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StockImageRequest',
+						signature:
+							'type StockImageRequest = z.output<typeof searchInputSchema>;'
+					},
+					{
+						description:
+							'Transport/persistence schema. Descriptions remain untrusted provider metadata.',
+						kind: 'value',
+						name: 'stockImageSchema',
+						signature:
+							'const stockImageSchema: z.ZodObject<{\n    provider: z.ZodString;\n    id: z.ZodString;\n    description: z.ZodNullable<z.ZodString>;\n    width: z.ZodNumber;\n    height: z.ZodNumber;\n    urls: z.ZodObject<{\n        thumbnail: z.ZodString;\n        display: z.ZodString;\n        original: z.ZodString;\n    }, z.core.$strip>;\n    sourceUrl: z.ZodString;\n    photographer: z.ZodObject<{\n        name: z.ZodString;\n        url: z.ZodString;\n    }, z.core.$strip>;\n    attribution: z.ZodObject<{\n        text: z.ZodString;\n        providerName: z.ZodString;\n        providerUrl: z.ZodString;\n        required: z.ZodBoolean;\n    }, z.core.$strip>;\n    license: z.ZodObject<{\n        name: z.ZodString;\n        url: z.ZodString;\n    }, z.core.$strip>;\n    usage: z.ZodObject<{\n        hotlinkRequired: z.ZodBoolean;\n        selectionNotificationRequired: z.ZodBoolean;\n    }, z.core.$strip>;\n}, z.core.$strip>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StockImage',
+						signature:
+							'type StockImage = z.infer<typeof stockImageSchema>;'
+					},
+					{
+						description: '',
+						kind: 'interface',
+						name: 'StockImagePage',
+						signature:
+							'interface StockImagePage {\n    images: StockImage[];\n    page: number;\n    nextPage: number | null;\n    total: number;\n}'
+					},
+					{
+						description: '',
+						kind: 'interface',
+						name: 'StockImageProvider',
+						signature:
+							'interface StockImageProvider {\n    id: string;\n    name: string;\n    search(input: StockImageSearch, signal?: AbortSignal): Promise<StockImagePage>;\n    get(id: string, signal?: AbortSignal): Promise<StockImage>;\n    /** Call on actual insertion/selection, not search or hover. Resolves fresh metadata. */\n    select(id: string, signal?: AbortSignal): Promise<StockImage>;\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StockImageErrorCode',
+						signature:
+							'type StockImageErrorCode = "invalid_input" | "unauthorized" | "rate_limited" | "not_found" | "unavailable" | "invalid_response";'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'StockImageError',
+						signature:
+							'class StockImageError extends Error {\n    readonly provider: string;\n    readonly code: StockImageErrorCode;\n    readonly retryAfterSeconds?: number | undefined;\n    constructor(provider: string, code: StockImageErrorCode, retryAfterSeconds?: number | undefined);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseSearch',
+						signature:
+							'const parseSearch: (input: StockImageSearch) => StockImageRequest;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseImageId',
+						signature:
+							'const parseImageId: (provider: string, id: string, pattern: RegExp) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'httpsUrl',
+						signature:
+							'const httpsUrl: (hosts: readonly string[]) => z.ZodString;'
+					},
+					{
+						description: '',
+						kind: 'interface',
+						name: 'ProviderOptions',
+						signature:
+							'interface ProviderOptions {\n    apiKey: string;\n    /** Server-side transport injection for tests or controlled egress. */\n    transport?: (url: URL, init: RequestInit) => Promise<Response>;\n    timeoutMs?: number;\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createProviderHttp',
+						signature:
+							'const createProviderHttp: (provider: string, origin: string, options: ProviderOptions, headers: Record<string, string>) => <T>(url: URL, schema: z.ZodType<T>, signal?: AbortSignal) => Promise<T>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createStockImages',
+						signature:
+							'const createStockImages: (providers: readonly StockImageProvider[]) => {\n    providers: {\n        id: string;\n        name: string;\n    }[];\n    search(input: StockImageSearch, signal?: AbortSignal): Promise<{\n        configured: boolean;\n        results: ({\n            images: StockImage[];\n            page: number;\n            nextPage: number | null;\n            total: number;\n            provider: string;\n            ok: true;\n            code?: undefined;\n            retryAfterSeconds?: undefined;\n        } | {\n            provider: string;\n            ok: false;\n            code: StockImageErrorCode;\n            retryAfterSeconds: number | undefined;\n        })[];\n    }>;\n    get: (provider: string, id: string, signal?: AbortSignal) => Promise<{\n        provider: string;\n        id: string;\n        description: string | null;\n        width: number;\n        height: number;\n        urls: {\n            thumbnail: string;\n            display: string;\n            original: string;\n        };\n        sourceUrl: string;\n        photographer: {\n            name: string;\n            url: string;\n        };\n        attribution: {\n            text: string;\n            providerName: stri'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/stock-images/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature: 'const manifest: any;'
+					}
+				]
+			}
+		],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command: 'tsc -p tsconfig.build.json && absolute-manifest emit',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run typecheck && bun run test && bun run build && absolute-manifest verify-package',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write src tests package.json README.md',
+				name: 'format'
+			},
+			{
+				command: 'bun test tests',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Provider-neutral stock photo search, selection, attribution and typed failure contracts.',
+		directory: 'stock-images',
+		kind: 'package',
+		name: 'Stock Images',
+		packageName: '@absolutejs/stock-images',
+		private: false,
+		publicExports: [
+			'@absolutejs/stock-images',
+			'@absolutejs/stock-images/manifest',
+			'@absolutejs/stock-images/manifest.json'
+		],
+		readmeDigest:
+			'606e444c8a659db8f7bdbefe66e41e2bb3055ce3df16c980748b6642514f2700',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Provider-neutral stock photo search, selection, attribution and typed failure contracts.',
+				details: [
+					'Server-side only: keep provider keys out of browser bundles and generated projects. Search results retain provider descriptions, original image URLs, dimensions, attribution and license links. Metadata is not visual proof of what an image depicts; review the actual image before claiming specific equipment, people or services.',
+					'Call select(id) only when actually inserting an image. Unsplash records its required download notification before selection succeeds. Do not repeatedly call selection during render, search or hover. A failed notification means insertion must not proceed. The caller owns duplicate-click prevention and durable insertion records.',
+					'Search returns pagination per provider. Failures remain distinguishable from empty results. Keys and upstream error bodies are never included in error messages. Requests time out and reject redirects. Cancellation is supported.',
+					'Preserve the returned attribution and hotlink requirements wherever images are used; a stock license is not proof of model/property releases or permission for all contexts.',
+					'Provider documentation: Unsplash, Pexels.',
+					'Live credentials are not included. Automated tests use synthetic API-shaped responses, not live-provider acceptance.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/stock-images',
+		subpackages: [],
+		version: '0.1.1'
+	},
+	{
+		api: [],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command: "bun run --filter './*' check:package",
+				name: 'check:package'
+			}
+		],
+		description:
+			'Separate published adapters for Pexels and Unsplash. Both consume the published @absolutejs/stock-images contract; no local links.',
+		directory: 'stock-images-providers',
+		kind: 'monorepo',
+		name: 'Stock Images Providers',
+		packageName: '@absolutejs/stock-images-providers',
+		private: true,
+		publicExports: [],
+		readmeDigest:
+			'79b7b8a21c17915f16d68cab7997bbf43f6ba076b388ff261edfd7b167e7e718',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Separate published adapters for Pexels and Unsplash. Both consume the published @absolutejs/stock-images contract; no local links.',
+				details: [
+					'Each adapter requires its own server-side API key. See the package READMEs for selection and attribution requirements.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/stock-images-providers',
+		subpackages: [
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/stock-images-pexels',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPexelsProvider',
+								signature:
+									'const createPexelsProvider: (options: ProviderOptions) => StockImageProvider;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/stock-images-pexels/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature: 'const manifest: any;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'tsc -p tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build && absolute-manifest verify-package',
+						name: 'check:package'
+					},
+					{
+						command:
+							'prettier --write src tests package.json README.md',
+						name: 'format'
+					},
+					{
+						command: 'bun test tests',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Server-side Pexels search and selection provider for AbsoluteJS stock images.',
+				name: '@absolutejs/stock-images-pexels',
+				private: false,
+				publicExports: [
+					'@absolutejs/stock-images-pexels',
+					'@absolutejs/stock-images-pexels/manifest',
+					'@absolutejs/stock-images-pexels/manifest.json'
+				],
+				readmeDigest:
+					'92b236165d7d98663d32da3f191b69f60d3e5e7f2535dcf5d4e9e07fec4a66c8',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Server-side Pexels search and selection provider for AbsoluteJS stock images.',
+						details: [
+							'Server-side only: keep provider keys out of browser bundles and generated projects. Search results retain provider descriptions, original image URLs, dimensions, attribution and license links. Metadata is not visual proof of what an image depicts; review the actual image before claiming specific equipment, people or services.',
+							'Call select(id) only when actually inserting an image. Unsplash records its required download notification before selection succeeds. Do not repeatedly call selection during render, search or hover. A failed notification means insertion must not proceed. The caller owns duplicate-click prevention and durable insertion records.',
+							'Search returns pagination per provider. Failures remain distinguishable from empty results. Keys and upstream error bodies are never included in error messages. Requests time out and reject redirects. Cancellation is supported.',
+							'Preserve the returned attribution and hotlink requirements wherever images are used; a stock license is not proof of model/property releases or permission for all contexts.',
+							'Provider documentation: Unsplash, Pexels.',
+							'Live credentials are not included. Automated tests use synthetic API-shaped responses, not live-provider acceptance.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'pexels',
+				version: '0.1.0'
+			},
+			{
+				api: [
+					{
+						entryPoint: '@absolutejs/stock-images-unsplash',
+						symbols: [
+							{
+								description: '',
+								kind: 'interface',
+								name: 'UnsplashOptions',
+								signature:
+									'interface UnsplashOptions extends ProviderOptions {\n    appName: string;\n}'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createUnsplashProvider',
+								signature:
+									'const createUnsplashProvider: (options: UnsplashOptions) => StockImageProvider;'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/stock-images-unsplash/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature: 'const manifest: any;'
+							}
+						]
+					}
+				],
+				commands: [
+					{
+						command:
+							'tsc -p tsconfig.build.json && absolute-manifest emit',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build && absolute-manifest verify-package',
+						name: 'check:package'
+					},
+					{
+						command:
+							'prettier --write src tests package.json README.md',
+						name: 'format'
+					},
+					{
+						command: 'bun test tests',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Server-side Unsplash search, attribution and selection tracking provider for AbsoluteJS stock images.',
+				name: '@absolutejs/stock-images-unsplash',
+				private: false,
+				publicExports: [
+					'@absolutejs/stock-images-unsplash',
+					'@absolutejs/stock-images-unsplash/manifest',
+					'@absolutejs/stock-images-unsplash/manifest.json'
+				],
+				readmeDigest:
+					'63456df3ec8b8115d1f6dacacddae681e92d3dc9ad2eafa40ea9d6ab4d2f4b2d',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Server-side Unsplash search, attribution and selection tracking provider for AbsoluteJS stock images.',
+						details: [
+							'Server-side only: keep provider keys out of browser bundles and generated projects. Search results retain provider descriptions, original image URLs, dimensions, attribution and license links. Metadata is not visual proof of what an image depicts; review the actual image before claiming specific equipment, people or services.',
+							'Call select(id) only when actually inserting an image. Unsplash records its required download notification before selection succeeds. Do not repeatedly call selection during render, search or hover. A failed notification means insertion must not proceed. The caller owns duplicate-click prevention and durable insertion records.',
+							'Search returns pagination per provider. Failures remain distinguishable from empty results. Keys and upstream error bodies are never included in error messages. Requests time out and reject redirects. Cancellation is supported.',
+							'Preserve the returned attribution and hotlink requirements wherever images are used; a stock license is not proof of model/property releases or permission for all contexts.',
+							'Provider documentation: Unsplash, Pexels.',
+							'Live credentials are not included. Automated tests use synthetic API-shaped responses, not live-provider acceptance.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'unsplash',
+				version: '0.1.0'
+			}
+		],
+		version: null
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/svg-parts',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ApplyInput',
+						signature:
+							'type ApplyInput = {\n    /** partId → colour. Anything missing keeps the colour it was drawn in. */\n    colors: Record<string, string>;\n    model: PartModel;\n};'
+					},
+					{
+						description:
+							"The document with each part's colour applied to the shapes it owns. Byte ranges come from the parse, so tags are rewritten in place from the end backwards and every earlier offset stays valid.",
+						kind: 'value',
+						name: 'applyParts',
+						signature:
+							'const applyParts: (doc: SvgDocument, input: ApplyInput) => string;'
+					},
+					{
+						description:
+							'Same thing from raw markup, for a caller that has not parsed yet.',
+						kind: 'value',
+						name: 'recolor',
+						signature:
+							'const recolor: (markup: string, model: PartModel, colors: Record<string, string>) => string;'
+					},
+					{
+						description:
+							'The document with data-part on every assigned shape, so a canvas can hit -test a click without carrying the node list alongside the markup.',
+						kind: 'value',
+						name: 'withPartIds',
+						signature:
+							'const withPartIds: (doc: SvgDocument, model: PartModel) => string;'
+					},
+					{
+						description:
+							'What a part looks like right now: its colour, or the colour of the first shape it owns.',
+						kind: 'value',
+						name: 'partColor',
+						signature:
+							'const partColor: (doc: SvgDocument, part: Part, colors?: Record<string, string>) => string | null;'
+					},
+					{
+						description:
+							'An element that puts marks on the canvas. Everything else (defs, title, metadata) is structure we keep but never assign to a part.',
+						kind: 'value',
+						name: 'DRAWABLE_TAGS',
+						signature: 'const DRAWABLE_TAGS: string[];'
+					},
+					{
+						description: 'Where a colour can live on an element.',
+						kind: 'value',
+						name: 'PAINT_ATTRS',
+						signature: 'const PAINT_ATTRS: string[];'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SvgNode',
+						signature: 'SvgNode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SvgDocument',
+						signature: 'SvgDocument'
+					},
+					{
+						description:
+							'A colour written in any of the forms SVG allows, in one comparable shape. none, currentColor and url(#gradient) references stay as they are — they are not colours anyone can pick.',
+						kind: 'value',
+						name: 'normalizePaint',
+						signature:
+							'const normalizePaint: (value: string) => string;'
+					},
+					{
+						description:
+							'The paint on an element, taking the style attribute into account — style="fill:#f00" beats fill="#00f", the way a browser paints it.',
+						kind: 'value',
+						name: 'paintOf',
+						signature:
+							'const paintOf: (node: SvgNode, attr: string) => string | null;'
+					},
+					{
+						description:
+							'Read a document into its drawable elements. Elements keep their source order (which is paint order), their group ancestry, and the byte range of their opening tag so a rewrite can be surgical rather than a re-serialize.',
+						kind: 'value',
+						name: 'parseSvg',
+						signature:
+							'const parseSvg: (markup: string) => SvgDocument;'
+					},
+					{
+						description:
+							'Every distinct colour actually painted in the document, in paint order — the old way of seeing an SVG, kept because it is how a flat design still arrives.',
+						kind: 'value',
+						name: 'paletteOf',
+						signature:
+							'const paletteOf: (doc: SvgDocument) => string[];'
+					},
+					{
+						description:
+							'Markup with the parts a browser must never run: scripts, event handlers, foreignObject and javascript: links. Anything rendering artwork it did not author should pass it through here first.',
+						kind: 'value',
+						name: 'stripScripts',
+						signature:
+							'const stripScripts: (markup: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Part',
+						signature:
+							'type Part = {\n    /** Stable id, used as the key in a colour map. */\n    id: string;\n    /** What the shop calls it: "outline", "the star", "background". */\n    name: string;\n    /** Nodes this part owns, by `SvgNode.id`. */\n    nodeIds: string[];\n    /** The colour it was drawn in — the default when nobody picks one. */\n    color: string | null;\n    /** Whether this part\'s colour is the stroke rather than the fill. */\n    paint: \'fill\' | \'stroke\';\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PartModel',
+						signature:
+							"type PartModel = {\n    parts: Part[];\n    /** Nodes no part claims. They still draw; they just can't be recoloured. */\n    unassigned: string[];\n    version: 1;\n};"
+					},
+					{
+						description:
+							'The everyday word for a colour — the nearest of a small, honest list.',
+						kind: 'value',
+						name: 'colorWord',
+						signature:
+							'const colorWord: (color: string | null) => string | null;'
+					},
+					{
+						description:
+							'What the artwork calls this shape, when it says. Illustrator and Figma write layer names into ids and titles, and a name the designer chose beats anything guessed from the drawing.',
+						kind: 'value',
+						name: 'nameFromMarkup',
+						signature:
+							'const nameFromMarkup: (node: SvgNode) => string | null;'
+					},
+					{
+						description:
+							'The model a flat design arrives with: one part per distinct colour. This is exactly what the old colour-keyed system did, which makes it the migration path — read an existing design, get the same parts, then split them.',
+						kind: 'value',
+						name: 'partsFromColors',
+						signature:
+							'const partsFromColors: (doc: SvgDocument) => PartModel;'
+					},
+					{
+						description: 'Every drawable node no part owns.',
+						kind: 'value',
+						name: 'unassignedIn',
+						signature:
+							'const unassignedIn: (doc: SvgDocument, parts: Part[]) => string[];'
+					},
+					{
+						description:
+							'One part holding everything — the starting point for a design somebody wants to colour as a single mark.',
+						kind: 'value',
+						name: 'oneWholePart',
+						signature:
+							'const oneWholePart: (doc: SvgDocument, name?: string) => {\n    parts: {\n        color: string | null;\n        id: string;\n        name: string;\n        nodeIds: string[];\n        paint: "fill";\n    }[];\n    unassigned: never[];\n    version: 1;\n};'
+					},
+					{
+						description:
+							'Which paints the picked shapes actually carry — a selection with no stroke should never be offered "outline".',
+						kind: 'value',
+						name: 'availablePaints',
+						signature:
+							'const availablePaints: (doc: SvgDocument, nodeIds: string[]) => Part["paint"][];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GroupInput',
+						signature:
+							"type GroupInput = {\n    /** Nodes to pull into the new part. */\n    nodeIds: string[];\n    name: string;\n    paint?: Part['paint'];\n};"
+					},
+					{
+						description:
+							'Pull nodes out of whatever parts hold them and into a new one. This is the whole point of the model: the shop selects two shapes and says "that is the crest", regardless of what colour either of them is.',
+						kind: 'value',
+						name: 'groupPart',
+						signature:
+							'const groupPart: (doc: SvgDocument, model: PartModel, input: GroupInput) => PartModel;'
+					},
+					{
+						description:
+							'Rename a part without touching what it holds.',
+						kind: 'value',
+						name: 'renamePart',
+						signature:
+							'const renamePart: (model: PartModel, partId: string, name: string) => PartModel;'
+					},
+					{
+						description:
+							'Drop a part; its shapes go back to being unassigned and keep the colours they were drawn in.',
+						kind: 'value',
+						name: 'ungroupPart',
+						signature:
+							'const ungroupPart: (doc: SvgDocument, model: PartModel, partId: string) => PartModel;'
+					},
+					{
+						description:
+							'Put a part somewhere else in the order. Parts are listed to the customer in this order, and paint order is rarely the order a person would read them in — "outline" belongs under the thing it outlines.',
+						kind: 'value',
+						name: 'movePart',
+						signature:
+							'const movePart: (model: PartModel, partId: string, offset: number) => PartModel;'
+					},
+					{
+						description:
+							'The whole order at once — what a drag-and-drop list hands back. Ids it does not mention keep their relative order at the end.',
+						kind: 'value',
+						name: 'reorderParts',
+						signature:
+							'const reorderParts: (model: PartModel, orderedIds: string[]) => PartModel;'
+					},
+					{
+						description:
+							'Which part owns a node, if any — what a canvas asks on hover.',
+						kind: 'value',
+						name: 'partOfNode',
+						signature:
+							'const partOfNode: (model: PartModel, nodeId: string) => Part | null;'
+					},
+					{
+						description:
+							'The colours a design shows with no customer choices applied.',
+						kind: 'value',
+						name: 'defaultColors',
+						signature:
+							'const defaultColors: (model: PartModel) => {\n    [k: string]: string;\n};'
+					},
+					{
+						description:
+							'A part model as the old colour-keyed map, for code that still speaks it.',
+						kind: 'value',
+						name: 'colorMapOf',
+						signature:
+							'const colorMapOf: (model: PartModel, colors: Record<string, string>) => Record<string, string>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/svg-parts/react',
+				symbols: [
+					{
+						description: 'A rectangle in viewport coordinates.',
+						kind: 'type',
+						name: 'Rect',
+						signature:
+							'type Rect = {\n    bottom: number;\n    left: number;\n    right: number;\n    top: number;\n};'
+					},
+					{
+						description:
+							'Shapes whose box overlaps the dragged rectangle. Pure, so the hit test is testable without a browser.',
+						kind: 'value',
+						name: 'nodesInRect',
+						signature:
+							'const nodesInRect: (boxes: {\n    id: string;\n    rect: Rect;\n}[], marquee: Rect) => string[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PartCanvasProps',
+						signature:
+							'type PartCanvasProps = {\n    className?: string;\n    /** Node ids currently picked. */\n    selection: string[];\n    /** A shape was clicked. `additive` is true when shift or meta was held. */\n    onSelect: (nodeId: string, additive: boolean) => void;\n    /** A rectangle was dragged over these shapes. Falls back to repeated\n     *  `onSelect` calls when not given. */\n    onSelectMany?: (nodeIds: string[], additive: boolean) => void;\n    model: PartModel;\n    style?: CSSProperties;\n    /** The artwork. Scripts and handlers are stripped before it is rendered. */\n    svg: string;\n};'
+					},
+					{
+						description:
+							'The artwork, clickable shape by shape. Controlled: the caller owns the selection, so grouping, undo and keyboard handling stay where the rest of the editing lives.',
+						kind: 'value',
+						name: 'PartCanvas',
+						signature:
+							'const PartCanvas: ({ className, model, onSelect, onSelectMany, selection, style, svg }: PartCanvasProps) => import("react/jsx-runtime").JSX.Element;'
+					},
+					{
+						description:
+							'What the shapes somebody has picked currently belong to — the sentence a canvas puts under itself ("2 shapes · part 2, detail").',
+						kind: 'value',
+						name: 'selectionSummary',
+						signature:
+							'const selectionSummary: (model: PartModel, selection: string[]) => {\n    count: number;\n    parts: string[];\n};'
+					}
+				]
+			}
+		],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build ./src/index.ts ./src/react.tsx --root ./src --outdir dist --target bun --external react --external react/* && tsc --emitDeclarationOnly --project tsconfig.json',
+				name: 'build'
+			},
+			{
+				command:
+					'bun run format && bun run typecheck && bun run test && bun run build && absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{js,ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Read an SVG as named, recolourable parts — a part is a set of shapes, not a hex value.',
+		directory: 'svg-parts',
+		kind: 'package',
+		name: 'SVG Parts',
+		packageName: '@absolutejs/svg-parts',
+		private: false,
+		publicExports: ['@absolutejs/svg-parts', '@absolutejs/svg-parts/react'],
+		readmeDigest:
+			'9adfd32f689702e529b5b0d3753d500edb3567ee0ea0dd755c0dcfb00a2a83b8',
+		readmeSamples: [
+			{
+				code: "import {\n\tparseSvg,\n\tpartsFromColors,\n\tgroupPart,\n\trecolor\n} from '@absolutejs/svg-parts';\n\nconst doc = parseSvg(markup);\n\n// A flat design arrives as one part per colour — the same model a\n// colour-keyed recolour gives you, so nothing has to be re-entered.\nlet model = partsFromColors(doc);\n\n// Then split it the way the artwork actually reads.\nmodel = groupPart(doc, model, { name: 'crest', nodeIds: ['n3', 'n4'] });\n\n// Colour by part id. Shapes another part owns are untouched, even if they\n// were drawn in the same colour.\nconst painted = recolor(markup, model, { crest: '#c8102e' });",
+				description: '# @absolutejs/svg-parts',
+				heading: '@absolutejs/svg-parts quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Read an SVG as named, recolourable parts — a part is a set of shapes, not a hex value.',
+				details: [],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Recolouring a flat SVG by substituting hex values repaints every shape that shares that hex. Two unrelated shapes drawn in black can never be separated, and a design with forty shades presents forty "parts" to a customer. This library gives shapes stable ids, lets you group them into named parts, and rewrites one attribute on one element at a time — the rest of the document is returned byte for byte.',
+				details: [],
+				title: 'Why'
+			},
+			{
+				description:
+					'parseSvg(markup) — Drawable elements in paint order, each with a stable id, its group ancestry and the byte range of its opening tag.',
+				details: [
+					'paletteOf(doc) — Every distinct painted colour, in paint order.',
+					'partsFromColors(doc) — One part per colour — the migration path from a colour-keyed model.',
+					'oneWholePart(doc) — Everything as a single part.',
+					'groupPart(doc, model, { name, nodeIds }) — Pull shapes into a new named part, out of whatever held them.',
+					'renamePart / ungroupPart / partOfNode — The rest of the model edits.',
+					'applyParts(doc, { model, colors }) / recolor(markup, model, colors) — Paint by part id.',
+					'withPartIds(doc, model) — The same markup with data-part / data-node, for a canvas to hit-test.',
+					'colorMapOf(model, colors) — The old colour→colour map, for code that still speaks it.',
+					'No DOM, no XML parser dependency, no browser needed.'
+				],
+				title: "What's here"
+			},
+			{
+				description:
+					'0.1.0-beta — the parser and the part model. A React selection canvas is the next slice; drawing tools are deliberately not in scope (Illustrator exists).',
+				details: [],
+				title: 'Status'
+			}
+		],
+		repository: 'https://github.com/absolutejs/svg-parts',
+		subpackages: [],
+		version: '0.1.0-beta.3'
 	},
 	{
 		api: [
@@ -52783,7 +67275,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		private: true,
 		publicExports: [],
 		readmeDigest:
-			'a09f8d2f4b652e899b495c0e274a02ae9635e292c011ecc9a84d57f39ce9a349',
+			'5e78bc392ea4a7fac06819a7c1162666fb2fb2c2f76c0b701a0d024fe341eb5a',
 		readmeSamples: [
 			{
 				code: 'bun install          # installs every workspace member\nbun run typecheck    # across all adapters\nbun run test         # across all adapters\nbun run build        # across all adapters',
@@ -52798,6 +67290,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'CRDT backend adapters for @absolutejs/sync — a private workspace monorepo. Each adapter is published as its own package and implements the TextCrdtAdapter contract from @absolutejs/sync/crdt; install only the one you want.',
 				details: [
 					'Adapter — Package — Backend — Status',
+					'capacitor/ — @absolutejs/sync-capacitor — Native SQLite + lifecycle — ✅',
 					'yjs/ — @absolutejs/sync-yjs — Yjs — ✅',
 					'automerge/ — @absolutejs/sync-automerge — Automerge — ✅',
 					'loro/ — @absolutejs/sync-loro — Loro — ✅'
@@ -52819,44 +67312,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Why a monorepo'
 			}
 		],
-		repository: 'https://github.com/absolutejs/sync-adapters',
+		repository: null,
 		subpackages: [
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/sync-automerge',
-						symbols: [
-							{
-								description:
-									'Create a live Automerge-backed collaborative-text doc for replica.',
-								kind: 'value',
-								name: 'createAutomergeText',
-								signature:
-									'const createAutomergeText: (replica: string, initial?: string) => CrdtText<string>;'
-							},
-							{
-								description:
-									'The Automerge collaborative-text backend as a {@link TextCrdtAdapter}. Drop-in for the first-party rgaText. The replica argument is accepted for contract compatibility; Automerge manages actor identity internally.',
-								kind: 'value',
-								name: 'automergeText',
-								signature:
-									'const automergeText: TextCrdtAdapter<string>;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/sync-automerge/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<never, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -52933,93 +67392,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.0.4'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/sync-bus-pg',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'PostgresClusterBusOptions',
-								signature:
-									"type PostgresClusterBusOptions = {\n    /**\n     * The `postgres` (https://github.com/porsager/postgres) client. We need\n     * both a regular SQL connection (for publish + spill fetch) and the\n     * ability to listen on a channel; `postgres` exposes both via the same\n     * `Sql` instance.\n     */\n    sql: Sql;\n    /**\n     * Channel name passed to `LISTEN` / `pg_notify`. Defaults to\n     * `'absolutejs_sync_cluster'`. Two engines on the same Postgres can scope\n     * themselves to different channels by overriding this.\n     */\n    channel?: string;\n    /**\n     * Spill strategy. `'overflow'` (default): inline JSON when small, table-\n     * backed when oversized. `'always'`: every message goes through the spill\n     * table (durable, slower). `'never'`: throws if a message exceeds the\n     * inline budget — useful in tests to assert payload-size discipline.\n     */\n    spill?: 'overflow' | 'always' | 'never';\n    /**\n     * Called when the listener encounters an error (parse failure, missing\n     * spill row, etc). Defaults to `console.warn`.\n     */\n    onError?: (error: unknown) => void;\n    /**\n     * End-to-end listener monitoring. The bus periodically publishes a private\n    "
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PostgresListenerState',
-								signature:
-									"type PostgresListenerState = 'connected' | 'connecting' | 'idle' | 'reconnecting';"
-							},
-							{
-								description:
-									"A point-in-time view of the dedicated LISTEN connection's real delivery path. Timestamps are Unix milliseconds so metrics and JSON APIs can consume the shape without parsing package-formatted dates.",
-								kind: 'type',
-								name: 'PostgresListenerHealth',
-								signature:
-									'type PostgresListenerHealth = {\n    activeSubscriptions: number;\n    connections: number;\n    lastConnectedAt: number | null;\n    lastProbeAttemptAt: number | null;\n    lastProbeFailedAt: number | null;\n    lastProbeSucceededAt: number | null;\n    probeAttempts: number;\n    probeFailures: number;\n    probeSuccesses: number;\n    reconnects: number;\n    state: PostgresListenerState;\n};'
-							},
-							{
-								description:
-									"Returned alongside the bus so apps can periodically prune old spill rows. Inline messages never touch the table; only the (rare) oversized batch does. Why we don't delete inline on consume: Postgres NOTIFY broadcasts to every listener on the channel, including the publisher's OWN listener. If the publisher deletes the spill row after reading it, the other N-1 peers find it gone. We instead let the row outlive the broadcast and prune by age.",
-								kind: 'type',
-								name: 'PostgresClusterBus',
-								signature:
-									'type PostgresClusterBus = ClusterBus & {\n    /** Delete spill rows older than `olderThanMs` (default 60_000). */\n    vacuum: (olderThanMs?: number) => Promise<number>;\n    /**\n     * Operator-shaped cumulative counters for the cluster-bus chokepoint.\n     * Scrape on a 30s interval to attribute cross-instance fan-out cost\n     * and detect a silently-broken cluster (received plateaus, errors\n     * climb). Added in 0.1.2.\n     */\n    metrics: () => PostgresClusterBusMetrics;\n    listenerHealth: () => PostgresListenerHealth;\n    /** Immediately prove that this process can publish to and receive from its\n     * dedicated LISTEN connection. Returns false when there is no subscription\n     * or when the probe times out. */\n    probeListener: () => Promise<boolean>;\n};'
-							},
-							{
-								description:
-									'Cumulative counters since createPostgresClusterBus(). Added in 0.1.2. - published / received — envelopes the bus put on / pulled off the channel. A receiver counts a message ONCE here, regardless of whether it ignored it by origin downstream. - publishedInline / publishedSpilled — split of the published total by envelope path; a healthy mostly-small workload has publishedSpilled near zero. - spillFetched / spillFetchFailed — receiver side of the spill path. spillFetchFailed climbing means a spil',
-								kind: 'type',
-								name: 'PostgresClusterBusMetrics',
-								signature:
-									'type PostgresClusterBusMetrics = {\n    published: number;\n    publishedInline: number;\n    publishedSpilled: number;\n    received: number;\n    spillFetched: number;\n    spillFetchFailed: number;\n    spillVacuumed: number;\n    publishErrors: number;\n    subscribeErrors: number;\n};'
-							},
-							{
-								description:
-									"A small, payload-agnostic process fan-out contract. Unlike Sync's ClusterBus, this does not pretend every message is a row change, so it can also carry MCP elicitation answers, cache invalidations, and control-plane signals. Delivery has the same semantics as this adapter's cluster bus.",
-								kind: 'type',
-								name: 'ChannelBus',
-								signature:
-									'type ChannelBus<Message> = {\n    publish: (message: Message) => void | Promise<void>;\n    subscribe: (onMessage: (message: Message) => void) => (() => void | Promise<void>) | Promise<() => void | Promise<void>>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PostgresChannelBus',
-								signature:
-									'type PostgresChannelBus<Message> = ChannelBus<Message> & {\n    listenerHealth: () => PostgresListenerHealth;\n    metrics: () => PostgresClusterBusMetrics;\n    probeListener: () => Promise<boolean>;\n    vacuum: (olderThanMs?: number) => Promise<number>;\n};'
-							},
-							{
-								description:
-									"Create a typed Postgres LISTEN/NOTIFY channel without coupling the payload to @absolutejs/sync row-change messages. Use spill: 'always' when the database row must survive a transient listener disconnect; the notification is still a wake-up signal, so durable work belongs in @absolutejs/queue.",
-								kind: 'value',
-								name: 'createPostgresChannelBus',
-								signature:
-									'const createPostgresChannelBus: <Message>(options: PostgresClusterBusOptions) => PostgresChannelBus<Message>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPostgresClusterBus',
-								signature:
-									'const createPostgresClusterBus: (options: PostgresClusterBusOptions) => PostgresClusterBus;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/sync-bus-pg/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<PostgresClusterBusOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -53127,85 +67500,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.3'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/sync-bus-redis',
-						symbols: [
-							{
-								description:
-									'Minimal Redis publisher contract. Both ioredis and node-redis v4 structurally satisfy this (publish(channel, message) is the canonical signature; both return a Promise that resolves to the number of subscribers that received the message).',
-								kind: 'type',
-								name: 'RedisPublisher',
-								signature:
-									'type RedisPublisher = {\n    publish: (channel: string, message: string) => Promise<number | unknown>;\n};'
-							},
-							{
-								description:
-									"Minimal Redis subscriber contract. The shape diverges between ioredis (EventEmitter-based) and node-redis (callback-based); RedisSubscriber is the lowest-common-denominator: - subscribe(channel, listener) registers listener for messages on channel AND returns an unsubscribe function. The listener receives the raw message string. The README shows how to wrap ioredis (where you'd call subscriber.on('message', handler) once and route by channel) and node-redis (where subscribe(channel, listener) is",
-								kind: 'type',
-								name: 'RedisSubscriber',
-								signature:
-									'type RedisSubscriber = {\n    subscribe: (channel: string, listener: (message: string) => void) => Promise<() => Promise<void>>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'CreateRedisClusterBusOptions',
-								signature:
-									"type CreateRedisClusterBusOptions = {\n    /** The Redis client used for `publish()` calls. */\n    publisher: RedisPublisher;\n    /** The Redis subscriber. MUST be a dedicated connection (a\n     *  `duplicate()` of your main client) — Redis forbids other\n     *  commands on a subscribed connection. */\n    subscriber: RedisSubscriber;\n    /**\n     * Channel name. Defaults to `'absolutejs_sync_cluster'`. Two\n     * engines on the same Redis can scope themselves to different\n     * channels by overriding this.\n     */\n    channel?: string;\n    /**\n     * Called when message parsing / delivery fails. Defaults to\n     * `console.warn`. Note that Redis pub/sub doesn't surface delivery\n     * failures on the publisher side — `publish()` resolves to the\n     * count of subscribers that received the message (or 0); a 0 count\n     * does NOT fire onError (Redis treats \"no subscribers\" as success).\n     */\n    onError?: (error: unknown) => void;\n};"
-							},
-							{
-								description:
-									"Cumulative metrics since createRedisClusterBus(). Same shape style as sync-bus-pg's — minus the spill-table fields (Redis has no equivalent).",
-								kind: 'type',
-								name: 'RedisClusterBusMetrics',
-								signature:
-									'type RedisClusterBusMetrics = {\n    published: number;\n    received: number;\n    publishErrors: number;\n    subscribeErrors: number;\n    /**\n     * Cumulative count of subscribers reached on the publisher side.\n     * Returned by Redis\'s PUBLISH. Use it as a rough "is the cluster\n     * still wired up" signal — a drop to 0 when you expect peers means\n     * subscribers disconnected (replication lag, network partition).\n     */\n    totalSubscribersReached: number;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'RedisClusterBus',
-								signature:
-									'type RedisClusterBus = ClusterBus & {\n    metrics: () => RedisClusterBusMetrics;\n};'
-							},
-							{
-								description:
-									'Payload-agnostic fan-out using the same Redis pub/sub transport. Messages are at-most-once; durable commands and effects belong in @absolutejs/queue.',
-								kind: 'type',
-								name: 'RedisChannelBus',
-								signature:
-									'type RedisChannelBus<Message> = {\n    metrics: () => RedisClusterBusMetrics;\n    publish: (message: Message) => Promise<void>;\n    subscribe: (onMessage: (message: Message) => void) => Promise<() => Promise<void>>;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createRedisChannelBus',
-								signature:
-									'const createRedisChannelBus: <Message>(options: CreateRedisClusterBusOptions) => RedisChannelBus<Message>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createRedisClusterBus',
-								signature:
-									'const createRedisClusterBus: (options: CreateRedisClusterBusOptions) => RedisClusterBus;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/sync-bus-redis/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<CreateRedisClusterBusOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -53307,41 +67602,122 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.1.1'
 			},
 			{
-				api: [
+				api: [],
+				commands: [
 					{
-						entryPoint: '@absolutejs/sync-loro',
-						symbols: [
-							{
-								description:
-									'Create a live Loro-backed collaborative-text doc for replica.',
-								kind: 'value',
-								name: 'createLoroText',
-								signature:
-									'const createLoroText: (replica: string, initial?: string) => CrdtText<string>;'
-							},
-							{
-								description:
-									'The Loro collaborative-text backend as a {@link TextCrdtAdapter}. Drop-in for the first-party rgaText. The replica argument is accepted for contract compatibility; Loro assigns a peer id internally.',
-								kind: 'value',
-								name: 'loroText',
-								signature:
-									'const loroText: TextCrdtAdapter<string>;'
-							}
-						]
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --sourcemap --target=browser --external @absolutejs/sync --external @absolutejs/devices --external @absolutejs/devices-capacitor --external @capacitor/core --external @capacitor-community/sqlite && tsc --project tsconfig.build.json',
+						name: 'build'
 					},
 					{
-						entryPoint: '@absolutejs/sync-loro/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<never, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'bun test',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
 					}
 				],
+				description:
+					'Transactional Capacitor SQLite local store and native lifecycle adapter for @absolutejs/sync',
+				name: '@absolutejs/sync-capacitor',
+				private: false,
+				publicExports: ['@absolutejs/sync-capacitor'],
+				readmeDigest:
+					'78802a012f887515fabb82aaf06c6d326b477c2fff0cf8d0787fd95fcc51ceb8',
+				readmeSamples: [
+					{
+						code: "import { createSyncClient } from '@absolutejs/sync/client';\nimport { lifecycle, network } from '@absolutejs/devices';\nimport {\n\tcreateCapacitorSyncLocalStore,\n\tcreateCapacitorSyncProtection,\n\tinstallCapacitorSyncLifecycle\n} from '@absolutejs/sync-capacitor';\n\nconst client = createSyncClient({\n\turl: 'wss://app.example.com/sync/ws',\n\tdurable: {\n\t\tstore: createCapacitorSyncLocalStore({\n\t\t\tprotection: createCapacitorSyncProtection()\n\t\t}),\n\t\tnamespace: authenticatedPrincipalNamespace\n\t}\n});\n\nconst removeLifecycle = await installCapacitorSyncLifecycle({\n\tclient,\n\tlifecycle,\n\tnetwork\n});",
+						description: '# @absolutejs/sync-capacitor',
+						heading: '@absolutejs/sync-capacitor quick start',
+						language: 'typescript'
+					},
+					{
+						code: 'const store = createCapacitorSyncLocalStore({\n\tstorageSchema: {\n\t\tversion: 2,\n\t\tmigrations: [\n\t\t\t{\n\t\t\t\ttoVersion: 2,\n\t\t\t\tmigrateCollection(record) {\n\t\t\t\t\treturn {\n\t\t\t\t\t\t...record,\n\t\t\t\t\t\trows: record.rows.map((row) => ({\n\t\t\t\t\t\t\t...(row as object),\n\t\t\t\t\t\t\tarchived: false\n\t\t\t\t\t\t}))\n\t\t\t\t\t};\n\t\t\t\t}\n\t\t\t}\n\t\t]\n\t}\n});',
+						description:
+							"storageSchema accepts the same generated SyncLocalStoreSchema or component bundle used by createIndexedDbSyncLocalStore. Before any foreground transaction begins, the adapter migrates every principal's collections, durable mutations, and logical schema marker inside one SQLite transaction. A transform failure or process death rolls back the entire upgrade; a runtime older than the stored schema fails closed.",
+						heading: 'Installed-data upgrades',
+						language: 'typescript'
+					},
+					{
+						code: "import { configureCapacitorBackgroundSync } from '@absolutejs/sync-capacitor';\n\nawait configureCapacitorBackgroundSync({\n\tissuer: 'https://app.example.com',\n\tclientId: 'mobile-public-client',\n\tendpoint: 'https://app.example.com/__absolute/sync/background',\n\tnamespace: authenticatedPrincipalNamespace\n});",
+						description:
+							"AbsoluteJS also configures AbsoluteBackgroundSync when the application uses both @absolutejs/auth and @absolutejs/sync. The native worker is deliberately finite: Android WorkManager or iOS BGProcessingTask wakes it, it refreshes a short-lived access token, pushes a bounded durable outbox batch, pulls the foreground client's persisted collection descriptors, commits the response to the same SQLite database, and exits. Foreground/resume Sync remains the correctness path because neither operating system guarantees when background work will run.",
+						heading: 'Managed native background Sync',
+						language: 'typescript'
+					}
+				],
+				readmeTopics: [
+					{
+						description:
+							'Native persistence and lifecycle wiring for @absolutejs/sync applications running in Capacitor. It stores confirmed rows, cursors, installation identity, and the durable mutation outbox in one principal-partitioned SQLite database. It also exposes namespace-scoped collection discovery so finite native workers can resume safe id-keyed pulls without application-authored worker code.',
+						details: [
+							'AbsoluteJS provisions this automatically when Mobile, Sync, and Auth are enabled. Version 0.9.3 adds peer support tested against @absolutejs/devices@0.7.0 and @absolutejs/devices-capacitor@0.8.0, while retaining the earlier declared peer ranges. Intermediate Devices release lines are not newly certified by this change. Keep the application and this adapter on one compatible Devices pair; do not use package-manager overrides to hide an incompatible peer range.',
+							'Direct Capacitor applications can opt in explicitly:',
+							"Resume and restored-connectivity events refresh the Auth-backed socket and ask the client to flush within a finite ten-second budget. Explicitly retryable failures obey the client's delivery ceiling; conflicts and permanent failures remain in the principal's dead-letter partition for explicit remediation rather than replaying forever.",
+							'Generated mutation conflict policies are captured inside each encrypted outbox record. The TypeScript foreground/headless runner and the Android WorkManager or iOS BGProcessingTask runner therefore make the same bounded decision: manual conflicts become dead letters, server-wins discards the rejected local intent, and client-wins retries the unchanged operation ID up to its declared ceiling. An explicit argument-changing rebase is left to the foreground remediation API and creates a new traceable intent.',
+							'The namespace must come from a verified Auth principal, never from an untrusted route or form value. AbsoluteJS derives an opaque namespace from the verified issuer, public client ID, and subject. Signing out locks that partition by removing it from the active runtime; it does not silently destroy offline data. Signing back in as the same verified principal unlocks the same partition.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							"storageSchema accepts the same generated SyncLocalStoreSchema or component bundle used by createIndexedDbSyncLocalStore. Before any foreground transaction begins, the adapter migrates every principal's collections, durable mutations, and logical schema marker inside one SQLite transaction. A transform failure or process death rolls back the entire upgrade; a runtime older than the stored schema fails closed.",
+						details: [
+							"Migration callbacks are synchronous and deterministic. They may replace or delete persisted records, but cannot change a mutation's stable operation ID. AbsoluteJS will generate and provision the plan for ordinary applications; direct Capacitor integrations can pass it explicitly:",
+							'Absolute composes the app schema and every installed Sync pack into a deterministic component bundle. SQLite tracks each component independently, keeps removed-pack ledgers as orphan diagnostics, and migrates all records and ledger updates in one transaction.'
+						],
+						title: 'Installed-data upgrades'
+					},
+					{
+						description:
+							'AbsoluteJS automatically installs createCapacitorSyncProtection(). It creates one random AES-256-GCM data key, seals that key in the existing iOS Keychain or Android Keystore vault, and writes only authenticated ciphertext envelopes to SQLite. Namespace, record kind, and collection/mutation name are authenticated as associated data. The foreground adapter and both finite native workers use the same versioned format; a missing key, changed identity, or modified record fails closed. Direct Capacitor integrations opt in as shown above.',
+						details: [
+							'The generated localData policy also enforces memory-only records, whole-projection expiry, deterministic eviction priority, and a logical per-principal byte ceiling. Pending mutations are never evicted. When protected data declares a memory-only fallback, browsers without an audited key provider remain usable without writing that data to disk.'
+						],
+						title: 'Protected local data and quotas'
+					},
+					{
+						description:
+							"AbsoluteJS also configures AbsoluteBackgroundSync when the application uses both @absolutejs/auth and @absolutejs/sync. The native worker is deliberately finite: Android WorkManager or iOS BGProcessingTask wakes it, it refreshes a short-lived access token, pushes a bounded durable outbox batch, pulls the foreground client's persisted collection descriptors, commits the response to the same SQLite database, and exits. Foreground/resume Sync remains the correctness path because neither operating system guarantees when background work will run.",
+						details: [
+							'The worker does not run application JavaScript and does not expose Capacitor APIs to a background WebView. Its credential and network boundary is fixed:',
+							'the OAuth refresh token is read from the shared native Keychain/Keystore',
+							'vault and sent only to the issuer-advertised HTTPS token endpoint;',
+							'the resulting bearer token, mutation arguments, and collection parameters',
+							'are sent only to the configured same-origin AbsoluteJS endpoint;',
+							'redirects fail closed, and response bodies are bounded before parsing;',
+							'a rotated refresh token is written back to the vault, while returned Sync',
+							"data is written only to the principal's SQLite partition.",
+							'Direct Capacitor applications can configure the worker after resolving a verified principal:',
+							'Call AbsoluteBackgroundSync.clear() on sign-out. On iOS, register AbsoluteBackgroundSyncPlugin.registerBackgroundTask() during application launch and list .absolutejs.background-sync in BGTaskSchedulerPermittedIdentifiers; the AbsoluteJS mobile CLI owns those generated regions. Android scheduling is registered by the plugin.'
+						],
+						title: 'Managed native background Sync'
+					},
+					{
+						description:
+							'AbsoluteJS protects record payloads with AES-256-GCM rather than claiming the',
+						details: [
+							'default SQLite connection is SQLCipher-encrypted. SQLite keys, namespaces, and ordering columns remain metadata; sensitive row and mutation payloads are ciphertext. Review platform encryption-export requirements before shipping.',
+							'Web/PWA builds should use createIndexedDbSyncLocalStore from',
+							"@absolutejs/sync/client; they do not need the plugin's WASM/web component.",
+							'The adapter serializes transactions so an app cannot overlap two explicit',
+							'transactions on the same Capacitor connection.',
+							"The native iOS worker currently targets the SQLite plugin's default Documents",
+							'location. Applications that override CapacitorSQLite.iosDatabaseLocation must keep foreground and background database locations aligned before enabling managed background Sync.'
+						],
+						title: 'Platform notes'
+					}
+				],
+				sourcePath: 'capacitor',
+				version: '0.9.3'
+			},
+			{
+				api: [],
 				commands: [
 					{
 						command:
@@ -53418,41 +67794,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.0.4'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/sync-yjs',
-						symbols: [
-							{
-								description:
-									'Create a live Yjs-backed collaborative-text doc for replica.',
-								kind: 'value',
-								name: 'createYjsText',
-								signature:
-									'const createYjsText: (replica: string, initial?: string) => CrdtText<string>;'
-							},
-							{
-								description:
-									'The Yjs collaborative-text backend as a {@link TextCrdtAdapter}. Drop-in for the first-party rgaText: create mints a live doc, merge combines two persisted states server-side, empty/textOf are conveniences.',
-								kind: 'value',
-								name: 'yjsText',
-								signature:
-									'const yjsText: TextCrdtAdapter<string>;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/sync-yjs/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<never, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -53536,6 +67878,311 @@ export const ecosystemProjects: EcosystemProject[] = [
 			}
 		],
 		version: null
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/sync-expo',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncSqliteExecutor',
+						signature:
+							'type ExpoSyncSqliteExecutor = {\n    execAsync(source: string): Promise<void>;\n    getAllAsync<T>(source: string, params?: readonly (boolean | number | null | string | Uint8Array)[]): Promise<T[]>;\n    getFirstAsync<T>(source: string, params?: readonly (boolean | number | null | string | Uint8Array)[]): Promise<T | null>;\n    runAsync(source: string, params?: readonly (boolean | number | null | string | Uint8Array)[]): Promise<unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncSqliteDatabase',
+						signature:
+							'type ExpoSyncSqliteDatabase = ExpoSyncSqliteExecutor & {\n    withExclusiveTransactionAsync(run: (transaction: ExpoSyncSqliteExecutor) => Promise<void>): Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncSqliteFactory',
+						signature:
+							'type ExpoSyncSqliteFactory = () => ExpoSyncSqliteDatabase | Promise<ExpoSyncSqliteDatabase>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncLocalStoreOptions',
+						signature:
+							'type ExpoSyncLocalStoreOptions = {\n    /** Defaults to `absolutejs-sync-local-v1.db`. */\n    databaseName?: string;\n    /** Injection seam for conformance tests and custom database provisioning. */\n    database?: ExpoSyncSqliteFactory;\n    /** Same generated logical migration plan used by web and Capacitor. */\n    storageSchema?: SyncLocalStoreSchemaInput;\n    protection?: SyncLocalProtectionProvider;\n    now?: () => number;\n};'
+					},
+					{
+						description:
+							"Expo SQLite implementation of Sync's principal-partitioned atomic cache and mutation outbox. Every operation is serialized around an exclusive native transaction so concurrent native routes, WebViews, and background work cannot observe partial state.",
+						kind: 'value',
+						name: 'createExpoSyncLocalStore',
+						signature:
+							'const createExpoSyncLocalStore: ({ databaseName, database: createDatabase, storageSchema, protection, now, }?: ExpoSyncLocalStoreOptions) => SyncLocalStore;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncBridgeHostOptions',
+						signature:
+							'type ExpoSyncBridgeHostOptions = {\n    store: SyncLocalStore;\n    namespace: string;\n    /** Maximum time one WebView may hold an atomic transaction. Defaults to 8s. */\n    transactionTimeoutMs?: number;\n    /** Native random identifier source, normally `expoSyncRandomId`. */\n    createId: () => string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncSocketBridgeEvent',
+						signature:
+							'type ExpoSyncSocketBridgeEvent = {\n    socketId: string;\n    type: "close" | "error" | "message-chunk" | "open";\n    code?: number;\n    data?: string;\n    index?: number;\n    messageId?: string;\n    reason?: string;\n    total?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncSocketBridgeHostOptions',
+						signature:
+							'type ExpoSyncSocketBridgeHostOptions = {\n    allowedOrigin: string;\n    socketTicket: (audience?: string) => Promise<string>;\n    emit(event: ExpoSyncSocketBridgeEvent): void;\n    webSocketImpl?: typeof WebSocket;\n    maxSockets?: number;\n    /** Maximum encoded Sync frame size. Defaults to 4 MiB. */\n    maxFrameBytes?: number;\n};'
+					},
+					{
+						description:
+							"Native owner for WebView local-store transactions. It exposes only Sync's typed persistence contract and never accepts a namespace from page code.",
+						kind: 'value',
+						name: 'createExpoSyncBridgeHost',
+						signature:
+							'const createExpoSyncBridgeHost: ({ store, namespace, transactionTimeoutMs, createId, }: ExpoSyncBridgeHostOptions) => {\n    close: () => Promise<void>;\n    request: (method: string, rawParams: unknown) => Promise<unknown>;\n};'
+					},
+					{
+						description:
+							'Owns authenticated sockets in native JavaScript. Only ordinary string Sync frames cross the WebView bridge; the single-use ticket is consumed here.',
+						kind: 'value',
+						name: 'createExpoSyncSocketBridgeHost',
+						signature:
+							'const createExpoSyncSocketBridgeHost: ({ allowedOrigin, socketTicket, emit, webSocketImpl, maxSockets, maxFrameBytes, }: ExpoSyncSocketBridgeHostOptions) => {\n    close: () => void;\n    request: (method: string, rawParams: unknown) => Promise<unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'expoSyncRandomId',
+						signature: 'expoSyncRandomId'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncSecureStore',
+						signature:
+							'type ExpoSyncSecureStore = {\n    AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY: number;\n    deleteItemAsync(key: string, options?: Record<string, unknown>): Promise<void>;\n    getItemAsync(key: string, options?: Record<string, unknown>): Promise<string | null>;\n    isAvailableAsync(): Promise<boolean>;\n    setItemAsync(key: string, value: string, options?: Record<string, unknown>): Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncProtectionOptions',
+						signature:
+							'type ExpoSyncProtectionOptions = {\n    secureStore?: ExpoSyncSecureStore;\n    storagePrefix?: string;\n};'
+					},
+					{
+						description:
+							'AES-256-GCM records whose data key is retained only by Expo SecureStore.',
+						kind: 'value',
+						name: 'createExpoSyncProtection',
+						signature:
+							'const createExpoSyncProtection: (options?: ExpoSyncProtectionOptions) => SyncLocalProtectionProvider;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncLifecycleDependencies',
+						signature:
+							'type ExpoSyncLifecycleDependencies = {\n    appState: {\n        currentState?: string | null;\n        addEventListener(type: "change", listener: (state: string) => void): Subscription;\n    };\n    network: {\n        addNetworkStateListener(listener: (state: {\n            isConnected?: boolean;\n            isInternetReachable?: boolean;\n        }) => void): Subscription;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncLifecycleOptions',
+						signature:
+							'type ExpoSyncLifecycleOptions = {\n    client: Pick<SyncClient, "reconnect"> & Partial<Pick<SyncClient, "flush">>;\n    /** Finite outbox budget after a wake-up. Defaults to 10 seconds. */\n    flushTimeoutMs?: number;\n    onError?: (error: unknown) => void;\n    dependencies?: ExpoSyncLifecycleDependencies;\n};'
+					},
+					{
+						description:
+							'Reconnect and perform a bounded flush after foreground or connectivity.',
+						kind: 'value',
+						name: 'installExpoSyncLifecycle',
+						signature:
+							'const installExpoSyncLifecycle: ({ client, flushTimeoutMs, onError, dependencies, }: ExpoSyncLifecycleOptions) => () => void;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncBackgroundDependencies',
+						signature:
+							'type ExpoSyncBackgroundDependencies = {\n    backgroundTask: {\n        Failed: number;\n        Success: number;\n        getStatusAsync(): Promise<number | null>;\n        registerTaskAsync(taskName: string, options?: {\n            minimumInterval?: number;\n        }): Promise<void>;\n        unregisterTaskAsync(taskName: string): Promise<void>;\n    };\n    taskManager: {\n        defineTask(taskName: string, run: () => Promise<number>): void;\n        isAvailableAsync(): Promise<boolean>;\n        isTaskDefined(taskName: string): boolean;\n        isTaskRegisteredAsync(taskName: string): Promise<boolean>;\n    };\n};'
+					},
+					{
+						description:
+							'Define the task at module scope before registering it during app startup.',
+						kind: 'value',
+						name: 'defineExpoSyncBackgroundTask',
+						signature:
+							'const defineExpoSyncBackgroundTask: (taskName: string, run: () => Promise<unknown>, dependencies?: ExpoSyncBackgroundDependencies) => void;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncBackgroundRegistration',
+						signature:
+							'type ExpoSyncBackgroundRegistration = {\n    available: boolean;\n    registered: boolean;\n    status: number | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'registerExpoSyncBackgroundTask',
+						signature:
+							'const registerExpoSyncBackgroundTask: (taskName: string, options?: {\n    minimumInterval?: number;\n}, dependencies?: ExpoSyncBackgroundDependencies) => Promise<ExpoSyncBackgroundRegistration>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'unregisterExpoSyncBackgroundTask',
+						signature:
+							'const unregisterExpoSyncBackgroundTask: (taskName: string, dependencies?: ExpoSyncBackgroundDependencies) => Promise<void>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync-expo/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'AbsoluteExpoSyncBridgeProvider',
+						signature:
+							'type AbsoluteExpoSyncBridgeProvider = {\n    on(event: "sync.socket", listener: (payload: Record<string, unknown>) => void): () => void;\n    request(method: string, params: Record<string, unknown>): Promise<unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncBridgeLocalStoreOptions',
+						signature:
+							'type ExpoSyncBridgeLocalStoreOptions = {\n    provider: AbsoluteExpoSyncBridgeProvider;\n    storageSchema?: SyncLocalStoreSchemaInput;\n};'
+					},
+					{
+						description:
+							'SyncLocalStore proxy whose atomic transaction is owned by native SQLite. The namespace argument never crosses the bridge; the native Auth principal selected when the host was created is authoritative.',
+						kind: 'value',
+						name: 'createExpoSyncBridgeLocalStore',
+						signature:
+							'const createExpoSyncBridgeLocalStore: ({ provider, storageSchema, }: ExpoSyncBridgeLocalStoreOptions) => SyncLocalStore;'
+					},
+					{
+						description:
+							'Browser-compatible string WebSocket facade backed by the native socket host. Default JSON Sync frames are supported; binary serializers fail explicitly.',
+						kind: 'value',
+						name: 'createExpoSyncBridgeWebSocket',
+						signature:
+							'const createExpoSyncBridgeWebSocket: (provider: AbsoluteExpoSyncBridgeProvider) => typeof WebSocket;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync-expo/bridge',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncBridgeHostOptions',
+						signature:
+							'type ExpoSyncBridgeHostOptions = {\n    store: SyncLocalStore;\n    namespace: string;\n    /** Maximum time one WebView may hold an atomic transaction. Defaults to 8s. */\n    transactionTimeoutMs?: number;\n    /** Native random identifier source, normally `expoSyncRandomId`. */\n    createId: () => string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncSocketBridgeEvent',
+						signature:
+							'type ExpoSyncSocketBridgeEvent = {\n    socketId: string;\n    type: "close" | "error" | "message-chunk" | "open";\n    code?: number;\n    data?: string;\n    index?: number;\n    messageId?: string;\n    reason?: string;\n    total?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoSyncSocketBridgeHostOptions',
+						signature:
+							'type ExpoSyncSocketBridgeHostOptions = {\n    allowedOrigin: string;\n    socketTicket: (audience?: string) => Promise<string>;\n    emit(event: ExpoSyncSocketBridgeEvent): void;\n    webSocketImpl?: typeof WebSocket;\n    maxSockets?: number;\n    /** Maximum encoded Sync frame size. Defaults to 4 MiB. */\n    maxFrameBytes?: number;\n};'
+					},
+					{
+						description:
+							"Native owner for WebView local-store transactions. It exposes only Sync's typed persistence contract and never accepts a namespace from page code.",
+						kind: 'value',
+						name: 'createExpoSyncBridgeHost',
+						signature:
+							'const createExpoSyncBridgeHost: ({ store, namespace, transactionTimeoutMs, createId, }: ExpoSyncBridgeHostOptions) => {\n    close: () => Promise<void>;\n    request: (method: string, rawParams: unknown) => Promise<unknown>;\n};'
+					},
+					{
+						description:
+							'Owns authenticated sockets in native JavaScript. Only ordinary string Sync frames cross the WebView bridge; the single-use ticket is consumed here.',
+						kind: 'value',
+						name: 'createExpoSyncSocketBridgeHost',
+						signature:
+							'const createExpoSyncSocketBridgeHost: ({ allowedOrigin, socketTicket, emit, webSocketImpl, maxSockets, maxFrameBytes, }: ExpoSyncSocketBridgeHostOptions) => {\n    close: () => void;\n    request: (method: string, rawParams: unknown) => Promise<unknown>;\n};'
+					}
+				]
+			}
+		],
+		category: 'Data & Sync',
+		commands: [
+			{
+				command:
+					'rm -rf dist && bun build src/index.ts src/client.ts src/bridge.ts --outdir dist --sourcemap --target=browser --external @absolutejs/sync --external @noble/ciphers --external expo-background-task --external expo-crypto --external expo-network --external expo-secure-store --external expo-sqlite --external expo-task-manager --external react-native && tsc --project tsconfig.build.json',
+				name: 'build'
+			},
+			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
+				command: 'prettier --write "./**/*.{ts,json,md}"',
+				name: 'format'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Expo SQLite, lifecycle, protection, and background-task adapter for @absolutejs/sync',
+		directory: 'sync-expo',
+		kind: 'package',
+		name: 'Sync Expo',
+		packageName: '@absolutejs/sync-expo',
+		private: false,
+		publicExports: [
+			'@absolutejs/sync-expo',
+			'@absolutejs/sync-expo/client',
+			'@absolutejs/sync-expo/bridge'
+		],
+		readmeDigest:
+			'39ca403b213fe105d9d6ea7c32631b5d04215789c3d11c6172f96bf430be7ce3',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Expo-native persistence and lifecycle integration for @absolutejs/sync.',
+				details: [
+					'Expo SQLite durable cache, outbox, receipts, cursors, and dead letters.',
+					'Principal-partitioned storage with the same migrations and policy contract as',
+					'web and Capacitor.',
+					'AES-256-GCM record protection with a device-only key held by Expo SecureStore.',
+					'AppState and Expo Network wake-up handling.',
+					'Bounded Expo Background Task integration.',
+					'AbsoluteJS provisions this package automatically for Expo applications that use @absolutejs/sync. Direct package consumers can use the exported adapter functions without AbsoluteJS.',
+					'The @absolutejs/sync-expo/client and @absolutejs/sync-expo/bridge subpaths remain free of Expo and React Native runtime imports for WebViews and bridge contract tests. Native bridge hosts inject expoSyncRandomId; WebView socket identities use the browser Crypto API.',
+					'Background execution is an acceleration only. Foreground startup, resume, and connectivity recovery remain authoritative because Android and iOS decide when deferrable work is allowed to run.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/sync-expo',
+		subpackages: [],
+		version: '0.0.4'
 	},
 	{
 		api: [],
@@ -55808,6 +70455,193 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/telemetry',
 		subpackages: [],
 		version: '0.3.0'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/theme',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'Theme',
+						signature: "type Theme = 'light' | 'dark';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ThemePreference',
+						signature: "type ThemePreference = Theme | 'system';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ThemeSnapshot',
+						signature:
+							'type ThemeSnapshot = Readonly<{\n    preference: ThemePreference;\n    resolved: Theme;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'themeStorageKey',
+						signature: 'const themeStorageKey = "absolutejs.theme";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseTheme',
+						signature:
+							'const parseTheme: (value: unknown) => ThemePreference;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveTheme',
+						signature:
+							'const resolveTheme: (preference: ThemePreference, systemDark: boolean) => Theme;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'serverTheme',
+						signature: 'const serverTheme: ThemeSnapshot;'
+					},
+					{
+						description:
+							'Run before visible content. No user-controlled text is interpolated. Allow via CSP nonce/hash when required.',
+						kind: 'value',
+						name: 'themeScript',
+						signature:
+							"const themeScript = \"(()=>{let p='system';try{p=localStorage.getItem('absolutejs.theme')}catch{}p=p==='dark'||p==='light'?p:'system';const t=p==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):p;document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t})()\";"
+					},
+					{
+						description:
+							'One controller per document. No browser globals are accessed during module evaluation or SSR.',
+						kind: 'function',
+						name: 'createThemeStore',
+						signature:
+							'function createThemeStore(target: Window): {\n    getSnapshot: () => Readonly<{\n        preference: ThemePreference;\n        resolved: Theme;\n    }>;\n    subscribe(listener: () => void): () => void;\n    setPreference(value: ThemePreference): void;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/theme/react',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'Theme',
+						signature: "type Theme = 'light' | 'dark';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ThemePreference',
+						signature: "type ThemePreference = Theme | 'system';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ThemeSnapshot',
+						signature:
+							'type ThemeSnapshot = Readonly<{\n    preference: ThemePreference;\n    resolved: Theme;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'themeStorageKey',
+						signature: 'const themeStorageKey = "absolutejs.theme";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseTheme',
+						signature:
+							'const parseTheme: (value: unknown) => ThemePreference;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveTheme',
+						signature:
+							'const resolveTheme: (preference: ThemePreference, systemDark: boolean) => Theme;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'serverTheme',
+						signature: 'const serverTheme: ThemeSnapshot;'
+					},
+					{
+						description:
+							'Run before visible content. No user-controlled text is interpolated. Allow via CSP nonce/hash when required.',
+						kind: 'value',
+						name: 'themeScript',
+						signature:
+							"const themeScript = \"(()=>{let p='system';try{p=localStorage.getItem('absolutejs.theme')}catch{}p=p==='dark'||p==='light'?p:'system';const t=p==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):p;document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t})()\";"
+					},
+					{
+						description:
+							'One controller per document. No browser globals are accessed during module evaluation or SSR.',
+						kind: 'function',
+						name: 'createThemeStore',
+						signature:
+							'function createThemeStore(target: Window): {\n    getSnapshot: () => Readonly<{\n        preference: ThemePreference;\n        resolved: Theme;\n    }>;\n    subscribe(listener: () => void): () => void;\n    setPreference(value: ThemePreference): void;\n};'
+					},
+					{
+						description:
+							'Shared, hydration-safe preference with automatic system and cross-tab updates.',
+						kind: 'function',
+						name: 'useTheme',
+						signature:
+							'function useTheme(): {\n    setPreference: (value: ThemePreference) => void;\n    preference: ThemePreference;\n    resolved: import("./index").Theme;\n};'
+					}
+				]
+			}
+		],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts src/react.ts --outdir dist --target browser --external react && tsc --emitDeclarationOnly',
+				name: 'build'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'SSR-safe light, dark and system theme preferences for AbsoluteJS applications.',
+		directory: 'theme',
+		kind: 'package',
+		name: 'Theme',
+		packageName: '@absolutejs/theme',
+		private: false,
+		publicExports: ['@absolutejs/theme', '@absolutejs/theme/react'],
+		readmeDigest:
+			'191394b86d8ccd2801e9c6c16f787b3733eeb8237791ed33c5246eb8b3d1f2ee',
+		readmeSamples: [],
+		readmeTopics: [
+			{
+				description:
+					'Shared Light / Dark / System preferences. Apps own their CSS palette and controls.',
+				details: [
+					'themeScript from @absolutejs/theme is a static inline bootstrap. Render it before visible content to restore the saved preference before paint; supply a CSP nonce/hash if your app requires one. It writes data-theme and color-scheme on the document root. Supply CSS media-query defaults for System when JavaScript is unavailable.',
+					'React: const { preference, resolved, setPreference } = useTheme() from @absolutejs/theme/react. Use preference for a three-option selector and resolved for canvas/material colors. Defaults to System, reacts to OS changes, syncs across tabs, tolerates unavailable storage, and cleans up listeners. No provider is required. The server snapshot is deterministic for hydration; browser resolution is available after hydration.',
+					'Other frameworks: createThemeStore(window) exposes subscribe, getSnapshot, and setPreference. Create one store per document and unsubscribe on teardown. Call subscribe to activate system/storage listeners. SSR can use the exported immutable serverTheme snapshot.',
+					'The preference is stored under absolutejs.theme for the current origin. There is no account or cross-device synchronization. Browser storage failures keep the preference in memory for the current page. Changing to System resumes OS tracking.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/theme',
+		subpackages: [],
+		version: '0.1.0'
 	},
 	{
 		api: [

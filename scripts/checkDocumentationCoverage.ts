@@ -497,6 +497,91 @@ for (const view of Object.keys(docsViews))
 			`${view}: documentation page is orphaned from navigation, catalog, and internal links.`
 		);
 
+// Every package published under the @absolutejs npm scope must be in the
+// generated catalog or listed here with the reason it is not. Deprecated
+// packages and per-platform binaries (an os or cpu field) are skipped.
+const uncataloguedPackages: Record<string, string> = {
+	'@absolutejs/agent-exchange-browser':
+		'Published from an unmerged agent-exchange-providers branch.',
+	'@absolutejs/agent-exchange-discovery':
+		'Published from an unmerged agent-exchange-providers branch.',
+	'@absolutejs/agent-exchange-local':
+		'Published from an unmerged agent-exchange-providers branch.',
+	'@absolutejs/agent-exchange-permissions':
+		'Published from an unmerged agent-exchange-providers branch.',
+	'@absolutejs/agent-exchange-postgres':
+		'Published from an unmerged agent-exchange-providers branch.',
+	'@absolutejs/browser-session':
+		'Published from an unmerged agent-exchange-providers branch.',
+	'@absolutejs/bvm': 'Documented by its own page, /documentation/bvm.',
+	'@absolutejs/commerce-dubow':
+		'Published from source not yet committed to commerce-adapters.',
+	'@absolutejs/commerce-programs':
+		'Published from source not yet committed to commerce-adapters.',
+	'@absolutejs/commerce-wishes':
+		'Published from source not yet committed to commerce-adapters.',
+	'@absolutejs/drizzle-utils':
+		'Personal utility outside the AbsoluteJS repositories.'
+};
+const npmRegistry = 'https://registry.npmjs.org';
+const npmTimeoutMs = 15_000;
+
+const fetchNpmJson = async (path: string) => {
+	const response = await fetch(`${npmRegistry}/${path}`, {
+		signal: AbortSignal.timeout(npmTimeoutMs)
+	});
+	if (!response.ok)
+		throw new Error(`${npmRegistry}/${path} returned ${response.status}`);
+
+	return response.json();
+};
+
+const isSkippedOnNpm = async (packageName: string) => {
+	const packument = await fetchNpmJson(packageName.replace('/', '%2F'));
+	const latest = packument.versions?.[packument['dist-tags']?.latest];
+
+	return Boolean(latest?.deprecated || latest?.os || latest?.cpu);
+};
+
+const checkPublishedPackages = async () => {
+	const published = Object.keys(
+		await fetchNpmJson('-/org/absolutejs/package')
+	);
+	const publishedNames = new Set(published);
+	for (const packageName of Object.keys(uncataloguedPackages)) {
+		if (documentedPackageNames.has(packageName))
+			failures.push(
+				`${packageName}: now in the catalog; remove it from uncataloguedPackages.`
+			);
+		if (!publishedNames.has(packageName))
+			failures.push(
+				`${packageName}: no longer published; remove it from uncataloguedPackages.`
+			);
+	}
+	if (!('bvm' in docsViews))
+		failures.push('@absolutejs/bvm: its documentation page is missing.');
+
+	const candidates = published.filter(
+		(packageName) =>
+			!documentedPackageNames.has(packageName) &&
+			!(packageName in uncataloguedPackages)
+	);
+	const skipped = await Promise.all(candidates.map(isSkippedOnNpm));
+	for (const [index, packageName] of candidates.entries())
+		if (!skipped[index])
+			failures.push(
+				`${packageName}: published on npm but missing from the catalog. Run bun run catalog:generate --only=<directory>, or add it to uncataloguedPackages with the reason.`
+			);
+};
+
+try {
+	await checkPublishedPackages();
+} catch (error) {
+	console.warn(
+		`Skipped the npm catalog check: ${error instanceof Error ? error.message : String(error)}`
+	);
+}
+
 if (failures.length > 0) {
 	console.error(failures.map((failure) => `- ${failure}`).join('\n'));
 	process.exit(1);
