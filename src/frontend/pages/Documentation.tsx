@@ -145,9 +145,10 @@ const DocumentationView = ({
 		(result: DocsSearchResult) => {
 			closeSearch();
 			if (isValidViewId(result.view)) handleNavigate(result.view);
-			if (result.anchor) scrollToAnchor(result.anchor);
+			if (result.anchor)
+				scrollToAnchor(result.anchor, result.view !== view);
 		},
-		[closeSearch, handleNavigate]
+		[closeSearch, handleNavigate, view]
 	);
 
 	const toggleSidebar = () => {

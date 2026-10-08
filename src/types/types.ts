@@ -29,6 +29,8 @@ export type SidebarPage = {
 };
 
 export type SidebarEntry = {
+	/** Section of the page to scroll to, such as a category on the Packages page. */
+	anchor?: string;
 	id?: DocsView;
 	label: string;
 	pages?: SidebarPage[];

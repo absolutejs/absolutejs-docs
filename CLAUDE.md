@@ -27,7 +27,7 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 - **pages/**: Top-level page components (Home, Documentation, AuthTesting): these are full HTML documents rendered server-side
 - **components/**: React components organized by feature (navbar, sidebar, home, documentation, testing, auth, utils)
 - **hooks/**: Custom hooks including `useAuthStatus` for auth state, `useTheme` for theming with react-spring
-- **eden/treaty.ts**: Type-safe API client using Eden treaty with the server type
+- **utils/edenTreaty.ts**: Type-safe API client using Eden treaty with the server type
 - **styles/**: Style objects (not CSS files): styles are colocated as TypeScript objects
 - **data/**: Static content data for documentation pages
 
@@ -41,6 +41,11 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 
 - **typebox.ts**: TypeBox schemas for API validation (used with Elysia)
 - **types.ts**: Shared TypeScript types
+
+## Docs search and the package catalog
+
+- **Search** (`src/backend/utils/searchIndex.ts`, `GET /api/v1/search`) renders every docs view server-side to index its headings and text. It must use `renderToReadableStream`: `renderToString` is undefined in the production bundle. Production builds the index a minute after boot so it never competes with the deploy's smoke checks. Verify search changes with `bun run start`, not only `bun run dev`.
+- **Package catalog** (`ecosystem.generated.ts`) is generated, never hand-edited. `bun run check:docs` fails the deploy when a published package is missing or documented at an older version than npm. Fix it with `bun run catalog:generate --only=<directory> --npm` (single packages; reads the published tarball) or `--source=<directory>=<checkout of the released branch>` (monorepos). Never generate from a local checkout with unreleased work.
 
 ## Rules
 
@@ -57,4 +62,4 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 
 ### API Type Safety
 
-The frontend uses Eden treaty (`src/frontend/eden/treaty.ts`) to create a type-safe client from the server type, enabling end-to-end type safety between backend and frontend.
+The frontend uses Eden treaty (`src/frontend/utils/edenTreaty.ts`) to create a type-safe client from the server type, enabling end-to-end type safety between backend and frontend.

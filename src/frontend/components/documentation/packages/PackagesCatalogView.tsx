@@ -24,6 +24,7 @@ import {
 import { AnchorHeading } from '../../utils/AnchorHeading';
 
 const categoryOrder: PackageCategory[] = [
+	'Native Apps',
 	'Auth & Identity',
 	'Data & Sync',
 	'AI',

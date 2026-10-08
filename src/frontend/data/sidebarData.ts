@@ -1,4 +1,4 @@
-import { SidebarCategory, SidebarEntry, SidebarPage } from '../../types/types';
+import { DocsView, SidebarCategory, SidebarEntry } from '../../types/types';
 import { AnalyzeView } from '../components/documentation/cli/AnalyzeView';
 import { ApiView } from '../components/documentation/cli/ApiView';
 import { CompileView } from '../components/documentation/cli/CompileView';
@@ -75,8 +75,7 @@ import { ecosystemProjects } from './documentation/packages/ecosystem.generated'
 import {
 	documentationViewByDirectory,
 	legacyPackageProjectViewId,
-	packageProjectViewId,
-	packageSubpackageViewId
+	packageProjectViewId
 } from './documentation/packages/packageRoutes';
 import { ScopedStateView } from '../components/documentation/packages/ScopedStateView';
 import {
@@ -568,46 +567,6 @@ export const documentationSitemapRoutes = [
 		.map((view) => `/documentation/${view}`)
 ];
 
-const packageApiSidebarEntries = ecosystemProjects.flatMap<{
-	category: string;
-	entry: SidebarEntry;
-}>((project) => {
-	const publicSubpackages = project.subpackages.filter(
-		(subpackage) => !subpackage.private
-	);
-	const hasCuratedGuide = Boolean(
-		documentationViewByDirectory[project.directory]
-	);
-	if (hasCuratedGuide && publicSubpackages.length === 0) return [];
-
-	const overview: SidebarPage = {
-		id: packageProjectViewId(project),
-		label: hasCuratedGuide ? 'Guide' : 'Overview'
-	};
-	if (publicSubpackages.length === 0)
-		return [
-			{
-				category: project.category,
-				entry: { id: overview.id, label: project.name }
-			}
-		];
-
-	return [
-		{
-			category: project.category,
-			entry: {
-				label: project.name,
-				pages: [
-					overview,
-					...publicSubpackages.map<SidebarPage>((subpackage) => ({
-						id: packageSubpackageViewId(project, subpackage),
-						label: subpackage.name.replace(/^@absolutejs\//, '')
-					}))
-				]
-			}
-		}
-	];
-});
 const baseSidebarCategories: SidebarCategory[] = [
 	{
 		entries: [
@@ -1173,10 +1132,10 @@ const baseSidebarCategories: SidebarCategory[] = [
 				label: 'Create AbsoluteJS',
 				status: 'beta'
 			},
+			{ id: 'eslint', label: 'ESLint' },
 			{
-				label: 'ESLint',
+				label: 'ESLint Rules',
 				pages: [
-					{ id: 'eslint', label: 'Overview' },
 					{
 						id: 'eslint-angular-one-feature-per-file',
 						label: 'angular-one-feature-per-file'
@@ -1305,14 +1264,48 @@ const sidebarLabelByPackageCategory: Record<string, string> = {
 	'Voice & Media': 'Voice & Media'
 };
 
-const generatedEntriesFor = (sidebarLabel: string) =>
-	packageApiSidebarEntries
-		.filter(
-			(candidate) =>
-				sidebarLabelByPackageCategory[candidate.category] ===
-				sidebarLabel
-		)
-		.map((candidate) => candidate.entry);
+const isDocsView = (view: string): view is DocsView => view in docsViews;
+
+const slugify = (value: string) =>
+	value
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-|-$/g, '');
+
+// The sidebar leads with hand-written guides. Generated package reference
+// pages stay reachable from the Packages page, search and links, so each
+// section ends with one link to its packages instead of listing all of them.
+// A project with a hand-written guide keeps a link to that guide.
+const packageEntriesFor = (sidebarLabel: string) => {
+	const categories = Object.keys(sidebarLabelByPackageCategory).filter(
+		(category) => sidebarLabelByPackageCategory[category] === sidebarLabel
+	);
+	const inSection = ecosystemProjects.filter((project) =>
+		categories.includes(project.category)
+	);
+	const guides = inSection.flatMap<SidebarEntry>((project) => {
+		const guide = documentationViewByDirectory[project.directory];
+		const hasPackages = project.subpackages.some(
+			(subpackage) => !subpackage.private
+		);
+
+		return guide && hasPackages && isDocsView(guide)
+			? [{ id: guide, label: project.name }]
+			: [];
+	});
+	const [category] = categories;
+
+	return inSection.length > 0 && category
+		? [
+				...guides,
+				{
+					anchor: slugify(category),
+					id: 'packages' as const,
+					label: 'Packages'
+				}
+			]
+		: guides;
+};
 
 const existingSidebarLabels = new Set(
 	baseSidebarCategories.map((category) => category.label)
@@ -1321,9 +1314,9 @@ const existingSidebarLabels = new Set(
 export const sidebarCategories: SidebarCategory[] = [
 	...baseSidebarCategories.map((category) => ({
 		...category,
-		entries: [...category.entries, ...generatedEntriesFor(category.label)]
+		entries: [...category.entries, ...packageEntriesFor(category.label)]
 	})),
 	...Array.from(new Set(Object.values(sidebarLabelByPackageCategory)))
 		.filter((label) => !existingSidebarLabels.has(label))
-		.map((label) => ({ entries: generatedEntriesFor(label), label }))
+		.map((label) => ({ entries: packageEntriesFor(label), label }))
 ];

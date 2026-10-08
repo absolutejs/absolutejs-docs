@@ -9,7 +9,9 @@ export const AuroraBackground = ({ themeSprings }: AuroraBackgroundProps) => (
 	<animated.div
 		style={{
 			animation: 'aurora 60s ease infinite',
-			background: themeSprings.theme.to((t) =>
+			// backgroundImage, not the background shorthand: React warns when a
+			// shorthand and backgroundSize change together on re-render.
+			backgroundImage: themeSprings.theme.to((t) =>
 				t.endsWith('dark')
 					? [
 							'radial-gradient(ellipse 80% 50% at 10% 20%, rgba(99,102,241,0.15) 0%, transparent 50%)',

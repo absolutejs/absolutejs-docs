@@ -19,6 +19,7 @@ import {
 } from '../../../types/types';
 import { sidebarCategories } from '../../data/sidebarData';
 import { primaryColor, secondaryColor } from '../../styles/colors';
+import { scrollToAnchor } from '../../utils/scrollToAnchor';
 
 type SidebarNavProps = {
 	navigateToView: (view: DocsView) => void;
@@ -268,18 +269,17 @@ const EntryItem = ({
 }) => {
 	if (!isExpandableEntry(entry)) {
 		if (entry.id === undefined) return null;
-		const { id } = entry;
+		const { anchor, id } = entry;
 
 		return (
 			<NavRow
-				active={view === id}
-				href={
-					id === 'overview'
-						? '/documentation'
-						: `/documentation/${id}`
-				}
+				active={view === id && anchor === undefined}
+				href={`${id === 'overview' ? '/documentation' : `/documentation/${id}`}${anchor ? `#${anchor}` : ''}`}
 				label={entry.label}
-				onClick={() => navigateToView(id)}
+				onClick={() => {
+					navigateToView(id);
+					if (anchor) scrollToAnchor(anchor, view !== id);
+				}}
 			/>
 		);
 	}
