@@ -1,6 +1,6 @@
 import { sleep } from 'bun';
 import { createElement } from 'react';
-import { renderToString } from 'react-dom/server';
+import { renderToReadableStream } from 'react-dom/server';
 import { documentationMetadataFor } from '../../frontend/data/documentation/documentationMetadata';
 import { searchKeywordsFor } from '../../frontend/data/documentation/searchKeywords';
 import { docsViews, sidebarCategories } from '../../frontend/data/sidebarData';
@@ -168,7 +168,18 @@ const sectionsOf = (html: string, fallbackHeading: string) => {
 	return sections;
 };
 
-const indexPage = (view: DocsView): IndexedPage | null => {
+// renderToString is missing from the production server's react-dom build;
+// the streaming renderer that serves every page is always there.
+const renderPage = async (view: DocsView) => {
+	const stream = await renderToReadableStream(
+		createElement(SearchIndexPage, { view })
+	);
+	await stream.allReady;
+
+	return new Response(stream).text();
+};
+
+const indexPage = async (view: DocsView): Promise<IndexedPage | null> => {
 	const metadata = documentationMetadataFor(view);
 	const title = metadata.title.replace(TITLE_SUFFIX, '');
 	const sidebar = sidebarPathByView.get(view);
@@ -176,8 +187,12 @@ const indexPage = (view: DocsView): IndexedPage | null => {
 	const breadcrumb = sidebar?.path ?? [];
 	let html: string;
 	try {
-		html = renderToString(createElement(SearchIndexPage, { view }));
-	} catch {
+		html = await renderPage(view);
+	} catch (error) {
+		renderFailures.push(
+			`${view}: ${error instanceof Error ? error.message : String(error)}`
+		);
+
 		return null;
 	}
 
@@ -199,20 +214,28 @@ const indexPage = (view: DocsView): IndexedPage | null => {
 };
 
 let indexPromise: Promise<IndexedPage[]> | undefined;
+const renderFailures: string[] = [];
 
 // Renders one page per turn of the event loop, so building the index never
 // holds up requests.
-const buildIndex = () =>
-	Object.keys(docsViews)
+const buildIndex = async () => {
+	const pages = await Object.keys(docsViews)
 		.filter(isValidViewId)
 		.reduce<Promise<IndexedPage[]>>(async (previous, view) => {
-			const pages = await previous;
+			const indexed = await previous;
 			await sleep(0);
-			const page = indexPage(view);
-			if (page) pages.push(page);
+			const page = await indexPage(view);
+			if (page) indexed.push(page);
 
-			return pages;
+			return indexed;
 		}, Promise.resolve([]));
+	if (renderFailures.length > 0)
+		console.warn(
+			`[search] ${renderFailures.length} docs pages could not be indexed; first: ${renderFailures[0]}`
+		);
+
+	return pages;
+};
 
 export const getDocsSearchIndex = () => {
 	indexPromise ??= buildIndex();
