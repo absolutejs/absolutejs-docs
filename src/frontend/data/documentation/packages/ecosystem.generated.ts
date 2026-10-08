@@ -4151,564 +4151,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.26.0'
 	},
 	{
-		api: [
-			{
-				entryPoint: '@absolutejs/agent-exchange',
-				symbols: [
-					{
-						description: '',
-						kind: 'export',
-						name: 'agentExchangeApprovalChallenge',
-						signature: 'agentExchangeApprovalChallenge'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'agentExchangeBinding',
-						signature: 'agentExchangeBinding'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'agentExchangeContext',
-						signature: 'agentExchangeContext'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'agentExchangeMandateApprovalChallenge',
-						signature: 'agentExchangeMandateApprovalChallenge'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'AgentExchangeError',
-						signature: 'AgentExchangeError'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'safeAgentExchangeError',
-						signature: 'safeAgentExchangeError'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'AgentExchangeErrorCode',
-						signature: 'type AgentExchangeErrorCode'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'assertNoSensitiveValue',
-						signature: 'assertNoSensitiveValue'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'containsSensitiveValue',
-						signature: 'containsSensitiveValue'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'AGENT_EXCHANGE_MANDATE_JWS_TYPE',
-						signature: 'AGENT_EXCHANGE_MANDATE_JWS_TYPE'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createAgentExchangeStandingMandateAuthority',
-						signature: 'createAgentExchangeStandingMandateAuthority'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'DEFAULT_MANDATE_APPROVAL_MAX_AGE_MS',
-						signature: 'DEFAULT_MANDATE_APPROVAL_MAX_AGE_MS'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'DEFAULT_MANDATE_MAX_GRANTS',
-						signature: 'DEFAULT_MANDATE_MAX_GRANTS'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'DEFAULT_MANDATE_MAX_PAYLOAD_BYTES',
-						signature: 'DEFAULT_MANDATE_MAX_PAYLOAD_BYTES'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'DEFAULT_MANDATE_MAX_TTL_MS',
-						signature: 'DEFAULT_MANDATE_MAX_TTL_MS'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'DEFAULT_MANDATE_MAX_USES',
-						signature: 'DEFAULT_MANDATE_MAX_USES'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createMemoryAgentExchangeMandateStore',
-						signature: 'createMemoryAgentExchangeMandateStore'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'MemoryAgentExchangeMandateStore',
-						signature: 'type MemoryAgentExchangeMandateStore'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createAgentExchangeReceiver',
-						signature: 'createAgentExchangeReceiver'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createMemoryAgentExchangeReplayStore',
-						signature: 'createMemoryAgentExchangeReplayStore'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'MemoryAgentExchangeReplayStore',
-						signature: 'type MemoryAgentExchangeReplayStore'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createAgentExchangeSender',
-						signature: 'createAgentExchangeSender'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'createMemoryAgentExchangeStore',
-						signature: 'createMemoryAgentExchangeStore'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'MemoryAgentExchangeStore',
-						signature: 'type MemoryAgentExchangeStore'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'agentExchangeErrorToTelemetry',
-						signature: 'agentExchangeErrorToTelemetry'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'agentExchangeReceiptToTelemetry',
-						signature: 'agentExchangeReceiptToTelemetry'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'ExchangeIdentity',
-						signature:
-							'type ExchangeIdentity = {\n    readonly agentId: string;\n    readonly authority: string;\n    readonly delegationId?: string;\n    readonly deviceId?: string;\n    readonly subject: string;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'ExchangeRiskClass',
-						signature:
-							'type ExchangeRiskClass = "account-recovery" | "administrative" | "authentication" | "data-export" | "money-movement" | "routine" | "security-settings" | (string & {});'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeAssurance',
-						signature:
-							'type AgentExchangeAssurance = {\n    readonly approval: "policy";\n    readonly credential: "bearer" | "origin-bound" | "sender-constrained";\n    readonly execution: "general" | "purpose-bound";\n} | {\n    readonly approval: "webauthn-verifier-bound";\n    readonly credential: "origin-bound" | "sender-constrained" | "token-confined-broker";\n    readonly execution: "purpose-bound";\n} | {\n    readonly approval: "standing-mandate";\n    readonly credential: "token-confined-broker";\n    readonly execution: "purpose-bound";\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeMandatePrincipal',
-						signature:
-							'type AgentExchangeMandatePrincipal = {\n    readonly authority: string;\n    readonly subject: string;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeMandateActor',
-						signature:
-							'type AgentExchangeMandateActor = AgentExchangeMandatePrincipal & {\n    readonly agentId: string;\n    readonly delegationId?: string;\n    readonly deviceId?: string;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeMandateGrant',
-						signature:
-							'type AgentExchangeMandateGrant = {\n    readonly accountRef: string;\n    readonly operation: string;\n    readonly origin: string;\n    readonly provider: string;\n    readonly purpose: string;\n    readonly risk: ExchangeRiskClass;\n    readonly secretKind: string;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeStandingMandate',
-						signature:
-							'type AgentExchangeStandingMandate = {\n    readonly approval: {\n        readonly credentialIdHash: string;\n        readonly method: "webauthn-verifier-bound";\n        readonly rpId: string;\n        readonly userVerified: true;\n        readonly verifiedAt: number;\n        readonly verifierOrigin: string;\n    };\n    readonly audience: AgentExchangeMandateActor;\n    readonly expiresAt: number;\n    readonly grants: readonly AgentExchangeMandateGrant[];\n    readonly issuedAt: number;\n    readonly issuer: AgentExchangeMandatePrincipal;\n    readonly mandateId: string;\n    readonly maximumUses: number;\n    readonly notBefore: number;\n    readonly requester: AgentExchangeMandateActor;\n    readonly version: 1;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeStandingMandateInput',
-						signature:
-							'type AgentExchangeStandingMandateInput = Omit<AgentExchangeStandingMandate, "issuedAt" | "version">;'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeStandingMandateDraft',
-						signature:
-							'type AgentExchangeStandingMandateDraft = Omit<AgentExchangeStandingMandateInput, "approval">;'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'SignedAgentExchangeStandingMandate',
-						signature:
-							'type SignedAgentExchangeStandingMandate = {\n    readonly compactJws: string;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeMandateJwsSigner',
-						signature:
-							'type AgentExchangeMandateJwsSigner = {\n    readonly sign: (input: {\n        readonly payload: Uint8Array;\n        readonly type: "absolute-agent-exchange-mandate+jws";\n    }) => Promise<string> | string;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeMandateJwsVerifier',
-						signature:
-							'type AgentExchangeMandateJwsVerifier = {\n    readonly verify: (input: {\n        readonly compactJws: string;\n        readonly expectedIssuer: AgentExchangeMandatePrincipal;\n        readonly type: "absolute-agent-exchange-mandate+jws";\n    }) => Promise<{\n        readonly algorithm: string;\n        readonly keyId: string;\n        readonly payload: Uint8Array;\n    }> | {\n        readonly algorithm: string;\n        readonly keyId: string;\n        readonly payload: Uint8Array;\n    };\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeMandateRegistration',
-						signature:
-							'type AgentExchangeMandateRegistration = {\n    readonly expiresAt: number;\n    readonly issuer: AgentExchangeMandatePrincipal;\n    readonly mandateId: string;\n    readonly maximumUses: number;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeMandateConsumeResult',
-						signature:
-							'type AgentExchangeMandateConsumeResult = "consumed" | "exhausted" | "replay" | "revoked" | "unknown";'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeMandateStore',
-						signature:
-							'type AgentExchangeMandateStore = {\n    readonly consume: (input: {\n        readonly exchangeId: string;\n        readonly mandateId: string;\n        readonly now: number;\n    }) => Promise<AgentExchangeMandateConsumeResult>;\n    readonly register: (registration: AgentExchangeMandateRegistration) => Promise<boolean>;\n    readonly revoke: (input: {\n        readonly issuer: AgentExchangeMandatePrincipal;\n        readonly mandateId: string;\n        readonly now: number;\n    }) => Promise<boolean>;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeMandateAuthorization',
-						signature:
-							'type AgentExchangeMandateAuthorization = {\n    readonly algorithm: string;\n    readonly keyId: string;\n    readonly mandateId: string;\n    readonly remainingUses?: number;\n    readonly status: "authorized";\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeStandingMandateAuthority',
-						signature:
-							'type AgentExchangeStandingMandateAuthority = {\n    readonly authorize: (input: {\n        readonly expectedIssuer: AgentExchangeMandatePrincipal;\n        readonly request: AgentExchangeRequest;\n        readonly signedMandate: SignedAgentExchangeStandingMandate;\n    }) => Promise<AgentExchangeMandateAuthorization>;\n    readonly issue: (input: AgentExchangeStandingMandateInput) => Promise<{\n        readonly mandate: AgentExchangeStandingMandate;\n        readonly signedMandate: SignedAgentExchangeStandingMandate;\n    }>;\n    readonly revoke: (input: {\n        readonly issuer: AgentExchangeMandatePrincipal;\n        readonly mandateId: string;\n    }) => Promise<boolean>;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'ExchangeResource',
-						signature:
-							'type ExchangeResource = {\n    readonly accountRef: string;\n    readonly challengeId?: string;\n    readonly operation: string;\n    readonly origin: string;\n    readonly provider: string;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeRequestInput',
-						signature:
-							'type AgentExchangeRequestInput = {\n    readonly assurance: AgentExchangeAssurance;\n    readonly expiresAt: number;\n    readonly idempotencyKey?: string;\n    readonly mandateId?: string;\n    readonly processingMode?: SecretProcessingMode;\n    readonly purpose: string;\n    readonly recipient: ExchangeIdentity;\n    readonly requester: ExchangeIdentity;\n    readonly resource: ExchangeResource;\n    readonly risk: ExchangeRiskClass;\n    readonly secretKind: string;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeRequest',
-						signature:
-							'type AgentExchangeRequest = Omit<AgentExchangeRequestInput, "processingMode"> & {\n    readonly actionId: string;\n    readonly createdAt: number;\n    readonly exchangeId: string;\n    readonly maximumUses: 1;\n    readonly nonce: string;\n    readonly processingMode: SecretProcessingMode;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'RequestedAgentExchange',
-						signature:
-							'type RequestedAgentExchange = {\n    readonly decision: ActionDecision;\n    readonly exchange: AgentExchangeRequest;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'SensitiveValue',
-						signature:
-							'type SensitiveValue = {\n    readonly bytes: Uint8Array;\n    readonly evidence?: {\n        readonly matchedAt: number;\n        readonly messageId: string;\n        readonly parserId: string;\n        readonly provider: string;\n    };\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'SensitiveValueSource',
-						signature:
-							'type SensitiveValueSource = {\n    readonly read: (request: AgentExchangeRequest) => Promise<SensitiveValue> | SensitiveValue;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'SensitiveValueSinkResult',
-						signature:
-							'type SensitiveValueSinkResult = {\n    readonly reference?: string;\n    readonly status: "submitted";\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'SensitiveValueSink',
-						signature:
-							'type SensitiveValueSink = {\n    readonly submit: (input: {\n        readonly plaintext: Uint8Array;\n        readonly request: AgentExchangeRequest;\n    }) => Promise<SensitiveValueSinkResult> | SensitiveValueSinkResult;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'RecipientKey',
-						signature:
-							'type RecipientKey = {\n    readonly keyId: string;\n    readonly publicKey: Uint8Array;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'RecipientKeyDirectory',
-						signature:
-							'type RecipientKeyDirectory = {\n    readonly resolve: (request: AgentExchangeRequest) => Promise<RecipientKey> | RecipientKey;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeDelivery',
-						signature:
-							'type AgentExchangeDelivery = {\n    readonly authenticatedContext: AuthenticatedContext;\n    readonly envelope: Uint8Array;\n    readonly recipientKeyId: string;\n    readonly request: AgentExchangeRequest;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeReceipt',
-						signature:
-							'type AgentExchangeReceipt = {\n    readonly assurance: AgentExchangeAssurance;\n    readonly completedAt: number;\n    readonly consentId: string;\n    readonly exchangeId: string;\n    readonly maximumUses: 1;\n    readonly modelObservedSecret: false;\n    readonly processingMode: "tool-confined";\n    readonly reference?: string;\n    readonly status: "submitted";\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeWebAuthnApprovalEvidence',
-						signature:
-							'type AgentExchangeWebAuthnApprovalEvidence = {\n    readonly challenge: string;\n    readonly credentialIdHash: string;\n    readonly requestDigest: string;\n    readonly rpId: string;\n    readonly subject: string;\n    readonly userVerified: true;\n    readonly verifiedAt: number;\n    readonly verifierOrigin: string;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeApprovalProvider',
-						signature:
-							'type AgentExchangeApprovalProvider = {\n    readonly begin: (input: {\n        readonly challenge: string;\n        readonly request: AgentExchangeRequest;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly challenge: string;\n        readonly options: unknown;\n    }> | {\n        readonly challenge: string;\n        readonly options: unknown;\n    };\n    readonly verify: (input: {\n        readonly challenge: string;\n        readonly request: AgentExchangeRequest;\n        readonly response: unknown;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly credentialId: string;\n        readonly rpId: string;\n        readonly subject: string;\n        readonly userVerified: true;\n        readonly verifierOrigin: string;\n    }> | {\n        readonly credentialId: string;\n        readonly rpId: string;\n        readonly subject: string;\n        readonly userVerified: true;\n        readonly verifierOrigin: string;\n    };\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeTransport',
-						signature:
-							'type AgentExchangeTransport = {\n    readonly deliver: (delivery: AgentExchangeDelivery) => Promise<AgentExchangeReceipt>;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'RecipientConsent',
-						signature:
-							'type RecipientConsent = {\n    readonly consentId: string;\n    readonly expiresAt: number;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'RecipientConsentVerifier',
-						signature:
-							'type RecipientConsentVerifier = {\n    readonly assertAllows: (request: AgentExchangeRequest) => Promise<RecipientConsent> | RecipientConsent;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeReplayStore',
-						signature:
-							'type AgentExchangeReplayStore = {\n    readonly consume: (input: {\n        readonly exchangeId: string;\n        readonly expiresAt: number;\n        readonly nonce: string;\n        readonly now: number;\n    }) => Promise<boolean>;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeStore',
-						signature:
-							'type AgentExchangeStore = {\n    readonly get: (exchangeId: string) => Promise<AgentExchangeRequest | undefined>;\n    readonly getByActionId: (actionId: string) => Promise<AgentExchangeRequest | undefined>;\n    readonly getReceipt: (exchangeId: string) => Promise<AgentExchangeReceipt | undefined>;\n    readonly save: (request: AgentExchangeRequest) => Promise<boolean>;\n    readonly saveReceipt: (receipt: AgentExchangeReceipt) => Promise<boolean>;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeSenderOptions',
-						signature:
-							'type AgentExchangeSenderOptions = {\n    readonly approvalProvider?: AgentExchangeApprovalProvider;\n    readonly agency: Agency;\n    readonly allowHighRisk?: (input: AgentExchangeRequestInput) => Promise<boolean> | boolean;\n    readonly allowInsecureLocalhost?: boolean;\n    readonly allowedProcessingModes?: readonly SecretProcessingMode[];\n    readonly e2ee: EnvelopeProvider;\n    readonly keyDirectory: RecipientKeyDirectory;\n    readonly maxSecretBytes?: number;\n    readonly maxTtlMs?: number;\n    readonly now?: () => number;\n    readonly source: SensitiveValueSource;\n    readonly store: AgentExchangeStore;\n    readonly transport: AgentExchangeTransport;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeReceiverOptions',
-						signature:
-							'type AgentExchangeReceiverOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly consent: RecipientConsentVerifier;\n    readonly e2ee: EnvelopeProvider;\n    readonly maxSecretBytes?: number;\n    readonly maxTtlMs?: number;\n    readonly now?: () => number;\n    readonly replay: AgentExchangeReplayStore;\n    readonly sink: SensitiveValueSink;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeSender',
-						signature:
-							'type AgentExchangeSender = {\n    readonly approve: (input: {\n        readonly exchangeId: string;\n        readonly response: unknown;\n    }) => Promise<AgentExchangeWebAuthnApprovalEvidence>;\n    readonly beginApproval: (exchangeId: string) => Promise<{\n        readonly challenge: string;\n        readonly options: unknown;\n    }>;\n    readonly execute: (input: {\n        readonly exchangeId: string;\n        readonly leaseId: string;\n    }) => Promise<{\n        readonly agencyReceipt: ActionReceipt;\n        readonly receipt: AgentExchangeReceipt;\n    }>;\n    readonly issueLease: (exchangeId: string) => Promise<ExecutionLease>;\n    readonly request: (input: AgentExchangeRequestInput) => Promise<RequestedAgentExchange>;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeReceiver',
-						signature:
-							'type AgentExchangeReceiver = {\n    readonly receive: (delivery: AgentExchangeDelivery) => Promise<AgentExchangeReceipt>;\n};'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'AgentExchangeTelemetry',
-						signature:
-							'type AgentExchangeTelemetry = {\n    readonly attributes: Readonly<Record<string, boolean | number | string>>;\n    readonly name: "agent_exchange.completed" | "agent_exchange.failed";\n};'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'DEFAULT_BLOCKED_RISKS',
-						signature: 'DEFAULT_BLOCKED_RISKS'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'DEFAULT_EXCHANGE_MAX_TTL_MS',
-						signature: 'DEFAULT_EXCHANGE_MAX_TTL_MS'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'DEFAULT_MAX_SECRET_BYTES',
-						signature: 'DEFAULT_MAX_SECRET_BYTES'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'isAgentExchangeAssurance',
-						signature: 'isAgentExchangeAssurance'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'validateAgentExchangeInput',
-						signature: 'validateAgentExchangeInput'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'validateAgentExchangeRequest',
-						signature: 'validateAgentExchangeRequest'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'validateSensitiveValue',
-						signature: 'validateSensitiveValue'
-					}
-				]
-			},
-			{
-				entryPoint: '@absolutejs/agent-exchange/a2a',
-				symbols: [
-					{
-						description: '',
-						kind: 'value',
-						name: 'ABSOLUTE_AGENT_EXCHANGE_EXTENSION',
-						signature:
-							'const ABSOLUTE_AGENT_EXCHANGE_EXTENSION: "https://github.com/absolutejs/agent-exchange/extensions/a2a/v1";'
-					},
-					{
-						description: '',
-						kind: 'value',
-						name: 'AGENT_EXCHANGE_REQUEST_MEDIA_TYPE',
-						signature:
-							'const AGENT_EXCHANGE_REQUEST_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-reference+json";'
-					},
-					{
-						description: '',
-						kind: 'type',
-						name: 'A2aAgentExchangeReference',
-						signature:
-							'type A2aAgentExchangeReference = {\n    readonly actionId: string;\n    readonly assurance: AgentExchangeAssurance;\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly mandateId?: string;\n    readonly operation: string;\n    readonly origin: string;\n    readonly processingMode: "tool-confined";\n    readonly provider: string;\n    readonly purpose: string;\n    readonly recipientAgentId: string;\n};'
-					},
-					{
-						description: '',
-						kind: 'value',
-						name: 'withAgentExchangeExtension',
-						signature:
-							'const withAgentExchangeExtension: (card: A2aAgentCard) => A2aAgentCard;'
-					},
-					{
-						description: '',
-						kind: 'value',
-						name: 'toA2aAgentExchangeReference',
-						signature:
-							'const toA2aAgentExchangeReference: (request: AgentExchangeRequest) => A2aAgentExchangeReference;'
-					},
-					{
-						description: '',
-						kind: 'value',
-						name: 'toA2aAgentExchangeMessage',
-						signature:
-							'const toA2aAgentExchangeMessage: (request: AgentExchangeRequest) => A2aMessage;'
-					},
-					{
-						description: '',
-						kind: 'value',
-						name: 'parseA2aAgentExchangeReference',
-						signature:
-							'const parseA2aAgentExchangeReference: (message: A2aMessage) => A2aAgentExchangeReference;'
-					}
-				]
-			},
-			{
-				entryPoint: '@absolutejs/agent-exchange/manifest',
-				symbols: [
-					{
-						description: '',
-						kind: 'value',
-						name: 'manifest',
-						signature:
-							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<{\n    maxSecretBytes?: number;\n    maxTtlMs?: number;\n}, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        maxSecretBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maxTtlMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
-					}
-				]
-			}
-		],
+		api: [],
 		category: 'AI',
 		commands: [
 			{
@@ -4844,7 +4287,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/agent-exchange',
 		subpackages: [],
-		version: '0.5.0'
+		version: '0.5.1'
 	},
 	{
 		api: [],
@@ -4852,7 +4295,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		commands: [
 			{
 				command:
-					'bun run --cwd conformance build && bun run --cwd destinations build && bun run --cwd oauth build && bun run --cwd broker build && bun run --cwd a2a build && bun run --cwd webauthn build && bun run --cwd oauth-webcrypto build && bun run --cwd oauth-stores build && bun run --cwd mandate-webcrypto build && bun run --cwd mandate-stores build && bun run --cwd google build && bun run --cwd microsoft build && bun run --cwd http-destination build && bun run --cwd secure-messaging build && bun run --cwd secure-messaging-stores build',
+					'bun run --cwd conformance build && bun run --cwd destinations build && bun run --cwd oauth build && bun run --cwd broker build && bun run --cwd a2a build && bun run --cwd webauthn build && bun run --cwd oauth-webcrypto build && bun run --cwd oauth-stores build && bun run --cwd mandate-webcrypto build && bun run --cwd mandate-stores build && bun run --cwd google build && bun run --cwd microsoft build && bun run --cwd http-destination build && bun run --cwd secure-messaging build && bun run --cwd secure-messaging-stores build && bun run --cwd postgres build && bun run --cwd permissions build && bun run --cwd browser build',
 				name: 'build'
 			},
 			{
@@ -4909,121 +4352,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Overview'
 			}
 		],
-		repository: 'https://github.com/absolutejs/agent-exchange-providers',
+		repository: null,
 		subpackages: [
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/agent-exchange-a2a',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE',
-								signature:
-									'const AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-receipt+json";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_A2A_SKILL_ID',
-								signature:
-									'const AGENT_EXCHANGE_A2A_SKILL_ID: "absolute-agent-exchange";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE',
-								signature:
-									'const AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-preparation+json";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aReceipt',
-								signature:
-									'type AgentExchangeA2aReceipt = {\n    readonly completedAt: number;\n    readonly exchangeId: string;\n    readonly mandateId?: string;\n    readonly modelObservedSecret: false;\n    readonly processingMode: "tool-confined";\n    readonly reference?: string;\n    readonly status: "submitted";\n    readonly usesRemaining?: number;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aExecutionContext',
-								signature:
-									'type AgentExchangeA2aExecutionContext<Caller> = {\n    readonly caller: Caller;\n    readonly reference: A2aAgentExchangeReference;\n    readonly request: Request;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aServerOptions',
-								signature:
-									'type AgentExchangeA2aServerOptions<Caller> = {\n    readonly agentCard: A2aAgentCard;\n    readonly authorize: (request: Request) => Promise<A2aAuthResult<Caller>> | A2aAuthResult<Caller>;\n    readonly execute: (context: AgentExchangeA2aExecutionContext<Caller>) => Promise<AgentExchangeA2aReceipt> | AgentExchangeA2aReceipt;\n    readonly maxRequestBytes?: number;\n    readonly path?: string;\n    readonly preparationEndpoint?: string;\n    readonly taskStore: A2aTaskStore;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aClient',
-								signature:
-									'type AgentExchangeA2aClient = {\n    readonly agentCard: A2aAgentCard;\n    readonly send: (request: AgentExchangeRequest) => Promise<AgentExchangeA2aReceipt>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aPreparationContext',
-								signature:
-									'type AgentExchangeA2aPreparationContext = {\n    readonly agentCard: A2aAgentCard;\n    readonly reference: A2aAgentExchangeReference;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aPrepare',
-								signature:
-									'type AgentExchangeA2aPrepare = (request: AgentExchangeRequest, context: AgentExchangeA2aPreparationContext) => Promise<unknown> | unknown;'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aProfileOptions',
-								signature:
-									'type AgentExchangeA2aProfileOptions = {\n    readonly preparationEndpoint?: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'toAgentExchangeA2aTask',
-								signature:
-									'const toAgentExchangeA2aTask: (input: {\n    readonly message: Parameters<typeof parseA2aAgentExchangeReference>[0];\n    readonly receipt: AgentExchangeA2aReceipt;\n    readonly reference: A2aAgentExchangeReference;\n}) => A2aTask;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'withAgentExchangeA2aProfile',
-								signature:
-									'const withAgentExchangeA2aProfile: (card: A2aAgentCard, options?: AgentExchangeA2aProfileOptions) => A2aAgentCard;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createAgentExchangeA2aHandler',
-								signature:
-									'const createAgentExchangeA2aHandler: <Caller>(options: AgentExchangeA2aServerOptions<Caller>) => (request: Request) => Promise<Response | null>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createAgentExchangeA2aClient',
-								signature:
-									'const createAgentExchangeA2aClient: (options: {\n    readonly agentCard: A2aAgentCard;\n    readonly fetch?: A2aFetch;\n    readonly headers?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly maxResponseBytes?: number;\n    readonly preparationHeaders?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly prepare?: AgentExchangeA2aPrepare;\n    readonly timeoutMs?: number;\n}) => AgentExchangeA2aClient;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'connectAgentExchangeA2a',
-								signature:
-									'const connectAgentExchangeA2a: (options: {\n    readonly discoveryHeaders?: HeadersInit;\n    readonly fetch?: A2aFetch;\n    readonly headers?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly maxResponseBytes?: number;\n    readonly origin: string;\n    readonly preparationHeaders?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly prepare?: AgentExchangeA2aPrepare;\n    readonly timeoutMs?: number;\n}) => Promise<AgentExchangeA2aClient>;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -5103,76 +4435,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.3.0'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/agent-exchange-broker',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'TokenConfinedBrokerClaim',
-								signature:
-									'type TokenConfinedBrokerClaim = {\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly provider: string;\n    readonly tenantId: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'TokenConfinedBrokerClaimResult',
-								signature:
-									'type TokenConfinedBrokerClaimResult = "claimed" | "completed" | "conflict" | "revoked";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'TokenConfinedBrokerStore',
-								signature:
-									'type TokenConfinedBrokerStore = {\n    readonly claim: (claim: TokenConfinedBrokerClaim) => Promise<TokenConfinedBrokerClaimResult>;\n    readonly complete: (input: {\n        readonly exchangeId: string;\n        readonly reference?: string;\n        readonly tenantId: string;\n    }) => Promise<boolean>;\n    readonly fail: (input: {\n        readonly exchangeId: string;\n        readonly tenantId: string;\n    }) => Promise<void>;\n    readonly revoke: (input: {\n        readonly exchangeId: string;\n        readonly tenantId: string;\n    }) => Promise<boolean>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'TokenConfinedCredential',
-								signature:
-									'type TokenConfinedCredential = {\n    readonly accessToken: string;\n    readonly expiresAt?: number;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'TokenConfinedCredentialResolver',
-								signature:
-									'type TokenConfinedCredentialResolver = {\n    readonly resolve: (input: {\n        readonly accountRef: string;\n        readonly exchangeId: string;\n        readonly provider: string;\n        readonly subject: string;\n        readonly tenantId: string;\n    }) => Promise<TokenConfinedCredential>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'TokenConfinedProviderExecutor',
-								signature:
-									'type TokenConfinedProviderExecutor = {\n    readonly execute: (input: {\n        readonly accessToken: string;\n        readonly request: AgentExchangeRequest;\n        readonly tenantId: string;\n    }) => Promise<SensitiveValueSinkResult>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'TokenConfinedBrokerReceipt',
-								signature:
-									'type TokenConfinedBrokerReceipt = {\n    readonly assurance: AgentExchangeRequest["assurance"];\n    readonly brokerMode: "token-confined-broker";\n    readonly completedAt: number;\n    readonly exchangeId: string;\n    readonly maximumUses: 1;\n    readonly modelObservedSecret: false;\n    readonly processingMode: "tool-confined";\n    readonly provider: string;\n    readonly reference?: string;\n    readonly status: "submitted";\n    readonly tenantId: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createTokenConfinedBroker',
-								signature:
-									'const createTokenConfinedBroker: (options: {\n    readonly credentials: TokenConfinedCredentialResolver;\n    readonly now?: () => number;\n    readonly providers: Readonly<Record<string, TokenConfinedProviderExecutor>>;\n    readonly store: TokenConfinedBrokerStore;\n}) => Readonly<{\n    execute: (input: {\n        readonly request: AgentExchangeRequest;\n        readonly tenantId: string;\n    }) => Promise<TokenConfinedBrokerReceipt>;\n}>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createMemoryTokenConfinedBrokerStore',
-								signature:
-									'const createMemoryTokenConfinedBrokerStore: () => TokenConfinedBrokerStore;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -5215,53 +4478,77 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.3.0'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/agent-exchange-destinations',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeDestinationDescriptor',
-								signature:
-									'type AgentExchangeDestinationDescriptor = {\n    readonly id: string;\n    readonly operations: readonly string[];\n    readonly origin: string;\n    readonly secretKinds: readonly string[];\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeDestinationInput',
-								signature:
-									'type AgentExchangeDestinationInput = {\n    readonly plaintext: Uint8Array;\n    readonly request: AgentExchangeRequest;\n    readonly tenantId: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeDestinationAdapter',
-								signature:
-									'type AgentExchangeDestinationAdapter = {\n    readonly descriptor: AgentExchangeDestinationDescriptor;\n    readonly submit: (input: AgentExchangeDestinationInput) => Promise<SensitiveValueSinkResult> | SensitiveValueSinkResult;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeDestinationRegistry',
-								signature:
-									'type AgentExchangeDestinationRegistry = {\n    readonly submit: (input: AgentExchangeDestinationInput) => Promise<SensitiveValueSinkResult>;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createAgentExchangeDestinationRegistry',
-								signature:
-									'const createAgentExchangeDestinationRegistry: (adapters: readonly AgentExchangeDestinationAdapter[]) => AgentExchangeDestinationRegistry;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
 							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
 						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Session-bound, model-blind browser verification destinations for Agent Exchange.',
+				name: '@absolutejs/agent-exchange-browser',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-browser'],
+				readmeDigest:
+					'e6f8d298ecf4615bcfe280a7b5327a7c4a6d8895655bedc5a534aa2b6366f00b',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'A deterministic six-digit verification destination bound to one browser page, exact HTTPS origin, form route, immutable exchange, tenant and short expiry.',
+						details: [
+							"createBrowserVerificationDestination accepts a Playwright-compatible page and trusted provider selectors, plus assertAuthorized and verifySuccess callbacks. The package snapshots the exact page/form URL privately, invalidates the binding on main-frame navigation, checks input/form uniqueness, rejects password/hidden fields, and repeats destination checks after input handlers execute. It permits only one submission attempt, even when submission fails or has an unknown result. Use it behind Agent Exchange's encrypted receiver and destination registry.",
+							'verifySuccess must verify authenticated access for the expected account. A redirect alone is not proof. This package does not bypass passwords or CAPTCHAs, retrieve mailbox codes, authenticate callers, or mint grants. The host checks the requester and mailbox-owner mandate before binding a page. Mail matching still requires a trusted sender profile and a bounded, unambiguous correlation window.',
+							"Disable browser tracing, screenshots, recordings and body logging during protected submission. Only the redacted success/error result may reach a model. Mutable copies are wiped, but transient browser/runtime strings cannot be guaranteed to be erased. The provider's page necessarily receives the code.",
+							'discoverBrowserVerificationProfile inspects a conventional single-input OTP form at the exact owner-approved origin. It never returns input values or page text, rejects ambiguous controls/password forms and cross-origin actions, and produces a session-local profile for the existing destination binder. Discovery does not grant authority. Hosts must still verify the expected signed-in account.'
+						],
+						title: 'Overview'
+					},
+					{
+						description:
+							"createExtensionVerificationPage adapts an explicitly clicked Chrome MV3 tab to this package's existing verification destination and account observer. Use only activeTab and scripting; no persistent all-site or browsing-history permission is needed. It restricts execution to the selected tab's top frame, checks the exact service origin, forwards navigation changes to the destination binder, and removes listeners on close. The caller still verifies the mandate and current requester access. Keep the adapter in the extension worker and never expose its evaluate method or accept JavaScript through external messages. Chrome docs: https://developer.chrome.com/docs/extensions/develop/concepts/activeTab and https://developer.chrome.com/docs/extensions/reference/api/scripting.",
+						details: [],
+						title: 'Desktop extension destination'
+					}
+				],
+				sourcePath: 'browser',
+				version: '0.3.0'
+			},
+			{
+				api: [],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
 					},
 					{
 						command: 'prettier --write "./**/*.{ts,json,md}"',
@@ -5309,30 +4596,62 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'destinations',
-				version: '0.3.0'
+				version: '0.3.1'
 			},
 			{
-				api: [
+				api: [],
+				commands: [
 					{
-						entryPoint: '@absolutejs/agent-exchange-google',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'GOOGLE_GMAIL_READONLY_SCOPE',
-								signature:
-									'const GOOGLE_GMAIL_READONLY_SCOPE = "https://www.googleapis.com/auth/gmail.readonly";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'GOOGLE_GMAIL_OAUTH_PROVIDER',
-								signature:
-									'const GOOGLE_GMAIL_OAUTH_PROVIDER: Readonly<{\n    readonly authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth";\n    readonly capabilities: {\n        readonly authorizationCode: "supported";\n        readonly issuerIdentification: "supported";\n        readonly par: "unsupported";\n        readonly pkceS256: "supported";\n        readonly rar: "unsupported";\n        readonly resourceIndicators: "unsupported";\n        readonly senderConstrainedAccessTokens: "unsupported";\n    };\n    readonly documentationUrl: "https://developers.google.com/identity/protocols/oauth2/resources/dpop-adoption";\n    readonly issuer: "https://accounts.google.com";\n    readonly notes: readonly ["Google\'s documented DPoP mode binds refresh tokens, while access tokens remain Bearer.", "gmail.readonly is a restricted scope and may require Google verification and a security assessment."];\n    readonly provider: "google-gmail";\n    readonly recommendedScopes: readonly ["https://www.googleapis.com/auth/gmail.readonly"];\n    readonly resource: "https://gmail.googleapis.com/";\n    readonly tokenEndpoint: "https://oauth2.googleapis.com/token";\n}>;'
-							}
-						]
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/email --external tldts && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
 					}
 				],
+				description:
+					'Owner-reviewable verification-service discovery with authenticated email evidence.',
+				name: '@absolutejs/agent-exchange-discovery',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-discovery'],
+				readmeDigest:
+					'a40c0c4fc14ed93f78b22857d18334b5d434097beabd6d05a70ef3ad2d15f832',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							"Discovers a reviewable verification-email profile for an exact HTTPS service origin. Uses PSL tenant boundaries, the exact connected mailbox, recent timestamps and Gmail's aligned DMARC evidence. Conflicting templates, multiple codes, recovery and security-changing templates fail closed. No provider names are built in.",
+						details: [
+							'The host must obtain mailbox-owner permission before inspecting at most ten recent messages. Discovery returns sender/subject/parser metadata, never a code or body. It does not authorize use. Display the exact origin and sender to the owner and obtain a signed Agent Exchange permission before executing the resulting profile. Email content is evidence, never instructions. A changed template changes the profile revision and invalidates saved permission. Temporal email correlation is not cryptographic binding to a provider login session.',
+							'Only common English six-digit email login templates are currently recognized. Unsupported and ambiguous formats require review; do not loosen checks to guess.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'discovery',
+				version: '0.1.0'
+			},
+			{
+				api: [],
 				commands: [
 					{
 						command:
@@ -5379,42 +4698,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.0'
 			},
 			{
-				api: [
-					{
-						entryPoint:
-							'@absolutejs/agent-exchange-http-destination',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeHttpAuthorizationResolver',
-								signature:
-									'type AgentExchangeHttpAuthorizationResolver = (input: Readonly<{\n    exchangeId: string;\n    tenantId: string;\n}>) => Promise<string> | string;'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeHttpFetch',
-								signature:
-									'type AgentExchangeHttpFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeHttpDestinationOptions',
-								signature:
-									'type AgentExchangeHttpDestinationOptions = {\n    readonly authorization?: AgentExchangeHttpAuthorizationResolver;\n    readonly challengeField?: string;\n    readonly endpoint: string;\n    readonly fetcher?: AgentExchangeHttpFetch;\n    readonly id: string;\n    readonly operations: readonly string[];\n    readonly reference?: string;\n    readonly secretField?: string;\n    readonly timeoutMs?: number;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createAgentExchangeHttpDestination',
-								signature:
-									'const createAgentExchangeHttpDestination: (options: AgentExchangeHttpDestinationOptions) => AgentExchangeDestinationAdapter;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -5470,74 +4754,74 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.3.0'
 			},
 			{
-				api: [
+				api: [],
+				commands: [
 					{
-						entryPoint: '@absolutejs/agent-exchange-mandate-stores',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'MandatePostgresClient',
-								signature:
-									'type MandatePostgresClient = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<{\n        readonly rowCount: number;\n        readonly rows: readonly Row[];\n    }>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'MandateRedisClient',
-								signature:
-									'type MandateRedisClient = {\n    readonly eval: (script: string, keys: readonly string[], arguments_: readonly string[]) => Promise<unknown>;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_MANDATE_POSTGRES_MIGRATION',
-								signature:
-									'const AGENT_EXCHANGE_MANDATE_POSTGRES_MIGRATION: string;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPostgresAgentExchangeMandateStore',
-								signature:
-									'const createPostgresAgentExchangeMandateStore: (options: {\n    readonly client: MandatePostgresClient;\n}) => AgentExchangeMandateStore;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_MANDATE_REDIS_REGISTER_SCRIPT',
-								signature:
-									'const AGENT_EXCHANGE_MANDATE_REDIS_REGISTER_SCRIPT: string;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_MANDATE_REDIS_CONSUME_SCRIPT',
-								signature:
-									'const AGENT_EXCHANGE_MANDATE_REDIS_CONSUME_SCRIPT: string;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_MANDATE_REDIS_REVOKE_SCRIPT',
-								signature:
-									'const AGENT_EXCHANGE_MANDATE_REDIS_REVOKE_SCRIPT: string;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createRedisAgentExchangeMandateStore',
-								signature:
-									'const createRedisAgentExchangeMandateStore: (options: {\n    readonly client: MandateRedisClient;\n    readonly keyPrefix?: string;\n}) => AgentExchangeMandateStore;'
-							}
-						]
+						command:
+							'rm -rf dist && bun build src/index.ts src/windows.ts --outdir dist --root src --target=bun --external @absolutejs/agent-exchange --external @absolutejs/e2ee-webcrypto && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
 					}
 				],
+				description:
+					'Model-blind local encrypted code delivery and expiring private clipboard adapters.',
+				name: '@absolutejs/agent-exchange-local',
+				private: false,
+				publicExports: [
+					'@absolutejs/agent-exchange-local',
+					'@absolutejs/agent-exchange-local/windows'
+				],
+				readmeDigest:
+					'895afd6e072d69c7cb1512731358e8739211fbf7c2e9812a9b4ea67c8b7ccee5',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'A model-blind local recipient for approved six-digit email-code disclosure. clipboardServiceProfile derives a separate permission from a reviewed email profile. A browser-bound permission cannot authorize clipboard disclosure.',
+						details: [
+							'createLocalCodeRecipient creates per-request nonexportable recipient keys, validates the authenticated exchange context, requester, service, mailbox, operation and challenge, rechecks authorization, prevents replay, and sends the plaintext only to a PrivateClipboard. The receipt contains no code. Remote hosts receive only the public key; the mailbox endpoint seals to that key using ABS E2EE. createPostgresLocalDeliveryStore carries ciphertext and receipts between authenticated endpoints with fixed recipient keys and bounded expiry. Deploy its LOCAL_DELIVERY_MIGRATION before handling requests. Hosts must recheck owner identity and current permission on every read and acknowledgement.',
+							'@absolutejs/agent-exchange-local/windows provides the Windows/WSL clipboard adapter. It feeds six digits through stdin to a fixed short-lived native helper, opts out of Windows history/cloud sync, and clears its own clipboard write after 30 seconds (LOCAL_CLIPBOARD_TTL_MS, counted from the write, not from the exchange request) using the clipboard sequence under a native clipboard lock. It does not clear a later clipboard write. No secret enters argv, env, files, stdout or stderr. Other platforms fail closed until a private adapter is supplied.',
+							'Windows format documentation: https://learn.microsoft.com/en-us/windows/win32/dataxchg/clipboard-formats#cloud-clipboard-and-clipboard-history-formats',
+							'Local delivery means copied, not signed in. No browser is required and the recipient can paste elsewhere; the owner must approve that disclosure explicitly. The OS, mailbox endpoint, and local recipient are trusted. An MCP protocol hides values from model context; it cannot stop arbitrary local programs or an agent with unrestricted shell access from deliberately inspecting the OS clipboard. Third-party clipboard monitors are outside Windows history opt-out controls. Expiry is best effort if the helper/OS is killed or suspended. The recipient must never expose envelopes, clipboard reads, mail bodies or tokens as MCP tools.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'local',
+				version: '0.1.1'
+			},
+			{
+				api: [],
 				commands: [
 					{
 						command:
 							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
 						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
 					},
 					{
 						command: 'prettier --write "./**/*.{ts,json,md}"',
@@ -5576,38 +4860,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'mandate-stores',
-				version: '0.2.0'
+				version: '0.2.1'
 			},
 			{
-				api: [
-					{
-						entryPoint:
-							'@absolutejs/agent-exchange-mandate-webcrypto',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeMandatePublicKeyResolver',
-								signature:
-									'type AgentExchangeMandatePublicKeyResolver = {\n    readonly resolve: (input: {\n        readonly issuer: AgentExchangeMandatePrincipal;\n        readonly keyId: string;\n    }) => Promise<CryptoKey> | CryptoKey;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createWebCryptoMandateJwsSigner',
-								signature:
-									'const createWebCryptoMandateJwsSigner: (options: {\n    readonly keyId: string;\n    readonly privateKey: CryptoKey;\n}) => AgentExchangeMandateJwsSigner;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createWebCryptoMandateJwsVerifier',
-								signature:
-									'const createWebCryptoMandateJwsVerifier: (options: {\n    readonly keys: AgentExchangeMandatePublicKeyResolver;\n}) => AgentExchangeMandateJwsVerifier;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -5654,27 +4910,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.0'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/agent-exchange-microsoft',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'MICROSOFT_GRAPH_MAIL_READ_SCOPE',
-								signature:
-									'const MICROSOFT_GRAPH_MAIL_READ_SCOPE = "https://graph.microsoft.com/Mail.Read";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createMicrosoftGraphOAuthProvider',
-								signature:
-									'const createMicrosoftGraphOAuthProvider: (tenantId: string) => OAuthProviderDescriptor;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -5720,90 +4956,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.0'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/agent-exchange-oauth',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthAuthorizationDetails',
-								signature:
-									'type OAuthAuthorizationDetails = {\n    readonly actions: readonly string[];\n    readonly identifier?: string;\n    readonly locations: readonly string[];\n    readonly type: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'HardenedOAuthProfile',
-								signature:
-									'type HardenedOAuthProfile = {\n    readonly authorizationDetails: OAuthAuthorizationDetails;\n    readonly authorizationEndpoint: string;\n    readonly clientId: string;\n    readonly issuer: string;\n    readonly pushedAuthorizationRequestEndpoint: string;\n    readonly redirectUri: string;\n    readonly resource: string;\n    readonly scopes: readonly string[];\n    readonly tokenEndpoint: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthAuthorizationSession',
-								signature:
-									'type OAuthAuthorizationSession = {\n    readonly codeVerifier: string;\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly issuer: string;\n    readonly state: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthAuthorizationSessionStore',
-								signature:
-									'type OAuthAuthorizationSessionStore = {\n    readonly consume: (state: string) => Promise<OAuthAuthorizationSession | undefined>;\n    readonly save: (session: OAuthAuthorizationSession) => Promise<boolean>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthGrant',
-								signature:
-									'type OAuthGrant = {\n    readonly code: string;\n    readonly codeVerifier: string;\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly issuer: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'DpopProofSigner',
-								signature:
-									'type DpopProofSigner = {\n    readonly createProof: (input: {\n        readonly accessToken?: string;\n        readonly htm: string;\n        readonly htu: string;\n        readonly nonce?: string;\n    }) => Promise<string> | string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthFetch',
-								signature:
-									'type OAuthFetch = (input: string, init: RequestInit) => Promise<Response>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createHardenedOAuthAuthorizationClient',
-								signature:
-									'const createHardenedOAuthAuthorizationClient: (options: {\n    readonly fetch?: OAuthFetch;\n    readonly now?: () => number;\n    readonly profile: HardenedOAuthProfile;\n    readonly sessionStore: OAuthAuthorizationSessionStore;\n}) => {\n    begin: (request: AgentExchangeRequest) => Promise<{\n        expiresAt: number;\n        url: string;\n    }>;\n    complete: (input: {\n        readonly code: string;\n        readonly iss: string;\n        readonly state: string;\n    }) => Promise<{\n        code: string;\n        codeVerifier: string;\n        exchangeId: string;\n        expiresAt: number;\n        issuer: string;\n    }>;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'encodeOAuthGrant',
-								signature:
-									'const encodeOAuthGrant: (grant: OAuthGrant) => Uint8Array;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'decodeOAuthGrant',
-								signature:
-									'const decodeOAuthGrant: (bytes: Uint8Array) => OAuthGrant;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'redeemOAuthGrant',
-								signature:
-									'const redeemOAuthGrant: <Result>(options: {\n    readonly dpop: DpopProofSigner;\n    readonly execute: (input: {\n        readonly accessToken: string;\n        readonly createDpopProof: DpopProofSigner["createProof"];\n    }) => Promise<Result>;\n    readonly fetch?: OAuthFetch;\n    readonly grant: OAuthGrant;\n    readonly now?: () => number;\n    readonly profile: HardenedOAuthProfile;\n    readonly request: AgentExchangeRequest;\n}) => Promise<Result>;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -5855,69 +5008,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.3.0'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/agent-exchange-oauth-stores',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthSessionSealer',
-								signature:
-									'type OAuthSessionSealer = {\n    readonly open: (sealed: Uint8Array) => Promise<Uint8Array>;\n    readonly seal: (plaintext: Uint8Array) => Promise<Uint8Array>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AtomicRedisSessionClient',
-								signature:
-									'type AtomicRedisSessionClient = {\n    readonly putIfAbsent: (input: {\n        readonly key: string;\n        readonly ttlMs: number;\n        readonly value: string;\n    }) => Promise<boolean>;\n    readonly take: (key: string) => Promise<string | undefined>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PostgresSessionClient',
-								signature:
-									'type PostgresSessionClient = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<{\n        readonly rowCount: number;\n        readonly rows: readonly Row[];\n    }>;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'OAUTH_SESSION_POSTGRES_MIGRATION',
-								signature:
-									'const OAUTH_SESSION_POSTGRES_MIGRATION: string;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createMemoryOAuthAuthorizationSessionStore',
-								signature:
-									'const createMemoryOAuthAuthorizationSessionStore: () => OAuthAuthorizationSessionStore;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createRedisOAuthAuthorizationSessionStore',
-								signature:
-									'const createRedisOAuthAuthorizationSessionStore: (options: {\n    readonly client: AtomicRedisSessionClient;\n    readonly keyPrefix?: string;\n    readonly now?: () => number;\n    readonly sealer: OAuthSessionSealer;\n}) => OAuthAuthorizationSessionStore;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPostgresOAuthAuthorizationSessionStore',
-								signature:
-									'const createPostgresOAuthAuthorizationSessionStore: (options: {\n    readonly client: PostgresSessionClient;\n    readonly now?: () => number;\n    readonly sealer: OAuthSessionSealer;\n}) => OAuthAuthorizationSessionStore;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createWebCryptoOAuthSessionSealer',
-								signature:
-									'const createWebCryptoOAuthSessionSealer: (key: CryptoKey) => OAuthSessionSealer;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -5966,35 +5057,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.0'
 			},
 			{
-				api: [
-					{
-						entryPoint:
-							'@absolutejs/agent-exchange-oauth-webcrypto',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'WebCryptoDpopProofSigner',
-								signature:
-									'type WebCryptoDpopProofSigner = DpopProofSigner & {\n    readonly publicJwk: Readonly<JsonWebKey>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'WebCryptoDpopProofSignerOptions',
-								signature:
-									'type WebCryptoDpopProofSignerOptions = {\n    readonly keyPair?: CryptoKeyPair;\n    readonly now?: () => number;\n    readonly randomBytes?: (length: number) => Uint8Array;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createWebCryptoDpopProofSigner',
-								signature:
-									'const createWebCryptoDpopProofSigner: (options?: WebCryptoDpopProofSignerOptions) => Promise<WebCryptoDpopProofSigner>;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -6040,140 +5103,118 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.1'
 			},
 			{
-				api: [
+				api: [],
+				commands: [
 					{
-						entryPoint:
-							'@absolutejs/agent-exchange-provider-conformance',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthFeatureStatus',
-								signature:
-									'type OAuthFeatureStatus = "supported" | "unknown" | "unsupported";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthProviderCapabilities',
-								signature:
-									'type OAuthProviderCapabilities = {\n  readonly authorizationCode: OAuthFeatureStatus;\n  readonly issuerIdentification: OAuthFeatureStatus;\n  readonly par: OAuthFeatureStatus;\n  readonly pkceS256: OAuthFeatureStatus;\n  readonly rar: OAuthFeatureStatus;\n  readonly resourceIndicators: OAuthFeatureStatus;\n  readonly senderConstrainedAccessTokens:\n    "dpop" | "mtls" | "unknown" | "unsupported";\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthProviderDescriptor',
-								signature:
-									'type OAuthProviderDescriptor = {\n  readonly authorizationEndpoint: string;\n  readonly capabilities: OAuthProviderCapabilities;\n  readonly documentationUrl: string;\n  readonly issuer: string;\n  readonly notes?: readonly string[];\n  readonly provider: string;\n  readonly recommendedScopes: readonly string[];\n  readonly resource: string;\n  readonly tokenEndpoint: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'OAuthConformanceReport',
-								signature:
-									'type OAuthConformanceReport = {\n  readonly eligibleForPhishingResistantProfile: boolean;\n  readonly failures: readonly string[];\n  readonly provider: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'evaluateOAuthProviderConformance',
-								signature:
-									'const evaluateOAuthProviderConformance: (\n  descriptor: OAuthProviderDescriptor,\n) => OAuthConformanceReport;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'assertPhishingResistantOAuthProvider',
-								signature:
-									'const assertPhishingResistantOAuthProvider: (\n  descriptor: OAuthProviderDescriptor,\n) => void;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'normalizeDpopHtu',
-								signature:
-									'const normalizeDpopHtu: (value: string) => string;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'verifyDpopProof',
-								signature:
-									'const verifyDpopProof: (input: {\n  readonly accessToken?: string;\n  readonly htm: string;\n  readonly htu: string;\n  readonly maxAgeSeconds?: number;\n  readonly nonce?: string;\n  readonly now?: () => number;\n  readonly proof: string;\n}) => Promise<JsonWebKey>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_A2A_SKILL_ID',
-								signature:
-									'const AGENT_EXCHANGE_A2A_SKILL_ID: "absolute-agent-exchange";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE',
-								signature:
-									'const AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-preparation+json";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE',
-								signature:
-									'const AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-receipt+json";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aConformanceCheck',
-								signature:
-									'type AgentExchangeA2aConformanceCheck =\n  | "authentication-before-parsing"\n  | "credential-separation"\n  | "discovery"\n  | "negotiation"\n  | "prepared-execution"\n  | "profile"\n  | "replay-convergence"\n  | "task-redaction";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aConformanceFinding',
-								signature:
-									'type AgentExchangeA2aConformanceFinding = {\n  readonly check: AgentExchangeA2aConformanceCheck;\n  readonly detail?: string;\n  readonly passed: boolean;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aConformanceReport',
-								signature:
-									'type AgentExchangeA2aConformanceReport = {\n  readonly conformant: boolean;\n  readonly findings: readonly AgentExchangeA2aConformanceFinding[];\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aConformanceRequestPurpose',
-								signature:
-									'type AgentExchangeA2aConformanceRequestPurpose =\n  "credential-separation" | "negotiation" | "prepared-execution";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeA2aConformanceTarget',
-								signature:
-									'type AgentExchangeA2aConformanceTarget = {\n  readonly acknowledgeExecution: "sandbox-only";\n  readonly additionalSensitiveMarkers?: readonly string[];\n  readonly a2aHeaders: (input: {\n    readonly method: "POST";\n    readonly purpose: "a2a";\n    readonly url: string;\n  }) => HeadersInit | Promise<HeadersInit>;\n  readonly createRequest: (\n    purpose: AgentExchangeA2aConformanceRequestPurpose,\n  ) => AgentExchangeRequest | Promise<AgentExchangeRequest>;\n  readonly fetch?: (\n    input: RequestInfo | URL,\n    init?: RequestInit,\n  ) => Promise<Response>;\n  readonly maxResponseBytes?: number;\n  readonly origin: string;\n  readonly preparationHeaders: (input: {\n    readonly method: "POST";\n    readonly purpose: "preparation";\n    readonly url: string;\n  }) => HeadersInit | Promise<HeadersInit>;\n  readonly timeoutMs?: number;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'evaluateAgentExchangeA2aConformance',
-								signature:
-									'const evaluateAgentExchangeA2aConformance: (\n  target: AgentExchangeA2aConformanceTarget,\n) => Promise<AgentExchangeA2aConformanceReport>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'assertAgentExchangeA2aConformance',
-								signature:
-									'const assertAgentExchangeA2aConformance: (\n  target: AgentExchangeA2aConformanceTarget,\n) => Promise<AgentExchangeA2aConformanceReport>;'
-							}
-						]
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
 					}
 				],
+				description:
+					'Service profiles and owner-approved reusable permissions for secure Agent Exchange.',
+				name: '@absolutejs/agent-exchange-permissions',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-permissions'],
+				readmeDigest:
+					'21368f1d8d38e7bd3a6bf8113fda24bd37136cb53fff51e867566e0d6933e826',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Reusable allow-once / always-allow / deny orchestration for Agent Exchange signed mandates. Use trusted service profiles, an authenticated mailbox owner, and the Agent Exchange WebAuthn adapter to approve the exact returned draft.',
+						details: [
+							'createAgentExchangePermissionManager owns draft creation, profile matching, service revision invalidation, approval, denial and revocation. One-use grants last 15 minutes. Saved grants last 30 days with at most 100 uses; disclose these limits before requesting approval. Non-routine profiles cannot use saved approval.',
+							"createPostgresAgentExchangePermissionStore scopes records by tenant and owner. Install AGENT_EXCHANGE_PERMISSIONS_POSTGRES_MIGRATION and the Mandate Stores migration before use. Reuse excludes exhausted/revoked mandates. Actual execution must still call the signed mandate authority's authorize (which atomically consumes a use), and check assertActive before each sensitive stage. A permission lookup alone does not authorize secret access.",
+							'New services must be supplied as trusted, validated configuration. Unknown IDs are rejected. Change revision or adapterRevision when sender matching, destination, action, or other semantics change. Exact HTTPS origins only; no wildcards. Profile labels and all grant fields participate in scope matching. Approvals do not create source or destination adapters or bypass their validation.',
+							"The host app supplies company/task eligibility, validated authenticated principals, passkey ceremonies, and a UI. Never send the stored draft or signed mandate in public status responses. List permissions only for the authenticated owner. A requester cancelling one request must not revoke a mailbox owner's saved grant.",
+							'Deny rejects the pending request only. It does not create a permanent block. To stop previously saved access, revoke that grant separately. Revocation prevents future stages and cannot recall an already dispatched provider operation.',
+							'Saved permissions may be explicitly enabled for routine or authentication profiles. Authentication grants remain bound to the exact owner, requester, mailbox, origin, operation and profile/adapter revision. They require owner passkey approval and expire after 30 days or 100 uses. Recovery and other security-changing risks cannot enable saved permission. Hosts must classify operations honestly and recheck active access before every execution.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'permissions',
+				version: '0.2.0'
+			},
+			{
+				api: [],
+				commands: [
+					{
+						command:
+							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange && tsc --project tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run format:check && bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'prettier --write "./**/*.{ts,json,md}"',
+						name: 'format'
+					},
+					{
+						command: 'prettier --check "./**/*.{ts,json,md}"',
+						name: 'format:check'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Durable tenant-scoped Agent Exchange requests, replay protection and broker claims for PostgreSQL.',
+				name: '@absolutejs/agent-exchange-postgres',
+				private: false,
+				publicExports: ['@absolutejs/agent-exchange-postgres'],
+				readmeDigest:
+					'a0ac6f06512764bea478c899d8f86e77886ecae233b3aa366850eaef54c8dca6',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'PostgreSQL persistence for Agent Exchange request metadata, receipts, recipient replay protection, and token-confined broker execution claims.',
+						details: [
+							'Apply AGENT_EXCHANGE_POSTGRES_MIGRATION during deployment. Create stores with createPostgresAgentExchangeStores({ client, tenantId }); the client implements query(sql, parameters) returning { rows, rowCount }. All operations bind the configured tenant. Broker calls for another tenant fail closed.',
+							'The application must authorize requests with Agency and verify standing mandates before executing a broker. These stores are persistence, not authorization. Use @absolutejs/agent-exchange-mandate-stores for signed mandate use limits and revocation, and the Agency PostgreSQL adapter for execution leases.',
+							'Requests and receipts are immutable first-writer records. Replay protection rejects any second delivery for the same exchange, even with a different nonce. Broker claims are never automatically retried after an error or an unknown outcome; create a newly authorized exchange instead. Revocation before a claim leaves a tombstone so a later claim cannot start execution. Revocation cannot cancel a provider operation that has already begun.',
+							'Only declared metadata is persisted. Do not put tokens, codes, message bodies or other secrets in declared metadata fields. Optional free-form receipt references are deliberately omitted. The stores do not persist payloads or provider tokens. Expired metadata and tombstones may be pruned only after all corresponding leases, requests and envelopes have expired; no automatic deletion is enabled.',
+							'Run bun run check:package. Set AGENT_EXCHANGE_TEST_DATABASE_URL to run the real PostgreSQL concurrency tests in an isolated temporary schema.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'postgres',
+				version: '0.1.0'
+			},
+			{
+				api: [],
 				commands: [
 					{
 						command:
@@ -6259,105 +5300,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.3.1'
 			},
 			{
-				api: [
-					{
-						entryPoint:
-							'@absolutejs/agent-exchange-secure-messaging',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_SECURE_MESSAGING_CONTRACT',
-								signature:
-									'const AGENT_EXCHANGE_SECURE_MESSAGING_CONTRACT: 2;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_SECURE_MESSAGING_REQUEST_PURPOSE',
-								signature:
-									'const AGENT_EXCHANGE_SECURE_MESSAGING_REQUEST_PURPOSE: "org.absolutejs.agent-exchange.request.v2";'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_SECURE_MESSAGING_RECEIPT_PURPOSE',
-								signature:
-									'const AGENT_EXCHANGE_SECURE_MESSAGING_RECEIPT_PURPOSE: "org.absolutejs.agent-exchange.receipt.v2";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeSecureMessagingRoute',
-								signature:
-									'type AgentExchangeSecureMessagingRoute = {\n    readonly conversationId: string;\n    readonly recipientDeviceId: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeSecureMessagingReceiptSaveResult',
-								signature:
-									'type AgentExchangeSecureMessagingReceiptSaveResult = "conflict" | "duplicate" | "saved";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeSecureMessagingReceiptRecord',
-								signature:
-									'type AgentExchangeSecureMessagingReceiptRecord = {\n    readonly expiresAt: number;\n    readonly receipt: AgentExchangeReceipt;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeSecureMessagingReceiptStore',
-								signature:
-									'type AgentExchangeSecureMessagingReceiptStore = {\n    readonly get: (input: {\n        readonly exchangeId: string;\n        readonly now: number;\n    }) => Promise<AgentExchangeSecureMessagingReceiptRecord | undefined>;\n    readonly save: (input: AgentExchangeSecureMessagingReceiptRecord & {\n        readonly now: number;\n    }) => Promise<AgentExchangeSecureMessagingReceiptSaveResult>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeSecureMessagingTransportOptions',
-								signature:
-									'type AgentExchangeSecureMessagingTransportOptions = {\n    readonly client: Pick<SecureMessagingClient, "send">;\n    readonly maximumEnvelopeBytes?: number;\n    readonly maximumJwsBytes?: number;\n    readonly maximumTtlMs?: number;\n    readonly now?: () => number;\n    readonly pollIntervalMs?: number;\n    readonly receipts: AgentExchangeSecureMessagingReceiptStore;\n    readonly resolveRoute: (request: AgentExchangeRequest) => Promise<AgentExchangeSecureMessagingRoute> | AgentExchangeSecureMessagingRoute;\n    readonly resolveSignedMandate?: (request: AgentExchangeRequest) => Promise<SignedAgentExchangeStandingMandate | undefined> | SignedAgentExchangeStandingMandate | undefined;\n    readonly sleep?: (milliseconds: number) => Promise<void>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeSecureMessagingRequestAuthorization',
-								signature:
-									'type AgentExchangeSecureMessagingRequestAuthorization = {\n    readonly conversationId: string;\n    readonly delivery: AgentExchangeDelivery;\n    readonly senderCredential: Uint8Array;\n    readonly senderDeviceId: string;\n    readonly signedMandate?: SignedAgentExchangeStandingMandate;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeSecureMessagingHandlerOptions',
-								signature:
-									'type AgentExchangeSecureMessagingHandlerOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly authorizeRequest: (input: AgentExchangeSecureMessagingRequestAuthorization) => Promise<unknown> | unknown;\n    readonly localDeviceId: string;\n    readonly maximumEnvelopeBytes?: number;\n    readonly maximumJwsBytes?: number;\n    readonly maximumOuterExpirySkewMs?: number;\n    readonly maximumTtlMs?: number;\n    readonly now?: () => number;\n    readonly receipts: AgentExchangeSecureMessagingReceiptStore;\n    readonly receiver: AgentExchangeReceiver;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createMemoryAgentExchangeSecureMessagingReceiptStore',
-								signature:
-									'const createMemoryAgentExchangeSecureMessagingReceiptStore: () => AgentExchangeSecureMessagingReceiptStore;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createAgentExchangeSecureMessagingTransport',
-								signature:
-									'const createAgentExchangeSecureMessagingTransport: (options: AgentExchangeSecureMessagingTransportOptions) => AgentExchangeTransport;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createAgentExchangeSecureMessagingHandler',
-								signature:
-									'const createAgentExchangeSecureMessagingHandler: (options: AgentExchangeSecureMessagingHandlerOptions) => SecureMessagingApplicationHandler;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -6417,70 +5360,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.1.0'
 			},
 			{
-				api: [
-					{
-						entryPoint:
-							'@absolutejs/agent-exchange-secure-messaging-stores',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeReceiptRedisClient',
-								signature:
-									'type AgentExchangeReceiptRedisClient = {\n    readonly eval: (script: string, keys: readonly string[], arguments_: readonly string[]) => Promise<unknown>;\n    readonly get: (key: string) => Promise<string | undefined | null>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeReceiptPostgresClient',
-								signature:
-									'type AgentExchangeReceiptPostgresClient = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<{\n        readonly rowCount: number;\n        readonly rows: readonly Row[];\n    }>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeReceiptPostgresStore',
-								signature:
-									'type AgentExchangeReceiptPostgresStore = AgentExchangeSecureMessagingReceiptStore & {\n    readonly deleteExpired: (input: {\n        readonly batchSize?: number;\n        readonly now: number;\n    }) => Promise<number>;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_RECEIPT_POSTGRES_MIGRATION',
-								signature:
-									'const AGENT_EXCHANGE_RECEIPT_POSTGRES_MIGRATION: string;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'AGENT_EXCHANGE_RECEIPT_REDIS_SAVE_SCRIPT',
-								signature:
-									'const AGENT_EXCHANGE_RECEIPT_REDIS_SAVE_SCRIPT: string;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createMemoryAgentExchangeReceiptStore',
-								signature:
-									'const createMemoryAgentExchangeReceiptStore: (options: {\n    readonly tenantId: string;\n}) => AgentExchangeSecureMessagingReceiptStore;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createRedisAgentExchangeReceiptStore',
-								signature:
-									'const createRedisAgentExchangeReceiptStore: (options: {\n    readonly client: AgentExchangeReceiptRedisClient;\n    readonly keyPrefix?: string;\n    readonly tenantId: string;\n}) => AgentExchangeSecureMessagingReceiptStore;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPostgresAgentExchangeReceiptStore',
-								signature:
-									'const createPostgresAgentExchangeReceiptStore: (options: {\n    readonly client: AgentExchangeReceiptPostgresClient;\n    readonly tenantId: string;\n}) => AgentExchangeReceiptPostgresStore;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -6559,52 +5439,11 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.0.1'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/agent-exchange-webauthn',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'WebAuthnAgentExchangeApprovalProviderOptions',
-								signature:
-									'type WebAuthnAgentExchangeApprovalProviderOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly adapter: WebAuthnAdapter;\n    readonly credentialStore: WebAuthnCredentialStore;\n    readonly now?: () => number;\n    readonly origin: string;\n    readonly resolveUserId: (input: {\n        readonly request: AgentExchangeRequest;\n        readonly subject: string;\n    }) => Promise<string> | string;\n    readonly rpId: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeMandateApprovalProvider',
-								signature:
-									'type AgentExchangeMandateApprovalProvider = {\n    readonly begin: (input: {\n        readonly challenge: string;\n        readonly draft: AgentExchangeStandingMandateDraft;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly challenge: string;\n        readonly options: unknown;\n    }>;\n    readonly verify: (input: {\n        readonly challenge: string;\n        readonly draft: AgentExchangeStandingMandateDraft;\n        readonly response: unknown;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly credentialId: string;\n        readonly rpId: string;\n        readonly subject: string;\n        readonly userVerified: true;\n        readonly verifierOrigin: string;\n    }>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'WebAuthnAgentExchangeMandateApprovalProviderOptions',
-								signature:
-									'type WebAuthnAgentExchangeMandateApprovalProviderOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly adapter: WebAuthnAdapter;\n    readonly credentialStore: WebAuthnCredentialStore;\n    readonly now?: () => number;\n    readonly origin: string;\n    readonly resolveUserId: (input: {\n        readonly draft: AgentExchangeStandingMandateDraft;\n        readonly subject: string;\n    }) => Promise<string> | string;\n    readonly rpId: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createWebAuthnAgentExchangeApprovalProvider',
-								signature:
-									'const createWebAuthnAgentExchangeApprovalProvider: (options: WebAuthnAgentExchangeApprovalProviderOptions) => AgentExchangeApprovalProvider;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createWebAuthnAgentExchangeMandateApprovalProvider',
-								signature:
-									'const createWebAuthnAgentExchangeMandateApprovalProvider: (options: WebAuthnAgentExchangeMandateApprovalProviderOptions) => AgentExchangeMandateApprovalProvider;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
-							'rm -rf dist && bun build src/index.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange --external @absolutejs/auth && tsc --project tsconfig.build.json',
+							'rm -rf dist && bun build src/index.ts src/client.ts --outdir dist --root src --sourcemap --target=browser --external @absolutejs/agent-exchange --external @absolutejs/auth --external @simplewebauthn/browser && tsc --project tsconfig.build.json',
 						name: 'build'
 					},
 					{
@@ -6633,9 +5472,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'Request-bound, user-verified WebAuthn approvals for @absolutejs/agent-exchange.',
 				name: '@absolutejs/agent-exchange-webauthn',
 				private: false,
-				publicExports: ['@absolutejs/agent-exchange-webauthn'],
+				publicExports: [
+					'@absolutejs/agent-exchange-webauthn',
+					'@absolutejs/agent-exchange-webauthn/client'
+				],
 				readmeDigest:
-					'1dd6360e9c49c560748a9606c1bfa7b97ce42158d96adb7c5fdf689467fea421',
+					'5c5677b6c4d976101a172cc1346c41263b8dd36c8ee49504fc46e9f6b56a6779',
 				readmeSamples: [
 					{
 						code: 'const approvalProvider = createWebAuthnAgentExchangeApprovalProvider({\n  adapter,\n  credentialStore,\n  origin: "https://app.example.com",\n  resolveUserId: async ({ subject }) => subject,\n  rpId: "example.com",\n});',
@@ -6656,10 +5498,68 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'For local development only, allowInsecureLocalhost: true permits an HTTP localhost origin and RP ID. It does not permit arbitrary HTTP hosts.'
 						],
 						title: 'Overview'
+					},
+					{
+						description:
+							"Import approveAgentExchangeWithPasskey from @absolutejs/agent-exchange-webauthn/client. Call it from the user's confirmation button after displaying the exact service, teammate, expiry, and use limit. Provide begin() (returns approvalId and WebAuthn options) and verify() (receives the same approval ID and the authenticator response). The helper uses SimpleWebAuthn's browser implementation and does not approve or persist a mandate itself. The server must consume an Auth challenge bound to purpose, user and session before using the mandate approval provider.",
+						details: [
+							'Version 0.5.0 requires Auth 0.89.x, whose credential stores prevent owner/key replacement and counter rollback and provide durable one-use challenge stores.'
+						],
+						title: 'Browser approval'
 					}
 				],
 				sourcePath: 'webauthn',
-				version: '0.4.1'
+				version: '0.5.0'
+			},
+			{
+				api: [],
+				commands: [
+					{
+						command:
+							'bun build src/index.ts --outdir dist --target=browser && bun build src/playwright.ts --outdir dist --target=bun --external playwright-core --external @absolutejs/egress/transport && tsc -p tsconfig.build.json',
+						name: 'build'
+					},
+					{
+						command:
+							'bun run typecheck && bun run test && bun run build',
+						name: 'check:package'
+					},
+					{
+						command: 'bun test tests/',
+						name: 'test'
+					},
+					{
+						command: 'tsc --noEmit',
+						name: 'typecheck'
+					}
+				],
+				description:
+					'Owner-bound expiring browser sessions for human handoff and protected agent destinations.',
+				name: '@absolutejs/browser-session',
+				private: false,
+				publicExports: [
+					'@absolutejs/browser-session',
+					'@absolutejs/browser-session/playwright'
+				],
+				readmeDigest:
+					'37ea6ef204d75a6eb3ef0604d5cb906869c75dc132164fa2c15892702665198e',
+				readmeSamples: [],
+				readmeTopics: [
+					{
+						description:
+							'Reusable lifecycle for owner-bound, short-lived browser sessions. It reserves capacity before launching, checks current application authorization on every operation, serializes human interaction against protected verification, and closes late-starting browsers during shutdown. Unconfirmed process termination keeps its capacity slot occupied instead of silently launching another browser.',
+						details: [
+							"Actors must come from ABS Auth at the host boundary. resourceRef binds the application's task/discovery context; accountRef binds the approved account. The host implements business access checks through authorize. Session IDs are identifiers, not authentication tokens. No page object is returned to clients.",
+							"./playwright provides an isolated Chromium process per session, Chromium's sandbox enabled, blocked service workers/WebSockets, HTTPS-only requests through ABS Egress's public-IP-pinned transport, bounded response sizes and kill fallback. The deployment must additionally restrict private-network egress at the OS or container boundary, run unprivileged with bounded CPU/RAM/PIDs and ephemeral profile storage, and expose debugging only on loopback. It must not log input bodies, enable traces/video, export cookies or send screenshots to a model.",
+							'maskedBrowserPreview masks password and marked OTP inputs for human-only UI. The host must stop previews and input while its verification callback runs. Verification must use the Agent Exchange destination adapter, bind the exact approved origin/document/account, check revocation immediately before submission, and verify the resulting signed-in account. Pool access alone grants no sign-in permission.',
+							"Browser resources are deliberately ephemeral. Persist requests, authorization and audit records in ABS's durable packages. A runner restart loses its browser sessions; mark affected attempts interrupted and never automatically replay an uncertain sign-in. Launchers must honor abort and terminate within bounded time.",
+							'Version 0.2 adds getBrowserFocus: fixed field categories, bounds and an opaque DOM-element binding, never values or arbitrary page labels. Text input requires the returned focusId; changed focus or a reloaded document fails closed. Filling replaces the selected field value so retrying acknowledged input cannot append a password twice. Hosts must show the selected field and confirm accepted input. Human input waits for an in-flight preview; protected verification stays exclusive.'
+						],
+						title: 'Overview'
+					}
+				],
+				sourcePath: 'browser-session',
+				version: '0.2.1'
 			}
 		],
 		version: null
@@ -6719,101 +5619,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Overview'
 			}
 		],
-		repository: 'https://github.com/absolutejs/agent-exchange-sources',
+		repository: null,
 		subpackages: [
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/agent-exchange-email',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'EmailAgentExchangeCorrelation',
-								signature:
-									'type EmailAgentExchangeCorrelation = {\n    readonly mode: "challenge-text";\n} | {\n    readonly mode: "temporal-only";\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'EmailAgentExchangeProfile',
-								signature:
-									'type EmailAgentExchangeProfile = EmailVerificationProfile & {\n    readonly correlation: EmailAgentExchangeCorrelation;\n    readonly operations: readonly string[];\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'EmailAgentExchangeSourceOptions',
-								signature:
-									'type EmailAgentExchangeSourceOptions = {\n    readonly allowTemporalOnlyCorrelation?: boolean;\n    readonly clockSkewMs?: number;\n    readonly lookup: EmailVerificationMessageLookup;\n    readonly maxBodyBytes?: number;\n    readonly maxCandidates?: number;\n    readonly maxLookbackMs?: number;\n    readonly now?: () => number;\n    readonly profiles: readonly EmailAgentExchangeProfile[];\n    readonly resolveAccountEmail: (request: AgentExchangeRequest) => Promise<string> | string;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createEmailVerificationCodeSource',
-								signature:
-									'const createEmailVerificationCodeSource: (options: EmailAgentExchangeSourceOptions) => SensitiveValueSource;'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'EmailVerificationMessageLookup',
-								signature: 'EmailVerificationMessageLookup'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'EmailVerificationProfile',
-								signature: 'EmailVerificationProfile'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST',
-								signature:
-									'EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'AgentExchangeSourceManifest',
-								signature: 'AgentExchangeSourceManifest'
-							}
-						]
-					},
-					{
-						entryPoint:
-							'@absolutejs/agent-exchange-email/source-manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'AgentExchangeSourceManifest',
-								signature:
-									'type AgentExchangeSourceManifest = {\n    readonly assurance: "experimental";\n    readonly correlationModes: readonly ["challenge-text", "temporal-only"];\n    readonly modelCanObserveSecret: false;\n    readonly packageName: `@absolutejs/agent-exchange-${string}`;\n    readonly processingModes: readonly ["tool-confined"];\n    readonly providers: readonly string[];\n    readonly role: "source";\n    readonly secretKinds: readonly string[];\n    readonly senderAuthentication: "trusted-authserv-dmarc";\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST',
-								signature:
-									'const EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST: Readonly<{\n    readonly assurance: "experimental";\n    readonly correlationModes: readonly ["challenge-text", "temporal-only"];\n    readonly modelCanObserveSecret: false;\n    readonly packageName: "@absolutejs/agent-exchange-email";\n    readonly processingModes: readonly ["tool-confined"];\n    readonly providers: readonly ["gmail", "microsoft", "imap"];\n    readonly role: "source";\n    readonly secretKinds: readonly ["email-one-time-code"];\n    readonly senderAuthentication: "trusted-authserv-dmarc";\n}>;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/agent-exchange-email/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>>;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>>;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -6853,7 +5662,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/agent-exchange-email/manifest.json'
 				],
 				readmeDigest:
-					'830b8ceb2f34e1b520d9c028557ec99673d7e34583114b6667e40bfb1d146a43',
+					'680f1035942a18338e7188301e0f0d339c1904ff776ec779ec0e246bfb0d11fa',
 				readmeSamples: [
 					{
 						code: 'bun add @absolutejs/agent-exchange @absolutejs/agent-exchange-email @absolutejs/email',
@@ -6902,7 +5711,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'email',
-				version: '0.5.0'
+				version: '0.6.1'
 			}
 		],
 		version: null

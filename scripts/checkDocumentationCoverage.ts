@@ -501,18 +501,6 @@ for (const view of Object.keys(docsViews))
 // generated catalog or listed here with the reason it is not. Deprecated
 // packages and per-platform binaries (an os or cpu field) are skipped.
 const uncataloguedPackages: Record<string, string> = {
-	'@absolutejs/agent-exchange-browser':
-		'Published from an unmerged agent-exchange-providers branch.',
-	'@absolutejs/agent-exchange-discovery':
-		'Published from an unmerged agent-exchange-providers branch.',
-	'@absolutejs/agent-exchange-local':
-		'Published from an unmerged agent-exchange-providers branch.',
-	'@absolutejs/agent-exchange-permissions':
-		'Published from an unmerged agent-exchange-providers branch.',
-	'@absolutejs/agent-exchange-postgres':
-		'Published from an unmerged agent-exchange-providers branch.',
-	'@absolutejs/browser-session':
-		'Published from an unmerged agent-exchange-providers branch.',
 	'@absolutejs/bvm': 'Documented by its own page, /documentation/bvm.',
 	'@absolutejs/drizzle-utils':
 		'Personal utility outside the AbsoluteJS repositories.'
