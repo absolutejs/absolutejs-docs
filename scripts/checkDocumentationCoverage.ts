@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import process from 'node:process';
-import { Glob } from 'bun';
+import { Glob, semver } from 'bun';
 import {
 	docsViews,
 	documentationSitemapRoutes,
@@ -556,8 +556,68 @@ const checkPublishedPackages = async () => {
 			);
 };
 
+// The catalog is generated from each repository's released branch, so a
+// package published since its last generation is documented as an older
+// API. @absolutejs/absolute is cataloged at its beta line (0.20.0-beta) as
+// it releases several times a day.
+const catalogedVersions = ecosystemProjects.flatMap((project) => [
+	...(project.packageName && !project.private && project.version
+		? [
+				{
+					directory: project.directory,
+					packageName: project.packageName,
+					version: project.version
+				}
+			]
+		: []),
+	...project.subpackages
+		.filter((subpackage) => !subpackage.private && subpackage.version)
+		.map((subpackage) => ({
+			directory: project.directory,
+			packageName: subpackage.name,
+			version: subpackage.version ?? ''
+		}))
+]);
+
+const newestPublishedVersion = async (packageName: string) => {
+	const packument = await fetchNpmJson(packageName.replace('/', '%2F'));
+	const versions: unknown[] = Object.values(packument['dist-tags'] ?? {});
+
+	return versions
+		.filter((version): version is string => typeof version === 'string')
+		.sort((left, right) => semver.order(right, left))[0];
+};
+
+const isCurrent = (packageName: string, cataloged: string, newest: string) =>
+	packageName === '@absolutejs/absolute'
+		? newest.replace(/-beta\.\d+$/, '-beta') === cataloged
+		: newest === cataloged;
+
+const checkCatalogVersions = async () => {
+	const newest = await Promise.all(
+		catalogedVersions.map(({ packageName }) =>
+			newestPublishedVersion(packageName).catch(() => undefined)
+		)
+	);
+	const stale = catalogedVersions.filter(
+		({ packageName, version }, index) => {
+			const published = newest[index];
+
+			return (
+				published !== undefined &&
+				!isCurrent(packageName, version, published)
+			);
+		}
+	);
+	for (const { directory, packageName, version } of stale)
+		failures.push(
+			`${packageName}: the catalog documents ${version}, npm has ${newest[catalogedVersions.findIndex((entry) => entry.packageName === packageName)]}. Regenerate it from what npm published: bun run catalog:generate --only=${directory} --npm (for a monorepo, pass --source=${directory}=<checkout of the branch it was published from>).`
+		);
+};
+
 try {
 	await checkPublishedPackages();
+	await checkCatalogVersions();
 } catch (error) {
 	console.warn(
 		`Skipped the npm catalog check: ${error instanceof Error ? error.message : String(error)}`

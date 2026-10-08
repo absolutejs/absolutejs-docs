@@ -1,15 +1,18 @@
 import {
 	existsSync,
+	mkdtempSync,
 	readFileSync,
 	readdirSync,
 	statSync,
 	writeFileSync
 } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { tmpdir } from 'node:os';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import ts from 'typescript';
 import process from 'node:process';
+import { semver, spawnSync } from 'bun';
 import { ecosystemProjects as existingProjects } from '../src/frontend/data/documentation/packages/ecosystem.generated';
 
 const workspaceDirectory = resolve(import.meta.dir, '../..');
@@ -42,6 +45,54 @@ const sourceOverrides = new Map(
 			];
 		})
 );
+// --npm documents exactly what is published: each selected single-package
+// project is read from its npm tarball instead of a checkout, which also
+// works when a release was published before its source was pushed.
+const unpackPublishedPackage = (directory: string) => {
+	const project = existingProjects.find(
+		(candidate) => candidate.directory === directory
+	);
+	if (!project?.packageName || project.kind === 'monorepo')
+		throw new Error(
+			`--npm reads one published package; ${directory} is not a single-package project. Use --source=${directory}=<released checkout>.`
+		);
+	// The newest version under any tag, which is what check:docs compares
+	// against: a package on a beta line may keep an older latest tag.
+	const tags = spawnSync(
+		['npm', 'view', project.packageName, 'dist-tags', '--json'],
+		{ stderr: 'pipe', stdout: 'pipe' }
+	);
+	const tagged: unknown[] =
+		tags.exitCode === 0
+			? Object.values(JSON.parse(tags.stdout.toString()))
+			: [];
+	const [newest] = tagged
+		.filter((version): version is string => typeof version === 'string')
+		.sort((left, right) => semver.order(right, left));
+	if (!newest)
+		throw new Error(
+			`No published versions found for ${project.packageName}.`
+		);
+	const root = mkdtempSync(join(tmpdir(), `catalog-${directory}-`));
+	const packed = spawnSync(
+		['npm', 'pack', `${project.packageName}@${newest}`, '--silent'],
+		{ cwd: root, stderr: 'pipe', stdout: 'pipe' }
+	);
+	const tarball = packed.stdout.toString().trim().split('\n').at(-1);
+	if (packed.exitCode !== 0 || !tarball)
+		throw new Error(
+			`npm pack ${project.packageName} failed: ${packed.stderr.toString().trim()}`
+		);
+	const unpacked = spawnSync(['tar', '-xzf', tarball], { cwd: root });
+	if (unpacked.exitCode !== 0)
+		throw new Error(`Could not unpack ${tarball}.`);
+
+	return join(root, 'package');
+};
+if (process.argv.includes('--npm'))
+	for (const directory of selectedDirectories)
+		if (!sourceOverrides.has(directory))
+			sourceOverrides.set(directory, unpackPublishedPackage(directory));
 for (const directory of selectedDirectories) {
 	if (
 		!existsSync(
