@@ -6,6 +6,7 @@ export type PackageCategory =
 	| 'Dev Tools'
 	| 'Frontend & UX'
 	| 'Messaging'
+	| 'Native Apps'
 	| 'Observability'
 	| 'On-chain'
 	| 'Platform & Infra'

@@ -47,6 +47,21 @@ import { ProductionBuildView } from '../components/documentation/deployment/Prod
 import { StaticGenerationView } from '../components/documentation/deployment/StaticGenerationView';
 import { InstallationView } from '../components/documentation/getting-started/InstallationView';
 import { BvmView } from '../components/documentation/getting-started/BvmView';
+import { NativeOverviewView } from '../components/documentation/native/NativeOverviewView';
+import { NativeQuickstartView } from '../components/documentation/native/NativeQuickstartView';
+import { NativeTestingView } from '../components/documentation/native/NativeTestingView';
+import { NativeHowItWorksView } from '../components/documentation/native/NativeHowItWorksView';
+import { NativeDevicesView } from '../components/documentation/native/NativeDevicesView';
+import { NativeAuthSyncView } from '../components/documentation/native/NativeAuthSyncView';
+import { NativePushView } from '../components/documentation/native/NativePushView';
+import { NativeNavigationView } from '../components/documentation/native/NativeNavigationView';
+import { NativeBrandingLinksView } from '../components/documentation/native/NativeBrandingLinksView';
+import { NativeDevelopmentView } from '../components/documentation/native/NativeDevelopmentView';
+import { NativeReleaseView } from '../components/documentation/native/NativeReleaseView';
+import { NativeUpdatesView } from '../components/documentation/native/NativeUpdatesView';
+import { NativeExpoView } from '../components/documentation/native/NativeExpoView';
+import { NativeConfigView } from '../components/documentation/native/NativeConfigView';
+import { NativeCliView } from '../components/documentation/native/NativeCliView';
 import { QuickstartView } from '../components/documentation/getting-started/QuickstartView';
 import { Overview } from '../components/documentation/overview/OverviewView';
 import { CitraView } from '../components/documentation/packages/CitraView';
@@ -393,6 +408,21 @@ const primaryDocsViews = definePortalViews({
 	metrics: MetricsPackageView,
 	middleware: MiddlewareView,
 	mkcert: MkcertView,
+	'native-apps': NativeOverviewView,
+	'native-auth-sync': NativeAuthSyncView,
+	'native-branding-links': NativeBrandingLinksView,
+	'native-cli': NativeCliView,
+	'native-config': NativeConfigView,
+	'native-development': NativeDevelopmentView,
+	'native-devices': NativeDevicesView,
+	'native-expo': NativeExpoView,
+	'native-how-it-works': NativeHowItWorksView,
+	'native-navigation-ui': NativeNavigationView,
+	'native-push': NativePushView,
+	'native-quickstart': NativeQuickstartView,
+	'native-release': NativeReleaseView,
+	'native-testing': NativeTestingView,
+	'native-updates': NativeUpdatesView,
 	'networking-plugin': NetworkingPluginView,
 	onchain: OnchainPackageView,
 	'out-of-order-streaming': OutOfOrderStreamingView,
@@ -799,6 +829,44 @@ const baseSidebarCategories: SidebarCategory[] = [
 			}
 		],
 		label: 'Framework'
+	},
+	{
+		entries: [
+			{ id: 'native-apps', label: 'Overview' },
+			{ id: 'native-quickstart', label: 'Quickstart' },
+			{ id: 'native-how-it-works', label: 'How It Works' },
+			{
+				label: 'Build Your App',
+				pages: [
+					{ id: 'native-devices', label: 'Device APIs' },
+					{ id: 'native-auth-sync', label: 'Auth, Sync & HTTP' },
+					{ id: 'native-push', label: 'Push Notifications' },
+					{ id: 'native-navigation-ui', label: 'Navigation & UI' },
+					{
+						id: 'native-branding-links',
+						label: 'Branding & Deep Links'
+					}
+				]
+			},
+			{
+				label: 'Develop & Ship',
+				pages: [
+					{ id: 'native-development', label: 'Development' },
+					{ id: 'native-testing', label: 'Testing' },
+					{ id: 'native-release', label: 'Release' },
+					{ id: 'native-updates', label: 'Over-the-Air Updates' }
+				]
+			},
+			{ id: 'native-expo', label: 'Expo (React Native Screens)' },
+			{
+				label: 'Reference',
+				pages: [
+					{ id: 'native-config', label: 'Config' },
+					{ id: 'native-cli', label: 'CLI' }
+				]
+			}
+		],
+		label: 'Native Apps'
 	},
 	{
 		entries: [
@@ -1230,6 +1298,7 @@ const sidebarLabelByPackageCategory: Record<string, string> = {
 	'Dev Tools': 'Dev Tools',
 	'Frontend & UX': 'Frontend & UX',
 	Messaging: 'Messaging',
+	'Native Apps': 'Native Apps',
 	Observability: 'Observability',
 	'On-chain': 'On-chain',
 	'Platform & Infra': 'Platform & Infra',

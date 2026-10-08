@@ -18228,7 +18228,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				]
 			}
 		],
-		category: 'Auth & Identity',
+		category: 'Native Apps',
 		commands: [
 			{
 				command:
@@ -28656,7 +28656,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		api: [],
-		category: 'Frontend & UX',
+		category: 'Native Apps',
 		commands: [
 			{
 				command:
@@ -68123,7 +68123,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				]
 			}
 		],
-		category: 'Data & Sync',
+		category: 'Native Apps',
 		commands: [
 			{
 				command:
