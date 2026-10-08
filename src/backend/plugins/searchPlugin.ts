@@ -3,11 +3,11 @@ import { Elysia, t } from 'elysia';
 import { getDocsSearchIndex, searchDocs } from '../utils/searchIndex';
 
 const MAX_QUERY_LENGTH = 200;
-const WARM_DELAY_MS = 2_000;
+const WARM_DELAY_MS = 60_000;
 
-// Production builds the index shortly after boot so the first search is
-// instant; development builds it on the first search instead of on every
-// server restart.
+// Production builds the index a minute after boot, clear of the deploy's
+// smoke checks, so later searches are instant; development builds it on the
+// first search instead of on every server restart.
 if (env.NODE_ENV === 'production')
 	setTimeout(() => void getDocsSearchIndex(), WARM_DELAY_MS);
 

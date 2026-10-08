@@ -45,6 +45,9 @@ const SNIPPET_RADIUS = 90;
 const MAX_BODY_HITS = 5;
 const MAX_BODY_SCORE = 12;
 const NOT_FOUND = -1;
+// Pause between pages so a small server keeps answering requests while the
+// index builds.
+const INDEX_PAUSE_MS = 5;
 const OVERVIEW_LABELS = new Set(['guide', 'overview']);
 // How much a query term counts in each place it can appear. A page's title,
 // sidebar label and search keywords outweigh any amount of body text, and a
@@ -216,14 +219,14 @@ const indexPage = async (view: DocsView): Promise<IndexedPage | null> => {
 let indexPromise: Promise<IndexedPage[]> | undefined;
 const renderFailures: string[] = [];
 
-// Renders one page per turn of the event loop, so building the index never
-// holds up requests.
+// Renders one page at a time with a pause between, so building the index
+// never holds up requests.
 const buildIndex = async () => {
 	const pages = await Object.keys(docsViews)
 		.filter(isValidViewId)
 		.reduce<Promise<IndexedPage[]>>(async (previous, view) => {
 			const indexed = await previous;
-			await sleep(0);
+			await sleep(INDEX_PAUSE_MS);
 			const page = await indexPage(view);
 			if (page) indexed.push(page);
 
