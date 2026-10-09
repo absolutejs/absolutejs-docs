@@ -352,14 +352,29 @@ export const DemoBrowserView = ({
 						Quick Start
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Install with <code>bun add @absolutejs/demo</code>, and
-						add optional drivers only when needed (
-						<code>bun add -d playwright</code>). A browser demo is
-						three pieces: a Playwright <em>session</em> (page +
-						video + screenshots), a <em>runner</em> holding the
-						drivers, and a declarative <em>script</em> of steps. The
-						report that comes back carries every artifact and a
-						timestamped event log.
+						Install Bun and FFmpeg (the ffmpeg binary must be on
+						PATH), then run{' '}
+						<code>bun add @absolutejs/demo @absolutejs/sync</code>,{' '}
+						<code>bun add -d playwright</code>, and{' '}
+						<code>bunx playwright install chromium</code>. The root
+						export loads the sync-plan helper, so install sync too.
+						Set <code>ELEVENLABS_API_KEY</code> in your environment
+						or local .env file. Save this as demo.ts and run{' '}
+						<code>bun demo.ts</code> (or{' '}
+						<code>DEMO_HEADLESS=1 bun demo.ts</code> on a server).
+						The example hosts its own fixture, uses your ElevenLabs
+						account for narration, and writes
+						.demo-artifacts/quick-start/crm-demo.mp4 and its
+						manifest. No product login is needed.
+					</p>
+					<p style={paragraphSpacedStyle}>
+						Render narration before recording to avoid network
+						pauses. The runner waits for its duration; it does not
+						play audio through your speakers. Close the session to
+						finalize its video, attach that recording to the report,
+						compose the MP4, and only then write the manifest. For
+						your own product, replace the fixture URL and selectors
+						and add a sign-in profile below.
 					</p>
 					<PrismPlus
 						codeString={demoQuickStart}
@@ -483,11 +498,12 @@ export const DemoBrowserView = ({
 					>
 						Credentials are passed as env <em>references</em> (
 						<code>{'{ env: "VAR_NAME" }'}</code>) — the runner
-						resolves them at sign-in time, so real secrets never
-						enter the script object, the manifest, or the recording.
-						A missing env var throws an error naming the variable,
-						never its value. The sign-in log artifact records only
-						which profile ran and whether it succeeded.
+						resolves them at sign-in time, keeping credential values
+						out of the script. This does not redact the screen: use
+						demo accounts and review recordings and reports before
+						sharing. A missing env var throws an error naming the
+						variable, never its value. The sign-in log artifact
+						records only which profile ran and whether it succeeded.
 					</Callout>
 					<PrismPlus
 						codeString={demoAuthProfiles}

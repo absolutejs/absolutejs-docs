@@ -13407,6 +13407,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'build'
 			},
 			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
 				command: 'absolute prettier --write',
 				name: 'format'
 			},
@@ -13444,31 +13448,34 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/demo/sync-plan'
 		],
 		readmeDigest:
-			'242d3e1d2638de5435d5a822a7ae767c684e3e84ea538325d3f6b37c0fe54d56',
+			'd96321ae95163996a4cefdba18ce3596ff849e551e6ff6c12cd38318f8b7b108',
 		readmeSamples: [
 			{
-				code: 'bun add @absolutejs/demo',
-				description: 'Working example for Install.',
-				heading: 'Install',
+				code: 'bun add @absolutejs/demo @absolutejs/sync\nbun add -d playwright\nbunx playwright install chromium\nffmpeg -version',
+				description:
+					'Requires Bun, FFmpeg on PATH, and an ElevenLabs synthesis API key. Install Chromium as well as the Playwright package:',
+				heading: 'Install and make your first MP4',
 				language: 'sh'
 			},
 			{
-				code: 'bun add -d playwright',
-				description: 'Install optional drivers only when needed:',
-				heading: 'Install 2',
-				language: 'sh'
-			},
-			{
-				code: 'import {\n\tcreateDemoRunner,\n\tgoto,\n\tnarrate,\n\tsignIn,\n\tspotlight,\n\twriteDemoManifest,\n} from "@absolutejs/demo";\nimport { createDemoAuthDriver } from "@absolutejs/demo/auth";\nimport {\n\tcreatePlaywrightDemoSession,\n} from "@absolutejs/demo/playwright";\n\nconst session = await createPlaywrightDemoSession({\n\theadless: false,\n\trecordVideoDir: ".demo-video",\n\tscreenshotDir: ".demo-shots",\n});\n\nconst runner = createDemoRunner({\n\tauth: createDemoAuthDriver(),\n\tbrowser: session.browserDriver,\n\tannotations: session.annotations,\n\tvoiceover: {\n\t\tspeak: async ({ text }) => {\n\t\t\tconsole.log("[voiceover]", text);\n\t\t},\n\t},\n});\n\nconst report = await runner.run({\n\tprofiles: [\n\t\t{\n\t\t\tid: "ae",\n\t\t\tkind: "absolute",\n\t\t\tbaseUrl: "http://localhost:3000",\n\t\t\temail: { env: "DEMO_EMAIL" },\n\t\t\tpassword: { env: "DEMO_PASSWORD" },\n\t\t\tafterLoginUrl: "http://localhost:3000/pipeline",\n\t\t},\n\t],\n\tid: "crm-demo",\n\ttitle: "CRM demo",\n\tsteps: [\n\t\tsignIn("ae"),\n\t\tnarrate("Here is the live pipeline view."),\n\t\tgoto("http://localhost:3000/pipeline"),\n\t\tspotlight({\n\t\t\tselector: "[data-demo=\'pipeline-total\']",\n\t\t\tlabel: "Revenue at risk",\n\t\t\tdurationMs: 1800,\n\t\t}),\n\t],\n});\n\nawait writeDemoManifest(report, ".demo-artifacts/crm-demo.manifest.json");\nconsole.log(report.status, report.artifacts);\nawait session.close();',
-				description: 'Working example for Browser demo.',
-				heading: 'Browser demo',
+				code: 'import { mkdir } from "node:fs/promises";\nimport {\n\tcreateDemoRunner,\n\tgoto,\n\tnarrate,\n\tspotlight,\n\twriteDemoManifest,\n} from "@absolutejs/demo";\nimport { createPlaywrightDemoSession } from "@absolutejs/demo/playwright";\nimport { createElevenLabsVoiceover } from "@absolutejs/demo/voiceover";\nimport { composeDemoWithFFmpeg } from "@absolutejs/demo/composition";\n\nconst apiKey = process.env.ELEVENLABS_API_KEY;\nif (!apiKey)\n\tthrow new Error("Set ELEVENLABS_API_KEY in your environment or .env file.");\nconst outputDir = ".demo-artifacts/quick-start";\nawait mkdir(outputDir, { recursive: true });\n\n// Render before recording so network latency does not leave dead air.\nconst text =\n\t"Here is the live pipeline view. Revenue at risk is forty-two thousand dollars.";\nconst voiceover = createElevenLabsVoiceover({ apiKey, outputDir });\nconst narration = await voiceover.speak({ text });\n\n// A local fixture makes this runnable without an existing app or login.\nconst server = Bun.serve({\n\thostname: "127.0.0.1",\n\tport: 0,\n\tfetch: () =>\n\t\tnew Response(\n\t\t\t\'<!doctype html><html lang="en"><title>CRM demo</title><body style="font:24px sans-serif;padding:80px"><h1>Pipeline</h1><p id="total">Revenue at risk: $42,000</p></body></html>\',\n\t\t\t{ headers: { "content-type": "text/html" } },\n\t\t),\n});\n\ntry {\n\tconst session = await createPlaywrightDemoSession({\n\t\theadless: process.env.DEMO_HEADLESS === "1",\n\t\trecordVideoDir: outputDir,\n\t\tcontextOptions: { viewport: { width: 1280, height: 720 } },\n\t});\n\tlet closed = false;\n\ttry {\n\t\tconst runner = createDemoRunner({\n\t\t\tbrowser: session.browserDriver,\n\t\t\tannotations: session.annotations,\n\t\t\tvoiceover: { speak: async () => narration },\n\t\t\tvoiceoverPlayback: "wait-for-duration",\n\t\t});\n\t\tconst report = await runner.run({\n\t\t\tid: "crm-demo",\n\t\t\tsteps: [\n\t\t\t\tgoto(server.url.href),\n\t\t\t\tspotlight({ selector: "#total", label: "Revenue at risk" }),\n\t\t\t\tnarrate(text),\n\t\t\t],\n\t\t});\n\t\t// Closing finalizes the video; the session does not attach it for you.\n\t\tconst recording = await session.close();\n\t\tclosed = true;\n\t\tif (recording) report.artifacts.push(recording);\n\t\tif (report.status === "completed") {\n\t\t\treport.artifacts.push(\n\t\t\t\tawait composeDemoWithFFmpeg(report, {\n\t\t\t\t\toutputPath: outputDir + "/crm-demo.mp4",\n\t\t\t\t\tvoiceoverTiming: "timeline",\n\t\t\t\t}),\n\t\t\t);\n\t\t}\n\t\tawait writeDemoManifest(report, outputDir + "/crm-demo.manifest.json");\n\t\tif (report.status !== "completed")\n\t\t\tthrow new Error(report.error?.message ?? "Demo failed");\n\t\tconsole.log("Created", outputDir + "/crm-demo.mp4");\n\t} finally {\n\t\tif (!closed) await session.close();\n\t}\n} finally {\n\tawait server.stop(true);\n}',
+				description:
+					'Requires Bun, FFmpeg on PATH, and an ElevenLabs synthesis API key. Install Chromium as well as the Playwright package:',
+				heading: 'Install and make your first MP4 2',
 				language: 'typescript'
 			},
 			{
 				code: '// A third-party site you do not control:\n{\n\tid: "saucedemo",\n\tkind: "form",\n\tloginUrl: "https://www.saucedemo.com/",\n\tfields: [\n\t\t{ selector: "#user-name", value: { env: "SAUCE_USERNAME" } },\n\t\t{ selector: "#password", value: { env: "SAUCE_PASSWORD" } },\n\t],\n\tsubmitSelector: "#login-button",\n\tsuccess: { selector: ".inventory_list" },\n}',
 				description:
-					'Sign-in is profile-based. Declare named credential profiles on the script and trigger them with signIn("") steps. Credentials are passed as env references ({ env: "VAR_NAME" }) — the runner resolves them at sign-in time, so real secrets never enter the script object, the manifest, or the recording. A missing env var throws an error naming the variable, never its value.',
+					'Sign-in is profile-based. Declare named credential profiles on the script and trigger them with signIn("") steps. Credentials are passed as env _references_ ({ env: "VAR_NAME" }) — the runner resolves them at sign-in time, so credential values stay out of the script object. Environment references do not redact the screen: login fields, account names, or errors can appear in recordings and reports. Use demo accounts and review artifacts before sharing. A missing env var throws an error naming the variable, never its value.',
 				heading: 'Authentication',
+				language: 'typescript'
+			},
+			{
+				code: 'import { createDemoRunner, focusApp, openApp, wait } from "@absolutejs/demo";\nimport { createMacDesktopDriver } from "@absolutejs/demo/desktop";\n\nconst runner = createDemoRunner({\n\tdesktop: createMacDesktopDriver(),\n});\n\nawait runner.run({\n\tid: "discord-demo",\n\tsteps: [openApp("Discord"), wait(1000), focusApp("Discord")],\n});',
+				description:
+					'Use createCommandDesktopDriver for native-app automation. On macOS, createMacDesktopDriver() can open/focus apps and send basic keystrokes via osascript; Linux and Windows can provide equivalent command factories using xdotool, wmctrl, PowerShell, or a UIA bridge.',
+				heading: 'Desktop control',
 				language: 'typescript'
 			}
 		],
@@ -13482,13 +13489,26 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Overview'
 			},
 			{
-				description: 'Install optional drivers only when needed:',
-				details: [],
-				title: 'Install'
+				description:
+					'Requires Bun, FFmpeg on PATH, and an ElevenLabs synthesis API key. Install Chromium as well as the Playwright package:',
+				details: [
+					'The root entry point exports the sync-plan helper and loads @absolutejs/sync. The other optional integrations are needed only when used. On a Linux host missing browser system libraries, install them with bunx playwright install --with-deps chromium. Install FFmpeg using your OS package manager (for example brew install ffmpeg on macOS or sudo apt-get install ffmpeg on Debian/Ubuntu).',
+					'Set ELEVENLABS_API_KEY in your environment or a local .env file. Save the following as demo.ts and run bun demo.ts (or DEMO_HEADLESS=1 bun demo.ts on a server). The narration request uses your ElevenLabs account.',
+					'This example hosts its own local fixture, so no existing application or login credentials are needed. It writes .demo-artifacts/quick-start/crm-demo.mp4 and a manifest containing the recording, narration, and final video. Re-running overwrites that output. The same script ships at examples/quick-start.ts.',
+					'To demo your product, replace the fixture URL and selectors, add the auth driver and a profile below, and replace the narration text. wait-for-duration reserves screen time for the audio; it does not play audio through your speakers. The composition step adds the audio to the final video. For multiple lines, render and cache each line before recording and return its artifact from speak.',
+					'Always finalize the Playwright session, attach its returned recording to the report, compose, and then write the manifest. Command recorders attached to the runner collect their recording artifact automatically. Composition defaults to sequential narration; use voiceoverTiming: "timeline" for run-clock placement.'
+				],
+				title: 'Install and make your first MP4'
 			},
 			{
 				description:
-					'Sign-in is profile-based. Declare named credential profiles on the script and trigger them with signIn("") steps. Credentials are passed as env references ({ env: "VAR_NAME" }) — the runner resolves them at sign-in time, so real secrets never enter the script object, the manifest, or the recording. A missing env var throws an error naming the variable, never its value.',
+					'The browser, desktop, recording, auth, voiceover, composition, script, timeline, manifest, and sync-plan helpers are subpath exports of @absolutejs/demo. @absolutejs/voice supplies voice adapter contracts; @absolutejs/voice-tester and @absolutejs/meeting with @absolutejs/meeting-discord or @absolutejs/meeting-recall support optional live-call scenes. The larger examples/demo application contains those scene helpers; it is not required for this quick start.',
+				details: [],
+				title: 'Packages and helpers'
+			},
+			{
+				description:
+					'Sign-in is profile-based. Declare named credential profiles on the script and trigger them with signIn("") steps. Credentials are passed as env _references_ ({ env: "VAR_NAME" }) — the runner resolves them at sign-in time, so credential values stay out of the script object. Environment references do not redact the screen: login fields, account names, or errors can appear in recordings and reports. Use demo accounts and review artifacts before sharing. A missing env var throws an error naming the variable, never its value.',
 				details: [
 					'Three profile kinds cover the common cases:',
 					'absolute — a site you own that uses @absolutejs/auth. Posts to the auth',
@@ -13497,7 +13517,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'UI: navigates to loginUrl, fills fields (with secrets from env), clicks submitSelector, and confirms via a success selector and/or URL. A steps array handles multi-step flows (username → Next → password).',
 					'storage-state — reuse a saved Playwright session; applied when the browser',
 					'context is created.',
-					'See examples/demo/src/sign-in.ts for runnable own-site (absolute) and third-party (form) examples. For bespoke auth screens, provide your own DemoAuthDriver.'
+					'See examples/demo/src/run.ts for the larger runnable form-login demo. For bespoke auth screens, provide your own DemoAuthDriver.'
 				],
 				title: 'Authentication'
 			},
@@ -13531,7 +13551,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/demo',
 		subpackages: [],
-		version: '0.0.1-beta.0'
+		version: '0.0.1-beta.1'
 	},
 	{
 		api: [],
@@ -20444,10 +20464,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				private: true,
 				publicExports: [],
 				readmeDigest:
-					'c4fbcf4f4fc22c11bb245a8e121875cfdd3918ab589e55f51ebd1320d7325fdd',
+					'86affca32feb973766a9e9f0d81848fd693644c4ce39551cbd577b2af9efa536',
 				readmeSamples: [
 					{
-						code: "bun install\nOWN_SITE_EMAIL=owner@example.com OWN_SITE_PASSWORD='demo-password' \\\nSAUCE_USERNAME=standard_user SAUCE_PASSWORD=secret_sauce \\\nbun run demo",
+						code: "bun install\nbunx playwright install chromium\n# Build the local @absolutejs/demo dependency first: (cd ../../demo && bun run build)\n# Install ffmpeg on PATH and set ELEVENLABS_API_KEY in .env before running.\nOWN_SITE_EMAIL=owner@example.com OWN_SITE_PASSWORD='demo-password' \\\nSAUCE_USERNAME=standard_user SAUCE_PASSWORD=secret_sauce \\\nbun run demo",
 						description: '# AbsoluteJS Demo Example',
 						heading: 'AbsoluteJS Demo Example quick start',
 						language: 'sh'
@@ -20464,10 +20484,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'(opens the auth tab, types email + password, submits, confirms authenticated).',
 							"A third party you don't control — the form profile logs into",
 							'saucedemo.com by driving its real login screen.',
-							'Credentials are passed to the profiles as env references ({ env: "NAME" }), so values never enter the script, the manifest, or the recording. They are required — the demo refuses to run without them (no silent defaults).',
+							'Credentials are passed to the profiles as env references ({ env: "NAME" }), so values stay out of the script. This does not redact the login UI: review recordings and reports before sharing, and use demo accounts. They are required — the demo refuses to run without them (no silent defaults).',
 							"Own-site values can be anything (the fixture accepts them). For the third party, saucedemo.com's documented public test login is standard_user / secret_sauce. Swap in real credentials + DEMO_TARGET_URL to point at your own app and a real third-party site.",
 							'Each run writes to a timestamped directory under .demo-artifacts/, e.g. .demo-artifacts/absolute-product-demo-2026-05-28T193925Z/, containing the recording, screenshots, voiceover audio, manifest, and the composed …​.mp4 — review that single MP4 to see the whole run (sign-ins included).',
-							'Voiceover uses the upgraded ElevenLabs path; ELEVENLABS_API_KEY loads from /onspark/absolutejs/dealroom/.env by default (set DEMO_ENV_FILE to change). Set DEMO_COMPOSE=false to skip FFmpeg composition, DEMO_HEADLESS=1 to run without a visible browser.'
+							'Voiceover uses the upgraded ElevenLabs path; ELEVENLABS_API_KEY loads from the local .env by default (set DEMO_ENV_FILE to load a different file). For a minimal browser-to-MP4 walkthrough without third-party sign-ins, use demo/examples/quick-start.ts. Set DEMO_COMPOSE=false to skip FFmpeg composition, DEMO_HEADLESS=1 to run without a visible browser.'
 						],
 						title: 'Overview'
 					}

@@ -1,9 +1,10 @@
+import { demoQuickStart } from '../demoSectionDocsCode';
 import { PackageDocData } from '../../../../types/packageDocs';
 
 export const demoPackageData: PackageDocData = {
 	category: 'Frontend & UX',
 	description:
-		'@absolutejs/demo is an automated product-demo runtime: it drives your product through browser and desktop workflows, records the screen, draws presenter-style highlights over the UI, and coordinates AI voiceover. It is adapter-first — Playwright covers web apps, while desktop drivers, command recorders, and voiceover providers sit behind stable interfaces so each environment plugs in the right driver. Sign-in is profile-based with credentials resolved from env references, so secrets never enter the script, manifest, or recording.',
+		'@absolutejs/demo is an automated product-demo runtime: it drives your product through browser and desktop workflows, records the screen, draws presenter-style highlights over the UI, and coordinates AI voiceover. It is adapter-first — Playwright covers web apps, while desktop drivers, command recorders, and voiceover providers sit behind stable interfaces so each environment plugs in the right driver. Sign-in is profile-based with credentials resolved from env references, so credential values stay out of the script. A recording can still capture anything displayed by the login UI; use demo accounts and review recordings before sharing.',
 	features: [
 		{
 			description:
@@ -36,7 +37,8 @@ export const demoPackageData: PackageDocData = {
 			title: 'FFmpeg composition'
 		}
 	],
-	installCommand: 'bun add @absolutejs/demo',
+	installCommand:
+		'bun add @absolutejs/demo @absolutejs/sync && bun add -d playwright && bunx playwright install chromium',
 	links: [
 		{
 			href: 'https://www.npmjs.com/package/@absolutejs/demo',
@@ -63,64 +65,9 @@ export const demoPackageData: PackageDocData = {
 	npmName: '@absolutejs/demo',
 	samples: [
 		{
-			code: `import {
-	createDemoRunner,
-	goto,
-	narrate,
-	signIn,
-	spotlight,
-	writeDemoManifest
-} from '@absolutejs/demo';
-import { createDemoAuthDriver } from '@absolutejs/demo/auth';
-import { createPlaywrightDemoSession } from '@absolutejs/demo/playwright';
-
-const session = await createPlaywrightDemoSession({
-	headless: false,
-	recordVideoDir: '.demo-video',
-	screenshotDir: '.demo-shots'
-});
-
-const runner = createDemoRunner({
-	annotations: session.annotations,
-	auth: createDemoAuthDriver(),
-	browser: session.browserDriver,
-	voiceover: {
-		speak: async ({ text }) => {
-			console.log('[voiceover]', text);
-		}
-	}
-});
-
-const report = await runner.run({
-	id: 'crm-demo',
-	profiles: [
-		{
-			afterLoginUrl: 'http://localhost:3000/pipeline',
-			baseUrl: 'http://localhost:3000',
-			email: { env: 'DEMO_EMAIL' },
-			id: 'ae',
-			kind: 'absolute',
-			password: { env: 'DEMO_PASSWORD' }
-		}
-	],
-	steps: [
-		signIn('ae'),
-		narrate('Here is the live pipeline view.'),
-		goto('http://localhost:3000/pipeline'),
-		spotlight({
-			durationMs: 1800,
-			label: 'Revenue at risk',
-			selector: "[data-demo='pipeline-total']"
-		})
-	],
-	title: 'CRM demo'
-});
-
-await writeDemoManifest(report, '.demo-artifacts/crm-demo.manifest.json');
-console.log(report.status, report.artifacts);
-await session.close();`,
+			code: demoQuickStart,
 			description:
-				'Drive a browser demo: sign in with an env-backed profile, narrate, navigate, spotlight an element, and write the run manifest.',
+				'Run the local fixture, render real narration, record a browser walkthrough, and write a composed MP4 plus manifest. Install Playwright and its Chromium browser, put ffmpeg on PATH, and set ELEVENLABS_API_KEY before running. Save as demo.ts and run bun demo.ts.',
 			heading: 'Quick Start',
 			language: 'typescript'
 		},
@@ -153,7 +100,8 @@ const voiceover = withRenderCache(
 // Merge the run recording and voiceover artifacts into a final video,
 // offsetting narration against the recorded screen via the demo timeline.
 const finalVideo = await composeDemoWithFFmpeg(report, {
-	outputPath: '.demo-artifacts/crm-demo.mp4'
+	outputPath: '.demo-artifacts/crm-demo.mp4',
+	voiceoverTiming: 'timeline'
 });`,
 			description:
 				'Produce the final demo video from a run report by composing recording and voiceover artifacts with FFmpeg.',
@@ -164,5 +112,5 @@ const finalVideo = await composeDemoWithFFmpeg(report, {
 	status: 'beta',
 	tagline:
 		'Automated product-demo runtime that drives browser and desktop workflows, records the screen, highlights the UI, and narrates with AI voiceover.',
-	version: '0.0.1-beta.0'
+	version: '0.0.1-beta.1'
 };
