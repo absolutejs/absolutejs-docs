@@ -138,7 +138,7 @@ const platformPackages: PlatformPackage[] = [
 		.map((entry) => ({
 			description: entry.tagline,
 			name: entry.name,
-			npm: entry.npmName ?? `~/abs/${entry.sourceDirectory}`,
+			npm: entry.badge,
 			version: entry.version ?? 'workspace',
 			viewId: entry.view
 		}))

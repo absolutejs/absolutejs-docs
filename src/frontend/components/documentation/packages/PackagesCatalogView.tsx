@@ -46,7 +46,7 @@ const slugify = (value: string) =>
 
 const matchesQuery = (entry: PackageCatalogEntry, query: string) => {
 	const haystack =
-		`${entry.name} ${entry.npmName ?? ''} ${entry.sourceDirectory} ${entry.kind} ${entry.tagline} ${entry.searchText}`.toLowerCase();
+		`${entry.name} ${entry.badge} ${entry.npmName ?? ''} ${entry.sourceDirectory} ${entry.kind} ${entry.tagline} ${entry.searchText}`.toLowerCase();
 
 	return query
 		.toLowerCase()
@@ -127,7 +127,7 @@ const CatalogCard = ({ entry, onNavigate, themeSprings }: CatalogCardProps) => (
 				marginBottom: '0.6rem'
 			}}
 		>
-			{entry.npmName ?? `~/abs/${entry.sourceDirectory}`}
+			{entry.badge}
 		</code>
 		<animated.p
 			style={{

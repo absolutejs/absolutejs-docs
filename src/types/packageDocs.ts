@@ -121,6 +121,9 @@ export type PackageRelationship = {
 };
 
 export type PackageCatalogEntry = {
+	/** What a reader installs or opens: the npm name, a monorepo's published
+	 * packages, or the source repository. */
+	badge: string;
 	category: PackageCategory;
 	guideView?: string;
 	kind: 'monorepo' | 'package' | 'repository';

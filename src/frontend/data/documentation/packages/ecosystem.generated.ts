@@ -17952,7 +17952,688 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.3.1'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/email',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'bulkSignalsFromHeaders',
+						signature: 'bulkSignalsFromHeaders'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isBulkMail',
+						signature: 'isBulkMail'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BulkMailSignals',
+						signature: 'type BulkMailSignals'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeaderLike',
+						signature: 'type HeaderLike'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailHeader',
+						signature:
+							'type GmailHeader = {\n    name?: string;\n    value?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailMessagePart',
+						signature:
+							'type GmailMessagePart = {\n    body?: {\n        data?: string;\n    };\n    mimeType?: string;\n    parts?: GmailMessagePart[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailMessage',
+						signature:
+							'type GmailMessage = {\n    historyId?: string;\n    id?: string;\n    internalDate?: string;\n    labelIds?: string[];\n    payload?: GmailMessagePart & {\n        headers?: GmailHeader[];\n    };\n    snippet?: string;\n    threadId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailHistoryResponse',
+						signature:
+							'type GmailHistoryResponse = {\n    history?: {\n        messages?: {\n            id?: string;\n            threadId?: string;\n        }[];\n        messagesAdded?: {\n            message?: {\n                id?: string;\n                threadId?: string;\n            };\n        }[];\n    }[];\n    historyId?: string;\n    nextPageToken?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailMessageListResponse',
+						signature:
+							'type GmailMessageListResponse = {\n    messages?: {\n        id?: string;\n        threadId?: string;\n    }[];\n    nextPageToken?: string;\n    resultSizeEstimate?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailWatchResponse',
+						signature:
+							'type GmailWatchResponse = {\n    expiration?: string;\n    historyId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailClient',
+						signature:
+							'type GmailClient = {\n    getMessage: (id: string) => Promise<GmailMessage | null>;\n    listHistory: (input: {\n        cursor?: string | null;\n    }) => Promise<EmailDeltaResult<{\n        id: string;\n        threadId?: string;\n    }>>;\n    searchMessages: (input: {\n        maxResults?: number;\n        query: string;\n    }) => Promise<{\n        id: string;\n        threadId?: string;\n    }[]>;\n    watch: (topicName: string) => Promise<EmailSubscriptionResult & {\n        cursor?: string | null;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGmailClient',
+						signature:
+							'const createGmailClient: (credential: TokenCredential, fetcher?: EmailFetch) => GmailClient;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'gmailMessageToNormalized',
+						signature:
+							'const gmailMessageToNormalized: (message: GmailMessage, input: {\n    accountEmail: string;\n}) => NormalizedEmailMessage | null;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'gmailMessagesToNormalized',
+						signature:
+							'const gmailMessagesToNormalized: (client: GmailClient, messages: {\n    id: string;\n}[], input: {\n    accountEmail: string;\n}) => Promise<NormalizedEmailMessage[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'gmailCounterpartEmail',
+						signature:
+							'const gmailCounterpartEmail: (message: NormalizedEmailMessage) => string;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ImapMailboxConfig',
+						signature:
+							'type ImapMailboxConfig = {\n    accountEmail: string;\n    auth: MailboxAuth;\n    host: string;\n    mailbox?: string;\n    port?: number;\n    secure?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ImapFetchOptions',
+						signature:
+							'type ImapFetchOptions = {\n    cursor?: string | null;\n    limit?: number;\n    since?: Date;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ImapFetchResult',
+						signature:
+							'type ImapFetchResult = {\n    cursor?: string | null;\n    messages: NormalizedEmailMessage[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'fetchImapMessages',
+						signature:
+							'const fetchImapMessages: (config: ImapMailboxConfig, options?: ImapFetchOptions) => Promise<ImapFetchResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MicrosoftGraphRecipient',
+						signature:
+							'type MicrosoftGraphRecipient = {\n    emailAddress?: {\n        address?: string;\n        name?: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MicrosoftGraphMessage',
+						signature:
+							'type MicrosoftGraphMessage = {\n    body?: {\n        content?: string;\n        contentType?: string;\n    };\n    bodyPreview?: string | null;\n    ccRecipients?: MicrosoftGraphRecipient[];\n    conversationId?: string;\n    from?: MicrosoftGraphRecipient;\n    id?: string;\n    internetMessageId?: string;\n    internetMessageHeaders?: {\n        name?: string;\n        value?: string;\n    }[];\n    receivedDateTime?: string;\n    sentDateTime?: string;\n    subject?: string | null;\n    toRecipients?: MicrosoftGraphRecipient[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MicrosoftGraphMessagePage',
+						signature:
+							'type MicrosoftGraphMessagePage = {\n    "@odata.deltaLink"?: string;\n    "@odata.nextLink"?: string;\n    value?: MicrosoftGraphMessage[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MicrosoftGraphSubscription',
+						signature:
+							'type MicrosoftGraphSubscription = {\n    clientState?: string;\n    expirationDateTime?: string;\n    id?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MicrosoftEmailClient',
+						signature:
+							'type MicrosoftEmailClient = {\n    createOrRenewSubscription: (input: {\n        changeType?: string;\n        clientState: string;\n        expiration: Date;\n        notificationUrl: string;\n        resource?: string;\n        subscriptionId?: string | null;\n    }) => Promise<EmailSubscriptionResult>;\n    getMessage: (id: string) => Promise<MicrosoftGraphMessage | null>;\n    listDelta: (input?: {\n        cursor?: string | null;\n        pageSize?: number;\n    }) => Promise<EmailDeltaResult<MicrosoftGraphMessage>>;\n    searchMessages: (input: {\n        maxResults?: number;\n        query: string;\n    }) => Promise<MicrosoftGraphMessage[]>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMicrosoftGraphEmailClient',
+						signature:
+							'const createMicrosoftGraphEmailClient: (credential: TokenCredential, fetcher?: EmailFetch) => MicrosoftEmailClient;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'microsoftMessageToNormalized',
+						signature:
+							'const microsoftMessageToNormalized: (message: MicrosoftGraphMessage, input: {\n    accountEmail: string;\n}) => NormalizedEmailMessage | null;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'microsoftMessagesToNormalized',
+						signature:
+							'const microsoftMessagesToNormalized: (messages: MicrosoftGraphMessage[], input: {\n    accountEmail: string;\n}) => NormalizedEmailMessage[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'encryptEmailSecret',
+						signature:
+							'const encryptEmailSecret: (plaintext: string, key: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'decryptEmailSecret',
+						signature:
+							'const decryptEmailSecret: (ciphertext: string, key: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'InboundEmailMessage',
+						signature:
+							'type InboundEmailMessage = {\n    cc: EmailAddress[];\n    /** The provider\'s id for the received message — the idempotency key. */\n    emailId: string;\n    from: EmailAddress;\n    html?: string;\n    /** RFC 5322 `In-Reply-To` when the provider exposes headers. */\n    inReplyTo?: string;\n    /** RFC 5322 `Message-ID` of the received message. */\n    messageIdHeader?: string;\n    provider: "resend" | (string & {});\n    receivedAt?: Date;\n    /** RFC 5322 `References` chain, space-separated as received. */\n    references?: string;\n    subject: string;\n    text?: string;\n    to: EmailAddress[];\n};'
+					},
+					{
+						description:
+							'Parse one RFC 5322 mailbox (Jane or jane@x.com).',
+						kind: 'value',
+						name: 'parseMailbox',
+						signature:
+							'const parseMailbox: (value: string | null | undefined) => EmailAddress | null;'
+					},
+					{
+						description:
+							"Parse a header-style list (a@x.com, Jane ) or an array of mailboxes, dropping anything that isn't an address.",
+						kind: 'value',
+						name: 'parseMailboxList',
+						signature:
+							'const parseMailboxList: (value: string | (string | null | undefined)[] | null | undefined) => EmailAddress[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StripQuotedReplyOptions',
+						signature:
+							'type StripQuotedReplyOptions = {\n    /** Hard cap on the returned text (after stripping). */\n    maxLength?: number;\n};'
+					},
+					{
+						description:
+							"The sender's own words: everything before the first quoted-history or signature marker, trimmed. Returns an empty string for a reply that was nothing but quoted history.",
+						kind: 'value',
+						name: 'stripQuotedReply',
+						signature:
+							'const stripQuotedReply: (text: string | null | undefined, options?: StripQuotedReplyOptions) => string;'
+					},
+					{
+						description:
+							'A one-line preview of a reply for notifications and list rows.',
+						kind: 'value',
+						name: 'replyPreview',
+						signature:
+							'const replyPreview: (text: string, maxLength?: number) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'EMAIL_PLACEMENTS',
+						signature:
+							'const EMAIL_PLACEMENTS: readonly ["inbox", "spam", "trash", "other", "missing"];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailPlacement',
+						signature:
+							'type EmailPlacement = (typeof EMAIL_PLACEMENTS)[number];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailPlacementResult',
+						signature:
+							'type EmailPlacementResult = {\n    messageId: string | null;\n    placement: EmailPlacement;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'gmailPlacementFromLabels',
+						signature:
+							'const gmailPlacementFromLabels: (labelIds: GmailMessage["labelIds"]) => Exclude<EmailPlacement, "missing">;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'findGmailMessagePlacement',
+						signature:
+							'const findGmailMessagePlacement: (client: GmailClient, input: {\n    query: string;\n}) => Promise<EmailPlacementResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailSyncState',
+						signature:
+							'type EmailSyncState = {\n    accountEmail: string;\n    cursor?: string | null;\n    provider: string;\n    subscriptionExpiration?: Date | null;\n    subscriptionId?: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailSyncStateStore',
+						signature:
+							'type EmailSyncStateStore = {\n    get: (provider: string, accountEmail: string) => Promise<EmailSyncState | null>;\n    set: (state: EmailSyncState) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createInMemoryEmailSyncStateStore',
+						signature:
+							'const createInMemoryEmailSyncStateStore: () => EmailSyncStateStore;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailProvider',
+						signature:
+							'type EmailProvider = "gmail" | "microsoft" | "imap" | (string & {});'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailAddress',
+						signature:
+							'type EmailAddress = {\n    address: string;\n    name?: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NormalizedEmailMessage',
+						signature:
+							'type NormalizedEmailMessage = {\n    accountEmail: string;\n    /** Raw RFC 8601 values. Consumers must trust only explicitly configured authserv-ids. */\n    authenticationResults?: string[];\n    bodyText?: string | null;\n    /** Cc recipients — reply-all needs the full participant list, not just To. */\n    cc?: EmailAddress[];\n    direction: "inbound" | "outbound";\n    from?: EmailAddress | null;\n    id: string;\n    occurredAt: Date;\n    provider: EmailProvider;\n    raw?: unknown;\n    snippet?: string | null;\n    subject?: string | null;\n    threadId?: string | null;\n    to: EmailAddress[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailDeltaResult',
+						signature:
+							'type EmailDeltaResult<TMessage> = {\n    cursor?: string | null;\n    expired?: boolean;\n    messages: TMessage[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailSubscriptionResult',
+						signature:
+							'type EmailSubscriptionResult = {\n    expiration?: Date | null;\n    id?: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FetchJsonResult',
+						signature:
+							'type FetchJsonResult<T> = {\n    body: T | null;\n    ok: boolean;\n    status: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailFetch',
+						signature: 'type EmailFetch = typeof fetch;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'TokenCredential',
+						signature:
+							'type TokenCredential = {\n    accessToken: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MailboxAuth',
+						signature:
+							'type MailboxAuth = {\n    pass: string;\n    user: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'cleanEmail',
+						signature:
+							'const cleanEmail: (value: string | null | undefined) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'stripHtml',
+						signature:
+							'const stripHtml: (value: string | null | undefined, preserveLines?: boolean) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseDate',
+						signature:
+							'const parseDate: (value: string | number | undefined) => Date;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'directionFor',
+						signature:
+							'const directionFor: (accountEmail: string, from?: string | null) => "inbound" | "outbound";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'firstAddress',
+						signature:
+							'const firstAddress: (addresses: EmailAddress[]) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'fetchJson',
+						signature:
+							'const fetchJson: <T>(input: string, accessToken: string, init?: RequestInit, fetcher?: EmailFetch) => Promise<FetchJsonResult<T>>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailSenderAuthenticationPolicy',
+						signature:
+							'type EmailSenderAuthenticationPolicy = {\n    readonly allowedHeaderFromDomains: readonly string[];\n    readonly trustedAuthservIds: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationProfile',
+						signature:
+							'type EmailVerificationProfile = {\n    readonly bodyMarkers: readonly string[];\n    readonly codeLength?: number;\n    readonly codeLayout?: "after-marker" | "standalone-after-marker";\n    readonly id: string;\n    readonly maxMarkerGap?: number;\n    readonly origins: readonly string[];\n    readonly providers: readonly EmailProvider[];\n    readonly senderAddresses: readonly string[];\n    readonly senderAuthentication: EmailSenderAuthenticationPolicy;\n    readonly subjectIncludesAny: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationLookupInput',
+						signature:
+							'type EmailVerificationLookupInput = {\n    readonly accountEmail: string;\n    readonly maxCandidates?: number;\n    /**\n     * "unique" (default) fails when more than one message matches. "newest" uses the\n     * most recent authenticated match, for services whose emails carry no per-request\n     * challenge; it allows a lookup window of up to 24 hours.\n     */\n    readonly selection?: "unique" | "newest";\n    readonly notAfter: Date;\n    readonly notBefore: Date;\n    readonly profile: EmailVerificationProfile;\n    readonly requiredBodyText?: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationMessageLookup',
+						signature:
+							'type EmailVerificationMessageLookup = {\n    readonly find: (input: EmailVerificationLookupInput) => Promise<readonly NormalizedEmailMessage[]>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationCodeResult',
+						signature:
+							'type EmailVerificationCodeResult = {\n    readonly bytes: Uint8Array;\n    readonly evidence: {\n        readonly matchedAt: number;\n        readonly messageId: string;\n        readonly parserId: string;\n        readonly provider: string;\n        readonly senderAuthenticated: true;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationErrorCode',
+						signature:
+							'type EmailVerificationErrorCode = "ambiguous_match" | "candidate_limit" | "invalid_profile" | "lookup_failed" | "no_match";'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'EmailVerificationError',
+						signature:
+							'class EmailVerificationError extends Error {\n    readonly code: EmailVerificationErrorCode;\n    constructor(code: EmailVerificationErrorCode);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveEmailVerificationCode',
+						signature:
+							'const resolveEmailVerificationCode: (messages: readonly NormalizedEmailMessage[], input: EmailVerificationLookupInput & {\n    readonly expectedOrigin: string;\n    readonly maxBodyBytes?: number;\n}) => EmailVerificationCodeResult;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'retrieveEmailVerificationCode',
+						signature:
+							'const retrieveEmailVerificationCode: (lookup: EmailVerificationMessageLookup, input: EmailVerificationLookupInput & {\n    readonly expectedOrigin: string;\n    readonly maxBodyBytes?: number;\n}) => Promise<EmailVerificationCodeResult>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGmailVerificationMessageLookup',
+						signature:
+							'const createGmailVerificationMessageLookup: (input: {\n    readonly accountEmail: string;\n    readonly client: GmailClient;\n    readonly maxCandidates?: number;\n}) => EmailVerificationMessageLookup;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMicrosoftVerificationMessageLookup',
+						signature:
+							'const createMicrosoftVerificationMessageLookup: (input: {\n    readonly accountEmail: string;\n    readonly client: MicrosoftEmailClient;\n    readonly maxCandidates?: number;\n}) => EmailVerificationMessageLookup;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createImapVerificationMessageLookup',
+						signature:
+							'const createImapVerificationMessageLookup: (input: {\n    readonly config: ImapMailboxConfig;\n    readonly fetch?: (config: ImapMailboxConfig, options: ImapFetchOptions) => ReturnType<typeof fetchImapMessages>;\n    readonly maxCandidates?: number;\n}) => EmailVerificationMessageLookup;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailPubSubWebhookBody',
+						signature:
+							'type GmailPubSubWebhookBody = {\n    message?: {\n        data?: string;\n        messageId?: string;\n    };\n    subscription?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GmailPubSubPayload',
+						signature:
+							'type GmailPubSubPayload = {\n    emailAddress?: string;\n    historyId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseGmailPubSubWebhook',
+						signature:
+							'const parseGmailPubSubWebhook: (body: unknown) => GmailPubSubPayload | null;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MicrosoftGraphWebhookBody',
+						signature:
+							'type MicrosoftGraphWebhookBody = {\n    value?: {\n        clientState?: string;\n        subscriptionId?: string;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MicrosoftGraphWebhookPayload',
+						signature:
+							'type MicrosoftGraphWebhookPayload = {\n    clientState?: string;\n    subscriptionId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseMicrosoftGraphWebhook',
+						signature:
+							'const parseMicrosoftGraphWebhook: (body: MicrosoftGraphWebhookBody, expectedClientState?: string | null) => MicrosoftGraphWebhookPayload[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResendInboundEventData',
+						signature:
+							'type ResendInboundEventData = {\n    attachments?: unknown[];\n    bcc?: string[] | string;\n    cc?: string[] | string;\n    created_at?: string;\n    email_id?: string;\n    from?: string;\n    headers?: Record<string, string> | {\n        name?: string;\n        value?: string;\n    }[];\n    html?: string | null;\n    message_id?: string;\n    subject?: string;\n    text?: string | null;\n    to?: string[] | string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResendInboundWebhookBody',
+						signature:
+							'type ResendInboundWebhookBody = {\n    created_at?: string;\n    data?: ResendInboundEventData;\n    type?: string;\n};'
+					},
+					{
+						description:
+							'Normalize a Resend email.received webhook. Accepts the event envelope ({ type, data: {…} }) and the bare data object; any other event type is rejected with null. The result has no body — see fetchResendReceivedEmail.',
+						kind: 'value',
+						name: 'parseResendInboundWebhook',
+						signature:
+							'const parseResendInboundWebhook: (body: unknown) => InboundEmailMessage | null;'
+					},
+					{
+						description:
+							"GET /emails/receiving/:id — the full received message (text, html, headers). Returns null when the API rejects the request or the payload can't be normalized; a network failure never throws.",
+						kind: 'value',
+						name: 'fetchResendReceivedEmail',
+						signature:
+							'const fetchResendReceivedEmail: (apiKey: string, emailId: string, fetcher?: EmailFetch) => Promise<InboundEmailMessage | null>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/email/verification',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailSenderAuthenticationPolicy',
+						signature:
+							'type EmailSenderAuthenticationPolicy = {\n    readonly allowedHeaderFromDomains: readonly string[];\n    readonly trustedAuthservIds: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationProfile',
+						signature:
+							'type EmailVerificationProfile = {\n    readonly bodyMarkers: readonly string[];\n    readonly codeLength?: number;\n    readonly codeLayout?: "after-marker" | "standalone-after-marker";\n    readonly id: string;\n    readonly maxMarkerGap?: number;\n    readonly origins: readonly string[];\n    readonly providers: readonly EmailProvider[];\n    readonly senderAddresses: readonly string[];\n    readonly senderAuthentication: EmailSenderAuthenticationPolicy;\n    readonly subjectIncludesAny: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationLookupInput',
+						signature:
+							'type EmailVerificationLookupInput = {\n    readonly accountEmail: string;\n    readonly maxCandidates?: number;\n    /**\n     * "unique" (default) fails when more than one message matches. "newest" uses the\n     * most recent authenticated match, for services whose emails carry no per-request\n     * challenge; it allows a lookup window of up to 24 hours.\n     */\n    readonly selection?: "unique" | "newest";\n    readonly notAfter: Date;\n    readonly notBefore: Date;\n    readonly profile: EmailVerificationProfile;\n    readonly requiredBodyText?: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationMessageLookup',
+						signature:
+							'type EmailVerificationMessageLookup = {\n    readonly find: (input: EmailVerificationLookupInput) => Promise<readonly NormalizedEmailMessage[]>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationCodeResult',
+						signature:
+							'type EmailVerificationCodeResult = {\n    readonly bytes: Uint8Array;\n    readonly evidence: {\n        readonly matchedAt: number;\n        readonly messageId: string;\n        readonly parserId: string;\n        readonly provider: string;\n        readonly senderAuthenticated: true;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailVerificationErrorCode',
+						signature:
+							'type EmailVerificationErrorCode = "ambiguous_match" | "candidate_limit" | "invalid_profile" | "lookup_failed" | "no_match";'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'EmailVerificationError',
+						signature:
+							'class EmailVerificationError extends Error {\n    readonly code: EmailVerificationErrorCode;\n    constructor(code: EmailVerificationErrorCode);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveEmailVerificationCode',
+						signature:
+							'const resolveEmailVerificationCode: (messages: readonly NormalizedEmailMessage[], input: EmailVerificationLookupInput & {\n    readonly expectedOrigin: string;\n    readonly maxBodyBytes?: number;\n}) => EmailVerificationCodeResult;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'retrieveEmailVerificationCode',
+						signature:
+							'const retrieveEmailVerificationCode: (lookup: EmailVerificationMessageLookup, input: EmailVerificationLookupInput & {\n    readonly expectedOrigin: string;\n    readonly maxBodyBytes?: number;\n}) => Promise<EmailVerificationCodeResult>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGmailVerificationMessageLookup',
+						signature:
+							'const createGmailVerificationMessageLookup: (input: {\n    readonly accountEmail: string;\n    readonly client: GmailClient;\n    readonly maxCandidates?: number;\n}) => EmailVerificationMessageLookup;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMicrosoftVerificationMessageLookup',
+						signature:
+							'const createMicrosoftVerificationMessageLookup: (input: {\n    readonly accountEmail: string;\n    readonly client: MicrosoftEmailClient;\n    readonly maxCandidates?: number;\n}) => EmailVerificationMessageLookup;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/email/verification/imap',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'createImapVerificationMessageLookup',
+						signature:
+							'const createImapVerificationMessageLookup: (input: {\n    readonly config: ImapMailboxConfig;\n    readonly fetch?: (config: ImapMailboxConfig, options: ImapFetchOptions) => ReturnType<typeof fetchImapMessages>;\n    readonly maxCandidates?: number;\n}) => EmailVerificationMessageLookup;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/email/manifest',
+				symbols: [
+					{
+						description:
+							'Composite runtime (v1 convention: several cooperating pieces, no single instance). The host binds whichever provider clients it constructed for the mailbox it wants AI tools on. Tokens live inside the clients and are never echoed by any tool.',
+						kind: 'type',
+						name: 'EmailManifestRuntime',
+						signature:
+							'type EmailManifestRuntime = {\n    /** The mailbox the bound clients read. */\n    accountEmail: string;\n    gmail?: GmailClient;\n    microsoft?: MicrosoftEmailClient;\n    imap?: ImapMailboxConfig;\n    /** Per-account sync cursors + webhook subscription state. */\n    stateStore?: EmailSyncStateStore;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<never, never>, EmailManifestRuntime>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<EmailManifestRuntime>>;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<EmailManifestRuntime>>;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+					}
+				]
+			}
+		],
 		category: 'Messaging',
 		commands: [
 			{
@@ -18065,7 +18746,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/email',
 		subpackages: [],
-		version: '0.7.0'
+		version: '0.7.1'
 	},
 	{
 		api: [],

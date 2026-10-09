@@ -124,8 +124,13 @@ const SearchIcon = () => (
 const rowBaseStyle: CSSProperties = {
 	alignItems: 'center',
 	background: 'transparent',
-	border: 'none',
+	// Each side separately: indented rows replace borderLeft with an accent,
+	// and React warns when a border shorthand and a side change together.
+	borderBottom: 'none',
+	borderLeft: 'none',
 	borderRadius: '0.5rem',
+	borderRight: 'none',
+	borderTop: 'none',
 	cursor: 'pointer',
 	display: 'flex',
 	fontSize: '0.9rem',

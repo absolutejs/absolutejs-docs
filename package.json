@@ -30,7 +30,7 @@
 		"db:push": "drizzle-kit push"
 	},
 	"dependencies": {
-		"@absolutejs/absolute": "0.20.0-beta.0",
+		"@absolutejs/absolute": "0.20.0-beta.137",
 		"@absolutejs/auth": "0.68.1",
 		"@absolutejs/blog": "0.2.0",
 		"@elysia/eden": "2.0.0-beta.5",
