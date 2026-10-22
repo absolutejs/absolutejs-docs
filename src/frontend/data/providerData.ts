@@ -1,4 +1,4 @@
-import { ProviderOption } from 'citra';
+import { ProviderOption } from '@absolutejs/auth/providers';
 
 export type ProviderInfo = {
 	name: string;
@@ -375,6 +375,14 @@ export const providerData: ProviderData = {
 		name: 'Naver',
 		primaryColor: '#03C75A'
 	},
+	neon: {
+		createNewCredentialsUrl:
+			'https://neon.com/docs/guides/oauth-integration',
+		logoUrl: '/assets/svg/provider-placeholder.svg',
+		manageCredentialsUrl: 'https://console.neon.tech',
+		name: 'Neon',
+		primaryColor: '#00E599'
+	},
 	notion: {
 		createNewCredentialsUrl: 'https://www.notion.so/my-integrations',
 		logoUrl: '/assets/svg/notion-logo.svg',
@@ -440,6 +448,15 @@ export const providerData: ProviderData = {
 		manageCredentialsUrl: 'https://admin.polaraccesslink.com',
 		name: 'Polar Team Pro',
 		primaryColor: '#DF0827'
+	},
+	procore: {
+		createNewCredentialsUrl:
+			'https://developers.procore.com/developer_portal/apps',
+		logoUrl: '/assets/svg/provider-placeholder.svg',
+		manageCredentialsUrl:
+			'https://developers.procore.com/developer_portal/apps',
+		name: 'Procore',
+		primaryColor: '#F47E42'
 	},
 	reddit: {
 		createNewCredentialsUrl: 'https://www.reddit.com/prefs/apps',

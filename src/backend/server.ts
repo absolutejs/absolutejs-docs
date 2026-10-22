@@ -40,7 +40,7 @@ const builtApp = new Elysia()
 	.use(telemetryPlugin(db))
 	.use(pagesPlugin(manifest))
 	.use(searchPlugin)
-	.error(({ error, request }) => {
+	.onError(({ error, request }) => {
 		console.error(
 			`Server error on ${request.method} ${request.url}: ${error instanceof Error ? error.message : String(error)}`
 		);
