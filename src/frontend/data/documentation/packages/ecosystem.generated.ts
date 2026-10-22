@@ -1837,7 +1837,261 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.7.4'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/agent',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'AGENT_STACK_PACKAGES',
+						signature:
+							'const AGENT_STACK_PACKAGES: {\n    readonly a2a: "@absolutejs/a2a";\n    readonly actions: "@absolutejs/agency";\n    readonly auth: "@absolutejs/auth";\n    readonly conformance: "@absolutejs/agent-conformance";\n    readonly commerce: "@absolutejs/agent/commerce";\n    readonly control: "@absolutejs/agent-control";\n    readonly discovery: "@absolutejs/agent-discovery";\n    readonly execution: "@absolutejs/execution";\n    readonly exchange: "@absolutejs/agent-exchange";\n    readonly inbox: "@absolutejs/agent-inbox";\n    readonly mcp: "@absolutejs/mcp";\n    readonly memory: "@absolutejs/agent-memory";\n    readonly policy: "@absolutejs/policy";\n    readonly runtime: "@absolutejs/agent-runtime";\n    readonly sandbox: "@absolutejs/agent-sandbox";\n    readonly trust: "@absolutejs/agent-trust";\n    readonly wallet: "@absolutejs/wallet";\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'PRODUCTION_AGENT_CAPABILITIES',
+						signature:
+							'const PRODUCTION_AGENT_CAPABILITIES: readonly ["identity", "authorization", "durability", "sandbox", "trust", "memory", "triggers", "discovery", "interoperability", "spend", "operations", "conformance"];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProductionAgentCapability',
+						signature:
+							'type ProductionAgentCapability = (typeof PRODUCTION_AGENT_CAPABILITIES)[number];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentStackComponent',
+						signature:
+							'type AgentStackComponent<Instance = unknown> = {\n    capability: ProductionAgentCapability;\n    instance: Instance;\n    name: string;\n    productionReady?: () => boolean | Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentStack',
+						signature:
+							'type AgentStack<Components extends readonly AgentStackComponent[]> = {\n    components: Components;\n    get: <Name extends Components[number]["name"]>(name: Name) => Extract<Components[number], {\n        name: Name;\n    }>["instance"];\n    readiness: () => Promise<AgentStackReadiness>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentStackReadiness',
+						signature:
+							'type AgentStackReadiness = {\n    capabilities: Record<ProductionAgentCapability, boolean>;\n    missing: ProductionAgentCapability[];\n    ready: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'defineAgentStack',
+						signature:
+							'const defineAgentStack: <const Components extends readonly AgentStackComponent[]>(components: Components) => AgentStack<Components>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'assertProductionReady',
+						signature:
+							'const assertProductionReady: (stack: Pick<AgentStack<readonly AgentStackComponent[]>, "readiness">) => Promise<AgentStackReadiness>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/agent/actions',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'AUTH_AGENCY_AUTHORIZATION_DETAIL_TYPE',
+						signature:
+							'const AUTH_AGENCY_AUTHORIZATION_DETAIL_TYPE = "urn:absolutejs:authorization-detail:agency-delegation";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AuthAgencyAuthorizationDetailSchema',
+						signature:
+							'const AuthAgencyAuthorizationDetailSchema: import("@sinclair/typebox").TObject<{\n    actions: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;\n    audience: import("@sinclair/typebox").TString;\n    effects: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;\n    resourceIds: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>>;\n    resourceTypes: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;\n    type: import("@sinclair/typebox").TLiteral<"urn:absolutejs:authorization-detail:agency-delegation">;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthAgencyAuthorizationDetail',
+						signature:
+							'type AuthAgencyAuthorizationDetail = Static<typeof AuthAgencyAuthorizationDetailSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'authAgencyAuthorizationDetail',
+						signature:
+							'const authAgencyAuthorizationDetail: (detail: Omit<AuthAgencyAuthorizationDetail, "type">) => AuthAgencyAuthorizationDetail;'
+					},
+					{
+						description:
+							"Bridges Absolute Auth's verified principal grant directly into Agency. The same delegation ID is re-read at request, lease, and execution time; no shadow grant or manual synchronization is required.",
+						kind: 'value',
+						name: 'createAuthAgencyDelegationAuthority',
+						signature:
+							'const createAuthAgencyDelegationAuthority: (options: {\n    now?: () => number;\n    store: AgentDelegationStore;\n}) => {\n    assertAllows: (action: ActionRequestInput) => Promise<{\n        expiresAt?: number | undefined;\n    }>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/agent/commerce',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentPurchaseIntentStatus',
+						signature:
+							'type AgentPurchaseIntentStatus = "drafted" | "pending_approval" | "mandate_ready" | "installation_ready" | "enqueued" | "cancelled";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentPurchaseIntentInput',
+						signature:
+							'type AgentPurchaseIntentInput<Payload = unknown> = {\n    actionId: string;\n    adapterId: string;\n    agentId: string;\n    allowanceId: string;\n    amountMinor: number;\n    category?: string;\n    credentials?: ReadonlyArray<EffectAdapterCredentialInstallation>;\n    currency: string;\n    destination?: string;\n    effect: string;\n    expiresAt: string;\n    handler: string;\n    idempotencyKey: string;\n    installationId: string;\n    merchantId: string;\n    ownerId: string;\n    payload: Payload;\n    purchaseId: string;\n    refundable?: boolean;\n    tenantId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentPurchaseIntent',
+						signature:
+							'type AgentPurchaseIntent<Payload = unknown> = {\n    createdAt: number;\n    effectId: string;\n    envelope: EffectAdapterExecutionEnvelope<Payload>;\n    input: AgentPurchaseIntentInput<Payload>;\n    inputDigest: string;\n    mandate?: Omit<SpendMandate, "signature">;\n    mandateId: string;\n    status: AgentPurchaseIntentStatus;\n    updatedAt: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentPurchaseIntentStore',
+						signature:
+							'type AgentPurchaseIntentStore = {\n    get: (tenantId: string, purchaseId: string) => Promise<AgentPurchaseIntent | undefined>;\n    getByIdempotencyKey: (tenantId: string, idempotencyKey: string) => Promise<AgentPurchaseIntent | undefined>;\n    list: (input: {\n        limit: number;\n        ownerId?: string;\n        status?: AgentPurchaseIntentStatus;\n        tenantId?: string;\n    }) => Promise<AgentPurchaseIntent[]>;\n    save: (intent: AgentPurchaseIntent) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'AgentPurchaseIntentError',
+						signature:
+							'class AgentPurchaseIntentError extends Error {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMemoryAgentPurchaseIntentStore',
+						signature:
+							'const createMemoryAgentPurchaseIntentStore: () => AgentPurchaseIntentStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'agentPurchaseIntentDrizzleSchema',
+						signature:
+							'const agentPurchaseIntentDrizzleSchema: (namespace?: string) => {\n    purchaseIntents: import("drizzle-orm/pg-core").PgTableWithColumns<{\n        name: "purchase_intents";\n        schema: string;\n        columns: {\n            created_at: import("drizzle-orm/pg-core").PgBuildColumn<"purchase_intents", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgBigInt53Builder>, {\n                name: string;\n                tableName: "purchase_intents";\n                dataType: "number int53";\n                data: number;\n                driverParam: string | number;\n                notNull: true;\n                hasDefault: false;\n                isPrimaryKey: false;\n                isAutoincrement: false;\n                hasRuntimeDefault: false;\n                enumValues: undefined;\n                identity: undefined;\n                generated: undefined;\n            }>;\n            data: import("drizzle-orm/pg-core").PgBuildColumn<"purchase_intents", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").Set$Type<import("drizzle-orm/pg-core").PgCustomColumnBuilder<{\n                dataType: "custom";\n                data: unknown;\n           '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDrizzleAgentPurchaseIntentStore',
+						signature:
+							'const createDrizzleAgentPurchaseIntentStore: <DB extends AnyPgDatabase>(db: DB, options?: {\n    namespace?: string;\n}) => AgentPurchaseIntentStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'agentPurchaseIntentsPostgresSchemaSql',
+						signature:
+							'const agentPurchaseIntentsPostgresSchemaSql: (namespace?: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createPostgresAgentPurchaseIntentStore',
+						signature:
+							'const createPostgresAgentPurchaseIntentStore: (options: {\n    client: ExecutionSqlClient;\n    namespace?: string;\n}) => AgentPurchaseIntentStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAgentPurchaseOrchestrator',
+						signature:
+							'const createAgentPurchaseOrchestrator: (options: {\n    effects: Pick<EffectStore, "enqueue" | "getByIdempotencyKey">;\n    installations: Pick<EffectAdapterInstallationRegistry, "disable" | "enable" | "put">;\n    now?: () => number;\n    store: AgentPurchaseIntentStore;\n    wallet: PurchaseWallet;\n}) => {\n    list: (input: {\n        limit: number;\n        ownerId?: string;\n        status?: AgentPurchaseIntentStatus;\n        tenantId?: string;\n    }) => Promise<AgentPurchaseIntent[]>;\n    submit: <Payload>(input: AgentPurchaseIntentInput<Payload>) => Promise<AgentPurchaseIntent<Payload>>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/agent/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/agent/migrations',
+				symbols: [
+					{
+						description:
+							"The subsystems whose schema this runner can apply. A host selects the ones it actually uses; anything it leaves out is never created. Applying the whole stack unconditionally means an app that only wants, say, agency approvals still gets wallet's six tables, its balance-assertion function, and a constraint trigger — inert schema in a production database that nothing reads, that every schema audit has to explain, and that shows up in any drift or catalog check as unaccounted-for objects.",
+						kind: 'type',
+						name: 'AgentPostgresModule',
+						signature:
+							'type AgentPostgresModule = "a2a" | "agency" | "agent-control" | "agent-inbox" | "agent-memory" | "agent-runtime" | "commerce" | "execution" | "mcp" | "wallet";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentPostgresMigration',
+						signature:
+							'type AgentPostgresMigration = {\n    digest: string;\n    id: string;\n    module: AgentPostgresModule;\n    packageName: string;\n    packageVersion: string;\n    sql: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentPostgresMigrationClient',
+						signature:
+							'type AgentPostgresMigrationClient = {\n    query: <Row = Record<string, unknown>>(text: string, values?: ReadonlyArray<unknown>) => Promise<{\n        rows: ReadonlyArray<Row>;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentPostgresMigrationResult',
+						signature:
+							'type AgentPostgresMigrationResult = {\n    applied: string[];\n    skipped: string[];\n};'
+					},
+					{
+						description:
+							'Ordered database contract for the AbsoluteJS agent stack. Pass modules to get only the subsystems the host actually uses; omit it for the complete stack, which is the historical behaviour. Narrowing later is safe: already-applied migrations stay recorded in the journal and are simply not revisited, and widening again applies the rest on the next run.',
+						kind: 'value',
+						name: 'agentPostgresMigrations',
+						signature:
+							'const agentPostgresMigrations: (modules?: readonly AgentPostgresModule[]) => AgentPostgresMigration[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ApplyAgentPostgresMigrationsOptions',
+						signature:
+							"type ApplyAgentPostgresMigrationsOptions = {\n    /** Subsystems to apply. Omit for the complete stack. Passing only what the\n     *  host uses keeps unused schema — wallet's tables, function, and constraint\n     *  trigger being the usual culprits — out of its database entirely. */\n    modules?: readonly AgentPostgresModule[];\n};"
+					},
+					{
+						description:
+							'Apply the selected package-owned agent migrations once under a cross-replica lock.',
+						kind: 'value',
+						name: 'applyAgentPostgresMigrations',
+						signature:
+							'const applyAgentPostgresMigrations: (client: AgentPostgresMigrationClient, options?: ApplyAgentPostgresMigrationsOptions) => Promise<AgentPostgresMigrationResult>;'
+					}
+				]
+			}
+		],
 		category: 'AI',
 		commands: [
 			{
@@ -1943,7 +2197,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/agent',
 		subpackages: [],
-		version: '0.35.0'
+		version: '0.37.0'
 	},
 	{
 		api: [],
@@ -2147,10 +2401,121 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Overview'
 			}
 		],
-		repository: null,
+		repository: 'https://github.com/absolutejs/agent-exchange-providers',
 		subpackages: [
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-a2a',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE',
+								signature:
+									'const AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-receipt+json";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_A2A_SKILL_ID',
+								signature:
+									'const AGENT_EXCHANGE_A2A_SKILL_ID: "absolute-agent-exchange";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE',
+								signature:
+									'const AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-preparation+json";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aReceipt',
+								signature:
+									'type AgentExchangeA2aReceipt = {\n    readonly completedAt: number;\n    readonly exchangeId: string;\n    readonly mandateId?: string;\n    readonly modelObservedSecret: false;\n    readonly processingMode: "tool-confined";\n    readonly reference?: string;\n    readonly status: "submitted";\n    readonly usesRemaining?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aExecutionContext',
+								signature:
+									'type AgentExchangeA2aExecutionContext<Caller> = {\n    readonly caller: Caller;\n    readonly reference: A2aAgentExchangeReference;\n    readonly request: Request;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aServerOptions',
+								signature:
+									'type AgentExchangeA2aServerOptions<Caller> = {\n    readonly agentCard: A2aAgentCard;\n    readonly authorize: (request: Request) => Promise<A2aAuthResult<Caller>> | A2aAuthResult<Caller>;\n    readonly execute: (context: AgentExchangeA2aExecutionContext<Caller>) => Promise<AgentExchangeA2aReceipt> | AgentExchangeA2aReceipt;\n    readonly maxRequestBytes?: number;\n    readonly path?: string;\n    readonly preparationEndpoint?: string;\n    readonly taskStore: A2aTaskStore;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aClient',
+								signature:
+									'type AgentExchangeA2aClient = {\n    readonly agentCard: A2aAgentCard;\n    readonly send: (request: AgentExchangeRequest) => Promise<AgentExchangeA2aReceipt>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aPreparationContext',
+								signature:
+									'type AgentExchangeA2aPreparationContext = {\n    readonly agentCard: A2aAgentCard;\n    readonly reference: A2aAgentExchangeReference;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aPrepare',
+								signature:
+									'type AgentExchangeA2aPrepare = (request: AgentExchangeRequest, context: AgentExchangeA2aPreparationContext) => Promise<unknown> | unknown;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aProfileOptions',
+								signature:
+									'type AgentExchangeA2aProfileOptions = {\n    readonly preparationEndpoint?: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'toAgentExchangeA2aTask',
+								signature:
+									'const toAgentExchangeA2aTask: (input: {\n    readonly message: Parameters<typeof parseA2aAgentExchangeReference>[0];\n    readonly receipt: AgentExchangeA2aReceipt;\n    readonly reference: A2aAgentExchangeReference;\n}) => A2aTask;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'withAgentExchangeA2aProfile',
+								signature:
+									'const withAgentExchangeA2aProfile: (card: A2aAgentCard, options?: AgentExchangeA2aProfileOptions) => A2aAgentCard;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeA2aHandler',
+								signature:
+									'const createAgentExchangeA2aHandler: <Caller>(options: AgentExchangeA2aServerOptions<Caller>) => (request: Request) => Promise<Response | null>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeA2aClient',
+								signature:
+									'const createAgentExchangeA2aClient: (options: {\n    readonly agentCard: A2aAgentCard;\n    readonly fetch?: A2aFetch;\n    readonly headers?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly maxResponseBytes?: number;\n    readonly preparationHeaders?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly prepare?: AgentExchangeA2aPrepare;\n    readonly timeoutMs?: number;\n}) => AgentExchangeA2aClient;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'connectAgentExchangeA2a',
+								signature:
+									'const connectAgentExchangeA2a: (options: {\n    readonly discoveryHeaders?: HeadersInit;\n    readonly fetch?: A2aFetch;\n    readonly headers?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly maxResponseBytes?: number;\n    readonly origin: string;\n    readonly preparationHeaders?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    readonly prepare?: AgentExchangeA2aPrepare;\n    readonly timeoutMs?: number;\n}) => Promise<AgentExchangeA2aClient>;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2230,7 +2595,76 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.3.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-broker',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedBrokerClaim',
+								signature:
+									'type TokenConfinedBrokerClaim = {\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly provider: string;\n    readonly tenantId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedBrokerClaimResult',
+								signature:
+									'type TokenConfinedBrokerClaimResult = "claimed" | "completed" | "conflict" | "revoked";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedBrokerStore',
+								signature:
+									'type TokenConfinedBrokerStore = {\n    readonly claim: (claim: TokenConfinedBrokerClaim) => Promise<TokenConfinedBrokerClaimResult>;\n    readonly complete: (input: {\n        readonly exchangeId: string;\n        readonly reference?: string;\n        readonly tenantId: string;\n    }) => Promise<boolean>;\n    readonly fail: (input: {\n        readonly exchangeId: string;\n        readonly tenantId: string;\n    }) => Promise<void>;\n    readonly revoke: (input: {\n        readonly exchangeId: string;\n        readonly tenantId: string;\n    }) => Promise<boolean>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedCredential',
+								signature:
+									'type TokenConfinedCredential = {\n    readonly accessToken: string;\n    readonly expiresAt?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedCredentialResolver',
+								signature:
+									'type TokenConfinedCredentialResolver = {\n    readonly resolve: (input: {\n        readonly accountRef: string;\n        readonly exchangeId: string;\n        readonly provider: string;\n        readonly subject: string;\n        readonly tenantId: string;\n    }) => Promise<TokenConfinedCredential>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedProviderExecutor',
+								signature:
+									'type TokenConfinedProviderExecutor = {\n    readonly execute: (input: {\n        readonly accessToken: string;\n        readonly request: AgentExchangeRequest;\n        readonly tenantId: string;\n    }) => Promise<SensitiveValueSinkResult>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'TokenConfinedBrokerReceipt',
+								signature:
+									'type TokenConfinedBrokerReceipt = {\n    readonly assurance: AgentExchangeRequest["assurance"];\n    readonly brokerMode: "token-confined-broker";\n    readonly completedAt: number;\n    readonly exchangeId: string;\n    readonly maximumUses: 1;\n    readonly modelObservedSecret: false;\n    readonly processingMode: "tool-confined";\n    readonly provider: string;\n    readonly reference?: string;\n    readonly status: "submitted";\n    readonly tenantId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createTokenConfinedBroker',
+								signature:
+									'const createTokenConfinedBroker: (options: {\n    readonly credentials: TokenConfinedCredentialResolver;\n    readonly now?: () => number;\n    readonly providers: Readonly<Record<string, TokenConfinedProviderExecutor>>;\n    readonly store: TokenConfinedBrokerStore;\n}) => Readonly<{\n    execute: (input: {\n        readonly request: AgentExchangeRequest;\n        readonly tenantId: string;\n    }) => Promise<TokenConfinedBrokerReceipt>;\n}>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMemoryTokenConfinedBrokerStore',
+								signature:
+									'const createMemoryTokenConfinedBrokerStore: () => TokenConfinedBrokerStore;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2333,7 +2767,48 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.3.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-destinations',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeDestinationDescriptor',
+								signature:
+									'type AgentExchangeDestinationDescriptor = {\n    readonly id: string;\n    readonly operations: readonly string[];\n    readonly origin: string;\n    readonly secretKinds: readonly string[];\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeDestinationInput',
+								signature:
+									'type AgentExchangeDestinationInput = {\n    readonly plaintext: Uint8Array;\n    readonly request: AgentExchangeRequest;\n    readonly tenantId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeDestinationAdapter',
+								signature:
+									'type AgentExchangeDestinationAdapter = {\n    readonly descriptor: AgentExchangeDestinationDescriptor;\n    readonly submit: (input: AgentExchangeDestinationInput) => Promise<SensitiveValueSinkResult> | SensitiveValueSinkResult;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeDestinationRegistry',
+								signature:
+									'type AgentExchangeDestinationRegistry = {\n    readonly submit: (input: AgentExchangeDestinationInput) => Promise<SensitiveValueSinkResult>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeDestinationRegistry',
+								signature:
+									'const createAgentExchangeDestinationRegistry: (adapters: readonly AgentExchangeDestinationAdapter[]) => AgentExchangeDestinationRegistry;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2446,7 +2921,27 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.1.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-google',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'GOOGLE_GMAIL_READONLY_SCOPE',
+								signature:
+									'const GOOGLE_GMAIL_READONLY_SCOPE = "https://www.googleapis.com/auth/gmail.readonly";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'GOOGLE_GMAIL_OAUTH_PROVIDER',
+								signature:
+									'const GOOGLE_GMAIL_OAUTH_PROVIDER: Readonly<{\n    readonly authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth";\n    readonly capabilities: {\n        readonly authorizationCode: "supported";\n        readonly issuerIdentification: "supported";\n        readonly par: "unsupported";\n        readonly pkceS256: "supported";\n        readonly rar: "unsupported";\n        readonly resourceIndicators: "unsupported";\n        readonly senderConstrainedAccessTokens: "unsupported";\n    };\n    readonly documentationUrl: "https://developers.google.com/identity/protocols/oauth2/resources/dpop-adoption";\n    readonly issuer: "https://accounts.google.com";\n    readonly notes: readonly ["Google\'s documented DPoP mode binds refresh tokens, while access tokens remain Bearer.", "gmail.readonly is a restricted scope and may require Google verification and a security assessment."];\n    readonly provider: "google-gmail";\n    readonly recommendedScopes: readonly ["https://www.googleapis.com/auth/gmail.readonly"];\n    readonly resource: "https://gmail.googleapis.com/";\n    readonly tokenEndpoint: "https://oauth2.googleapis.com/token";\n}>;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2493,7 +2988,42 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-http-destination',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeHttpAuthorizationResolver',
+								signature:
+									'type AgentExchangeHttpAuthorizationResolver = (input: Readonly<{\n    exchangeId: string;\n    tenantId: string;\n}>) => Promise<string> | string;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeHttpFetch',
+								signature:
+									'type AgentExchangeHttpFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeHttpDestinationOptions',
+								signature:
+									'type AgentExchangeHttpDestinationOptions = {\n    readonly authorization?: AgentExchangeHttpAuthorizationResolver;\n    readonly challengeField?: string;\n    readonly endpoint: string;\n    readonly fetcher?: AgentExchangeHttpFetch;\n    readonly id: string;\n    readonly operations: readonly string[];\n    readonly reference?: string;\n    readonly secretField?: string;\n    readonly timeoutMs?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeHttpDestination',
+								signature:
+									'const createAgentExchangeHttpDestination: (options: AgentExchangeHttpDestinationOptions) => AgentExchangeDestinationAdapter;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2606,7 +3136,69 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.1.1'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-mandate-stores',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'MandatePostgresClient',
+								signature:
+									'type MandatePostgresClient = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<{\n        readonly rowCount: number;\n        readonly rows: readonly Row[];\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'MandateRedisClient',
+								signature:
+									'type MandateRedisClient = {\n    readonly eval: (script: string, keys: readonly string[], arguments_: readonly string[]) => Promise<unknown>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_MANDATE_POSTGRES_MIGRATION',
+								signature:
+									'const AGENT_EXCHANGE_MANDATE_POSTGRES_MIGRATION: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresAgentExchangeMandateStore',
+								signature:
+									'const createPostgresAgentExchangeMandateStore: (options: {\n    readonly client: MandatePostgresClient;\n}) => AgentExchangeMandateStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_MANDATE_REDIS_REGISTER_SCRIPT',
+								signature:
+									'const AGENT_EXCHANGE_MANDATE_REDIS_REGISTER_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_MANDATE_REDIS_CONSUME_SCRIPT',
+								signature:
+									'const AGENT_EXCHANGE_MANDATE_REDIS_CONSUME_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_MANDATE_REDIS_REVOKE_SCRIPT',
+								signature:
+									'const AGENT_EXCHANGE_MANDATE_REDIS_REVOKE_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createRedisAgentExchangeMandateStore',
+								signature:
+									'const createRedisAgentExchangeMandateStore: (options: {\n    readonly client: MandateRedisClient;\n    readonly keyPrefix?: string;\n}) => AgentExchangeMandateStore;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2658,7 +3250,35 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.1'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-mandate-webcrypto',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeMandatePublicKeyResolver',
+								signature:
+									'type AgentExchangeMandatePublicKeyResolver = {\n    readonly resolve: (input: {\n        readonly issuer: AgentExchangeMandatePrincipal;\n        readonly keyId: string;\n    }) => Promise<CryptoKey> | CryptoKey;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoMandateJwsSigner',
+								signature:
+									'const createWebCryptoMandateJwsSigner: (options: {\n    readonly keyId: string;\n    readonly privateKey: CryptoKey;\n}) => AgentExchangeMandateJwsSigner;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoMandateJwsVerifier',
+								signature:
+									'const createWebCryptoMandateJwsVerifier: (options: {\n    readonly keys: AgentExchangeMandatePublicKeyResolver;\n}) => AgentExchangeMandateJwsVerifier;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2705,7 +3325,27 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-microsoft',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'MICROSOFT_GRAPH_MAIL_READ_SCOPE',
+								signature:
+									'const MICROSOFT_GRAPH_MAIL_READ_SCOPE = "https://graph.microsoft.com/Mail.Read";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMicrosoftGraphOAuthProvider',
+								signature:
+									'const createMicrosoftGraphOAuthProvider: (tenantId: string) => OAuthProviderDescriptor;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2751,7 +3391,90 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-oauth',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthAuthorizationDetails',
+								signature:
+									'type OAuthAuthorizationDetails = {\n    readonly actions: readonly string[];\n    readonly identifier?: string;\n    readonly locations: readonly string[];\n    readonly type: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'HardenedOAuthProfile',
+								signature:
+									'type HardenedOAuthProfile = {\n    readonly authorizationDetails: OAuthAuthorizationDetails;\n    readonly authorizationEndpoint: string;\n    readonly clientId: string;\n    readonly issuer: string;\n    readonly pushedAuthorizationRequestEndpoint: string;\n    readonly redirectUri: string;\n    readonly resource: string;\n    readonly scopes: readonly string[];\n    readonly tokenEndpoint: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthAuthorizationSession',
+								signature:
+									'type OAuthAuthorizationSession = {\n    readonly codeVerifier: string;\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly issuer: string;\n    readonly state: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthAuthorizationSessionStore',
+								signature:
+									'type OAuthAuthorizationSessionStore = {\n    readonly consume: (state: string) => Promise<OAuthAuthorizationSession | undefined>;\n    readonly save: (session: OAuthAuthorizationSession) => Promise<boolean>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthGrant',
+								signature:
+									'type OAuthGrant = {\n    readonly code: string;\n    readonly codeVerifier: string;\n    readonly exchangeId: string;\n    readonly expiresAt: number;\n    readonly issuer: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'DpopProofSigner',
+								signature:
+									'type DpopProofSigner = {\n    readonly createProof: (input: {\n        readonly accessToken?: string;\n        readonly htm: string;\n        readonly htu: string;\n        readonly nonce?: string;\n    }) => Promise<string> | string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthFetch',
+								signature:
+									'type OAuthFetch = (input: string, init: RequestInit) => Promise<Response>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createHardenedOAuthAuthorizationClient',
+								signature:
+									'const createHardenedOAuthAuthorizationClient: (options: {\n    readonly fetch?: OAuthFetch;\n    readonly now?: () => number;\n    readonly profile: HardenedOAuthProfile;\n    readonly sessionStore: OAuthAuthorizationSessionStore;\n}) => {\n    begin: (request: AgentExchangeRequest) => Promise<{\n        expiresAt: number;\n        url: string;\n    }>;\n    complete: (input: {\n        readonly code: string;\n        readonly iss: string;\n        readonly state: string;\n    }) => Promise<{\n        code: string;\n        codeVerifier: string;\n        exchangeId: string;\n        expiresAt: number;\n        issuer: string;\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'encodeOAuthGrant',
+								signature:
+									'const encodeOAuthGrant: (grant: OAuthGrant) => Uint8Array;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'decodeOAuthGrant',
+								signature:
+									'const decodeOAuthGrant: (bytes: Uint8Array) => OAuthGrant;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'redeemOAuthGrant',
+								signature:
+									'const redeemOAuthGrant: <Result>(options: {\n    readonly dpop: DpopProofSigner;\n    readonly execute: (input: {\n        readonly accessToken: string;\n        readonly createDpopProof: DpopProofSigner["createProof"];\n    }) => Promise<Result>;\n    readonly fetch?: OAuthFetch;\n    readonly grant: OAuthGrant;\n    readonly now?: () => number;\n    readonly profile: HardenedOAuthProfile;\n    readonly request: AgentExchangeRequest;\n}) => Promise<Result>;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2803,7 +3526,69 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.3.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-oauth-stores',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthSessionSealer',
+								signature:
+									'type OAuthSessionSealer = {\n    readonly open: (sealed: Uint8Array) => Promise<Uint8Array>;\n    readonly seal: (plaintext: Uint8Array) => Promise<Uint8Array>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AtomicRedisSessionClient',
+								signature:
+									'type AtomicRedisSessionClient = {\n    readonly putIfAbsent: (input: {\n        readonly key: string;\n        readonly ttlMs: number;\n        readonly value: string;\n    }) => Promise<boolean>;\n    readonly take: (key: string) => Promise<string | undefined>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'PostgresSessionClient',
+								signature:
+									'type PostgresSessionClient = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<{\n        readonly rowCount: number;\n        readonly rows: readonly Row[];\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'OAUTH_SESSION_POSTGRES_MIGRATION',
+								signature:
+									'const OAUTH_SESSION_POSTGRES_MIGRATION: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMemoryOAuthAuthorizationSessionStore',
+								signature:
+									'const createMemoryOAuthAuthorizationSessionStore: () => OAuthAuthorizationSessionStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createRedisOAuthAuthorizationSessionStore',
+								signature:
+									'const createRedisOAuthAuthorizationSessionStore: (options: {\n    readonly client: AtomicRedisSessionClient;\n    readonly keyPrefix?: string;\n    readonly now?: () => number;\n    readonly sealer: OAuthSessionSealer;\n}) => OAuthAuthorizationSessionStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresOAuthAuthorizationSessionStore',
+								signature:
+									'const createPostgresOAuthAuthorizationSessionStore: (options: {\n    readonly client: PostgresSessionClient;\n    readonly now?: () => number;\n    readonly sealer: OAuthSessionSealer;\n}) => OAuthAuthorizationSessionStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoOAuthSessionSealer',
+								signature:
+									'const createWebCryptoOAuthSessionSealer: (key: CryptoKey) => OAuthSessionSealer;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -2852,7 +3637,35 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.2.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-oauth-webcrypto',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoDpopProofSigner',
+								signature:
+									'type WebCryptoDpopProofSigner = DpopProofSigner & {\n    readonly publicJwk: Readonly<JsonWebKey>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebCryptoDpopProofSignerOptions',
+								signature:
+									'type WebCryptoDpopProofSignerOptions = {\n    readonly keyPair?: CryptoKeyPair;\n    readonly now?: () => number;\n    readonly randomBytes?: (length: number) => Uint8Array;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebCryptoDpopProofSigner',
+								signature:
+									'const createWebCryptoDpopProofSigner: (options?: WebCryptoDpopProofSignerOptions) => Promise<WebCryptoDpopProofSigner>;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -3009,7 +3822,140 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.1.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-provider-conformance',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthFeatureStatus',
+								signature:
+									'type OAuthFeatureStatus = "supported" | "unknown" | "unsupported";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthProviderCapabilities',
+								signature:
+									'type OAuthProviderCapabilities = {\n  readonly authorizationCode: OAuthFeatureStatus;\n  readonly issuerIdentification: OAuthFeatureStatus;\n  readonly par: OAuthFeatureStatus;\n  readonly pkceS256: OAuthFeatureStatus;\n  readonly rar: OAuthFeatureStatus;\n  readonly resourceIndicators: OAuthFeatureStatus;\n  readonly senderConstrainedAccessTokens:\n    "dpop" | "mtls" | "unknown" | "unsupported";\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthProviderDescriptor',
+								signature:
+									'type OAuthProviderDescriptor = {\n  readonly authorizationEndpoint: string;\n  readonly capabilities: OAuthProviderCapabilities;\n  readonly documentationUrl: string;\n  readonly issuer: string;\n  readonly notes?: readonly string[];\n  readonly provider: string;\n  readonly recommendedScopes: readonly string[];\n  readonly resource: string;\n  readonly tokenEndpoint: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'OAuthConformanceReport',
+								signature:
+									'type OAuthConformanceReport = {\n  readonly eligibleForPhishingResistantProfile: boolean;\n  readonly failures: readonly string[];\n  readonly provider: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'evaluateOAuthProviderConformance',
+								signature:
+									'const evaluateOAuthProviderConformance: (\n  descriptor: OAuthProviderDescriptor,\n) => OAuthConformanceReport;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'assertPhishingResistantOAuthProvider',
+								signature:
+									'const assertPhishingResistantOAuthProvider: (\n  descriptor: OAuthProviderDescriptor,\n) => void;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'normalizeDpopHtu',
+								signature:
+									'const normalizeDpopHtu: (value: string) => string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'verifyDpopProof',
+								signature:
+									'const verifyDpopProof: (input: {\n  readonly accessToken?: string;\n  readonly htm: string;\n  readonly htu: string;\n  readonly maxAgeSeconds?: number;\n  readonly nonce?: string;\n  readonly now?: () => number;\n  readonly proof: string;\n}) => Promise<JsonWebKey>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_A2A_SKILL_ID',
+								signature:
+									'const AGENT_EXCHANGE_A2A_SKILL_ID: "absolute-agent-exchange";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE',
+								signature:
+									'const AGENT_EXCHANGE_PREPARATION_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-preparation+json";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE',
+								signature:
+									'const AGENT_EXCHANGE_RECEIPT_MEDIA_TYPE: "application/vnd.absolutejs.agent-exchange-receipt+json";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceCheck',
+								signature:
+									'type AgentExchangeA2aConformanceCheck =\n  | "authentication-before-parsing"\n  | "credential-separation"\n  | "discovery"\n  | "negotiation"\n  | "prepared-execution"\n  | "profile"\n  | "replay-convergence"\n  | "task-redaction";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceFinding',
+								signature:
+									'type AgentExchangeA2aConformanceFinding = {\n  readonly check: AgentExchangeA2aConformanceCheck;\n  readonly detail?: string;\n  readonly passed: boolean;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceReport',
+								signature:
+									'type AgentExchangeA2aConformanceReport = {\n  readonly conformant: boolean;\n  readonly findings: readonly AgentExchangeA2aConformanceFinding[];\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceRequestPurpose',
+								signature:
+									'type AgentExchangeA2aConformanceRequestPurpose =\n  "credential-separation" | "negotiation" | "prepared-execution";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeA2aConformanceTarget',
+								signature:
+									'type AgentExchangeA2aConformanceTarget = {\n  readonly acknowledgeExecution: "sandbox-only";\n  readonly additionalSensitiveMarkers?: readonly string[];\n  readonly a2aHeaders: (input: {\n    readonly method: "POST";\n    readonly purpose: "a2a";\n    readonly url: string;\n  }) => HeadersInit | Promise<HeadersInit>;\n  readonly createRequest: (\n    purpose: AgentExchangeA2aConformanceRequestPurpose,\n  ) => AgentExchangeRequest | Promise<AgentExchangeRequest>;\n  readonly fetch?: (\n    input: RequestInfo | URL,\n    init?: RequestInit,\n  ) => Promise<Response>;\n  readonly maxResponseBytes?: number;\n  readonly origin: string;\n  readonly preparationHeaders: (input: {\n    readonly method: "POST";\n    readonly purpose: "preparation";\n    readonly url: string;\n  }) => HeadersInit | Promise<HeadersInit>;\n  readonly timeoutMs?: number;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'evaluateAgentExchangeA2aConformance',
+								signature:
+									'const evaluateAgentExchangeA2aConformance: (\n  target: AgentExchangeA2aConformanceTarget,\n) => Promise<AgentExchangeA2aConformanceReport>;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'assertAgentExchangeA2aConformance',
+								signature:
+									'const assertAgentExchangeA2aConformance: (\n  target: AgentExchangeA2aConformanceTarget,\n) => Promise<AgentExchangeA2aConformanceReport>;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -3095,7 +4041,105 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.3.1'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-secure-messaging',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_SECURE_MESSAGING_CONTRACT',
+								signature:
+									'const AGENT_EXCHANGE_SECURE_MESSAGING_CONTRACT: 2;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_SECURE_MESSAGING_REQUEST_PURPOSE',
+								signature:
+									'const AGENT_EXCHANGE_SECURE_MESSAGING_REQUEST_PURPOSE: "org.absolutejs.agent-exchange.request.v2";'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_SECURE_MESSAGING_RECEIPT_PURPOSE',
+								signature:
+									'const AGENT_EXCHANGE_SECURE_MESSAGING_RECEIPT_PURPOSE: "org.absolutejs.agent-exchange.receipt.v2";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingRoute',
+								signature:
+									'type AgentExchangeSecureMessagingRoute = {\n    readonly conversationId: string;\n    readonly recipientDeviceId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingReceiptSaveResult',
+								signature:
+									'type AgentExchangeSecureMessagingReceiptSaveResult = "conflict" | "duplicate" | "saved";'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingReceiptRecord',
+								signature:
+									'type AgentExchangeSecureMessagingReceiptRecord = {\n    readonly expiresAt: number;\n    readonly receipt: AgentExchangeReceipt;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingReceiptStore',
+								signature:
+									'type AgentExchangeSecureMessagingReceiptStore = {\n    readonly get: (input: {\n        readonly exchangeId: string;\n        readonly now: number;\n    }) => Promise<AgentExchangeSecureMessagingReceiptRecord | undefined>;\n    readonly save: (input: AgentExchangeSecureMessagingReceiptRecord & {\n        readonly now: number;\n    }) => Promise<AgentExchangeSecureMessagingReceiptSaveResult>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingTransportOptions',
+								signature:
+									'type AgentExchangeSecureMessagingTransportOptions = {\n    readonly client: Pick<SecureMessagingClient, "send">;\n    readonly maximumEnvelopeBytes?: number;\n    readonly maximumJwsBytes?: number;\n    readonly maximumTtlMs?: number;\n    readonly now?: () => number;\n    readonly pollIntervalMs?: number;\n    readonly receipts: AgentExchangeSecureMessagingReceiptStore;\n    readonly resolveRoute: (request: AgentExchangeRequest) => Promise<AgentExchangeSecureMessagingRoute> | AgentExchangeSecureMessagingRoute;\n    readonly resolveSignedMandate?: (request: AgentExchangeRequest) => Promise<SignedAgentExchangeStandingMandate | undefined> | SignedAgentExchangeStandingMandate | undefined;\n    readonly sleep?: (milliseconds: number) => Promise<void>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingRequestAuthorization',
+								signature:
+									'type AgentExchangeSecureMessagingRequestAuthorization = {\n    readonly conversationId: string;\n    readonly delivery: AgentExchangeDelivery;\n    readonly senderCredential: Uint8Array;\n    readonly senderDeviceId: string;\n    readonly signedMandate?: SignedAgentExchangeStandingMandate;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSecureMessagingHandlerOptions',
+								signature:
+									'type AgentExchangeSecureMessagingHandlerOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly authorizeRequest: (input: AgentExchangeSecureMessagingRequestAuthorization) => Promise<unknown> | unknown;\n    readonly localDeviceId: string;\n    readonly maximumEnvelopeBytes?: number;\n    readonly maximumJwsBytes?: number;\n    readonly maximumOuterExpirySkewMs?: number;\n    readonly maximumTtlMs?: number;\n    readonly now?: () => number;\n    readonly receipts: AgentExchangeSecureMessagingReceiptStore;\n    readonly receiver: AgentExchangeReceiver;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMemoryAgentExchangeSecureMessagingReceiptStore',
+								signature:
+									'const createMemoryAgentExchangeSecureMessagingReceiptStore: () => AgentExchangeSecureMessagingReceiptStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeSecureMessagingTransport',
+								signature:
+									'const createAgentExchangeSecureMessagingTransport: (options: AgentExchangeSecureMessagingTransportOptions) => AgentExchangeTransport;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createAgentExchangeSecureMessagingHandler',
+								signature:
+									'const createAgentExchangeSecureMessagingHandler: (options: AgentExchangeSecureMessagingHandlerOptions) => SecureMessagingApplicationHandler;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -3155,7 +4199,70 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.1.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-secure-messaging-stores',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeReceiptRedisClient',
+								signature:
+									'type AgentExchangeReceiptRedisClient = {\n    readonly eval: (script: string, keys: readonly string[], arguments_: readonly string[]) => Promise<unknown>;\n    readonly get: (key: string) => Promise<string | undefined | null>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeReceiptPostgresClient',
+								signature:
+									'type AgentExchangeReceiptPostgresClient = {\n    readonly query: <Row = Record<string, unknown>>(text: string, values: readonly unknown[]) => Promise<{\n        readonly rowCount: number;\n        readonly rows: readonly Row[];\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeReceiptPostgresStore',
+								signature:
+									'type AgentExchangeReceiptPostgresStore = AgentExchangeSecureMessagingReceiptStore & {\n    readonly deleteExpired: (input: {\n        readonly batchSize?: number;\n        readonly now: number;\n    }) => Promise<number>;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_RECEIPT_POSTGRES_MIGRATION',
+								signature:
+									'const AGENT_EXCHANGE_RECEIPT_POSTGRES_MIGRATION: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'AGENT_EXCHANGE_RECEIPT_REDIS_SAVE_SCRIPT',
+								signature:
+									'const AGENT_EXCHANGE_RECEIPT_REDIS_SAVE_SCRIPT: string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createMemoryAgentExchangeReceiptStore',
+								signature:
+									'const createMemoryAgentExchangeReceiptStore: (options: {\n    readonly tenantId: string;\n}) => AgentExchangeSecureMessagingReceiptStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createRedisAgentExchangeReceiptStore',
+								signature:
+									'const createRedisAgentExchangeReceiptStore: (options: {\n    readonly client: AgentExchangeReceiptRedisClient;\n    readonly keyPrefix?: string;\n    readonly tenantId: string;\n}) => AgentExchangeSecureMessagingReceiptStore;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresAgentExchangeReceiptStore',
+								signature:
+									'const createPostgresAgentExchangeReceiptStore: (options: {\n    readonly client: AgentExchangeReceiptPostgresClient;\n    readonly tenantId: string;\n}) => AgentExchangeReceiptPostgresStore;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -3234,7 +4341,48 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.0.1'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-webauthn',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebAuthnAgentExchangeApprovalProviderOptions',
+								signature:
+									'type WebAuthnAgentExchangeApprovalProviderOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly adapter: WebAuthnAdapter;\n    readonly credentialStore: WebAuthnCredentialStore;\n    readonly now?: () => number;\n    readonly origin: string;\n    readonly resolveUserId: (input: {\n        readonly request: AgentExchangeRequest;\n        readonly subject: string;\n    }) => Promise<string> | string;\n    readonly rpId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeMandateApprovalProvider',
+								signature:
+									'type AgentExchangeMandateApprovalProvider = {\n    readonly begin: (input: {\n        readonly challenge: string;\n        readonly draft: AgentExchangeStandingMandateDraft;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly challenge: string;\n        readonly options: unknown;\n    }>;\n    readonly verify: (input: {\n        readonly challenge: string;\n        readonly draft: AgentExchangeStandingMandateDraft;\n        readonly response: unknown;\n        readonly subject: string;\n        readonly verifierOrigin: string;\n    }) => Promise<{\n        readonly credentialId: string;\n        readonly rpId: string;\n        readonly subject: string;\n        readonly userVerified: true;\n        readonly verifierOrigin: string;\n    }>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'WebAuthnAgentExchangeMandateApprovalProviderOptions',
+								signature:
+									'type WebAuthnAgentExchangeMandateApprovalProviderOptions = {\n    readonly allowInsecureLocalhost?: boolean;\n    readonly adapter: WebAuthnAdapter;\n    readonly credentialStore: WebAuthnCredentialStore;\n    readonly now?: () => number;\n    readonly origin: string;\n    readonly resolveUserId: (input: {\n        readonly draft: AgentExchangeStandingMandateDraft;\n        readonly subject: string;\n    }) => Promise<string> | string;\n    readonly rpId: string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebAuthnAgentExchangeApprovalProvider',
+								signature:
+									'const createWebAuthnAgentExchangeApprovalProvider: (options: WebAuthnAgentExchangeApprovalProviderOptions) => AgentExchangeApprovalProvider;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createWebAuthnAgentExchangeMandateApprovalProvider',
+								signature:
+									'const createWebAuthnAgentExchangeMandateApprovalProvider: (options: WebAuthnAgentExchangeMandateApprovalProviderOptions) => AgentExchangeMandateApprovalProvider;'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -3414,10 +4562,101 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Overview'
 			}
 		],
-		repository: null,
+		repository: 'https://github.com/absolutejs/agent-exchange-sources',
 		subpackages: [
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/agent-exchange-email',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'EmailAgentExchangeCorrelation',
+								signature:
+									'type EmailAgentExchangeCorrelation = {\n    readonly mode: "challenge-text";\n} | {\n    readonly mode: "temporal-only";\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'EmailAgentExchangeProfile',
+								signature:
+									'type EmailAgentExchangeProfile = EmailVerificationProfile & {\n    readonly correlation: EmailAgentExchangeCorrelation;\n    readonly operations: readonly string[];\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'EmailAgentExchangeSourceOptions',
+								signature:
+									'type EmailAgentExchangeSourceOptions = {\n    readonly allowTemporalOnlyCorrelation?: boolean;\n    readonly clockSkewMs?: number;\n    readonly lookup: EmailVerificationMessageLookup;\n    readonly maxBodyBytes?: number;\n    readonly maxCandidates?: number;\n    readonly maxLookbackMs?: number;\n    readonly now?: () => number;\n    readonly profiles: readonly EmailAgentExchangeProfile[];\n    readonly resolveAccountEmail: (request: AgentExchangeRequest) => Promise<string> | string;\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createEmailVerificationCodeSource',
+								signature:
+									'const createEmailVerificationCodeSource: (options: EmailAgentExchangeSourceOptions) => SensitiveValueSource;'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'EmailVerificationMessageLookup',
+								signature: 'EmailVerificationMessageLookup'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'EmailVerificationProfile',
+								signature: 'EmailVerificationProfile'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST',
+								signature:
+									'EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'AgentExchangeSourceManifest',
+								signature: 'AgentExchangeSourceManifest'
+							}
+						]
+					},
+					{
+						entryPoint:
+							'@absolutejs/agent-exchange-email/source-manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AgentExchangeSourceManifest',
+								signature:
+									'type AgentExchangeSourceManifest = {\n    readonly assurance: "experimental";\n    readonly correlationModes: readonly ["challenge-text", "temporal-only"];\n    readonly modelCanObserveSecret: false;\n    readonly packageName: `@absolutejs/agent-exchange-${string}`;\n    readonly processingModes: readonly ["tool-confined"];\n    readonly providers: readonly string[];\n    readonly role: "source";\n    readonly secretKinds: readonly string[];\n    readonly senderAuthentication: "trusted-authserv-dmarc";\n};'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST',
+								signature:
+									'const EMAIL_AGENT_EXCHANGE_SOURCE_MANIFEST: Readonly<{\n    readonly assurance: "experimental";\n    readonly correlationModes: readonly ["challenge-text", "temporal-only"];\n    readonly modelCanObserveSecret: false;\n    readonly packageName: "@absolutejs/agent-exchange-email";\n    readonly processingModes: readonly ["tool-confined"];\n    readonly providers: readonly ["gmail", "microsoft", "imap"];\n    readonly role: "source";\n    readonly secretKinds: readonly ["email-one-time-code"];\n    readonly senderAuthentication: "trusted-authserv-dmarc";\n}>;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/agent-exchange-email/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>>;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>>;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -4470,7 +5709,2128 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.2.2'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/ai',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'StructuredOutputError',
+						signature: 'StructuredOutputError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'aiChat',
+						signature: 'aiChat'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'streamAI',
+						signature: 'streamAI'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'streamAIToSSE',
+						signature: 'streamAIToSSE'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'toolOutputText',
+						signature: 'toolOutputText'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'streamAIWithTools',
+						signature: 'streamAIWithTools'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createProviderProxyResponse',
+						signature: 'createProviderProxyResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseProviderProxyParams',
+						signature: 'parseProviderProxyParams'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'remoteProvider',
+						signature: 'remoteProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProviderProxyResponseOptions',
+						signature: 'ProviderProxyResponseOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProviderProxyStreamParams',
+						signature: 'ProviderProxyStreamParams'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RemoteProviderConfig',
+						signature: 'RemoteProviderConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StreamAIWithToolsEvent',
+						signature: 'StreamAIWithToolsEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StreamAIWithToolsOptions',
+						signature: 'StreamAIWithToolsOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StreamAIWithToolsSummary',
+						signature: 'StreamAIWithToolsSummary'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createUiCards',
+						signature: 'createUiCards'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiCardValidationError',
+						signature: 'UiCardValidationError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiCardDefinition',
+						signature: 'type UiCardDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiCardEvent',
+						signature: 'type UiCardEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiCards',
+						signature: 'type UiCards'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BUILTIN_UI_CARDS',
+						signature: 'BUILTIN_UI_CARDS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CARD_ID_MAX_CHARS',
+						signature: 'CARD_ID_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'chartCard',
+						signature: 'chartCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHART_MAX_POINTS',
+						signature: 'CHART_MAX_POINTS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHART_MAX_SERIES',
+						signature: 'CHART_MAX_SERIES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHART_TYPES',
+						signature: 'CHART_TYPES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHOICE_MAX_OPTIONS',
+						signature: 'CHOICE_MAX_OPTIONS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHOICE_TITLE_MAX_CHARS',
+						signature: 'CHOICE_TITLE_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHOICE_LABEL_MAX_CHARS',
+						signature: 'CHOICE_LABEL_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHOICE_DESCRIPTION_MAX_CHARS',
+						signature: 'CHOICE_DESCRIPTION_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'choiceCard',
+						signature: 'choiceCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CONFIRM_CONSEQUENCE_MAX_CHARS',
+						signature: 'CONFIRM_CONSEQUENCE_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'confirmCard',
+						signature: 'confirmCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CREDENTIAL_MAX_KEYS',
+						signature: 'CREDENTIAL_MAX_KEYS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'credentialCard',
+						signature: 'credentialCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DIFF_MAX_FILES',
+						signature: 'DIFF_MAX_FILES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DIFF_MAX_LINES',
+						signature: 'DIFF_MAX_LINES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'diffCard',
+						signature: 'diffCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FORM_FIELD_TYPES',
+						signature: 'FORM_FIELD_TYPES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FORM_MAX_FIELDS',
+						signature: 'FORM_MAX_FIELDS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FORM_SELECT_MAX_OPTIONS',
+						signature: 'FORM_SELECT_MAX_OPTIONS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formCard',
+						signature: 'formCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseChartSpec',
+						signature: 'parseChartSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseChoiceSpec',
+						signature: 'parseChoiceSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseConfirmSpec',
+						signature: 'parseConfirmSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseCredentialSpec',
+						signature: 'parseCredentialSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseDiffSpec',
+						signature: 'parseDiffSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseFormSpec',
+						signature: 'parseFormSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parsePlanSpec',
+						signature: 'parsePlanSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseStatTilesSpec',
+						signature: 'parseStatTilesSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseTableSpec',
+						signature: 'parseTableSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseUiActions',
+						signature: 'parseUiActions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PLAN_MAX_STEPS',
+						signature: 'PLAN_MAX_STEPS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PLAN_STEP_STATUSES',
+						signature: 'PLAN_STEP_STATUSES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'planCard',
+						signature: 'planCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'STAT_TILES_MAX',
+						signature: 'STAT_TILES_MAX'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'statTilesCard',
+						signature: 'statTilesCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TABLE_MAX_COLUMNS',
+						signature: 'TABLE_MAX_COLUMNS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TABLE_MAX_ROWS',
+						signature: 'TABLE_MAX_ROWS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'tableCard',
+						signature: 'tableCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UI_ACTIONS_MAX',
+						signature: 'UI_ACTIONS_MAX'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChartSeries',
+						signature: 'type ChartSeries'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChartSpec',
+						signature: 'type ChartSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChartType',
+						signature: 'type ChartType'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChoiceOption',
+						signature: 'type ChoiceOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChoiceSpec',
+						signature: 'type ChoiceSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConfirmSpec',
+						signature: 'type ConfirmSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CredentialKey',
+						signature: 'type CredentialKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CredentialSpec',
+						signature: 'type CredentialSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DiffFile',
+						signature: 'type DiffFile'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DiffSpec',
+						signature: 'type DiffSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FormField',
+						signature: 'type FormField'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FormFieldType',
+						signature: 'type FormFieldType'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FormSpec',
+						signature: 'type FormSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PlanSpec',
+						signature: 'type PlanSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PlanStep',
+						signature: 'type PlanStep'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PlanStepStatus',
+						signature: 'type PlanStepStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StatTile',
+						signature: 'type StatTile'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StatTilesSpec',
+						signature: 'type StatTilesSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TableSpec',
+						signature: 'type TableSpec'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'serverMessageToAction',
+						signature: 'serverMessageToAction'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAIConnection',
+						signature: 'createAIConnection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAIStream',
+						signature: 'createAIStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateAIStream',
+						signature: 'CreateAIStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConversationTurnQueueFullError',
+						signature: 'ConversationTurnQueueFullError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createConversationTurnQueue',
+						signature: 'createConversationTurnQueue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConversationTurnQueueItem',
+						signature: 'type ConversationTurnQueueItem'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConversationTurnQueueOptions',
+						signature: 'type ConversationTurnQueueOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConversationTurnQueueSnapshot',
+						signature: 'type ConversationTurnQueueSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConversationTurnQueueStatus',
+						signature: 'type ConversationTurnQueueStatus'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/react',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'AIStreamProvider',
+						signature: 'AIStreamProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useAIStream',
+						signature: 'useAIStream'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/vue',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'useAIStream',
+						signature: 'useAIStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AIStreamKey',
+						signature: 'AIStreamKey'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/svelte',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAIStream',
+						signature: 'createAIStream'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/angular',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'AIStreamService',
+						signature: 'AIStreamService'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/anthropic',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'CONTEXT_MANAGEMENT_BETA',
+						signature:
+							'const CONTEXT_MANAGEMENT_BETA = "context-management-2025-06-27";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'anthropic',
+						signature:
+							'const anthropic: (config: AnthropicConfig) => AIProviderConfig;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/gemini',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'gemini',
+						signature:
+							'const gemini: (config: GeminiConfig) => AIProviderConfig;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/ollama',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'ollama',
+						signature:
+							'const ollama: (config?: OllamaConfig) => AIProviderConfig;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/openai',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenAIConfig',
+						signature:
+							'type OpenAIConfig = {\n    modelLimits?: (params: AIProviderStreamParams) => Promise<import("../inputCapacity").AIModelLimits>;\n    apiKey?: string;\n    baseUrl?: string;\n    fetch?: typeof globalThis.fetch;\n    headers?: HeadersInit | ((params: AIProviderStreamParams) => HeadersInit | Promise<HeadersInit>);\n    modelForCapabilities?: (model: string) => string;\n    providerName?: string;\n    tokenSource?: () => Promise<string> | string;\n    transformRequestBody?: (body: Record<string, unknown>, params: AIProviderStreamParams) => Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'openai',
+						signature:
+							'const openai: (config: OpenAIConfig) => AIProviderConfig;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/openai-compatible',
+				symbols: [
+					{
+						description:
+							'Creates a provider for any OpenAI-compatible API. Many providers (Google, xAI, DeepSeek, Mistral, etc.) expose OpenAI-compatible chat completion endpoints.',
+						kind: 'value',
+						name: 'alibaba',
+						signature:
+							'const alibaba: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'deepseek',
+						signature:
+							'const deepseek: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'google',
+						signature:
+							'const google: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'meta',
+						signature:
+							'const meta: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'mistralai',
+						signature:
+							'const mistralai: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'moonshot',
+						signature:
+							'const moonshot: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'openaiCompatible',
+						signature:
+							'const openaiCompatible: (config: {\n    apiKey?: string;\n    baseUrl: string;\n    tokenSource?: () => Promise<string> | string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'xai',
+						signature:
+							'const xai: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/openrouter',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterDataCollection',
+						signature:
+							'type OpenRouterDataCollection = "allow" | "deny";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterQuantization',
+						signature:
+							'type OpenRouterQuantization = "bf16" | "fp4" | "fp6" | "fp8" | "fp16" | "fp32" | "int4" | "int8" | "unknown";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterSortStrategy',
+						signature:
+							'type OpenRouterSortStrategy = "latency" | "price" | "throughput";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterSort',
+						signature:
+							'type OpenRouterSort = OpenRouterSortStrategy | {\n    by: OpenRouterSortStrategy;\n    partition?: "model" | "none";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterPerformancePreference',
+						signature:
+							'type OpenRouterPerformancePreference = number | {\n    p50?: number;\n    p75?: number;\n    p90?: number;\n    p99?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterMaxPrice',
+						signature:
+							'type OpenRouterMaxPrice = {\n    /** Maximum completion-token price in USD per million tokens. */\n    completion?: number;\n    /** Maximum price in USD per image. */\n    image?: number;\n    /** Maximum prompt-token price in USD per million tokens. */\n    prompt?: number;\n    /** Maximum price in USD per request. */\n    request?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterProviderRouting',
+						signature:
+							'type OpenRouterProviderRouting = {\n    allowFallbacks?: boolean;\n    dataCollection?: OpenRouterDataCollection;\n    enforceDistillableText?: boolean;\n    ignore?: readonly string[];\n    maxPrice?: OpenRouterMaxPrice;\n    only?: readonly string[];\n    order?: readonly string[];\n    preferredMaxLatency?: OpenRouterPerformancePreference;\n    preferredMinThroughput?: OpenRouterPerformancePreference;\n    quantizations?: readonly OpenRouterQuantization[];\n    requireParameters?: boolean;\n    sort?: OpenRouterSort;\n    zdr?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterServiceTier',
+						signature:
+							'type OpenRouterServiceTier = "auto" | "default" | "flex" | "priority" | "fast";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterResponseCache',
+						signature:
+							'type OpenRouterResponseCache = {\n    clear?: boolean;\n    enabled: boolean;\n    /** OpenRouter response-cache TTL in seconds (1-86400). */\n    ttlSeconds?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterCacheControl',
+						signature:
+							'type OpenRouterCacheControl = {\n    type: "ephemeral";\n    ttl?: "5m" | "1h";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterPromptCacheOptions',
+						signature:
+							'type OpenRouterPromptCacheOptions = {\n    mode: "explicit";\n    ttl?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterReasoning',
+						signature:
+							'type OpenRouterReasoning = {\n    context?: "all_turns" | "auto" | "current_turn";\n    effort?: "minimal" | "low" | "medium" | "high" | "max" | "xhigh";\n    enabled?: boolean;\n    exclude?: boolean;\n    maxTokens?: number;\n    mode?: "pro";\n    summary?: "auto" | "concise" | "detailed";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterTrace',
+						signature:
+							'type OpenRouterTrace = Record<string, unknown> & {\n    generation_name?: string;\n    parent_span_id?: string;\n    span_name?: string;\n    trace_id?: string;\n    trace_name?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterAudioOutput',
+						signature:
+							'type OpenRouterAudioOutput = {\n    format: "wav" | "mp3" | "flac" | "opus" | "pcm16";\n    voice: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterAutoRouterCostTier',
+						signature:
+							'type OpenRouterAutoRouterCostTier = "low" | "medium" | "high" | "xhigh" | "max";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterAutoRouterPlugin',
+						signature:
+							'type OpenRouterAutoRouterPlugin = {\n    id: "auto-router";\n    /** Restrict Auto Router candidates; omitted means the full catalog. */\n    allowed_models?: readonly string[];\n    cost_tier?: OpenRouterAutoRouterCostTier;\n    /** Legacy numeric control. When present, OpenRouter prioritizes it over cost_tier. */\n    cost_quality_tradeoff?: number;\n};'
+					},
+					{
+						deprecated:
+							'OpenRouter recommends the openrouter:web_search server tool.',
+						description:
+							'@deprecated OpenRouter recommends the openrouter:web_search server tool.',
+						kind: 'type',
+						name: 'OpenRouterWebSearchPlugin',
+						signature:
+							'type OpenRouterWebSearchPlugin = {\n    id: "web";\n    engine?: "native" | "exa" | "firecrawl" | "parallel" | "perplexity";\n    exclude_domains?: readonly string[];\n    include_domains?: readonly string[];\n    max_results?: number;\n    search_prompt?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterFusionPlugin',
+						signature:
+							'type OpenRouterFusionPlugin = {\n    id: "fusion";\n    analysis_models?: readonly string[];\n    enabled?: boolean;\n    max_tool_calls?: number;\n    model?: string;\n    preset?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterResponseHealingPlugin',
+						signature:
+							'type OpenRouterResponseHealingPlugin = {\n    id: "response-healing";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterPlugin',
+						signature:
+							'type OpenRouterPlugin = OpenRouterAutoRouterPlugin | OpenRouterFusionPlugin | OpenRouterResponseHealingPlugin | OpenRouterWebSearchPlugin | {\n    id: string;\n    [option: string]: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterWebSearchParameters',
+						signature:
+							'type OpenRouterWebSearchParameters = {\n    allowed_domains?: readonly string[];\n    engine?: "auto" | "native" | "exa" | "firecrawl" | "parallel" | "perplexity";\n    excluded_domains?: readonly string[];\n    max_characters?: number;\n    max_results?: number;\n    max_total_results?: number;\n    search_context_size?: "low" | "medium" | "high";\n    user_location?: {\n        city?: string;\n        country?: string;\n        region?: string;\n        timezone?: string;\n        type: "approximate";\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterWebFetchParameters',
+						signature:
+							'type OpenRouterWebFetchParameters = {\n    allowed_domains?: readonly string[];\n    blocked_domains?: readonly string[];\n    engine?: "auto" | "native" | "exa" | "openrouter" | "firecrawl" | "parallel";\n    max_content_tokens?: number;\n    max_uses?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterImageGenerationParameters',
+						signature:
+							'type OpenRouterImageGenerationParameters = {\n    aspect_ratio?: string;\n    background?: string;\n    model?: string;\n    moderation?: string;\n    output_compression?: number;\n    output_format?: string;\n    quality?: string;\n    size?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterSubagentParameters',
+						signature:
+							'type OpenRouterSubagentParameters = {\n    inherit_functions?: boolean;\n    inherited_function_names?: readonly string[];\n    instructions?: string;\n    max_completion_tokens?: number;\n    max_tool_calls?: number;\n    model?: string;\n    name?: string;\n    reasoning?: {\n        effort?: OpenRouterReasoning["effort"];\n        max_tokens?: number;\n    };\n    temperature?: number;\n    tools?: readonly Exclude<OpenRouterServerTool, {\n        type: "openrouter:subagent";\n    }>[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterAdvisorParameters',
+						signature:
+							'type OpenRouterAdvisorParameters = {\n    forward_transcript?: boolean;\n    instructions?: string;\n    max_completion_tokens?: number;\n    model?: string;\n    name?: string;\n    reasoning?: {\n        effort?: string;\n        max_tokens?: number;\n    };\n    stream?: boolean;\n    temperature?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterFusionServerToolParameters',
+						signature:
+							'type OpenRouterFusionServerToolParameters = {\n    analysis_models?: readonly string[];\n    cache_control?: OpenRouterCacheControl;\n    max_completion_tokens?: number;\n    max_tool_calls?: number;\n    model?: string;\n    reasoning?: {\n        effort?: string;\n        max_tokens?: number;\n    };\n    temperature?: number;\n    tools?: readonly OpenRouterServerTool[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterShellParameters',
+						signature:
+							'type OpenRouterShellParameters = {\n    engine?: "auto" | "openrouter";\n    environment?: {\n        type: "container_auto";\n    } | {\n        container_id: string;\n        type: "container_reference";\n    };\n    sleep_after_seconds?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterServerTool',
+						signature:
+							'type OpenRouterServerTool = {\n    type: "openrouter:web_search";\n    parameters?: OpenRouterWebSearchParameters;\n} | {\n    type: "openrouter:web_fetch";\n    parameters?: OpenRouterWebFetchParameters;\n} | {\n    type: "openrouter:datetime";\n    parameters?: {\n        timezone?: string;\n    };\n} | {\n    type: "openrouter:image_generation";\n    parameters?: OpenRouterImageGenerationParameters;\n} | {\n    type: "openrouter:apply_patch";\n    parameters?: {\n        engine?: "auto" | "native" | "openrouter";\n    };\n} | {\n    type: "openrouter:subagent";\n    parameters: OpenRouterSubagentParameters;\n} | {\n    type: "openrouter:advisor";\n    parameters?: OpenRouterAdvisorParameters;\n} | {\n    type: "openrouter:fusion";\n    parameters?: OpenRouterFusionServerToolParameters;\n} | {\n    type: "openrouter:shell";\n    parameters?: OpenRouterShellParameters;\n} | {\n    type: "openrouter:experimental__search_models";\n    parameters?: {\n        max_results?: number;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterRequestOptions',
+						signature:
+							'type OpenRouterRequestOptions = {\n    /** Stream text and synthesized audio from an audio-output chat model. */\n    audioOutput?: OpenRouterAudioOutput;\n    /** Automatic top-level prompt caching, including optional Anthropic TTL. */\n    cacheControl?: OpenRouterCacheControl;\n    /** Future OpenRouter fields. Security-sensitive routing fields are rejected. */\n    extraBody?: Record<string, unknown>;\n    fallbackModels?: readonly string[];\n    includeReasoning?: boolean;\n    maxToolCalls?: number;\n    /** Native `/messages` server-tool definitions and replayable tool shapes. */\n    messagesTools?: readonly Record<string, unknown>[];\n    plugins?: readonly OpenRouterPlugin[];\n    /** Stable cache identity used by compatible OpenAI-family models. */\n    promptCacheKey?: string;\n    /** OpenAI explicit-cache mode and TTL. */\n    promptCacheOptions?: OpenRouterPromptCacheOptions;\n    preset?: string;\n    responseCache?: OpenRouterResponseCache;\n    /** OpenRouter-native reasoning controls beyond the portable effort knob. */\n    reasoning?: OpenRouterReasoning;\n    routerMetadata?: boolean;\n    routing?: OpenRouterProviderRouting;\n    serverTools?: readonly OpenRouterServerTool[];\n    se'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterConfig',
+						signature:
+							"type OpenRouterConfig = {\n    /**\n     * Local model policy. Entries are exact model IDs or namespace wildcards such\n     * as `anthropic/*`. Requests outside the list fail before network access.\n     */\n    allowedModels?: readonly string[];\n    /** Preset slugs deliberately approved for use with this provider. */\n    allowedPresets?: readonly string[];\n    /**\n     * Inference-provider policy sent as OpenRouter's `provider.only`. When\n     * `routing.only` is also set, every entry must be allowed by this policy.\n     */\n    allowedProviders?: readonly string[];\n    apiKey?: string;\n    /** Up to two OpenRouter marketplace categories. */\n    appCategories?: readonly string[];\n    /** Public application name used for optional OpenRouter attribution. */\n    appName?: string;\n    /** Public application URL used for optional OpenRouter attribution. */\n    appUrl?: string;\n    baseUrl?: string;\n    fetch?: typeof globalThis.fetch;\n    headers?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);\n    /** Default OpenRouter request options, overridable per call. */\n    requestOptions?: OpenRouterRequestOptions;\n    routing?: OpenRouterProviderRouting;\n    tokenSource?: () => Promis"
+					},
+					{
+						description:
+							'OpenRouter provider for the shared AbsoluteJS AI contract. Uses the existing OpenAI-compatible streaming implementation while adding OpenRouter attribution, typed provider routing, local model policy, provider allowlists, cost metadata, and OpenRouter-specific error attribution.',
+						kind: 'value',
+						name: 'openrouter',
+						signature:
+							'const openrouter: (config: OpenRouterConfig) => AIProviderConfig;'
+					},
+					{
+						description:
+							"OpenRouter's stateless OpenAI-compatible Responses API provider skin.",
+						kind: 'value',
+						name: 'openrouterResponses',
+						signature:
+							'const openrouterResponses: (config: OpenRouterConfig) => AIProviderConfig;'
+					},
+					{
+						description:
+							'OpenRouter provider using the native Anthropic Messages protocol skin.',
+						kind: 'value',
+						name: 'openrouterMessages',
+						signature:
+							'const openrouterMessages: (config: OpenRouterConfig) => AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOpenRouterAuthorizationUrl',
+						signature: 'createOpenRouterAuthorizationUrl'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOpenRouterClient',
+						signature: 'createOpenRouterClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOpenRouterKeyLinks',
+						signature: 'createOpenRouterKeyLinks'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'estimateOpenRouterCost',
+						signature: 'estimateOpenRouterCost'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'estimateOpenRouterModelCost',
+						signature: 'estimateOpenRouterModelCost'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'exchangeOpenRouterAuthCode',
+						signature: 'exchangeOpenRouterAuthCode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateOpenRouterPKCE',
+						signature: 'generateOpenRouterPKCE'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'openRouterModelMatchesRule',
+						signature: 'openRouterModelMatchesRule'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'verifyOpenRouterWebhookSignature',
+						signature: 'verifyOpenRouterWebhookSignature'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterActivityItem',
+						signature: 'OpenRouterActivityItem'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterActivityQuery',
+						signature: 'OpenRouterActivityQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAnalyticsMeta',
+						signature: 'OpenRouterAnalyticsMeta'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAnalyticsQuery',
+						signature: 'OpenRouterAnalyticsQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAnalyticsResponse',
+						signature: 'OpenRouterAnalyticsResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAuthCodeExchangeRequest',
+						signature: 'OpenRouterAuthCodeExchangeRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAuthCodeExchangeResponse',
+						signature: 'OpenRouterAuthCodeExchangeResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterAuthorizationUrlOptions',
+						signature: 'OpenRouterAuthorizationUrlOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatch',
+						signature: 'OpenRouterBatch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatchEndpoint',
+						signature: 'OpenRouterBatchEndpoint'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatchRequest',
+						signature: 'OpenRouterBatchRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatchResult',
+						signature: 'OpenRouterBatchResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterBatchStatus',
+						signature: 'OpenRouterBatchStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterChatRequest',
+						signature: 'OpenRouterChatRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterChatResponse',
+						signature: 'OpenRouterChatResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterClient',
+						signature: 'OpenRouterClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterClientConfig',
+						signature: 'OpenRouterClientConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCostEstimate',
+						signature: 'OpenRouterCostEstimate'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCostUnits',
+						signature: 'OpenRouterCostUnits'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCreateAuthCodeRequest',
+						signature: 'OpenRouterCreateAuthCodeRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCreateAuthCodeResponse',
+						signature: 'OpenRouterCreateAuthCodeResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCreateBatchRequest',
+						signature: 'OpenRouterCreateBatchRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterCreateWorkspaceRequest',
+						signature: 'OpenRouterCreateWorkspaceRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterEmbeddingRequest',
+						signature: 'OpenRouterEmbeddingRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterEmbeddingResponse',
+						signature: 'OpenRouterEmbeddingResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterFile',
+						signature: 'OpenRouterFile'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterFileList',
+						signature: 'OpenRouterFileList'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterHttpRequestOptions',
+						signature: 'OpenRouterHttpRequestOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageModelEndpoint',
+						signature: 'OpenRouterImageModelEndpoint'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageModelEndpoints',
+						signature: 'OpenRouterImageModelEndpoints'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageRequest',
+						signature: 'OpenRouterImageRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageResponse',
+						signature: 'OpenRouterImageResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterImageStreamEvent',
+						signature: 'OpenRouterImageStreamEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterModel',
+						signature: 'OpenRouterModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterModelList',
+						signature: 'OpenRouterModelList'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterModelQuery',
+						signature: 'OpenRouterModelQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterPreset',
+						signature: 'OpenRouterPreset'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterPresetInferenceRequest',
+						signature: 'OpenRouterPresetInferenceRequest'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/openrouter/sdk',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenRouterSDKConfig',
+						signature:
+							'type OpenRouterSDKConfig = Omit<SDKOptions, "apiKey" | "appCategories" | "appTitle" | "httpReferer" | "serverURL"> & {\n    apiKey?: string;\n    /** Comma-separated marketplace categories are produced from this list. */\n    appCategories?: readonly string[];\n    appName?: string;\n    appUrl?: string;\n    baseUrl?: string;\n    tokenSource?: () => Promise<string> | string;\n};'
+					},
+					{
+						description:
+							"Create OpenRouter's generated SDK with AbsoluteJS-style configuration. Use this for the complete REST surface: API keys, BYOK, guardrails, observability, organizations, SCIM, datasets, benchmarks, and future OpenAPI-generated additions. Use openrouter() for policy-aware inference.",
+						kind: 'value',
+						name: 'createOpenRouterSDK',
+						signature:
+							'const createOpenRouterSDK: (config?: OpenRouterSDKConfig) => OfficialOpenRouterSDK;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterSDK',
+						signature: 'OfficialOpenRouterSDK as OpenRouterSDK'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OfficialOpenRouterSDKOptions',
+						signature: 'SDKOptions as OfficialOpenRouterSDKOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OpenRouterSDKRequestOptions',
+						signature:
+							'RequestOptions as OpenRouterSDKRequestOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/openai-responses',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'OpenAIResponsesConfig',
+						signature:
+							'type OpenAIResponsesConfig = {\n    modelLimits?: (params: AIProviderStreamParams) => Promise<import("../inputCapacity").AIModelLimits>;\n    apiKey?: string;\n    baseUrl?: string;\n    fetch?: typeof globalThis.fetch;\n    headers?: HeadersInit | ((params: AIProviderStreamParams) => HeadersInit | Promise<HeadersInit>);\n    imageModels?: Set<string> | string[];\n    modelForCapabilities?: (model: string) => string;\n    providerName?: string;\n    tokenSource?: () => Promise<string> | string;\n    transformRequestBody?: (body: Record<string, unknown>, params: AIProviderStreamParams) => Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildResponsesRequestBody',
+						signature:
+							'const buildResponsesRequestBody: (params: AIProviderStreamParams, isImageModel: boolean, capabilityModel?: string) => Record<string, unknown>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'openaiResponses',
+						signature:
+							'const openaiResponses: (config: OpenAIResponsesConfig) => AIProviderConfig;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/providers',
+				symbols: [
+					{
+						description:
+							'Creates a provider for any OpenAI-compatible API. Many providers (Google, xAI, DeepSeek, Mistral, etc.) expose OpenAI-compatible chat completion endpoints.',
+						kind: 'value',
+						name: 'alibaba',
+						signature:
+							'const alibaba: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'deepseek',
+						signature:
+							'const deepseek: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'google',
+						signature:
+							'const google: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'meta',
+						signature:
+							'const meta: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'mistralai',
+						signature:
+							'const mistralai: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'moonshot',
+						signature:
+							'const moonshot: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'openaiCompatible',
+						signature:
+							'const openaiCompatible: (config: {\n    apiKey?: string;\n    baseUrl: string;\n    tokenSource?: () => Promise<string> | string;\n}) => import("..").AIProviderConfig;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'xai',
+						signature:
+							'const xai: (config: {\n    apiKey: string;\n}) => import("..").AIProviderConfig;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/tools',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'codeExecutionTool',
+						signature: 'codeExecutionTool'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CodeExecutionToolOptions',
+						signature: 'type CodeExecutionToolOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CodeModeHostTool',
+						signature: 'type CodeModeHostTool'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'codeModeTool',
+						signature: 'codeModeTool'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CodeModeToolOptions',
+						signature: 'type CodeModeToolOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'hardenUntrustedTool',
+						signature: 'hardenUntrustedTool'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'hardenUntrustedTools',
+						signature: 'hardenUntrustedTools'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UntrustedToolOptions',
+						signature: 'type UntrustedToolOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/tools/untrusted',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'UntrustedToolOptions',
+						signature:
+							'type UntrustedToolOptions = {\n    /** Truncate textual output to this many characters. Default 20000. */\n    maxOutputChars?: number;\n    /** A short label for where the tool comes from, shown to the model. */\n    source?: string;\n    /** Abort the handler after this many ms. Default 30000. */\n    timeoutMs?: number;\n};'
+					},
+					{
+						description:
+							'Wrap a single untrusted tool with provenance framing, output delimiting, a timeout, and a size cap. The returned tool is a drop-in AIToolDefinition.',
+						kind: 'value',
+						name: 'hardenUntrustedTool',
+						signature:
+							'const hardenUntrustedTool: (tool: AIToolDefinition, options?: UntrustedToolOptions) => AIToolDefinition;'
+					},
+					{
+						description:
+							"Harden every tool in a map. Names are preserved; the host is responsible for namespacing external names so they can't collide with first-party tools.",
+						kind: 'value',
+						name: 'hardenUntrustedTools',
+						signature:
+							'const hardenUntrustedTools: (tools: AIToolMap, options?: UntrustedToolOptions) => AIToolMap;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/ui',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createUiCards',
+						signature: 'createUiCards'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiCardValidationError',
+						signature: 'UiCardValidationError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiCardDefinition',
+						signature: 'type UiCardDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiCardEvent',
+						signature: 'type UiCardEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiCards',
+						signature: 'type UiCards'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BUILTIN_UI_CARDS',
+						signature: 'BUILTIN_UI_CARDS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CARD_ID_MAX_CHARS',
+						signature: 'CARD_ID_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'chartCard',
+						signature: 'chartCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHART_MAX_POINTS',
+						signature: 'CHART_MAX_POINTS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHART_MAX_SERIES',
+						signature: 'CHART_MAX_SERIES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHART_TYPES',
+						signature: 'CHART_TYPES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHOICE_MAX_OPTIONS',
+						signature: 'CHOICE_MAX_OPTIONS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHOICE_TITLE_MAX_CHARS',
+						signature: 'CHOICE_TITLE_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHOICE_LABEL_MAX_CHARS',
+						signature: 'CHOICE_LABEL_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CHOICE_DESCRIPTION_MAX_CHARS',
+						signature: 'CHOICE_DESCRIPTION_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'choiceCard',
+						signature: 'choiceCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CONFIRM_CONSEQUENCE_MAX_CHARS',
+						signature: 'CONFIRM_CONSEQUENCE_MAX_CHARS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'confirmCard',
+						signature: 'confirmCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CREDENTIAL_MAX_KEYS',
+						signature: 'CREDENTIAL_MAX_KEYS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'credentialCard',
+						signature: 'credentialCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DIFF_MAX_FILES',
+						signature: 'DIFF_MAX_FILES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DIFF_MAX_LINES',
+						signature: 'DIFF_MAX_LINES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'diffCard',
+						signature: 'diffCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FORM_FIELD_TYPES',
+						signature: 'FORM_FIELD_TYPES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FORM_MAX_FIELDS',
+						signature: 'FORM_MAX_FIELDS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FORM_SELECT_MAX_OPTIONS',
+						signature: 'FORM_SELECT_MAX_OPTIONS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formCard',
+						signature: 'formCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseChartSpec',
+						signature: 'parseChartSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseChoiceSpec',
+						signature: 'parseChoiceSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseConfirmSpec',
+						signature: 'parseConfirmSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseCredentialSpec',
+						signature: 'parseCredentialSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseDiffSpec',
+						signature: 'parseDiffSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseFormSpec',
+						signature: 'parseFormSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parsePlanSpec',
+						signature: 'parsePlanSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseStatTilesSpec',
+						signature: 'parseStatTilesSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseTableSpec',
+						signature: 'parseTableSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseUiActions',
+						signature: 'parseUiActions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PLAN_MAX_STEPS',
+						signature: 'PLAN_MAX_STEPS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PLAN_STEP_STATUSES',
+						signature: 'PLAN_STEP_STATUSES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'planCard',
+						signature: 'planCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'STAT_TILES_MAX',
+						signature: 'STAT_TILES_MAX'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'statTilesCard',
+						signature: 'statTilesCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TABLE_MAX_COLUMNS',
+						signature: 'TABLE_MAX_COLUMNS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TABLE_MAX_ROWS',
+						signature: 'TABLE_MAX_ROWS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'tableCard',
+						signature: 'tableCard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UI_ACTIONS_MAX',
+						signature: 'UI_ACTIONS_MAX'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChartSeries',
+						signature: 'type ChartSeries'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChartSpec',
+						signature: 'type ChartSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChartType',
+						signature: 'type ChartType'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChoiceOption',
+						signature: 'type ChoiceOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChoiceSpec',
+						signature: 'type ChoiceSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConfirmSpec',
+						signature: 'type ConfirmSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CredentialKey',
+						signature: 'type CredentialKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CredentialSpec',
+						signature: 'type CredentialSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DiffFile',
+						signature: 'type DiffFile'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DiffSpec',
+						signature: 'type DiffSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FormField',
+						signature: 'type FormField'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FormFieldType',
+						signature: 'type FormFieldType'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FormSpec',
+						signature: 'type FormSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PlanSpec',
+						signature: 'type PlanSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PlanStep',
+						signature: 'type PlanStep'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PlanStepStatus',
+						signature: 'type PlanStepStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StatTile',
+						signature: 'type StatTile'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StatTilesSpec',
+						signature: 'type StatTilesSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TableSpec',
+						signature: 'type TableSpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiAction',
+						signature: 'type UiAction'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DARK_UI_THEME',
+						signature: 'DARK_UI_THEME'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LIGHT_UI_THEME',
+						signature: 'LIGHT_UI_THEME'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderChartSvg',
+						signature: 'renderChartSvg'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RenderChartSvgOptions',
+						signature: 'type RenderChartSvgOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UiSvgTheme',
+						signature: 'type UiSvgTheme'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'prepareFormSubmission',
+						signature: 'prepareFormSubmission'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FormSubmission',
+						signature: 'type FormSubmission'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'backgroundWorkNextAction',
+						signature: 'backgroundWorkNextAction'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BackgroundWorkCard',
+						signature: 'type BackgroundWorkCard'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/models',
+				symbols: [
+					{
+						description:
+							'Client-safe model discovery. Missing metadata means unknown, never unsupported.',
+						kind: 'type',
+						name: 'ModelModality',
+						signature:
+							'type ModelModality = "text" | "image" | "pdf" | "audio" | "video";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ModelFeature',
+						signature:
+							'type ModelFeature = "reasoning" | "tools" | "structured-output" | "prompt-cache" | "web-search";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ModelMetadata',
+						signature:
+							'type ModelMetadata = {\n    input: readonly ModelModality[];\n    output: readonly ModelModality[];\n    features: readonly ModelFeature[];\n    contextWindow?: number;\n    sources: readonly string[];\n    reviewedAt: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'MODEL_CAPABILITY_DESCRIPTIONS',
+						signature:
+							'const MODEL_CAPABILITY_DESCRIPTIONS: {\n    readonly Fast: "Suited to quick edits and lightweight tasks; actual speed varies with the request.";\n    readonly Reasoning: "Can spend extra thinking time on complex problems.";\n    readonly Tools: "Supports function calls for actions such as inspecting and editing code.";\n    readonly Vision: "Understands images. This does not mean it generates images.";\n    readonly PDF: "Accepts PDF documents, including their text and visual content.";\n    readonly Audio: "Understands audio input. This does not mean it generates speech.";\n    readonly Video: "Understands video input. This does not mean it generates videos.";\n    readonly "Image generation": "Produces images as model output.";\n    readonly "Speech generation": "Produces audio as model output.";\n    readonly "Video generation": "Produces video as model output.";\n    readonly Structured: "Supports schema-constrained output for reliable structured data.";\n    readonly Caching: "The provider can reuse matching prompt content to reduce repeated processing. Cache hits are not guaranteed.";\n    readonly Search: "Supports a provider-hosted web-search tool when enabled by the application.";\n    '
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ModelCapability',
+						signature:
+							'type ModelCapability = keyof typeof MODEL_CAPABILITY_DESCRIPTIONS;'
+					},
+					{
+						description:
+							'Derive badges from explicit evidence; do not infer support from model names.',
+						kind: 'value',
+						name: 'modelCapabilities',
+						signature:
+							'const modelCapabilities: (metadata?: ModelMetadata) => ModelCapability[];'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MODEL_METADATA',
+						signature: 'MODEL_METADATA'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getModelMetadata',
+						signature: 'getModelMetadata'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MODEL_REASONING',
+						signature: 'MODEL_REASONING'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'REASONING_EFFORTS',
+						signature: 'REASONING_EFFORTS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getModelReasoning',
+						signature: 'getModelReasoning'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isReasoningSelection',
+						signature: 'isReasoningSelection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'supportsReasoningSelection',
+						signature: 'supportsReasoningSelection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'reasoningSelectionLabel',
+						signature: 'reasoningSelectionLabel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ModelReasoning',
+						signature: 'type ModelReasoning'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReasoningSelection',
+						signature: 'type ReasoningSelection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MODEL_DIRECTORY',
+						signature: 'MODEL_DIRECTORY'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MODEL_PROVIDERS',
+						signature: 'MODEL_PROVIDERS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'findModel',
+						signature: 'findModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'listModels',
+						signature: 'listModels'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'modelKey',
+						signature: 'modelKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recommendModel',
+						signature: 'recommendModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recommendTier',
+						signature: 'recommendTier'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ListedModel',
+						signature: 'type ListedModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ModelDirectoryEntry',
+						signature: 'type ModelDirectoryEntry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ModelTier',
+						signature: 'type ModelTier'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/ai/research',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchFinding',
+						signature:
+							'type ResearchFinding = {\n    claim: string;\n    sourceId: string;\n    quote: string;\n    eventDate?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchEvidence',
+						signature:
+							'type ResearchEvidence = {\n    status: "grounded" | "partial" | "empty" | "unavailable";\n    text: string;\n    findings: ResearchFinding[];\n    sources: SearchSource[];\n    searches: SearchResult[];\n    limitations: string[];\n    generatedAt: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchSynthesis',
+						signature:
+							'type ResearchSynthesis = {\n    findings: ResearchFinding[];\n    limitations?: string[];\n};'
+					},
+					{
+						description:
+							'Retrieval and synthesis are separate injected capabilities. No hosted search is enabled here.',
+						kind: 'value',
+						name: 'researchWithEvidence',
+						signature:
+							'const researchWithEvidence: (input: {\n    query: string;\n    queries?: string[];\n    provider: SearchProvider;\n    signal?: AbortSignal;\n    maxQueries?: number;\n    maxTokens?: number;\n    freshness?: string;\n    /** Required literal entity phrases; defaults to quoted phrases in the question. */\n    requiredPhrases?: string[];\n    synthesize: (evidence: string, signal?: AbortSignal) => Promise<ResearchSynthesis>;\n}) => Promise<ResearchEvidence>;'
+					}
+				]
+			}
+		],
 		category: 'AI',
 		commands: [
 			{
@@ -4528,7 +7888,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/ai/research'
 		],
 		readmeDigest:
-			'f2440d3aa9a0fc0c29a757025ec5ce323a97f7a3e8f0898b003441880577461c',
+			'cfd2368e8f89d3249208fc02ed1a2d93762123d28d29d6c8ad408c9d1c3996b5',
 		readmeSamples: [
 			{
 				code: 'const result = await generateAI({\n  provider: anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }),\n  model: "claude-sonnet-4-6",\n  messages: [{ role: "user", content: "What changed today?" }],\n  providerOptions: {\n    anthropic: {\n      serverTools: [\n        {\n          type: "anthropic:web_search",\n          parameters: { maxUses: 3 },\n        },\n      ],\n    },\n  },\n});',
@@ -4553,6 +7913,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'This package currently focuses on generic AI/chat/provider functionality. RAG remains a separate package.'
 				],
 				title: 'Overview'
+			},
+			{
+				description:
+					"createUiCards validates each tool input with the card's parse function before returning its success acknowledgement. Invalid inputs reject with UiCardValidationError (including the card name). Both tool loops feed this failure back to the model for correction; an invalid card does not count as a successful stopAfterTools call. Hosts invoking handlers directly should catch the rejection. Parsers should be pure because execution and collect both validate the input.",
+				details: [
+					'Choice cards preserve complete questions and answers: titles and option labels allow 600 characters, and card/option descriptions allow 2,000. These limits are exported as CHOICE_TITLE_MAX_CHARS, CHOICE_LABEL_MAX_CHARS, and CHOICE_DESCRIPTION_MAX_CHARS, and appear in choiceCard.inputSchema. A choice over its text limits or eight-option limit is rejected as a whole, never silently shortened. Option/card IDs (64 characters), badges (24), and submit labels (40) must also fit their limits. Keep labels concise and put detail in descriptions; renderers should wrap the full text instead of visually truncating it.'
+				],
+				title: 'Validated UI cards'
 			},
 			{
 				description:
@@ -4616,14 +7984,20 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/ai/models is a browser-safe, dependency-free catalog. Use getModelMetadata(provider, id) and modelCapabilities(metadata) to build model selectors. Metadata separates input modalities, output modalities, and provider features, with source URLs and a review date. Unknown IDs return undefined; absence of a badge is not evidence of unsupported functionality.',
 				details: [
 					'These are provider capabilities, not application enablement or account entitlement. Consumers must separately explain whether attachments, hosted search, structured output, and media generation are enabled in their UI and endpoint. Context windows are documented provider limits, not a substitute for runtime token budgeting. Regional features are omitted when they are not consistently supported.',
-					'@absolutejs/ai/research separates an injected SearchProvider from evidence-only synthesis. It returns sources, findings, searches, limitations and explicit availability, and excludes invented source references/quotes. Quotation checks establish provenance; they are not a substitute for claim entailment or entity review. Hosts can set maxRetries: 0 on one-shot or stream requests when they own attempt accounting, and independently bound maxRepairAttempts and disable context recovery.'
+					'@absolutejs/ai/research separates an injected SearchProvider from evidence-only synthesis. It returns sources, findings, searches, limitations and explicit availability, and excludes invented source references/quotes. Quotation checks establish provenance; they are not a substitute for claim entailment or entity review. Hosts can set maxRetries: 0 on one-shot or stream requests when they own attempt accounting, and independently bound maxRepairAttempts and disable context recovery.',
+					'Interrupted streams and usage',
+					'Provider streams can emit usage_update chunks before done. Each carries a provider-reported cumulative snapshot: replace the previous snapshot for that attempt; never sum snapshots. final: true means the provider reported complete usage. An absent or false final means partial evidence, not a final bill. Anthropic exposes message-start and message-delta usage; OpenAI Chat exposes its usage chunk, and Responses preserves usage even on incomplete responses.',
+					'Persist snapshots while consuming the stream. Cancellation or transport failure can prevent done, and no adapter can reconstruct usage the provider never sent. onUsage still reports only complete usage, once per instrumented stream. Keep credit reservations separate from charges and reconcile unknown outcomes in the host application. The package does not invent token counts or decide billing policy.',
+					'Typed forms and background work',
+					'Form fields support valueType (string, number, integer, boolean). For a numeric dropdown use type: "select", options: ["3", "10"], valueType: "integer". All hosts should call prepareFormSubmission(form, values) before invoking the bound tool: it returns typed input or field errors without discarding answers. The host must still validate the complete tool schema and apply authorization. Legacy dropdowns retain string values; migrate numeric fields explicitly.',
+					'BackgroundWorkCard and backgroundWorkNextAction provide framework-neutral progress/CTA semantics. A funding pause offers Add credits; only confirmed funding changes it to Continue research. Completed work offers View results; uncertain work offers Check status, never replay. The host persists the work ID, polls or subscribes to actual progress, and binds actions to authenticated routes.'
 				],
 				title: 'Model capability metadata'
 			}
 		],
 		repository: 'https://github.com/absolutejs/ai',
 		subpackages: [],
-		version: '0.3.2'
+		version: '0.6.3'
 	},
 	{
 		api: [],
@@ -5844,7 +9218,192 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.3.1'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/attest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'COSIGN_VERSION',
+						signature: 'const COSIGN_VERSION = "v3.1.2";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CommandResult',
+						signature:
+							'type CommandResult = {\n    stderr: string;\n    stdout: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CommandRunner',
+						signature:
+							'type CommandRunner = (command: readonly string[]) => Promise<CommandResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GithubWorkflowIdentity',
+						signature:
+							'type GithubWorkflowIdentity = {\n    issuer: string;\n    ref: string;\n    repository: string;\n    sha: string;\n    workflowPath: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GithubWorkflowEnvironment',
+						signature:
+							'type GithubWorkflowEnvironment = {\n    GITHUB_REF?: string;\n    GITHUB_REPOSITORY?: string;\n    GITHUB_RUN_ID?: string;\n    GITHUB_SERVER_URL?: string;\n    GITHUB_SHA?: string;\n    GITHUB_WORKFLOW_REF?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SlsaProvenancePredicate',
+						signature:
+							'type SlsaProvenancePredicate = {\n    buildDefinition: {\n        buildType: string;\n        externalParameters: {\n            ref: string;\n            repository: string;\n            workflowPath: string;\n        };\n        internalParameters: Record<string, never>;\n        resolvedDependencies: Array<{\n            digest: {\n                gitCommit: string;\n            };\n            uri: string;\n        }>;\n    };\n    runDetails: {\n        builder: {\n            id: string;\n        };\n        metadata: {\n            invocationId: string;\n        };\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ImageAttestationReferences',
+						signature:
+							'type ImageAttestationReferences = {\n    provenance: string;\n    sbom: string;\n    signature: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PortableBlobVerification',
+						signature:
+							'type PortableBlobVerification = {\n    bundleSha256: string;\n    identity: GithubWorkflowIdentity;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'AttestationPolicyError',
+						signature:
+							'class AttestationPolicyError extends Error {\n    constructor(message: string);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'assertCosignVersion',
+						signature:
+							'const assertCosignVersion: (runner: CommandRunner) => Promise<string>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBlobSigningCommands',
+						signature:
+							'const createBlobSigningCommands: (input: {\n    artifactPath: string;\n    identity: GithubWorkflowIdentity;\n}) => string[][];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBlobVerificationCommand',
+						signature:
+							'const createBlobVerificationCommand: (input: {\n    artifactPath: string;\n    identity: GithubWorkflowIdentity;\n}) => string[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createImagePublicationCommands',
+						signature:
+							'const createImagePublicationCommands: (input: {\n    identity: GithubWorkflowIdentity;\n    imageReference: string;\n    provenancePath: string;\n    sbomPath: string;\n}) => (string[] | readonly ["cosign", "verify-attestation", ...string[], "--type", "slsaprovenance1", string] | readonly ["cosign", "verify-attestation", ...string[], "--type", "spdxjson", string] | readonly ["cosign", "verify", ...string[], string])[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createImageVerificationCommands',
+						signature:
+							'const createImageVerificationCommands: (input: {\n    identity: GithubWorkflowIdentity;\n    imageReference: string;\n}) => readonly [readonly ["cosign", "verify-attestation", ...string[], "--type", "slsaprovenance1", string], readonly ["cosign", "verify-attestation", ...string[], "--type", "spdxjson", string], readonly ["cosign", "verify", ...string[], string]];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createSlsaProvenancePredicate',
+						signature:
+							'const createSlsaProvenancePredicate: (input: {\n    identity: GithubWorkflowIdentity;\n    invocationUrl: string;\n}) => {\n    buildDefinition: {\n        buildType: string;\n        externalParameters: {\n            ref: string;\n            repository: string;\n            workflowPath: string;\n        };\n        internalParameters: {};\n        resolvedDependencies: {\n            digest: {\n                gitCommit: string;\n            };\n            uri: string;\n        }[];\n    };\n    runDetails: {\n        builder: {\n            id: string;\n        };\n        metadata: {\n            invocationId: string;\n        };\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'defineGithubWorkflowIdentity',
+						signature:
+							'const defineGithubWorkflowIdentity: (input: GithubWorkflowIdentity) => GithubWorkflowIdentity;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'executeCommandPlan',
+						signature:
+							'const executeCommandPlan: (commands: ReadonlyArray<ReadonlyArray<string>>, runner: CommandRunner) => Promise<CommandResult[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'githubCertificateIdentity',
+						signature:
+							'const githubCertificateIdentity: (input: GithubWorkflowIdentity) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'githubWorkflowIdentityFromEnvironment',
+						signature:
+							'const githubWorkflowIdentityFromEnvironment: (environment: GithubWorkflowEnvironment) => GithubWorkflowIdentity;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'imageAttestationReferences',
+						signature:
+							'const imageAttestationReferences: (imageReference: string) => ImageAttestationReferences;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'sigstoreBundlePath',
+						signature:
+							'const sigstoreBundlePath: (artifactPath: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'toleratingExistingLogEntries',
+						signature:
+							'const toleratingExistingLogEntries: (runner: CommandRunner) => (command: readonly string[]) => Promise<CommandResult>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyPortableBlobBundle',
+						signature:
+							'const verifyPortableBlobBundle: (input: {\n    artifact: string | Uint8Array;\n    bundle: unknown;\n    identity: GithubWorkflowIdentity;\n    runner: CommandRunner;\n}) => Promise<{\n    bundleSha256: string;\n    identity: GithubWorkflowIdentity;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'writeSlsaProvenancePredicate',
+						signature:
+							'const writeSlsaProvenancePredicate: (outputPath: string, input: Parameters<typeof createSlsaProvenancePredicate>[0]) => Promise<{\n    buildDefinition: {\n        buildType: string;\n        externalParameters: {\n            ref: string;\n            repository: string;\n            workflowPath: string;\n        };\n        internalParameters: {};\n        resolvedDependencies: {\n            digest: {\n                gitCommit: string;\n            };\n            uri: string;\n        }[];\n    };\n    runDetails: {\n        builder: {\n            id: string;\n        };\n        metadata: {\n            invocationId: string;\n        };\n    };\n}>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/attest/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+					}
+				]
+			}
+		],
 		category: 'Platform & Infra',
 		commands: [
 			{
@@ -5887,7 +9446,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/attest/manifest.json'
 		],
 		readmeDigest:
-			'2b8c308cb2dd6d5d9419807edec239bc136c7ae7c689fd429374ca49b2c19233',
+			'b6159e64f3f12b1e7992d4e3373e6f30b92dff3086ef12a263c99808f1e8345c',
 		readmeSamples: [
 			{
 				code: 'import {\n  createImagePublicationCommands,\n  githubWorkflowIdentityFromEnvironment,\n} from "@absolutejs/attest";\n\nconst identity = githubWorkflowIdentityFromEnvironment(process.env);\nconst commands = createImagePublicationCommands({\n  identity,\n  imageReference:\n    "ghcr.io/acme/api@sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",\n  provenancePath: "evidence/provenance.json",\n  sbomPath: "evidence/sbom.spdx.json",\n});',
@@ -5958,7 +9517,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/attest',
 		subpackages: [],
-		version: '0.2.0'
+		version: '0.2.1'
 	},
 	{
 		api: [],
@@ -6802,7 +10361,53 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/audit-adapters',
 		subpackages: [
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/audit-elysia',
+						symbols: [
+							{
+								description: '',
+								kind: 'type',
+								name: 'AuditElysiaActorResolver',
+								signature:
+									'type AuditElysiaActorResolver = (context: ElysiaRequestContext) => string | undefined | Promise<string | undefined>;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AuditElysiaRedactor',
+								signature:
+									'type AuditElysiaRedactor = (event: {\n    method: string;\n    path: string;\n    status: number;\n    durationMs: number;\n    headers: Record<string, string | undefined>;\n}) => Record<string, unknown> | undefined;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'AuditElysiaOptions',
+								signature:
+									"type AuditElysiaOptions = {\n    /** The audit log to append every request event to. */\n    audit: Audit;\n    /**\n     * Resolve the actor (user id / session id / api-key id) from the\n     * request. Default: undefined (events have no `actor`). Pass\n     * `(ctx) => ctx.request.headers.get('x-user-id') ?? undefined` for\n     * a header-driven actor, or read the upstream Elysia derive value\n     * if you have an auth middleware.\n     */\n    actor?: AuditElysiaActorResolver;\n    /**\n     * Skip non-business traffic such as health probes and metrics scrapes.\n     * Evaluated before per-request state allocation. Throwing fails closed: the\n     * request is audited.\n     */\n    exclude?: (context: ElysiaRequestContext) => boolean | Promise<boolean>;\n    /**\n     * Build the `metadata` payload of the audit event. Default:\n     * `{ requestId, durationMs }`. Return `undefined` to omit\n     * metadata entirely. Use this to redact / enrich:\n     *\n     *   redact: (req) => ({\n     *     requestId: req.requestId,\n     *     durationMs: req.durationMs,\n     *     userAgent: req.headers['user-agent'],\n     *   })\n     *\n     * The plugin does NOT capture request/response bodies by default —\n   "
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'auditElysia',
+								signature:
+									'const auditElysia: (options: AuditElysiaOptions) => Elysia<"", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral>;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/audit-elysia/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<AuditElysiaOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        correlateOtelTraceId: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        kind: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        requestIdHeader: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TString, import("@sinclair/typebox").TNull]>>;\n    }>;\n});'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -6937,10 +10542,142 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'elysia',
-				version: '0.2.1'
+				version: '0.3.0'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/audit-postgres',
+						symbols: [
+							{
+								description: '',
+								kind: 'export',
+								name: 'auditBunSqlDrizzleSchema',
+								signature: 'auditBunSqlDrizzleSchema'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'auditDrizzleSchema',
+								signature: 'auditDrizzleSchema'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'auditEvents',
+								signature: 'auditEvents'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'auditEventsBunSql',
+								signature: 'auditEventsBunSql'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'createBunSqlDrizzleAuditSink',
+								signature: 'createBunSqlDrizzleAuditSink'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'createDrizzleAuditSink',
+								signature: 'createDrizzleAuditSink'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'CreateDrizzleAuditSinkOptions',
+								signature: 'type CreateDrizzleAuditSinkOptions'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'AUDIT_POSTGRES_MIGRATION_JOURNAL_TABLE',
+								signature:
+									'AUDIT_POSTGRES_MIGRATION_JOURNAL_TABLE'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'auditPostgresMigrationPlan',
+								signature: 'auditPostgresMigrationPlan'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'getAuditPostgresSchemaSql',
+								signature: 'getAuditPostgresSchemaSql'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'runAuditPostgresMigrations',
+								signature: 'runAuditPostgresMigrations'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'AuditPostgresMigration',
+								signature: 'type AuditPostgresMigration'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'AuditPostgresMigrationClient',
+								signature: 'type AuditPostgresMigrationClient'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'AuditPostgresSchemaOptions',
+								signature: 'type AuditPostgresSchemaOptions'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'RunAuditPostgresMigrationsOptions',
+								signature:
+									'type RunAuditPostgresMigrationsOptions'
+							},
+							{
+								description:
+									"Minimal subset of postgres's Sql type the adapter uses. Declaring it locally (rather than import type { Sql } from 'postgres') keeps postgres as a truly optional peer — Neon serverless users don't have to install it.",
+								kind: 'type',
+								name: 'PostgresTag',
+								signature:
+									'type PostgresTag = {\n    unsafe: (sql: string) => unknown;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'CreatePostgresAuditSinkOptions',
+								signature:
+									"type CreatePostgresAuditSinkOptions = {\n    /**\n     * The SQL tag template. Either `postgres('postgres://...')` from\n     * `postgres` OR `neon('postgres://...')` from `@neondatabase/serverless`\n     * — both implement the same shape.\n     */\n    sql: PostgresTag;\n    /**\n     * Table name. Defaults to `'audit_events'`. Validated against\n     * `/^[a-zA-Z_][a-zA-Z0-9_]*$/` — any other shape throws to defend\n     * against injection (the table name has to be interpolated into the\n     * DDL string, not as a parameter).\n     */\n    table?: string;\n    /**\n     * Run `CREATE TABLE IF NOT EXISTS` on first `append` / `list` /\n     * `prune`. Default `true`. Set `false` if you manage the schema\n     * yourself (migrations); the adapter then assumes the table exists.\n     */\n    ensureSchema?: boolean;\n};"
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresAuditSink',
+								signature:
+									'const createPostgresAuditSink: (options: CreatePostgresAuditSinkOptions) => AuditSink;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/audit-postgres/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<CreatePostgresAuditSinkOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -7084,7 +10821,68 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.1.4'
 			},
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/audit-s3',
+						symbols: [
+							{
+								description:
+									"The single S3 operation the sink needs. Implement against your preferred SDK; the sink calls put(key, body, contentType) with 'application/x-ndjson' and expects a resolved Promise on success or a rejection on failure.",
+								kind: 'type',
+								name: 'S3PutFn',
+								signature:
+									'type S3PutFn = (key: string, body: string, contentType: string) => Promise<void>;'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'S3KeyOptions',
+								signature:
+									"type S3KeyOptions = {\n    /** First event's `at` in the batch. */\n    batchStart: number;\n    /** Last event's `at` in the batch. */\n    batchEnd: number;\n    /** How many events the batch contains. */\n    eventCount: number;\n};"
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'CreateS3AuditSinkOptions',
+								signature:
+									"type CreateS3AuditSinkOptions = {\n    /**\n     * The S3 PUT operation. Receives the object key (relative to whatever\n     * bucket your put implementation targets), the serialized JSONL body,\n     * and a content-type hint (`'application/x-ndjson'`).\n     */\n    put: S3PutFn;\n    /**\n     * Key prefix. Default `'audit/'`. Useful when one bucket holds\n     * multiple audit streams — `'audit/tenant-A/'`, `'audit/system/'`, etc.\n     */\n    prefix?: string;\n    /**\n     * Build the object key from batch metadata. Default produces keys\n     * like `audit/2026-05-30/19-42-15.123-abcd1234.jsonl`. The default\n     * is intentionally sortable end-to-end so `s3 ls --prefix audit/`\n     * returns chronological order; override only when you need a\n     * different layout (e.g., per-tenant fan-out, hourly partitions).\n     */\n    keyFor?: (params: S3KeyOptions) => string;\n    /** Flush when the buffer reaches this many events. Default 1000. */\n    maxBatchSize?: number;\n    /** Flush when serialized JSONL would exceed this many bytes. Default 5MB. */\n    maxBatchBytes?: number;\n    /**\n     * Flush every N ms regardless of buffer state. Set to `0` or\n     * `Infinity` to disable the timer (siz"
+							},
+							{
+								description:
+									"Default object-key generator. Produces lexically-sortable keys of the form <YYYY-MM-DD>/<HH-MM-SS>.-.jsonl. The date prefix is the natural lifecycle-policy boundary; the time suffix is unique within the millisecond via a random tail so two flushes at the same instant don't collide.",
+								kind: 'value',
+								name: 'defaultKeyFor',
+								signature:
+									'const defaultKeyFor: (prefix: string) => (params: S3KeyOptions) => string;'
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createS3AuditSink',
+								signature:
+									'const createS3AuditSink: (options: CreateS3AuditSinkOptions) => AuditSink;'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'S3_AUDIT_SINK_DEFAULTS',
+								signature: 'DEFAULTS as S3_AUDIT_SINK_DEFAULTS'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/audit-s3/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<CreateS3AuditSinkOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -7230,7 +11028,3229 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: null
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/auth',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'auth',
+						signature:
+							'const auth: <UserType>(configuration: AuthConfig<UserType>) => Promise<Elysia<"", "local", {\n    decorator: {\n        absoluteAuthSync: import("./syncBridge").AbsoluteAuthSyncBridge<UserType> | undefined;\n    };\n    store: {\n        session: import("./types").SessionRecord<UserType>;\n        unregisteredSession: import("./types").UnregisteredSessionRecord;\n    };\n    derive: ({\n        readonly absoluteAuthStatus: {\n            error: {\n                readonly code: "Bad Request";\n                readonly message: "Cookies are missing";\n            };\n            user: null;\n            impersonator?: undefined;\n        } | {\n            error: null;\n            impersonator: import("./types").Impersonator | undefined;\n            user: NonNullable<UserType> | null;\n        };\n        readonly authPrincipal: import("./principal").AuthPrincipal<UserType> | undefined;\n    } & {\n        readonly protectRoute: {\n            <AuthReturn, AuthFailReturn = never>(handleAuth: (user: UserType) => Promise<AuthReturn>, handleAuthFail?: ((error: {\n                readonly code: "Bad Request";\n                readonly message: "Cookies are missing";\n            } | {\n                readonly c'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'DEFAULT_NATIVE_PUSH_ROUTE',
+						signature:
+							'const DEFAULT_NATIVE_PUSH_ROUTE: "/auth/mobile/push";'
+					},
+					{
+						description: 'Canonical cross-platform push route.',
+						kind: 'value',
+						name: 'DEFAULT_PUSH_ROUTE',
+						signature: 'const DEFAULT_PUSH_ROUTE: "/auth/push";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushPlatform',
+						signature:
+							"type PushPlatform = 'apns' | 'fcm' | 'webpush';"
+					},
+					{
+						deprecated: 'Use PushPlatform.',
+						description: '@deprecated Use PushPlatform.',
+						kind: 'type',
+						name: 'NativePushPlatform',
+						signature: 'type NativePushPlatform = PushPlatform;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebPushRegistration',
+						signature:
+							'type WebPushRegistration = {\n    endpoint: string;\n    keys: {\n        auth: string;\n        p256dh: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushRegistrationInput',
+						signature:
+							'type PushRegistrationInput = PushRegistrationCredential & {\n    /** Opaque server-issued installation identity, absent on first registration. */\n    installationId?: string;\n    locale?: string;\n    tenant: string;\n    topics: readonly string[];\n    userId: string;\n};'
+					},
+					{
+						deprecated: 'Use PushRegistrationInput.',
+						description: '@deprecated Use PushRegistrationInput.',
+						kind: 'type',
+						name: 'NativePushRegistrationInput',
+						signature:
+							'type NativePushRegistrationInput = PushRegistrationInput;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushRemovalInput',
+						signature:
+							'type PushRemovalInput = {\n    installationId: string;\n    tenant: string;\n    userId: string;\n};'
+					},
+					{
+						deprecated: 'Use PushRemovalInput.',
+						description: '@deprecated Use PushRemovalInput.',
+						kind: 'type',
+						name: 'NativePushRemovalInput',
+						signature:
+							'type NativePushRemovalInput = PushRemovalInput;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushRegistrar',
+						signature:
+							'type PushRegistrar = {\n    /** Must verify ownership when installationId is present. */\n    registerInstallation(input: PushRegistrationInput): Promise<{\n        installationId: string;\n    }>;\n    /** Remove every provider token for this authenticated installation identity. */\n    removeInstallation(input: PushRemovalInput): Promise<void>;\n};'
+					},
+					{
+						deprecated: 'Use PushRegistrar.',
+						description: '@deprecated Use PushRegistrar.',
+						kind: 'type',
+						name: 'NativePushRegistrar',
+						signature: 'type NativePushRegistrar = PushRegistrar;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushConfig',
+						signature:
+							'type PushConfig<UserType> = {\n    registrar: PushRegistrar;\n    /** Server-owned tenant identity. Clients cannot submit or override it. */\n    tenant: string | ((principal: AuthPrincipal<UserType>) => Promise<string> | string);\n    /** Server-owned topics. Clients cannot subscribe themselves to arbitrary topics. */\n    topics?: (principal: AuthPrincipal<UserType>) => Promise<readonly string[]> | readonly string[];\n};'
+					},
+					{
+						deprecated: 'Use PushConfig.',
+						description: '@deprecated Use PushConfig.',
+						kind: 'type',
+						name: 'NativePushConfig',
+						signature:
+							'type NativePushConfig<UserType> = PushConfig<UserType>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'pushRoutes',
+						signature:
+							'const pushRoutes: <UserType>({ accessTokens, authSessionStore, config }: {\n    accessTokens: AccessTokenPrincipalConfig<UserType>;\n    authSessionStore?: AuthSessionSource<UserType>;\n    config: PushConfig<UserType>;\n}) => import("elysia/types").AddRoute<"", "local", {\n    decorator: {};\n    store: {\n        session: import("./types").SessionRecord<UserType>;\n        unregisteredSession: import("./types").UnregisteredSessionRecord;\n    };\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, import("elysia").DefaultMetadata, {\n    auth: {\n        push: {\n            post: {\n                body: {\n                    installationId?: string | undefined;\n                    locale?: string | undefined;\n                    token: string;\n                    platform: "apns" | "fcm";\n                } | {\n                    installationId?: string | undefined;\n                    locale?: string | undefined;\n                    platform: "webpush";\n                    subscription: {\n                        keys: {\n                            auth: string;\n                            p256dh: string;\n                        };\n                        endpoint: string;\n              '
+					},
+					{
+						deprecated: 'Use pushRoutes.',
+						description: '@deprecated Use pushRoutes.',
+						kind: 'value',
+						name: 'nativePushRoutes',
+						signature:
+							'const nativePushRoutes: <UserType>({ accessTokens, authSessionStore, config }: {\n    accessTokens: AccessTokenPrincipalConfig<UserType>;\n    authSessionStore?: AuthSessionSource<UserType>;\n    config: PushConfig<UserType>;\n}) => import("elysia/types").AddRoute<"", "local", {\n    decorator: {};\n    store: {\n        session: import("./types").SessionRecord<UserType>;\n        unregisteredSession: import("./types").UnregisteredSessionRecord;\n    };\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, import("elysia").DefaultMetadata, {\n    auth: {\n        push: {\n            post: {\n                body: {\n                    installationId?: string | undefined;\n                    locale?: string | undefined;\n                    token: string;\n                    platform: "apns" | "fcm";\n                } | {\n                    installationId?: string | undefined;\n                    locale?: string | undefined;\n                    platform: "webpush";\n                    subscription: {\n                        keys: {\n                            auth: string;\n                            p256dh: string;\n                        };\n                        endpoint: string;\n        '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAuthApplications',
+						signature:
+							'const createAuthApplications: <UserType>(configuration: AuthConfig<UserType>) => Promise<{\n    authContext: Elysia<"", "local", {\n        decorator: {\n            absoluteAuthSync: import("./syncBridge").AbsoluteAuthSyncBridge<UserType> | undefined;\n        };\n        store: {\n            session: import("./types").SessionRecord<UserType>;\n            unregisteredSession: import("./types").UnregisteredSessionRecord;\n        };\n        derive: ({\n            readonly absoluteAuthStatus: {\n                error: {\n                    readonly code: "Bad Request";\n                    readonly message: "Cookies are missing";\n                };\n                user: null;\n                impersonator?: undefined;\n            } | {\n                error: null;\n                impersonator: import("./types").Impersonator | undefined;\n                user: NonNullable<UserType> | null;\n            };\n            readonly authPrincipal: import("./principal").AuthPrincipal<UserType> | undefined;\n        } & {\n            readonly protectRoute: {\n                <AuthReturn, AuthFailReturn = never>(handleAuth: (user: UserType) => Promise<AuthReturn>, handleAuthFail?: ((error: {\n              '
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthEventName',
+						signature:
+							"type AuthEventName = 'postLogin' | 'postLogout' | 'postMfa' | 'postOauthCallback' | 'postRegister' | 'preLogin' | 'preRegister';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthActionContext',
+						signature:
+							'type AuthActionContext<UserType> = {\n    email?: string;\n    event: AuthEventName;\n    ip?: string;\n    metadata?: Record<string, unknown>;\n    user?: UserType;\n    userAgent?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthActionResult',
+						signature:
+							"type AuthActionResult = {\n    kind: 'deny';\n    reason: string;\n} | {\n    kind: 'pass';\n} | {\n    kind: 'redirect';\n    url: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthAction',
+						signature:
+							'type AuthAction<UserType> = {\n    event: AuthEventName | AuthEventName[];\n    handler: (context: AuthActionContext<UserType>) => AuthActionResult | Promise<AuthActionResult>;\n    name: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthPipeline',
+						signature:
+							"type AuthPipeline<UserType> = {\n    run: (event: AuthEventName, context: Omit<AuthActionContext<UserType>, 'event'>) => Promise<AuthActionResult>;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createActionPipeline',
+						signature:
+							'const createActionPipeline: <UserType>(actions: AuthAction<UserType>[]) => AuthPipeline<UserType>;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'consumeSocketTicket',
+						signature: 'consumeSocketTicket'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'issueSocketTicket',
+						signature: 'issueSocketTicket'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ABSOLUTE_NATIVE_AUTH_CLIENTS_ENV',
+						signature: 'ABSOLUTE_NATIVE_AUTH_CLIENTS_ENV'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseAbsoluteNativeAuthClients',
+						signature: 'parseAbsoluteNativeAuthClients'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'withAbsoluteNativeAuthClients',
+						signature: 'withAbsoluteNativeAuthClients'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AbsoluteNativeAuthClient',
+						signature: 'type AbsoluteNativeAuthClient'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthApplications',
+						signature:
+							'type AuthApplications<UserType> = Awaited<ReturnType<typeof createAuthApplications<UserType>>>;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAuthContext',
+						signature: 'createAuthContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthInstance',
+						signature: 'AuthInstance'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthIntent',
+						signature:
+							"type AuthIntent = 'login' | 'link_identity' | 'link_connector';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OAuth2ProviderClientConfiguration',
+						signature:
+							"type OAuth2ProviderClientConfiguration<Provider extends ProviderOption> = {\n    credentials: CredentialsFor<Provider>;\n    searchParams?: [string, string][];\n} & (ProvidersMap[Provider]['scopeRequired'] extends true ? {\n    scope: NonEmptyArray<string>;\n} : {\n    scope?: string[];\n});"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OAuth2ProviderConfiguration',
+						signature:
+							'type OAuth2ProviderConfiguration<Provider extends ProviderOption> = OAuth2ProviderClientConfiguration<Provider> | Record<string, OAuth2ProviderClientConfiguration<Provider>>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OAuth2ConfigurationOptions',
+						signature:
+							'type OAuth2ConfigurationOptions = {\n    [Provider in ProviderOption]?: OAuth2ProviderConfiguration<Provider>;\n};'
+					},
+					{
+						description:
+							"One client of a caller-defined (custom) OAuth provider: the full citra ProviderConfig plus this app's credentials. Same optional scope / searchParams knobs as built-in provider clients.",
+						kind: 'type',
+						name: 'CustomProviderClientConfiguration',
+						signature:
+							'type CustomProviderClientConfiguration = {\n    credentials: CustomProviderCredentials;\n    providerConfig: ProviderConfig;\n    scope?: string[];\n    searchParams?: [string, string][];\n};'
+					},
+					{
+						description:
+							"Caller-defined providers keyed by YOUR provider name (any key that isn't a built-in citra provider). Single client or named client variants — the same shape as providersConfiguration. Registered providers get the full route set (authorize/callback/refresh/revoke/linked-providers) like built-ins.",
+						kind: 'type',
+						name: 'CustomProvidersConfiguration',
+						signature:
+							'type CustomProvidersConfiguration = Record<string, CustomProviderClientConfiguration | Record<string, CustomProviderClientConfiguration>>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'UserSessionId',
+						signature:
+							'type UserSessionId = `${string}-${string}-${string}-${string}-${string}`;'
+					},
+					{
+						description:
+							'Stamped on a session created via admin impersonation (startImpersonation). RFC 8693 actor semantics: actorId/actorEmail are the admin acting as the user, reason is required and audited, returnToSessionId is the admin\'s own session to restore on exit. Surfaced by userStatus so your UI can show an "impersonating" banner. readOnly is the RFC 8693 §6 "down-scope the delegated session" lever, surfaced for the app to enforce: when true this is a GHOST/observe-only session — the app should reject write',
+						kind: 'type',
+						name: 'Impersonator',
+						signature:
+							'type Impersonator = {\n    actorEmail?: string;\n    actorId: string;\n    readOnly?: boolean;\n    reason: string;\n    returnToSessionId?: UserSessionId;\n    startedAt: number;\n    /** Sandbox lever, surfaced for the app to enforce: when true, the app should\n     *  suppress outbound side-effects (emails / SMS / push / notifications)\n     *  triggered while acting as the member — so an admin can run a flow and watch\n     *  the behavior WITHOUT the member or their partners being contacted. Like\n     *  `readOnly`, the package only carries it; enforce it at your emitters.\n     *  Independent of `readOnly` (a session can act AND suppress = "sandbox"). */\n    suppressSideEffects?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SessionData',
+						signature:
+							'type SessionData<UserType> = {\n    /** Snapshot of your user, serialized into the session at login and handed to\n     *  `protectRoute`/`userStatus` as-is — it is NOT re-read from your user table per\n     *  request. Mutations made after login (role grants, bans, tier changes) stay\n     *  invisible to existing sessions until you rewrite the snapshot with\n     *  `refreshUserSessions`. */\n    user: UserType;\n    /** OAuth provider access token. Optional: credential / SSO sessions are not backed\n     *  by a provider token, so they omit it. Only the OAuth routes (profile, refresh,\n     *  revoke) read it, and they are all gated on an `auth_provider`. */\n    accessToken?: string;\n    refreshToken?: string;\n    /** Normalized OAuth subject retained for provider operations that target an\n     *  account identifier instead of a token, such as Withings revocation. */\n    oauthSubject?: string | number;\n    expiresAt: number;\n    /** When the session was last established by an actual authentication (login, OAuth\n     *  callback, or MFA challenge — NOT a token refresh). Drives step-up `requireRecentAuth`. */\n    authenticatedAt?: number;\n    /** SAML SP-initiated Single Logout context, ca'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SessionRecord',
+						signature:
+							'type SessionRecord<UserType> = Record<UserSessionId, SessionData<UserType>>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'UnregisteredSessionData',
+						signature:
+							'type UnregisteredSessionData = {\n    userIdentity?: JsonObject;\n    sessionInformation?: JsonObject;\n    expiresAt: number;\n    accessToken?: string;\n    refreshToken?: string;\n    oauthSubject?: string | number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'UnregisteredSessionRecord',
+						signature:
+							'type UnregisteredSessionRecord = Record<UserSessionId, UnregisteredSessionData>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResolvedOAuthAuthorization',
+						signature:
+							'type ResolvedOAuthAuthorization = {\n    userIdentity: JsonObject;\n    accessToken: string;\n    oauthSubject?: string | number;\n    refreshToken?: string;\n    expiresAt?: number;\n    tokenType?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StatusReturn',
+						signature:
+							"type StatusReturn = Pick<ElysiaStatus<number | keyof StatusMap, unknown>, 'response' | 'status'>;"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnNewUser',
+						signature:
+							'type OnNewUser<UserType> = (userIdentity: JsonObject) => UserType | StatusReturn | Response | Promise<UserType | StatusReturn | Response>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GetUser',
+						signature:
+							'type GetUser<UserType> = (userIdentity: JsonObject) => UserType | StatusReturn | Response | null | undefined | Promise<UserType | StatusReturn | Response | null | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CallbackCookie',
+						signature:
+							'type CallbackCookie = Record<string, Cookie<unknown>> & {\n    auth_client: Cookie<string | undefined>;\n    auth_intent: Cookie<AuthIntent | undefined>;\n    user_session_id: Cookie<UserSessionId | undefined>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CallbackContext',
+						signature:
+							"type CallbackContext<UserType> = {\n    providerInstance: OAuth2Client<ProviderOption>;\n    /** Configured provider name — a built-in citra key or a customProviders key. */\n    authProvider: string;\n    /** The provider's citra config — pass to instantiateUserSession so identity\n     *  extraction works for custom providers too. */\n    providerConfiguration: ProviderConfig;\n    authClient?: string;\n    authIntent: AuthIntent;\n    tokenResponse: OAuth2TokenResponse;\n    session: SessionRecord<UserType>;\n    unregisteredSession: UnregisteredSessionRecord;\n    userSessionId: UserSessionId;\n    originUrl: string;\n    cookie: CallbackCookie;\n    currentUser?: UserType;\n    /** The callback request; pass it to `instantiateUserSession` to record the device. */\n    request?: Request;\n    status: typeof statusType;\n    redirect: typeof redirectType;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResolveAuthIntent',
+						signature:
+							'type ResolveAuthIntent<UserType> = (({ authProvider, authClient, originUrl, session, userSessionId, currentUser }: {\n    authProvider: string;\n    authClient?: string;\n    originUrl: string;\n    session: SessionRecord<UserType>;\n    userSessionId?: UserSessionId;\n    currentUser?: UserType;\n}) => AuthIntent | Promise<AuthIntent>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnCallbackSuccess',
+						signature:
+							'type OnCallbackSuccess<UserType> = ((context: CallbackContext<UserType>) => void | Response | StatusReturn | Promise<void | Response | StatusReturn>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnLinkIdentity',
+						signature:
+							'type OnLinkIdentity<UserType> = ((context: CallbackContext<UserType>) => void | Response | StatusReturn | Promise<void | Response | StatusReturn>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnLinkIdentityConflict',
+						signature:
+							'type OnLinkIdentityConflict<UserType> = ((context: CallbackContext<UserType> & {\n    conflict: AuthIdentityConflict;\n}) => void | Response | StatusReturn | Promise<void | Response | StatusReturn>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnLinkConnector',
+						signature:
+							'type OnLinkConnector<UserType> = ((context: CallbackContext<UserType>) => void | Response | StatusReturn | Promise<void | Response | StatusReturn>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnCallbackError',
+						signature:
+							'type OnCallbackError = (({ error, authProvider, originUrl }: {\n    authProvider: string;\n    authClient?: string;\n    error: unknown;\n    originUrl: string;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnAuthorizeSuccess',
+						signature:
+							'type OnAuthorizeSuccess = (({ authProvider, authClient, authIntent, authorizationUrl }: {\n    authProvider: string;\n    authClient?: string;\n    authIntent?: AuthIntent;\n    authorizationUrl: URL;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnAuthorizeError',
+						signature:
+							'type OnAuthorizeError = (({ error, authProvider }: {\n    authProvider: string;\n    authClient?: string;\n    error: unknown;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnRefreshSuccess',
+						signature:
+							'type OnRefreshSuccess = (({ tokenResponse, authProvider }: {\n    tokenResponse: OAuth2TokenResponse;\n    authProvider: string;\n    authClient?: string;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnRefreshError',
+						signature:
+							'type OnRefreshError = (({ error, authProvider }: {\n    authProvider: string;\n    authClient?: string;\n    error: unknown;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnProfileSuccess',
+						signature:
+							'type OnProfileSuccess = (({ userProfile, authProvider }: {\n    userProfile: Record<string, unknown>;\n    authProvider: string;\n    authClient?: string;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnProfileError',
+						signature:
+							'type OnProfileError = (({ error, authProvider }: {\n    authProvider: string;\n    authClient?: string;\n    error: unknown;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnRevocationSuccess',
+						signature:
+							'type OnRevocationSuccess = (({ tokenToRevoke, authProvider }: {\n    tokenToRevoke: string | number;\n    authProvider: string;\n    authClient?: string;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnRevocationError',
+						signature:
+							'type OnRevocationError = (({ error, authProvider }: {\n    authProvider: string;\n    authClient?: string;\n    error: unknown;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnStatus',
+						signature:
+							'type OnStatus<UserType> = (({ impersonator, user }: {\n    impersonator?: Impersonator;\n    user: UserType | null;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnSignOut',
+						signature:
+							'type OnSignOut<UserType> = (({ authProvider, userSessionId, session }: {\n    /** Set only when the session was minted by the OAuth2 `/authorize` flow —\n     *  credentials, MFA, passwordless, SSO, WebAuthn, and impersonation-minted\n     *  sessions sign out without one. Use it to revoke the upstream provider\n     *  token when present; ignore when undefined. */\n    authProvider: string | undefined;\n    userSessionId: UserSessionId;\n    session: SessionRecord<UserType>;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'OnSessionCleanup',
+						signature:
+							'type OnSessionCleanup<UserType> = (({ removedSessionCount, removedSessions, removedUnregisteredSessionCount, removedUnregisteredSessions }: {\n    /** Total removed, including SQL fast-path rows whose values were never loaded. */\n    removedSessionCount: number;\n    removedSessions: Map<UserSessionId, SessionData<UserType>>;\n    /** Total unregistered sessions removed, including SQL fast-path rows. */\n    removedUnregisteredSessionCount: number;\n    removedUnregisteredSessions: Map<UserSessionId, UnregisteredSessionData>;\n}) => void | Promise<void>) | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RouteString',
+						signature: 'type RouteString = `/${string}`;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthorizeRoute',
+						signature:
+							"type AuthorizeRoute = `${string}/:provider${'' | `/${string}`}`;"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthConfig',
+						signature:
+							"type AuthConfig<UserType> = {\n    /** Canonical user resolver: load the application user for a session subject\n     *  (`sub`). REQUIRED, and the single source of truth for `UserType` — every\n     *  other user-typed callback (`credentials.getUserByEmail`,\n     *  `sso.getSsoUser`, `onCallbackSuccess`, …) is checked against the shape\n     *  `getUser` returns (via `NoInfer`), so they cannot disagree. This is also\n     *  the resolver the package uses to hydrate the typed `user` in\n     *  `protectRoute`'s context. */\n    getUser: (sub: string) => UserType | null | Promise<UserType | null>;\n    /** Authenticated, server-owned web and native push registration. Requires `oidc`. */\n    push?: import('./nativePush').PushConfig<NoInfer<UserType>>;\n    /** @deprecated Use `push`. */\n    nativePush?: import('./nativePush').NativePushConfig<NoInfer<UserType>>;\n    providersConfiguration: OAuth2ConfigurationOptions;\n    /** Bring-your-own OAuth providers (citra createCustomOAuth2Client) — keys\n     *  must not collide with built-in provider names. */\n    customProviders?: CustomProvidersConfiguration;\n    /** Override the `Secure` attribute on every cookie the package sets (session, OAuth st"
+					},
+					{
+						description:
+							'The serializable subset of AuthConfig — the route paths, session durations, and limits that can live in a data file (auth.config.ts via defineAuthSettings) and be edited from tooling, separate from the code wiring (stores, hooks, callbacks) that stays in the auth() call. Spread alongside the rest: auth({ ...defineAuthSettings({...}), authSessionStore, providersConfiguration }).',
+						kind: 'type',
+						name: 'AuthSettings',
+						signature:
+							"type AuthSettings = Pick<AuthConfig<unknown>, 'authorizeRoute' | 'callbackRoute' | 'cleanupIntervalMs' | 'maxSessions' | 'profileRoute' | 'refreshRoute' | 'revokeRoute' | 'sessionDurationMs' | 'signoutRoute' | 'statusRoute' | 'unregisteredSessionDurationMs'>;"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ClientProviderEntry',
+						signature:
+							'type ClientProviderEntry = {\n    providerConfiguration: ProviderConfig;\n    requiresPKCE: boolean;\n    clientName?: string;\n    providerInstance: OAuth2Client<ProviderOption>;\n    scope?: string[];\n    searchParams?: [string, string][];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ClientProviderGroup',
+						signature:
+							'type ClientProviderGroup = {\n    entries: Record<string, ClientProviderEntry>;\n    isSingleClient: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ClientProviders',
+						signature:
+							'type ClientProviders = Record<string, ClientProviderGroup>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'InsantiateUserSessionProps',
+						signature:
+							'type InsantiateUserSessionProps<UserType> = {\n    authProvider: string;\n    /** Required for custom providers (names outside the citra registry). */\n    providerConfiguration?: ProviderConfig;\n    tokenResponse: OAuth2TokenResponse;\n    session: SessionRecord<UserType>;\n    unregisteredSession: UnregisteredSessionRecord;\n    providerInstance: OAuth2Client<ProviderOption>;\n    user_session_id: Cookie<UserSessionId | undefined>;\n    onNewUser: OnNewUser<NoInfer<UserType>>;\n    getUser: GetUser<NoInfer<UserType>>;\n    cookieSecure?: boolean;\n    resolvedAuthorization?: ResolvedOAuthAuthorization;\n    sessionDurationMs?: number;\n    unregisteredSessionDurationMs?: number;\n    /** Records the sign-in device on the session (its User-Agent). */\n    request?: Request;\n    /** Defaults to `authProvider`. */\n    signInMethod?: string;\n    /** Keep the session cookie for `sessionDurationMs`, across browser restarts,\n     *  instead of dropping it when the browser closes. */\n    persistentCookie?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'JsonPrimitive',
+						signature:
+							'type JsonPrimitive = boolean | null | number | string;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'JsonValue',
+						signature:
+							'type JsonValue = JsonPrimitive | JsonObject | JsonValue[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'JsonObject',
+						signature:
+							'type JsonObject = {\n    [key: string]: JsonValue;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'isJsonValue',
+						signature:
+							'const isJsonValue: (value: unknown) => value is JsonValue;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseJsonObject',
+						signature:
+							'const parseJsonObject: (value: unknown) => JsonObject;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/server',
+				symbols: [
+					{
+						description:
+							'Create the complete AbsoluteJS auth application through a declaration-stable server entry point. Import this subpath in server applications so TypeScript does not need to load declarations for every optional Auth feature.',
+						kind: 'value',
+						name: 'auth',
+						signature:
+							'const auth: <UserType>(configuration: AuthConfig<UserType>) => Promise<AuthInstance<UserType>>;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAuthContext',
+						signature: 'createAuthContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthInstance',
+						signature: 'AuthInstance'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuditSink',
+						signature: 'AuditSink'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PortalConfig',
+						signature: 'PortalConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SetupCapability',
+						signature: 'SetupCapability'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SetupSession',
+						signature: 'SetupSession'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SetupSessionStore',
+						signature: 'SetupSessionStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSetupSession',
+						signature: 'createSetupSession'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresSetupSessionStore',
+						signature: 'createPostgresSetupSessionStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'protectRoutePlugin',
+						signature: 'protectRoutePlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'readSessionCookie',
+						signature: 'readSessionCookie'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'requireAuthPlugin',
+						signature: 'requireAuthPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAbsoluteAuthSyncBridge',
+						signature: 'createAbsoluteAuthSyncBridge'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AbsoluteAuthSyncBridge',
+						signature: 'type AbsoluteAuthSyncBridge'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AbsoluteAuthSyncContext',
+						signature: 'type AbsoluteAuthSyncContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'deriveAuthSyncNamespace',
+						signature: 'deriveAuthSyncNamespace'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ScimConfig',
+						signature: 'ScimConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ScimFilter',
+						signature: 'ScimFilter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ScimGroup',
+						signature: 'ScimGroup'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ScimGroupInput',
+						signature: 'ScimGroupInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ScimTokenStore',
+						signature: 'ScimTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ScimUser',
+						signature: 'ScimUser'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ScimUserInput',
+						signature: 'ScimUserInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresScimTokenStore',
+						signature: 'createPostgresScimTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthSessionStore',
+						signature: 'AuthSessionStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationProviderError',
+						signature: 'VerificationProviderError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationCheckInput',
+						signature: 'type VerificationCheckInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationCheckResult',
+						signature: 'type VerificationCheckResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationCheckStatus',
+						signature: 'type VerificationCheckStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationProvider',
+						signature: 'type VerificationProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationProviderErrorKind',
+						signature: 'type VerificationProviderErrorKind'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationPurpose',
+						signature: 'type VerificationPurpose'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationStartInput',
+						signature: 'type VerificationStartInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationStartResult',
+						signature: 'type VerificationStartResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NodeSamlAdapterOptions',
+						signature: 'NodeSamlAdapterOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SsoIdentity',
+						signature: 'SsoIdentity'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SSOConfig',
+						signature: 'SSOConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SSOConnection',
+						signature: 'SSOConnection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SSOConnectionStore',
+						signature: 'SSOConnectionStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresSsoConnectionStore',
+						signature: 'createPostgresSsoConnectionStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isUserSessionId',
+						signature: 'isUserSessionId'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'userSessionIdTypebox',
+						signature: 'userSessionIdTypebox'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthConfig',
+						signature: 'AuthConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuth2ConfigurationOptions',
+						signature: 'OAuth2ConfigurationOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SessionData',
+						signature: 'SessionData'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UnregisteredSessionData',
+						signature: 'UnregisteredSessionData'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UserSessionId',
+						signature: 'UserSessionId'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'instantiateUserSession',
+						signature: 'instantiateUserSession'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuth2TokenResponse',
+						signature: 'OAuth2TokenResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProviderOption',
+						signature: 'ProviderOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'extractPropFromIdentity',
+						signature: 'extractPropFromIdentity'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isValidProviderOption',
+						signature: 'isValidProviderOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'providers',
+						signature: 'providers'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createCredentialsApi',
+						signature: 'createCredentialsApi'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSignoutApi',
+						signature: 'createSignoutApi'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'SessionSummary',
+						signature:
+							'type SessionSummary = {\n    authenticatedAt?: number;\n    current: boolean;\n    device?: {\n        browser?: string;\n        os?: string;\n    };\n    expiresAt: number;\n    id: string;\n    signInMethod?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'IdentitySummary',
+						signature: 'IdentitySummary'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PasskeySummary',
+						signature: 'PasskeySummary'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthClientError',
+						signature:
+							'type AuthClientError = {\n    body: unknown;\n    message: string;\n    status: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthClientResult',
+						signature:
+							'type AuthClientResult<T> = {\n    data: null;\n    error: AuthClientError;\n} | {\n    data: T;\n    error: null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthClientRoutes',
+						signature:
+							'type AuthClientRoutes = {\n    emailVerify?: string;\n    emailVerifyRequest?: string;\n    login?: string;\n    magicLinkRequest?: string;\n    magicLinkVerify?: string;\n    mfaChallenge?: string;\n    mfaManagement?: string;\n    mfaSetup?: string;\n    mfaVerifySetup?: string;\n    passkeyAuthenticateOptions?: string;\n    passkeyAuthenticateVerify?: string;\n    passkeyList?: string;\n    passkeyRegisterOptions?: string;\n    passkeyRegisterVerify?: string;\n    passkeyRemove?: string;\n    passwordReset?: string;\n    passwordResetRequest?: string;\n    register?: string;\n    identities?: string;\n    linkIdentity?: string;\n    sessions?: string;\n    signout?: string;\n    status?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthClientConfig',
+						signature:
+							'type AuthClientConfig = {\n    baseUrl?: string;\n    credentials?: RequestCredentials;\n    fetch?: AuthClientFetch;\n    routes?: AuthClientRoutes;\n    transport?: AuthClientTransport;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthClientFetch',
+						signature:
+							'type AuthClientFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthClientTransport',
+						signature:
+							"type AuthClientTransport = {\n    fetch?: AuthClientFetch;\n    signInEmail?: (body: {\n        email: string;\n        password: string;\n    }) => Promise<{\n        passwordCompromised?: boolean;\n        status: 'authenticated' | 'mfa_required';\n    }>;\n    signOut?: () => Promise<null>;\n    signUpEmail?: (body: {\n        email: string;\n        password: string;\n        [extra: string]: unknown;\n    }) => Promise<{\n        status: 'authenticated';\n    } | {\n        status: 'verification_required';\n    }>;\n    status?: () => Promise<{\n        impersonator?: unknown;\n        user: unknown | null;\n    }>;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAuthClient',
+						signature:
+							'const createAuthClient: ({ baseUrl, credentials, fetch: fetchImpl, routes, transport: configuredTransport }?: AuthClientConfig) => {\n    emailVerification: {\n        request: (body: {\n            email: string;\n        }) => Promise<{\n            data: null;\n            error: AuthClientError;\n        } | {\n            data: {\n                ok: true;\n            };\n            error: null;\n        }>;\n        verify: (body: {\n            token: string;\n        }) => Promise<{\n            data: null;\n            error: AuthClientError;\n        } | {\n            data: {\n                ok: true;\n            };\n            error: null;\n        }>;\n    };\n    identities: {\n        linkUrl: (provider: string) => string;\n        list: () => Promise<{\n            data: null;\n            error: AuthClientError;\n        } | {\n            data: {\n                createdAt: number;\n                email: string | undefined;\n                id: string;\n                lastUsedAt: number | undefined;\n                name: string | undefined;\n                provider: string;\n            }[];\n            error: null;\n        }>;\n        remove: (identityId: string) => Promise<{\n            dat'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AuthClient',
+						signature:
+							'type AuthClient = ReturnType<typeof createAuthClient>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DpopKey',
+						signature:
+							'type DpopKey = {\n    privateKey: CryptoKey;\n    publicJwk: JsonWebKey;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreateDpopProofInput',
+						signature:
+							'type CreateDpopProofInput = {\n    accessToken?: string;\n    htm: string;\n    htu: string | URL;\n    jti?: string;\n    key: DpopKey;\n    nonce?: string;\n    now?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DpopRequestInit',
+						signature:
+							'type DpopRequestInit = RequestInit & {\n    dpop?: {\n        accessToken?: string;\n        nonceScope?: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DpopClient',
+						signature:
+							'type DpopClient = {\n    fetch: (input: RequestInfo | URL, init?: DpopRequestInit) => Promise<Response>;\n    key: DpopKey;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DpopFetch',
+						signature:
+							'type DpopFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDpopClient',
+						signature: 'createDpopClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDpopKey',
+						signature: 'createDpopKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDpopProof',
+						signature: 'createDpopProof'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SessionExpiredContext',
+						signature:
+							'type SessionExpiredContext = {\n    returnTo: string;\n    signInUrl: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SessionExpiryGuard',
+						signature:
+							'type SessionExpiryGuard = {\n    check: () => Promise<boolean>;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SessionExpiryGuardConfig',
+						signature:
+							'type SessionExpiryGuardConfig = {\n    checkIntervalMs?: number;\n    isProtectedRequest?: (url: URL) => boolean;\n    onExpired?: (context: SessionExpiredContext) => void;\n    protectedPaths?: readonly string[];\n    reason?: string;\n    reasonParam?: string;\n    returnUrlParam?: string;\n    signInPath?: string;\n    statusPath?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildSessionExpiredSignInUrl',
+						signature:
+							'const buildSessionExpiredSignInUrl: ({ currentHref, reason, reasonParam, returnUrlParam, signInPath }: {\n    currentHref: string;\n    reason?: string;\n    reasonParam?: string;\n    returnUrlParam?: string;\n    signInPath?: string;\n}) => string;'
+					},
+					{
+						description:
+							'Installs one browser-wide session-expiry guard. It intercepts 401 responses only for explicitly protected same-origin requests and rechecks the auth status route when a backgrounded or bfcached page becomes active again.',
+						kind: 'value',
+						name: 'installSessionExpiryGuard',
+						signature:
+							'const installSessionExpiryGuard: (config?: SessionExpiryGuardConfig) => SessionExpiryGuard;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'isProtectedSessionRequest',
+						signature:
+							'const isProtectedSessionRequest: ({ input, origin, protectedPaths }: {\n    input: RequestInfo | URL;\n    origin: string;\n    protectedPaths: readonly string[];\n}) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthSecureStorage',
+						signature:
+							'type MobileAuthSecureStorage = {\n    capability?: () => Promise<{\n        available: boolean;\n        message?: string;\n    }>;\n    get(key: string): Promise<string | null>;\n    remove(key: string): Promise<void>;\n    set(key: string, value: string): Promise<void>;\n    /** Serialize refresh-token rotation with a native background worker. */\n    withLock?<T>(key: string, run: () => Promise<T>): Promise<T>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthLinks',
+						signature:
+							'type MobileAuthLinks = {\n    getLaunchUrl(): Promise<string | null>;\n    onOpen(listener: (url: string) => void): Promise<() => Promise<void> | void>;\n    openExternal(url: string): Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthLifecycle',
+						signature:
+							'type MobileAuthLifecycle = {\n    onResume?(listener: () => void): Promise<() => Promise<void> | void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthCrypto',
+						signature:
+							'type MobileAuthCrypto = {\n    digestSha256(value: Uint8Array): Promise<Uint8Array>;\n    randomBytes(length: number): Uint8Array;\n    verifyEs256(input: {\n        data: Uint8Array;\n        jwk: JsonWebKey;\n        signature: Uint8Array;\n    }): Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthDiscovery',
+						signature:
+							'type MobileAuthDiscovery = {\n    authorization_endpoint: string;\n    code_challenge_methods_supported?: string[];\n    issuer: string;\n    jwks_uri: string;\n    revocation_endpoint?: string;\n    socket_ticket_endpoint?: string;\n    token_endpoint: string;\n    token_endpoint_auth_methods_supported?: string[];\n    userinfo_endpoint: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthClientConfig',
+						signature:
+							'type MobileAuthClientConfig = {\n    allowedOrigins?: readonly string[];\n    /** Runs while renewable credentials still exist, before native sign-out. */\n    beforeSignOut?: () => Promise<void> | void;\n    clientId: string;\n    clockSkewMs?: number;\n    crypto?: MobileAuthCrypto;\n    fetch?: typeof globalThis.fetch;\n    issuer: string;\n    lifecycle?: MobileAuthLifecycle;\n    links: MobileAuthLinks;\n    now?: () => number;\n    redirectUri: string;\n    resource?: string;\n    scopes?: readonly string[];\n    storage: MobileAuthSecureStorage;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthSignInOptions',
+						signature:
+							'type MobileAuthSignInOptions = {\n    authorizationParameters?: Readonly<Record<string, string>>;\n    signal?: AbortSignal;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthTokens',
+						signature:
+							"type MobileAuthTokens = {\n    accessToken: string;\n    expiresAt: number;\n    idToken: string;\n    refreshToken: string;\n    scope: string[];\n    tokenType: 'Bearer';\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthUser',
+						signature:
+							'type MobileAuthUser = Record<string, unknown> & {\n    sub: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthPrincipal',
+						signature:
+							'type MobileAuthPrincipal = {\n    issuer: string;\n    namespace: string;\n    /** Optional server-owned tenant/account partition from userinfo. */\n    partition?: string;\n    subject: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthErrorCode',
+						signature:
+							"type MobileAuthErrorCode = 'aborted' | 'callback' | 'discovery' | 'id-token' | 'network' | 'oauth' | 'origin' | 'secure-storage' | 'token';"
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'MobileAuthError',
+						signature:
+							'class MobileAuthError extends Error {\n    readonly code: MobileAuthErrorCode;\n    readonly cause?: unknown;\n    constructor(code: MobileAuthErrorCode, message: string, options?: {\n        cause?: unknown;\n    });\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMobileAuthClient',
+						signature:
+							'const createMobileAuthClient: (config: MobileAuthClientConfig) => {\n    fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n    fetchOptional: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n    handleCallback: (value: string) => Promise<MobileAuthTokens>;\n    onPrincipalChange: (listener: (principal: MobileAuthPrincipal | null) => void) => () => void;\n    principal: () => Promise<MobileAuthPrincipal | null>;\n    refresh: () => Promise<string>;\n    signIn: (options?: MobileAuthSignInOptions) => Promise<MobileAuthTokens>;\n    signOut: () => Promise<void>;\n    socketTicket: (audience?: string) => Promise<string>;\n    start: () => Promise<void>;\n    status: () => Promise<{\n        sub: string;\n    } | null>;\n    stop: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthClient',
+						signature:
+							'type MobileAuthClient = ReturnType<typeof createMobileAuthClient>;'
+					},
+					{
+						description:
+							'Adapts the native OAuth lifecycle behind the same createAuthClient API used by web applications. Passwords stay out of the WebView request path; the external authorization UI owns credential entry and MFA.',
+						kind: 'value',
+						name: 'createMobileAuthTransport',
+						signature:
+							'const createMobileAuthTransport: (client: MobileAuthClient, options?: {\n    baseUrl?: string;\n}) => import("./createAuthClient").AuthClientTransport;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'installAuthClientRuntimeTransport',
+						signature:
+							'const installAuthClientRuntimeTransport: (transport: AuthClientTransport) => () => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getAuthClientRuntimeTransport',
+						signature:
+							'const getAuthClientRuntimeTransport: () => AuthClientTransport | undefined;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'isSafeLocalPath',
+						signature:
+							'const isSafeLocalPath: (value: string) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'toSafeLocalPath',
+						signature:
+							'const toSafeLocalPath: (value: string | undefined, fallback?: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runConditionalAuthentication',
+						signature: 'runConditionalAuthentication'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runPasskeyAuthentication',
+						signature: 'runPasskeyAuthentication'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runPasskeyRegistration',
+						signature: 'runPasskeyRegistration'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/client/mobile',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthSecureStorage',
+						signature:
+							'type MobileAuthSecureStorage = {\n    capability?: () => Promise<{\n        available: boolean;\n        message?: string;\n    }>;\n    get(key: string): Promise<string | null>;\n    remove(key: string): Promise<void>;\n    set(key: string, value: string): Promise<void>;\n    /** Serialize refresh-token rotation with a native background worker. */\n    withLock?<T>(key: string, run: () => Promise<T>): Promise<T>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthLinks',
+						signature:
+							'type MobileAuthLinks = {\n    getLaunchUrl(): Promise<string | null>;\n    onOpen(listener: (url: string) => void): Promise<() => Promise<void> | void>;\n    openExternal(url: string): Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthLifecycle',
+						signature:
+							'type MobileAuthLifecycle = {\n    onResume?(listener: () => void): Promise<() => Promise<void> | void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthCrypto',
+						signature:
+							'type MobileAuthCrypto = {\n    digestSha256(value: Uint8Array): Promise<Uint8Array>;\n    randomBytes(length: number): Uint8Array;\n    verifyEs256(input: {\n        data: Uint8Array;\n        jwk: JsonWebKey;\n        signature: Uint8Array;\n    }): Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthDiscovery',
+						signature:
+							'type MobileAuthDiscovery = {\n    authorization_endpoint: string;\n    code_challenge_methods_supported?: string[];\n    issuer: string;\n    jwks_uri: string;\n    revocation_endpoint?: string;\n    socket_ticket_endpoint?: string;\n    token_endpoint: string;\n    token_endpoint_auth_methods_supported?: string[];\n    userinfo_endpoint: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthClientConfig',
+						signature:
+							'type MobileAuthClientConfig = {\n    allowedOrigins?: readonly string[];\n    /** Runs while renewable credentials still exist, before native sign-out. */\n    beforeSignOut?: () => Promise<void> | void;\n    clientId: string;\n    clockSkewMs?: number;\n    crypto?: MobileAuthCrypto;\n    fetch?: typeof globalThis.fetch;\n    issuer: string;\n    lifecycle?: MobileAuthLifecycle;\n    links: MobileAuthLinks;\n    now?: () => number;\n    redirectUri: string;\n    resource?: string;\n    scopes?: readonly string[];\n    storage: MobileAuthSecureStorage;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthSignInOptions',
+						signature:
+							'type MobileAuthSignInOptions = {\n    authorizationParameters?: Readonly<Record<string, string>>;\n    signal?: AbortSignal;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthTokens',
+						signature:
+							"type MobileAuthTokens = {\n    accessToken: string;\n    expiresAt: number;\n    idToken: string;\n    refreshToken: string;\n    scope: string[];\n    tokenType: 'Bearer';\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthUser',
+						signature:
+							'type MobileAuthUser = Record<string, unknown> & {\n    sub: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthPrincipal',
+						signature:
+							'type MobileAuthPrincipal = {\n    issuer: string;\n    namespace: string;\n    /** Optional server-owned tenant/account partition from userinfo. */\n    partition?: string;\n    subject: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthErrorCode',
+						signature:
+							"type MobileAuthErrorCode = 'aborted' | 'callback' | 'discovery' | 'id-token' | 'network' | 'oauth' | 'origin' | 'secure-storage' | 'token';"
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'MobileAuthError',
+						signature:
+							'class MobileAuthError extends Error {\n    readonly code: MobileAuthErrorCode;\n    readonly cause?: unknown;\n    constructor(code: MobileAuthErrorCode, message: string, options?: {\n        cause?: unknown;\n    });\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMobileAuthClient',
+						signature:
+							'const createMobileAuthClient: (config: MobileAuthClientConfig) => {\n    fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n    fetchOptional: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;\n    handleCallback: (value: string) => Promise<MobileAuthTokens>;\n    onPrincipalChange: (listener: (principal: MobileAuthPrincipal | null) => void) => () => void;\n    principal: () => Promise<MobileAuthPrincipal | null>;\n    refresh: () => Promise<string>;\n    signIn: (options?: MobileAuthSignInOptions) => Promise<MobileAuthTokens>;\n    signOut: () => Promise<void>;\n    socketTicket: (audience?: string) => Promise<string>;\n    start: () => Promise<void>;\n    status: () => Promise<{\n        sub: string;\n    } | null>;\n    stop: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileAuthClient',
+						signature:
+							'type MobileAuthClient = ReturnType<typeof createMobileAuthClient>;'
+					},
+					{
+						description:
+							'Adapts the native OAuth lifecycle behind the same createAuthClient API used by web applications. Passwords stay out of the WebView request path; the external authorization UI owns credential entry and MFA.',
+						kind: 'value',
+						name: 'createMobileAuthTransport',
+						signature:
+							'const createMobileAuthTransport: (client: MobileAuthClient, options?: {\n    baseUrl?: string;\n}) => import("./createAuthClient").AuthClientTransport;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'installAuthClientRuntimeTransport',
+						signature: 'installAuthClientRuntimeTransport'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/agents',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'DEFAULT_AGENT_RESOURCE_METADATA_ROUTE',
+						signature:
+							'const DEFAULT_AGENT_RESOURCE_METADATA_ROUTE: RouteString;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentRegistrationDiscoveryMetadata',
+						signature:
+							'type AgentRegistrationDiscoveryMetadata = {\n    claim_endpoint: string;\n    identity_assertion: {\n        assertion_types_supported: string[];\n    };\n    identity_endpoint: string;\n    identity_types_supported: string[];\n    skill: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentAuthConfig',
+						signature:
+							'type AgentAuthConfig = {\n    /** Permit registered agents to authenticate without a user delegation. Secure\n     * default is false; enable for machine-only resources. */\n    allowUndelegated?: boolean;\n    /** Open auth.md agent-registration support. Implemented natively by Absolute\n     * Auth and projected through OAuth discovery; no WorkOS service is required. */\n    agentRegistration?: AgentRegistrationProtocolConfig;\n    /** Agent-readable OAuth onboarding derived from the same protected resources\n     * and scopes the application actually enables. This is separate from the\n     * optional claim/ID-JAG registration profile. */\n    oauthGuide?: AgentOAuthGuideConfig;\n    authorizationServer: string;\n    delegationStore: AgentDelegationStore;\n    /** Advertise RFC 9728 `dpop_bound_access_tokens_required`. Keep this aligned\n     * with a credential verifier configured with `requireDpop: true`. */\n    dpopBoundAccessTokensRequired?: boolean;\n    logoUri?: string;\n    metadataRoute?: RouteString;\n    /** Authorization-server route prefix. Defaults to `/oauth2`; used to derive\n     * the authoritative token endpoint advertised by the generated guide. */\n    oidcRoute?: RouteString;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'agentProtectedResourceMetadata',
+						signature:
+							'const agentProtectedResourceMetadata: (config: Pick<AgentAuthConfig, "authorizationServer" | "dpopBoundAccessTokensRequired" | "logoUri" | "resource" | "resourceName" | "scopes">) => {\n    resource: string;\n    scopes_supported: string[];\n    resource_name?: string | undefined;\n    resource_logo_uri?: string | undefined;\n    dpop_bound_access_tokens_required?: boolean | undefined;\n    authorization_servers: string[];\n    bearer_methods_supported: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentRegistrationStatus',
+						signature:
+							"type AgentRegistrationStatus = 'active' | 'revoked';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentDelegationStatus',
+						signature:
+							"type AgentDelegationStatus = 'active' | 'revoked';"
+					},
+					{
+						description:
+							'A durable identity for an agent client. This is deliberately protocol-neutral: clientId can refer to an OAuth client, while adapters for other protocols can use agentId without manufacturing OAuth metadata.',
+						kind: 'type',
+						name: 'AgentRegistration',
+						signature:
+							'type AgentRegistration = {\n    agentId: string;\n    allowedScopes: string[];\n    clientId?: string;\n    createdAt: number;\n    metadata?: Record<string, unknown>;\n    name: string;\n    status: AgentRegistrationStatus;\n    updatedAt: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentRegistrationStore',
+						signature:
+							'type AgentRegistrationStore = {\n    findByAgentId: (agentId: string) => Promise<AgentRegistration | undefined>;\n    findByClientId: (clientId: string) => Promise<AgentRegistration | undefined>;\n    listRegistrations: () => Promise<AgentRegistration[]>;\n    saveRegistration: (registration: AgentRegistration) => Promise<void>;\n};'
+					},
+					{
+						description:
+							"A user's explicit grant to an agent. Authorization details use RFC 9396's open object shape so applications can express transaction constraints without forcing them into coarse OAuth scope strings.",
+						kind: 'type',
+						name: 'AgentDelegation',
+						signature:
+							'type AgentDelegation = {\n    agentId: string;\n    authorizationDetails?: Record<string, unknown>[];\n    createdAt: number;\n    delegationId: string;\n    expiresAt?: number;\n    organizationId?: string;\n    scopes: string[];\n    status: AgentDelegationStatus;\n    updatedAt: number;\n    userId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentDelegationStore',
+						signature:
+							'type AgentDelegationStore = {\n    findActiveDelegation: (query: {\n        agentId: string;\n        now?: number;\n        organizationId?: string;\n        userId: string;\n    }) => Promise<AgentDelegation | undefined>;\n    findByDelegationId: (delegationId: string) => Promise<AgentDelegation | undefined>;\n    listDelegations: (agentId?: string) => Promise<AgentDelegation[]>;\n    saveDelegation: (delegation: AgentDelegation) => Promise<void>;\n};'
+					},
+					{
+						description:
+							'The normalized result produced by a wire-protocol adapter. The core never handles raw provider assertions; it authorizes only this verified shape.',
+						kind: 'type',
+						name: 'VerifiedAgentCredential',
+						signature:
+							'type VerifiedAgentCredential = {\n    agentId: string;\n    claims?: Record<string, unknown>;\n    expiresAt?: number;\n    organizationId?: string;\n    resource?: string;\n    scopes: string[];\n    userId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentCredentialVerifier',
+						signature:
+							'type AgentCredentialVerifier = (request: Request) => Promise<VerifiedAgentCredential | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentPrincipal',
+						signature:
+							"type AgentPrincipal = {\n    agentId: string;\n    authorizationDetails?: Record<string, unknown>[];\n    delegationId?: string;\n    kind: 'agent';\n    name: string;\n    organizationId?: string;\n    scopes: string[];\n    trust: 'delegated' | 'registered';\n    userId?: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentIdentityRegistrationKind',
+						signature:
+							"type AgentIdentityRegistrationKind = 'anonymous' | 'identity_assertion' | 'service_auth';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentIdentityRegistrationStatus',
+						signature:
+							"type AgentIdentityRegistrationStatus = 'claimed' | 'pending' | 'revoked';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentClaimAttempt',
+						signature:
+							'type AgentClaimAttempt = {\n    attempts: number;\n    email: string;\n    expiresAt: number;\n    tokenHash: string;\n    userCodeHash: string;\n};'
+					},
+					{
+						description:
+							'Durable state for the open auth.md registration profile. Secrets are represented only by hashes; plaintext claim and attempt tokens are returned once to the agent and never persisted. version is used for compare-and-swap updates so claim completion is safe across multiple application instances.',
+						kind: 'type',
+						name: 'AgentIdentityRegistration',
+						signature:
+							'type AgentIdentityRegistration = {\n    agentId: string;\n    claimAttempt?: AgentClaimAttempt;\n    claimExpiresAt: number;\n    claimTokenHash: string;\n    createdAt: number;\n    expiresAt: number;\n    kind: AgentIdentityRegistrationKind;\n    loginHint?: string;\n    lastPolledAt?: number;\n    registrationId: string;\n    status: AgentIdentityRegistrationStatus;\n    updatedAt: number;\n    upstream?: {\n        clientId: string;\n        issuer: string;\n        subject: string;\n    };\n    userId?: string;\n    version: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentIdentityRegistrationStore',
+						signature:
+							'type AgentIdentityRegistrationStore = {\n    create: (registration: AgentIdentityRegistration) => Promise<boolean>;\n    findByClaimTokenHash: (claimTokenHash: string) => Promise<AgentIdentityRegistration | undefined>;\n    findByAgentId: (agentId: string) => Promise<AgentIdentityRegistration | undefined>;\n    findByRegistrationId: (registrationId: string) => Promise<AgentIdentityRegistration | undefined>;\n    findByUpstreamIdentity: (query: {\n        clientId: string;\n        issuer: string;\n        subject: string;\n    }) => Promise<AgentIdentityRegistration | undefined>;\n    findByAttemptTokenHash: (attemptTokenHash: string) => Promise<AgentIdentityRegistration | undefined>;\n    /** Replaces a record only when its current version equals expectedVersion. */\n    replace: (registration: AgentIdentityRegistration, expectedVersion: number) => Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VerifiedAgentIdentityAssertion',
+						signature:
+							'type VerifiedAgentIdentityAssertion = {\n    authenticatedAt: number;\n    clientId: string;\n    email?: string;\n    emailVerified?: boolean;\n    issuer: string;\n    name?: string;\n    phoneNumber?: string;\n    phoneNumberVerified?: boolean;\n    subject: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AGENT_CLAIM_GRANT_TYPE',
+						signature:
+							'const AGENT_CLAIM_GRANT_TYPE: "urn:workos:agent-auth:grant-type:claim";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AGENT_IDENTITY_ASSERTION_GRANT_TYPE',
+						signature:
+							'const AGENT_IDENTITY_ASSERTION_GRANT_TYPE: "urn:ietf:params:oauth:grant-type:jwt-bearer";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AGENT_IDENTITY_ASSERTION_TYPE',
+						signature:
+							'const AGENT_IDENTITY_ASSERTION_TYPE: "urn:ietf:params:oauth:token-type:id-jag";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentRegistrationAuthenticatedUser',
+						signature:
+							'type AgentRegistrationAuthenticatedUser = {\n    email?: string;\n    userId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentRegistrationProtocolConfig',
+						signature:
+							'type AgentRegistrationProtocolConfig = {\n    accessTokenStore: AccessTokenStore;\n    allowAnonymous?: boolean;\n    allowServiceAuth?: boolean;\n    assertionTtlMs?: number;\n    attemptTtlMs?: number;\n    claimRoute?: RouteString;\n    claimTtlMs?: number;\n    completeRoute?: RouteString;\n    guideRoute?: RouteString;\n    identityRoute?: RouteString;\n    identityStore: AgentIdentityRegistrationStore;\n    maxAuthenticationAgeMs?: number;\n    maxCodeAttempts?: number;\n    pollIntervalSeconds?: number;\n    postClaimScopes: string[];\n    preClaimScopes?: string[];\n    resolveAuthenticatedUser: (request: Request) => Promise<AgentRegistrationAuthenticatedUser | undefined>;\n    /** Match a cryptographically verified upstream identity to local state. A\n     * userId permits immediate registration; omitting it requires a user claim. */\n    resolveVerifiedIdentity?: (identity: VerifiedAgentIdentityAssertion) => Promise<{\n        userId?: string;\n    } | undefined>;\n    /** Bulk-revokes access tokens for an agent. Required for anonymous\n     * registration and recommended for immediate cleanup on any revocation. It\n     * must be idempotent because atomic state updates may be retried. */\n    rev'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentRegistrationEndpoints',
+						signature:
+							'type AgentRegistrationEndpoints = {\n    claimEndpoint: string;\n    completeEndpoint: string;\n    guide: string;\n    identityEndpoint: string;\n    tokenEndpoint: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'agentRegistrationDiscoveryMetadata',
+						signature:
+							'const agentRegistrationDiscoveryMetadata: (config: AgentAuthConfig) => AgentRegistrationDiscoveryMetadata;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'agentRegistrationEndpoints',
+						signature:
+							'const agentRegistrationEndpoints: (config: AgentAuthConfig) => AgentRegistrationEndpoints;'
+					},
+					{
+						description:
+							'Generates the agent-readable companion document. Endpoint URLs and support flags come from the same structured configuration used for discovery, so the prose cannot silently drift from the authorization server metadata.',
+						kind: 'value',
+						name: 'generateAgentRegistrationGuide',
+						signature:
+							'const generateAgentRegistrationGuide: (config: AgentAuthConfig) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'issueAgentServiceAssertion',
+						signature:
+							'const issueAgentServiceAssertion: (config: AgentAuthConfig, flow: AgentIdentityRegistration, now?: number) => Promise<{\n    assertion: string;\n    expiresAt: number;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StartAgentRegistrationInput',
+						signature:
+							"type StartAgentRegistrationInput = {\n    type: 'anonymous';\n} | {\n    loginHint: string;\n    type: 'service_auth';\n} | {\n    assertion: string;\n    assertionType: typeof AGENT_IDENTITY_ASSERTION_TYPE;\n    type: 'identity_assertion';\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'StartAgentRegistrationResult',
+						signature:
+							'type StartAgentRegistrationResult = {\n    error: string;\n    message?: string;\n    status: 400 | 401 | 403;\n} | {\n    assertionExpires: number;\n    claim?: ReturnType<typeof ceremony>;\n    claimToken?: string;\n    claimTokenExpires?: number;\n    identityAssertion?: string;\n    preClaimScopes?: string[];\n    postClaimScopes: string[];\n    registrationId: string;\n    registrationType: AgentIdentityRegistrationKind;\n    status: 200;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'startAgentRegistration',
+						signature:
+							'const startAgentRegistration: (config: AgentAuthConfig, input: StartAgentRegistrationInput, now?: number) => Promise<StartAgentRegistrationResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeginAgentClaimResult',
+						signature:
+							"type BeginAgentClaimResult = {\n    error: 'claim_expired' | 'invalid_claim_token';\n    status: 400;\n} | {\n    error: 'concurrent_update';\n    status: 409;\n} | {\n    claimAttempt: ReturnType<typeof ceremony>;\n    status: 200;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'beginAgentClaim',
+						signature:
+							'const beginAgentClaim: (config: AgentAuthConfig, input: {\n    claimToken: string;\n    email: string;\n}, now?: number) => Promise<BeginAgentClaimResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CompleteAgentClaimResult',
+						signature:
+							"type CompleteAgentClaimResult = {\n    error: 'claim_expired' | 'concurrent_update' | 'invalid_claim_attempt' | 'user_code_invalid' | 'wrong_user';\n    status: 400 | 403 | 409 | 429;\n} | {\n    status: 204;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'completeAgentClaim',
+						signature:
+							'const completeAgentClaim: (config: AgentAuthConfig, input: {\n    attemptToken: string;\n    request: Request;\n    userCode: string;\n}, now?: number) => Promise<CompleteAgentClaimResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentTokenGrantResult',
+						signature:
+							'type AgentTokenGrantResult = {\n    body: Record<string, unknown>;\n    status: 200;\n} | {\n    body: {\n        error: string;\n    };\n    status: 400;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAgentRegistrationCredentialVerifier',
+						signature:
+							'const createAgentRegistrationCredentialVerifier: (accessTokenStore: AccessTokenStore, identityStore?: AgentIdentityRegistrationStore) => (request: Request) => Promise<{\n    agentId: string;\n    expiresAt: number;\n    scopes: string[];\n    userId: string | undefined;\n} | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'handleAgentTokenGrant',
+						signature:
+							'const handleAgentTokenGrant: (config: AgentAuthConfig, body: Record<string, string | undefined>, now?: number) => Promise<AgentTokenGrantResult | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'revokeAgentIdentityRegistration',
+						signature:
+							'const revokeAgentIdentityRegistration: (config: AgentAuthConfig, registrationId: string, now?: number) => Promise<boolean>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiscoveredAgentRegistration',
+						signature:
+							'type DiscoveredAgentRegistration = {\n    agentAuth: {\n        claimEndpoint: string;\n        identityAssertionTypes: string[];\n        identityEndpoint: string;\n        identityTypes: string[];\n        skill: string;\n    };\n    authorizationServer: string;\n    resource: string;\n    resourceMetadataUrl: string;\n    scopes: string[];\n    tokenEndpoint: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentRegistrationClientOptions',
+						signature:
+							'type AgentRegistrationClientOptions = {\n    allowInsecureLocalhost?: boolean;\n    maxResponseBytes?: number;\n    request?: typeof fetch;\n};'
+					},
+					{
+						description:
+							'Discovers agent registration using RFC 9728 followed by RFC 8414. Network policy is injected through request; redirects are rejected by default.',
+						kind: 'value',
+						name: 'createAgentRegistrationClient',
+						signature:
+							'const createAgentRegistrationClient: (discovery: DiscoveredAgentRegistration, options?: AgentRegistrationClientOptions) => {\n    beginAnonymous: () => Promise<{\n        body: JsonObject;\n        response: Response;\n    }>;\n    beginServiceAuth: (loginHint: string) => Promise<{\n        body: JsonObject;\n        response: Response;\n    }>;\n    beginVerified: (assertion: string) => Promise<{\n        body: JsonObject;\n        response: Response;\n    }>;\n    claim: (claimToken: string, email: string) => Promise<{\n        body: JsonObject;\n        response: Response;\n    }>;\n    exchangeAssertion: (assertion: string) => Promise<{\n        body: JsonObject;\n        response: Response;\n    }>;\n    pollClaim: (claimToken: string) => Promise<{\n        body: JsonObject;\n        response: Response;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'discoverAgentRegistration',
+						signature:
+							'const discoverAgentRegistration: (resource: string, options?: AgentRegistrationClientOptions) => Promise<DiscoveredAgentRegistration>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentIdentityAssertionJtiStore',
+						signature:
+							'type AgentIdentityAssertionJtiStore = {\n    /** Atomically records an issuer+jti pair. Returns false for a replay. */\n    recordIfFresh: (issuer: string, jti: string, expiresAt: number) => Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createInMemoryAgentIdentityAssertionJtiStore',
+						signature:
+							'const createInMemoryAgentIdentityAssertionJtiStore: () => AgentIdentityAssertionJtiStore;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentIdentityAssertionUser',
+						signature:
+							'type AgentIdentityAssertionUser = {\n    authenticatedAt: number;\n    email?: string;\n    emailVerified?: boolean;\n    methods?: string[];\n    name?: string;\n    phoneNumber?: string;\n    phoneNumberVerified?: boolean;\n    subject: string;\n};'
+					},
+					{
+						description:
+							'Native provider-side ID-JAG issuance. The caller owns the user consent UI and must authorize the requested audience before invoking this helper.',
+						kind: 'value',
+						name: 'issueAgentIdentityAssertion',
+						signature:
+							'const issueAgentIdentityAssertion: ({ agentContextId, agentPlatform, audience, clientId, issuer, now, resource, signingKey, ttlMs, user }: {\n    agentContextId?: string;\n    agentPlatform?: string;\n    audience: string;\n    clientId: string;\n    issuer: string;\n    now?: number;\n    resource?: string;\n    signingKey: SigningKey;\n    ttlMs?: number;\n    user: AgentIdentityAssertionUser;\n}) => Promise<{\n    assertion: string;\n    assertionType: "urn:ietf:params:oauth:token-type:id-jag";\n    expiresAt: number;\n}>;'
+					},
+					{
+						description:
+							'Builds a fail-closed service-side verifier. Issuer resolution is injected so the application can use pinned configuration, CIMD, or an egress-guarded JWKS resolver without this package performing ambient network access.',
+						kind: 'value',
+						name: 'createAgentIdentityAssertionVerifier',
+						signature:
+							'const createAgentIdentityAssertionVerifier: ({ audience, clockSkewMs, jtiStore, maxAssertionLifetimeMs, maxAuthenticationAgeMs, resolveIssuer }: {\n    audience: string;\n    clockSkewMs?: number;\n    jtiStore: AgentIdentityAssertionJtiStore;\n    maxAssertionLifetimeMs?: number;\n    maxAuthenticationAgeMs?: number;\n    resolveIssuer: (issuer: string) => Promise<{\n        allowedClientIds?: string[];\n        publicJwk: JsonWebKey;\n    } | undefined>;\n}) => (assertion: string, now?: number) => Promise<VerifiedAgentIdentityAssertion | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentOAuthGuideResource',
+						signature:
+							'type AgentOAuthGuideResource = {\n    metadataUrl: string;\n    name: string;\n    resource: string;\n    scopes: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AgentOAuthGuideConfig',
+						signature:
+							'type AgentOAuthGuideConfig = {\n    authorizationServer: string;\n    resources: readonly AgentOAuthGuideResource[];\n    route?: RouteString;\n    serviceName: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'agentOAuthGuideRoute',
+						signature:
+							'const agentOAuthGuideRoute: (config: AgentOAuthGuideConfig) => `/${string}`;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'agentOAuthGuideUrl',
+						signature:
+							'const agentOAuthGuideUrl: (config: AgentOAuthGuideConfig) => string;'
+					},
+					{
+						description:
+							'Generate an agent-readable OAuth companion from exact application-owned resource metadata. OAuth discovery remains authoritative.',
+						kind: 'value',
+						name: 'generateAgentOAuthGuide',
+						signature:
+							'const generateAgentOAuthGuide: (config: AgentOAuthGuideConfig) => string;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ClientIdMetadataDocument',
+						signature:
+							"type ClientIdMetadataDocument = {\n    client_id: string;\n    client_name?: string;\n    redirect_uris: string[];\n    grant_types?: string[];\n    response_types?: string[];\n    token_endpoint_auth_method?: 'none' | 'private_key_jwt' | 'self_signed_tls_client_auth';\n    application_type?: 'native' | 'web';\n    client_uri?: string;\n    logo_uri?: string;\n    policy_uri?: string;\n    tos_uri?: string;\n    jwks_uri?: string;\n    jwks?: {\n        keys: JsonWebKey[];\n    };\n    scope?: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'clientIdMetadataToOAuthClient',
+						signature:
+							'const clientIdMetadataToOAuthClient: (document: ClientIdMetadataDocument) => OAuthClient;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createClientIdMetadataResolver',
+						signature:
+							'const createClientIdMetadataResolver: ({ fetch: fetcher, allow, cacheTtlMs, maxBytes, now }: {\n    fetch: (input: string | URL, init?: RequestInit) => Promise<Response>;\n    allow?: (clientId: string) => boolean | Promise<boolean>;\n    cacheTtlMs?: number;\n    maxBytes?: number;\n    now?: () => number;\n}) => (clientId: string) => Promise<OAuthClient | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateClientIdMetadataDocument',
+						signature:
+							'const validateClientIdMetadataDocument: (document: ClientIdMetadataDocument, expectedClientId: string) => string[];'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOidcAgentCredentialVerifier',
+						signature: 'createOidcAgentCredentialVerifier'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentHasScopes',
+						signature: 'agentHasScopes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveAgentPrincipal',
+						signature: 'resolveAgentPrincipal'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentAuthChallenge',
+						signature: 'agentAuthChallenge'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentAuthContextPlugin',
+						signature: 'agentAuthContextPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentAuthPlugin',
+						signature: 'agentAuthPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryAgentDelegationStore',
+						signature: 'createInMemoryAgentDelegationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryAgentIdentityRegistrationStore',
+						signature:
+							'createInMemoryAgentIdentityRegistrationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryAgentRegistrationStore',
+						signature: 'createInMemoryAgentRegistrationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentDelegationsTable',
+						signature: 'agentDelegationsTable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentDelegationsBunSqlTable',
+						signature: 'agentDelegationsBunSqlTable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentIdentityRegistrationsTable',
+						signature: 'agentIdentityRegistrationsTable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentIdentityRegistrationsBunSqlTable',
+						signature: 'agentIdentityRegistrationsBunSqlTable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentRegistrationsTable',
+						signature: 'agentRegistrationsTable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'agentRegistrationsBunSqlTable',
+						signature: 'agentRegistrationsBunSqlTable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createBunSqlDrizzleAgentDelegationStore',
+						signature: 'createBunSqlDrizzleAgentDelegationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createBunSqlDrizzleAgentIdentityRegistrationStore',
+						signature:
+							'createBunSqlDrizzleAgentIdentityRegistrationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createBunSqlDrizzleAgentRegistrationStore',
+						signature: 'createBunSqlDrizzleAgentRegistrationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonAgentDelegationStore',
+						signature: 'createNeonAgentDelegationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonAgentIdentityRegistrationStore',
+						signature: 'createNeonAgentIdentityRegistrationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonAgentRegistrationStore',
+						signature: 'createNeonAgentRegistrationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDrizzleAgentDelegationStore',
+						signature: 'createDrizzleAgentDelegationStore'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/oidc',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'OidcProviderConfig',
+						signature: 'OidcProviderConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'extractDpopNonceClaim',
+						signature: 'extractDpopNonceClaim'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mintDpopNonce',
+						signature: 'mintDpopNonce'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'verifyDpopNonce',
+						signature: 'verifyDpopNonce'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'verifyDpopProof',
+						signature: 'verifyDpopProof'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DpopJti',
+						signature: 'type DpopJti'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DpopResult',
+						signature: 'type DpopResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateSigningKey',
+						signature: 'generateSigningKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'jwkThumbprint',
+						signature: 'jwkThumbprint'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'signJwt',
+						signature: 'signJwt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'signingVerificationKeys',
+						signature: 'signingVerificationKeys'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'toPublicJwk',
+						signature: 'toPublicJwk'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'verifyJwt',
+						signature: 'verifyJwt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'verifyJwtWithKeys',
+						signature: 'verifyJwtWithKeys'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SigningKey',
+						signature: 'type SigningKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SigningKeyIdentity',
+						signature: 'type SigningKeyIdentity'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'revokeOAuthClientCredentials',
+						signature: 'revokeOAuthClientCredentials'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonAuthorizationCodeStore',
+						signature: 'createNeonAuthorizationCodeStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonClientAssertionJtiStore',
+						signature: 'createNeonClientAssertionJtiStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonClientRegistrationTokenStore',
+						signature: 'createNeonClientRegistrationTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonDeviceAuthorizationStore',
+						signature: 'createNeonDeviceAuthorizationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonInitialAccessTokenStore',
+						signature: 'createNeonInitialAccessTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonOAuthClientStore',
+						signature: 'createNeonOAuthClientStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonOidcRefreshTokenStore',
+						signature: 'createNeonOidcRefreshTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonSocketTicketStore',
+						signature: 'createNeonSocketTicketStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresAuthorizationCodeStore',
+						signature: 'createPostgresAuthorizationCodeStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresClientAssertionJtiStore',
+						signature: 'createPostgresClientAssertionJtiStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresClientRegistrationTokenStore',
+						signature: 'createPostgresClientRegistrationTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresDeviceAuthorizationStore',
+						signature: 'createPostgresDeviceAuthorizationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresInitialAccessTokenStore',
+						signature: 'createPostgresInitialAccessTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresOAuthClientStore',
+						signature: 'createPostgresOAuthClientStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresOidcRefreshTokenStore',
+						signature: 'createPostgresOidcRefreshTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresSocketTicketStore',
+						signature: 'createPostgresSocketTicketStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemorySocketTicketStore',
+						signature: 'createInMemorySocketTicketStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'consumeSocketTicket',
+						signature: 'consumeSocketTicket'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'issueSocketTicket',
+						signature: 'issueSocketTicket'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthorizationCodeStore',
+						signature: 'AuthorizationCodeStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ClientAssertionJtiStore',
+						signature: 'ClientAssertionJtiStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ClientRegistrationTokenStore',
+						signature: 'ClientRegistrationTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DeviceAuthorizationStore',
+						signature: 'DeviceAuthorizationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'InitialAccessTokenStore',
+						signature: 'InitialAccessTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuthClient',
+						signature: 'OAuthClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuthClientStore',
+						signature: 'OAuthClientStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OidcRefreshTokenConnection',
+						signature: 'OidcRefreshTokenConnection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OidcRefreshTokenFamily',
+						signature: 'OidcRefreshTokenFamily'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OidcRefreshTokenStore',
+						signature: 'OidcRefreshTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SocketTicket',
+						signature: 'SocketTicket'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SocketTicketStore',
+						signature: 'SocketTicketStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderOAuthConsentPage',
+						signature: 'renderOAuthConsentPage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderOAuthStatusPage',
+						signature: 'renderOAuthStatusPage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'oauthPageResponse',
+						signature: 'oauthPageResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuthPageBrand',
+						signature: 'type OAuthPageBrand'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuthPageAction',
+						signature: 'type OAuthPageAction'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuthConsentPageOptions',
+						signature: 'type OAuthConsentPageOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuthStatusPageOptions',
+						signature: 'type OAuthStatusPageOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/linked-providers',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'LinkedProviderCredentialError',
+						signature: 'LinkedProviderCredentialError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOAuthAccountLinkedProviderCredentialResolver',
+						signature:
+							'createOAuthAccountLinkedProviderCredentialResolver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuthLinkedProviderAccount',
+						signature: 'type OAuthLinkedProviderAccount'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuthLinkedProviderAccountStore',
+						signature: 'type OAuthLinkedProviderAccountStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOAuthLinkedProviderCredentialResolver',
+						signature: 'createOAuthLinkedProviderCredentialResolver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createLinkedProviderCredentialResolver',
+						signature: 'createLinkedProviderCredentialResolver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateLinkedProviderCredentialResolverOptions',
+						signature:
+							'type CreateLinkedProviderCredentialResolverOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LinkedProviderRefreshResult',
+						signature: 'type LinkedProviderRefreshResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createLinkedProviderBindingStore',
+						signature: 'createLinkedProviderBindingStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createLinkedProviderGrantStore',
+						signature: 'createLinkedProviderGrantStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonLinkedProviderStores',
+						signature: 'createNeonLinkedProviderStores'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonOAuthLinkedProviderCredentialResolver',
+						signature:
+							'createNeonOAuthLinkedProviderCredentialResolver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'linkedProviderBindingsTable',
+						signature: 'linkedProviderBindingsTable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'linkedProviderGrantsTable',
+						signature: 'linkedProviderGrantsTable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LinkedProviderBindingRow',
+						signature: 'type LinkedProviderBindingRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LinkedProviderGrantRow',
+						signature: 'type LinkedProviderGrantRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryLinkedProviderStores',
+						signature: 'createInMemoryLinkedProviderStores'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEncryptedLinkedProviderGrantStore',
+						signature: 'createEncryptedLinkedProviderGrantStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createCoordinatedOAuthLinkedProviderCredentialResolver',
+						signature:
+							'createCoordinatedOAuthLinkedProviderCredentialResolver'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/vault',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSecretCipher',
+						signature: 'createSecretCipher'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVersionedSecretCipher',
+						signature: 'createVersionedSecretCipher'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SecretCipher',
+						signature: 'type SecretCipher'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVault',
+						signature: 'createVault'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'rotateVaultKey',
+						signature: 'rotateVaultKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Vault',
+						signature: 'type Vault'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryVaultStore',
+						signature: 'createInMemoryVaultStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonVaultStore',
+						signature: 'createNeonVaultStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresVaultStore',
+						signature: 'createPostgresVaultStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'vaultEntriesTable',
+						signature: 'vaultEntriesTable'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VaultEntry',
+						signature: 'VaultEntry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VaultStore',
+						signature: 'VaultStore'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/htmx',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'escapeHtml',
+						signature: 'escapeHtml'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveAuthHtmxRenderers',
+						signature: 'resolveAuthHtmxRenderers'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthHtmxClient',
+						signature: 'AuthHtmxClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthHtmxConnectorTarget',
+						signature: 'AuthHtmxConnectorTarget'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthHtmxProviderData',
+						signature: 'AuthHtmxProviderData'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthHtmxProviderInfo',
+						signature: 'AuthHtmxProviderInfo'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthHtmxRenderersConfig',
+						signature: 'AuthHtmxRenderersConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthHtmxRenderOverrides',
+						signature: 'AuthHtmxRenderOverrides'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthHtmxUser',
+						signature: 'AuthHtmxUser'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthIdentityMergeRequestSummary',
+						signature: 'AuthIdentityMergeRequestSummary'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthIdentityPayload',
+						signature: 'AuthIdentityPayload'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AuthIdentitySummary',
+						signature: 'AuthIdentitySummary'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LinkedProviderBindingSummary',
+						signature: 'LinkedProviderBindingSummary'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LinkedProviderGrantSummary',
+						signature: 'LinkedProviderGrantSummary'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LinkedProviderPayload',
+						signature: 'LinkedProviderPayload'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResolvedAuthHtmxRenderers',
+						signature: 'ResolvedAuthHtmxRenderers'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/fingerprint-client',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'FingerprintSignals',
+						signature:
+							'type FingerprintSignals = {\n    audio?: number;\n    canvas?: string;\n    deviceMemory?: number;\n    fonts?: string[];\n    hardwareConcurrency?: number;\n    languages?: readonly string[];\n    pixelRatio?: number;\n    platform?: string;\n    screen?: {\n        colorDepth: number;\n        height: number;\n        width: number;\n    };\n    timezone?: string;\n    userAgent?: string;\n    webgl?: {\n        renderer?: string;\n        vendor?: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeviceFingerprint',
+						signature:
+							'type DeviceFingerprint = {\n    deviceId: string;\n    signals: FingerprintSignals;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'collectDeviceFingerprint',
+						signature:
+							'const collectDeviceFingerprint: () => Promise<DeviceFingerprint>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/plugins',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'denyDisposableEmailPlugin',
+						signature: 'denyDisposableEmailPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DenyDisposableEmailDecision',
+						signature: 'DenyDisposableEmailDecision'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'discordAlertPlugin',
+						signature: 'discordAlertPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DiscordAlertOptions',
+						signature: 'DiscordAlertOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'geoBlockPlugin',
+						signature: 'geoBlockPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GeoBlockOptions',
+						signature: 'GeoBlockOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'pagerdutyAlertPlugin',
+						signature: 'pagerdutyAlertPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PagerDutyAlertOptions',
+						signature: 'PagerDutyAlertOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PagerDutySeverity',
+						signature: 'PagerDutySeverity'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'posthogIdentifyPlugin',
+						signature: 'posthogIdentifyPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PosthogIdentifyOptions',
+						signature: 'PosthogIdentifyOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'slackAlertPlugin',
+						signature: 'slackAlertPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SlackAlertOptions',
+						signature: 'SlackAlertOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/providers',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'CredentialsFor',
+						signature: 'CredentialsFor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuth2Client',
+						signature: 'OAuth2Client'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OAuth2TokenResponse',
+						signature: 'OAuth2TokenResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OIDCProvider',
+						signature: 'OIDCProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PKCEProvider',
+						signature: 'PKCEProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProviderConfiguration',
+						signature: 'ProviderConfiguration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProviderOption',
+						signature: 'ProviderOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProvidersMap',
+						signature: 'ProvidersMap'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RefreshableProvider',
+						signature: 'RefreshableProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RevocableProvider',
+						signature: 'RevocableProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ScopeRequiredProvider',
+						signature: 'ScopeRequiredProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'decodeJWT',
+						signature: 'decodeJWT'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'extractPropFromIdentity',
+						signature: 'extractPropFromIdentity'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isOIDCProviderOption',
+						signature: 'isOIDCProviderOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isPKCEProviderOption',
+						signature: 'isPKCEProviderOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isRefreshableOAuth2Client',
+						signature: 'isRefreshableOAuth2Client'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isRefreshableProviderOption',
+						signature: 'isRefreshableProviderOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isRevocableOAuth2Client',
+						signature: 'isRevocableOAuth2Client'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isRevocableProviderOption',
+						signature: 'isRevocableProviderOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isValidProviderOption',
+						signature: 'isValidProviderOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'oidcProviderOptions',
+						signature: 'oidcProviderOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'pkceProviderOptions',
+						signature: 'pkceProviderOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'providerOptions',
+						signature: 'providerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'providers',
+						signature: 'providers'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'refreshableProviderOptions',
+						signature: 'refreshableProviderOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'revocableProviderOptions',
+						signature: 'revocableProviderOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'scopeRequiredProviderOptions',
+						signature: 'scopeRequiredProviderOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNeonProviderConfiguration',
+						signature: 'createNeonProviderConfiguration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'neonProviderConfiguration',
+						signature: 'neonProviderConfiguration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NeonManagementScope',
+						signature: 'NeonManagementScope'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NeonProviderOptions',
+						signature: 'NeonProviderOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/saml',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNodeSamlAdapter',
+						signature: 'createNodeSamlAdapter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NodeSamlAdapterOptions',
+						signature: 'type NodeSamlAdapterOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/webauthn',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSimpleWebAuthnAdapter',
+						signature: 'createSimpleWebAuthnAdapter'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/react',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'useMagicLink',
+						signature:
+							'const useMagicLink: (client: AuthClient) => MutationState<{\n    email: string;\n}, {\n    ok: true;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useMfaChallenge',
+						signature:
+							'const useMfaChallenge: (client: AuthClient) => MutationState<{\n    code: string;\n}, {\n    status: "authenticated";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'usePasskeyAutofill',
+						signature:
+							'const usePasskeyAutofill: (client: AuthClient) => {\n    cancel: () => void;\n    data: {\n        status: "authenticated";\n    } | null;\n    error: AuthClientError | null;\n    isPending: boolean;\n    start: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'usePasswordReset',
+						signature:
+							'const usePasswordReset: (client: AuthClient) => MutationState<{\n    email: string;\n}, {\n    ok: true;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSessions',
+						signature:
+							'const useSessions: (client: AuthClient) => {\n    data: unknown[] | null;\n    error: AuthClientError | null;\n    isPending: boolean;\n    refetch: () => Promise<void>;\n    revoke: (sessionId: string) => Promise<{\n        data: null;\n        error: AuthClientError;\n    } | {\n        data: {\n            revoked: string;\n        };\n        error: null;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignIn',
+						signature:
+							'const useSignIn: (client: AuthClient) => MutationState<{\n    email: string;\n    password: string;\n}, {\n    passwordCompromised?: boolean;\n    status: "authenticated" | "mfa_required";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignOut',
+						signature:
+							'const useSignOut: (client: AuthClient) => MutationState<unknown, null>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignUp',
+						signature:
+							'const useSignUp: (client: AuthClient) => MutationState<{\n    [extra: string]: unknown;\n    email: string;\n    password: string;\n}, {\n    status: "authenticated";\n} | {\n    status: "verification_required";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useUpgradeToPasskey',
+						signature:
+							'const useUpgradeToPasskey: (client: AuthClient) => {\n    error: AuthClientError | null;\n    isPending: boolean;\n    passkeys: unknown[] | null;\n    refetch: () => Promise<void>;\n    register: () => Promise<{\n        data: null;\n        error: AuthClientError;\n    } | {\n        data: {\n            credentialId: string;\n            verified: true;\n        };\n        error: null;\n    }>;\n    shouldPrompt: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SignIn',
+						signature: 'SignIn'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SignInProps',
+						signature: 'type SignInProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SignUp',
+						signature: 'SignUp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SignUpProps',
+						signature: 'type SignUpProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UserButton',
+						signature: 'UserButton'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UserButtonItem',
+						signature: 'type UserButtonItem'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UserButtonProps',
+						signature: 'type UserButtonProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UserButtonUser',
+						signature: 'type UserButtonUser'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/solid',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'useMagicLink',
+						signature:
+							'const useMagicLink: (client: AuthClient) => MutationState<{\n    email: string;\n}, {\n    ok: true;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useMfaChallenge',
+						signature:
+							'const useMfaChallenge: (client: AuthClient) => MutationState<{\n    code: string;\n}, {\n    status: "authenticated";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'usePasskeyAutofill',
+						signature:
+							'const usePasskeyAutofill: (client: AuthClient) => {\n    cancel: () => void;\n    data: Accessor<{\n        status: "authenticated";\n    } | null>;\n    error: Accessor<AuthClientError | null>;\n    isPending: Accessor<boolean>;\n    start: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'usePasswordReset',
+						signature:
+							'const usePasswordReset: (client: AuthClient) => MutationState<{\n    email: string;\n}, {\n    ok: true;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSessions',
+						signature:
+							'const useSessions: (client: AuthClient) => {\n    data: Accessor<unknown[] | null>;\n    error: Accessor<AuthClientError | null>;\n    isPending: Accessor<boolean>;\n    refetch: () => Promise<void>;\n    revoke: (sessionId: string) => Promise<{\n        data: null;\n        error: AuthClientError;\n    } | {\n        data: {\n            revoked: string;\n        };\n        error: null;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignIn',
+						signature:
+							'const useSignIn: (client: AuthClient) => MutationState<{\n    email: string;\n    password: string;\n}, {\n    passwordCompromised?: boolean;\n    status: "authenticated" | "mfa_required";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignOut',
+						signature:
+							'const useSignOut: (client: AuthClient) => MutationState<unknown, null>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignUp',
+						signature:
+							'const useSignUp: (client: AuthClient) => MutationState<{\n    [extra: string]: unknown;\n    email: string;\n    password: string;\n}, {\n    status: "authenticated";\n} | {\n    status: "verification_required";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useUpgradeToPasskey',
+						signature:
+							'const useUpgradeToPasskey: (client: AuthClient) => {\n    error: Accessor<AuthClientError | null>;\n    isPending: Accessor<boolean>;\n    passkeys: Accessor<unknown[] | null>;\n    refetch: () => Promise<void>;\n    register: () => Promise<{\n        data: null;\n        error: AuthClientError;\n    } | {\n        data: {\n            credentialId: string;\n            verified: true;\n        };\n        error: null;\n    }>;\n    shouldPrompt: () => boolean;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/svelte',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'useMagicLink',
+						signature:
+							'const useMagicLink: (client: AuthClient) => MutationState<{\n    email: string;\n}, {\n    ok: true;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useMfaChallenge',
+						signature:
+							'const useMfaChallenge: (client: AuthClient) => MutationState<{\n    code: string;\n}, {\n    status: "authenticated";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'usePasskeyAutofill',
+						signature:
+							'const usePasskeyAutofill: (client: AuthClient) => {\n    cancel: () => void;\n    data: Writable<{\n        status: "authenticated";\n    } | null>;\n    error: Writable<AuthClientError | null>;\n    isPending: Writable<boolean>;\n    start: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'usePasswordReset',
+						signature:
+							'const usePasswordReset: (client: AuthClient) => MutationState<{\n    email: string;\n}, {\n    ok: true;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSessions',
+						signature:
+							'const useSessions: (client: AuthClient) => {\n    data: Writable<unknown[] | null>;\n    error: Writable<AuthClientError | null>;\n    isPending: Writable<boolean>;\n    refetch: () => Promise<void>;\n    revoke: (sessionId: string) => Promise<{\n        data: null;\n        error: AuthClientError;\n    } | {\n        data: {\n            revoked: string;\n        };\n        error: null;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignIn',
+						signature:
+							'const useSignIn: (client: AuthClient) => MutationState<{\n    email: string;\n    password: string;\n}, {\n    passwordCompromised?: boolean;\n    status: "authenticated" | "mfa_required";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignOut',
+						signature:
+							'const useSignOut: (client: AuthClient) => MutationState<unknown, null>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignUp',
+						signature:
+							'const useSignUp: (client: AuthClient) => MutationState<{\n    [extra: string]: unknown;\n    email: string;\n    password: string;\n}, {\n    status: "authenticated";\n} | {\n    status: "verification_required";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useUpgradeToPasskey',
+						signature:
+							'const useUpgradeToPasskey: (client: AuthClient) => {\n    error: Writable<AuthClientError | null>;\n    isPending: Writable<boolean>;\n    passkeys: Writable<unknown[] | null>;\n    refetch: () => Promise<void>;\n    register: () => Promise<{\n        data: null;\n        error: AuthClientError;\n    } | {\n        data: {\n            credentialId: string;\n            verified: true;\n        };\n        error: null;\n    }>;\n    shouldPrompt: Writable<boolean>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/vue',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'useMagicLink',
+						signature:
+							'const useMagicLink: (client: AuthClient) => MutationState<{\n    email: string;\n}, {\n    ok: true;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useMfaChallenge',
+						signature:
+							'const useMfaChallenge: (client: AuthClient) => MutationState<{\n    code: string;\n}, {\n    status: "authenticated";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'usePasskeyAutofill',
+						signature:
+							'const usePasskeyAutofill: (client: AuthClient) => {\n    cancel: () => void;\n    data: Ref<{\n        status: "authenticated";\n    } | null, {\n        status: "authenticated";\n    } | null>;\n    error: Ref<AuthClientError | null, AuthClientError | null>;\n    isPending: Ref<boolean, boolean>;\n    start: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'usePasswordReset',
+						signature:
+							'const usePasswordReset: (client: AuthClient) => MutationState<{\n    email: string;\n}, {\n    ok: true;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSessions',
+						signature:
+							'const useSessions: (client: AuthClient) => {\n    data: Ref<unknown[] | null, unknown[] | null>;\n    error: Ref<AuthClientError | null, AuthClientError | null>;\n    isPending: Ref<boolean, boolean>;\n    refetch: () => Promise<void>;\n    revoke: (sessionId: string) => Promise<{\n        data: null;\n        error: AuthClientError;\n    } | {\n        data: {\n            revoked: string;\n        };\n        error: null;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignIn',
+						signature:
+							'const useSignIn: (client: AuthClient) => MutationState<{\n    email: string;\n    password: string;\n}, {\n    passwordCompromised?: boolean;\n    status: "authenticated" | "mfa_required";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignOut',
+						signature:
+							'const useSignOut: (client: AuthClient) => MutationState<unknown, null>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useSignUp',
+						signature:
+							'const useSignUp: (client: AuthClient) => MutationState<{\n    [extra: string]: unknown;\n    email: string;\n    password: string;\n}, {\n    status: "authenticated";\n} | {\n    status: "verification_required";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useUpgradeToPasskey',
+						signature:
+							'const useUpgradeToPasskey: (client: AuthClient) => {\n    error: Ref<AuthClientError | null, AuthClientError | null>;\n    isPending: Ref<boolean, boolean>;\n    passkeys: Ref<unknown[] | null, unknown[] | null>;\n    refetch: () => Promise<void>;\n    register: () => Promise<{\n        data: null;\n        error: AuthClientError;\n    } | {\n        data: {\n            credentialId: string;\n            verified: true;\n        };\n        error: null;\n    }>;\n    shouldPrompt: Ref<boolean, boolean>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<AuthConfig<unknown>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: Type.TObject<{\n        cleanupIntervalMs: Type.TOptional<Type.TNumber>;\n        cookieSecure: Type.TOptional<Type.TBoolean>;\n        maxSessions: Type.TOptional<Type.TInteger>;\n        providersConfiguration: Type.TOptional<Type.TRecord<"^.*$", Type.TObject<{\n            scope: Type.TOptional<Type.TArray<Type.TString>>;\n        }>>>;\n        sessionDurationMs: Type.TOptional<Type.TNumber>;\n    }>;\n});'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/auth/bun',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'BunMigrationsOptions',
+						signature:
+							"type BunMigrationsOptions = Pick<RunMigrationsOptions, 'blocks' | 'log'> & {\n    databaseUrl: string;\n};"
+					},
+					{
+						description:
+							'Owns its connection; serializes and atomically journals package-owned DDL.',
+						kind: 'value',
+						name: 'runBunMigrations',
+						signature:
+							'const runBunMigrations: ({ databaseUrl, blocks, log }: BunMigrationsOptions) => Promise<any>;'
+					}
+				]
+			}
+		],
 		category: 'Auth & Identity',
 		commands: [
 			{
@@ -7298,7 +14318,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/auth/bun'
 		],
 		readmeDigest:
-			'f68c481b56ec842fbea25319d72fcea900c476a8d0bb2a098174bc98b1e6b765',
+			'106d5d5ab8bd19f8325741823db60e3854cec533c3cb9619186f9a35e5fa3eb4',
 		readmeSamples: [
 			{
 				code: 'git clone https://github.com/absolutejs/auth.git\n    cd auth',
@@ -7419,11 +14439,17 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'Resend cooldown responses include sms_resend_cooldown, retryAfterMs, and Retry-After; successful sends include retryAfterMs and expiresAt. A separate sms_send attempt budget limits account-wide delivery attempts to ten per five minutes by default (smsSendMaxAttempts / smsSendWindowMs). It does not invalidate issued codes or block authenticator/recovery verification. SMS senders must throw on delivery failure; scoped rollback preserves the previous challenge.'
 				],
 				title: 'Several ways to sign in to one account'
+			},
+			{
+				description:
+					'Use the shared consent, handoff, completion, and recovery screens from @absolutejs/auth/oidc. See OAuth connection screens for hosted MCP installation and device-flow integration.',
+				details: [],
+				title: 'Branded OAuth connection screens'
 			}
 		],
 		repository: 'https://github.com/absolutejs/absolute-auth',
 		subpackages: [],
-		version: '0.99.0'
+		version: '0.101.0'
 	},
 	{
 		api: [],
@@ -8208,7 +15234,724 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: null
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/billing',
+				symbols: [
+					{
+						description:
+							'@absolutejs/billing — cost-model substrate for the AbsoluteJS PaaS. Two pieces: - createPlan(...) — declarative pricing config: optional flat base fee + per-dimension unit prices, with optional graduated tiers and free-tier allowances per dimension. - computeInvoice({ plan, period, tenant, usage, currency? }) — pure function that turns a @absolutejs/metering-shaped Usage snapshot (or any record of metered numbers) into an Invoice of line items + total. All money math is done in integer micros (1',
+						kind: 'type',
+						name: 'Micros',
+						signature: 'type Micros = number;'
+					},
+					{
+						description:
+							'Sub-units per currency unit when a plan does not say otherwise.',
+						kind: 'value',
+						name: 'DEFAULT_DENOMINATION',
+						signature: 'const DEFAULT_DENOMINATION = 1000000;'
+					},
+					{
+						description:
+							'Nanos — the denomination token-priced APIs need.',
+						kind: 'value',
+						name: 'NANO_DENOMINATION',
+						signature: 'const NANO_DENOMINATION = 1000000000;'
+					},
+					{
+						description:
+							'Round a fractional micros value to an integer. The substrate uses truncation (banker\'s-style would surprise callers expecting "$0.0009 → $0.00" not "$0.0009 → $0.001"). Plans override per-plan.',
+						kind: 'type',
+						name: 'Rounding',
+						signature:
+							'type Rounding = "truncate" | "round-half-up";'
+					},
+					{
+						description:
+							'One step in a graduated-tier price table. upTo is the inclusive upper bound (in metered units, NOT micros) for this band. perUnitMicros is what the customer pays per single metered unit within this band. The last entry must have upTo: Infinity to cover any overflow.',
+						kind: 'type',
+						name: 'PricingTier',
+						signature:
+							'type PricingTier = {\n    upTo: number;\n    perUnitMicros: number;\n};'
+					},
+					{
+						description:
+							'Per-dimension pricing. Three shapes: - Flat per-unit: { perUnitMicros: 200, unit: 1024 1024 } charges 200 micros ($0.0002) per MB of usage. - Tiered: { tiers: [...], unit: 1 } charges per the first matching PricingTier band. - Custom: { price: (quantity) => micros, unit: 1 } — escape hatch for surge / caps / non-monotonic pricing. The substrate stays pure; you ship whatever function you want. freeTier is subtracted from the metered quantity BEFORE pricing — the conventional "first N units free" ',
+						kind: 'type',
+						name: 'PricedDimension',
+						signature:
+							'type PricedDimension = {\n    label?: string;\n    freeTier?: number;\n    unit?: number;\n} & ({\n    perUnitMicros: number;\n    tiers?: never;\n    price?: never;\n} | {\n    tiers: PricingTier[];\n    perUnitMicros?: never;\n    price?: never;\n} | {\n    price: (chargedQuantity: number) => Micros;\n    perUnitMicros?: never;\n    tiers?: never;\n});'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Plan',
+						signature:
+							"type Plan = {\n    /** Human label for the invoice (`'pro'`, `'enterprise'`, etc.). */\n    name: string;\n    /**\n     * Sub-units per currency unit. Defaults to 1,000,000 (micros).\n     *\n     * Micros are too coarse for token-priced APIs: at $0.16 per million\n     * embedding tokens a five-token call costs $0.0000008, which truncates to\n     * ZERO in micros — so a plan priced in micros systematically under-bills\n     * its cheapest calls. Set `1_000_000_000` to price in nanos, or any other\n     * power of ten the vendor's rate card needs. Every `*Micros` field on the\n     * plan and the invoice is denominated in these sub-units.\n     */\n    denomination?: number;\n    /** Optional flat base fee charged once per invoice period. */\n    basePriceMicros?: Micros;\n    /**\n     * Dimensions priced from usage. Keys must match keys on the\n     * `usage` record passed to `computeInvoice`. Anything not listed\n     * is ignored.\n     */\n    pricedDimensions: Record<string, PricedDimension>;\n    /** Default currency for invoices generated from this plan. */\n    currency?: string;\n    /** Rounding strategy applied per line item. Default `'truncate'`. */\n    rounding?: Rounding;\n    /**\n     * M"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createPlan',
+						signature: 'const createPlan: (plan: Plan) => Plan;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'LineItem',
+						signature:
+							"type LineItem = {\n    /**\n     * Stable key for the line item. For priced dimensions it's the\n     * usage-record key (`'requests'`, `'cpuMs'`, etc.). For the base\n     * fee it's `'base'`. For minimum-charge top-up it's\n     * `'minimum-charge-adjustment'`.\n     */\n    key: string;\n    /** Human-readable label. */\n    label: string;\n    /** Metered units BEFORE applying free tier. 0 for the base fee. */\n    quantity: number;\n    /** Metered units AFTER applying free tier (what's actually charged). */\n    chargedQuantity: number;\n    /** Free-tier units subtracted from `quantity`. */\n    freeTier?: number;\n    /** Charge for this line in integer micros. */\n    amountMicros: Micros;\n    /**\n     * Tier-by-tier breakdown when graduated pricing was used. Each\n     * entry: `{ tierIndex, unitsInTier, perUnitMicros, amountMicros }`.\n     */\n    tierBreakdown?: Array<{\n        tierIndex: number;\n        unitsInTier: number;\n        perUnitMicros: number;\n        amountMicros: Micros;\n    }>;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'InvoicePeriod',
+						signature:
+							'type InvoicePeriod = {\n    /** Inclusive period start (`Date.now()` ms). */\n    start: number;\n    /** Exclusive period end. */\n    end: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Invoice',
+						signature:
+							'type Invoice = {\n    tenant: string;\n    plan: string;\n    currency: string;\n    /** Sub-units per currency unit these amounts are in (default micros). */\n    denomination: number;\n    period: InvoicePeriod;\n    lineItems: LineItem[];\n    /** Sum of all `lineItems[].amountMicros`. */\n    totalMicros: Micros;\n    /** Convenience: `totalMicros / 1_000_000` as a number. */\n    totalUnits: number;\n    /** Plan-level metadata copied through unchanged. */\n    metadata?: Record<string, string>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ComputeInvoiceInput',
+						signature:
+							"type ComputeInvoiceInput = {\n    plan: Plan;\n    tenant: string;\n    period: InvoicePeriod;\n    /** Metered numbers keyed by the same names as `plan.pricedDimensions`. */\n    usage: Record<string, number>;\n    /** Override the plan's currency (e.g. for tenant-local invoicing). */\n    currency?: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'computeInvoice',
+						signature:
+							'const computeInvoice: ({ plan, tenant, period, usage, currency, }: ComputeInvoiceInput) => Invoice;'
+					},
+					{
+						description:
+							'Format an integer micros amount as a human currency string. Pure — no Intl side effects. For locales / advanced formatting, pipe through Intl.NumberFormat yourself.',
+						kind: 'value',
+						name: 'formatMicros',
+						signature:
+							'const formatMicros: (amount: Micros, currency: string, { denomination, minorUnits, }?: {\n    denomination?: number;\n    minorUnits?: number;\n}) => string;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'readProviderBalances',
+						signature: 'readProviderBalances'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProviderBalance',
+						signature: 'type ProviderBalance'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProviderBalanceConfig',
+						signature: 'type ProviderBalanceConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProviderBalanceKind',
+						signature: 'type ProviderBalanceKind'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProviderBalanceStatus',
+						signature: 'type ProviderBalanceStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BraveUsageSnapshot',
+						signature: 'type BraveUsageSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EmbeddingUsageSnapshot',
+						signature: 'type EmbeddingUsageSnapshot'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<never, never>, BillingRuntime>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<BillingRuntime>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<BillingRuntime>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/ledger',
+				symbols: [
+					{
+						description:
+							'Stable server-side correlation; identifiers are not authorization credentials. Unknown external-host spend must remain unknown, never inferred as zero.',
+						kind: 'type',
+						name: 'UsageAttribution',
+						signature:
+							'type UsageAttribution = {\n    actorId?: string;\n    beneficiaryId?: string;\n    fundingSource?: "member" | "promotional";\n    approvalId?: string;\n    traceId?: string;\n    runId?: string;\n    subjectType?: string;\n    subjectId?: string;\n    sessionId?: string;\n    workId?: string;\n    release?: string;\n    serverName?: string;\n    serverVersion?: string;\n    tool?: string;\n};'
+					},
+					{
+						description:
+							'One priced, metered event, ready to persist.',
+						kind: 'type',
+						name: 'LedgerEntry',
+						signature:
+							'type LedgerEntry = {\n    attribution?: UsageAttribution;\n    /** Charge in integer sub-units of the plan\'s denomination (see\n     *  `Plan.denomination`) — never a float. */\n    amount: number;\n    /** What the customer is billed in the product\'s own unit. */\n    credits: number;\n    /** Product-level grouping ("chat", "voice"), not the vendor\'s. */\n    feature?: string | null;\n    model?: string;\n    /** "llm" | "tts" | "embedding" | whatever the product meters. */\n    operation: string;\n    provider: string;\n    /** Idempotency handle for at-least-once callers. */\n    requestId?: string;\n    /** Null for system/background work with nobody to bill. */\n    tenant?: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'LedgerCommit',
+						signature:
+							"type LedgerCommit = {\n    /** Append the row AND debit `entry.credits` from the tenant's balance in a\n     *  single atomic unit. Called with tenant null for unattributed work, where\n     *  there is nothing to debit. */\n    commit: (entry: LedgerEntry) => Promise<void>;\n    /** Fold the entry into a derived daily aggregate. Best-effort by contract:\n     *  this module swallows its failures. */\n    rollup?: (entry: LedgerEntry) => Promise<void>;\n    /** Total sub-units charged since `since`, for the spend cap. */\n    spentSince?: (since: Date) => Promise<number>;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'UsageLedgerOptions',
+						signature:
+							'type UsageLedgerOptions = {\n    /** Sub-units per credit. A peg of 1_000 with micros means 1 credit =\n     *  $0.001. Required for credit conversion; omit to bill in raw amounts. */\n    creditPegSubUnits?: number;\n    /** Reported when a rollup fails. The charge already succeeded. */\n    onRollupError?: (error: unknown, entry: LedgerEntry) => void;\n    store: LedgerCommit;\n};'
+					},
+					{
+						description:
+							'Credits for a charge. Ceiling, not rounding: a product that sells credits must never hand out a fraction it cannot deduct, and rounding down means the smallest calls are free — which is how a "cheap" endpoint becomes an unmetered one.',
+						kind: 'value',
+						name: 'creditsFor',
+						signature:
+							'const creditsFor: (amount: number, pegSubUnits: number) => number;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'UsageLedger',
+						signature:
+							'type UsageLedger = {\n    /** Price-agnostic: hand it an amount already in sub-units. Returns what was\n     *  written, including the credits it derived. */\n    record: (entry: Omit<LedgerEntry, "credits"> & {\n        credits?: number;\n    }) => Promise<LedgerEntry>;\n    /** True once spend since `since` reaches `capSubUnits`. Fails OPEN — a\n     *  broken cap must not take down paid features, and the per-provider\n     *  budgets are still in front. */\n    overCap: (capSubUnits: number, since: Date) => Promise<boolean>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createUsageLedger',
+						signature:
+							'const createUsageLedger: (options: UsageLedgerOptions) => UsageLedger;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditBalanceInput',
+						signature:
+							'type CreditBalanceInput = {\n    /** Granted credits that SURVIVE a period reset (referrals, goodwill). */\n    bonusCredits: number;\n    consumed: number;\n    /** Credits the plan grants for the current period. */\n    periodAllowance: number;\n    periodEnd?: Date | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditBalance',
+						signature:
+							'type CreditBalance = {\n    /** periodAllowance + bonusCredits — the spendable ceiling this period. */\n    allowance: number;\n    bonusCredits: number;\n    consumed: number;\n    periodAllowance: number;\n    periodEnd: Date | null;\n    /** Never negative: an over-spend reads as zero left, not a debt. */\n    remaining: number;\n};'
+					},
+					{
+						description:
+							'Derive the spendable view of a stored balance row.',
+						kind: 'value',
+						name: 'creditBalanceFrom',
+						signature:
+							'const creditBalanceFrom: (row: CreditBalanceInput) => CreditBalance;'
+					},
+					{
+						description:
+							'Whether the billing window has closed and the allowance should re-snapshot. A null end date means "no window" — an unbounded balance never lapses.',
+						kind: 'value',
+						name: 'isPeriodLapsed',
+						signature:
+							'const isPeriodLapsed: (periodEnd: Date | null | undefined, now?: Date) => boolean;'
+					},
+					{
+						description:
+							'How hard the gate bites. off skips the balance read entirely, warn always allows but reports low so the UI can say so, block refuses once the remaining balance cannot cover the estimate.',
+						kind: 'type',
+						name: 'CreditEnforcementMode',
+						signature:
+							'type CreditEnforcementMode = "block" | "off" | "warn";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditGate',
+						signature:
+							'type CreditGate = {\n    allowance: number;\n    allowed: boolean;\n    /** True when the balance cannot cover the estimate, in ANY mode — the\n     *  signal a product surfaces before it starts refusing work. */\n    low: boolean;\n    mode: CreditEnforcementMode;\n    remaining: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditGateInput',
+						signature:
+							'type CreditGateInput = {\n    allowance: number;\n    estimatedCredits?: number;\n    mode: CreditEnforcementMode;\n    remaining: number;\n};'
+					},
+					{
+						description:
+							'Decide whether a metered call proceeds. Pure — the caller does the reads.',
+						kind: 'value',
+						name: 'creditGate',
+						signature:
+							'const creditGate: (input: CreditGateInput) => CreditGate;'
+					},
+					{
+						description:
+							'Whether a bonus grant is worth writing — guards against NaN and negatives quietly corrupting a balance.',
+						kind: 'value',
+						name: 'isGrantableCredits',
+						signature:
+							'const isGrantableCredits: (credits: number) => boolean;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/prepaid',
+				symbols: [
+					{
+						description: '',
+						kind: 'class',
+						name: 'CreditError',
+						signature:
+							'class CreditError extends Error {\n    readonly code: "insufficient_credits" | "approval_mismatch" | "budget_exceeded";\n    readonly details?: {\n        required?: number;\n        available?: number;\n    } | undefined;\n    readonly name = "CreditError";\n    constructor(code: "insufficient_credits" | "approval_mismatch" | "budget_exceeded", message: string, details?: {\n        required?: number;\n        available?: number;\n    } | undefined);\n}'
+					},
+					{
+						description:
+							'Service-credit accounting. Host authorization and payment verification happen before these commands. Every command and its receipt commit in one transaction.',
+						kind: 'type',
+						name: 'CreditAccount',
+						signature:
+							'type CreditAccount = {\n    periodId: string;\n    periodEnd: string | null;\n    periodAllowance: number;\n    periodRemaining: number;\n    purchasedRemaining: number;\n    promotionalRemaining: number;\n    debt: number;\n    reserved: number;\n    consumed: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditAllocation',
+						signature:
+							'type CreditAllocation = {\n    period: number;\n    purchased: number;\n    promotional: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditReservation',
+						signature:
+							'type CreditReservation = {\n    id: string;\n    periodId: string;\n    allocation: CreditAllocation;\n    status: "reserved" | "settled" | "released";\n    charged: number | null;\n    /** Run-only promotional authorization; unused capacity is never refunded. */\n    promotionalSponsor?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditCommand',
+						signature:
+							'type CreditCommand = {\n    kind: "grant";\n    bucket: "purchased" | "promotional";\n    credits: number;\n} | {\n    kind: "reverse";\n    bucket: "purchased" | "promotional";\n    credits: number;\n} | {\n    kind: "period";\n    periodId: string;\n    periodEnd: string | null;\n    allowance: number;\n} | {\n    kind: "reserve";\n    reservationId: string;\n    credits: number;\n} | {\n    kind: "reserve_promotional";\n    reservationId: string;\n    credits: number;\n    actorId: string;\n} | {\n    kind: "settle";\n    reservationId: string;\n    credits: number;\n} | {\n    kind: "release";\n    reservationId: string;\n} | {\n    kind: "debit";\n    credits: number;\n    allowDebt?: boolean;\n    reference?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditReceipt',
+						signature:
+							'type CreditReceipt = {\n    command: CreditCommand;\n    account: CreditAccount;\n    reservation?: CreditReservation;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditTransaction',
+						signature:
+							'type CreditTransaction = {\n    account: CreditAccount;\n    receipt: (operationId: string) => Promise<CreditReceipt | null>;\n    reservation: (id: string) => Promise<CreditReservation | null>;\n    save: (operationId: string, receipt: CreditReceipt) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditAccountStore',
+						signature:
+							'type CreditAccountStore = {\n    /** Persist seed once. Never overwrite an existing account. */\n    initialize: (accountId: string, seed: CreditAccount) => Promise<void>;\n    read: (accountId: string) => Promise<CreditAccount | null>;\n    /** Lock one account, serialize its commands across processes, and roll back\n     * account, reservation and receipt together if the callback fails. */\n    transaction: <T>(accountId: string, run: (tx: CreditTransaction) => Promise<T>) => Promise<T>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateCreditAccount',
+						signature:
+							'const validateCreditAccount: (account: CreditAccount) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'availableCredits',
+						signature:
+							'const availableCredits: (account: CreditAccount) => number;'
+					},
+					{
+						description:
+							'Preserve the currently observable legacy balance without inventing purchase provenance. Historical mixed bonus grants remain promotional carryover.',
+						kind: 'value',
+						name: 'migrateLegacyCreditAccount',
+						signature:
+							'const migrateLegacyCreditAccount: (input: {\n    periodId: string;\n    periodEnd?: string | null;\n    periodAllowance: number;\n    bonusCredits: number;\n    consumed: number;\n}) => CreditAccount;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createCreditAccountLedger',
+						signature:
+							'const createCreditAccountLedger: (store: CreditAccountStore) => {\n    initialize: (accountId: string, seed: CreditAccount) => Promise<void>;\n    receipt: (accountId: string, operationId: string) => Promise<CreditReceipt | null>;\n    balance: (accountId: string) => Promise<CreditAccount | null>;\n    execute: (accountId: string, operationId: string, input: CreditCommand) => Promise<CreditReceipt>;\n};'
+					},
+					{
+						description:
+							'Portal access and funded MCP access are independent. Period-only free allowances do not silently unlock prepaid work; carryover grants may.',
+						kind: 'value',
+						name: 'creditEntitlements',
+						signature:
+							'const creditEntitlements: (input: {\n    subscribed: boolean;\n    prepaidEnabled: boolean;\n    account: CreditAccount | null;\n}) => {\n    portal: boolean;\n    mcp: "member" | "prepaid" | "free";\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/prepaid-postgres',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditSql',
+						signature:
+							'type CreditSql = {\n    query: (query: string, parameters: readonly unknown[]) => Promise<{\n        rows: Record<string, unknown>[];\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditSqlClient',
+						signature:
+							'type CreditSqlClient = CreditSql & {\n    transaction: <T>(run: (sql: CreditSql) => Promise<T>) => Promise<T>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'creditAccountPostgresSchemaSql',
+						signature:
+							'const creditAccountPostgresSchemaSql: (schema?: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createPostgresCreditAccountStore',
+						signature:
+							'const createPostgresCreditAccountStore: (client: CreditSqlClient, schema?: string) => CreditAccountStore;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/credit-work',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreditError',
+						signature: 'CreditError'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditWorkFunding',
+						signature:
+							'type CreditWorkFunding = {\n    kind: "promotional";\n    actorId: string;\n    beneficiaryId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeferredCreditBinding',
+						signature:
+							'type DeferredCreditBinding = {\n    effectId: string;\n    authorizationId: string;\n};'
+					},
+					{
+						description:
+							'Trusted server-side admission policy, evaluated only for a new claim. This is an estimate-based floor, not a provider-cost guarantee or authorization.',
+						kind: 'type',
+						name: 'CreditWorkAdmission',
+						signature:
+							'type CreditWorkAdmission = {\n    minimumCredits: number;\n    policy: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'canAffordCreditStep',
+						signature:
+							'const canAffordCreditStep: (budget: number, charged: number, minimumCredits: number) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditWork',
+						signature:
+							'type CreditWork = {\n    admission?: CreditWorkAdmission;\n    funding?: CreditWorkFunding;\n    deferred?: DeferredCreditBinding;\n    checkpoint?: {\n        revision: number;\n        value: string;\n    };\n    /** A settled segment may continue once; its charges remain immutable. */\n    pause?: {\n        reason: string;\n        revision: number;\n        continuationId?: string;\n    };\n    previousWorkId?: string;\n    uncertain?: boolean;\n    request: string;\n    budget: number;\n    charged: number;\n    absorbed: number;\n    status: "running" | "completed" | "failed";\n    result: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'creditWorkPostgresSchemaSql',
+						signature:
+							'const creditWorkPostgresSchemaSql: (schema?: string) => string;'
+					},
+					{
+						description:
+							'Durable execution claim + capped customer charge. A crash leaves work running and its credits held: never automatically rerun an uncertain external effect. Provider cost over the agreed budget is recorded as absorbed, not customer debt.',
+						kind: 'value',
+						name: 'createPostgresCreditWork',
+						signature:
+							'const createPostgresCreditWork: (client: CreditSqlClient, schema?: string) => {\n    /** Settle a known safe pause. Call only after the worker has durably\n     * checkpointed all usage and confirmed no provider operation is in flight. */\n    pauseDeferred: (accountId: string, workId: string, binding: DeferredCreditBinding, expectedRevision: number, reason: string) => Promise<CreditWork>;\n    /** Atomically claim one funded successor with copied progress, preserving\n     * prior charges. Call within the same transaction as successor outbox enqueue.\n     * Host validates immutable plan/ownership and authorizes the new budget. */\n    continueDeferred: (accountId: string, previousWorkId: string, previousBinding: DeferredCreditBinding, expectedRevision: number, workId: string, binding: DeferredCreditBinding, budget: number, admit?: () => Promise<CreditWorkAdmission>) => Promise<{\n        fresh: boolean;\n        work: CreditWork;\n    }>;\n    /** Bound durable progress only: the caller must already own the effect lease.\n     * CAS prevents stale workers from overwriting a newer checkpoint. */\n    checkpointDeferred: (accountId: string, workId: string, binding: DeferredCreditBinding, expect'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/checkout-handoff',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'CheckoutQuote',
+						signature:
+							'type CheckoutQuote = {\n    productId: string;\n    amountCents: number;\n    currency: string;\n    credits: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CheckoutContinuation',
+						signature:
+							'type CheckoutContinuation = {\n    workId: string;\n    returnPath: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CheckoutHandoff',
+						signature:
+							'type CheckoutHandoff = {\n    /** Navigation/recovery only; never authorizes execution or proves payment. */\n    continuation?: CheckoutContinuation;\n    id: string;\n    accountId: string;\n    quote: CheckoutQuote;\n    expiresAt: number;\n    paymentLocked: boolean;\n    replacedBy: string | null;\n};'
+					},
+					{
+						description:
+							'Apply explicitly during deployment. Secrets are stored only as SHA-256 hashes.',
+						kind: 'value',
+						name: 'checkoutHandoffPostgresSchemaSql',
+						signature:
+							'const checkoutHandoffPostgresSchemaSql: () => string;'
+					},
+					{
+						description:
+							'This is a purchase-only capability, never a login or a saved-card authorization. The application binds the authenticated account and prices the quote.',
+						kind: 'value',
+						name: 'createPostgresCheckoutHandoffs',
+						signature:
+							'const createPostgresCheckoutHandoffs: (db: CreditSqlClient, now?: () => number) => {\n    issue(accountId: string, quote: CheckoutQuote, continuation?: CheckoutContinuation): Promise<{\n        id: `${string}-${string}-${string}-${string}-${string}`;\n        code: string;\n        expiresAt: number;\n    }>;\n    /** Invoke only on a deliberate same-origin POST, never a preview GET.\n     * Atomic exchange makes concurrent redemption and link replay fail closed. */\n    exchange(code: string, browserAccountId?: string | null): Promise<{\n        handoff: CheckoutHandoff;\n        session: string;\n        csrf: string;\n        expiresAt: number;\n    } | null>;\n    /** Price changes create a new reference and retire the old capability atomically.\n     * The server computes quote; the browser supplies only its selected amount. */\n    selectQuote(session: string, csrf: string, expectedId: string, quote: CheckoutQuote, browserAccountId?: string | null): Promise<CheckoutHandoff | null>;\n    /** Freeze the exact reference before an external payment request. Repeated\n     * calls can reconcile that same payment, but can never change its quote. */\n    lockPayment(session: string, csrf: string, expec'
+					},
+					{
+						description:
+							"Put the code in a fragment so previews, servers and referrers don't receive it. The landing page must remove it before loading any third-party code.",
+						kind: 'value',
+						name: 'checkoutHandoffUrl',
+						signature:
+							'const checkoutHandoffUrl: (landingUrl: string, code: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'checkoutSameOrigin',
+						signature:
+							'const checkoutSameOrigin: (request: Request, origin: string) => boolean;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/reports',
+				symbols: [
+					{
+						description:
+							'Public customer reports. No payment tokens, vault references, or provider costs.',
+						kind: 'type',
+						name: 'BillingStatus',
+						signature:
+							'type BillingStatus = {\n    portalAccess: boolean;\n    subscription: {\n        status: string;\n        renewsAt: string | null;\n        cancelAtPeriodEnd: boolean;\n    } | null;\n    credits: {\n        remaining: number;\n        reserved: number;\n        purchased: number;\n        promotional: number;\n        debt: number;\n    };\n    automaticRefill: false;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BillingReceipt',
+						signature:
+							'type BillingReceipt = {\n    id: string;\n    issuedAt: string;\n    currency: string;\n    amountCents: number;\n    refundedAmountCents: number;\n    source: "credit_purchase" | "initial" | "plan_change" | "renewal";\n    status: "paid" | "partially_refunded" | "refunded";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReceiptCursor',
+						signature:
+							'type ReceiptCursor = {\n    at: string;\n    id: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReceiptPageRequest',
+						signature:
+							'type ReceiptPageRequest = {\n    limit: number;\n    cursor: ReceiptCursor | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReceiptPage',
+						signature:
+							'type ReceiptPage = {\n    receipts: BillingReceipt[];\n    nextCursor: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'UsageRange',
+						signature:
+							'type UsageRange = {\n    from: string;\n    to: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CustomerUsageReport',
+						signature:
+							'type CustomerUsageReport = {\n    from: string;\n    to: string;\n    creditsConsumed: number;\n    events: number;\n    byDay: {\n        day: string;\n        credits: number;\n        events: number;\n    }[];\n    byFeature: {\n        feature: string;\n        credits: number;\n        events: number;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseUsageRange',
+						signature:
+							'const parseUsageRange: (input: unknown, now?: Date) => UsageRange;'
+					},
+					{
+						description:
+							'Cursor is a position, never authorization. Consumers must filter by account.',
+						kind: 'value',
+						name: 'encodeReceiptCursor',
+						signature:
+							'const encodeReceiptCursor: (cursor: ReceiptCursor) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseReceiptPage',
+						signature:
+							'const parseReceiptPage: (input: unknown) => ReceiptPageRequest;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'projectBillingStatus',
+						signature:
+							'const projectBillingStatus: (value: BillingStatus) => BillingStatus;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'projectReceiptPage',
+						signature:
+							'const projectReceiptPage: (value: ReceiptPage, limit: number) => ReceiptPage;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'projectUsageReport',
+						signature:
+							'const projectUsageReport: (value: CustomerUsageReport, range: UsageRange) => CustomerUsageReport;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/credit-purchase',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditPurchaseCatalog',
+						signature:
+							'type CreditPurchaseCatalog = {\n    minimumCents: number;\n    maximumCents: number;\n    stepCents: number;\n    creditsPerCent: number;\n    bonusWindows: readonly {\n        minimumAmountCents: number;\n        maximumAmountCents: number;\n        bonusPercent: number;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreditPurchasePreset',
+						signature:
+							'type CreditPurchasePreset = {\n    id: string;\n    name: string;\n    amountCents: number;\n};'
+					},
+					{
+						description:
+							'Canonical integer credit pricing shared by the server and amount picker.',
+						kind: 'value',
+						name: 'quoteCreditAmount',
+						signature:
+							'const quoteCreditAmount: (catalog: CreditPurchaseCatalog, amountCents: number) => {\n    amountCents: number;\n    credits: number;\n    bonusPercent: number;\n} | undefined;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/provider-budget',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProviderReservation',
+						signature:
+							'type ProviderReservation = {\n    id: string;\n    scope: string;\n    period: string;\n    reservedMicros: number;\n    status: "reserved" | "fulfilled" | "rejected" | "unknown";\n    actualMicros: number | null;\n};'
+					},
+					{
+						description:
+							'Host supplies a journaled table; every writer locks the same scope before admission.',
+						kind: 'value',
+						name: 'createProviderBudget',
+						signature:
+							'const createProviderBudget: (client: CreditSqlClient, table?: string) => {\n    reserve: (input: {\n        id: string;\n        scope: string;\n        period: string;\n        reserveMicros: number;\n        maxMicros: number;\n        maxRequests: number;\n    }) => Promise<boolean>;\n    settle: (id: string, status: "fulfilled" | "rejected" | "unknown", actualMicros: number | null) => Promise<void>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/billing/paid-work-policy',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'PaidWorkContext',
+						signature:
+							'type PaidWorkContext = {\n    userSub: string;\n    actorId?: string;\n    approvalId?: string;\n    closed?: boolean;\n};'
+					},
+					{
+						description:
+							"In-process execution permission; never serialize it or accept it from a client. Accounting, reservations and durable approval claims remain the host's responsibility.",
+						kind: 'type',
+						name: 'PaidAuthorization',
+						signature:
+							'type PaidAuthorization = {\n    readonly userSub: string;\n    readonly [authorizationBrand]: true;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'PaidWorkApprovalError',
+						signature:
+							'class PaidWorkApprovalError extends Error {\n}'
+					},
+					{
+						description:
+							'Create once per application, using its trusted funded-work context.',
+						kind: 'value',
+						name: 'createPaidWorkPolicy',
+						signature:
+							'const createPaidWorkPolicy: <W extends PaidWorkContext>(adapter: WorkAdapter<W>) => {\n    authorizePaidWork: (userSub?: string | null) => PaidAuthorization;\n    requirePaidAuthorization: (authorization: PaidAuthorization) => string;\n    bindPaidExecution: <T>(userSub: string, run: () => Promise<T>) => () => Promise<T>;\n    hasBoundPaidRequester: () => boolean;\n    isBackgroundPaidWork: () => boolean;\n    requireApprovedPaidWork: () => W;\n    requireExplicitPaidRequester: () => string;\n    requirePaidWorkOwner: (userSub?: string | null) => string;\n    withDeferredPaidRequester: <T>(userSub: string, run: () => Promise<T>) => Promise<T>;\n    withoutAutomaticSpend: <T>(run: () => T) => T;\n    withPaidRequester: <T>(userSub: string, method: string, run: () => T, actorId?: string) => T;\n};'
+					}
+				]
+			}
+		],
 		category: 'Platform & Infra',
 		commands: [
 			{
@@ -8360,7 +16103,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/billing',
 		subpackages: [],
-		version: '0.17.2'
+		version: '0.18.0'
 	},
 	{
 		api: [],
@@ -12059,9 +19802,9 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Scaffold compatibility and verification'
 			}
 		],
-		repository: null,
+		repository: 'https://github.com/absolutejs/create-absolutejs',
 		subpackages: [],
-		version: '0.20.3'
+		version: '0.20.6'
 	},
 	{
 		api: [],
@@ -14881,7 +22624,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'diagnosticCorrelationPlugin',
 						signature:
-							'const diagnosticCorrelationPlugin: (options?: DiagnosticCorrelationPluginOptions) => import("elysia/types").PluginHookReturn<"", "local", import("elysia/types").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia/types").DefaultMetadata, {}, {\n    derive: {\n        readonly diagnosticCorrelation: DiagnosticRequestCorrelation;\n    };\n    schema: {};\n    schemas: {};\n    response: import("elysia/types").ExtractErrorFromHandle<{\n        readonly diagnosticCorrelation: DiagnosticRequestCorrelation;\n    }>;\n    error: [];\n}, import("elysia/types").DefaultEphemeral, {}>;'
+							'const diagnosticCorrelationPlugin: (options?: DiagnosticCorrelationPluginOptions) => import("elysia/types").PluginHookReturn<"", "local", import("elysia").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia").DefaultMetadata, {}, {\n    derive: {\n        readonly diagnosticCorrelation: DiagnosticRequestCorrelation;\n    };\n    schema: {};\n    schemas: {};\n    response: {};\n    error: [];\n}, import("elysia").DefaultEphemeral, {}>;'
 					},
 					{
 						description: '',
@@ -14916,7 +22659,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'diagnosticsPlugin',
 						signature:
-							'const diagnosticsPlugin: (options: DiagnosticsPluginOptions) => import("elysia/types").AddRoute<"", "local", import("elysia/types").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia/types").DefaultMetadata, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral, "post", string, import("elysia/types").IntersectIfObjectSchema<import("elysia").UnwrapRoute<{\n    body: import("typebox").TObject<{\n        archive: import("typebox").TOptional<import("typebox").TUnknown>;\n        bundle: import("typebox").TOptional<import("typebox").TUnknown>;\n        har: import("typebox").TOptional<import("typebox").TString>;\n    }>;\n}, {}, `/${string}`>, import("elysia/types").MergeScopedSchemas<{}, {}, {}>>, {}, ({ body, request, set }: {\n    body: {\n        archive?: unknown;\n        bundle?: unknown;\n        har?: string;\n    };\n    query: Record<string, string | undefined>;\n    params: {};\n    headers: Record<string, string | undefined>;\n    cookie: Record<string, import("elysia").Cookie<unknown>>;\n    server: import("elysia").Server | null;\n    redirect: import("elysia").redirect;\n    set: {\n        headers: import("elysia").HTTPHeaders;\n        sta'
+							'const diagnosticsPlugin: (options: DiagnosticsPluginOptions) => import("elysia/types").AddRoute<"", "local", import("elysia").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia").DefaultMetadata, {}, import("elysia").DefaultEphemeral, import("elysia").DefaultEphemeral, "post", string, import("elysia/types").IntersectIfObjectSchema<import("elysia").UnwrapRoute<{\n    body: import("typebox").TObject<{\n        archive: import("typebox").TOptional<import("typebox").TUnknown>;\n        bundle: import("typebox").TOptional<import("typebox").TUnknown>;\n        har: import("typebox").TOptional<import("typebox").TString>;\n    }>;\n}, {}, `/${string}`>, import("elysia/types").MergeScopedSchemas<{}, {}, {}>>, {}, ({ body, request, set }: {\n    body: {\n        archive?: unknown;\n        bundle?: unknown;\n        har?: string;\n    };\n    query: Record<string, string | undefined>;\n    params: {};\n    headers: Record<string, string | undefined>;\n    cookie: Record<string, import("elysia").Cookie<unknown>>;\n    server: import("elysia").Server | null;\n    redirect: import("elysia").redirect;\n    set: {\n        headers: import("elysia").HTTPHeaders;\n        status?: number | keyof imp'
 					}
 				]
 			},
@@ -15122,7 +22865,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/diagnostics',
 		subpackages: [],
-		version: '0.2.1'
+		version: '0.3.0'
 	},
 	{
 		api: [],
@@ -17707,6 +25450,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'build'
 			},
 			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
 				command: 'bun test',
 				name: 'test'
 			},
@@ -17771,7 +25518,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/eden',
 		subpackages: [],
-		version: '0.2.0'
+		version: '0.3.0'
 	},
 	{
 		api: [
@@ -19215,7 +26962,707 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.1.5'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/errors',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'computeFingerprint',
+						signature: 'computeFingerprint'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'issueCulprit',
+						signature: 'issueCulprit'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'issueTitle',
+						signature: 'issueTitle'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fingerprintSeed',
+						signature: 'fingerprintSeed'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'redactTelemetryString',
+						signature: 'redactTelemetryString'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'redactTelemetryValue',
+						signature: 'redactTelemetryValue'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorAuditLike',
+						signature:
+							'type ErrorAuditLike = {\n    append: (event: {\n        kind: string;\n        actor?: string;\n        target?: string;\n        metadata?: Record<string, unknown>;\n    }) => Promise<void> | void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorTracerLike',
+						signature:
+							'type ErrorTracerLike = {\n    startSpan?: (name: string) => {\n        setAttribute?: (key: string, value: string | number | boolean) => unknown;\n        recordException?: (error: unknown) => void;\n        end?: () => void;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorContext',
+						signature:
+							'type ErrorContext = {\n    /** Stable semantic issue identity for synthetic/integration errors whose\n     * message or source frame may change between builds. Hashed server-side. */\n    groupingKey?: string;\n    /** Tenant id — propagates to audit `actor` + span attributes. */\n    tenant?: string;\n    /** What the error was acting on — audit `target`. */\n    target?: string;\n    /** Active OTel trace id, if you\'ve already resolved it. */\n    traceId?: string;\n    /** Active OTel span id, if relevant. */\n    spanId?: string;\n    /** Session-replay id, if a recording is active — joins into @absolutejs/replay. */\n    replayId?: string;\n    /** Free-form structured fields. */\n    tags?: Record<string, string>;\n    /** Free-form arbitrary data. */\n    extra?: Record<string, unknown>;\n    /** Severity. Default `\'error\'`. */\n    level?: "fatal" | "error" | "warning" | "info";\n};'
+					},
+					{
+						description:
+							'Produces a privacy-safe error context that links an Issue to a handoff. Latest evidence, messages, references, external ids, and raw payloads are deliberately excluded.',
+						kind: 'value',
+						name: 'handoffErrorContext',
+						signature:
+							'const handoffErrorContext: (summary: HandoffSummary, context?: ErrorContext) => ErrorContext;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CapturedError',
+						signature:
+							'type CapturedError = {\n    /** Stable id grouping the same logical error across captures. */\n    fingerprint: string;\n    /** `Date.now()` when capture happened. */\n    at: number;\n    /** `error.name`. */\n    name: string;\n    /** `error.message`. */\n    message: string;\n    /** Stack trace, when available. */\n    stack?: string;\n    /** Context passed to `capture`. */\n    context: ErrorContext;\n    /** Release tag at capture time, when set on the tracker. */\n    release?: string;\n    /** Environment tag at capture time, when set on the tracker. */\n    environment?: string;\n};'
+					},
+					{
+						description:
+							'A store adapter could not durably create the schema.',
+						kind: 'class',
+						name: 'IssueStoreSchemaError',
+						signature:
+							'class IssueStoreSchemaError extends IssueStoreSchemaError_base<{\n    op: string;\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description:
+							'A store adapter query (read/write) failed.',
+						kind: 'class',
+						name: 'IssueStoreQueryError',
+						signature:
+							'class IssueStoreQueryError extends IssueStoreQueryError_base<{\n    op: string;\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description:
+							'A store adapter could not (de)serialize an event/issue payload.',
+						kind: 'class',
+						name: 'IssueStoreSerializationError',
+						signature:
+							'class IssueStoreSerializationError extends IssueStoreSerializationError_base<{\n    fingerprint: string;\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description:
+							'Everything a store adapter is allowed to fail with.',
+						kind: 'type',
+						name: 'IssueStoreError',
+						signature:
+							'type IssueStoreError = IssueStoreSchemaError | IssueStoreQueryError | IssueStoreSerializationError;'
+					},
+					{
+						description:
+							'The configured fingerprint function threw — capture fell back.',
+						kind: 'class',
+						name: 'FingerprintFailure',
+						signature:
+							'class FingerprintFailure extends FingerprintFailure_base<{\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description: 'The audit sink (audit.append) threw.',
+						kind: 'class',
+						name: 'AuditSinkFailure',
+						signature:
+							'class AuditSinkFailure extends AuditSinkFailure_base<{\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description:
+							'The tracer (startSpan / recordException) threw.',
+						kind: 'class',
+						name: 'TracerFailure',
+						signature:
+							'class TracerFailure extends TracerFailure_base<{\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description:
+							'The durable store rejected the upsert — wraps the typed IssueStoreError.',
+						kind: 'class',
+						name: 'StoreFailure',
+						signature:
+							'class StoreFailure extends StoreFailure_base<{\n    cause: IssueStoreError;\n}> {\n}'
+					},
+					{
+						description: 'The onIssue alert callback threw.',
+						kind: 'class',
+						name: 'OnIssueFailure',
+						signature:
+							'class OnIssueFailure extends OnIssueFailure_base<{\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description:
+							'Any per-sink failure collected into a CaptureOutcome.',
+						kind: 'type',
+						name: 'CaptureFailure',
+						signature:
+							'type CaptureFailure = FingerprintFailure | AuditSinkFailure | TracerFailure | StoreFailure | OnIssueFailure;'
+					},
+					{
+						description:
+							'The fan-out sinks a capture multiplexes to.',
+						kind: 'type',
+						name: 'SinkName',
+						signature:
+							'type SinkName = "fingerprint" | "audit" | "tracer" | "store" | "onIssue";'
+					},
+					{
+						description:
+							"Per-sink delivery state. 'skipped' (sink not configured) is distinct from 'failed' (configured, threw) on purpose — they demand different reactions.",
+						kind: 'type',
+						name: 'Delivery',
+						signature:
+							'type Delivery = "ok" | "failed" | "skipped";'
+					},
+					{
+						description:
+							'The value of a capture. Capture never fails (E = never); partial sink failure is normal and is reported as data here.',
+						kind: 'type',
+						name: 'CaptureOutcome',
+						signature:
+							"type CaptureOutcome = {\n    /** Stable grouping id (fallback `'0'.repeat(16)` if fingerprinting threw). */\n    fingerprint: string;\n    /** What each sink did. */\n    delivered: Record<SinkName, Delivery>;\n    /** The grouped issue, present iff the store delivered. */\n    issue?: IssueUpsertResult;\n    /** Typed per-sink failures. Empty ⇒ fully delivered. */\n    failures: CaptureFailure[];\n};"
+					},
+					{
+						description: 'Lifecycle state of a grouped issue.',
+						kind: 'type',
+						name: 'IssueState',
+						signature:
+							'type IssueState = "unresolved" | "resolved" | "ignored";'
+					},
+					{
+						description:
+							'Severity, non-optional form (events/issues always resolve a level).',
+						kind: 'type',
+						name: 'IssueLevel',
+						signature:
+							'type IssueLevel = NonNullable<ErrorContext["level"]>;'
+					},
+					{
+						description:
+							'A single stored occurrence — denormalized for the events timeline.',
+						kind: 'type',
+						name: 'StoredEvent',
+						signature:
+							'type StoredEvent = {\n    fingerprint: string;\n    groupingKey?: string;\n    /** Project/tenant scope. */\n    project: string;\n    /** Occurrence time (ms). */\n    at: number;\n    level: IssueLevel;\n    name: string;\n    message: string;\n    stack?: string;\n    release?: string;\n    environment?: string;\n    /** Joins straight into @absolutejs/telemetry traces. */\n    traceId?: string;\n    spanId?: string;\n    /** Joins into @absolutejs/replay. */\n    replayId?: string;\n    tags?: Record<string, string>;\n    extra?: Record<string, unknown>;\n};'
+					},
+					{
+						description:
+							'One grouped issue — a fingerprint plus its aggregated occurrence stats.',
+						kind: 'type',
+						name: 'IssueRecord',
+						signature:
+							'type IssueRecord = {\n    fingerprint: string;\n    project: string;\n    environment?: string;\n    /** Human title — `name: normalized-message`. See `issueTitle`. */\n    title: string;\n    /** Top user stack frame, when available. See `issueCulprit`. */\n    culprit?: string;\n    level: IssueLevel;\n    state: IssueState;\n    /** First-ever capture (ms). */\n    firstSeen: number;\n    /** Most recent capture (ms). */\n    lastSeen: number;\n    /** Total occurrences across all captures. */\n    timesSeen: number;\n    /** Release id at first capture. */\n    firstRelease?: string;\n    /** Release id at most recent capture. */\n    lastRelease?: string;\n    /** Assigned operator, when triaged. */\n    assignee?: string;\n};'
+					},
+					{
+						description:
+							'Result of recording a capture against the store.',
+						kind: 'type',
+						name: 'IssueUpsertResult',
+						signature:
+							'type IssueUpsertResult = {\n    issue: IssueRecord;\n    /** First time this fingerprint has ever been seen. */\n    isNew: boolean;\n    /** Was `resolved`, now seen again — drives "regression" alerts. */\n    isRegression: boolean;\n};'
+					},
+					{
+						description: 'Filter for the dashboard issue list.',
+						kind: 'type',
+						name: 'IssueFilter',
+						signature:
+							'type IssueFilter = {\n    project?: string;\n    environment?: string;\n    state?: IssueState;\n    /** Substring match on title. */\n    query?: string;\n    /** Max rows. Default adapter-defined (e.g. 100). */\n    limit?: number;\n};'
+					},
+					{
+						description:
+							'A coalesced batch of occurrences of ONE (project, fingerprint) — the unit the in-process ingest buffer flushes. A thundering herd of N identical errors collapses into a single recordCoalesced instead of N record calls, so the hot issue row is touched once (times_seen += occurrences) and only a capped samples set of raw events is persisted to the timeline.',
+						kind: 'type',
+						name: 'CoalescedGroup',
+						signature:
+							'type CoalescedGroup = {\n    /**\n     * Representative event — drives title/culprit/release/environment. Its\n     * `level` should already be the escalated (max-severity) level for the group.\n     */\n    representative: StoredEvent;\n    /** Total occurrences in the window (>= 1). `times_seen` increments by this. */\n    occurrences: number;\n    /** Earliest occurrence time (ms) in the group. */\n    firstSeen: number;\n    /** Latest occurrence time (ms) in the group. */\n    lastSeen: number;\n    /** Sampled raw events to persist (capped; never empty — includes one rep). */\n    samples: StoredEvent[];\n};'
+					},
+					{
+						description:
+							'Durable issue store. record is the only required method — capture works with a write-only store. Query/mutation methods are optional, so a minimal ship-only adapter is valid; a dashboard-backing adapter implements them all. Every method returns an Effect with a typed IssueStoreError channel.',
+						kind: 'type',
+						name: 'IssueStore',
+						signature:
+							'type IssueStore = {\n    /** Upsert the issue + append the event. */\n    record: (event: StoredEvent) => Effect.Effect<IssueUpsertResult, IssueStoreError>;\n    /**\n     * Upsert a coalesced batch (one fingerprint, N occurrences) in a single\n     * round-trip — the efficient path for the ingest buffer. Optional: the\n     * buffer falls back to `record` per sample when an adapter omits it.\n     */\n    recordCoalesced?: (group: CoalescedGroup) => Effect.Effect<IssueUpsertResult, IssueStoreError>;\n    listIssues?: (filter?: IssueFilter) => Effect.Effect<IssueRecord[], IssueStoreError>;\n    getIssue?: (project: string, fingerprint: string) => Effect.Effect<Option.Option<IssueRecord>, IssueStoreError>;\n    setState?: (project: string, fingerprint: string, state: IssueState, by?: string) => Effect.Effect<void, IssueStoreError>;\n    assign?: (project: string, fingerprint: string, assignee: string | null) => Effect.Effect<void, IssueStoreError>;\n    listEvents?: (project: string, fingerprint: string, limit?: number) => Effect.Effect<StoredEvent[], IssueStoreError>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorTrackerMetrics',
+						signature:
+							'type ErrorTrackerMetrics = {\n    /** Successful `capture` calls. */\n    captured: number;\n    /** Total per-sink failures across all captures. */\n    captureErrors: number;\n    /** Per-fingerprint occurrence counts (capped at `maxFingerprints`). */\n    byFingerprint: Record<string, number>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorTrackerOptions',
+						signature:
+							"type ErrorTrackerOptions = {\n    /** Optional audit writer. Pass `@absolutejs/audit`'s broker `append`. */\n    audit?: ErrorAuditLike;\n    /**\n     * Optional tracer — used to call `startSpan` + `recordException` so the\n     * error lands on the active trace. Pass any OTel-compatible tracer (e.g.\n     * from `@absolutejs/telemetry`).\n     */\n    tracer?: ErrorTracerLike;\n    /**\n     * Build a stable fingerprint from `(name, message, stack)`. Default:\n     * SHA-1-hex of `name + first-meaningful-stack-frame + normalized message`.\n     * Inject a custom hasher for deterministic tests. If it throws, capture\n     * falls back to a degenerate fingerprint and records a `FingerprintFailure`.\n     */\n    fingerprint?: (error: Error, context: ErrorContext) => string | Promise<string>;\n    /** Tag every event with a release id (deploy version). */\n    release?: string;\n    /** Tag every event with an environment (`'production'`, etc.). */\n    environment?: string;\n    /** LRU cap on recent-errors buffer. Default 100. */\n    maxRecent?: number;\n    /**\n     * LRU cap on `byFingerprint` map. Default 1000. Prevents an attacker who\n     * can synthesize unique errors from blowing memory.\n     *"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorTracker',
+						signature:
+							'type ErrorTracker = {\n    /** Primary Effect API — `Effect<CaptureOutcome, never>`; never throws. */\n    capture: (error: unknown, context?: ErrorContext) => Effect.Effect<CaptureOutcome>;\n    /** Promise edge — runs `capture` for Promise-world consumers. */\n    captureException: (error: unknown, context?: ErrorContext) => Promise<CaptureOutcome>;\n    /** In-process LRU of recent captures, newest first. */\n    recentErrors: () => ReadonlyArray<CapturedError>;\n    /** Drop the in-process buffer. Counters survive. */\n    clearRecent: () => void;\n    /** Operator-shaped counters. */\n    metrics: () => ErrorTrackerMetrics;\n    /**\n     * Configured durable issue store. Exposed for manifest-governed operator\n     * tools; application code should prefer the tracker capture APIs for writes.\n     */\n    store?: IssueStore;\n};'
+					},
+					{
+						description:
+							'One serializable link in an Error.cause chain.',
+						kind: 'type',
+						name: 'CapturedErrorCause',
+						signature:
+							'type CapturedErrorCause = {\n    name: string;\n    message: string;\n    stack?: string;\n    /** Driver/runtime diagnostics such as PostgreSQL code, detail, and routine. */\n    properties?: Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createErrorTracker',
+						signature:
+							'const createErrorTracker: (options?: ErrorTrackerOptions) => ErrorTracker;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MemoryIssueStoreOptions',
+						signature:
+							'type MemoryIssueStoreOptions = {\n    /** Max issues retained, evicting least-recently-seen. Default 10_000. */\n    maxIssues?: number;\n    /** Max events retained per issue, newest-first. Default 50. */\n    maxEventsPerIssue?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMemoryIssueStore',
+						signature:
+							'const createMemoryIssueStore: (options?: MemoryIssueStoreOptions) => IssueStore;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/errors/ingest',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'BufferStats',
+						signature:
+							'type BufferStats = {\n    /** Distinct (project, fingerprint) groups currently pending. */\n    groups: number;\n    /** Events pending (not yet drained). */\n    events: number;\n    /** Lifetime count of events dropped because `maxGroups` was full. */\n    droppedGroups: number;\n};'
+					},
+					{
+						description:
+							'The pluggable buffer seam. v1 ships createInMemoryEventBuffer; a Redis- or durable-log-backed implementation drops in here when an enterprise guarantee (zero-loss, cross-instance quota) demands it.',
+						kind: 'type',
+						name: 'EventBuffer',
+						signature:
+							'type EventBuffer = {\n    /** Add a validated event to the coalescer. Sub-ms, synchronous, never fails. */\n    push: (event: StoredEvent) => void;\n    /** Return all pending coalesced groups and clear the buffer. */\n    drain: () => CoalescedGroup[];\n    stats: () => BufferStats;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'InMemoryEventBufferOptions',
+						signature:
+							'type InMemoryEventBufferOptions = {\n    /**\n     * Max distinct `(project, fingerprint)` groups held between flushes. New\n     * groups beyond this are dropped (counted in `droppedGroups`) — bounds memory\n     * to `maxGroups × maxSamplesPerGroup` regardless of event volume. Occurrence\n     * counts within an existing group are unbounded (just an integer). Default 10_000.\n     */\n    maxGroups?: number;\n    /** Max sampled raw events persisted per group per flush. Default 10. */\n    maxSamplesPerGroup?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createInMemoryEventBuffer',
+						signature:
+							'const createInMemoryEventBuffer: (options?: InMemoryEventBufferOptions) => EventBuffer;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconEvent',
+						signature:
+							'type BeaconEvent = typeof BeaconEventSchema.Type;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconEnvelope',
+						signature:
+							'type BeaconEnvelope = typeof BeaconEnvelopeSchema.Type;'
+					},
+					{
+						description:
+							'Defense-in-depth redaction for an already schema-validated browser event. The client performs the same pass, but the ingest boundary does not trust it.',
+						kind: 'value',
+						name: 'redactBeaconEvent',
+						signature:
+							'const redactBeaconEvent: (event: BeaconEvent) => BeaconEvent;'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'PayloadTooLarge',
+						signature:
+							'class PayloadTooLarge extends PayloadTooLarge_base<{\n    limitBytes: number;\n    actualBytes: number;\n}> {\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'MalformedJson',
+						signature:
+							'class MalformedJson extends MalformedJson_base<{\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'SchemaInvalid',
+						signature:
+							'class SchemaInvalid extends SchemaInvalid_base<{\n    message: string;\n}> {\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'UnknownProject',
+						signature:
+							'class UnknownProject extends UnknownProject_base<{\n    project: string;\n}> {\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'Unauthorized',
+						signature:
+							'class Unauthorized extends Unauthorized_base<{\n    reason: "missing-key" | "bad-key";\n}> {\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'RateLimited',
+						signature:
+							'class RateLimited extends RateLimited_base<{\n    retryAfterMs: number;\n}> {\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'TooManyEvents',
+						signature:
+							'class TooManyEvents extends TooManyEvents_base<{\n    limit: number;\n    actual: number;\n}> {\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IngestRejection',
+						signature:
+							'type IngestRejection = PayloadTooLarge | MalformedJson | SchemaInvalid | UnknownProject | Unauthorized | RateLimited | TooManyEvents;'
+					},
+					{
+						description:
+							'Map a rejection to its HTTP status. Exhaustive — adding a tag is a compile error.',
+						kind: 'value',
+						name: 'ingestRejectionStatus',
+						signature:
+							'const ingestRejectionStatus: (rejection: IngestRejection) => number;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IngestAuthorizer',
+						signature:
+							'type IngestAuthorizer = (input: {\n    project: string;\n    key?: string;\n}) => Effect.Effect<void, Unauthorized | UnknownProject>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IngestOptions',
+						signature:
+							'type IngestOptions = {\n    buffer: EventBuffer;\n    /** Per-request authorization. Omit to accept any project (dev / trusted edge). */\n    authorize?: IngestAuthorizer;\n    /** Reject envelopes whose byte size exceeds this. Default 512_000 (512 KB). */\n    maxBytes?: number;\n    /** Reject envelopes carrying more than this many events. Default 1000. */\n    maxEvents?: number;\n    /** Override `Date.now()` for `at` defaults / tests. */\n    clock?: () => number;\n    /**\n     * Defense-in-depth redaction after validation and before fingerprinting or\n     * buffering. Default true. Pass a function to replace the built-in policy.\n     */\n    redact?: boolean | ((event: BeaconEvent) => BeaconEvent);\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IngestAccepted',
+						signature:
+							'type IngestAccepted = {\n    project: string;\n    accepted: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IngestRequest',
+						signature:
+							'type IngestRequest = {\n    /** Parsed object, or a raw JSON string (which will be parsed). */\n    body: unknown;\n    /** Byte size, when known (e.g. Content-Length) — enforces `maxBytes`. */\n    bytes?: number;\n    /** Auth key, when present (e.g. `x-beacon-key` header). */\n    key?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IngestEndpoint',
+						signature:
+							'type IngestEndpoint = {\n    ingest: (request: IngestRequest) => Effect.Effect<IngestAccepted, IngestRejection>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createIngestEndpoint',
+						signature:
+							'const createIngestEndpoint: (options: IngestOptions) => IngestEndpoint;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FlushResult',
+						signature:
+							'type FlushResult = {\n    /** Distinct groups flushed this cycle. */\n    groups: number;\n    /** Total occurrences represented (sum of coalesced counts). */\n    occurrences: number;\n    /** Groups that failed to persist (store error). */\n    failures: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DrainerOptions',
+						signature:
+							'type DrainerOptions = {\n    buffer: EventBuffer;\n    store: IssueStore;\n    /** Flush interval (ms). Default 500. */\n    intervalMs?: number;\n    /**\n     * Applied to each sampled event before persistence — the symbolication hook.\n     * Wire `@absolutejs/errors/symbolicate` here to rewrite minified stacks. Off\n     * the hot path (runs in the drainer, not the request).\n     */\n    prepare?: (event: StoredEvent) => Effect.Effect<StoredEvent>;\n    /** Max prepared samples retained when raw groups merge canonically. Default 10. */\n    maxSamplesPerGroup?: number;\n    /** Fired per NEW or REGRESSED issue — the alerting hook (→ @absolutejs/dispatch). */\n    onIssue?: (result: IssueUpsertResult) => void | Promise<void>;\n    /** Fired when a group fails to persist (store degraded). */\n    onError?: (error: IssueStoreError) => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Drainer',
+						signature:
+							'type Drainer = {\n    /** Flush all pending groups once, now. Also what the interval invokes. */\n    flush: () => Effect.Effect<FlushResult>;\n    /** Stop the interval and do a final flush (call on graceful shutdown). */\n    stop: () => Promise<FlushResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDrainer',
+						signature:
+							'const createDrainer: (options: DrainerOptions) => Drainer;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/errors/reporting',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'BrowserReportingOptions',
+						signature:
+							'type BrowserReportingOptions = {\n    project: string;\n    release?: string;\n    environment?: string;\n};'
+					},
+					{
+						description:
+							'Returns null for malformed deliveries and an envelope for valid batches.',
+						kind: 'value',
+						name: 'browserReportsEnvelope',
+						signature:
+							'const browserReportsEnvelope: (value: unknown, options: BrowserReportingOptions, receivedAt?: number) => BeaconEnvelope | null;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/errors/elysia',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'handledError',
+						signature: 'handledError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ErrorsCapture',
+						signature: 'ErrorsCapture'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ErrorsCaptureContext',
+						signature: 'ErrorsCaptureContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ErrorsServerContext',
+						signature: 'ErrorsServerContext'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorsPluginTracker',
+						signature:
+							'type ErrorsPluginTracker = Pick<ErrorTracker, "captureException" | "store">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorsPluginServerOptions',
+						signature:
+							'type ErrorsPluginServerOptions = Omit<ServerBoundaryOptions, "capture"> & {\n    /** Defaults to `tracker.captureException`. */\n    capture?: ErrorsCapture;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorsPluginIngestOptions',
+						signature:
+							'type ErrorsPluginIngestOptions = InMemoryEventBufferOptions & {\n    /** Defaults to the store configured on `tracker`. */\n    store?: IssueStore;\n    buffer?: EventBuffer;\n    /** Route path. Default `/ingest`. */\n    path?: string;\n    authorize?: IngestAuthorizer;\n    maxBytes?: number;\n    maxEvents?: number;\n    intervalMs?: number;\n    prepare?: (event: StoredEvent) => Effect.Effect<StoredEvent>;\n    onIssue?: (result: IssueUpsertResult) => void | Promise<void>;\n    onError?: (error: IssueStoreError) => void;\n    /** Browser Reporting API receiver. This is the only path that can receive\n     * crash reports because page JavaScript is gone when a browser crashes. */\n    reporting?: false | (BrowserReportingOptions & {\n        /** Route path. Default `/ingest/reports`. */\n        path?: string;\n        /** Optional dedicated authorization for browser-generated reports. */\n        authorize?: IngestAuthorizer;\n    });\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ErrorsPluginOptions',
+						signature:
+							'type ErrorsPluginOptions = {\n    /**\n     * Supplies the default server capture edge and ingest store. Optional when\n     * the enabled sections provide those values directly.\n     */\n    tracker?: ErrorsPluginTracker;\n    /**\n     * Request-error settings. Enabled by default; set `false` to install no\n     * request boundary.\n     */\n    server?: false | ErrorsPluginServerOptions;\n    /**\n     * Browser-event ingest settings. Omitted/false means no route is opened.\n     */\n    ingest?: false | ErrorsPluginIngestOptions;\n};'
+					},
+					{
+						description:
+							'The only Elysia plugin exported by @absolutejs/errors. It can capture server request failures, receive browser events, or do both. Each section is configured independently through one plugin invocation.',
+						kind: 'value',
+						name: 'errorsPlugin',
+						signature:
+							'const errorsPlugin: (options: ErrorsPluginOptions) => Elysia<"", "local", import("elysia").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia").DefaultMetadata, {}, import("elysia").DefaultEphemeral, import("elysia").DefaultEphemeral>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/errors/symbolicate',
+				symbols: [
+					{
+						description:
+							'A frame parsed out of a raw minified stack. Lines/columns are 1-based.',
+						kind: 'type',
+						name: 'RawFrame',
+						signature:
+							'type RawFrame = {\n    /** Function name as it appears in the minified stack, if any. */\n    function?: string;\n    /** Generated file URL/path. */\n    file: string;\n    /** 1-based line in generated code. */\n    line: number;\n    /** 1-based column in generated code. */\n    column: number;\n};'
+					},
+					{
+						description:
+							'A resolved original position. column is 0-based (as source maps store it).',
+						kind: 'type',
+						name: 'OriginalPosition',
+						signature:
+							'type OriginalPosition = {\n    source: string;\n    line: number;\n    column: number;\n    name?: string;\n};'
+					},
+					{
+						description:
+							'A frame plus its original position, when one was found.',
+						kind: 'type',
+						name: 'SymbolicatedFrame',
+						signature:
+							'type SymbolicatedFrame = RawFrame & {\n    original?: OriginalPosition;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SymbolicationResult',
+						signature:
+							'type SymbolicationResult = {\n    /** Every parsed frame, in order; `original` set where mapping succeeded. */\n    frames: SymbolicatedFrame[];\n    /** Typed per-frame / per-file failures. Empty ⇒ fully symbolicated. */\n    failures: SymbolicationFailure[];\n    /** How many frames resolved to an original position. */\n    mapped: number;\n};'
+					},
+					{
+						description:
+							'No source map is available for the generated file.',
+						kind: 'class',
+						name: 'NoSourceMap',
+						signature:
+							'class NoSourceMap extends NoSourceMap_base<{\n    file: string;\n}> {\n}'
+					},
+					{
+						description:
+							'The resolver threw fetching the source map (network / IO boundary).',
+						kind: 'class',
+						name: 'SourceMapFetchFailed',
+						signature:
+							'class SourceMapFetchFailed extends SourceMapFetchFailed_base<{\n    file: string;\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description:
+							'The fetched source map could not be parsed.',
+						kind: 'class',
+						name: 'SourceMapParseFailed',
+						signature:
+							'class SourceMapParseFailed extends SourceMapParseFailed_base<{\n    file: string;\n    cause: unknown;\n}> {\n}'
+					},
+					{
+						description:
+							'The map loaded, but had no entry for this generated position.',
+						kind: 'class',
+						name: 'FrameUnmapped',
+						signature:
+							'class FrameUnmapped extends FrameUnmapped_base<{\n    file: string;\n    line: number;\n    column: number;\n}> {\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SymbolicationFailure',
+						signature:
+							'type SymbolicationFailure = NoSourceMap | SourceMapFetchFailed | SourceMapParseFailed | FrameUnmapped;'
+					},
+					{
+						description:
+							"Resolve the raw source map for a generated file. Returns Option.none() when no map exists (a non-error: many files legitimately have none). The error channel is unknown — it's a trust boundary (a fetch, a disk read, an S3 GET); symbolicate wraps any failure into a typed SourceMapFetchFailed.",
+						kind: 'type',
+						name: 'SourceMapResolver',
+						signature:
+							'type SourceMapResolver = (file: string) => Effect.Effect<Option.Option<SourceMapInput>, unknown>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseStack',
+						signature:
+							'const parseStack: (stack: string) => RawFrame[];'
+					},
+					{
+						description:
+							"Symbolicate a raw stack string. Never fails: returns every frame (with original set where it mapped) plus the typed failures for those that didn't. A source map is built at most once per distinct file per call.",
+						kind: 'value',
+						name: 'symbolicateStack',
+						signature:
+							'const symbolicateStack: (stack: string, resolve: SourceMapResolver) => Effect.Effect<SymbolicationResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SymbolicatedStack',
+						signature:
+							'type SymbolicatedStack = {\n    /** Rewritten stack string (original positions where available). */\n    stack: string;\n    failures: SymbolicationFailure[];\n    mapped: number;\n};'
+					},
+					{
+						description:
+							'High-level entry for the ingest drainer: rewrite a minified stack into an original-source stack string, preserving the Error: message header line.',
+						kind: 'value',
+						name: 'symbolicate',
+						signature:
+							'const symbolicate: (stack: string, resolve: SourceMapResolver) => Effect.Effect<SymbolicatedStack>;'
+					},
+					{
+						description:
+							'Wrap a resolver with an in-process LRU so a release\'s source map is fetched once, not once per event. This is the "source-map cache" — read-mostly, highly reused, in-process (no Redis needed). Caches the resolved value including Option.none() (negative caching), so files with no map don\'t re-hit the resolver on every occurrence.',
+						kind: 'value',
+						name: 'cachedSourceMapResolver',
+						signature:
+							'const cachedSourceMapResolver: (resolve: SourceMapResolver, options?: {\n    max?: number;\n}) => SourceMapResolver;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/errors/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<ErrorTrackerOptions, ErrorTracker>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<ErrorTracker>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<ErrorTracker>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        environment: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        maxFingerprints: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maxRecent: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        project: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        release: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n    }>;\n});'
+					}
+				]
+			}
+		],
 		category: 'Observability',
 		commands: [
 			{
@@ -19345,7 +27792,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/errors',
 		subpackages: [],
-		version: '0.9.3'
+		version: '0.10.0'
 	},
 	{
 		api: [],
@@ -19389,7 +27836,149 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/errors-adapters',
 		subpackages: [
 			{
-				api: [],
+				api: [
+					{
+						entryPoint: '@absolutejs/errors-postgres',
+						symbols: [
+							{
+								description: '',
+								kind: 'export',
+								name: 'createDrizzleIssueStore',
+								signature: 'createDrizzleIssueStore'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'errorDrizzleSchema',
+								signature: 'errorDrizzleSchema'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'errorEvents',
+								signature: 'errorEvents'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'errorIssues',
+								signature: 'errorIssues'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'CreateDrizzleIssueStoreOptions',
+								signature: 'type CreateDrizzleIssueStoreOptions'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'createIssueTriage',
+								signature: 'createIssueTriage'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'emptyReleaseIssueReport',
+								signature: 'emptyReleaseIssueReport'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'toTriageIssue',
+								signature: 'toTriageIssue'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'CreateIssueTriageOptions',
+								signature: 'type CreateIssueTriageOptions'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'IssueListQuery',
+								signature: 'type IssueListQuery'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'IssueOccurrence',
+								signature: 'type IssueOccurrence'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'IssueSeverity',
+								signature: 'type IssueSeverity'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'IssueTriage',
+								signature: 'type IssueTriage'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'ReleaseIssueReport',
+								signature: 'type ReleaseIssueReport'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'ReleaseIssueStats',
+								signature: 'type ReleaseIssueStats'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'SetIssueStateOptions',
+								signature: 'type SetIssueStateOptions'
+							},
+							{
+								description: '',
+								kind: 'export',
+								name: 'TriageIssue',
+								signature: 'type TriageIssue'
+							},
+							{
+								description:
+									"A postgres-js (postgres('…')) or Neon serverless (neon('…')) tag-template client. Declared locally (rather than import type { Sql } from 'postgres') so postgres stays a truly optional peer. The PUBLIC surface is intentionally permissive: postgres-js's real Sql type has heavily-overloaded call signatures (the sql(array) insert-helper form returns a non-Promise Helper), so no precise hand-rolled structural type cleanly subtypes it. A zero-extra-arg call returning Promise binds only to the tagged-t",
+								kind: 'type',
+								name: 'PostgresTag',
+								signature:
+									'type PostgresTag = {\n    (strings: TemplateStringsArray, ...values: never[]): Promise<unknown[]>;\n    unsafe: (sql: string, ...args: never[]) => Promise<unknown[]>;\n};'
+							},
+							{
+								description: '',
+								kind: 'type',
+								name: 'CreatePostgresIssueStoreOptions',
+								signature:
+									"type CreatePostgresIssueStoreOptions = {\n    /** `postgres('…')` or `neon('…')` — both implement the same tag shape. */\n    sql: PostgresTag;\n    /**\n     * Table-name prefix. Defaults to `'error'` → `error_issues` + `error_events`.\n     * Validated against `/^[a-zA-Z_][a-zA-Z0-9_]*$/` (interpolated into DDL, not\n     * a bind, so it must be sanitized).\n     */\n    tablePrefix?: string;\n    /**\n     * Run `CREATE TABLE IF NOT EXISTS` on first use. Default `true`. Set `false`\n     * if you own the schema via migrations.\n     */\n    ensureSchema?: boolean;\n};"
+							},
+							{
+								description: '',
+								kind: 'value',
+								name: 'createPostgresIssueStore',
+								signature:
+									'const createPostgresIssueStore: (options: CreatePostgresIssueStoreOptions) => IssueStore;'
+							}
+						]
+					},
+					{
+						entryPoint: '@absolutejs/errors-postgres/manifest',
+						symbols: [
+							{
+								description: '',
+								kind: 'value',
+								name: 'manifest',
+								signature:
+									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<CreatePostgresIssueStoreOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+							}
+						]
+					}
+				],
 				commands: [
 					{
 						command:
@@ -19398,7 +27987,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						command:
-							'bun run typecheck && bun run verify-package && bun run build && bun run verify-package --artifacts && bun run test',
+							'bun run typecheck && bun run verify-package && bun run build && bun run test',
 						name: 'check:package'
 					},
 					{
@@ -19513,7 +28102,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'postgres',
-				version: '0.2.0-beta.0'
+				version: '0.2.0'
 			}
 		],
 		version: null
@@ -22126,7 +30715,511 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: null
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/execution',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryEffectStore',
+						signature: 'createMemoryEffectStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDrizzleEffectStore',
+						signature: 'createDrizzleEffectStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDrizzleEffectAdapterHealthStore',
+						signature: 'createDrizzleEffectAdapterHealthStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDrizzleEffectAdapterInstallationStore',
+						signature: 'createDrizzleEffectAdapterInstallationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDrizzleEffectAdapterRegistryStore',
+						signature: 'createDrizzleEffectAdapterRegistryStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDrizzleEffectEvidenceStore',
+						signature: 'createDrizzleEffectEvidenceStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDrizzleEffectReconciliationLeaseStore',
+						signature: 'createDrizzleEffectReconciliationLeaseStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDrizzleEffectReconciliationSchedulerStore',
+						signature:
+							'createDrizzleEffectReconciliationSchedulerStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'executionDrizzleSchema',
+						signature: 'executionDrizzleSchema'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEffectEvidenceIngestion',
+						signature: 'createEffectEvidenceIngestion'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryEffectEvidenceStore',
+						signature: 'createMemoryEffectEvidenceStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresEffectEvidenceStore',
+						signature: 'createPostgresEffectEvidenceStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectEvidencePostgresSchemaSql',
+						signature: 'effectEvidencePostgresSchemaSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectEvidenceError',
+						signature: 'EffectEvidenceError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectEvidenceOutcome',
+						signature: 'type EffectEvidenceOutcome'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectEvidenceRecord',
+						signature: 'type EffectEvidenceRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectEvidenceSource',
+						signature: 'type EffectEvidenceSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectEvidenceStore',
+						signature: 'type EffectEvidenceStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEffectAdapterExecutionHandler',
+						signature: 'createEffectAdapterExecutionHandler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectAdapterExecutionInputDigest',
+						signature: 'effectAdapterExecutionInputDigest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectProviderReconciliationReferenceFromResult',
+						signature:
+							'effectProviderReconciliationReferenceFromResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseEffectAdapterExecutionEnvelope',
+						signature: 'parseEffectAdapterExecutionEnvelope'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseEffectProviderReconciliationReference',
+						signature: 'parseEffectProviderReconciliationReference'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterExecutionError',
+						signature: 'EffectAdapterExecutionError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterDriver',
+						signature: 'type EffectAdapterDriver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterDriverCapabilities',
+						signature: 'type EffectAdapterDriverCapabilities'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterDriverContext',
+						signature: 'type EffectAdapterDriverContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterExecutionEnvelope',
+						signature: 'type EffectAdapterExecutionEnvelope'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterExecutionResult',
+						signature: 'type EffectAdapterExecutionResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterSettlementInput',
+						signature: 'type EffectAdapterSettlementInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterSettlement',
+						signature: 'type EffectAdapterSettlement'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterSettlementRefundInput',
+						signature: 'type EffectAdapterSettlementRefundInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResolvedEffectAdapterCredential',
+						signature: 'type ResolvedEffectAdapterCredential'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEffectAdapterInstallationRegistry',
+						signature: 'createEffectAdapterInstallationRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryEffectAdapterInstallationStore',
+						signature: 'createMemoryEffectAdapterInstallationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresEffectAdapterInstallationStore',
+						signature:
+							'createPostgresEffectAdapterInstallationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectAdapterInstallationsPostgresSchemaSql',
+						signature: 'effectAdapterInstallationsPostgresSchemaSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectAdapterPurposeBoundInstallationsPostgresSchemaSql',
+						signature:
+							'effectAdapterPurposeBoundInstallationsPostgresSchemaSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterInstallationError',
+						signature: 'EffectAdapterInstallationError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterCredentialInstallation',
+						signature: 'type EffectAdapterCredentialInstallation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterInstallationAuthorization',
+						signature: 'type EffectAdapterInstallationAuthorization'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterInstallationInput',
+						signature: 'type EffectAdapterInstallationInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterInstallationPolicy',
+						signature: 'type EffectAdapterInstallationPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterInstallationPosture',
+						signature: 'type EffectAdapterInstallationPosture'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterInstallationRecord',
+						signature: 'type EffectAdapterInstallationRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterInstallationRegistry',
+						signature: 'type EffectAdapterInstallationRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterInstallationStore',
+						signature: 'type EffectAdapterInstallationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEffectAdapterRegistry',
+						signature: 'createEffectAdapterRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryEffectAdapterRegistryStore',
+						signature: 'createMemoryEffectAdapterRegistryStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresEffectAdapterRegistryStore',
+						signature: 'createPostgresEffectAdapterRegistryStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectAdapterDescriptorDigest',
+						signature: 'effectAdapterDescriptorDigest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectAdapterQueryReconciliation',
+						signature: 'effectAdapterQueryReconciliation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectAdapterWebhookCallbackPath',
+						signature: 'effectAdapterWebhookCallbackPath'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectAdapterWebhookReconciliation',
+						signature: 'effectAdapterWebhookReconciliation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectAdapterRegistryPostgresSchemaSql',
+						signature: 'effectAdapterRegistryPostgresSchemaSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterActivationError',
+						signature: 'EffectAdapterActivationError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterCertification',
+						signature: 'type EffectAdapterCertification'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterConformanceCertificate',
+						signature: 'type EffectAdapterConformanceCertificate'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterDescriptor',
+						signature: 'type EffectAdapterDescriptor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterDestination',
+						signature: 'type EffectAdapterDestination'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterReconciliation',
+						signature: 'type EffectAdapterReconciliation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterQueryReconciliation',
+						signature: 'type EffectAdapterQueryReconciliation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterRegistryPosture',
+						signature: 'type EffectAdapterRegistryPosture'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterRegistryRecord',
+						signature: 'type EffectAdapterRegistryRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterRegistryStore',
+						signature: 'type EffectAdapterRegistryStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterSecretRotation',
+						signature: 'type EffectAdapterSecretRotation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterWebhookReconciliation',
+						signature: 'type EffectAdapterWebhookReconciliation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEffectAdapterHealthOperations',
+						signature: 'createEffectAdapterHealthOperations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEffectAdapterReconciliationRuntime',
+						signature: 'createEffectAdapterReconciliationRuntime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryEffectAdapterHealthStore',
+						signature: 'createMemoryEffectAdapterHealthStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryEffectReconciliationLeaseStore',
+						signature: 'createMemoryEffectReconciliationLeaseStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresEffectAdapterHealthStore',
+						signature: 'createPostgresEffectAdapterHealthStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresEffectReconciliationLeaseStore',
+						signature:
+							'createPostgresEffectReconciliationLeaseStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'effectAdapterReconciliationPostgresSchemaSql',
+						signature:
+							'effectAdapterReconciliationPostgresSchemaSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterReconciliationError',
+						signature: 'EffectAdapterReconciliationError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterHealthObservation',
+						signature: 'type EffectAdapterHealthObservation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterHealthRecord',
+						signature: 'type EffectAdapterHealthRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterHealthSignal',
+						signature: 'type EffectAdapterHealthSignal'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterHealthStatus',
+						signature: 'type EffectAdapterHealthStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EffectAdapterHealthStore',
+						signature: 'type EffectAdapterHealthStore'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/execution/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+					}
+				]
+			}
+		],
 		category: 'AI',
 		commands: [
 			{
@@ -22165,7 +31258,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/execution/manifest.json'
 		],
 		readmeDigest:
-			'c0f66e3b44d84287bf04d01d66c12cf7e56dc05d0604a4eec2e5ea9929b6e6fa',
+			'b00ab4fac094133fb04a6710aefd4e46a5da1d35ff690c2a73ad28bd6df9ea46',
 		readmeSamples: [
 			{
 				code: 'import {\n  createExecutionOutboxDispatcher,\n  createExecutionQueueHandler,\n  createPostgresEffectStore,\n  executionJobs,\n  executionPostgresSchemaSql,\n  executionTenantInventoryPostgresSchemaSql,\n} from "@absolutejs/execution";\nimport { createJobRegistry, createQueueWorker } from "@absolutejs/queue";\n\nawait sql.unsafe(executionPostgresSchemaSql());\nawait sql.unsafe(executionTenantInventoryPostgresSchemaSql());\nconst effects = createPostgresEffectStore({ client });\nconst dispatch = createExecutionOutboxDispatcher({\n  store: effects,\n  queue: queueStore,\n});\nconst registry = createJobRegistry(executionJobs).on(\n  "absolutejs.execution.effect",\n  createExecutionQueueHandler({\n    store: effects,\n    handlers: {\n      "email.send": {\n        execute: (input, { idempotencyKey, signal }) =>\n          email.send(input, { idempotencyKey, signal }),\n      },\n    },\n  }),\n);\nconst worker = createQueueWorker({ registry, store: queueStore });',
@@ -22212,14 +31305,16 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'runCheckpointedSteps runs an immutable finite plan under a caller-owned, renewed execution lease. Its adapter must atomically save the full checkpoint using the expected revision. Save a unique plan key that covers every execution input. Completed steps are reused. An in-flight marker on recovery throws UnknownEffectOutcomeError: do not retry that provider operation blindly. Return from runStep only after known usage writes drain. A false beforeStep result durably stops the plan (for example, at the agreed credit ceiling).',
 				details: [
-					"createExecutionQueueHandler renews its effect lease (30 seconds by default, renewed every 10 seconds), forwards shutdown/lease loss through the handler's signal, and quarantines uncertain completion. Each invocation has a unique lease owner. The queue job lease must also exceed the bounded job duration or be renewed by the queue worker. This API does not make arbitrary providers idempotent."
+					"createExecutionQueueHandler renews its effect lease (30 seconds by default, renewed every 10 seconds), forwards shutdown/lease loss through the handler's signal, and quarantines uncertain completion. Each invocation has a unique lease owner. The queue job lease must also exceed the bounded job duration or be renewed by the queue worker. This API does not make arbitrary providers idempotent.",
+					'Resumable funding pauses',
+					'Return { pause: "funding" } from runCheckpointedSteps.beforeStep to persist a resumable stop before the next provider call. After funding is verified and an exclusive execution lease is acquired, pass resume: { expectedRevision, reason: "funding" }. The runner checks the exact checkpoint revision, immutable plan and pause reason, preserves completed results, and rejects any in-flight uncertain operation. A plain false remains a terminal stop. Never reset a checkpoint or create a new plan just to retry a funding interruption.'
 				],
 				title: 'Bounded background steps'
 			}
 		],
 		repository: 'https://github.com/absolutejs/execution',
 		subpackages: [],
-		version: '0.14.9'
+		version: '0.14.10'
 	},
 	{
 		api: [],
@@ -25171,7 +34266,860 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.1.7'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/mcp',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'verifyBearer',
+						signature: 'verifyBearer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BearerResult',
+						signature: 'type BearerResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BearerVerifier',
+						signature: 'type BearerVerifier'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerifiedJwt',
+						signature: 'type VerifiedJwt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerifyBearerConfig',
+						signature: 'type VerifyBearerConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMcpClient',
+						signature: 'createMcpClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpClientError',
+						signature: 'McpClientError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpClient',
+						signature: 'type McpClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpClientOptions',
+						signature: 'type McpClientOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpInitializeResult',
+						signature: 'type McpInitializeResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpRemoteTask',
+						signature: 'type McpRemoteTask'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpRemoteTool',
+						signature: 'type McpRemoteTool'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpProtectedResourceMetadata',
+						signature:
+							'type McpProtectedResourceMetadata = {\n    resource: string;\n    authorization_servers: string[];\n    scopes_supported?: string[];\n    bearer_methods_supported?: string[];\n    resource_name?: string;\n    resource_documentation?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpAuthorizationServerMetadata',
+						signature:
+							'type McpAuthorizationServerMetadata = {\n    issuer: string;\n    authorization_endpoint: string;\n    token_endpoint: string;\n    registration_endpoint?: string;\n    scopes_supported?: string[];\n    code_challenge_methods_supported?: string[];\n    dpop_signing_alg_values_supported?: string[];\n    client_id_metadata_document_supported?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpOAuthTokens',
+						signature:
+							'type McpOAuthTokens = {\n    accessToken: string;\n    tokenType: "Bearer" | "DPoP";\n    expiresAt?: number;\n    refreshToken?: string;\n    scopes: string[];\n    resource: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpOAuthTokenStore',
+						signature:
+							'type McpOAuthTokenStore = {\n    load(resource: string): Promise<McpOAuthTokens | undefined>;\n    save(tokens: McpOAuthTokens): Promise<void>;\n    remove(resource: string): Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpAuthorizationChallenge',
+						signature:
+							'type McpAuthorizationChallenge = {\n    scheme: string;\n    resourceMetadataUrl?: string;\n    scopes: string[];\n    error?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpOAuthDiscovery',
+						signature:
+							'type McpOAuthDiscovery = {\n    resource: McpProtectedResourceMetadata;\n    authorizationServer: McpAuthorizationServerMetadata;\n    resourceMetadataUrl: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpAuthorizationProvider',
+						signature:
+							'type McpAuthorizationProvider = {\n    headers(context: {\n        method: string;\n        url: string;\n    }): Promise<Record<string, string>> | Record<string, string>;\n    onUnauthorized?(context: {\n        method: string;\n        response: Response;\n        url: string;\n    }): Promise<boolean> | boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpOAuthInteractiveRequest',
+						signature:
+							'type McpOAuthInteractiveRequest = {\n    authorizationUrl: string;\n    state: string;\n    scopes: readonly string[];\n    resource: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpOAuthOptions',
+						signature:
+							'type McpOAuthOptions = {\n    clientId: string;\n    /** Confidential clients only; never sent to authorization URLs or resource servers. */\n    clientSecret?: string;\n    redirectUri: string;\n    store: McpOAuthTokenStore;\n    fetch: (input: string | URL, init?: RequestInit) => Promise<Response>;\n    onAuthorize(request: McpOAuthInteractiveRequest): Promise<{\n        code: string;\n        state: string;\n    }>;\n    scopes?: string[];\n    createDpopProof?: (input: {\n        accessToken?: string;\n        method: string;\n        url: string;\n    }) => Promise<string>;\n    now?: () => number;\n    maxMetadataBytes?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseMcpAuthorizationChallenge',
+						signature:
+							'const parseMcpAuthorizationChallenge: (value: string | null) => McpAuthorizationChallenge | undefined;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'discoverMcpAuthorization',
+						signature:
+							'const discoverMcpAuthorization: ({ endpoint, fetch: fetcher, resourceMetadataUrl, maxMetadataBytes, }: {\n    endpoint: string;\n    fetch: McpOAuthOptions["fetch"];\n    resourceMetadataUrl?: string;\n    maxMetadataBytes?: number;\n}) => Promise<McpOAuthDiscovery>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMcpAuthorizationRequest',
+						signature:
+							'const createMcpAuthorizationRequest: ({ discovery, clientId, redirectUri, scopes, }: {\n    discovery: McpOAuthDiscovery;\n    clientId: string;\n    redirectUri: string;\n    scopes: readonly string[];\n}) => Promise<{\n    authorizationUrl: string;\n    codeVerifier: string;\n    state: string;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMemoryMcpOAuthTokenStore',
+						signature:
+							'const createMemoryMcpOAuthTokenStore: () => McpOAuthTokenStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMcpOAuthProvider',
+						signature:
+							'const createMcpOAuthProvider: (options: McpOAuthOptions & {\n    endpoint: string;\n}) => McpAuthorizationProvider;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'dispatchMcp',
+						signature: 'dispatchMcp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MCP_LATEST_PROTOCOL_VERSION',
+						signature: 'MCP_LATEST_PROTOCOL_VERSION'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpDispatchContext',
+						signature: 'type McpDispatchContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FEEDBACK_INSTRUCTIONS',
+						signature: 'FEEDBACK_INSTRUCTIONS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'feedbackTools',
+						signature: 'feedbackTools'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpFeedbackRating',
+						signature: 'type McpFeedbackRating'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpFeedbackReport',
+						signature: 'type McpFeedbackReport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpFeedbackStore',
+						signature: 'type McpFeedbackStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpProblemReport',
+						signature: 'type McpProblemReport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMcpHandler',
+						signature: 'createMcpHandler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'metadataPathFor',
+						signature: 'metadataPathFor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'protectedResourceMetadata',
+						signature: 'protectedResourceMetadata'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProtectedResourceMetadata',
+						signature: 'type ProtectedResourceMetadata'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mcpServer',
+						signature: 'mcpServer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSessionRegistry',
+						signature: 'createSessionRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SessionRegistry',
+						signature: 'type SessionRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemoryMcpTaskStore',
+						signature: 'createMemoryMcpTaskStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'publicMcpTask',
+						signature: 'publicMcpTask'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mcpPostgresMigrations',
+						signature: 'mcpPostgresMigrations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresMcpSessionStore',
+						signature: 'createPostgresMcpSessionStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresMcpTaskStore',
+						signature: 'createPostgresMcpTaskStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mcpPostgresSchemaSql',
+						signature: 'mcpPostgresSchemaSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpSqlClient',
+						signature: 'type McpSqlClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpSqlResult',
+						signature: 'type McpSqlResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpAgencyOptions',
+						signature: 'McpAgencyOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpAudioContent',
+						signature: 'McpAudioContent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpElicitAnswer',
+						signature: 'McpElicitAnswer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpElicitationRequest',
+						signature: 'McpElicitationRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpElicitBus',
+						signature: 'McpElicitBus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpElicitResult',
+						signature: 'McpElicitResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpFormElicitationRequest',
+						signature: 'McpFormElicitationRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpSessionStore',
+						signature: 'McpSessionStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpAuthResult',
+						signature: 'McpAuthResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpCallGate',
+						signature: 'McpCallGate'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpCallMeta',
+						signature: 'McpCallMeta'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpContent',
+						signature: 'McpContent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpImageContent',
+						signature: 'McpImageContent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpPromptArgument',
+						signature: 'McpPromptArgument'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpPromptDefinition',
+						signature: 'McpPromptDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpPrompts',
+						signature: 'McpPrompts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpResource',
+						signature: 'McpResource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpResourceLink',
+						signature: 'McpResourceLink'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpResources',
+						signature: 'McpResources'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpServerConfig',
+						signature: 'McpServerConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpServerInfo',
+						signature: 'McpServerInfo'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpTextContent',
+						signature: 'McpTextContent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpTask',
+						signature: 'McpTask'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpTaskStatus',
+						signature: 'McpTaskStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpTaskStore',
+						signature: 'McpTaskStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpTasksOptions',
+						signature: 'McpTasksOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpTool',
+						signature: 'McpTool'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpToolAnnotations',
+						signature: 'McpToolAnnotations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpToolCallContext',
+						signature: 'McpToolCallContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpToolContext',
+						signature: 'McpToolContext'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/mcp/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<McpServerConfig<unknown>, never>, "tools" | "contract" | "settings"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        instructions: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        issuer: import("@sinclair/typebox").TString;\n        path: import("@sinclair/typebox").TString;\n        scopesSupported: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>>;\n        serveRootMetadata: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        serverInfo: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TObject<{\n            name: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n            title: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n            version: import("@'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/mcp/commerce',
+				symbols: [
+					{
+						description:
+							'Host commerce eligibility, not payment authorization. All inputs are server-owned; never derive a permissive profile from clientInfo alone.',
+						kind: 'value',
+						name: 'COMMERCE_POLICY_VERSION',
+						signature:
+							'const COMMERCE_POLICY_VERSION = "2026-10-20.1";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'COMMERCE_POLICY_SOURCES',
+						signature:
+							'const COMMERCE_POLICY_SOURCES: Readonly<{\n    claude: "https://support.claude.com/en/articles/13454812-use-interactive-connectors-in-claude";\n    chatgpt: "https://developers.openai.com/plugins/plugin-guidelines#commerce-and-monetization";\n    chatgptCheckout: "https://developers.openai.com/plugins/build/monetization";\n    cursorMarketplace: "https://cursor.com/marketplace-publisher-terms";\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CommerceAction',
+						signature:
+							'type CommerceAction = "entitlement_status" | "informational_link" | "paid_access" | "pricing" | "external_checkout" | "saved_method_purchase" | "new_method_collection" | "subscription" | "automatic_refill";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CommerceCategory',
+						signature:
+							'type CommerceCategory = "physical_goods" | "digital_service" | "usage_credits" | "subscription";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CommerceProfile',
+						signature:
+							'type CommerceProfile = "claude-interactive" | "chatgpt-plugin" | "cursor-marketplace" | "direct-mcp" | "self-hosted" | "unknown";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CommerceRequirement',
+						signature:
+							'type CommerceRequirement = {\n    action: CommerceAction;\n    /** All product categories this tool can expose, including every cart line.\n     * Dynamic catalogs must be classified by the server before registration. */\n    categories: readonly CommerceCategory[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CommerceReview',
+						signature:
+							'type CommerceReview = {\n    id: string;\n    profile: CommerceProfile;\n    actions: readonly CommerceAction[];\n    categories: readonly CommerceCategory[];\n    reviewedAt: string;\n    /** Operational reminder only; never an automatic access cutoff. */\n    reviewAfter?: string;\n    /** @deprecated Use reviewAfter. Legacy expiry dates are reminders too. */\n    expiresAt?: string;\n    /** Explicit withdrawal of this review, effective immediately. */\n    revoked?: boolean;\n    sourceUrls: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CommerceContext',
+						signature:
+							'type CommerceContext = {\n    /** Ambiguous channels are evaluated as the intersection of their rules. */\n    profiles: readonly CommerceProfile[];\n    reviews?: readonly CommerceReview[];\n    /** Reviewed and tested capabilities; these do not establish permission. */\n    capabilities?: {\n        externalLinks?: boolean;\n        interactiveUi?: boolean;\n        nativePaymentSheet?: boolean;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CommerceDecision',
+						signature:
+							'type CommerceDecision = {\n    allowed: boolean;\n    status: "permitted" | "restricted" | "unverified";\n    reason: string;\n    policyVersion: string;\n    sourceUrls: string[];\n    reviewIds: string[];\n    /** Overdue reviews for operator/audit reporting, never customer gating. */\n    reviewDueIds: string[];\n};'
+					},
+					{
+						description:
+							'Published restrictions cannot be overridden by a deployment review. Unverified paths need explicit server-side review evidence. Review reminders never revoke access; restrictions or explicit withdrawal do.',
+						kind: 'value',
+						name: 'evaluateCommerce',
+						signature:
+							'const evaluateCommerce: (req: CommerceRequirement, context: CommerceContext, now?: Date) => CommerceDecision;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createCreditBalanceTool',
+						signature: 'createCreditBalanceTool'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpCreditBalance',
+						signature: 'type McpCreditBalance'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createCheckoutHandoffTool',
+						signature: 'createCheckoutHandoffTool'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPurchaseStatusTool',
+						signature: 'createPurchaseStatusTool'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpPurchaseStatus',
+						signature: 'type McpPurchaseStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createBillingReportTools',
+						signature: 'createBillingReportTools'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createBillingManagementTool',
+						signature: 'createBillingManagementTool'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/mcp/apps',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'MCP_APP_MIME',
+						signature:
+							'const MCP_APP_MIME = "text/html;profile=mcp-app";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpAppResource',
+						signature:
+							'type McpAppResource = {\n    name: string;\n    html: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpAppsConfig',
+						signature:
+							"type McpAppsConfig = {\n    /** Only enable for a host build whose upstream rendering fix has been verified. */\n    allowKnownBrokenHosts?: boolean;\n    resources: Record<string, McpAppResource>;\n    /** Legacy URI -> current resource URI. Read-only compatibility aliases inherit\n     * the current resource's tool authorization and are not advertised in lists. */\n    resourceAliases?: Record<string, string>;\n    store?: McpSessionStore;\n};"
+					},
+					{
+						description:
+							'Capability is presentation only; never a commerce or authorization decision.',
+						kind: 'value',
+						name: 'clientSupportsMcpApps',
+						signature:
+							'const clientSupportsMcpApps: (params: unknown, options?: Pick<McpAppsConfig, "allowKnownBrokenHosts">) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'withMcpApp',
+						signature:
+							'const withMcpApp: (tool: McpTool, resourceUri: string) => McpTool;'
+					},
+					{
+						description:
+							'Offline templates: all data comes through authenticated tool results and the official host bridge. Network, nested frames and privileged permissions are not requested.',
+						kind: 'value',
+						name: 'appResourceContent',
+						signature:
+							'const appResourceContent: (resource: McpAppResource, uri: string) => {\n    uri: string;\n    mimeType: string;\n    text: string;\n    _meta: {\n        ui: {\n            csp: {\n                connectDomains: never[];\n                resourceDomains: never[];\n                frameDomains: never[];\n                baseUriDomains: never[];\n            };\n            permissions: {};\n            prefersBorder: boolean;\n        };\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createBillingApps',
+						signature: 'createBillingApps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWorkflowApps',
+						signature: 'createWorkflowApps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWorkflowTools',
+						signature: 'createWorkflowTools'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'projectSetupStatus',
+						signature: 'projectSetupStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'projectWorkPreview',
+						signature: 'projectWorkPreview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpSetupStatus',
+						signature: 'type McpSetupStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpWorkPreview',
+						signature: 'type McpWorkPreview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpWorkPreviewRequest',
+						signature: 'type McpWorkPreviewRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSetupSelectionTools',
+						signature: 'createSetupSelectionTools'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'projectSetupSelection',
+						signature: 'projectSetupSelection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SetupSelection',
+						signature: 'type SetupSelection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SetupConfirmation',
+						signature: 'type SetupConfirmation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SetupOption',
+						signature: 'type SetupOption'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createActionWorkflowTools',
+						signature: 'createActionWorkflowTools'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'projectActionReview',
+						signature: 'projectActionReview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'projectActionJob',
+						signature: 'projectActionJob'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ActionReview',
+						signature: 'type ActionReview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ActionConfirmation',
+						signature: 'type ActionConfirmation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ActionJob',
+						signature: 'type ActionJob'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/mcp/call-context',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'McpCallIdentity',
+						signature: 'McpCallIdentity'
+					},
+					{
+						description:
+							'Available throughout tool execution, including async provider callbacks.',
+						kind: 'value',
+						name: 'currentMcpCall',
+						signature:
+							'const currentMcpCall: () => McpCallIdentity | undefined;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'withMcpCall',
+						signature:
+							'const withMcpCall: <T>(identity: McpCallIdentity, run: () => T) => T;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/mcp/stdio',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'McpStdioOptions',
+						signature:
+							'type McpStdioOptions<Caller> = {\n    config: Omit<McpServerConfig<Caller>, "authorize" | "issuer" | "path" | "elicitation" | "tasks" | "apps">;\n    /** The local process identity. Remote tools must still authorize every call. */\n    caller: Caller;\n    scopes?: string[];\n    input: AsyncIterable<Uint8Array>;\n    /** Protocol output only. Never write logs or private tool values here. */\n    write: (line: string) => void | Promise<void>;\n    maxMessageBytes?: number;\n};'
+					},
+					{
+						description:
+							'Newline-delimited stdio transport using the same registry/dispatcher as HTTP. No listening socket or ambient HTTP authorization. The launching OS user owns the process; hosts authenticate remote operations independently. Elicitation, MCP Apps and background tasks are intentionally not advertised by this adapter.',
+						kind: 'function',
+						name: 'serveMcpStdio',
+						signature:
+							'function serveMcpStdio<Caller>(options: McpStdioOptions<Caller>): Promise<void>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/mcp/local-auth',
+				symbols: [
+					{
+						description:
+							'Local device-flow client. Token files are private to the OS user and never returned by begin/poll/status. An exclusive directory lock serializes refresh rotation across AI sessions; interrupted locks fail closed, never replay a possibly consumed refresh token. No request/response bodies are logged.',
+						kind: 'function',
+						name: 'createLocalMcpAuthorization',
+						signature:
+							'function createLocalMcpAuthorization(options: {\n    issuer: string;\n    oauthPath: string;\n    clientId: string;\n    resource: string;\n    scope: string;\n    directory: string;\n    fetch?: typeof fetch;\n}): {\n    begin(): Promise<{\n        state: "approval-required";\n        userCode: string;\n        verificationUrl: string;\n    }>;\n    poll(): Promise<{\n        state: "sign-in-required";\n    } | {\n        state: "approval-pending";\n    } | {\n        state: "connected";\n    }>;\n    headers(): Promise<Record<string, string>>;\n    forget(): Promise<void>;\n};'
+					}
+				]
+			}
+		],
 		category: 'AI',
 		commands: [
 			{
@@ -25226,7 +35174,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/mcp/local-auth'
 		],
 		readmeDigest:
-			'8a7cfb3b434ce50372be7f59989c06a197bc04f3f50618df54d8249780106789',
+			'f298c1bc0422486a127bfd2587d087e3ee3ea3a01a2914948a31e543d0eea5a8',
 		readmeSamples: [
 			{
 				code: 'import { Elysia } from "elysia";\nimport { mcpServer, verifyBearer } from "@absolutejs/mcp";\nimport { verifyJwt } from "@absolutejs/auth"; // or any JWT verifier\n\ntype Caller = { userId: string };\n\nconst server = new Elysia().use(\n  mcpServer<Caller>({\n    path: "/mcp",\n    issuer: "https://your.app",\n    serverInfo: { name: "your-app", title: "Your App", version: "1.0.0" },\n    instructions: "What the model should know about this server.",\n    scopesSupported: ["openid", "mcp"],\n    serveRootMetadata: true,\n\n    // You decide who is allowed in. verifyBearer does the standard OAuth\n    // access-token checks; add your own (billing, role, MFA) on top.\n    authorize: async (request) => {\n      const token = await verifyBearer({\n        audience: "https://your.app/mcp",\n        request,\n        issuer: "https://your.app",\n        requiredScope: "mcp",\n        verify: (jwt) => verifyJwt(jwt, publicJwk),\n      });\n      if ("error" in token) return { ok: false, reason: token.error };\n      return { ok: true, caller: { userId: token.subject } };\n    },\n\n    // Called once per request; build the tools for this caller.\n    tools: ({ caller }) => buildToolsFor(caller.userId),\n  }),\n);',
@@ -25363,7 +35311,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
-					'createBackgroundWorkTools({ description, inputSchema, start, read }) exposes start_background_work with a stable requestId and maximum service credits, plus read-only get_background_work recovery. Omit start to support recovery at zero credits or while rollout is disabled. Account ownership must come from the authenticated caller, never tool arguments.',
+					'createBackgroundWorkTools({ description, inputSchema, start, read }) exposes start_background_work with a stable requestId and a server-managed budget, plus read-only get_background_work recovery. Omit start to support recovery at zero credits or while rollout is disabled. Account ownership must come from the authenticated caller, never tool arguments.',
 				details: [
 					'The start adapter must atomically reserve credits, bind immutable work and enqueue a durable job; duplicate IDs must return existing work and reject changed input or budget. The read adapter returns public results and accounting only, without starting, settling or retrying work. createBackgroundWorkResult projects the same progress, results and spend in text and structured content for broad host support. In uncertain states, retain the reservation and do not create a new ID to repeat work.',
 					"Start is classified as paid_access; recovery is entitlement_status. Existing commerce host reviews and account/client restrictions still apply. These tools do not enable embedded checkout or override any host's commerce rules.",
@@ -25375,14 +35323,15 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'onCallStart runs before tool dispatch. Persist a start receipt there; throwing prevents execution. onCall runs once at completion, including streamed/deferred execution. Its failure never replaces an executed result: use a durable local outbox or equivalent reconciliation mechanism, not a retry of the effect. A start without completion means incomplete evidence, not success.',
 					'For Bun/Node servers, import withMcpCall and currentMcpCall from @absolutejs/mcp/call-context, and set withCallContext: withMcpCall on the server config. The main entry remains browser-compatible; other runtimes can supply their own context adapter. currentMcpCall() exposes server-generated trace identity, request/session identity, tool, server version and the per-call metadata object across asynchronous execution. Use it to correlate downstream metering. Bind domain identifiers only after authorization; incoming arguments and external conversation identifiers are not authority. withMcpCall is available for trusted host adapters. Concurrent calls have isolated contexts. External host conversations, host-side retries and subscription costs are not visible to this server.',
 					'Local stdio servers',
-					'@absolutejs/mcp/stdio exports serveMcpStdio({ config, caller, scopes, input, write }). Supply an async byte stream (for example Bun.stdin.stream()) and a protocol-only writer. It reuses the HTTP registry and dispatcher with bounded, newline-delimited UTF-8 framing. The launching OS user is the local identity; each tool remains responsible for authorizing remote actions. This initial adapter processes calls sequentially and does not advertise elicitation, Apps, or background tasks. Keep tools bounded; return a job reference for longer work. Never send credentials or private delivery payloads through tool results, stdout, stderr, prompts, or resources. Use a separate trusted local sink for such values.'
+					'@absolutejs/mcp/stdio exports serveMcpStdio({ config, caller, scopes, input, write }). Supply an async byte stream (for example Bun.stdin.stream()) and a protocol-only writer. It reuses the HTTP registry and dispatcher with bounded, newline-delimited UTF-8 framing. The launching OS user is the local identity; each tool remains responsible for authorizing remote actions. This initial adapter processes calls sequentially and does not advertise elicitation, Apps, or background tasks. Keep tools bounded; return a job reference for longer work. Never send credentials or private delivery payloads through tool results, stdout, stderr, prompts, or resources. Use a separate trusted local sink for such values.',
+					'Automatic credit use is the default'
 				],
 				title: 'Budgeted background work'
 			}
 		],
 		repository: 'https://github.com/absolutejs/mcp',
 		subpackages: [],
-		version: '0.28.0'
+		version: '0.30.0'
 	},
 	{
 		api: [
@@ -26680,7 +36629,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'workloadMeterElysia',
 						signature:
-							'const workloadMeterElysia: (options: WorkloadMeterElysiaOptions) => Elysia<"", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, import("elysia/types").DefaultEphemeral, import("elysia/types").DefaultEphemeral>;'
+							'const workloadMeterElysia: (options: WorkloadMeterElysiaOptions) => Elysia<"", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: {};\n}, {}, import("elysia").DefaultEphemeral, import("elysia").DefaultEphemeral>;'
 					}
 				]
 			},
@@ -26745,7 +36694,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'build'
 			},
 			{
-				command: 'bun run typecheck && bun run build && bun run test',
+				command:
+					'bun run typecheck && bun run build && bun run test && absolute-changelog check',
 				name: 'check:package'
 			},
 			{
@@ -26837,7 +36787,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/metering',
 		subpackages: [],
-		version: '0.7.0'
+		version: '0.8.0'
 	},
 	{
 		api: [],
@@ -26979,7 +36929,114 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.4.1'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/observability',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'connectSupportReportElements',
+						signature: 'connectSupportReportElements'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedSupportOptions',
+						signature:
+							'type ManagedSupportOptions = {\n    endpoint?: string;\n    expiresInMs?: number;\n    maxDurationMs?: number;\n    propagateDiagnosticId?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedObservabilityOptions',
+						signature:
+							'type ManagedObservabilityOptions = {\n    environment?: string;\n    project: string;\n    release?: string;\n    sampleRate?: number;\n    signals?: boolean;\n    vitals?: boolean;\n    replay?: boolean;\n    support?: boolean | ManagedSupportOptions;\n    supportContext?: () => Promise<Record<string, unknown> | undefined> | Record<string, unknown> | undefined;\n    supportIssueFingerprints?: () => Promise<string[]> | string[];\n    supportTraceIds?: () => Promise<string[]> | string[];\n    maskAllInputs?: boolean;\n    maskAllText?: boolean;\n    recordCanvas?: boolean;\n    flushIntervalMs?: number;\n    maxBatch?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedObservability',
+						signature:
+							'type ManagedObservability = {\n    beacon: Beacon;\n    close: () => Promise<void>;\n    flushReplay: () => Promise<string | null>;\n    replay?: ReplayController;\n    diagnostics?: BrowserDiagnostics;\n    support?: SupportModeController;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'connectManagedSupportReport',
+						signature:
+							'const connectManagedSupportReport: (observability: ManagedObservability, options?: {\n    root?: Document | HTMLElement;\n    tagName?: string;\n}) => (() => void);'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createManagedObservability',
+						signature:
+							'const createManagedObservability: (options: ManagedObservabilityOptions) => ManagedObservability;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/observability/elysia',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ObservabilityRelayFetch',
+						signature:
+							'type ObservabilityRelayFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedObservabilityRelayOptions',
+						signature:
+							'type ManagedObservabilityRelayOptions = {\n    endpoint: string;\n    environment?: string;\n    fetch?: ObservabilityRelayFetch;\n    onCaptureError?: (error: unknown) => void;\n    project: string;\n    redact?: (value: string) => string;\n    release?: string;\n    serverErrors?: boolean;\n    token: string;\n};'
+					},
+					{
+						description:
+							'Promotes a reconciled handoff contradiction into the normal Issues pipeline. Non-contradictory summaries are ignored, and the capture context excludes evidence messages, references, external ids, and raw payloads.',
+						kind: 'value',
+						name: 'captureHandoffContradiction',
+						signature:
+							'const captureHandoffContradiction: (capture: ErrorsCapture, summary: HandoffSummary, context?: ErrorsCaptureContext) => Promise<boolean>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createManagedObservabilityRelay',
+						signature:
+							'const createManagedObservabilityRelay: (options: ManagedObservabilityRelayOptions) => import("elysia/types").AddRoute<"/api/observability", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [{\n        error: Error;\n        response: {};\n        passes: true;\n        \'~return\': import("elysia").ElysiaStatus<"Internal Server Error", "Internal Server Error", 500> | undefined;\n        \'~catchAll\': true;\n    }];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: import("elysia/types").ExtractErrorFromHandle<import("elysia").ElysiaStatus<"Internal Server Error", "Internal Server Error", 500> | undefined>;\n}, {\n    api: {\n        observability: {};\n    };\n} & {\n    api: {\n        observability: {\n            errors: {\n                post: {\n                    body: {\n                        environment?: string;\n                        release?: string;\n                        events: {\n                            at?: number;\n                            extra?: Record<string, unknown>;\n                            level?: "fatal" | "error" | "warning" | "info";\n                            replay'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createManagedObservabilityRelayFromEnv',
+						signature:
+							'const createManagedObservabilityRelayFromEnv: (env?: RelayEnvironment) => import("elysia/types").AddRoute<"/api/observability", "local", {\n    decorator: {};\n    store: {};\n    derive: {};\n}, {\n    typebox: {};\n    error: [{\n        error: Error;\n        response: {};\n        passes: true;\n        \'~return\': import("elysia").ElysiaStatus<"Internal Server Error", "Internal Server Error", 500> | undefined;\n        \'~catchAll\': true;\n    }];\n}, {\n    schema: {};\n    schemas: {};\n    macro: {};\n    macroFn: {};\n    parser: {};\n    response: import("elysia/types").ExtractErrorFromHandle<import("elysia").ElysiaStatus<"Internal Server Error", "Internal Server Error", 500> | undefined>;\n}, {\n    api: {\n        observability: {};\n    };\n} & {\n    api: {\n        observability: {\n            errors: {\n                post: {\n                    body: {\n                        environment?: string;\n                        release?: string;\n                        events: {\n                            at?: number;\n                            extra?: Record<string, unknown>;\n                            level?: "fatal" | "error" | "warning" | "info";\n                            replayId?: string;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedObservabilityRelay',
+						signature:
+							'type ManagedObservabilityRelay = ReturnType<typeof createManagedObservabilityRelay>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/observability/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<ManagedObservabilityOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>>;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>>;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        environment: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        flushIntervalMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maskAllInputs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        maskAllText: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        maxBatch: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        project: import("@sinclair/typebox").TString;\n        recordCanvas: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        release: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        replay: import("@sinclair/typebox'
+					}
+				]
+			}
+		],
 		category: 'Observability',
 		commands: [
 			{
@@ -27090,7 +37147,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/observability',
 		subpackages: [],
-		version: '0.6.1'
+		version: '0.7.0'
 	},
 	{
 		api: [
@@ -28796,7 +38853,505 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.6.2'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/pwa',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'PwaIcon',
+						signature:
+							'type PwaIcon = {\n    src: string;\n    sizes: string;\n    type: string;\n    purpose?: string;\n};'
+					},
+					{
+						description:
+							"An app shortcut — a jump target the OS exposes on the icon's context menu (right-click the dock/taskbar icon, long-press on mobile).",
+						kind: 'type',
+						name: 'WebAppShortcut',
+						signature:
+							'type WebAppShortcut = {\n    name: string;\n    short_name?: string;\n    description?: string;\n    url: string;\n    icons?: PwaIcon[];\n};'
+					},
+					{
+						description:
+							'Register the app as an OS share target. The OS posts the shared content to action; params maps the shared title/text/url onto your query/form keys.',
+						kind: 'type',
+						name: 'WebShareTarget',
+						signature:
+							'type WebShareTarget = {\n    action: string;\n    method?: "GET" | "POST";\n    enctype?: string;\n    params: {\n        title?: string;\n        text?: string;\n        url?: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebAppManifestConfig',
+						signature:
+							'type WebAppManifestConfig = {\n    name: string;\n    shortName: string;\n    icons: PwaIcon[];\n    description?: string;\n    themeColor?: string;\n    backgroundColor?: string;\n    display?: "standalone" | "fullscreen" | "minimal-ui" | "browser";\n    startUrl?: string;\n    scope?: string;\n    shortcuts?: WebAppShortcut[];\n    shareTarget?: WebShareTarget;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebAppManifest',
+						signature:
+							'type WebAppManifest = {\n    name: string;\n    short_name: string;\n    description?: string;\n    icons: PwaIcon[];\n    theme_color: string;\n    background_color: string;\n    display: string;\n    start_url: string;\n    scope: string;\n    shortcuts?: WebAppShortcut[];\n    share_target?: WebShareTarget;\n};'
+					},
+					{
+						description:
+							'Build a spec-shaped web app manifest from a friendly config. Serve the result as application/manifest+json at e.g. /manifest.webmanifest.',
+						kind: 'value',
+						name: 'createWebAppManifest',
+						signature:
+							'const createWebAppManifest: (config: WebAppManifestConfig) => WebAppManifest;'
+					},
+					{
+						description:
+							'Opt-in offline support for the service worker. When set, the SW precaches the fallback page (+ any precache URLs) on install, serves navigations network-first with the cached fallback when offline, and serves same-origin requests under assetPrefix stale-while-revalidate (instant from cache, then refetched in the background) so assets under a stable filename still update.',
+						kind: 'type',
+						name: 'OfflineConfig',
+						signature:
+							'type OfflineConfig = {\n    /** A precached page served when a navigation fails offline (e.g. "/offline.html"). */\n    fallback: string;\n    /** Extra same-origin URLs to precache on install. */\n    precache?: string[];\n    /** Same-origin path prefix served stale-while-revalidate (e.g. "/assets/"). */\n    assetPrefix?: string;\n    /** Cache bucket name — bump it to invalidate old caches. */\n    cacheName?: string;\n};'
+					},
+					{
+						description:
+							"Re-register a rotated push subscription with no app open. Browsers occasionally rotate a push subscription's keys and fire pushsubscriptionchange; without handling it, the old endpoint silently goes dead and the user stops getting push. With this set, the worker re-subscribes with the same VAPID key and POSTs the fresh subscription to the same-origin trusted Auth route with its opaque installation identity.",
+						kind: 'type',
+						name: 'PushResubscribeConfig',
+						signature:
+							'type PushResubscribeConfig = {\n    /** VAPID public key (base64url) — same one passed to `subscribeToPush`. */\n    applicationServerKey: string;\n    /** Root-relative Auth route. Cross-origin URLs are rejected before the\n     *  worker is generated. Defaults to `/auth/push`. */\n    subscribePath?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ServiceWorkerOptions',
+						signature:
+							'type ServiceWorkerOptions = {\n    /** Icon shown on the notification + as its badge. */\n    icon?: string;\n    badge?: string;\n    /** Enable offline caching + a fallback page. Omit for push-only (no fetch handler). */\n    offline?: OfflineConfig;\n    /** Activate a new worker immediately on install (default false). Leave false to\n     *  support an in-app "new version — reload" prompt: the new SW waits until the\n     *  client posts `SKIP_WAITING` (via applyUpdate). A fresh first install still\n     *  activates right away regardless. */\n    skipWaiting?: boolean;\n    /** Auto-recover a rotated push subscription via `pushsubscriptionchange`. */\n    resubscribe?: PushResubscribeConfig;\n    /** Bundle Absolute Sync\'s finite IndexedDB runner into this worker. The page\n     *  provisions its same-origin endpoint and opaque Auth namespace at runtime;\n     *  neither credentials nor application data are embedded in this script. */\n    sync?: boolean;\n};'
+					},
+					{
+						description:
+							"The push service-worker script (a string to serve at e.g. /sw.js with a Service-Worker-Allowed: / header). Handles push (renders the payload as a notification) and notificationclick (focuses an open tab on the payload's url, or opens it). If the payload carries actions + actionRequests, the notification renders buttons and tapping one fires the matching authenticated request (same-origin, with cookies) instead of opening a tab. Pass offline to also cache an app shell + fallback page, or resubscr",
+						kind: 'value',
+						name: 'pushServiceWorker',
+						signature:
+							'const pushServiceWorker: (options?: ServiceWorkerOptions) => string;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebPushSubscription',
+						signature:
+							'type WebPushSubscription = {\n    endpoint: string;\n    keys: {\n        p256dh: string;\n        auth: string;\n    };\n};'
+					},
+					{
+						description:
+							'Validate and normalize browser PushSubscription.toJSON() output at a server boundary. Returns null for malformed or non-HTTPS subscriptions so hosts do not have to hand-roll credential parsing.',
+						kind: 'value',
+						name: 'parseWebPushSubscription',
+						signature:
+							'const parseWebPushSubscription: (value: unknown) => WebPushSubscription | null;'
+					},
+					{
+						description:
+							'A notification action button (rendered by the OS under the notification).',
+						kind: 'type',
+						name: 'WebPushAction',
+						signature:
+							'type WebPushAction = {\n    /** Identifies the button; echoed back as `event.action` on click. */\n    action: string;\n    title: string;\n    icon?: string;\n};'
+					},
+					{
+						description:
+							"Tells the service worker what authenticated request to fire when a given notification action is tapped — keyed by the action id. The fetch is sent same-origin with credentials: 'include', so the server re-validates the caller from the session cookie (a spoofed push can't forge it).",
+						kind: 'type',
+						name: 'WebPushActionRequest',
+						signature:
+							'type WebPushActionRequest = {\n    url: string;\n    /** Defaults to "POST". */\n    method?: string;\n    /** JSON-serialized as the request body. */\n    body?: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebPushPayload',
+						signature:
+							'type WebPushPayload = {\n    /** Stable receipt identity forwarded to open clients; never a subscription credential. */\n    id: string;\n    title: string;\n    body: string;\n    /** Provider-neutral application data forwarded to receipt listeners. */\n    data?: Record<string, unknown>;\n    url?: string;\n    tag?: string;\n    icon?: string;\n    badge?: string;\n    /** Action buttons shown on the notification. */\n    actions?: WebPushAction[];\n    /** Per-action request the SW fires on tap (action id → request). When an\n     *  action has a request, the SW fetches it instead of opening `url`. */\n    actionRequests?: Record<string, WebPushActionRequest>;\n    /** Per-action application route opened when no authenticated request is configured. */\n    actionLinks?: Record<string, string>;\n    /** Unread/pending count to show on the app icon badge (0 clears it). The SW\n     *  applies it on receipt, so the badge updates even with no window open. */\n    badgeCount?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebPushConfig',
+						signature:
+							'type WebPushConfig = {\n    publicKey: string;\n    privateKey: string;\n    /** A `mailto:` or URL identifying the application server to push services. */\n    subject: string;\n};'
+					},
+					{
+						description:
+							'Outcome of one send. gone means the push service reported the endpoint permanently dead (404/410) — drop it from your store.',
+						kind: 'type',
+						name: 'WebPushSendResult',
+						signature:
+							'type WebPushSendResult = {\n    ok: boolean;\n    gone: boolean;\n};'
+					},
+					{
+						description:
+							'Create a Web Push sender bound to your VAPID keys. Pass a partial/empty config (e.g. unset env) and isConfigured() returns false and sends no-op — so push degrades gracefully to your email/in-app fallback.',
+						kind: 'value',
+						name: 'createWebPush',
+						signature:
+							'const createWebPush: (config?: Partial<WebPushConfig>) => {\n    isConfigured: () => boolean;\n    send: (subscription: WebPushSubscription, payload: WebPushPayload) => Promise<WebPushSendResult>;\n    sendMany: (subscriptions: WebPushSubscription[], payload: WebPushPayload) => Promise<{\n        gone: string[];\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebPushSender',
+						signature:
+							'type WebPushSender = ReturnType<typeof createWebPush>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/pwa/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmbeddedBrowserApp',
+						signature:
+							'type EmbeddedBrowserApp = "facebook" | "instagram" | "messenger";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmbeddedBrowserPlatform',
+						signature:
+							'type EmbeddedBrowserPlatform = "android" | "ios" | "unknown";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmbeddedBrowser',
+						signature:
+							'type EmbeddedBrowser = {\n    app: EmbeddedBrowserApp;\n    platform: EmbeddedBrowserPlatform;\n};'
+					},
+					{
+						description:
+							'Identify common social-app embedded browsers from their explicit host-app user-agent markers. Returns null for ordinary browsers and unknown hosts so callers do not degrade UX based on a broad mobile-WebKit guess.',
+						kind: 'value',
+						name: 'detectEmbeddedBrowser',
+						signature:
+							'const detectEmbeddedBrowser: (userAgent?: string) => EmbeddedBrowser | null;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BrowserCapabilities',
+						signature:
+							'type BrowserCapabilities = {\n    clipboardWrite: boolean;\n    embeddedBrowser: EmbeddedBrowser | null;\n    installPrompt: boolean;\n    mediaCapture: boolean;\n    passkeys: boolean;\n    pushNotifications: boolean;\n    serviceWorker: boolean;\n    webShare: boolean;\n};'
+					},
+					{
+						description:
+							'Snapshot browser capabilities for action-level UX. Feature checks remain the source of truth; embedded-browser identity is context for explaining why a capability is unavailable, never a substitute for a feature check.',
+						kind: 'value',
+						name: 'getBrowserCapabilities',
+						signature:
+							'const getBrowserCapabilities: () => BrowserCapabilities;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PwaSyncOptions',
+						signature:
+							"type PwaSyncOptions = {\n    /** Finite Sync JSON endpoint. Must resolve to this page's exact origin. */\n    endpoint?: string;\n    /** Auth namespace bootstrap. Must resolve to this page's exact origin. */\n    principalEndpoint?: string;\n    /** Shared IndexedDB name used by foreground clients and the worker. */\n    databaseName?: string;\n    /** Generated app + Sync-pack migration metadata shared with the worker. */\n    storageSchema?: SyncLocalStoreSchemaBundle;\n    /** Browser Background Sync tag. Default `absolutejs-sync`. */\n    backgroundTag?: string;\n    maxAttempts?: number;\n    maxMutations?: number;\n    maxPulls?: number;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ServiceWorkerRegistrationRetryOptions',
+						signature:
+							'type ServiceWorkerRegistrationRetryOptions = {\n    /** Wait for the document load event before competing for the network. Default\n     *  true. */\n    deferUntilLoad?: boolean;\n    /** Total registration attempts for transient browser/network failures.\n     *  Default 3. */\n    maxAttempts?: number;\n    /** Initial retry delay. Later retries use exponential backoff. Default\n     *  1000ms. */\n    retryDelayMs?: number;\n    /** Provision cookie-authenticated finite Sync after registration. The served\n     *  worker must have been generated with `pushServiceWorker({ sync: true })`. */\n    sync?: false | PwaSyncOptions;\n    /** Install the provider-neutral Devices Web Push capability after the worker\n     *  is registered. Permission remains an explicit application action. */\n    push?: false | PwaPushOptions;\n};'
+					},
+					{
+						description:
+							'Register the service worker (installability + push delivery). Safe to call on every boot. Registration waits for page load by default and retries transient browser/network failures; terminal failures are swallowed so they never break page load.',
+						kind: 'value',
+						name: 'registerServiceWorker',
+						signature:
+							'const registerServiceWorker: (path?: string, options?: ServiceWorkerRegistrationRetryOptions) => Promise<ServiceWorkerRegistration | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PwaSyncConfigurationResult',
+						signature:
+							'type PwaSyncConfigurationResult = {\n    configured: boolean;\n    reason?: "invalid-principal" | "superseded" | "unauthenticated" | "unsupported";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PwaSyncTrigger',
+						signature:
+							'type PwaSyncTrigger = "background-sync" | "configure" | "lifecycle";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PwaSyncRunResult',
+						signature:
+							'type PwaSyncRunResult = {\n    acknowledged?: number;\n    conflictsDiscarded?: number;\n    conflictsRetried?: number;\n    deadLettered?: number;\n    durationMs: number;\n    ok: boolean;\n    pulled?: number;\n    retryScheduled?: number;\n    trigger: PwaSyncTrigger;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'PWA_SYNC_RESULT_EVENT',
+						signature:
+							'const PWA_SYNC_RESULT_EVENT = "absolute:pwa-sync-result";'
+					},
+					{
+						description:
+							'Observe sanitized finite Sync outcomes. The latest result is replayed to a late subscriber. No endpoint, namespace, credentials, rows, or mutation arguments cross this boundary.',
+						kind: 'value',
+						name: 'onPwaSyncResult',
+						signature:
+							'const onPwaSyncResult: (listener: (result: PwaSyncRunResult) => void) => () => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getLastPwaSyncResult',
+						signature:
+							'const getLastPwaSyncResult: () => PwaSyncRunResult | undefined;'
+					},
+					{
+						description:
+							'Provision the shared foreground/worker Sync transport from the active Auth session. The bootstrap returns only an opaque namespace; cookies, tokens, mutation args, and row data are never sent through service-worker messages.',
+						kind: 'value',
+						name: 'configurePwaSync',
+						signature:
+							'const configurePwaSync: (options?: PwaSyncOptions, suppliedRegistration?: ServiceWorkerRegistration) => Promise<PwaSyncConfigurationResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PwaPushOptions',
+						signature:
+							'type PwaPushOptions = {\n    /** Public VAPID application-server key embedded by the AbsoluteJS build. */\n    applicationServerKey: string;\n    /** Authenticated same-origin registration route. Defaults to `/auth/push`. */\n    endpoint?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PwaPushConfigurationResult',
+						signature:
+							'type PwaPushConfigurationResult = {\n    configured: boolean;\n    reason?: "unsupported" | "wrong-runtime";\n};'
+					},
+					{
+						description:
+							'Install Web Push behind @absolutejs/devices for ordinary web pages. The VAPID key and fixed authenticated endpoint are supplied by the build; page code never receives a subscription credential.',
+						kind: 'value',
+						name: 'configurePwaPush',
+						signature:
+							'const configurePwaPush: (options: PwaPushOptions, suppliedRegistration?: ServiceWorkerRegistration) => Promise<PwaPushConfigurationResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushStatus',
+						signature:
+							'type PushStatus = {\n    supported: boolean;\n    permission: NotificationPermission | "unsupported";\n    subscribed: boolean;\n};'
+					},
+					{
+						description:
+							'Whether push is supported here, the notification permission, and whether this device currently holds a push subscription.',
+						kind: 'value',
+						name: 'getPushStatus',
+						signature:
+							'const getPushStatus: () => Promise<PushStatus>;'
+					},
+					{
+						description:
+							'Request permission (if needed) and subscribe this device with your VAPID public key. Returns the subscription JSON to POST to your server, or null if unsupported. Throws Error("notification-permission-denied") on a hard deny so the UI can message it.',
+						kind: 'value',
+						name: 'subscribeToPush',
+						signature:
+							'const subscribeToPush: (vapidPublicKey: string) => Promise<PushSubscriptionJSON | null>;'
+					},
+					{
+						description:
+							'Unsubscribe this device locally. Returns the endpoint that was removed (POST it to your server to drop the row), or null if there was none.',
+						kind: 'value',
+						name: 'unsubscribeFromPush',
+						signature:
+							'const unsubscribeFromPush: () => Promise<string | null>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'InstallPromptOptions',
+						signature:
+							'type InstallPromptOptions = {\n    /** Suppress the browser\'s own install UI (mobile mini-infobar) by deferring\n     *  the event. NOTE: Chrome logs a "Banner not shown" notice on every load when\n     *  this is set, and modern Chrome no longer shows the mini-infobar anyway —\n     *  so it defaults to false. The stashed event stays promptable either way. */\n    suppressBrowserPrompt?: boolean;\n};'
+					},
+					{
+						description:
+							"Start listening for the browser's install signal. Call once at boot. The browser fires beforeinstallprompt only when the app is installable and not already installed — we stash it so a custom button can call promptInstall(). By default we do NOT call preventDefault() (see {@link InstallPromptOptions}).",
+						kind: 'value',
+						name: 'initInstallPrompt',
+						signature:
+							'const initInstallPrompt: (options?: InstallPromptOptions) => void;'
+					},
+					{
+						description:
+							'Whether a deferred install prompt is currently available.',
+						kind: 'value',
+						name: 'canInstall',
+						signature: 'const canInstall: () => boolean;'
+					},
+					{
+						description:
+							'Subscribe to installability changes (true when a prompt becomes available, false once used or after install). Returns an unsubscribe fn.',
+						kind: 'value',
+						name: 'onInstallable',
+						signature:
+							'const onInstallable: (listener: (installable: boolean) => void) => () => boolean;'
+					},
+					{
+						description:
+							'Show the native install prompt (must be called from a user gesture). Returns true if the user accepted. No-ops to false when no prompt is pending.',
+						kind: 'value',
+						name: 'promptInstall',
+						signature:
+							'const promptInstall: () => Promise<boolean>;'
+					},
+					{
+						description:
+							'Set the installed-app icon badge to count (0 or omitted clears it). No-op where the Badging API is unavailable (most non-installed contexts).',
+						kind: 'value',
+						name: 'setAppBadge',
+						signature:
+							'const setAppBadge: (count?: number) => void;'
+					},
+					{
+						description: 'Clear the app icon badge.',
+						kind: 'value',
+						name: 'clearAppBadge',
+						signature: 'const clearAppBadge: () => void;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppUpdateSource',
+						signature:
+							'type AppUpdateSource = "release-probe" | "service-worker";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppUpdate',
+						signature:
+							'type AppUpdate = {\n    currentRelease?: string;\n    newestRelease?: string;\n    sources: readonly AppUpdateSource[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppUpdateSignal',
+						signature:
+							'type AppUpdateSignal = {\n    currentRelease?: string;\n    newestRelease?: string;\n    source: AppUpdateSource;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ApplyUpdateOptions',
+						signature:
+							'type ApplyUpdateOptions = {\n    /** Maximum wait for a waiting service worker to take control before a hard\n     *  reload. Default 5000ms. */\n    activationTimeoutMs?: number;\n};'
+					},
+					{
+						description:
+							'Latch an app update discovered outside the service-worker lifecycle, such as a stale-release probe. Late subscribers are notified immediately, so boot order cannot lose the prompt. Repeated signals update the same state rather than scheduling reloads.',
+						kind: 'value',
+						name: 'announceUpdateAvailable',
+						signature:
+							'const announceUpdateAvailable: (signal: AppUpdateSignal) => void;'
+					},
+					{
+						description:
+							'Fire onAvailable when a new app version is available from either a waiting service worker or announceUpdateAvailable(). The update state is latched, so subscribing after detection still displays the prompt. Returns an unsubscribe function. Passive detection never reloads the page.',
+						kind: 'value',
+						name: 'onUpdateAvailable',
+						signature:
+							'const onUpdateAvailable: (onAvailable: (update: AppUpdate) => void) => (() => void);'
+					},
+					{
+						description:
+							'Ask the current service-worker registration to check for a newer script. Safe for focus/visibility polling and a no-op outside a browser.',
+						kind: 'value',
+						name: 'checkForUpdate',
+						signature: 'const checkForUpdate: () => Promise<void>;'
+					},
+					{
+						description:
+							'Apply the update after an explicit user action. A waiting worker is asked to activate; the page reloads once it takes control, with a bounded hard-reload fallback. Release-probe-only updates reload immediately. Concurrent calls share one operation, preventing reload loops from repeated clicks/signals.',
+						kind: 'value',
+						name: 'applyUpdate',
+						signature:
+							'const applyUpdate: (options?: ApplyUpdateOptions) => Promise<void>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppUpdateCheckOptions',
+						signature:
+							'type AppUpdateCheckOptions = {\n    /** Release embedded in this page. Omit to check only service workers. */\n    currentRelease?: string;\n    /** Same-origin JSON endpoint returning { release } or { commit }. Default /version. */\n    endpoint?: string;\n    /** Visible-tab polling interval; default 60000ms, minimum 1000ms. */\n    intervalMs?: number;\n};'
+					},
+					{
+						description:
+							'Keep open tabs informed without reloading them. Check immediately, every visible minute, and on focus/visibility/reconnect. Release probes also work without service workers. Offline/malformed responses leave the current page usable; cleanup aborts in-flight probes and removes all polling listeners.',
+						kind: 'value',
+						name: 'startAppUpdateChecks',
+						signature:
+							'const startAppUpdateChecks: (options?: AppUpdateCheckOptions) => (() => void);'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AutoUpdateOptions',
+						signature:
+							'type AutoUpdateOptions = {\n    /** Quiet period (no pointer, key, wheel, touch or scroll input) a visible tab\n     *  must reach before updating. Default 15000ms. */\n    idleMs?: number;\n    /** How often to re-check once an update is waiting but the page is busy.\n     *  Default 5000ms. */\n    retryMs?: number;\n    /** App-specific veto, e.g. unsaved drafts. Return true to postpone. */\n    isBusy?: () => boolean;\n    /** Called once, just before the page reloads into the new release. */\n    onApply?: () => void;\n    applyOptions?: ApplyUpdateOptions;\n};'
+					},
+					{
+						description:
+							'Built-in "don\'t reload now" signals: an open dialog/modal, or focus in a field where someone may be typing.',
+						kind: 'value',
+						name: 'pageLooksBusy',
+						signature: 'const pageLooksBusy: () => boolean;'
+					},
+					{
+						description:
+							'Apply app updates without asking, at a moment that cannot lose work: at once in a hidden tab, or after idleMs without input in a visible one, and never while a dialog is open, a field has focus or isBusy() returns true. Pairs with startAppUpdateChecks() for discovery; a banner from onUpdateAvailable() remains useful while the page is busy. Returns a stop function.',
+						kind: 'value',
+						name: 'startAutoUpdate',
+						signature:
+							'const startAutoUpdate: (options?: AutoUpdateOptions) => (() => void);'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/pwa/dispatch',
+				symbols: [
+					{
+						description:
+							"Bind Dispatch's provider-neutral fanout to one structured browser subscription without flattening its authentication keys into a token.",
+						kind: 'value',
+						name: 'createWebPushDispatchAdapter',
+						signature:
+							'const createWebPushDispatchAdapter: (sender: WebPushSender, subscription: DispatchWebPushSubscription) => DispatchPushAdapter;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/pwa/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<PwaConfig, {\n    isConfigured: () => boolean;\n    send: (subscription: import("./index").WebPushSubscription, payload: import("./index").WebPushPayload) => Promise<import("./index").WebPushSendResult>;\n    sendMany: (subscriptions: import("./index").WebPushSubscription[], payload: import("./index").WebPushPayload) => Promise<{\n        gone: string[];\n    }>;\n}>, "settings" | "contract" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<{\n        isConfigured: () => boolean;\n        send: (subscription: import("./index").WebPushSubscription, payload: import("./index").WebPushPayload) => Promise<import("./index").WebPushSendResult>;\n        sendMany: (subscriptions: import("./index").WebPushSubscription[], payload: import("./index").WebPushPayload) => Promise<{\n            gone: string[];\n        }>;\n    }>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<{\n        isConfigured: () => boolean;\n        send: (subscription: import("./index").WebPushSubscription, payload: import("./index").Web'
+					}
+				]
+			}
+		],
 		category: 'Frontend & UX',
 		commands: [
 			{
@@ -28908,10 +39463,436 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/pwa',
 		subpackages: [],
-		version: '0.16.2'
+		version: '0.16.3'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/queue',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 't',
+						signature: 'Type as t'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Static',
+						signature: 'Static'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TSchema',
+						signature: 'TSchema'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'exponentialBackoff',
+						signature: 'exponentialBackoff'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ExponentialBackoffOptions',
+						signature: 'ExponentialBackoffOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_BACKOFF_BASE_MS',
+						signature: 'DEFAULT_BACKOFF_BASE_MS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_BACKOFF_FACTOR',
+						signature: 'DEFAULT_BACKOFF_FACTOR'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_BACKOFF_MAX_MS',
+						signature: 'DEFAULT_BACKOFF_MAX_MS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_CONCURRENCY',
+						signature: 'DEFAULT_CONCURRENCY'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_LEASE_MS',
+						signature: 'DEFAULT_LEASE_MS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_MAX_ATTEMPTS',
+						signature: 'DEFAULT_MAX_ATTEMPTS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_POLL_INTERVAL_MS',
+						signature: 'DEFAULT_POLL_INTERVAL_MS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_WAKE_TICK_MS',
+						signature: 'DEFAULT_WAKE_TICK_MS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'cronMatchesMinute',
+						signature: 'cronMatchesMinute'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseCronExpression',
+						signature: 'parseCronExpression'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CronExpression',
+						signature: 'CronExpression'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineJobs',
+						signature: 'defineJobs'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createJobId',
+						signature: 'createJobId'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryJobStore',
+						signature: 'createInMemoryJobStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'queue',
+						signature: 'queue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'QueueDecorator',
+						signature: 'QueueDecorator'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'QueueEnqueueOptions',
+						signature: 'QueueEnqueueOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'QueuePluginOptions',
+						signature: 'QueuePluginOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createJobRegistry',
+						signature: 'createJobRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createQueueRoutes',
+						signature: 'createQueueRoutes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'QueueRoutesOptions',
+						signature: 'QueueRoutesOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runHandlerOnce',
+						signature: 'runHandlerOnce'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RunHandlerOnceOptions',
+						signature: 'RunHandlerOnceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runQueueWorker',
+						signature: 'runQueueWorker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RunQueueWorkerOptions',
+						signature: 'RunQueueWorkerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BackoffStrategy',
+						signature: 'BackoffStrategy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ClaimDueOptions',
+						signature: 'ClaimDueOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateQueueWorkerOptions',
+						signature: 'CreateQueueWorkerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateWakeSchedulerOptions',
+						signature: 'CreateWakeSchedulerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EnqueueInput',
+						signature: 'EnqueueInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FailOptions',
+						signature: 'FailOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'InMemoryJobStore',
+						signature: 'InMemoryJobStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'InMemoryJobStoreSnapshot',
+						signature: 'InMemoryJobStoreSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Job',
+						signature: 'Job'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobContext',
+						signature: 'JobContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobDefinition',
+						signature: 'JobDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobHandler',
+						signature: 'JobHandler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobId',
+						signature: 'JobId'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobMap',
+						signature: 'JobMap'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobMapFromDefinition',
+						signature: 'JobMapFromDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobRegistry',
+						signature: 'JobRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobStatus',
+						signature: 'JobStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobStore',
+						signature: 'JobStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ListByKindOptions',
+						signature: 'ListByKindOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ListJobsOptions',
+						signature: 'ListJobsOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'QueueWorker',
+						signature: 'QueueWorker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'QueueWorkerMetrics',
+						signature: 'QueueWorkerMetrics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReapStuckOptions',
+						signature: 'ReapStuckOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WakeCatchUpMode',
+						signature: 'WakeCatchUpMode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WakeEntry',
+						signature: 'WakeEntry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WakeScheduler',
+						signature: 'WakeScheduler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WakeSchedulerMetrics',
+						signature: 'WakeSchedulerMetrics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WakeSchedulerSnapshot',
+						signature: 'WakeSchedulerSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'assertValidPayload',
+						signature: 'assertValidPayload'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'collectPayloadIssues',
+						signature: 'collectPayloadIssues'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'compileJobValidators',
+						signature: 'compileJobValidators'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'QueueHandlerTimeoutError',
+						signature: 'QueueHandlerTimeoutError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'QueuePayloadValidationError',
+						signature: 'QueuePayloadValidationError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JobValidators',
+						signature: 'JobValidators'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWakeScheduler',
+						signature: 'createWakeScheduler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'httpWake',
+						signature: 'httpWake'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createQueueWorker',
+						signature: 'createQueueWorker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NonRetryableJobError',
+						signature: 'NonRetryableJobError'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/queue/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<QueuePluginOptions<JobMap>, JobStore<JobMap>>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<JobStore<JobMap>>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<JobStore<JobMap>>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        concurrency: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        runWorker: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n    }>;\n});'
+					}
+				]
+			}
+		],
 		category: 'Data & Sync',
 		commands: [
 			{
@@ -29023,7 +40004,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/queue',
 		subpackages: [],
-		version: '0.9.0'
+		version: '0.10.0'
 	},
 	{
 		api: [],
@@ -29478,7 +40459,3117 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.2.0'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/rag',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGPagedPDFExtractor',
+						signature: 'createRAGPagedPDFExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGPagedPDFExtractorOptions',
+						signature: 'type RAGPagedPDFExtractorOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ragChat',
+						signature: 'ragChat'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ragPlugin',
+						signature: 'ragChat as ragPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGHTMXConfig',
+						signature: 'createRAGHTMXConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGHTMXWorkflowRenderConfig',
+						signature: 'createRAGHTMXWorkflowRenderConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGEmbeddingProvider',
+						signature: 'createRAGEmbeddingProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveRAGEmbeddingProvider',
+						signature: 'resolveRAGEmbeddingProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validateRAGEmbeddingDimensions',
+						signature: 'validateRAGEmbeddingDimensions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'classifyEmbeddingError',
+						signature: 'classifyEmbeddingError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGEmbeddingError',
+						signature: 'createRAGEmbeddingError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'embeddingCacheKey',
+						signature: 'embeddingCacheKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isEmbeddingQuotaError',
+						signature: 'isEmbeddingQuotaError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isRetryableEmbeddingError',
+						signature: 'isRetryableEmbeddingError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'withEmbeddingBudget',
+						signature: 'withEmbeddingBudget'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGBudgetedEmbedding',
+						signature: 'type RAGBudgetedEmbedding'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGEmbeddingCache',
+						signature: 'type RAGEmbeddingCache'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGEmbeddingHealth',
+						signature: 'type RAGEmbeddingHealth'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGEmbeddingError',
+						signature: 'type RAGEmbeddingError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGEmbeddingErrorKind',
+						signature: 'type RAGEmbeddingErrorKind'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WithEmbeddingBudgetOptions',
+						signature: 'type WithEmbeddingBudgetOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'applyRAGReranking',
+						signature: 'applyRAGReranking'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createHeuristicRAGReranker',
+						signature: 'createHeuristicRAGReranker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGReranker',
+						signature: 'createRAGReranker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveRAGReranker',
+						signature: 'resolveRAGReranker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createCohereRAGReranker',
+						signature: 'createCohereRAGReranker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createJinaRAGReranker',
+						signature: 'createJinaRAGReranker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoyageRAGReranker',
+						signature: 'createVoyageRAGReranker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'applyRAGQueryTransform',
+						signature: 'applyRAGQueryTransform'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createHeuristicRAGQueryTransform',
+						signature: 'createHeuristicRAGQueryTransform'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGQueryTransform',
+						signature: 'createRAGQueryTransform'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveRAGQueryTransform',
+						signature: 'resolveRAGQueryTransform'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createHeuristicRAGRetrievalStrategy',
+						signature: 'createHeuristicRAGRetrievalStrategy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGAccessControl',
+						signature: 'createRAGAccessControl'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGLexicalHaystack',
+						signature: 'buildRAGLexicalHaystack'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fuseRAGQueryResults',
+						signature: 'fuseRAGQueryResults'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveRAGHybridSearchOptions',
+						signature: 'resolveRAGHybridSearchOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'scoreRAGLexicalMatch',
+						signature: 'scoreRAGLexicalMatch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'alibabaEmbeddings',
+						signature: 'alibabaEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'deepseekEmbeddings',
+						signature: 'deepseekEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'geminiEmbeddings',
+						signature: 'geminiEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'googleEmbeddings',
+						signature: 'googleEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'metaEmbeddings',
+						signature: 'metaEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mistralaiEmbeddings',
+						signature: 'mistralaiEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'moonshotEmbeddings',
+						signature: 'moonshotEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ollamaEmbeddings',
+						signature: 'ollamaEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'openaiCompatibleEmbeddings',
+						signature: 'openaiCompatibleEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'openaiEmbeddings',
+						signature: 'openaiEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'xaiEmbeddings',
+						signature: 'xaiEmbeddings'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'anthropicOCR',
+						signature: 'anthropicOCR'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'geminiOCR',
+						signature: 'geminiOCR'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ollamaOCR',
+						signature: 'ollamaOCR'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ollamaTranscriber',
+						signature: 'ollamaTranscriber'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'openaiCompatibleOCR',
+						signature: 'openaiCompatibleOCR'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'openaiCompatibleTranscriber',
+						signature: 'openaiCompatibleTranscriber'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'openaiOCR',
+						signature: 'openaiOCR'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'openaiTranscriber',
+						signature: 'openaiTranscriber'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGGmailEmailSyncClient',
+						signature: 'createRAGGmailEmailSyncClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGLinkedGmailEmailSyncClient',
+						signature: 'createRAGLinkedGmailEmailSyncClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGGraphEmailSyncClient',
+						signature: 'createRAGGraphEmailSyncClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGIMAPEmailSyncClient',
+						signature: 'createRAGIMAPEmailSyncClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGGoogleContactsConnector',
+						signature: 'createRAGGoogleContactsConnector'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGFacebookPageConnector',
+						signature: 'createRAGFacebookPageConnector'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGInstagramBusinessConnector',
+						signature: 'createRAGInstagramBusinessConnector'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'authoredEmailText',
+						signature: 'authoredEmailText'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGUpsertInputFromDirectory',
+						signature: 'buildRAGUpsertInputFromDirectory'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGUpsertInputFromDocuments',
+						signature: 'buildRAGUpsertInputFromDocuments'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGUpsertInputFromUploads',
+						signature: 'buildRAGUpsertInputFromUploads'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createBuiltinArchiveExpander',
+						signature: 'createBuiltinArchiveExpander'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEmailExtractor',
+						signature: 'createEmailExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEPUBExtractor',
+						signature: 'createEPUBExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createLegacyDocumentExtractor',
+						signature: 'createLegacyDocumentExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGPDFOCRExtractor',
+						signature: 'createRAGPDFOCRExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGArchiveExpander',
+						signature: 'createRAGArchiveExpander'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGArchiveFileExtractor',
+						signature: 'createRAGArchiveFileExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createOfficeDocumentExtractor',
+						signature: 'createOfficeDocumentExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPDFFileExtractor',
+						signature: 'createPDFFileExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGFileExtractor',
+						signature: 'createRAGFileExtractor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGFileExtractorRegistry',
+						signature: 'createRAGFileExtractorRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGChunkingRegistry',
+						signature: 'createRAGChunkingRegistry'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/adapter-kit',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGVector',
+						signature: 'createRAGVector'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'normalizeVector',
+						signature: 'normalizeVector'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'querySimilarity',
+						signature: 'querySimilarity'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'matchesMetadataFilterRecord',
+						signature: 'matchesMetadataFilterRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'planNativeCandidateSearchBackfillK',
+						signature: 'planNativeCandidateSearchBackfillK'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'planNativeCandidateSearchK',
+						signature: 'planNativeCandidateSearchK'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveAdaptiveNativeCandidateLimit',
+						signature: 'resolveAdaptiveNativeCandidateLimit'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'summarizeSQLiteCandidateCoverage',
+						signature: 'summarizeSQLiteCandidateCoverage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'rankRAGLexicalMatches',
+						signature: 'rankRAGLexicalMatches'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGCollection',
+						signature: 'createRAGCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ragChat',
+						signature: 'ragChat'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ragPlugin',
+						signature: 'ragChat as ragPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAG_NATIVE_QUERY_CANDIDATE_LIMIT',
+						signature: 'RAG_NATIVE_QUERY_CANDIDATE_LIMIT'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAG_VECTOR_DIMENSIONS_DEFAULT',
+						signature: 'RAG_VECTOR_DIMENSIONS_DEFAULT'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGBackendCapabilities',
+						signature: 'RAGBackendCapabilities'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGCollection',
+						signature: 'RAGCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGEmbeddingInput',
+						signature: 'RAGEmbeddingInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGLexicalQueryInput',
+						signature: 'RAGLexicalQueryInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGPostgresNativeDiagnostics',
+						signature: 'RAGPostgresNativeDiagnostics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGQueryInput',
+						signature: 'RAGQueryInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGQueryResult',
+						signature: 'RAGQueryResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGSQLiteNativeDiagnostics',
+						signature: 'RAGSQLiteNativeDiagnostics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGUpsertInput',
+						signature: 'RAGUpsertInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGVectorCountInput',
+						signature: 'RAGVectorCountInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGVectorDeleteInput',
+						signature: 'RAGVectorDeleteInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGVectorStore',
+						signature: 'RAGVectorStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGVectorStoreStatus',
+						signature: 'RAGVectorStoreStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SQLiteVecResolution',
+						signature: 'SQLiteVecResolution'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGWorkflow',
+						signature:
+							'createRAGAnswerWorkflow as createRAGWorkflow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateRAGWorkflow',
+						signature: 'RAGAnswerWorkflow as CreateRAGWorkflow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGWorkflow',
+						signature: 'RAGAnswerWorkflow as RAGWorkflow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGStream',
+						signature: 'createRAGStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateRAGStream',
+						signature: 'CreateRAGStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGMaintenanceOverview',
+						signature: 'buildRAGMaintenanceOverview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGClient',
+						signature: 'createRAGClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGClient',
+						signature: 'RAGClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGClientOptions',
+						signature: 'RAGClientOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGDetailedSearchResponse',
+						signature: 'RAGDetailedSearchResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGMaintenanceActionDescriptor',
+						signature: 'RAGMaintenanceActionDescriptor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGMaintenanceOverview',
+						signature: 'RAGMaintenanceOverview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGMaintenancePayload',
+						signature: 'RAGMaintenancePayload'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGEvaluationLeaderboard',
+						signature: 'buildRAGEvaluationLeaderboard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGEvaluationSuite',
+						signature: 'createRAGEvaluationSuite'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runRAGEvaluationSuite',
+						signature: 'runRAGEvaluationSuite'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchRequest',
+						signature:
+							'type ResearchRequest = Pick<ResearchInput, "query" | "task" | "freshness">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchState',
+						signature:
+							'type ResearchState = {\n    status: "idle" | "running" | "complete" | "cancelled" | "error";\n    result: ResearchResult | null;\n    progress: ResearchProgress | null;\n    error: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchClientOptions',
+						signature:
+							'type ResearchClientOptions = {\n    path?: string;\n    fetch?: typeof fetch;\n    headers?: () => HeadersInit;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchClient',
+						signature:
+							'const createResearchClient: (options?: ResearchClientOptions) => {\n    run: (input: ResearchRequest) => Promise<ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description:
+							'HTML binding uses textContent, never model-produced HTML. Returns cleanup.',
+						kind: 'value',
+						name: 'bindResearchForm',
+						signature:
+							'const bindResearchForm: (form: HTMLFormElement, output: HTMLElement, options?: ResearchClientOptions) => {\n    dispose: () => void;\n    run: (input: ResearchRequest) => Promise<ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexRequests',
+						signature:
+							'type WebIndexRequests = {\n    stats: {\n        generation?: string;\n    };\n    history: {\n        url: string;\n        generation?: string;\n    };\n    search: {\n        query: string;\n        count?: number;\n        mode?: "web" | "context";\n    };\n    projections: {\n        kind: "company" | "person" | "event";\n        generation?: string;\n    };\n    enqueue: {\n        urls: string[];\n        generation?: string;\n    };\n    run: {\n        generation?: string;\n    };\n    remove: {\n        url: string;\n        generation?: string;\n    };\n    restore: {\n        url: string;\n        generation?: string;\n    };\n    rebuild: {\n        from: string;\n        to: string;\n        limit: number;\n        after?: string;\n    };\n    activate: {\n        generation: string;\n        expected: string;\n        evidence: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexResponses',
+						signature:
+							'type WebIndexResponses = {\n    stats: WebIndexStats;\n    history: WebIndexDocument[];\n    search: SearchResult;\n    projections: Array<WebIndexProjection & {\n        url: string;\n        version: string;\n        fetchedAt: string;\n    }>;\n    enqueue: {\n        enqueued: number;\n    };\n    run: WebIndexRun;\n    remove: {\n        removed: true;\n    };\n    restore: {\n        restored: true;\n    };\n    rebuild: {\n        enqueued: number;\n        next?: string;\n    };\n    activate: {\n        activated: boolean;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexClientState',
+						signature:
+							'type WebIndexClientState = {\n    status: "idle" | "running" | "complete" | "cancelled" | "error";\n    operation: keyof WebIndexRequests | null;\n    result: WebIndexResponses[keyof WebIndexResponses] | null;\n    error: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexClientOptions',
+						signature:
+							'type WebIndexClientOptions = {\n    path?: string;\n    fetch?: typeof fetch;\n    headers?: () => HeadersInit;\n};'
+					},
+					{
+						description:
+							'One foreground operation per client. Superseding a call cancels its request, not already committed work.',
+						kind: 'value',
+						name: 'createWebIndexClient',
+						signature:
+							'const createWebIndexClient: (options?: WebIndexClientOptions) => {\n    call: <K extends keyof WebIndexRequests>(operation: K, input: WebIndexRequests[K]) => Promise<WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'bindWebIndexSearchForm',
+						signature:
+							'const bindWebIndexSearchForm: (form: HTMLFormElement, output: HTMLElement, options?: WebIndexClientOptions) => {\n    dispose: () => void;\n    call: <K extends keyof WebIndexRequests>(operation: K, input: WebIndexRequests[K]) => Promise<WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/client/ui',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAnswerWorkflowState',
+						signature: 'buildRAGAnswerWorkflowState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSourceGroups',
+						signature: 'buildRAGSourceGroups'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSourceSummaries',
+						signature: 'buildRAGSourceSummaries'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGStreamProgress',
+						signature: 'buildRAGStreamProgress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getLatestAssistantMessage',
+						signature: 'getLatestAssistantMessage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveRAGStreamStage',
+						signature: 'resolveRAGStreamStage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getRAGStreamProgress',
+						signature:
+							'buildRAGStreamProgress as getRAGStreamProgress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGCitationReferenceMap',
+						signature: 'buildRAGCitationReferenceMap'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkExcerpts',
+						signature: 'buildRAGChunkExcerpts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkGraphNavigation',
+						signature: 'buildRAGChunkGraphNavigation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkGraph',
+						signature: 'buildRAGChunkGraph'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkPreviewGraph',
+						signature: 'buildRAGChunkPreviewGraph'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkPreviewNavigation',
+						signature: 'buildRAGChunkPreviewNavigation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundedAnswer',
+						signature: 'buildRAGGroundedAnswer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundedAnswerSectionSummaries',
+						signature: 'buildRAGGroundedAnswerSectionSummaries'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundingReferences',
+						signature: 'buildRAGGroundingReferences'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSectionRetrievalDiagnostics',
+						signature: 'buildRAGSectionRetrievalDiagnostics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGStreamProgress',
+						signature: 'RAGStreamProgress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGStreamProgressState',
+						signature: 'RAGStreamProgressState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGAnswerWorkflowState',
+						signature: 'RAGAnswerWorkflowState'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/ui',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAdminActionPresentation',
+						signature: 'buildRAGAdminActionPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAdminActionPresentations',
+						signature: 'buildRAGAdminActionPresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAdminJobPresentation',
+						signature: 'buildRAGAdminJobPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAdminJobPresentations',
+						signature: 'buildRAGAdminJobPresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGCitations',
+						signature: 'buildRAGCitations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGCitationReferenceMap',
+						signature: 'buildRAGCitationReferenceMap'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkExcerpts',
+						signature: 'buildRAGChunkExcerpts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkGraphNavigation',
+						signature: 'buildRAGChunkGraphNavigation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkPreviewGraph',
+						signature: 'buildRAGChunkPreviewGraph'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkPreviewNavigation',
+						signature: 'buildRAGChunkPreviewNavigation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGChunkGraph',
+						signature: 'buildRAGChunkGraph'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGCorpusHealthPresentation',
+						signature: 'buildRAGCorpusHealthPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundedAnswer',
+						signature: 'buildRAGGroundedAnswer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundedAnswerSectionSummaries',
+						signature: 'buildRAGGroundedAnswerSectionSummaries'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundingReferences',
+						signature: 'buildRAGGroundingReferences'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGReadinessPresentation',
+						signature: 'buildRAGReadinessPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSourceLabels',
+						signature: 'buildRAGSourceLabels'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSectionRetrievalDiagnostics',
+						signature: 'buildRAGSectionRetrievalDiagnostics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGRetrievalTracePresentation',
+						signature: 'buildRAGRetrievalTracePresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSyncOverviewPresentation',
+						signature: 'buildRAGSyncOverviewPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSyncSourcePresentation',
+						signature: 'buildRAGSyncSourcePresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSyncSourcePresentations',
+						signature: 'buildRAGSyncSourcePresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAnswerWorkflowState',
+						signature: 'buildRAGAnswerWorkflowState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGRetrievedState',
+						signature: 'buildRAGRetrievedState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSourceGroups',
+						signature: 'buildRAGSourceGroups'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGSourceSummaries',
+						signature: 'buildRAGSourceSummaries'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGStreamProgress',
+						signature: 'buildRAGStreamProgress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getLatestAssistantMessage',
+						signature: 'getLatestAssistantMessage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getLatestRAGSources',
+						signature: 'getLatestRAGSources'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveRAGStreamStage',
+						signature: 'resolveRAGStreamStage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAnswerGroundingCaseSnapshotPresentations',
+						signature:
+							'buildRAGAnswerGroundingCaseSnapshotPresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAnswerGroundingEntityQualityPresentation',
+						signature:
+							'buildRAGAnswerGroundingEntityQualityPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAnswerGroundingHistoryPresentation',
+						signature: 'buildRAGAnswerGroundingHistoryPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGAnswerGroundingHistoryRows',
+						signature: 'buildRAGAnswerGroundingHistoryRows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGComparisonTraceDiffRows',
+						signature: 'buildRAGComparisonTraceDiffRows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGComparisonTraceSummaryRows',
+						signature: 'buildRAGComparisonTraceSummaryRows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGQualityOverviewPresentation',
+						signature: 'buildRAGQualityOverviewPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundingOverviewPresentation',
+						signature: 'buildRAGGroundingOverviewPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundingProviderCaseComparisonPresentations',
+						signature:
+							'buildRAGGroundingProviderCaseComparisonPresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundingProviderOverviewPresentation',
+						signature:
+							'buildRAGGroundingProviderOverviewPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGGroundingProviderPresentations',
+						signature: 'buildRAGGroundingProviderPresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGRetrievalComparisonOverviewPresentation',
+						signature:
+							'buildRAGRetrievalComparisonOverviewPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGRetrievalOverviewPresentation',
+						signature: 'buildRAGRetrievalOverviewPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGRetrievalComparisonPresentations',
+						signature: 'buildRAGRetrievalComparisonPresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGRerankerComparisonOverviewPresentation',
+						signature:
+							'buildRAGRerankerComparisonOverviewPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGRerankerOverviewPresentation',
+						signature: 'buildRAGRerankerOverviewPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGRerankerComparisonPresentations',
+						signature: 'buildRAGRerankerComparisonPresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGEvaluationCaseTracePresentations',
+						signature: 'buildRAGEvaluationCaseTracePresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGEvaluationEntityQualityPresentation',
+						signature: 'buildRAGEvaluationEntityQualityPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGEvaluationHistoryPresentation',
+						signature: 'buildRAGEvaluationHistoryPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGEvaluationHistoryRows',
+						signature: 'buildRAGEvaluationHistoryRows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGEvaluationSuiteSnapshotHistoryPresentation',
+						signature:
+							'buildRAGEvaluationSuiteSnapshotHistoryPresentation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGEvaluationSuiteSnapshotPresentations',
+						signature:
+							'buildRAGEvaluationSuiteSnapshotPresentations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildRAGEvaluationSuiteSnapshotRows',
+						signature: 'buildRAGEvaluationSuiteSnapshotRows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGStreamProgress',
+						signature: 'RAGStreamProgress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGStreamProgressState',
+						signature: 'RAGStreamProgressState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveRAGHTMXRenderers',
+						signature: 'resolveRAGHTMXRenderers'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGHTMXRenderConfig',
+						signature: 'RAGHTMXRenderConfig'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResolvedRAGHTMXRenderers',
+						signature: 'ResolvedRAGHTMXRenderers'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildCitationGroups',
+						signature: 'buildCitationGroups'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildGroundingReferenceGroups',
+						signature: 'buildGroundingReferenceGroups'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildSearchTargetId',
+						signature: 'buildSearchTargetId'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildSourceSummarySectionGroups',
+						signature: 'buildSourceSummarySectionGroups'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatCitationDetails',
+						signature: 'formatCitationDetails'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatCitationExcerpt',
+						signature: 'formatCitationExcerpt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatCitationLabel',
+						signature: 'formatCitationLabel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatCitationSummary',
+						signature: 'formatCitationSummary'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticAttributionFocus',
+						signature: 'formatSectionDiagnosticAttributionFocus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticChannels',
+						signature: 'formatSectionDiagnosticChannels'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticCompetition',
+						signature: 'formatSectionDiagnosticCompetition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticDistributionRows',
+						signature: 'formatSectionDiagnosticDistributionRows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticPipeline',
+						signature: 'formatSectionDiagnosticPipeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticReasons',
+						signature: 'formatSectionDiagnosticReasons'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticStageBounds',
+						signature: 'formatSectionDiagnosticStageBounds'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticStageFlow',
+						signature: 'formatSectionDiagnosticStageFlow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticStageWeightReasons',
+						signature: 'formatSectionDiagnosticStageWeightReasons'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticStageWeightRows',
+						signature: 'formatSectionDiagnosticStageWeightRows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSectionDiagnosticTopEntry',
+						signature: 'formatSectionDiagnosticTopEntry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatSourceSummaryDetails',
+						signature: 'formatSourceSummaryDetails'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGCitationGroup',
+						signature: 'RAGCitationGroup'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/quality',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGSearchTraceStoreOptions',
+						signature:
+							'type SQLiteRAGSearchTraceStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGEvaluationHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGEvaluationHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGEvaluationSuiteSnapshotHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGEvaluationSuiteSnapshotHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGAnswerGroundingEvaluationHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGAnswerGroundingEvaluationHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGSearchTracePruneHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGSearchTracePruneHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalComparisonHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalComparisonHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalReleaseDecisionStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalReleaseDecisionStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalBaselineStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalBaselineStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalReleaseIncidentStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalReleaseIncidentStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalLaneHandoffDecisionStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalLaneHandoffDecisionStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalLaneHandoffIncidentStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalLaneHandoffIncidentStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalLaneHandoffIncidentHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalLaneHandoffIncidentHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalIncidentRemediationDecisionStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalIncidentRemediationDecisionStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalIncidentRemediationExecutionHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalIncidentRemediationExecutionHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalLaneHandoffAutoCompletePolicyHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalLaneHandoffAutoCompletePolicyHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalReleaseLanePolicyHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalReleaseLanePolicyHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalBaselineGatePolicyHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalBaselineGatePolicyHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGRetrievalReleaseLaneEscalationPolicyHistoryStoreOptions',
+						signature:
+							'type SQLiteRAGRetrievalReleaseLaneEscalationPolicyHistoryStoreOptions = SQLiteStoreOptionsBase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGGovernanceStoreBundleOptions',
+						signature:
+							'type SQLiteRAGGovernanceStoreBundleOptions = {\n    db?: Database;\n    path?: string;\n    tablePrefix?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SQLiteRAGStoreMigrationOptions',
+						signature:
+							'type SQLiteRAGStoreMigrationOptions = {\n    db?: Database;\n    path?: string;\n    descriptors?: Array<{\n        tableName: string;\n        columns: Array<{\n            name: string;\n            definition: string;\n        }>;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildRAGRetrievalReleaseVerdict',
+						signature:
+							'const buildRAGRetrievalReleaseVerdict: ({ groupKey, decisionSummary, }: {\n    groupKey?: string;\n    decisionSummary?: RAGRetrievalComparisonDecisionSummary;\n}) => RAGRetrievalReleaseVerdict | undefined;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildRAGEvaluationLeaderboard',
+						signature:
+							'const buildRAGEvaluationLeaderboard: (runs: RAGEvaluationSuiteRun[]) => RAGEvaluationLeaderboardEntry[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildRAGAnswerGroundingEvaluationLeaderboard',
+						signature:
+							'const buildRAGAnswerGroundingEvaluationLeaderboard: (runs: RAGAnswerGroundingEvaluationRun[]) => RAGAnswerGroundingEvaluationLeaderboardEntry[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildRAGAnswerGroundingCaseDifficultyLeaderboard',
+						signature:
+							'const buildRAGAnswerGroundingCaseDifficultyLeaderboard: (entries: Array<{\n    label: string;\n    response: RAGAnswerGroundingEvaluationResponse;\n}>) => RAGAnswerGroundingEvaluationCaseDifficultyEntry[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildRAGAnswerGroundingCaseDifficultyRunDiff',
+						signature:
+							'const buildRAGAnswerGroundingCaseDifficultyRunDiff: ({ current, previous, }: {\n    current: RAGAnswerGroundingCaseDifficultyRun;\n    previous?: RAGAnswerGroundingCaseDifficultyRun;\n}) => RAGAnswerGroundingCaseDifficultyRunDiff;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildRAGEvaluationRunDiff',
+						signature:
+							'const buildRAGEvaluationRunDiff: ({ current, previous, }: {\n    current: RAGEvaluationSuiteRun;\n    previous?: RAGEvaluationSuiteRun;\n}) => RAGEvaluationRunDiff;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildRAGAnswerGroundingEvaluationRunDiff',
+						signature:
+							'const buildRAGAnswerGroundingEvaluationRunDiff: ({ current, previous, }: {\n    current: RAGAnswerGroundingEvaluationRun;\n    previous?: RAGAnswerGroundingEvaluationRun;\n}) => RAGAnswerGroundingEvaluationRunDiff;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileEvaluationHistoryStore',
+						signature:
+							'const createRAGFileEvaluationHistoryStore: (path: string) => RAGEvaluationHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileEvaluationSuiteSnapshotHistoryStore',
+						signature:
+							'const createRAGFileEvaluationSuiteSnapshotHistoryStore: (path: string) => RAGEvaluationSuiteSnapshotHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalComparisonHistoryStore',
+						signature:
+							'const createRAGFileRetrievalComparisonHistoryStore: (path: string) => RAGRetrievalComparisonHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalBaselineStore',
+						signature:
+							'const createRAGFileRetrievalBaselineStore: (path: string) => RAGRetrievalBaselineStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalReleaseDecisionStore',
+						signature:
+							'const createRAGFileRetrievalReleaseDecisionStore: (path: string) => RAGRetrievalReleaseDecisionStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalLaneHandoffDecisionStore',
+						signature:
+							'const createRAGFileRetrievalLaneHandoffDecisionStore: (path: string) => RAGRetrievalLaneHandoffDecisionStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalReleaseIncidentStore',
+						signature:
+							'const createRAGFileRetrievalReleaseIncidentStore: (path: string) => RAGRetrievalReleaseIncidentStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalLaneHandoffIncidentStore',
+						signature:
+							'const createRAGFileRetrievalLaneHandoffIncidentStore: (path: string) => RAGRetrievalLaneHandoffIncidentStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalLaneHandoffIncidentHistoryStore',
+						signature:
+							'const createRAGFileRetrievalLaneHandoffIncidentHistoryStore: (path: string) => RAGRetrievalLaneHandoffIncidentHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalIncidentRemediationDecisionStore',
+						signature:
+							'const createRAGFileRetrievalIncidentRemediationDecisionStore: (path: string) => RAGRetrievalIncidentRemediationDecisionStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalIncidentRemediationExecutionHistoryStore',
+						signature:
+							'const createRAGFileRetrievalIncidentRemediationExecutionHistoryStore: (path: string) => RAGRetrievalIncidentRemediationExecutionHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalLaneHandoffAutoCompletePolicyHistoryStore',
+						signature:
+							'const createRAGFileRetrievalLaneHandoffAutoCompletePolicyHistoryStore: (path: string) => RAGRetrievalLaneHandoffAutoCompletePolicyHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalReleaseLanePolicyHistoryStore',
+						signature:
+							'const createRAGFileRetrievalReleaseLanePolicyHistoryStore: (path: string) => RAGRetrievalReleaseLanePolicyHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalBaselineGatePolicyHistoryStore',
+						signature:
+							'const createRAGFileRetrievalBaselineGatePolicyHistoryStore: (path: string) => RAGRetrievalBaselineGatePolicyHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileRetrievalReleaseLaneEscalationPolicyHistoryStore',
+						signature:
+							'const createRAGFileRetrievalReleaseLaneEscalationPolicyHistoryStore: (path: string) => RAGRetrievalReleaseLaneEscalationPolicyHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileSearchTraceStore',
+						signature:
+							'const createRAGFileSearchTraceStore: (path: string) => RAGSearchTraceStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileSearchTracePruneHistoryStore',
+						signature:
+							'const createRAGFileSearchTracePruneHistoryStore: (path: string) => RAGSearchTracePruneHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteEvaluationHistoryStore',
+						signature:
+							'const createRAGSQLiteEvaluationHistoryStore: (options: SQLiteRAGEvaluationHistoryStoreOptions) => RAGEvaluationHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteEvaluationSuiteSnapshotHistoryStore',
+						signature:
+							'const createRAGSQLiteEvaluationSuiteSnapshotHistoryStore: (options: SQLiteRAGEvaluationSuiteSnapshotHistoryStoreOptions) => RAGEvaluationSuiteSnapshotHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteAnswerGroundingEvaluationHistoryStore',
+						signature:
+							'const createRAGSQLiteAnswerGroundingEvaluationHistoryStore: (options: SQLiteRAGAnswerGroundingEvaluationHistoryStoreOptions) => RAGAnswerGroundingEvaluationHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'inspectRAGSQLiteStoreMigrations',
+						signature:
+							'const inspectRAGSQLiteStoreMigrations: (options?: SQLiteRAGStoreMigrationOptions) => RAGSQLiteStoreMigrationInspection;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'applyRAGSQLiteStoreMigrations',
+						signature:
+							'const applyRAGSQLiteStoreMigrations: (options?: SQLiteRAGStoreMigrationOptions) => RAGSQLiteStoreMigrationResult;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteSearchTraceStore',
+						signature:
+							'const createRAGSQLiteSearchTraceStore: (options: SQLiteRAGSearchTraceStoreOptions) => RAGSearchTraceStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteSearchTracePruneHistoryStore',
+						signature:
+							'const createRAGSQLiteSearchTracePruneHistoryStore: (options: SQLiteRAGSearchTracePruneHistoryStoreOptions) => RAGSearchTracePruneHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalComparisonHistoryStore',
+						signature:
+							'const createRAGSQLiteRetrievalComparisonHistoryStore: (options: SQLiteRAGRetrievalComparisonHistoryStoreOptions) => RAGRetrievalComparisonHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalReleaseDecisionStore',
+						signature:
+							'const createRAGSQLiteRetrievalReleaseDecisionStore: (options: SQLiteRAGRetrievalReleaseDecisionStoreOptions) => RAGRetrievalReleaseDecisionStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalBaselineStore',
+						signature:
+							'const createRAGSQLiteRetrievalBaselineStore: (options: SQLiteRAGRetrievalBaselineStoreOptions) => RAGRetrievalBaselineStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalReleaseIncidentStore',
+						signature:
+							'const createRAGSQLiteRetrievalReleaseIncidentStore: (options: SQLiteRAGRetrievalReleaseIncidentStoreOptions) => RAGRetrievalReleaseIncidentStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalLaneHandoffDecisionStore',
+						signature:
+							'const createRAGSQLiteRetrievalLaneHandoffDecisionStore: (options: SQLiteRAGRetrievalLaneHandoffDecisionStoreOptions) => RAGRetrievalLaneHandoffDecisionStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalLaneHandoffIncidentStore',
+						signature:
+							'const createRAGSQLiteRetrievalLaneHandoffIncidentStore: (options: SQLiteRAGRetrievalLaneHandoffIncidentStoreOptions) => RAGRetrievalLaneHandoffIncidentStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalLaneHandoffIncidentHistoryStore',
+						signature:
+							'const createRAGSQLiteRetrievalLaneHandoffIncidentHistoryStore: (options: SQLiteRAGRetrievalLaneHandoffIncidentHistoryStoreOptions) => RAGRetrievalLaneHandoffIncidentHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalIncidentRemediationDecisionStore',
+						signature:
+							'const createRAGSQLiteRetrievalIncidentRemediationDecisionStore: (options: SQLiteRAGRetrievalIncidentRemediationDecisionStoreOptions) => RAGRetrievalIncidentRemediationDecisionStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalIncidentRemediationExecutionHistoryStore',
+						signature:
+							'const createRAGSQLiteRetrievalIncidentRemediationExecutionHistoryStore: (options: SQLiteRAGRetrievalIncidentRemediationExecutionHistoryStoreOptions) => RAGRetrievalIncidentRemediationExecutionHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalLaneHandoffAutoCompletePolicyHistoryStore',
+						signature:
+							'const createRAGSQLiteRetrievalLaneHandoffAutoCompletePolicyHistoryStore: (options: SQLiteRAGRetrievalLaneHandoffAutoCompletePolicyHistoryStoreOptions) => RAGRetrievalLaneHandoffAutoCompletePolicyHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalReleaseLanePolicyHistoryStore',
+						signature:
+							'const createRAGSQLiteRetrievalReleaseLanePolicyHistoryStore: (options: SQLiteRAGRetrievalReleaseLanePolicyHistoryStoreOptions) => RAGRetrievalReleaseLanePolicyHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalBaselineGatePolicyHistoryStore',
+						signature:
+							'const createRAGSQLiteRetrievalBaselineGatePolicyHistoryStore: (options: SQLiteRAGRetrievalBaselineGatePolicyHistoryStoreOptions) => RAGRetrievalBaselineGatePolicyHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGSQLiteRetrievalReleaseLaneEscalationPolicyHistoryStore',
+						signature:
+							'const createRAGSQLiteRetrievalReleaseLaneEscalationPolicyHistoryStore: (options: SQLiteRAGRetrievalReleaseLaneEscalationPolicyHistoryStoreOptions) => RAGRetrievalReleaseLaneEscalationPolicyHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileAnswerGroundingEvaluationHistoryStore',
+						signature:
+							'const createRAGFileAnswerGroundingEvaluationHistoryStore: (path: string) => RAGAnswerGroundingEvaluationHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRAGFileAnswerGroundingCaseDifficultyHistoryStore',
+						signature:
+							'const createRAGFileAnswerGroundingCaseDifficultyHistoryStore: (path: string) => RAGAnswerGroundingCaseDifficultyHistoryStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'loadRAGEvaluationHistory',
+						signature:
+							'const loadRAGEvaluationHistory: ({ store, suite, limit, }: {\n    store: RAGEvaluationHistoryStore;\n    suite: RAGEvaluationSuite;\n    limit?: number;\n}) => Promise<RAGEvaluationHistory>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'loadRAGEvaluationSuiteSnapshotHistory',
+						signature:
+							'const loadRAGEvaluationSuiteSnapshotHistory: ({ store, suite, limit, }: {\n    store: RAGEvaluationSuiteSnapshotHistoryStore;\n    suite: Pick<RAGEvaluationSuite, "id" | "label">;\n    limit?: number;\n}) => Promise<RAGEvaluationSuiteSnapshotHistory>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'loadRAGSearchTraceHistory',
+						signature:
+							'const loadRAGSearchTraceHistory: ({ store, query, groupKey, tag, limit, }: {\n    store: RAGSearchTraceStore;\n    query?: string;\n    groupKey?: string;\n    tag?: string;\n    limit?: number;\n}) => Promise<RAGSearchTraceHistory>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'loadRAGSearchTraceGroupHistory',
+						signature:
+							'const loadRAGSearchTraceGroupHistory: ({ store, tag, limit, }: {\n    store: RAGSearchTraceStore;\n    tag?: string;\n    limit?: number;\n}) => Promise<RAGSearchTraceGroupHistory>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'summarizeRAGSearchTraceStore',
+						signature:
+							'const summarizeRAGSearchTraceStore: ({ store, tag, }: {\n    store: RAGSearchTraceStore;\n    tag?: string;\n}) => Promise<RAGSearchTraceStats>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'previewRAGSearchTraceStorePrune',
+						signature:
+							'const previewRAGSearchTraceStorePrune: ({ store, input, }: {\n    store: RAGSearchTraceStore;\n    input?: RAGSearchTracePruneInput;\n}) => Promise<RAGSearchTracePrunePreview>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'loadRAGAnswerGroundingEvaluationHistory',
+						signature:
+							'const loadRAGAnswerGroundingEvaluationHistory: ({ store, suite, limit, }: {\n    store: RAGAnswerGroundingEvaluationHistoryStore;\n    suite: Pick<RAGEvaluationSuite, "id" | "label">;\n    limit?: number;\n}) => Promise<RAGAnswerGroundingEvaluationHistory>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'loadRAGAnswerGroundingCaseDifficultyHistory',
+						signature:
+							'const loadRAGAnswerGroundingCaseDifficultyHistory: ({ store, suite, limit, }: {\n    store: RAGAnswerGroundingCaseDifficultyHistoryStore;\n    suite: Pick<RAGEvaluationSuite, "id" | "label">;\n    limit?: number;\n}) => Promise<RAGAnswerGroundingCaseDifficultyHistory>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'persistRAGEvaluationSuiteRun',
+						signature:
+							'const persistRAGEvaluationSuiteRun: ({ store, run, }: {\n    store: RAGEvaluationHistoryStore;\n    run: RAGEvaluationSuiteRun;\n}) => Promise<RAGEvaluationSuiteRun>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'persistRAGAnswerGroundingEvaluationRun',
+						signature:
+							'const persistRAGAnswerGroundingEvaluationRun: ({ store, run, }: {\n    store: RAGAnswerGroundingEvaluationHistoryStore;\n    run: RAGAnswerGroundingEvaluationRun;\n}) => Promise<RAGAnswerGroundingEvaluationRun>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'persistRAGAnswerGroundingCaseDifficultyRun',
+						signature:
+							'const persistRAGAnswerGroundingCaseDifficultyRun: ({ store, run, }: {\n    store: RAGAnswerGroundingCaseDifficultyHistoryStore;\n    run: RAGAnswerGroundingCaseDifficultyRun;\n}) => Promise<RAGAnswerGroundingCaseDifficultyRun>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'persistRAGSearchTraceRecord',
+						signature:
+							'const persistRAGSearchTraceRecord: ({ store, record, }: {\n    store: RAGSearchTraceStore;\n    record: RAGSearchTraceRecord;\n}) => Promise<RAGSearchTraceRecord>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'pruneRAGSearchTraceStore',
+						signature:
+							'const pruneRAGSearchTraceStore: ({ store, input, }: {\n    store: RAGSearchTraceStore;\n    input?: RAGSearchTracePruneInput;\n}) => Promise<RAGSearchTracePruneResult>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'persistRAGSearchTracePruneRun',
+						signature:
+							'const persistRAGSearchTracePruneRun: ({ store, run, }: {\n    store: RAGSearchTracePruneHistoryStore;\n    run: RAGSearchTracePruneRun;\n}) => Promise<RAGSearchTracePruneRun>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/react',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGChunkPreview',
+						signature: 'useRAGChunkPreview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAG',
+						signature: 'useRAG'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGCitations',
+						signature: 'useRAGCitations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGDocuments',
+						signature: 'useRAGDocuments'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGEvaluate',
+						signature: 'useRAGEvaluate'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGGrounding',
+						signature: 'useRAGGrounding'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGIngest',
+						signature: 'useRAGIngest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGIndexAdmin',
+						signature: 'useRAGIndexAdmin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGOps',
+						signature: 'useRAGOps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGSearch',
+						signature: 'useRAGSearch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGWorkflow',
+						signature: 'useRAGWorkflow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UseRAGWorkflowResult',
+						signature: 'UseRAGWorkflowResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGStream',
+						signature: 'useRAGStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGStreamProgress',
+						signature: 'useRAGStreamProgress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UseRAGStreamResult',
+						signature: 'UseRAGStreamResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UseRAGStreamProgressResult',
+						signature: 'UseRAGStreamProgressResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGSources',
+						signature: 'useRAGSources'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGStatus',
+						signature: 'useRAGStatus'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useResearch',
+						signature:
+							'const useResearch: (path?: string) => {\n    state: import("../client").ResearchState;\n    run: (input: import("../client").ResearchRequest) => Promise<import("../research").ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useWebIndex',
+						signature:
+							'const useWebIndex: (path?: string) => {\n    state: import("../client").WebIndexClientState;\n    call: <K extends keyof import("../client").WebIndexRequests>(operation: K, input: import("../client").WebIndexRequests[K]) => Promise<import("../client").WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/vue',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGChunkPreview',
+						signature: 'useRAGChunkPreview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAG',
+						signature: 'useRAG'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGCitations',
+						signature: 'useRAGCitations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGDocuments',
+						signature: 'useRAGDocuments'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGEvaluate',
+						signature: 'useRAGEvaluate'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGGrounding',
+						signature: 'useRAGGrounding'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGIngest',
+						signature: 'useRAGIngest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGIndexAdmin',
+						signature: 'useRAGIndexAdmin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGOps',
+						signature: 'useRAGOps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGSearch',
+						signature: 'useRAGSearch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGWorkflow',
+						signature: 'useRAGWorkflow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UseRAGWorkflowResult',
+						signature: 'UseRAGWorkflowResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGStream',
+						signature: 'useRAGStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGStreamProgress',
+						signature: 'useRAGStreamProgress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UseRAGStreamResult',
+						signature: 'UseRAGStreamResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGSources',
+						signature: 'useRAGSources'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useRAGStatus',
+						signature: 'useRAGStatus'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useResearch',
+						signature:
+							'const useResearch: (path?: string) => {\n    state: import("vue").ShallowRef<import("../client").ResearchState, import("../client").ResearchState>;\n    run: (input: import("../client").ResearchRequest) => Promise<import("../research").ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'useWebIndex',
+						signature:
+							'const useWebIndex: (path?: string) => {\n    state: import("vue").ShallowRef<import("../client").WebIndexClientState, import("../client").WebIndexClientState>;\n    call: <K extends keyof import("../client").WebIndexRequests>(operation: K, input: import("../client").WebIndexRequests[K]) => Promise<import("../client").WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/svelte',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAG',
+						signature: 'createRAG'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGChunkPreview',
+						signature: 'createRAGChunkPreview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGCitations',
+						signature: 'createRAGCitations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGDocuments',
+						signature: 'createRAGDocuments'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGEvaluate',
+						signature: 'createRAGEvaluate'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGGrounding',
+						signature: 'createRAGGrounding'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGIngest',
+						signature: 'createRAGIngest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGIndexAdmin',
+						signature: 'createRAGIndexAdmin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGOps',
+						signature: 'createRAGOps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGSearch',
+						signature: 'createRAGSearch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGSources',
+						signature: 'createRAGSources'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGStatus',
+						signature: 'createRAGStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGWorkflow',
+						signature: 'createRAGWorkflow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGStream',
+						signature: 'createRAGStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRAGStreamProgress',
+						signature: 'createRAGStreamProgress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateRAGWorkflowResult',
+						signature: 'CreateRAGWorkflowResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateRAGStreamResult',
+						signature: 'CreateRAGStreamResult'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchStore',
+						signature:
+							'const createResearchStore: (path?: string) => {\n    state: import("svelte/store").Readable<import("../client").ResearchState>;\n    run: (input: import("../client").ResearchRequest) => Promise<import("../research").ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createWebIndexStore',
+						signature:
+							'const createWebIndexStore: (path?: string) => {\n    state: import("svelte/store").Readable<import("../client").WebIndexClientState>;\n    call: <K extends keyof import("../client").WebIndexRequests>(operation: K, input: import("../client").WebIndexRequests[K]) => Promise<import("../client").WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => import("../client").WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/angular',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGWorkflowService',
+						signature: 'RAGWorkflowService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGStreamService',
+						signature: 'RAGStreamService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RAGClientService',
+						signature: 'RAGClientService'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'ResearchService',
+						signature:
+							'class ResearchService {\n    connect(path?: string, destroyRef?: DestroyRef): {\n        state: import("@angular/core").Signal<import("../client").ResearchState>;\n        dispose: () => void;\n        run: (input: import("../client").ResearchRequest) => Promise<import("../research").ResearchResult>;\n        cancel: () => void;\n        getSnapshot: () => import("../client").ResearchState;\n        subscribe: (listener: () => void) => () => void;\n        reset: () => void;\n    };\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'WebIndexService',
+						signature:
+							'class WebIndexService {\n    connect(path?: string, destroyRef?: DestroyRef): {\n        state: import("@angular/core").Signal<import("../client").WebIndexClientState>;\n        dispose: () => void;\n        call: <K extends keyof import("../client").WebIndexRequests>(operation: K, input: import("../client").WebIndexRequests[K]) => Promise<import("../client").WebIndexResponses[K]>;\n        cancel: () => void;\n        getSnapshot: () => import("../client").WebIndexClientState;\n        subscribe: (listener: () => void) => () => void;\n        reset: () => void;\n    };\n}'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<CreateRAGCollectionOptions, RAGCollection>, "tools" | "contract" | "settings"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<RAGCollection>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<RAGCollection>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        defaultCandidateMultiplier: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        defaultModel: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        defaultTopK: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/web',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebEvidence',
+						signature: 'WebEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebLink',
+						signature: 'WebLink'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebImage',
+						signature: 'WebImage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebMedia',
+						signature: 'WebMedia'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebRedirect',
+						signature: 'WebRedirect'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchPublicWebResource',
+						signature: 'fetchPublicWebResource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validatePublicWebUrl',
+						signature: 'validatePublicWebUrl'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isPublicWebAddress',
+						signature: 'isPublicWebAddress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebReadError',
+						signature: 'WebReadError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebFetchResult',
+						signature: 'WebFetchResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebFetchOptions',
+						signature: 'WebFetchOptions'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebReadAttempt',
+						signature:
+							'type WebReadAttempt = {\n    method: "http" | "browser";\n    status: string;\n    httpStatus?: number;\n    extractedChars?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebReadResult',
+						signature:
+							'type WebReadResult = {\n    status: "ok" | "partial" | "error";\n    url: string;\n    finalUrl: string;\n    title: string | null;\n    text: string;\n    method: "http" | "browser";\n    truncated: boolean;\n    attempts: WebReadAttempt[];\n    error?: {\n        code: string;\n        message: string;\n    };\n    fetchedAt: string;\n    redirects: WebRedirect[];\n    evidence: WebEvidence;\n    limitations: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebRenderer',
+						signature:
+							'type WebRenderer = (url: string, options: {\n    signal: AbortSignal;\n}) => Promise<{\n    html: string;\n    text?: string;\n    url: string;\n    status: number;\n    redirects?: WebRedirect[];\n    settled?: boolean;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReadWebpageOptions',
+						signature:
+							'type ReadWebpageOptions = {\n    url: string;\n    render?: WebRenderer;\n    signal?: AbortSignal;\n    maxChars?: number;\n    mode?: "auto" | "browser";\n    fetchResource?: typeof fetchPublicWebResource;\n};'
+					},
+					{
+						description:
+							'Read prepared evidence, escalating thin HTML shells to a host-supplied browser.',
+						kind: 'value',
+						name: 'readRAGWebpage',
+						signature:
+							'const readRAGWebpage: (options: ReadWebpageOptions) => Promise<WebReadResult>;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'readRAGWebsite',
+						signature: 'readRAGWebsite'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWebsiteReaderClient',
+						signature: 'createWebsiteReaderClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseWebsiteServiceResult',
+						signature: 'parseWebsiteServiceResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebsiteServiceResult',
+						signature: 'type WebsiteServiceResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWebpageReaderClient',
+						signature: 'createWebpageReaderClient'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/web/playwright',
+				symbols: [
+					{
+						description:
+							'Fresh contexts share a browser, never cookies; all HTTP traffic uses pinned public DNS.',
+						kind: 'value',
+						name: 'createPlaywrightWebRenderer',
+						signature:
+							'const createPlaywrightWebRenderer: (options?: {\n    executablePath?: string;\n}) => {\n    render: WebRenderer;\n    ready: () => Promise<void>;\n    close: () => Promise<void>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/research',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createResearch',
+						signature: 'createResearch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'researchPlugin',
+						signature: 'researchPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderResearchResult',
+						signature: 'renderResearchResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResearchPluginOptions',
+						signature: 'type ResearchPluginOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'bindResearchReview',
+						signature: 'bindResearchReview'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'researchLeaves',
+						signature: 'researchLeaves'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResearchSchema',
+						signature: 'ResearchSchema'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResearchStatic',
+						signature: 'ResearchStatic'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchOperation',
+						signature:
+							'type ResearchOperation = "search" | "read" | "plan" | "extract" | "review";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchProgress',
+						signature:
+							'type ResearchProgress = {\n    phase: ResearchOperation | "complete";\n    completed: number;\n    limit: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchField',
+						signature:
+							'type ResearchField = {\n    /** RFC 6901 JSON pointer, including array indices. */\n    path: string;\n    value: string | number | boolean | null;\n    verdict: "supported" | "unsupported" | "conflicting" | "unknown";\n    citations: {\n        sourceId: string;\n        quote: string;\n    }[];\n    reason: string;\n    /** Model judgments, not independent verification; all must pass for support. */\n    checks?: {\n        answersQuestion: boolean;\n        correctEntity: boolean;\n        correctTime: boolean;\n        preservesScope: boolean;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchResult',
+						signature:
+							'type ResearchResult<T = unknown> = {\n    id: string;\n    status: "reviewed" | "partial" | "empty" | "unavailable";\n    /** Only populated when every primitive field passed evidence review. */\n    data: T | null;\n    fields: ResearchField[];\n    sources: SearchSource[];\n    searches: SearchResult[];\n    limitations: string[];\n    generatedAt: string;\n    operations: {\n        kind: ResearchOperation;\n        status: "fulfilled" | "unknown";\n        usage?: AIUsage;\n        durationMs: number;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchTask',
+						signature:
+							'type ResearchTask<S extends ResearchSchema = ResearchSchema> = {\n    schema: S;\n    instructions?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchInput',
+						signature:
+							'type ResearchInput = {\n    queries?: string[];\n    requiredPhrases?: string[];\n    query: string;\n    task?: string;\n    freshness?: string;\n    signal?: AbortSignal;\n    onProgress?: (event: ResearchProgress) => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchLimits',
+						signature:
+							'type ResearchLimits = {\n    searches: number;\n    reads: number;\n    rounds: number;\n    timeoutMs: number;\n    evidenceChars: number;\n    outputTokens: number;\n    fields: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchConfig',
+						signature:
+							'type ResearchConfig = {\n    /** Optional host accounting adapter; defaults to the standard AI generator. */\n    generateObject?: typeof import("@absolutejs/ai").generateObjectAI;\n    budget?: import("./budget").ResearchBudgetConfig;\n    search: SearchProvider;\n    provider: AIProviderConfig;\n    model: string;\n    /** Optional separate reviewer. Host reservations must price this model too. */\n    reviewer?: {\n        provider: AIProviderConfig;\n        model: string;\n    };\n    tasks?: Record<string, ResearchTask>;\n    limits?: Partial<ResearchLimits>;\n    /** Explicit shared-public or tenant scope. Omit to disable search caching. */\n    cache?: {\n        scope: string;\n        store?: SearchCacheStore;\n        ttlMs?: number;\n        capacity?: number;\n    };\n    reader?: (options: ReadWebpageOptions) => Promise<WebReadResult>;\n    render?: ReadWebpageOptions["render"];\n    /** Called before each operation. May atomically reserve tenant budget or deny. */\n    admit?: (operation: {\n        runId: string;\n        kind: ResearchOperation;\n        signal: AbortSignal;\n    }) => Promise<false | {\n        settle: (outcome: {\n            status: "fulfilled" | "unknown";\n            usage'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchRuntime',
+						signature:
+							'type ResearchRuntime = {\n    run: (input: ResearchInput) => Promise<ResearchResult>;\n    extract: <S extends ResearchSchema>(task: ResearchTask<S>, input: ResearchInput) => Promise<ResearchResult<ResearchStatic<S>>>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchCheckpoint',
+						signature:
+							'type ResearchCheckpoint = {\n    revision: number;\n    value: unknown;\n    fingerprint: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchClaim',
+						signature:
+							'type ResearchClaim = ResearchCheckpoint & {\n    token: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchDelivery',
+						signature:
+							'type ResearchDelivery = {\n    id: string;\n    key: string;\n    payload: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchWorkflowStore',
+						signature:
+							'type ResearchWorkflowStore = {\n    claim: (key: string, fingerprint: string, leaseMs: number) => Promise<ResearchClaim | null>;\n    /** Commit state and append delivery records atomically, fenced against lease expiry and takeover. */\n    commit: (key: string, claim: ResearchClaim, value: unknown, events?: ResearchDelivery[]) => Promise<boolean>;\n    release: (key: string, token: string) => Promise<void>;\n    deliveries: (key: string, limit: number) => Promise<ResearchDelivery[]>;\n    acknowledge: (key: string, id: string) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'researchKey',
+						signature:
+							'const researchKey: (value: unknown) => Promise<string>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMemoryResearchWorkflowStore',
+						signature:
+							'const createMemoryResearchWorkflowStore: (now?: () => number) => ResearchWorkflowStore;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchSqlClient',
+						signature:
+							'type ResearchSqlClient = {\n    unsafe: (query: string, parameters?: unknown[]) => PromiseLike<Record<string, unknown>[]>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'researchWorkflowPostgresSchemaSql',
+						signature:
+							'const researchWorkflowPostgresSchemaSql: () => string;'
+					},
+					{
+						description:
+							'SQL operations use database time and one fenced statement for state plus outbox.',
+						kind: 'value',
+						name: 'createPostgresResearchWorkflowStore',
+						signature:
+							'const createPostgresResearchWorkflowStore: (sql: ResearchSqlClient) => ResearchWorkflowStore;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchCriterion',
+						signature:
+							'type ResearchCriterion = {\n    id: string;\n    description: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchCandidate',
+						signature:
+							'type ResearchCandidate = {\n    name: string;\n    domain: string;\n    evidence: ResearchResult;\n    criteria: {\n        id: string;\n        verdict: "matched" | "not_matched" | "unknown";\n        evidence: ResearchResult;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'discoverResearchCompanies',
+						signature:
+							'const discoverResearchCompanies: (runtime: ResearchRuntime, input: {\n    query: string;\n    criteria: ResearchCriterion[];\n    limit?: number;\n    signal?: AbortSignal;\n}) => Promise<{\n    discovery: ResearchResult<{\n        companies: {\n            name: string;\n            domain: string;\n        }[];\n    }>;\n    candidates: ResearchCandidate[];\n    accepted: ResearchCandidate[];\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchBatchItem',
+						signature:
+							'type ResearchBatchItem = {\n    id: string;\n    query: string;\n    task?: string;\n    freshness?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchMonitorEvent',
+						signature:
+							'type ResearchMonitorEvent = {\n    id: string;\n    occurredAt: string;\n    fields: string[];\n    payload: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchWorkflows',
+						signature:
+							'const createResearchWorkflows: (options: {\n    runtime: ResearchRuntime;\n    store: ResearchWorkflowStore;\n    scope: string;\n    version: string;\n    leaseMs?: number;\n    now?: () => number;\n}) => {\n    batch(input: {\n        id: string;\n        items: ResearchBatchItem[];\n        signal?: AbortSignal;\n    }): Promise<{\n        id: string;\n        status: "complete" | "busy" | "lease_lost";\n        result?: ResearchResult;\n    }[]>;\n    /** Schedule this function using the existing Queue/cron infrastructure. It owns no timer. */\n    monitor(input: {\n        id: string;\n        query: string;\n        task?: string;\n        freshness?: string;\n        signal?: AbortSignal;\n        select: (result: ResearchResult) => ResearchMonitorEvent[];\n    }): Promise<{\n        status: "busy";\n        events: number;\n        result?: undefined;\n    } | {\n        status: "incomplete";\n        events: number;\n        result: ResearchResult<unknown>;\n    } | {\n        status: "updated" | "baseline" | "lease_lost";\n        events: number;\n        result: ResearchResult<unknown>;\n    }>;\n    /** Delivery is at-least-once: the receiver MUST deduplicate using event.id. */\n    deliverMonitor(id: string'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'researchMonitorTask',
+						signature:
+							'const researchMonitorTask: {\n    schema: import("@sinclair/typebox").TObject<{\n        events: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n            entity: import("@sinclair/typebox").TString;\n            type: import("@sinclair/typebox").TString;\n            occurredAt: import("@sinclair/typebox").TString;\n            summary: import("@sinclair/typebox").TString;\n        }>>;\n    }>;\n    instructions: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'selectResearchMonitorEvents',
+						signature:
+							'const selectResearchMonitorEvents: (result: ResearchResult) => ResearchMonitorEvent[];'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'researchManifest',
+						signature: 'researchManifest'
+					},
+					{
+						description:
+							'Feed research evidence into the existing @absolutejs/rag/quality evaluators.',
+						kind: 'value',
+						name: 'researchGroundingCase',
+						signature:
+							'const researchGroundingCase: (id: string, query: string, result: ResearchResult, expectedSources?: string[]) => RAGAnswerGroundingEvaluationCase;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchAcceptance',
+						signature:
+							'type ResearchAcceptance = {\n    accepted: number;\n    rejected: number;\n    reviewMs: number;\n    reviewer: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchEvaluationCase',
+						signature:
+							'type ResearchEvaluationCase = {\n    id: string;\n    input: Pick<ResearchInput, "query" | "task" | "freshness">;\n    expectedSources?: string[];\n    publishedAfter?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evaluateResearch',
+						signature:
+							'const evaluateResearch: (options: {\n    runtime: ResearchRuntime;\n    cases: ResearchEvaluationCase[];\n    signal?: AbortSignal;\n    /** Supply independent human decisions; absence means unreviewed, never zero errors. */\n    review?: (test: ResearchEvaluationCase, result: ResearchResult) => Promise<ResearchAcceptance>;\n    /** Total cost must include search, reads, planning, extraction, review and failed attempts. */\n    cost?: (result: ResearchResult) => Promise<number | null>;\n}) => Promise<{\n    cases: {\n        id: string;\n        result: ResearchResult<unknown>;\n        durationMs: number;\n        acceptance: ResearchAcceptance | null;\n        costUsd: number | null;\n        costPerAcceptedFinding: number | null;\n        publicationFreshness: {\n            dated: number;\n            fresh: number;\n            unknown: number;\n        } | null;\n        groundingCase: RAGAnswerGroundingEvaluationCase;\n    }[];\n    independentlyReviewed: number;\n    totalCostUsd: number | null;\n}>;'
+					},
+					{
+						description:
+							'Structural adapter for @absolutejs/billing/provider-budget; no second ledger.',
+						kind: 'type',
+						name: 'ResearchBudgetConfig',
+						signature:
+							'type ResearchBudgetConfig = {\n    ledger: {\n        reserve: (input: {\n            id: string;\n            scope: string;\n            period: string;\n            reserveMicros: number;\n            maxMicros: number;\n            maxRequests: number;\n        }) => Promise<boolean>;\n        settle: (id: string, status: "fulfilled" | "rejected" | "unknown", actualMicros: number | null) => Promise<void>;\n    };\n    scope: string;\n    period: () => string;\n    maxMicros: number;\n    maxRequests: number;\n    /** Conservative ceilings for configured models, token limits, search and reader. */\n    reserveMicros: Record<ResearchOperation, number>;\n    actualMicros: (kind: ResearchOperation, outcome: Outcome) => number | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchBudgetAdmission',
+						signature:
+							'const createResearchBudgetAdmission: (config: ResearchBudgetConfig) => Admission;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/research/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchRequest',
+						signature:
+							'type ResearchRequest = Pick<ResearchInput, "query" | "task" | "freshness">;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchState',
+						signature:
+							'type ResearchState = {\n    status: "idle" | "running" | "complete" | "cancelled" | "error";\n    result: ResearchResult | null;\n    progress: ResearchProgress | null;\n    error: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResearchClientOptions',
+						signature:
+							'type ResearchClientOptions = {\n    path?: string;\n    fetch?: typeof fetch;\n    headers?: () => HeadersInit;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createResearchClient',
+						signature:
+							'const createResearchClient: (options?: ResearchClientOptions) => {\n    run: (input: ResearchRequest) => Promise<ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description:
+							'HTML binding uses textContent, never model-produced HTML. Returns cleanup.',
+						kind: 'value',
+						name: 'bindResearchForm',
+						signature:
+							'const bindResearchForm: (form: HTMLFormElement, output: HTMLElement, options?: ResearchClientOptions) => {\n    dispose: () => void;\n    run: (input: ResearchRequest) => Promise<ResearchResult>;\n    cancel: () => void;\n    getSnapshot: () => ResearchState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/web-index',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWebIndex',
+						signature: 'createWebIndex'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresWebIndexStore',
+						signature: 'createPostgresWebIndexStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'webIndexPostgresSchemaSql',
+						signature: 'webIndexPostgresSchemaSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexDatabase',
+						signature: 'WebIndexDatabase'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexSql',
+						signature: 'WebIndexSql'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexScope',
+						signature: 'WebIndexScope'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexGeneration',
+						signature: 'WebIndexGeneration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexDocument',
+						signature: 'WebIndexDocument'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexPassage',
+						signature: 'WebIndexPassage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexProjection',
+						signature: 'WebIndexProjection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexStats',
+						signature: 'WebIndexStats'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexStore',
+						signature: 'WebIndexStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexOptions',
+						signature: 'WebIndexOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexRun',
+						signature: 'WebIndexRun'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexRuntime',
+						signature: 'WebIndexRuntime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'webIndexPlugin',
+						signature: 'webIndexPlugin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderWebIndexStats',
+						signature: 'renderWebIndexStats'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexPluginOptions',
+						signature: 'WebIndexPluginOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexOperation',
+						signature: 'WebIndexOperation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'startWebIndexWorker',
+						signature: 'startWebIndexWorker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexWorkerOptions',
+						signature: 'WebIndexWorkerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWebIndexProjector',
+						signature: 'createWebIndexProjector'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WebIndexProjectorOptions',
+						signature: 'WebIndexProjectorOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rag/web-index/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexRequests',
+						signature:
+							'type WebIndexRequests = {\n    stats: {\n        generation?: string;\n    };\n    history: {\n        url: string;\n        generation?: string;\n    };\n    search: {\n        query: string;\n        count?: number;\n        mode?: "web" | "context";\n    };\n    projections: {\n        kind: "company" | "person" | "event";\n        generation?: string;\n    };\n    enqueue: {\n        urls: string[];\n        generation?: string;\n    };\n    run: {\n        generation?: string;\n    };\n    remove: {\n        url: string;\n        generation?: string;\n    };\n    restore: {\n        url: string;\n        generation?: string;\n    };\n    rebuild: {\n        from: string;\n        to: string;\n        limit: number;\n        after?: string;\n    };\n    activate: {\n        generation: string;\n        expected: string;\n        evidence: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexResponses',
+						signature:
+							'type WebIndexResponses = {\n    stats: WebIndexStats;\n    history: WebIndexDocument[];\n    search: SearchResult;\n    projections: Array<WebIndexProjection & {\n        url: string;\n        version: string;\n        fetchedAt: string;\n    }>;\n    enqueue: {\n        enqueued: number;\n    };\n    run: WebIndexRun;\n    remove: {\n        removed: true;\n    };\n    restore: {\n        restored: true;\n    };\n    rebuild: {\n        enqueued: number;\n        next?: string;\n    };\n    activate: {\n        activated: boolean;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexClientState',
+						signature:
+							'type WebIndexClientState = {\n    status: "idle" | "running" | "complete" | "cancelled" | "error";\n    operation: keyof WebIndexRequests | null;\n    result: WebIndexResponses[keyof WebIndexResponses] | null;\n    error: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebIndexClientOptions',
+						signature:
+							'type WebIndexClientOptions = {\n    path?: string;\n    fetch?: typeof fetch;\n    headers?: () => HeadersInit;\n};'
+					},
+					{
+						description:
+							'One foreground operation per client. Superseding a call cancels its request, not already committed work.',
+						kind: 'value',
+						name: 'createWebIndexClient',
+						signature:
+							'const createWebIndexClient: (options?: WebIndexClientOptions) => {\n    call: <K extends keyof WebIndexRequests>(operation: K, input: WebIndexRequests[K]) => Promise<WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n    dispose: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'bindWebIndexSearchForm',
+						signature:
+							'const bindWebIndexSearchForm: (form: HTMLFormElement, output: HTMLElement, options?: WebIndexClientOptions) => {\n    dispose: () => void;\n    call: <K extends keyof WebIndexRequests>(operation: K, input: WebIndexRequests[K]) => Promise<WebIndexResponses[K]>;\n    cancel: () => void;\n    getSnapshot: () => WebIndexClientState;\n    subscribe: (listener: () => void) => () => void;\n    reset: () => void;\n};'
+					}
+				]
+			}
+		],
 		category: 'AI',
 		commands: [
 			{
@@ -29619,9 +43710,9 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Web research workflows'
 			}
 		],
-		repository: 'https://github.com/absolutejs/rag',
+		repository: null,
 		subpackages: [],
-		version: '0.22.2'
+		version: '0.22.5'
 	},
 	{
 		api: [],
@@ -29755,122 +43846,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				version: '0.0.13'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/rag-postgres',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'ABSOLUTE_POSTGRESQL_RAG_PACKAGE_NAME',
-								signature:
-									'const ABSOLUTE_POSTGRESQL_RAG_PACKAGE_NAME = "@absolutejs/rag-postgres";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PostgresRAGCollectionOptions',
-								signature:
-									'type PostgresRAGCollectionOptions = {\n    store?: RAGVectorStore;\n    storeOptions?: PostgresRAGStoreOptions;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PostgresRAGOptions',
-								signature:
-									'type PostgresRAGOptions = {\n    store?: RAGVectorStore;\n    collection?: RAGCollection;\n    storeOptions?: PostgresRAGStoreOptions;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'PostgresRAG',
-								signature:
-									'type PostgresRAG = {\n    store: RAGVectorStore;\n    collection: RAGCollection;\n    getStatus: () => RAGVectorStoreStatus | undefined;\n    getCapabilities: () => RAGBackendCapabilities | undefined;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPostgresRAGCollection',
-								signature:
-									'const createPostgresRAGCollection: (options?: PostgresRAGCollectionOptions) => RAGCollection;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPostgresRAG',
-								signature:
-									'const createPostgresRAG: (options?: PostgresRAGOptions) => PostgresRAG;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPostgreSQLRAG',
-								signature:
-									'const createPostgreSQLRAG: typeof createPostgresRAG;'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'createPostgresRAGStore',
-								signature: 'createPostgresRAGStore'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'createRAGCollection',
-								signature: 'createRAGCollection'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'ragPlugin',
-								signature: 'ragPlugin'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'PostgresRAGStoreOptions',
-								signature: 'PostgresRAGStoreOptions'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'RAGBackendCapabilities',
-								signature: 'RAGBackendCapabilities'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'RAGCollection',
-								signature: 'RAGCollection'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'RAGVectorStore',
-								signature: 'RAGVectorStore'
-							},
-							{
-								description: '',
-								kind: 'export',
-								name: 'RAGVectorStoreStatus',
-								signature: 'RAGVectorStoreStatus'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/rag-postgres/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<never, never>, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -30019,7 +43995,384 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: null
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/rate-limit',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'Algorithm',
+						signature: 'Algorithm'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RateLimitDecision',
+						signature: 'RateLimitDecision'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Store',
+						signature: 'Store'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StoreMetrics',
+						signature: 'StoreMetrics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'gcra',
+						signature: 'gcra'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'slidingWindow',
+						signature: 'slidingWindow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'tokenBucket',
+						signature: 'tokenBucket'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GcraOptions',
+						signature: 'type GcraOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SlidingWindowOptions',
+						signature: 'type SlidingWindowOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TokenBucketOptions',
+						signature: 'type TokenBucketOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'memoryStore',
+						signature: 'memoryStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MemoryStoreOptions',
+						signature: 'type MemoryStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'extractIp',
+						signature: 'extractIp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ipInCidr',
+						signature: 'ipInCidr'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'normalizeIp',
+						signature: 'normalizeIp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'IpExtractOptions',
+						signature: 'type IpExtractOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatHeaders',
+						signature: 'formatHeaders'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeaderMode',
+						signature: 'type HeaderMode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'combined',
+						signature: 'combined'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CombinedOptions',
+						signature: 'type CombinedOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'rateLimit',
+						signature: 'rateLimit'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'KeyResolver',
+						signature: 'type KeyResolver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LimitInfo',
+						signature: 'type LimitInfo'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RateLimitContext',
+						signature: 'type RateLimitContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RateLimitOptions',
+						signature: 'type RateLimitOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rate-limit/elysia',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'RateLimitContext',
+						signature:
+							'type RateLimitContext = {\n    request: Request;\n    server?: {\n        requestIP?: (request: Request) => {\n            address: string;\n        } | null;\n    } | null;\n    headers?: Record<string, string | undefined>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'KeyResolver',
+						signature:
+							"type KeyResolver = 'ip' | 'authorization' | ((ctx: RateLimitContext) => string | null);"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'LimitInfo',
+						signature:
+							'type LimitInfo = {\n    decision: RateLimitDecision;\n    key: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RateLimitOptions',
+						signature:
+							"type RateLimitOptions = {\n    algorithm: Algorithm;\n    store?: Store;\n    /**\n     * Namespace prefix prepended to every store key the plugin writes.\n     * Default the plugin's Elysia name (`'@absolutejs/rate-limit'`). When\n     * mounting two `rateLimit()` plugins against the same `Store` instance,\n     * set distinct `namespace` strings on each to prevent cross-plugin key\n     * collisions.\n     */\n    namespace?: string;\n    /**\n     * How to derive the per-request rate-limit key. `'ip'` (default) uses\n     * `extractIp` with the `trustedProxies` / `ipv6Prefix` options below.\n     * `'authorization'` uses the `Authorization` header (good for an\n     * authenticated API where IPs aren't stable). Or pass a function for\n     * any custom shape.\n     */\n    key?: KeyResolver;\n    /**\n     * Cost of the current request in algorithm units. Default `1` per\n     * request. Use this to charge expensive endpoints more (e.g. a bulk\n     * upload that should consume 10× the budget) or to free-list specific\n     * routes (`cost: 0`).\n     */\n    cost?: number | ((ctx: RateLimitContext) => number);\n    /**\n     * Number of trusted proxies in front of the app for IP extraction. Only\n     * r"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'rateLimit',
+						signature:
+							'const rateLimit: (options: RateLimitOptions) => Elysia<"", "local", import("elysia").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia").DefaultMetadata, {}, import("elysia").DefaultEphemeral, import("elysia").DefaultEphemeral>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rate-limit/core',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'Algorithm',
+						signature: 'Algorithm'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RateLimitDecision',
+						signature: 'RateLimitDecision'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Store',
+						signature: 'Store'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StoreMetrics',
+						signature: 'StoreMetrics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'gcra',
+						signature: 'gcra'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'slidingWindow',
+						signature: 'slidingWindow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'tokenBucket',
+						signature: 'tokenBucket'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GcraOptions',
+						signature: 'type GcraOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SlidingWindowOptions',
+						signature: 'type SlidingWindowOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TokenBucketOptions',
+						signature: 'type TokenBucketOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'memoryStore',
+						signature: 'memoryStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MemoryStoreOptions',
+						signature: 'type MemoryStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'extractIp',
+						signature: 'extractIp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ipInCidr',
+						signature: 'ipInCidr'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'normalizeIp',
+						signature: 'normalizeIp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'IpExtractOptions',
+						signature: 'type IpExtractOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'formatHeaders',
+						signature: 'formatHeaders'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeaderMode',
+						signature: 'type HeaderMode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'combined',
+						signature: 'combined'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CombinedOptions',
+						signature: 'type CombinedOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rate-limit/postgres',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'PostgresStoreOptions',
+						signature:
+							'type PostgresStoreOptions = {\n    sql: SQL;\n    table?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PostgresStore',
+						signature:
+							'type PostgresStore = Store & {\n    activeEntries: () => Promise<number>;\n    delete: NonNullable<Store["delete"]>;\n    pruneExpired: (limit?: number) => Promise<number>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'postgresStore',
+						signature:
+							'const postgresStore: (options: PostgresStoreOptions) => PostgresStore;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'sqlStore',
+						signature: 'sqlStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RateLimitSqlClient',
+						signature: 'type RateLimitSqlClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RateLimitSql',
+						signature: 'type RateLimitSql'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/rate-limit/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<RateLimitOptions, RateLimitRuntime>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<RateLimitRuntime>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<RateLimitRuntime>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        cost: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TNumber>;\n        headers: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"standard">, import("@sinclair/typebox").TLiteral<"legacy">, import("@sinclair/typebox").TLiteral<"both">, import("@sinclair/typebox").TLiteral<false>]>>;\n        ipv6Prefix: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        key: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"ip">, import("@sinclair/typebox").TLiteral<"authorization">]>>;\n        namespace: import("@sinclair/typebox").TOptional<import("@sinclair'
+					}
+				]
+			}
+		],
 		category: 'Platform & Infra',
 		commands: [
 			{
@@ -30133,7 +44486,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/rate-limit',
 		subpackages: [],
-		version: '0.7.0'
+		version: '0.8.0'
 	},
 	{
 		api: [
@@ -31209,7 +45562,280 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.1.1'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/router',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'Region',
+						signature:
+							'type Region = {\n    id: string;\n    /**\n     * Relative weight for the default assignment strategy (weighted\n     * rendezvous). Higher weight = proportionally more tenants land here.\n     * Default 1. Weights <= 0 exclude the region from default assignment\n     * (explicit `assignRegion` still works).\n     */\n    weight?: number;\n};'
+					},
+					{
+						description:
+							'Optional caller-supplied assignment hook, consulted on first-time assignment (e.g. latency-based placement from an edge probe). Returning undefined — or an id that is not a registered region — falls back to the default weighted-rendezvous strategy.',
+						kind: 'type',
+						name: 'RegionAssignFn',
+						signature:
+							'type RegionAssignFn = (tenantId: string) => string | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RegionDirectoryOptions',
+						signature:
+							'type RegionDirectoryOptions = {\n    /** Region set. At least one region is required. */\n    regions: Region[];\n    /** Optional assignment hook. See {@link RegionAssignFn}. */\n    assign?: RegionAssignFn;\n    /** Override `Date.now` for tests. */\n    clock?: () => number;\n    /**\n     * Optional OpenTelemetry tracer provider. When set, first-time\n     * assignments are wrapped in `router.region_assign` spans with\n     * `abs.tenant` + `abs.region` attributes. When omitted, all tracing\n     * is a zero-allocation noop.\n     */\n    tracerProvider?: TracerProvider;\n};'
+					},
+					{
+						description:
+							'Returned by {@link RegionDirectory.metrics}. Point-in-time view of the assignment table — the operator\'s "is my region spread what I think it is?" answer. - assignments — number of tenants currently assigned. - byRegion — current assignment count per region id. - overrides — how many current assignments were explicit assignRegion overrides rather than strategy/hook picks.',
+						kind: 'type',
+						name: 'RegionDirectoryMetrics',
+						signature:
+							'type RegionDirectoryMetrics = {\n    assignments: number;\n    byRegion: Record<string, number>;\n    overrides: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RegionDirectorySnapshot',
+						signature:
+							'type RegionDirectorySnapshot = {\n    version: 1;\n    at: number;\n    regions: Region[];\n    assignments: Array<{\n        tenant: string;\n        region: string;\n        override: boolean;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RegionDirectory',
+						signature:
+							"type RegionDirectory = {\n    /**\n     * The sticky assignment for a tenant, created on first call. Once\n     * assigned, every subsequent call returns the same region until\n     * `release()` or `removeRegion()` invalidates it. If the assigned\n     * region has been removed, the tenant is lazily re-assigned here.\n     */\n    regionFor: (tenantId: string) => string;\n    /**\n     * Explicit override — the control-plane onboarding decision. Throws\n     * on an unknown region id. Overrides survive `snapshot()`/`restore()`\n     * and are counted separately in `metrics().overrides`.\n     */\n    assignRegion: (tenantId: string, regionId: string) => void;\n    /** Forget a tenant's assignment. Next `regionFor` re-assigns. */\n    release: (tenantId: string) => void;\n    addRegion: (region: Region) => void;\n    /**\n     * Remove a region. Tenants assigned to it are NOT eagerly moved —\n     * they re-assign lazily on their next `regionFor()` call.\n     */\n    removeRegion: (regionId: string) => void;\n    regions: () => Region[];\n    snapshot: () => RegionDirectorySnapshot;\n    /**\n     * Repopulate the assignment table from a previously captured\n     * `snapshot()` — assignments must survive c"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRegionDirectory',
+						signature:
+							'const createRegionDirectory: (options: RegionDirectoryOptions) => RegionDirectory;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DomainMatch',
+						signature:
+							"type DomainMatch = 'exact' | 'wildcard' | 'fallback';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DomainResolution',
+						signature:
+							'type DomainResolution = {\n    tenantId: string;\n    matched: DomainMatch;\n};'
+					},
+					{
+						description:
+							"Optional caller-supplied resolver of last resort, consulted when neither an exact nor a wildcard entry matches. The intended use is the platform's own subdomain scheme — parse .cloud.absolutejs.com into a tenant id without registering every workspace as an entry. Returning undefined makes the resolve a miss (resolve() returns null).",
+						kind: 'type',
+						name: 'DomainFallbackFn',
+						signature:
+							'type DomainFallbackFn = (hostname: string) => string | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DomainMapOptions',
+						signature:
+							'type DomainMapOptions = {\n    /** Optional resolver of last resort. See {@link DomainFallbackFn}. */\n    fallback?: DomainFallbackFn;\n    /** Override `Date.now` for tests. */\n    clock?: () => number;\n    /**\n     * Optional OpenTelemetry tracer provider. When set, `resolve()` is\n     * wrapped in `router.domain_resolve` spans with `abs.domain.host`,\n     * and (on a hit) `abs.tenant` + `abs.domain.matched` attributes.\n     * Status OK on hit, ERROR on miss. When omitted, all tracing is a\n     * zero-allocation noop.\n     */\n    tracerProvider?: TracerProvider;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DomainMapEntry',
+						signature:
+							'type DomainMapEntry = {\n    /** Wildcard entries keep their `*.example.com` form here. */\n    hostname: string;\n    tenantId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DomainMapSnapshot',
+						signature:
+							'type DomainMapSnapshot = {\n    version: 1;\n    at: number;\n    entries: DomainMapEntry[];\n};'
+					},
+					{
+						description:
+							'Returned by {@link DomainMap.metrics}. - entries — registered entries (exact + wildcard). - resolves — total resolve() calls. - hits / misses — resolves that found a tenant (any match kind) vs. resolves that returned null. A climbing miss rate usually means stale DNS pointing at the gateway after an offboard. - lastResolveMs — wall-clock of the most recent resolve() call.',
+						kind: 'type',
+						name: 'DomainMapMetrics',
+						signature:
+							'type DomainMapMetrics = {\n    entries: number;\n    resolves: number;\n    hits: number;\n    misses: number;\n    lastResolveMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DomainMap',
+						signature:
+							"type DomainMap = {\n    /**\n     * Register a hostname → tenant entry. Hostnames are lowercased.\n     * `*.example.com` registers a wildcard matching exactly one label\n     * (`app.example.com` yes; `a.b.example.com` and the bare apex no).\n     * Throws on any other `*` placement.\n     */\n    add: (hostname: string, tenantId: string) => void;\n    remove: (hostname: string) => void;\n    /**\n     * Resolve a request's `Host` value to a tenant. Strips the port,\n     * lowercases, then checks exact → wildcard → `fallback` hook (exact\n     * beats wildcard). Returns `null` on a miss.\n     */\n    resolve: (hostname: string) => DomainResolution | null;\n    list: () => DomainMapEntry[];\n    snapshot: () => DomainMapSnapshot;\n    restore: (snapshot: DomainMapSnapshot) => void;\n    metrics: () => DomainMapMetrics;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDomainMap',
+						signature:
+							'const createDomainMap: (options?: DomainMapOptions) => DomainMap;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Shard',
+						signature:
+							"type Shard = {\n    id: string;\n    /**\n     * Connection target for the chosen backend. Format is opaque to the router\n     * — `ws://host:port`, `https://host`, a unix socket path, whatever the\n     * caller's proxy layer understands.\n     */\n    url: string;\n    /**\n     * Optional tenant allowlist for dedicated runtimes. When present, this\n     * shard is eligible only for the listed tenant ids. Omit for shared shard\n     * hosts that can serve any tenant.\n     */\n    tenants?: readonly string[];\n    /**\n     * Relative weight for hash strategies that support it (rendezvous). Jump\n     * hash ignores weights — every shard is treated as weight 1. Default 1.\n     */\n    weight?: number;\n    /**\n     * Region this shard serves (matches a `Region.id` in the paired\n     * `createRegionDirectory`). When `route()` is called with a `region`,\n     * only shards in that region — plus region-less shards, for\n     * back-compat — are candidates. Omit for a single-region deployment.\n     * Added in 0.4.0.\n     */\n    region?: string;\n};"
+					},
+					{
+						description:
+							'Pure hash-strategy function. Given the routing key + the list of currently eligible shards (healthy AND not draining), return the index in shards of the chosen shard. The router never calls a strategy with an empty shards array — that case is handled upstream as no-shards.',
+						kind: 'type',
+						name: 'HashStrategyFn',
+						signature:
+							'type HashStrategyFn = (key: string, shards: ReadonlyArray<Shard>) => number;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HashStrategy',
+						signature:
+							"type HashStrategy = 'jump' | 'rendezvous' | HashStrategyFn;"
+					},
+					{
+						description:
+							"How route() picks among the eligible shards. Added in 0.6.0. - 'sticky' (default, and the only 0.5.x behaviour) — consistent hash of the routing key through hashStrategy. The same key always lands on the same shard while the eligible set is unchanged. This is what you want when a shard OWNS the key's state (a sync engine, an in-memory room) and when you want session affinity: pass a per-client channelId so each client sticks to one shard while different clients spread out. - 'round-robin' — succ",
+						kind: 'type',
+						name: 'BalanceStrategy',
+						signature:
+							"type BalanceStrategy = 'sticky' | 'round-robin' | 'least-connections';"
+					},
+					{
+						description:
+							'Per-tenant token-bucket rate limit. tokens is the bucket capacity AND the starting balance; refillPerSecond is added continuously up to capacity. Defaults: Infinity tokens / 0 refill = no limit.',
+						kind: 'type',
+						name: 'RateLimit',
+						signature:
+							'type RateLimit = {\n    tokens: number;\n    refillPerSecond: number;\n};'
+					},
+					{
+						description:
+							"Optional caller-supplied gate. Called per-route with the tenant id; returning false causes the route to return decision: 'denied'. The intended use is meter.allow from @absolutejs/metering — pass it directly to refuse routes for over-quota tenants without wiring the integration manually.",
+						kind: 'type',
+						name: 'AllowHook',
+						signature:
+							'type AllowHook = (tenantId: string) => boolean;'
+					},
+					{
+						description:
+							"Optional caller-supplied load metric. Called per route() with a shard id; returning a value > 1 makes the rendezvous strategy bias AWAY from this shard (effective weight = shard.weight / load). Used to avoid hot-spotting when a stickiness-locked shard is overloaded — the router can't move existing tenants, but it can avoid sending NEW tenants there. Jump-hash ignores this — it has no per-call weight bias by design.",
+						kind: 'type',
+						name: 'ShardLoadFn',
+						signature:
+							'type ShardLoadFn = (shardId: string) => number;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RouterOptions',
+						signature:
+							"type RouterOptions = {\n    /** Initial shard set. Can be empty (every `route()` returns `no-shards`). */\n    shards: Shard[];\n    /** Hash strategy. Default `'jump'`. Only consulted for `'sticky'` balancing. */\n    hashStrategy?: HashStrategy;\n    /**\n     * Default shard-selection strategy for every `route()` call that does not\n     * override it. Default `'sticky'` — the 0.5.x behaviour. See\n     * {@link BalanceStrategy}. Added in 0.6.0.\n     */\n    balance?: BalanceStrategy;\n    /**\n     * Max concurrent connections per tenant (counted via `acquire()` /\n     * `release()`). Default `Infinity` (no cap). When reached, `route()`\n     * returns `'capped'`.\n     */\n    perTenantConnectionCap?: number;\n    /**\n     * Per-tenant token bucket. Default `{ tokens: Infinity, refillPerSecond: 0 }`\n     * (no limit). When the tenant's bucket is empty, `route()` returns\n     * `'rate-limited'`. One `route()` call costs one token.\n     */\n    perTenantRateLimit?: RateLimit;\n    /**\n     * Per-route token buckets layered on top of the tenant-wide bucket.\n     * Keyed by route name; supplied by the caller via\n     * `route({ route: 'someRoute' })`. The tenant bucket AND the route bucket\n     * "
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RouteDecision',
+						signature:
+							"type RouteDecision = 'allow' | 'rate-limited' | 'capped' | 'no-shards' | 'no-tenant-shards' | 'no-region-shards' | 'denied';"
+					},
+					{
+						description:
+							'Returned by {@link Router.metrics}. Combines point-in-time state with cumulative counters since createRouter(). Survives dispose() so post-shutdown introspection still reads totals. Added in 0.2.0. - routes — total route() calls (any decision). - acquires — total acquire() calls. - rejectsByDecision — counts per non-allow RouteDecision. The operator\'s "where am I shedding load?" answer. - shardLoadDistribution — cumulative routes assigned per shard since createRouter(). With markHealthy/drainSha',
+						kind: 'type',
+						name: 'RouterMetrics',
+						signature:
+							"type RouterMetrics = {\n    routes: number;\n    acquires: number;\n    rejectsByDecision: Record<Exclude<RouteDecision, 'allow'>, number>;\n    shardLoadDistribution: Record<string, number>;\n    shardActiveConnections: Record<string, number>;\n    lastRouteMs: number;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RouteRequest',
+						signature:
+							"type RouteRequest = {\n    tenantId: string;\n    /**\n     * Optional sub-key within a tenant for shardable channels. When set, the\n     * hash key is `${tenantId}:${channelId}`. Use this when a single tenant is\n     * too hot for one engine and its work can be partitioned (e.g. per-doc,\n     * per-room) across multiple engines. Different channels of the same\n     * tenant may land on different shards.\n     */\n    channelId?: string;\n    /**\n     * Optional per-route rate-limit key. Looked up in `perRouteRateLimits`.\n     * Unknown routes pass without per-route gating (only the tenant-wide\n     * bucket applies).\n     */\n    route?: string;\n    /**\n     * Optional region filter. When set, only shards whose `region` matches\n     * — plus region-less shards, for back-compat — are candidates. When\n     * the region has eligible shards registered but none are candidates,\n     * `route()` returns `'no-region-shards'` (distinguishable from the\n     * cluster-wide `'no-shards'`). The intended source is the paired\n     * directory: `route({ tenantId, region: directory.regionFor(tenantId) })`.\n     * Added in 0.4.0.\n     */\n    region?: string;\n    /**\n     * Per-call override of the router's"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RouteResult',
+						signature:
+							"type RouteResult = {\n    decision: RouteDecision;\n    /** The chosen shard. `null` when `decision !== 'allow'`. */\n    shard: Shard | null;\n    /**\n     * Set on a `'rate-limited'` result to tell the caller which bucket emptied:\n     * `'tenant'` for the tenant-wide bucket, the route id for a per-route bucket.\n     */\n    emptiedBucket?: 'tenant' | string;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AcquireHandle',
+						signature:
+							'type AcquireHandle = {\n    /** Number of active connections for this tenant after acquire (>=1). */\n    active: number;\n    /** Releases one connection for this tenant. Idempotent — safe to call once. */\n    release: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RouterSnapshot',
+						signature:
+							'type RouterSnapshot = {\n    version: 1;\n    at: number;\n    shards: Array<Shard & {\n        healthy: boolean;\n        draining: boolean;\n        active: number;\n    }>;\n    tenants: Array<{\n        tenant: string;\n        active: number;\n        tokens: number;\n        lastRefillAt: number;\n    }>;\n    routeBuckets: Array<{\n        tenant: string;\n        route: string;\n        tokens: number;\n        lastRefillAt: number;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Router',
+						signature:
+							"type Router = {\n    route: (request: RouteRequest) => RouteResult;\n    /**\n     * Count one active connection against the tenant's cap. Pass the id of the\n     * shard the connection was routed to (0.6.0) so the router can maintain\n     * per-shard active counts — `'least-connections'` balancing and\n     * `metrics().shardActiveConnections` both read from them. Omitting it\n     * keeps the 0.5.x behaviour: the tenant cap is enforced, but the\n     * connection is invisible to per-shard accounting.\n     */\n    acquire: (tenantId: string, shardId?: string) => AcquireHandle;\n    markHealthy: (shardId: string) => void;\n    markUnhealthy: (shardId: string) => void;\n    /**\n     * Begin draining a shard — exclude it from new routing decisions while\n     * leaving existing acquires alone. Semantically distinct from\n     * `markUnhealthy` (an operator-intentional state, not a failure).\n     * `markHealthy` cancels both states. Use this before a planned shard\n     * shutdown — tenants on the shard rehash to healthy non-draining shards\n     * on their next route, but in-flight requests are NOT torn down.\n     */\n    drainShard: (shardId: string) => void;\n    isHealthy: (shardId: string) => bo"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createRouter',
+						signature:
+							'const createRouter: (options: RouterOptions) => Router;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/router/bun',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'BunGatewayResolution',
+						signature:
+							'type BunGatewayResolution = RouteRequest | null;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BunGatewayOptions',
+						signature:
+							"type BunGatewayOptions = {\n    router: Pick<Router, 'acquire' | 'route'>;\n    resolve: (request: Request) => BunGatewayResolution | Promise<BunGatewayResolution>;\n    /** Optional final target rewrite after the router chooses a shard. */\n    target?: (shard: Shard, request: Request) => string | URL;\n    /** Preserve a trusted ingress proxy's X-Forwarded-For chain. Default false. */\n    trustForwardedFor?: boolean;\n    /** Public scheme when TLS terminates before this gateway. Never read from client headers. */\n    publicProtocol?: 'http' | 'https';\n    /** Send the client's Host to the upstream instead of the shard's address,\n     *  as reverse proxies normally do. Apps behind the gateway then build URLs\n     *  (callbacks, redirects, emailed links) from their public name rather than\n     *  an internal host:port. X-Forwarded-Host is set either way. Default false. */\n    preserveHost?: boolean;\n    upstreamOpenTimeoutMs?: number;\n    onError?: (error: unknown, request: Request) => void;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BunGatewaySocketData',
+						signature:
+							'type BunGatewaySocketData = {\n    client?: ServerWebSocket<BunGatewaySocketData>;\n    closed?: {\n        code: number;\n        reason: string;\n    };\n    pending: Array<string | ArrayBuffer>;\n    release: () => void;\n    upstream: WebSocket;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBunGateway',
+						signature:
+							'const createBunGateway: (options: BunGatewayOptions) => {\n    fetch: (request: Request, server: Server<BunGatewaySocketData>) => Promise<Response | undefined>;\n    websocket: WebSocketHandler<BunGatewaySocketData>;\n};'
+					}
+				]
+			}
+		],
 		category: 'Platform & Infra',
 		commands: [
 			{
@@ -31361,7 +45987,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/router',
 		subpackages: [],
-		version: '0.6.1'
+		version: '0.7.0'
 	},
 	{
 		api: [
@@ -35989,7 +50615,2466 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.1.0-beta.3'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/sync',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createWriteBehindCache',
+						signature: 'createWriteBehindCache'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WriteBehindCache',
+						signature: 'WriteBehindCache'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WriteBehindCacheOptions',
+						signature: 'WriteBehindCacheOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionBrokerDrainedError',
+						signature: 'ConnectionBrokerDrainedError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createConnectionBroker',
+						signature: 'createConnectionBroker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LeaseTimeoutError',
+						signature: 'LeaseTimeoutError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionBroker',
+						signature: 'ConnectionBroker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionBrokerMetrics',
+						signature: 'ConnectionBrokerMetrics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionBrokerOptions',
+						signature: 'ConnectionBrokerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionLease',
+						signature: 'ConnectionLease'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createReactiveHub',
+						signature: 'createReactiveHub'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReactiveEvent',
+						signature: 'ReactiveEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReactiveHub',
+						signature: 'ReactiveHub'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReactiveListener',
+						signature: 'ReactiveListener'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'sync',
+						signature: 'sync'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncPluginOptions',
+						signature: 'SyncPluginOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncRequestContext',
+						signature: 'SyncRequestContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSyncSocketController',
+						signature: 'createSyncSocketController'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'syncSocket',
+						signature: 'syncSocket'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'headlessSyncRoute',
+						signature: 'headlessSyncRoute'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncRouteOptions',
+						signature: 'HeadlessSyncRouteOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncMutation',
+						signature: 'HeadlessSyncMutation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncMutationResult',
+						signature: 'HeadlessSyncMutationResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncPull',
+						signature: 'HeadlessSyncPull'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncPullResult',
+						signature: 'HeadlessSyncPullResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncRequest',
+						signature: 'HeadlessSyncRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncResponse',
+						signature: 'HeadlessSyncResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SlowConnectionEvent',
+						signature: 'SlowConnectionEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncHeadlessOptions',
+						signature: 'SyncHeadlessOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncSocketController',
+						signature: 'SyncSocketController'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncSocketDrainOptions',
+						signature: 'SyncSocketDrainOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncSocketOptions',
+						signature: 'SyncSocketOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'jsonSerializer',
+						signature: 'jsonSerializer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FrameSerializer',
+						signature: 'FrameSerializer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMutationRejectedError',
+						signature: 'SyncMutationRejectedError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMutationRejectionError',
+						signature: 'SyncMutationRejectionError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'toSyncMutationRejection',
+						signature: 'toSyncMutationRejection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMutationRejection',
+						signature: 'SyncMutationRejection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMutationRejectionErrorOptions',
+						signature: 'SyncMutationRejectionErrorOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMutationRejectionKind',
+						signature: 'SyncMutationRejectionKind'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'syncCdc',
+						signature: 'syncCdc'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncCdcOptions',
+						signature: 'SyncCdcOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'syncDevtools',
+						signature: 'syncDevtools'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncDevtoolsOptions',
+						signature: 'SyncDevtoolsOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPresenceHub',
+						signature: 'createPresenceHub'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceDiff',
+						signature: 'PresenceDiff'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceHandle',
+						signature: 'PresenceHandle'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceHub',
+						signature: 'PresenceHub'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceMember',
+						signature: 'PresenceMember'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/scheduled',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ScheduledOptions',
+						signature:
+							"type ScheduledOptions = {\n    /** The engine whose registered schedules (see `registerSchedule`) to run. */\n    engine: SyncEngine;\n    /** Prefix for the cron job names registered on Elysia's store. Default `sync`. */\n    prefix?: string;\n    /** Called when a scheduled run throws (the batch is rolled back). */\n    onError?: (name: string, error: unknown) => void;\n};"
+					},
+					{
+						description:
+							"Elysia plugin that fires the engine's registered scheduled functions on their cron patterns, via @elysia/cron. Cron decides when; the engine runs the schedule and makes its writes go live through the change feed (and a schedule can enqueue into @absolutejs/queue for durable, retryable work). Register schedules with engine.registerSchedule(...) before mounting this, so each one becomes a cron job named :. Mount once.",
+						kind: 'value',
+						name: 'scheduled',
+						signature:
+							'const scheduled: ({ engine, prefix, onError }: ScheduledOptions) => Elysia<"", "local", import("elysia").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia").DefaultMetadata, {}, import("elysia").DefaultEphemeral, import("elysia").DefaultEphemeral>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/write-behind-cache',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'WriteBehindCacheOptions',
+						signature:
+							'type WriteBehindCacheOptions<K, V> = {\n    /**\n     * Read a value from the durable store on a cache miss. Called at most once per\n     * key until the entry is evicted.\n     */\n    load: (key: K) => Promise<V | undefined> | V | undefined;\n    /** Persist a value to the durable store. Runs in the background (write-behind). */\n    persist: (key: K, value: V) => Promise<void> | void;\n    /** Remove a value from the durable store. */\n    remove?: (key: K) => Promise<void> | void;\n    /**\n     * Coalesce writes: each key persists at most once per window. A burst of\n     * `set`s collapses into a single durable write. Defaults to 250ms.\n     */\n    debounceMs?: number;\n    /**\n     * After a key persists, return true to drop it from the in-memory cache so the\n     * cache stays bounded to "hot" entries (e.g. evict terminal sessions). The next\n     * `get` reloads it via `load`. Defaults to never evicting.\n     */\n    evict?: (value: V, key: K) => boolean;\n    /**\n     * Called when a background persist throws. The cache stays authoritative and the\n     * key re-persists on its next `set`, so a transient durable-store blip does not\n     * drop live state. Defaults to a no-op.\n     */\n   '
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WriteBehindCache',
+						signature:
+							'type WriteBehindCache<K, V> = {\n    /** Cached value, or load-through from the durable store on a miss. */\n    get: (key: K) => Promise<V | undefined>;\n    /** Cached value only — synchronous, never touches the durable store. */\n    peek: (key: K) => V | undefined;\n    has: (key: K) => boolean;\n    /** Write to memory immediately and schedule a coalesced durable persist. */\n    set: (key: K, value: V) => void;\n    /** Drop from cache and the durable store. */\n    delete: (key: K) => Promise<void>;\n    keys: () => IterableIterator<K>;\n    values: () => IterableIterator<V>;\n    size: () => number;\n    /** Persist every pending key to the durable store now. Call on shutdown. */\n    flush: () => Promise<void>;\n};'
+					},
+					{
+						description:
+							'Wrap a durable store (Postgres, SQLite, Drizzle, Prisma, file, S3, an HTTP API …) with an in-memory hot cache and write-behind persistence. Reads are served from memory; writes hit memory synchronously and are flushed to the durable store in coalesced background batches. The durable store stays the source of truth for history and cross-instance reads, while a latency-sensitive hot path (a per-frame voice session, presence, cursors, game state) stays fast. This is the "fast authoritative local st',
+						kind: 'value',
+						name: 'createWriteBehindCache',
+						signature:
+							'const createWriteBehindCache: <K, V>(options: WriteBehindCacheOptions<K, V>) => WriteBehindCache<K, V>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/testing',
+				symbols: [
+					{
+						description:
+							'Construct a {@link SyncEngine} for tests. Today this is a documented re-export of {@link createSyncEngine} — the wrapper exists so callers can clearly signal "this engine is test-scoped" at the call site, and so future test-mode defaults (e.g. a synchronous in-memory transaction runner) can be added without churning every test. Pass options through if you need a real transaction runner, schemas, permissions, etc. — same shape as {@link createSyncEngine}.',
+						kind: 'value',
+						name: 'createTestEngine',
+						signature:
+							'const createTestEngine: (options?: SyncEngineOptions) => SyncEngine;'
+					},
+					{
+						description:
+							"Await work and return the thrown value. Throws if work resolves — use it inside tests that expect a specific rejection without relying on expect(...).rejects.toThrow(...), which has been flaky on Bun 1.3.x (oven-sh/bun#31462). Equivalent to the rejection() helper sync's own tests use.",
+						kind: 'value',
+						name: 'expectRejection',
+						signature:
+							'const expectRejection: (work: () => unknown) => Promise<unknown>;'
+					},
+					{
+						description:
+							"Convenience: call engine.runMutation with an actor-id-shaped ctx. Matches the standard pack convention (getActorId: (ctx) => ctx.userId). Tests that don't need to vary other ctx fields can avoid the { userId: 'alice' } boilerplate.",
+						kind: 'value',
+						name: 'runAsActor',
+						signature:
+							'const runAsActor: (engine: SyncEngine, actorId: string, mutation: string, args: unknown, extraCtx?: Record<string, unknown>) => Promise<unknown>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncLocalStoreConformanceOptions',
+						signature:
+							'type SyncLocalStoreConformanceOptions = {\n    /** A fresh adapter instance. The harness may delete its test namespaces. */\n    store: SyncLocalStore;\n    /** Optional prefix when a test database is shared with other processes. */\n    namespacePrefix?: string;\n};'
+					},
+					{
+						description:
+							"Runs the portable durability contract used by Sync's memory, IndexedDB, and native SQLite adapters. An empty result means the adapter preserves atomic rows/outbox state, rollback, readonly behavior, and principal isolation.",
+						kind: 'value',
+						name: 'inspectSyncLocalStoreConformance',
+						signature:
+							'const inspectSyncLocalStoreConformance: ({ store, namespacePrefix }: SyncLocalStoreConformanceOptions) => Promise<string[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'assertSyncLocalStoreConformance',
+						signature:
+							'const assertSyncLocalStoreConformance: (options: SyncLocalStoreConformanceOptions) => Promise<void>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/code-mode',
+				symbols: [
+					{
+						description:
+							'One engine mutation surfaced to the model as a host function.',
+						kind: 'type',
+						name: 'MutationToolDescriptor',
+						signature:
+							"type MutationToolDescriptor = {\n    /** Engine-registered mutation name (e.g. `'comments:create'`). */\n    name: string;\n    /**\n     * One-line description shown to the model in the Code Mode prompt.\n     * Should describe *what the mutation does*, not just its inputs.\n     */\n    description: string;\n    /**\n     * TypeScript signature shown to the model. Default\n     * `'(args: any) => Promise<any>'` — provide a real signature so the\n     * model knows the input shape.\n     */\n    tsSignature?: string;\n    /**\n     * Override the host-fn name surfaced to the model. Default: the\n     * mutation `name` with `:` replaced by `_` (engine names are not\n     * valid JS identifiers). For `'comments:create'` the model sees\n     * `comments_create` by default.\n     */\n    hostFnName?: string;\n};"
+					},
+					{
+						description:
+							'Options for {@link engineMutationsAsHostTools}.',
+						kind: 'type',
+						name: 'EngineMutationsAsHostToolsOptions',
+						signature:
+							'type EngineMutationsAsHostToolsOptions<Ctx> = {\n    /** The engine whose mutations should be exposed. */\n    engine: SyncEngine;\n    /**\n     * Resolve the per-call ctx — invoked ONCE at the start of each\n     * Code Mode `run_mutations` call and threaded through every\n     * mutation in that script. Typically returns the current\n     * session/user identity. May be sync or async.\n     */\n    ctx: () => Ctx | Promise<Ctx>;\n    /** The mutation set to expose. */\n    mutations: MutationToolDescriptor[];\n};'
+					},
+					{
+						description:
+							'Options for {@link transactionalBatchAsHostTool}.',
+						kind: 'type',
+						name: 'TransactionalBatchOptions',
+						signature:
+							'type TransactionalBatchOptions<Ctx> = {\n    /** The engine to call `runMutations` on. */\n    engine: SyncEngine;\n    /** Resolve per-call ctx — same shape as the other factory. */\n    ctx: () => Ctx | Promise<Ctx>;\n    /**\n     * Allowlist of mutation names the model may include in a batch.\n     * The host-fn checks every entry against this set before calling\n     * `runMutations`, so a hallucinated name fails fast with a clear\n     * error instead of bubbling up from the engine.\n     */\n    allowedMutations: string[];\n    /** Override the model-visible host-fn description. */\n    description?: string;\n    /** Override the TS signature shown to the model. */\n    tsSignature?: string;\n};'
+					},
+					{
+						description:
+							"Shape of one entry in the host-tool map. Mirrors @absolutejs/ai/tools's CodeModeHostTool exactly — no import needed; the AI SDK consumes any record with this shape.",
+						kind: 'type',
+						name: 'CodeModeHostTool',
+						signature:
+							'type CodeModeHostTool = {\n    description: string;\n    tsSignature: string;\n    handler: (...args: unknown[]) => unknown;\n};'
+					},
+					{
+						description:
+							'Map of model-visible host-fn name → host tool.',
+						kind: 'type',
+						name: 'CodeModeHostToolMap',
+						signature:
+							'type CodeModeHostToolMap = Record<string, CodeModeHostTool>;'
+					},
+					{
+						description:
+							"Build a host-tool map that exposes the engine's mutation surface to a Code Mode tool. Pass the result to codeModeTool({ tools }) from @absolutejs/ai/tools. The function throws synchronously at build time if any descriptor names a mutation that isn't registered on the engine, so a typo'd allowlist surfaces at boot, not at the first model call.",
+						kind: 'value',
+						name: 'engineMutationsAsHostTools',
+						signature:
+							'const engineMutationsAsHostTools: <Ctx>(options: EngineMutationsAsHostToolsOptions<Ctx>) => CodeModeHostToolMap;'
+					},
+					{
+						description:
+							'A single Code Mode host tool wrapping engine.runMutations(specs, ctx) (sync 1.11+). Returns the per-mutation results array; rolls every accumulated write back on any thrown error. Plug the returned CodeModeHostTool into a codeModeTool({ tools: { ..., run_transaction: / this \\/ } }) map under whatever name fits your prompt strategy.',
+						kind: 'value',
+						name: 'transactionalBatchAsHostTool',
+						signature:
+							'const transactionalBatchAsHostTool: <Ctx>(options: TransactionalBatchOptions<Ctx>) => CodeModeHostTool;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/mcp',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSyncMcpServer',
+						signature: 'createSyncMcpServer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'serveStdio',
+						signature: 'serveStdio'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMcpServer',
+						signature: 'type SyncMcpServer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMcpServerOptions',
+						signature: 'type SyncMcpServerOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReactiveEvent',
+						signature: 'ReactiveEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSyncSubscriber',
+						signature: 'createSyncSubscriber'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSharedSyncSubscriber',
+						signature: 'createSharedSyncSubscriber'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncSubscriber',
+						signature: 'SyncSubscriber'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncSubscriberOptions',
+						signature: 'SyncSubscriberOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createLiveQuery',
+						signature: 'createLiveQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'jsonFetcher',
+						signature: 'jsonFetcher'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LiveQuery',
+						signature: 'LiveQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LiveQueryOptions',
+						signature: 'LiveQueryOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LiveQueryState',
+						signature: 'LiveQueryState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSyncCollection',
+						signature: 'createSyncCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'indexedDbCollectionCache',
+						signature: 'indexedDbCollectionCache'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'localStorageCollectionCache',
+						signature: 'localStorageCollectionCache'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'localStorageMutationStorage',
+						signature: 'localStorageMutationStorage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CollectionCache',
+						signature: 'CollectionCache'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CollectionCacheSnapshot',
+						signature: 'CollectionCacheSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MutateOptions',
+						signature: 'MutateOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MutationStorage',
+						signature: 'MutationStorage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OptimisticDraft',
+						signature: 'OptimisticDraft'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PendingMutationRecord',
+						signature: 'PendingMutationRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SerializableOptimisticOperation',
+						signature: 'SerializableOptimisticOperation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncCollection',
+						signature: 'SyncCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncCollectionOptions',
+						signature: 'SyncCollectionOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncCollectionState',
+						signature: 'SyncCollectionState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncCollectionStatus',
+						signature: 'SyncCollectionStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createCollaborativeText',
+						signature: 'createCollaborativeText'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CollaborativeText',
+						signature: 'CollaborativeText'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CollaborativeTextOptions',
+						signature: 'CollaborativeTextOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CollaborativeTextState',
+						signature: 'CollaborativeTextState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPresence',
+						signature: 'createPresence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceClient',
+						signature: 'PresenceClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceClientOptions',
+						signature: 'PresenceClientOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceMember',
+						signature: 'PresenceMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSyncClient',
+						signature: 'createSyncClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runHeadlessSync',
+						signature: 'runHeadlessSync'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncCollection',
+						signature: 'HeadlessSyncCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncFetchResponse',
+						signature: 'HeadlessSyncFetchResponse'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'HeadlessSyncRunResult',
+						signature: 'HeadlessSyncRunResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RunHeadlessSyncOptions',
+						signature: 'RunHeadlessSyncOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMutationRejectedError',
+						signature: 'SyncMutationRejectedError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMutationRejection',
+						signature: 'SyncMutationRejection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncMutationRejectionKind',
+						signature: 'SyncMutationRejectionKind'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMemorySyncLocalStore',
+						signature: 'createMemorySyncLocalStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createIndexedDbSyncLocalStore',
+						signature: 'createIndexedDbSyncLocalStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSyncLocalSchemaStatus',
+						signature: 'createSyncLocalSchemaStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSyncOperationId',
+						signature: 'createSyncOperationId'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ensureSyncInstallationId',
+						signature: 'ensureSyncInstallationId'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'migrateSyncLocalCollectionRecord',
+						signature: 'migrateSyncLocalCollectionRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'migrateSyncLocalMutationRecord',
+						signature: 'migrateSyncLocalMutationRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'normalizeSyncLocalSchemaComponents',
+						signature: 'normalizeSyncLocalSchemaComponents'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveSyncLocalSchemaComponents',
+						signature: 'resolveSyncLocalSchemaComponents'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveSyncLocalDataPolicy',
+						signature: 'resolveSyncLocalDataPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveSyncLocalCollectionPolicy',
+						signature: 'resolveSyncLocalCollectionPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveSyncLocalMutationPolicy',
+						signature: 'resolveSyncLocalMutationPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runSyncLocalPolicyTransaction',
+						signature: 'runSyncLocalPolicyTransaction'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveSyncLocalMigrations',
+						signature: 'resolveSyncLocalMigrations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'validateSyncLocalDataPolicy',
+						signature: 'validateSyncLocalDataPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalDataPolicyError',
+						signature: 'SyncLocalDataPolicyError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalStoreSchemaError',
+						signature: 'SyncLocalStoreSchemaError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LocalCollectionRecord',
+						signature: 'LocalCollectionRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LocalMutationRecord',
+						signature: 'LocalMutationRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LocalOptimisticOperation',
+						signature: 'LocalOptimisticOperation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResolvedSyncLocalDataPolicy',
+						signature: 'ResolvedSyncLocalDataPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'IndexedDbSyncLocalStoreOptions',
+						signature: 'IndexedDbSyncLocalStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MemorySyncLocalStoreOptions',
+						signature: 'MemorySyncLocalStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResolvedSyncLocalSchemaComponent',
+						signature: 'ResolvedSyncLocalSchemaComponent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalCollectionMigrationOperation',
+						signature: 'SyncLocalCollectionMigrationOperation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalCollectionPolicy',
+						signature: 'SyncLocalCollectionPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalConflictPolicy',
+						signature: 'SyncLocalConflictPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalConflictStrategy',
+						signature: 'SyncLocalConflictStrategy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalDataPolicy',
+						signature: 'SyncLocalDataPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalEvictionPriority',
+						signature: 'SyncLocalEvictionPriority'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalJsonValue',
+						signature: 'SyncLocalJsonValue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalMigrationContext',
+						signature: 'SyncLocalMigrationContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalMigrationResult',
+						signature: 'SyncLocalMigrationResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalMutationPolicy',
+						signature: 'SyncLocalMutationPolicy'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalPersistence',
+						signature: 'SyncLocalPersistence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalProtection',
+						signature: 'SyncLocalProtection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalProtectionProvider',
+						signature: 'SyncLocalProtectionProvider'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncLocalRecordProtectionContext',
+						signature: 'SyncLocalRecordProtectionContext'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/client/runtime',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncClientConnectionStatus',
+						signature:
+							"type SyncClientConnectionStatus = 'closed' | 'connecting' | 'offline' | 'online';"
+					},
+					{
+						description:
+							'Framework-neutral local-first diagnostics.',
+						kind: 'type',
+						name: 'SyncClientStatus',
+						signature:
+							'type SyncClientStatus = {\n    connection: SyncClientConnectionStatus;\n    pending: number;\n    deadLetters: number;\n    /** Retained dead letters whose server outcome was a conflict. */\n    conflicts: number;\n    /** Conflicts resolved automatically during this client lifetime. */\n    automaticResolutions: number;\n    oldestPendingAt?: number;\n    oldestDeadLetterAt?: number;\n    lastConflictAt?: number;\n    lastSuccessfulPullAt?: number;\n    lastSuccessfulPushAt?: number;\n    lastError?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncFlushOptions',
+						signature:
+							'type SyncFlushOptions = {\n    /** Finite foreground/background budget. Defaults to 10 seconds. */\n    timeoutMs?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncFlushResult',
+						signature:
+							'type SyncFlushResult = {\n    deadLetters: number;\n    pending: number;\n    timedOut: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncClientRuntimeTransport',
+						signature:
+							'type SyncClientRuntimeTransport = {\n    durable?: {\n        createId?: () => string;\n        onError?: (error: unknown) => void;\n        maxAttempts?: number;\n        retryBackoff?: (attempt: number) => number;\n        store: SyncLocalStore;\n        namespace: string;\n    };\n    /** Enroll clients in host lifecycle handling without page-level wiring. */\n    registerClient?: (client: SyncRuntimeClient) => void | (() => void);\n    socketTicket?: () => Promise<string>;\n    /** Host-provided socket implementation, used by native/WebView bridges. */\n    webSocketImpl?: typeof WebSocket;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncRuntimeClient',
+						signature:
+							'type SyncRuntimeClient = {\n    discardDeadLetter: (operationId: string) => Promise<void>;\n    flush: (options?: SyncFlushOptions) => Promise<SyncFlushResult>;\n    listDeadLetters: () => Promise<LocalMutationRecord[]>;\n    rebaseDeadLetter: (operationId: string, args: unknown) => Promise<string>;\n    reconnect: () => void;\n    retryDeadLetter: (operationId: string) => Promise<void>;\n    status: () => SyncClientStatus;\n    subscribeStatus: (listener: (status: SyncClientStatus) => void) => () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncRuntimeDeadLetter',
+						signature:
+							"type SyncRuntimeDeadLetter = {\n    attempts: number;\n    code?: string;\n    createdAt: number;\n    deadLetteredAt?: number;\n    kind?: 'conflict' | 'permanent' | 'retryable';\n    message?: string;\n    name: string;\n    operationId: string;\n};"
+					},
+					{
+						description:
+							'Aggregate, redacted diagnostics for framework and host devtools.',
+						kind: 'type',
+						name: 'SyncRuntimeInspection',
+						signature:
+							'type SyncRuntimeInspection = {\n    automaticResolutions: number;\n    clients: number;\n    conflicts: number;\n    deadLetters: SyncRuntimeDeadLetter[];\n    lastError?: string;\n    lastSuccessfulPullAt?: number;\n    lastSuccessfulPushAt?: number;\n    oldestDeadLetterAt?: number;\n    oldestPendingAt?: number;\n    pending: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getSyncClientRuntimeTransport',
+						signature:
+							'const getSyncClientRuntimeTransport: () => SyncClientRuntimeTransport | undefined;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'installSyncClientRuntimeTransport',
+						signature:
+							'const installSyncClientRuntimeTransport: (transport: SyncClientRuntimeTransport) => () => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'registerSyncRuntimeClient',
+						signature:
+							'const registerSyncRuntimeClient: (client: SyncRuntimeClient) => () => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'inspectSyncRuntime',
+						signature:
+							'const inspectSyncRuntime: () => Promise<SyncRuntimeInspection>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'retrySyncRuntimeDeadLetter',
+						signature:
+							'const retrySyncRuntimeDeadLetter: (operationId: string) => Promise<void>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'discardSyncRuntimeDeadLetter',
+						signature:
+							'const discardSyncRuntimeDeadLetter: (operationId: string) => Promise<void>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'rebaseSyncRuntimeDeadLetter',
+						signature:
+							'const rebaseSyncRuntimeDeadLetter: (operationId: string, args: unknown) => Promise<string>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/client/headless',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'HeadlessSyncCollection',
+						signature:
+							"type HeadlessSyncCollection<T = unknown> = {\n    collection: string;\n    params?: unknown;\n    /** Stable local-store key used by the foreground collection handle. */\n    localKey: string;\n    /** Defaults to the row's `id` property. */\n    key?: (row: T) => RowKey;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HeadlessSyncFetchResponse',
+						signature:
+							'type HeadlessSyncFetchResponse = {\n    ok: boolean;\n    status: number;\n    json: () => Promise<unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RunHeadlessSyncOptions',
+						signature:
+							"type RunHeadlessSyncOptions = {\n    endpoint: string;\n    store: SyncLocalStore;\n    namespace: string;\n    collections?: HeadlessSyncCollection[];\n    /** Maximum due outbox records sent in one run. Defaults to 50. */\n    maxMutations?: number;\n    /** Maximum collection descriptors pulled in one run. Defaults to 50. */\n    maxPulls?: number;\n    /** Inclusive automatic rejection ceiling. Defaults to 5 attempts. */\n    maxAttempts?: number;\n    retryBackoff?: (attempt: number) => number;\n    /** Supply short-lived authorization headers without coupling Sync to Auth. */\n    headers?: () => Record<string, string> | Promise<Record<string, string>>;\n    /** Injection seam for constrained native runners and tests. */\n    fetch?: (url: string, init: {\n        body: string;\n        credentials: 'include';\n        headers: Record<string, string>;\n        method: 'POST';\n        redirect: 'error';\n    }) => Promise<HeadlessSyncFetchResponse>;\n    now?: () => number;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HeadlessSyncRunResult',
+						signature:
+							'type HeadlessSyncRunResult = {\n    acknowledged: number;\n    conflictsDiscarded: number;\n    conflictsRetried: number;\n    deadLettered: number;\n    pulled: number;\n    retryScheduled: number;\n};'
+					},
+					{
+						description:
+							'Run one bounded HTTP push/pull cycle against a durable local store. It has no DOM or WebSocket dependency and commits each response only if the foreground process has not advanced that record since the request snapshot.',
+						kind: 'value',
+						name: 'runHeadlessSync',
+						signature:
+							'const runHeadlessSync: ({ endpoint, store, namespace, collections, maxMutations: configuredMaxMutations, maxPulls: configuredMaxPulls, maxAttempts: configuredMaxAttempts, retryBackoff, headers, fetch: fetchOverride, now }: RunHeadlessSyncOptions) => Promise<HeadlessSyncRunResult>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/crdt',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'orSet',
+						signature: 'orSet'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OrSetState',
+						signature: 'OrSetState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'lwwMap',
+						signature: 'lwwMap'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LwwMapEntry',
+						signature: 'LwwMapEntry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LwwMapState',
+						signature: 'LwwMapState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createList',
+						signature: 'createList'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'listOf',
+						signature: 'listOf'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mergeListState',
+						signature: 'mergeListState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ListCrdt',
+						signature: 'ListCrdt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ListElement',
+						signature: 'ListElement'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ListState',
+						signature: 'ListState'
+					},
+					{
+						description:
+							'A counter that survives concurrent increments/decrements across replicas.',
+						kind: 'type',
+						name: 'CounterState',
+						signature:
+							'type CounterState = {\n    increments: Record<string, number>;\n    decrements: Record<string, number>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'counter',
+						signature:
+							'const counter: {\n    create: () => CounterState;\n    /** Current value: total increments minus total decrements. */\n    value: (state: CounterState) => number;\n    increment: (state: CounterState, replica: string, by?: number) => CounterState;\n    decrement: (state: CounterState, replica: string, by?: number) => CounterState;\n    /** Merge by taking the max count seen per replica (monotonic). */\n    merge: (a: CounterState, b: CounterState) => CounterState;\n};'
+					},
+					{
+						description:
+							'A single value where the latest write wins (ties broken by replica id).',
+						kind: 'type',
+						name: 'LwwState',
+						signature:
+							'type LwwState<T> = {\n    value: T;\n    timestamp: number;\n    replica: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'lww',
+						signature:
+							'const lww: {\n    create: <T>(value: T, replica: string, timestamp?: number) => LwwState<T>;\n    set: <T>(value: T, replica: string, timestamp?: number) => LwwState<T>;\n    /** Keep the entry with the higher timestamp (replica id breaks ties). */\n    merge: <T>(a: LwwState<T>, b: LwwState<T>) => LwwState<T>;\n};'
+					},
+					{
+						description:
+							'The contract a collaborative-text CRDT exposes, independent of the algorithm behind it. Implemented first-party by the RGA below ({@link createTextCrdt}) and by third-party backends in the sync-adapters repo (e.g. @absolutejs/sync-yjs). State is whatever that backend persists and broadcasts — JSON ({@link TextState}) for the RGA, a base64 update for Yjs.',
+						kind: 'type',
+						name: 'CrdtText',
+						signature:
+							"type CrdtText<State> = {\n    /** The current visible text. */\n    text: () => string;\n    /** Reconcile the local text to `next` (the backend computes the edit). */\n    setText: (next: string) => void;\n    /** Merge another replica's state in (e.g. a broadcast from the server). */\n    merge: (state: State) => void;\n    /** The full serializable state to persist/broadcast (for hydration). */\n    state: () => State;\n    /**\n     * The locally-authored changes since the last call (a delta-state), then clears\n     * the buffer. A delta merges exactly like a full state (union), so a client can\n     * upload just its new ops — O(edit) instead of O(doc) — while the server keeps\n     * full state. Optional: backends without delta support fall back to `state()`.\n     */\n    takeDelta?: () => State;\n    /**\n     * The stable anchor for a caret at visible `index` — the id of the element the\n     * caret sits after (`null` = document start). Broadcast this instead of a raw\n     * index so a caret survives concurrent edits. Optional (text backends provide it).\n     */\n    anchorAt?: (index: number) => string | null;\n    /** The current visible index of a caret anchored after `anchor` (see {@lin"
+					},
+					{
+						description:
+							"The minimal server-side surface the engine needs to auto-merge a CRDT field on write (see engine.registerCrdt): combine two states and produce an empty one. Both the first-party {@link rgaText} and @absolutejs/sync-yjs's yjsText satisfy it, as does any {@link TextCrdtAdapter}.",
+						kind: 'type',
+						name: 'CrdtMergeable',
+						signature:
+							'type CrdtMergeable<State> = {\n    empty: () => State;\n    merge: (a: State, b: State) => State;\n};'
+					},
+					{
+						description:
+							'A pluggable collaborative-text backend. create mints a live doc for a replica; merge combines two persisted states server-side (no live instance needed — for the merge-on-write mutation); empty/textOf are conveniences. Swap the first-party {@link rgaText} for an adapter to get a different engine (e.g. Yjs) behind the exact same call sites.',
+						kind: 'type',
+						name: 'TextCrdtAdapter',
+						signature:
+							'type TextCrdtAdapter<State> = CrdtMergeable<State> & {\n    create: (replica: string, initial?: State) => CrdtText<State>;\n    textOf: (state: State) => string;\n    /** Optionally bound state growth (e.g. drop unreferenced tombstones). */\n    compact?: (state: State) => State;\n};'
+					},
+					{
+						description:
+							'One inserted character in the replicated sequence (kept as a tombstone if deleted).',
+						kind: 'type',
+						name: 'TextElement',
+						signature:
+							'type TextElement = {\n    id: string;\n    replica: string;\n    clock: number;\n    /** Id of the element this was inserted after (`null` = start of document). */\n    after: string | null;\n    value: string;\n    deleted: boolean;\n};'
+					},
+					{
+						description:
+							'Serializable state of a {@link TextCrdt} — safe to store as a row field.',
+						kind: 'type',
+						name: 'TextState',
+						signature:
+							'type TextState = {\n    elements: TextElement[];\n};'
+					},
+					{
+						description:
+							'The visible string of a text-CRDT state. Pure — use it server-side too.',
+						kind: 'value',
+						name: 'textOf',
+						signature: 'const textOf: (state: TextState) => string;'
+					},
+					{
+						description:
+							'Merge two text-CRDT states (commutative/idempotent). Pure — for server mutations.',
+						kind: 'value',
+						name: 'mergeTextState',
+						signature:
+							'const mergeTextState: (a: TextState, b: TextState) => TextState;'
+					},
+					{
+						description:
+							'How many tombstones (deleted-but-retained elements) a state carries. Use it to decide when to {@link compact} (e.g. a server-side threshold).',
+						kind: 'value',
+						name: 'tombstoneCount',
+						signature:
+							'const tombstoneCount: (state: TextState) => number;'
+					},
+					{
+						description:
+							'Drop tombstones that no remaining element anchors to (after), bounding state growth from deletions — the visible text is unchanged. Pure. Future inserts only ever anchor to visible elements, so a tombstone nothing currently references will never be referenced again; removing it is safe for the canonical (server-held) state. Run it server-side on the stored state (e.g. once tombstoneCount crosses a threshold); clients adopt the compacted state on the next broadcast. {@link textOf}/{@link mergeTex',
+						kind: 'value',
+						name: 'compact',
+						signature:
+							'const compact: (state: TextState) => TextState;'
+					},
+					{
+						description:
+							'The RGA text CRDT — {@link CrdtText} plus direct positional edits.',
+						kind: 'type',
+						name: 'TextCrdt',
+						signature:
+							'type TextCrdt = CrdtText<TextState> & {\n    /** Insert `value` at visible `index`. */\n    insert: (index: number, value: string) => void;\n    /** Tombstone `count` visible characters from `index`. */\n    delete: (index: number, count: number) => void;\n    /** Locally-authored changes since the last call, then clears the buffer. */\n    takeDelta: () => TextState;\n    /** The stable element-id anchor for a caret at visible `index`. */\n    anchorAt: (index: number) => string | null;\n    /** The current visible index of a caret anchored after `anchor`. */\n    indexOfAnchor: (anchor: string | null) => number;\n};'
+					},
+					{
+						description:
+							'A collaborative text buffer backed by an RGA sequence CRDT. Concurrent inserts and deletes from different replicas merge without conflict and converge. Drive it from an input via {@link TextCrdt.setText}; persist/broadcast {@link TextCrdt.state}; apply remote state via {@link TextCrdt.merge}.',
+						kind: 'value',
+						name: 'createTextCrdt',
+						signature:
+							'const createTextCrdt: (replica: string, initial?: TextState) => TextCrdt;'
+					},
+					{
+						description:
+							'The first-party collaborative-text backend (the RGA above) packaged as a {@link TextCrdtAdapter}. Zero dependencies. Use it directly, or swap in an adapter from sync-adapters (e.g. @absolutejs/sync-yjs) for the same shape.',
+						kind: 'value',
+						name: 'rgaText',
+						signature: 'const rgaText: TextCrdtAdapter<TextState>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/drizzle',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'keyTopic',
+						signature: 'keyTopic'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'tableTopic',
+						signature: 'tableTopic'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'drizzleCollection',
+						signature: 'drizzleCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DrizzleCollectionOptions',
+						signature: 'DrizzleCollectionOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'matchesDrizzleWhere',
+						signature: 'matchesDrizzleWhere'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UnsupportedDrizzleFilterError',
+						signature: 'UnsupportedDrizzleFilterError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'deriveReadTopics',
+						signature: 'deriveReadTopics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DeriveReadTopicsOptions',
+						signature: 'DeriveReadTopicsOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DerivedReadTopics',
+						signature: 'DerivedReadTopics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'publishChange',
+						signature: 'publishChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'publishRows',
+						signature: 'publishRows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'publishWhere',
+						signature: 'publishWhere'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChangeOp',
+						signature: 'ChangeOp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChangePayload',
+						signature: 'ChangePayload'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PublishChangeOptions',
+						signature: 'PublishChangeOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PublishRowsOptions',
+						signature: 'PublishRowsOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PublishWhereOptions',
+						signature: 'PublishWhereOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/prisma',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'keyTopic',
+						signature: 'keyTopic'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'tableTopic',
+						signature: 'tableTopic'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PrismaWhere',
+						signature: 'PrismaWhere'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RowKey',
+						signature: 'RowKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'deriveReadTopics',
+						signature: 'deriveReadTopics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DeriveReadTopicsOptions',
+						signature: 'DeriveReadTopicsOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DerivedReadTopics',
+						signature: 'DerivedReadTopics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'publishChange',
+						signature: 'publishChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'publishRows',
+						signature: 'publishRows'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'publishWhere',
+						signature: 'publishWhere'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChangeOp',
+						signature: 'ChangeOp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChangePayload',
+						signature: 'ChangePayload'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PublishChangeOptions',
+						signature: 'PublishChangeOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PublishRowsOptions',
+						signature: 'PublishRowsOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PublishWhereOptions',
+						signature: 'PublishWhereOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'matchesWhere',
+						signature: 'matchesWhere'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UnsupportedFilterError',
+						signature: 'UnsupportedFilterError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'prismaCollection',
+						signature: 'prismaCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PrismaCollectionOptions',
+						signature: 'PrismaCollectionOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/engine',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMaterializedView',
+						signature: 'createMaterializedView'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isEmptyViewDiff',
+						signature: 'isEmptyViewDiff'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MaterializedView',
+						signature: 'MaterializedView'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MaterializedViewOptions',
+						signature: 'MaterializedViewOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createAggregate',
+						signature: 'createAggregate'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Aggregate',
+						signature: 'Aggregate'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AggregateGroup',
+						signature: 'AggregateGroup'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AggregateOptions',
+						signature: 'AggregateOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createEquiJoin',
+						signature: 'createEquiJoin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EquiJoin',
+						signature: 'EquiJoin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EquiJoinOptions',
+						signature: 'EquiJoinOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'aggregateOp',
+						signature: 'aggregateOp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'chain',
+						signature: 'chain'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'filterOp',
+						signature: 'filterOp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fromRowChange',
+						signature: 'fromRowChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'joinNode',
+						signature: 'joinNode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mapOp',
+						signature: 'mapOp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'materialize',
+						signature: 'materialize'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'orderByOp',
+						signature: 'orderByOp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AggregateOpOptions',
+						signature: 'AggregateOpOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Change',
+						signature: 'Change'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JoinNode',
+						signature: 'JoinNode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JoinNodeOptions',
+						signature: 'JoinNodeOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Materializer',
+						signature: 'Materializer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Operator',
+						signature: 'Operator'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OrderByOptions',
+						signature: 'OrderByOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ChangeSource',
+						signature: 'ChangeSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EmitChange',
+						signature: 'EmitChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ParsedChange',
+						signature: 'ParsedChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RowChange',
+						signature: 'RowChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RowKey',
+						signature: 'RowKey'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RowOp',
+						signature: 'RowOp'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ViewDiff',
+						signature: 'ViewDiff'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPollingChangeSource',
+						signature: 'createPollingChangeSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseOutboxRow',
+						signature: 'parseOutboxRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OutboxRow',
+						signature: 'OutboxRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PollingChangeSourceOptions',
+						signature: 'PollingChangeSourceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryClusterBus',
+						signature: 'createInMemoryClusterBus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ClusterBus',
+						signature: 'ClusterBus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ClusterChange',
+						signature: 'ClusterChange'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ClusterMessage',
+						signature: 'ClusterMessage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPresenceHub',
+						signature: 'createPresenceHub'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceDiff',
+						signature: 'PresenceDiff'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceHandle',
+						signature: 'PresenceHandle'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceHub',
+						signature: 'PresenceHub'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PresenceMember',
+						signature: 'PresenceMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineCollection',
+						signature: 'defineCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineJoinCollection',
+						signature: 'defineJoinCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CollectionContext',
+						signature: 'CollectionContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CollectionDefinition',
+						signature: 'CollectionDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JoinCollectionDefinition',
+						signature: 'JoinCollectionDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JoinSide',
+						signature: 'JoinSide'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineReactiveQuery',
+						signature: 'defineReactiveQuery'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReactiveQueryContext',
+						signature: 'ReactiveQueryContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReactiveQueryDefinition',
+						signature: 'ReactiveQueryDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReadHandle',
+						signature: 'ReadHandle'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TableReader',
+						signature: 'TableReader'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineGraphCollection',
+						signature: 'defineGraphCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'query',
+						signature: 'query'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GraphCollectionDefinition',
+						signature: 'GraphCollectionDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GraphInstance',
+						signature: 'GraphInstance'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GraphSource',
+						signature: 'GraphSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GroupByOptions',
+						signature: 'GroupByOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'JoinOptions',
+						signature: 'JoinOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OrderByQueryOptions',
+						signature: 'OrderByQueryOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Query',
+						signature: 'Query'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'definePermissions',
+						signature: 'definePermissions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PermissionsDefinition',
+						signature: 'PermissionsDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReadRule',
+						signature: 'ReadRule'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TablePermissions',
+						signature: 'TablePermissions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'WriteRule',
+						signature: 'WriteRule'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineSearchCollection',
+						signature: 'defineSearchCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SEARCH_SCORE_FIELD',
+						signature: 'SEARCH_SCORE_FIELD'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SearchCollectionDefinition',
+						signature: 'SearchCollectionDefinition'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SearchHit',
+						signature: 'SearchHit'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SearchIndex',
+						signature: 'SearchIndex'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createTextIndex',
+						signature: 'createTextIndex'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TextIndexOptions',
+						signature: 'TextIndexOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVectorIndex',
+						signature: 'createVectorIndex'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VectorIndexOptions',
+						signature: 'VectorIndexOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/postgres',
+				symbols: [
+					{
+						description:
+							'A parsed change ready to feed the engine.',
+						kind: 'type',
+						name: 'ParsedNotification',
+						signature: 'type ParsedNotification = ParsedChange;'
+					},
+					{
+						description:
+							'Default NOTIFY-payload parser: expects the JSON the trigger from {@link postgresNotifyTrigger} sends — { table, op, row } where op is INSERT/UPDATE/DELETE. Returns undefined for anything malformed so a bad payload is skipped rather than throwing.',
+						kind: 'value',
+						name: 'parseNotification',
+						signature:
+							'const parseNotification: (payload: string) => ParsedNotification | undefined;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PostgresChangeSourceOptions',
+						signature:
+							"type PostgresChangeSourceOptions = {\n    /**\n     * Subscribe to a Postgres NOTIFY channel; return a function that stops\n     * listening. The wiring is yours, e.g. with porsager/postgres:\n     * `(channel, onNotify) => { const s = await sql.listen(channel, onNotify); return s.unlisten; }`.\n     */\n    listen: (channel: string, onNotify: (payload: string) => void) => Promise<() => void | Promise<void>> | (() => void | Promise<void>);\n    /** NOTIFY channel; must match the trigger's. Defaults to `absolute_sync`. */\n    channel?: string;\n    /** Override the payload parser (defaults to {@link parseNotification}). */\n    parse?: (payload: string) => ParsedNotification | undefined;\n    /**\n     * Called when a NOTIFY payload fails to parse (malformed JSON, unknown\n     * `op`, or — most often — payload was truncated past Postgres's 8000-byte\n     * cap and lost a closing brace). Default: silently dropped. Provide this\n     * to log the skip so you can detect oversized rows in production.\n     */\n    onSkip?: (payload: string, reason: 'parse-failed') => void;\n};"
+					},
+					{
+						description:
+							'A {@link ChangeSource} backed by Postgres LISTEN/NOTIFY. Each notification is parsed to (table, change) and emitted into the engine.',
+						kind: 'value',
+						name: 'postgresChangeSource',
+						signature:
+							'const postgresChangeSource: (options: PostgresChangeSourceOptions) => ChangeSource;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PostgresNotifyTriggerOptions',
+						signature:
+							"type PostgresNotifyTriggerOptions = {\n    /** Tables to emit changes for. */\n    tables: string[];\n    /** NOTIFY channel; must match the change source's. Defaults to `absolute_sync`. */\n    channel?: string;\n    /** Trigger function name. Defaults to `absolute_sync_notify`. */\n    functionName?: string;\n};"
+					},
+					{
+						description:
+							'Generate the SQL that installs a NOTIFY trigger on each table — run it once (e.g. in a migration). On every insert/update/delete it sends { table, op, row } JSON on the channel for {@link postgresChangeSource}. Note: pg_notify payloads are capped at 8000 bytes, so very wide rows can be truncated (the parser then skips them). For large rows or high throughput, prefer a logical-replication source behind the same {@link ChangeSource} seam.',
+						kind: 'value',
+						name: 'postgresNotifyTrigger',
+						signature:
+							'const postgresNotifyTrigger: (options: PostgresNotifyTriggerOptions) => string;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresMutationRunner',
+						signature: 'createPostgresMutationRunner'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'postgresMutationReceiptsMigration',
+						signature: 'postgresMutationReceiptsMigration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PostgresReceiptDatabase',
+						signature: 'PostgresReceiptDatabase'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'postgresTableRevisionsMigration',
+						signature: 'postgresTableRevisionsMigration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresTableRevisionSource',
+						signature: 'createPostgresTableRevisionSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PostgresTableRevisionSourceOptions',
+						signature: 'PostgresTableRevisionSourceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresSignalReaction',
+						signature: 'createPostgresSignalReaction'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PostgresSignalReactionOptions',
+						signature: 'PostgresSignalReactionOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/mysql',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPollingChangeSource',
+						signature: 'createPollingChangeSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseOutboxRow',
+						signature: 'parseOutboxRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OutboxRow',
+						signature: 'OutboxRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PollingChangeSourceOptions',
+						signature: 'PollingChangeSourceOptions'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MysqlChangelogOptions',
+						signature:
+							'type MysqlChangelogOptions = {\n    /** Table name → the column names to capture in the change payload. */\n    tables: Record<string, string[]>;\n    /** Changelog table name. Defaults to `absolute_sync_changelog`. */\n    changelogTable?: string;\n    /** Trigger name prefix. Defaults to `absolute_sync`. */\n    prefix?: string;\n};'
+					},
+					{
+						description:
+							'Generate the SQL that installs the changelog table and per-table insert/update/delete triggers — run it once (e.g. in a migration). Each trigger appends { tbl, op, payload } (payload built with JSON_OBJECT from the listed columns) to the changelog for {@link createPollingChangeSource}. Each CREATE TRIGGER body is a single statement (no DELIMITER needed). The statements are ;-separated; run them as a script, or split on ; if your driver executes one statement per call.',
+						kind: 'value',
+						name: 'mysqlChangelogSchema',
+						signature:
+							'const mysqlChangelogSchema: (options: MysqlChangelogOptions) => string;'
+					},
+					{
+						description:
+							'A row-level binlog event (the subset {@link normalizeBinlogEvent} needs).',
+						kind: 'type',
+						name: 'BinlogRowEvent',
+						signature:
+							"type BinlogRowEvent = {\n    /**\n     * Event kind — zongji's `writerows` / `updaterows` / `deleterows`\n     * (case-insensitive).\n     */\n    type: string;\n    /** The affected table. */\n    table: string;\n    /**\n     * Affected rows. Insert/delete: each entry is the row object. Update: each\n     * entry is `{ before, after }` (zongji's shape).\n     */\n    rows: unknown[];\n};"
+					},
+					{
+						description:
+							"Normalize a binlog row event into engine changes — one per affected row. For updates it takes the after image; for deletes the row (or its before image). Rows that aren't objects are skipped. Pure, so it's easy to test and to swap for a different reader's shape.",
+						kind: 'value',
+						name: 'normalizeBinlogEvent',
+						signature:
+							'const normalizeBinlogEvent: (event: BinlogRowEvent) => ParsedChange[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MysqlBinlogChangeSourceOptions',
+						signature:
+							"type MysqlBinlogChangeSourceOptions = {\n    /**\n     * Subscribe to row events from a binlog reader; return a function that stops\n     * it. e.g. with zongji:\n     * `(onEvent) => { zongji.on('binlog', e => onEvent({ type: e.getEventName(), table: e.tableMap[e.tableId].tableName, rows: e.rows })); zongji.start(...); return () => zongji.stop(); }`.\n     */\n    subscribe: (onEvent: (event: BinlogRowEvent) => void) => Promise<() => void | Promise<void>> | (() => void | Promise<void>);\n    /** Override the event normalizer (defaults to {@link normalizeBinlogEvent}). */\n    normalize?: (event: BinlogRowEvent) => ParsedChange[];\n    /**\n     * Called when a binlog event normalises to zero changes (unknown op type,\n     * non-object rows, etc). Default: silently dropped. Provide this to log\n     * skipped events so you notice schema changes / new event types as they\n     * appear.\n     */\n    onSkip?: (event: BinlogRowEvent, reason: 'normalized-empty') => void;\n};"
+					},
+					{
+						description:
+							'A {@link ChangeSource} backed by the MySQL binlog. Each row event is normalized and emitted into the engine. Connect with engine.connectSource(...).',
+						kind: 'value',
+						name: 'mysqlBinlogChangeSource',
+						signature:
+							'const mysqlBinlogChangeSource: (options: MysqlBinlogChangeSourceOptions) => ChangeSource;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/sqlite',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPollingChangeSource',
+						signature: 'createPollingChangeSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseOutboxRow',
+						signature: 'parseOutboxRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OutboxRow',
+						signature: 'OutboxRow'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PollingChangeSourceOptions',
+						signature: 'PollingChangeSourceOptions'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SqliteChangelogOptions',
+						signature:
+							'type SqliteChangelogOptions = {\n    /** Table name → the column names to capture in the change payload. */\n    tables: Record<string, string[]>;\n    /** Changelog table name. Defaults to `absolute_sync_changelog`. */\n    changelogTable?: string;\n    /** Trigger name prefix. Defaults to `absolute_sync`. */\n    prefix?: string;\n};'
+					},
+					{
+						description:
+							'Generate the SQL that installs the changelog table and per-table insert/update/delete triggers — run it once (e.g. in a migration). Each trigger appends { tbl, op, payload } (payload built with json_object from the listed columns) to the changelog for {@link createPollingChangeSource}. The statements are ;-separated; run them as a script, or split on ; if your driver executes one statement per call.',
+						kind: 'value',
+						name: 'sqliteChangelogSchema',
+						signature:
+							'const sqliteChangelogSchema: (options: SqliteChangelogOptions) => string;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/tanstack-db',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'TanStackRowKey',
+						signature:
+							'type TanStackRowKey = Extract<RowKey, string | number>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'TanStackMutationCall',
+						signature:
+							'type TanStackMutationCall = {\n    name: string;\n    args?: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'TanStackMutationMapper',
+						signature:
+							"type TanStackMutationMapper<T extends object, TOperation extends 'insert' | 'update' | 'delete'> = string | ((mutation: PendingMutation<T, TOperation>) => TanStackMutationCall | undefined);"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncTanStackMutations',
+						signature:
+							"type SyncTanStackMutations<T extends object> = {\n    insert?: TanStackMutationMapper<T, 'insert'>;\n    update?: TanStackMutationMapper<T, 'update'>;\n    delete?: TanStackMutationMapper<T, 'delete'>;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncTanStackCollectionOptions',
+						signature:
+							"type SyncTanStackCollectionOptions<T extends object, TKey extends TanStackRowKey = TanStackRowKey> = Omit<CollectionConfig<T, TKey>, 'sync' | 'getKey' | 'onInsert' | 'onUpdate' | 'onDelete'> & {\n    /** WebSocket URL of the Absolute Sync endpoint. */\n    url: string;\n    /** Registered Absolute Sync collection name. */\n    collection: string;\n    /** Query params forwarded to the server collection hydrate/match/authorize hooks. */\n    params?: unknown;\n    /** Row identity shared by TanStack DB and Absolute Sync. */\n    getKey: (row: T) => TKey;\n    webSocketImpl?: typeof WebSocket;\n    reconnectMs?: number;\n    maxReconnectMs?: number;\n    storage?: MutationStorage;\n    cache?: CollectionCache<T>;\n    onError?: (error: unknown) => void;\n    /**\n     * Optional mapping from TanStack mutations to registered Absolute Sync\n     * mutation names. TanStack already applies optimistic writes, so forwarded\n     * sync mutations intentionally do not add another optimistic overlay.\n     */\n    mutations?: SyncTanStackMutations<T>;\n    /** Optional prebuilt Absolute Sync collection, useful when sharing lifecycle externally. */\n    syncCollection?: SyncCollection<T>;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createSyncTanStackCollectionOptions',
+						signature:
+							'const createSyncTanStackCollectionOptions: <T extends object, TKey extends TanStackRowKey = TanStackRowKey>(options: SyncTanStackCollectionOptions<T, TKey>) => CollectionConfig<T, TKey>;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'syncTanStackCollectionOptions',
+						signature:
+							'createSyncTanStackCollectionOptions as syncTanStackCollectionOptions'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/react',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'useSyncCollection',
+						signature: 'useSyncCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useCollaborativeText',
+						signature: 'useCollaborativeText'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/vue',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'useSyncCollection',
+						signature: 'useSyncCollection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useCollaborativeText',
+						signature: 'useCollaborativeText'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/svelte',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSyncCollectionStore',
+						signature: 'createSyncCollectionStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createCollaborativeTextStore',
+						signature: 'createCollaborativeTextStore'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/angular',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'SyncCollectionService',
+						signature: 'SyncCollectionService'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'SyncManifestRuntime',
+						signature:
+							'type SyncManifestRuntime = {\n    engine?: SyncEngine;\n    hub?: ReactiveHub;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<SyncManifestConfig, SyncManifestRuntime>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<SyncManifestRuntime>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<SyncManifestRuntime>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        devtools: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TObject<{\n            path: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n            snapshotMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TNumber>;\n        }>>;\n        engine: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TObject<{\n            changeLogRetainMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TNumber>;\n            changeLogSize: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n            instanceId: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n            mutati'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/sync/platform',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'PLATFORM_SYNC_ENVIRONMENT_KEY',
+						signature:
+							'const PLATFORM_SYNC_ENVIRONMENT_KEY = "ABSOLUTE_SYNC_RUNTIME";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'PLATFORM_SYNC_HEALTH_PATH',
+						signature:
+							'const PLATFORM_SYNC_HEALTH_PATH = "/.well-known/absolute/sync";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'PlatformSyncConfigurationSchema',
+						signature:
+							'const PlatformSyncConfigurationSchema: import("@sinclair/typebox").TObject<{\n    changeLogRetainMs: import("@sinclair/typebox").TInteger;\n    changeLogSize: import("@sinclair/typebox").TInteger;\n    closeOnSlow: import("@sinclair/typebox").TBoolean;\n    heartbeatMs: import("@sinclair/typebox").TInteger;\n    instanceId: import("@sinclair/typebox").TString;\n    maxBufferedBytes: import("@sinclair/typebox").TInteger;\n    mutationConcurrency: import("@sinclair/typebox").TInteger;\n    mutationQueueLimit: import("@sinclair/typebox").TInteger;\n    pushPath: import("@sinclair/typebox").TString;\n    socketPath: import("@sinclair/typebox").TString;\n    tier: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"push">, import("@sinclair/typebox").TLiteral<"engine">, import("@sinclair/typebox").TLiteral<"both">]>;\n    version: import("@sinclair/typebox").TLiteral<1>;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PlatformSyncConfiguration',
+						signature:
+							'type PlatformSyncConfiguration = Static<typeof PlatformSyncConfigurationSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'PlatformSyncHealthSchema',
+						signature:
+							'const PlatformSyncHealthSchema: import("@sinclair/typebox").TObject<{\n    cluster: import("@sinclair/typebox").TObject<{\n        configured: import("@sinclair/typebox").TBoolean;\n        connected: import("@sinclair/typebox").TBoolean;\n        error: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n    }>;\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    instanceId: import("@sinclair/typebox").TString;\n    packs: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n        name: import("@sinclair/typebox").TString;\n        ownsTables: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;\n        readsTables: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;\n        version: import("@sinclair/typebox").TString;\n    }>>;\n    ready: import("@sinclair/typebox").TBoolean;\n    tier: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"push">, import("@sinclair/typebox").TLiteral<"engine">, import("@sinclair/typebox").TLiteral<"both">]>;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PlatformSyncHealth',
+						signature:
+							'type PlatformSyncHealth = Static<typeof PlatformSyncHealthSchema>;'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'PlatformSyncConfigurationError',
+						signature:
+							'class PlatformSyncConfigurationError extends Error {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'readPlatformSyncConfiguration',
+						signature:
+							'const readPlatformSyncConfiguration: (environment?: Record<string, string | undefined>) => PlatformSyncConfiguration | null;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PlatformSyncRuntimeOptions',
+						signature:
+							"type PlatformSyncRuntimeOptions = {\n    clusterBus?: ClusterBus;\n    configuration?: PlatformSyncConfiguration;\n    engineOptions?: SyncEngineOptions;\n    hub?: ReactiveHub;\n    onSlow?: SyncSocketOptions['onSlow'];\n    packs?: SyncPack[];\n    resolveContext?: SyncSocketOptions['resolveContext'];\n    resolveTopics?: SyncPluginOptions['resolveTopics'];\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createPlatformSyncRuntime',
+						signature:
+							'const createPlatformSyncRuntime: (options?: PlatformSyncRuntimeOptions) => {\n    app: import("elysia/types").AddRoute<"", "local", {\n        decorator: {};\n        store: {};\n        derive: {};\n    }, {\n        typebox: {};\n        error: [];\n    }, import("elysia").DefaultMetadata, {}, import("elysia").DefaultEphemeral, {\n        derive: {};\n        schema: {};\n        schemas: {};\n        response: {};\n        error: [];\n    }, "get", "/.well-known/absolute/sync", import("elysia/types").IntersectIfObjectSchema<import("elysia").UnwrapRoute<{}, {}, "/.well-known/absolute/sync">, import("elysia/types").MergeScopedSchemas<{}, {}, {}>>, {}, ({ set }: {\n        body: unknown;\n        query: Record<string, string | undefined>;\n        params: {};\n        headers: Record<string, string | undefined>;\n        cookie: Record<string, import("elysia").Cookie<unknown>>;\n        server: import("elysia").Server | null;\n        redirect: import("elysia").redirect;\n        set: {\n            headers: import("elysia").HTTPHeaders;\n            status?: number | keyof import("elysia").StatusMap;\n            cookie?: Record<string, import("elysia").BaseCookie>;\n            redirect?: never;\n        }'
+					}
+				]
+			}
+		],
 		category: 'Data & Sync',
 		commands: [
 			{
@@ -36047,7 +53132,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/sync/platform'
 		],
 		readmeDigest:
-			'f2ccd6185115aa57bc46f4c9c0cf83ec6339c603f6ee5db5a4f7a8dcd8ad662f',
+			'09472721467ba62fd2a25c0414e46f419e96e093ec4cda660944e1f31410e673',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/sync',
@@ -36194,7 +53279,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/sync',
 		subpackages: [],
-		version: '2.32.5'
+		version: '3.0.0'
 	},
 	{
 		api: [],
@@ -36340,7 +53425,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'automerge',
-				version: '0.0.4'
+				version: '0.0.5'
 			},
 			{
 				api: [],
@@ -36448,7 +53533,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'bus-pg',
-				version: '0.2.3'
+				version: '0.2.4'
 			},
 			{
 				api: [],
@@ -36550,7 +53635,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'redis',
-				version: '0.1.1'
+				version: '0.1.2'
 			},
 			{
 				api: [],
@@ -36665,7 +53750,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'capacitor',
-				version: '0.9.3'
+				version: '0.9.4'
 			},
 			{
 				api: [],
@@ -36742,7 +53827,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'loro',
-				version: '0.0.4'
+				version: '0.0.5'
 			},
 			{
 				api: [],
@@ -36825,7 +53910,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'yjs',
-				version: '0.1.0'
+				version: '0.1.1'
 			}
 		],
 		version: null
@@ -37133,7 +54218,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/sync-expo',
 		subpackages: [],
-		version: '0.0.4'
+		version: '0.0.5'
 	},
 	{
 		api: [],
@@ -37344,7 +54429,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'comments',
-				version: '0.7.1'
+				version: '0.7.2'
 			},
 			{
 				api: [],
@@ -37449,7 +54534,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'counters',
-				version: '0.2.0'
+				version: '0.2.1'
 			},
 			{
 				api: [],
@@ -37558,7 +54643,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'digest',
-				version: '0.3.0'
+				version: '0.3.1'
 			},
 			{
 				api: [],
@@ -37676,7 +54761,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'favorites',
-				version: '0.4.0'
+				version: '0.4.1'
 			},
 			{
 				api: [],
@@ -37746,7 +54831,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'mentions',
-				version: '0.3.0'
+				version: '0.3.1'
 			},
 			{
 				api: [],
@@ -37852,7 +54937,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'notifications',
-				version: '0.5.0'
+				version: '0.5.1'
 			},
 			{
 				api: [],
@@ -37968,7 +55053,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'presence',
-				version: '0.6.0'
+				version: '0.6.1'
 			},
 			{
 				api: [],
@@ -38078,7 +55163,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'triage',
-				version: '0.3.0'
+				version: '0.3.1'
 			},
 			{
 				api: [],
@@ -38180,7 +55265,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'utils',
-				version: '0.1.4'
+				version: '0.1.5'
 			}
 		],
 		version: null
@@ -39010,7 +56095,3201 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.3.0-beta.7'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/voice',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'voice',
+						signature: 'voice'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'applyVoiceCampaignTelephonyOutcome',
+						signature: 'applyVoiceCampaignTelephonyOutcome'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'assertVoiceCampaignReadinessEvidence',
+						signature: 'assertVoiceCampaignReadinessEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildVoiceCampaignObservabilityReport',
+						signature: 'buildVoiceCampaignObservabilityReport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCampaignTelephonyOutcomeHandler',
+						signature: 'createVoiceCampaignTelephonyOutcomeHandler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCampaignTelephonyOutcomeRecorder',
+						signature: 'createVoiceCampaignTelephonyOutcomeRecorder'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCampaign',
+						signature: 'createVoiceCampaign'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCampaignRoutes',
+						signature: 'createVoiceCampaignRoutes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCampaignWorker',
+						signature: 'createVoiceCampaignWorker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCampaignWorkerLoop',
+						signature: 'createVoiceCampaignWorkerLoop'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceMemoryCampaignStore',
+						signature: 'createVoiceMemoryCampaignStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'evaluateVoiceCampaignReadinessEvidence',
+						signature: 'evaluateVoiceCampaignReadinessEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'importVoiceCampaignRecipients',
+						signature: 'importVoiceCampaignRecipients'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceCampaignObservabilityHTML',
+						signature: 'renderVoiceCampaignObservabilityHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceCampaignsHTML',
+						signature: 'renderVoiceCampaignsHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runVoiceCampaignProof',
+						signature: 'runVoiceCampaignProof'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runVoiceCampaignReadinessProof',
+						signature: 'runVoiceCampaignReadinessProof'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'summarizeVoiceCampaigns',
+						signature: 'summarizeVoiceCampaigns'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'assertVoiceCampaignDialerProofEvidence',
+						signature: 'assertVoiceCampaignDialerProofEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoicePlivoCampaignDialer',
+						signature: 'createVoicePlivoCampaignDialer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceTelnyxCampaignDialer',
+						signature: 'createVoiceTelnyxCampaignDialer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceTwilioCampaignDialer',
+						signature: 'createVoiceTwilioCampaignDialer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'evaluateVoiceCampaignDialerProofEvidence',
+						signature: 'evaluateVoiceCampaignDialerProofEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getVoiceCampaignDialerProofStatus',
+						signature: 'getVoiceCampaignDialerProofStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runVoiceCampaignDialerProof',
+						signature: 'runVoiceCampaignDialerProof'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAssistant',
+						signature: 'createVoiceAssistant'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceExperiment',
+						signature: 'createVoiceExperiment'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'summarizeVoiceAssistantRuns',
+						signature: 'summarizeVoiceAssistantRuns'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAssistantHealthHTMLHandler',
+						signature: 'createVoiceAssistantHealthHTMLHandler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAssistantHealthJSONHandler',
+						signature: 'createVoiceAssistantHealthJSONHandler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAssistantHealthRoutes',
+						signature: 'createVoiceAssistantHealthRoutes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceAssistantHealthHTML',
+						signature: 'renderVoiceAssistantHealthHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'summarizeVoiceAssistantHealth',
+						signature: 'summarizeVoiceAssistantHealth'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditEvent',
+						signature: 'createVoiceAuditEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditLogger',
+						signature: 'createVoiceAuditLogger'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceMemoryAuditEventStore',
+						signature: 'createVoiceMemoryAuditEventStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceScopedAuditEventStore',
+						signature: 'createVoiceScopedAuditEventStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'filterVoiceAuditEvents',
+						signature: 'filterVoiceAuditEvents'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recordVoiceAuditEvent',
+						signature: 'recordVoiceAuditEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recordVoiceHandoffAuditEvent',
+						signature: 'recordVoiceHandoffAuditEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recordVoiceOperatorAuditEvent',
+						signature: 'recordVoiceOperatorAuditEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recordVoiceProviderAuditEvent',
+						signature: 'recordVoiceProviderAuditEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recordVoiceRetentionAuditEvent',
+						signature: 'recordVoiceRetentionAuditEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recordVoiceToolAuditEvent',
+						signature: 'recordVoiceToolAuditEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildVoiceAuditTrailReport',
+						signature: 'buildVoiceAuditTrailReport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditTrailRoutes',
+						signature: 'createVoiceAuditTrailRoutes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceAuditTrailHTML',
+						signature: 'renderVoiceAuditTrailHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveVoiceAuditTrailFilter',
+						signature: 'resolveVoiceAuditTrailFilter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'summarizeVoiceAuditTrail',
+						signature: 'summarizeVoiceAuditTrail'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildVoiceAuditExport',
+						signature: 'buildVoiceAuditExport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'exportVoiceAuditTrail',
+						signature: 'exportVoiceAuditTrail'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'redactVoiceAuditEvent',
+						signature: 'redactVoiceAuditEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'redactVoiceAuditEvents',
+						signature: 'redactVoiceAuditEvents'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceAuditHTML',
+						signature: 'renderVoiceAuditHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceAuditMarkdown',
+						signature: 'renderVoiceAuditMarkdown'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditHTTPSink',
+						signature: 'createVoiceAuditHTTPSink'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditS3Sink',
+						signature: 'createVoiceAuditS3Sink'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditSinkDeliveryId',
+						signature: 'createVoiceAuditSinkDeliveryId'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditSinkDeliveryRecord',
+						signature: 'createVoiceAuditSinkDeliveryRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditSinkDeliveryWorker',
+						signature: 'createVoiceAuditSinkDeliveryWorker'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditSinkDeliveryWorkerLoop',
+						signature: 'createVoiceAuditSinkDeliveryWorkerLoop'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditSinkStore',
+						signature: 'createVoiceAuditSinkStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceMemoryAuditSinkDeliveryStore',
+						signature: 'createVoiceMemoryAuditSinkDeliveryStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'deliverVoiceAuditEventsToSinks',
+						signature: 'deliverVoiceAuditEventsToSinks'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'summarizeVoiceAuditSinkDeliveries',
+						signature: 'summarizeVoiceAuditSinkDeliveries'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildVoiceAuditDeliveryReport',
+						signature: 'buildVoiceAuditDeliveryReport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditDeliveryHTMLHandler',
+						signature: 'createVoiceAuditDeliveryHTMLHandler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditDeliveryJSONHandler',
+						signature: 'createVoiceAuditDeliveryJSONHandler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAuditDeliveryRoutes',
+						signature: 'createVoiceAuditDeliveryRoutes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceAuditDeliveryHTML',
+						signature: 'renderVoiceAuditDeliveryHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'resolveVoiceAuditDeliveryFilter',
+						signature: 'resolveVoiceAuditDeliveryFilter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceBargeInRoutes',
+						signature: 'createVoiceBargeInRoutes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceBargeInHTML',
+						signature: 'renderVoiceBargeInHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'summarizeVoiceBargeIn',
+						signature: 'summarizeVoiceBargeIn'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'buildVoiceReconnectProofReport',
+						signature: 'buildVoiceReconnectProofReport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceReconnectContractRoutes',
+						signature: 'createVoiceReconnectContractRoutes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceReconnectProofRoutes',
+						signature: 'createVoiceReconnectProofRoutes'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceReconnectContractHTML',
+						signature: 'renderVoiceReconnectContractHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'summarizeVoiceReconnectProofSessions',
+						signature: 'summarizeVoiceReconnectProofSessions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'summarizeVoiceReconnectContractSnapshots',
+						signature: 'summarizeVoiceReconnectContractSnapshots'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/voice/client',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'bindVoiceReactiveSource',
+						signature: 'bindVoiceReactiveSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'voiceSseReactiveSource',
+						signature: 'voiceSseReactiveSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReactiveSource',
+						signature: 'VoiceReactiveSource'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSseReactiveSourceOptions',
+						signature: 'VoiceSseReactiveSourceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceConnection',
+						signature: 'createVoiceConnection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReconnectRejectedError',
+						signature: 'VoiceReconnectRejectedError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'checkBrowserVoiceSupport',
+						signature: 'checkBrowserVoiceSupport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'probeBrowserVoiceSupport',
+						signature: 'probeBrowserVoiceSupport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BrowserVoiceSupportProbe',
+						signature: 'BrowserVoiceSupportProbe'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BrowserVoiceSupportReport',
+						signature: 'BrowserVoiceSupportReport'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAudioPlayer',
+						signature: 'createVoiceAudioPlayer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'decodeVoiceAudioChunk',
+						signature: 'decodeVoiceAudioChunk'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createTimeStretcher',
+						signature: 'createTimeStretcher'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TimeStretcher',
+						signature: 'type TimeStretcher'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceStream',
+						signature: 'createVoiceStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceBrowserMediaReporter',
+						signature: 'createVoiceBrowserMediaReporter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceBrowserMediaReporter',
+						signature: 'VoiceBrowserMediaReporter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceController',
+						signature: 'createVoiceController'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'bindVoiceBargeIn',
+						signature: 'bindVoiceBargeIn'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceDuplexController',
+						signature: 'createVoiceDuplexController'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'bindVoiceHTMX',
+						signature: 'bindVoiceHTMX'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMicrophoneCapture',
+						signature: 'createMicrophoneCapture'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceBargeInMonitor',
+						signature: 'createVoiceBargeInMonitor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceLiveTurnLatencyMonitor',
+						signature: 'createVoiceLiveTurnLatencyMonitor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceOpsStatusStore',
+						signature: 'createVoiceOpsStatusStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceOpsStatus',
+						signature: 'fetchVoiceOpsStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoicePlatformCoverageStore',
+						signature: 'createVoicePlatformCoverageStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoicePlatformCoverage',
+						signature: 'fetchVoicePlatformCoverage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceProofTrendsStore',
+						signature: 'createVoiceProofTrendsStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceProofTrends',
+						signature: 'fetchVoiceProofTrends'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceReconnectProfileEvidenceStore',
+						signature: 'createVoiceReconnectProfileEvidenceStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceReconnectProfileEvidence',
+						signature: 'fetchVoiceReconnectProfileEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceSessionSnapshotStore',
+						signature: 'createVoiceSessionSnapshotStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceSessionSnapshot',
+						signature: 'fetchVoiceSessionSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceSessionObservabilityStore',
+						signature: 'createVoiceSessionObservabilityStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceSessionObservability',
+						signature: 'fetchVoiceSessionObservability'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCallDebuggerStore',
+						signature: 'createVoiceCallDebuggerStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceCallDebugger',
+						signature: 'fetchVoiceCallDebugger'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCallDebuggerLaunchViewModel',
+						signature: 'createVoiceCallDebuggerLaunchViewModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineVoiceCallDebuggerLaunchElement',
+						signature: 'defineVoiceCallDebuggerLaunchElement'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mountVoiceCallDebuggerLaunch',
+						signature: 'mountVoiceCallDebuggerLaunch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceCallDebuggerLaunchHTML',
+						signature: 'renderVoiceCallDebuggerLaunchHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallDebuggerClientOptions',
+						signature: 'VoiceCallDebuggerClientOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallDebuggerClientState',
+						signature: 'VoiceCallDebuggerClientState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallDebuggerLaunchOptions',
+						signature: 'VoiceCallDebuggerLaunchOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallDebuggerLaunchViewModel',
+						signature: 'VoiceCallDebuggerLaunchViewModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceSessionSnapshotViewModel',
+						signature: 'createVoiceSessionSnapshotViewModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineVoiceSessionSnapshotElement',
+						signature: 'defineVoiceSessionSnapshotElement'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mountVoiceSessionSnapshot',
+						signature: 'mountVoiceSessionSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceSessionSnapshotHTML',
+						signature: 'renderVoiceSessionSnapshotHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceSessionObservabilityViewModel',
+						signature: 'createVoiceSessionObservabilityViewModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defineVoiceSessionObservabilityElement',
+						signature: 'defineVoiceSessionObservabilityElement'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'getVoiceSessionObservabilityCSS',
+						signature: 'getVoiceSessionObservabilityCSS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'mountVoiceSessionObservability',
+						signature: 'mountVoiceSessionObservability'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceSessionObservabilityHTML',
+						signature: 'renderVoiceSessionObservabilityHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionSnapshotClientOptions',
+						signature: 'VoiceSessionSnapshotClientOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionSnapshotClientState',
+						signature: 'VoiceSessionSnapshotClientState'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionObservabilityClientOptions',
+						signature: 'VoiceSessionObservabilityClientOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionObservabilitySnapshot',
+						signature: 'VoiceSessionObservabilitySnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionSnapshotViewModel',
+						signature: 'VoiceSessionSnapshotViewModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionSnapshotWidgetOptions',
+						signature: 'VoiceSessionSnapshotWidgetOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionObservabilityTurnView',
+						signature: 'VoiceSessionObservabilityTurnView'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionObservabilityViewModel',
+						signature: 'VoiceSessionObservabilityViewModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionObservabilityWidgetOptions',
+						signature: 'VoiceSessionObservabilityWidgetOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceProfileComparisonStore',
+						signature: 'createVoiceProfileComparisonStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceProfileComparison',
+						signature: 'fetchVoiceProfileComparison'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceProfileSwitchRecommendationStore',
+						signature: 'createVoiceProfileSwitchRecommendationStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceProfileSwitchRecommendation',
+						signature: 'fetchVoiceProfileSwitchRecommendation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceReadinessFailuresStore',
+						signature: 'createVoiceReadinessFailuresStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceReadinessFailures',
+						signature: 'fetchVoiceReadinessFailures'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceOpsActionCenterActions',
+						signature: 'createVoiceOpsActionCenterActions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceOpsActionCenterStore',
+						signature: 'createVoiceOpsActionCenterStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'recordVoiceOpsActionResult',
+						signature: 'recordVoiceOpsActionResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'runVoiceOpsAction',
+						signature: 'runVoiceOpsAction'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceLiveOpsStore',
+						signature: 'createVoiceLiveOpsStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'postVoiceLiveOpsAction',
+						signature: 'postVoiceLiveOpsAction'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceOpsActionHistoryStore',
+						signature: 'createVoiceOpsActionHistoryStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceOpsActionHistory',
+						signature: 'fetchVoiceOpsActionHistory'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceDeliveryRuntimeStore',
+						signature: 'createVoiceDeliveryRuntimeStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'fetchVoiceDeliveryRuntime',
+						signature: 'fetchVoiceDeliveryRuntime'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/voice/react',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceOpsStatus',
+						signature: 'VoiceOpsStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceOpsActionCenter',
+						signature: 'VoiceOpsActionCenter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceDeliveryRuntime',
+						signature: 'VoiceDeliveryRuntime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoicePlatformCoverage',
+						signature: 'VoicePlatformCoverage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProofTrends',
+						signature: 'VoiceProofTrends'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReconnectProfileEvidence',
+						signature: 'VoiceReconnectProfileEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallDebuggerLaunch',
+						signature: 'VoiceCallDebuggerLaunch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionSnapshot',
+						signature: 'VoiceSessionSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionObservability',
+						signature: 'VoiceSessionObservability'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProfileComparison',
+						signature: 'VoiceProfileComparison'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProfileSwitchRecommendation',
+						signature: 'VoiceProfileSwitchRecommendation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReadinessFailures',
+						signature: 'VoiceReadinessFailures'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderSimulationControls',
+						signature: 'VoiceProviderSimulationControls'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderCapabilities',
+						signature: 'VoiceProviderCapabilities'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderContracts',
+						signature: 'VoiceProviderContracts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderStatus',
+						signature: 'VoiceProviderStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceRoutingStatus',
+						signature: 'VoiceRoutingStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTraceTimeline',
+						signature: 'VoiceTraceTimeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceAgentSquadStatus',
+						signature: 'VoiceAgentSquadStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTurnLatency',
+						signature: 'VoiceTurnLatency'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTurnQuality',
+						signature: 'VoiceTurnQuality'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceOpsStatus',
+						signature: 'useVoiceOpsStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoicePlatformCoverage',
+						signature: 'useVoicePlatformCoverage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProofTrends',
+						signature: 'useVoiceProofTrends'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceReconnectProfileEvidence',
+						signature: 'useVoiceReconnectProfileEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceCallDebugger',
+						signature: 'useVoiceCallDebugger'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceSessionSnapshot',
+						signature: 'useVoiceSessionSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceSessionObservability',
+						signature: 'useVoiceSessionObservability'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProfileComparison',
+						signature: 'useVoiceProfileComparison'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProfileSwitchRecommendation',
+						signature: 'useVoiceProfileSwitchRecommendation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceReadinessFailures',
+						signature: 'useVoiceReadinessFailures'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceOpsActionCenter',
+						signature: 'useVoiceOpsActionCenter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceLiveOps',
+						signature: 'useVoiceLiveOps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceDeliveryRuntime',
+						signature: 'useVoiceDeliveryRuntime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceCampaignDialerProof',
+						signature: 'useVoiceCampaignDialerProof'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceStream',
+						signature: 'useVoiceStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceController',
+						signature: 'useVoiceController'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidget',
+						signature: 'VoiceWidget'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidgetLabels',
+						signature: 'VoiceWidgetLabels'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidgetProps',
+						signature: 'VoiceWidgetProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidgetTheme',
+						signature: 'VoiceWidgetTheme'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallPlayer',
+						signature: 'VoiceCallPlayer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallPlayerProps',
+						signature: 'VoiceCallPlayerProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCostDashboard',
+						signature: 'VoiceCostDashboard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCostDashboardProps',
+						signature: 'VoiceCostDashboardProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveAgentConsole',
+						signature: 'VoiceLiveAgentConsole'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveAgentConsoleProps',
+						signature: 'VoiceLiveAgentConsoleProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveCallViewer',
+						signature: 'VoiceLiveCallViewer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveCallViewerProps',
+						signature: 'VoiceLiveCallViewerProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReplayTimeline',
+						signature: 'VoiceReplayTimeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReplayTimelineProps',
+						signature: 'VoiceReplayTimelineProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProviderStatus',
+						signature: 'useVoiceProviderStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProviderCapabilities',
+						signature: 'useVoiceProviderCapabilities'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProviderContracts',
+						signature: 'useVoiceProviderContracts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProviderSimulationControls',
+						signature: 'useVoiceProviderSimulationControls'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceRoutingStatus',
+						signature: 'useVoiceRoutingStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceTraceTimeline',
+						signature: 'useVoiceTraceTimeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceAgentSquadStatus',
+						signature: 'useVoiceAgentSquadStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceTurnLatency',
+						signature: 'useVoiceTurnLatency'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceTurnQuality',
+						signature: 'useVoiceTurnQuality'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceWorkflowStatus',
+						signature: 'useVoiceWorkflowStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceAgentSquadStatusProps',
+						signature: 'VoiceAgentSquadStatusProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceDeliveryRuntimeProps',
+						signature: 'VoiceDeliveryRuntimeProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceOpsActionCenterProps',
+						signature: 'VoiceOpsActionCenterProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceOpsStatusProps',
+						signature: 'VoiceOpsStatusProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoicePlatformCoverageProps',
+						signature: 'VoicePlatformCoverageProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProfileComparisonProps',
+						signature: 'VoiceProfileComparisonProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProfileSwitchRecommendationProps',
+						signature: 'VoiceProfileSwitchRecommendationProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProofTrendsProps',
+						signature: 'VoiceProofTrendsProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderCapabilitiesProps',
+						signature: 'VoiceProviderCapabilitiesProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderContractsProps',
+						signature: 'VoiceProviderContractsProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderSimulationControlsProps',
+						signature: 'VoiceProviderSimulationControlsProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderStatusProps',
+						signature: 'VoiceProviderStatusProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReadinessFailuresProps',
+						signature: 'VoiceReadinessFailuresProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReconnectProfileEvidenceProps',
+						signature: 'VoiceReconnectProfileEvidenceProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceRoutingStatusProps',
+						signature: 'VoiceRoutingStatusProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionObservabilityProps',
+						signature: 'VoiceSessionObservabilityProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionSnapshotProps',
+						signature: 'VoiceSessionSnapshotProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTraceTimelineProps',
+						signature: 'VoiceTraceTimelineProps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTurnLatencyProps',
+						signature: 'VoiceTurnLatencyProps'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/voice/vue',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceOpsStatus',
+						signature: 'VoiceOpsStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceOpsActionCenter',
+						signature: 'VoiceOpsActionCenter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceDeliveryRuntime',
+						signature: 'VoiceDeliveryRuntime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoicePlatformCoverage',
+						signature: 'VoicePlatformCoverage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProofTrends',
+						signature: 'VoiceProofTrends'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReconnectProfileEvidence',
+						signature: 'VoiceReconnectProfileEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallDebuggerLaunch',
+						signature: 'VoiceCallDebuggerLaunch'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionSnapshot',
+						signature: 'VoiceSessionSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionObservability',
+						signature: 'VoiceSessionObservability'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReadinessFailures',
+						signature: 'VoiceReadinessFailures'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderSimulationControls',
+						signature: 'VoiceProviderSimulationControls'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderCapabilities',
+						signature: 'VoiceProviderCapabilities'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderContracts',
+						signature: 'VoiceProviderContracts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderStatus',
+						signature: 'VoiceProviderStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceRoutingStatus',
+						signature: 'VoiceRoutingStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceAgentSquadStatus',
+						signature: 'useVoiceAgentSquadStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTurnLatency',
+						signature: 'VoiceTurnLatency'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTurnQuality',
+						signature: 'VoiceTurnQuality'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceOpsStatus',
+						signature: 'useVoiceOpsStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoicePlatformCoverage',
+						signature: 'useVoicePlatformCoverage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProofTrends',
+						signature: 'useVoiceProofTrends'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceReconnectProfileEvidence',
+						signature: 'useVoiceReconnectProfileEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceCallDebugger',
+						signature: 'useVoiceCallDebugger'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceSessionSnapshot',
+						signature: 'useVoiceSessionSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceSessionObservability',
+						signature: 'useVoiceSessionObservability'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProfileComparison',
+						signature: 'useVoiceProfileComparison'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceReadinessFailures',
+						signature: 'useVoiceReadinessFailures'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceOpsActionCenter',
+						signature: 'useVoiceOpsActionCenter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceLiveOps',
+						signature: 'useVoiceLiveOps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceDeliveryRuntime',
+						signature: 'useVoiceDeliveryRuntime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceCampaignDialerProof',
+						signature: 'useVoiceCampaignDialerProof'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceStream',
+						signature: 'useVoiceStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceController',
+						signature: 'useVoiceController'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidget',
+						signature: 'VoiceWidget'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallPlayer',
+						signature: 'VoiceCallPlayer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCostDashboard',
+						signature: 'VoiceCostDashboard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveAgentConsole',
+						signature: 'VoiceLiveAgentConsole'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveCallViewer',
+						signature: 'VoiceLiveCallViewer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReplayTimeline',
+						signature: 'VoiceReplayTimeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidgetLabels',
+						signature: 'VoiceWidgetLabels'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidgetTheme',
+						signature: 'VoiceWidgetTheme'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProviderStatus',
+						signature: 'useVoiceProviderStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProviderCapabilities',
+						signature: 'useVoiceProviderCapabilities'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProviderContracts',
+						signature: 'useVoiceProviderContracts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceProviderSimulationControls',
+						signature: 'useVoiceProviderSimulationControls'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceRoutingStatus',
+						signature: 'useVoiceRoutingStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceTraceTimeline',
+						signature: 'useVoiceTraceTimeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceTurnLatency',
+						signature: 'useVoiceTurnLatency'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceTurnQuality',
+						signature: 'useVoiceTurnQuality'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'useVoiceWorkflowStatus',
+						signature: 'useVoiceWorkflowStatus'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/voice/svelte',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCampaignDialerProof',
+						signature: 'createVoiceCampaignDialerProof'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCallPlayer',
+						signature: 'createVoiceCallPlayer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceCallPlayerHTML',
+						signature: 'renderVoiceCallPlayerHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateVoiceCallPlayerOptions',
+						signature: 'CreateVoiceCallPlayerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceWidget',
+						signature: 'createVoiceWidget'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateVoiceWidgetOptions',
+						signature: 'CreateVoiceWidgetOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidgetLabels',
+						signature: 'VoiceWidgetLabels'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidgetTheme',
+						signature: 'VoiceWidgetTheme'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidgetViewModel',
+						signature: 'VoiceWidgetViewModel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCostDashboard',
+						signature: 'createVoiceCostDashboard'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceCostDashboardHTML',
+						signature: 'renderVoiceCostDashboardHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateVoiceCostDashboardOptions',
+						signature: 'CreateVoiceCostDashboardOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceLiveAgentConsole',
+						signature: 'createVoiceLiveAgentConsole'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceLiveAgentConsoleHTML',
+						signature: 'renderVoiceLiveAgentConsoleHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateVoiceLiveAgentConsoleSvelteOptions',
+						signature: 'CreateVoiceLiveAgentConsoleSvelteOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceLiveCallViewer',
+						signature: 'createVoiceLiveCallViewer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceLiveCallViewerHTML',
+						signature: 'renderVoiceLiveCallViewerHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateVoiceLiveCallViewerSvelteOptions',
+						signature: 'CreateVoiceLiveCallViewerSvelteOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceReplayTimeline',
+						signature: 'createVoiceReplayTimeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'renderVoiceReplayTimelineHTML',
+						signature: 'renderVoiceReplayTimelineHTML'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateVoiceReplayTimelineOptions',
+						signature: 'CreateVoiceReplayTimelineOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceDeliveryRuntime',
+						signature: 'createVoiceDeliveryRuntime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceOpsActionCenter',
+						signature: 'createVoiceOpsActionCenter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceLiveOps',
+						signature: 'createVoiceLiveOps'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceOpsStatus',
+						signature: 'createVoiceOpsStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoicePlatformCoverage',
+						signature: 'createVoicePlatformCoverage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceProofTrends',
+						signature: 'createVoiceProofTrends'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceReconnectProfileEvidence',
+						signature: 'createVoiceReconnectProfileEvidence'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceCallDebugger',
+						signature: 'createVoiceCallDebugger'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceSessionSnapshot',
+						signature: 'createVoiceSessionSnapshot'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceSessionObservability',
+						signature: 'createVoiceSessionObservability'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceProfileComparison',
+						signature: 'createVoiceProfileComparison'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceReadinessFailures',
+						signature: 'createVoiceReadinessFailures'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceProviderSimulationControls',
+						signature: 'createVoiceProviderSimulationControls'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceProviderCapabilities',
+						signature: 'createVoiceProviderCapabilities'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceProviderContracts',
+						signature: 'createVoiceProviderContracts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceStream',
+						signature: 'createVoiceStream'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceProviderStatus',
+						signature: 'createVoiceProviderStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceRoutingStatus',
+						signature: 'createVoiceRoutingStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceTraceTimeline',
+						signature: 'createVoiceTraceTimeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceAgentSquadStatus',
+						signature: 'createVoiceAgentSquadStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceTurnLatency',
+						signature: 'createVoiceTurnLatency'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceTurnQuality',
+						signature: 'createVoiceTurnQuality'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceWorkflowStatus',
+						signature: 'createVoiceWorkflowStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createVoiceController',
+						signature: 'createVoiceController'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/voice/angular',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceOpsStatusService',
+						signature: 'VoiceOpsStatusService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWidgetService',
+						signature: 'VoiceWidgetService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateVoiceWidgetServiceOptions',
+						signature: 'CreateVoiceWidgetServiceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallPlayerService',
+						signature: 'VoiceCallPlayerService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallPlayerServiceOptions',
+						signature: 'VoiceCallPlayerServiceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCostDashboardService',
+						signature: 'VoiceCostDashboardService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCostDashboardServiceOptions',
+						signature: 'VoiceCostDashboardServiceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveAgentConsoleService',
+						signature: 'VoiceLiveAgentConsoleService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveAgentConsoleServiceOptions',
+						signature: 'VoiceLiveAgentConsoleServiceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveCallViewerService',
+						signature: 'VoiceLiveCallViewerService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveCallViewerServiceOptions',
+						signature: 'VoiceLiveCallViewerServiceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReplayTimelineService',
+						signature: 'VoiceReplayTimelineService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReplayTimelineServiceOptions',
+						signature: 'VoiceReplayTimelineServiceOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoicePlatformCoverageService',
+						signature: 'VoicePlatformCoverageService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProofTrendsService',
+						signature: 'VoiceProofTrendsService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReconnectProfileEvidenceService',
+						signature: 'VoiceReconnectProfileEvidenceService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCallDebuggerService',
+						signature: 'VoiceCallDebuggerService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionSnapshotService',
+						signature: 'VoiceSessionSnapshotService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceSessionObservabilityService',
+						signature: 'VoiceSessionObservabilityService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProfileComparisonService',
+						signature: 'VoiceProfileComparisonService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceReadinessFailuresService',
+						signature: 'VoiceReadinessFailuresService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceOpsActionCenterService',
+						signature: 'VoiceOpsActionCenterService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceLiveOpsService',
+						signature: 'VoiceLiveOpsService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceDeliveryRuntimeService',
+						signature: 'VoiceDeliveryRuntimeService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceCampaignDialerProofService',
+						signature: 'VoiceCampaignDialerProofService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceStreamService',
+						signature: 'VoiceStreamService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceControllerService',
+						signature: 'VoiceControllerService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderCapabilitiesService',
+						signature: 'VoiceProviderCapabilitiesService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderContractsService',
+						signature: 'VoiceProviderContractsService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceProviderStatusService',
+						signature: 'VoiceProviderStatusService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceRoutingStatusService',
+						signature: 'VoiceRoutingStatusService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTraceTimelineService',
+						signature: 'VoiceTraceTimelineService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceAgentSquadStatusService',
+						signature: 'VoiceAgentSquadStatusService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTurnLatencyService',
+						signature: 'VoiceTurnLatencyService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceTurnQualityService',
+						signature: 'VoiceTurnQualityService'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VoiceWorkflowStatusService',
+						signature: 'VoiceWorkflowStatusService'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/voice/drizzle',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceDocumentTable',
+						signature:
+							'const voiceDocumentTable: (name: string) => import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceDrizzleDocumentTable',
+						signature:
+							'type VoiceDrizzleDocumentTable = ReturnType<typeof voiceDocumentTable>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceDrizzleDatabase',
+						signature:
+							'type VoiceDrizzleDatabase = PgAsyncDatabase<any, any>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceDrizzleStoreOptions',
+						signature:
+							'type VoiceDrizzleStoreOptions = {\n    db: VoiceDrizzleDatabase;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleRecordStore',
+						signature:
+							'const createVoiceDrizzleRecordStore: <T, DB extends VoiceDrizzleDatabase = VoiceDrizzleDatabase>(input: {\n    db: DB;\n    decorate: (id: string, value: T) => T;\n    getSortAt: (value: T) => number;\n    table: VoiceDrizzleDocumentTable;\n}) => {\n    get: (id: string) => Promise<T | undefined>;\n    list: () => Promise<T[]>;\n    remove: (id: string) => Promise<void>;\n    set: (id: string, value: T) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceAuditDeliveriesTable',
+						signature:
+							'const voiceAuditDeliveriesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n           '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceAuditTable',
+						signature:
+							'const voiceAuditTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntim'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceCampaignsTable',
+						signature:
+							'const voiceCampaignsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRu'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceEventsTable',
+						signature:
+							'const voiceEventsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRunti'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceExternalObjectsTable',
+						signature:
+							'const voiceExternalObjectsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n           '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceReviewsTable',
+						signature:
+							'const voiceReviewsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRunt'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceSessionsTable',
+						signature:
+							'const voiceSessionsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRun'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceTasksTable',
+						signature:
+							'const voiceTasksTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntim'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceTelephonyWebhookIdempotencyTable',
+						signature:
+							'const voiceTelephonyWebhookIdempotencyTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceTraceDeliveriesTable',
+						signature:
+							'const voiceTraceDeliveriesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n           '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceTracesTable',
+						signature:
+							'const voiceTracesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRunti'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceRuntimeStorageDrizzleSchema',
+						signature:
+							'const voiceRuntimeStorageDrizzleSchema: {\n    voiceAudit: import("drizzle-orm/pg-core").PgTableWithColumns<{\n        name: string;\n        schema: undefined;\n        columns: {\n            id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n                name: string;\n                tableName: string;\n                dataType: "string";\n                data: string;\n                driverParam: string;\n                notNull: true;\n                hasDefault: false;\n                isPrimaryKey: false;\n                isAutoincrement: false;\n                hasRuntimeDefault: false;\n                enumValues: undefined;\n                identity: undefined;\n                generated: undefined;\n            }>;\n            payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n                name: string;\n                tableName: string;\n                dataType: "object json";\n                data: unknown;\n                driverParam: unknown;\n                n'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceDrizzleRuntimeStorage',
+						signature:
+							'type VoiceDrizzleRuntimeStorage<TSession extends VoiceSessionRecord = VoiceSessionRecord, TReview extends StoredVoiceCallReviewArtifact = StoredVoiceCallReviewArtifact, TTask extends StoredVoiceOpsTask = StoredVoiceOpsTask, TEvent extends StoredVoiceIntegrationEvent = StoredVoiceIntegrationEvent, TMapping extends StoredVoiceExternalObjectMap = StoredVoiceExternalObjectMap, TTrace extends StoredVoiceTraceEvent = StoredVoiceTraceEvent, TTraceDelivery extends VoiceTraceSinkDeliveryRecord = VoiceTraceSinkDeliveryRecord, TAudit extends StoredVoiceAuditEvent = StoredVoiceAuditEvent, TAuditDelivery extends VoiceAuditSinkDeliveryRecord = VoiceAuditSinkDeliveryRecord, TIncident extends StoredVoiceIncidentBundleArtifact = StoredVoiceIncidentBundleArtifact, TMemory extends VoiceAssistantMemoryRecord = VoiceAssistantMemoryRecord> = {\n    audit: VoiceAuditEventStore<TAudit>;\n    auditDeliveries: VoiceAuditSinkDeliveryStore<TAuditDelivery>;\n    campaigns: VoiceCampaignStore;\n    events: VoiceIntegrationEventStore<TEvent>;\n    externalObjects: VoiceExternalObjectMapStore<TMapping>;\n    incidentBundles: VoiceIncidentBundleStore<TIncident>;\n    memories: VoiceAssistantMemoryStore<TMemory>;\n    revi'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleAuditEventStore',
+						signature:
+							'const createVoiceDrizzleAuditEventStore: <TEvent extends StoredVoiceAuditEvent = StoredVoiceAuditEvent>(options: VoiceDrizzleStoreOptions) => VoiceAuditEventStore<TEvent>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleAuditSinkDeliveryStore',
+						signature:
+							'const createVoiceDrizzleAuditSinkDeliveryStore: <TDelivery extends VoiceAuditSinkDeliveryRecord = VoiceAuditSinkDeliveryRecord>(options: VoiceDrizzleStoreOptions) => VoiceAuditSinkDeliveryStore<TDelivery>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleCampaignStore',
+						signature:
+							'const createVoiceDrizzleCampaignStore: (options: VoiceDrizzleStoreOptions) => VoiceCampaignStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleExternalObjectMapStore',
+						signature:
+							'const createVoiceDrizzleExternalObjectMapStore: <TMapping extends StoredVoiceExternalObjectMap = StoredVoiceExternalObjectMap>(options: VoiceDrizzleStoreOptions) => VoiceExternalObjectMapStore<TMapping>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleIntegrationEventStore',
+						signature:
+							'const createVoiceDrizzleIntegrationEventStore: <TEvent extends StoredVoiceIntegrationEvent = StoredVoiceIntegrationEvent>(options: VoiceDrizzleStoreOptions) => VoiceIntegrationEventStore<TEvent>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleReviewStore',
+						signature:
+							'const createVoiceDrizzleReviewStore: <TArtifact extends StoredVoiceCallReviewArtifact = StoredVoiceCallReviewArtifact>(options: VoiceDrizzleStoreOptions) => VoiceCallReviewStore<TArtifact>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleRuntimeStorage',
+						signature:
+							'const createVoiceDrizzleRuntimeStorage: <TSession extends VoiceSessionRecord = VoiceSessionRecord, TReview extends StoredVoiceCallReviewArtifact = StoredVoiceCallReviewArtifact, TTask extends StoredVoiceOpsTask = StoredVoiceOpsTask, TEvent extends StoredVoiceIntegrationEvent = StoredVoiceIntegrationEvent, TMapping extends StoredVoiceExternalObjectMap = StoredVoiceExternalObjectMap, TTrace extends StoredVoiceTraceEvent = StoredVoiceTraceEvent, TTraceDelivery extends VoiceTraceSinkDeliveryRecord = VoiceTraceSinkDeliveryRecord, TAudit extends StoredVoiceAuditEvent = StoredVoiceAuditEvent, TAuditDelivery extends VoiceAuditSinkDeliveryRecord = VoiceAuditSinkDeliveryRecord, TIncident extends StoredVoiceIncidentBundleArtifact = StoredVoiceIncidentBundleArtifact, TMemory extends VoiceAssistantMemoryRecord = VoiceAssistantMemoryRecord>(options: VoiceDrizzleStoreOptions) => VoiceDrizzleRuntimeStorage<TSession, TReview, TTask, TEvent, TMapping, TTrace, TTraceDelivery, TAudit, TAuditDelivery, TIncident, TMemory>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleSessionStore',
+						signature:
+							'const createVoiceDrizzleSessionStore: <TSession extends VoiceSessionRecord = VoiceSessionRecord>(options: VoiceDrizzleStoreOptions) => VoiceSessionStore<TSession>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleTaskStore',
+						signature:
+							'const createVoiceDrizzleTaskStore: <TTask extends StoredVoiceOpsTask = StoredVoiceOpsTask>(options: VoiceDrizzleStoreOptions) => VoiceOpsTaskStore<TTask>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleTelephonyWebhookIdempotencyStore',
+						signature:
+							'const createVoiceDrizzleTelephonyWebhookIdempotencyStore: <TResult = unknown>(options: VoiceDrizzleStoreOptions) => VoiceTelephonyWebhookIdempotencyStore<TResult>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleTraceEventStore',
+						signature:
+							'const createVoiceDrizzleTraceEventStore: <TEvent extends StoredVoiceTraceEvent = StoredVoiceTraceEvent>(options: VoiceDrizzleStoreOptions) => VoiceTraceEventStore<TEvent>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleTraceSinkDeliveryStore',
+						signature:
+							'const createVoiceDrizzleTraceSinkDeliveryStore: <TDelivery extends VoiceTraceSinkDeliveryRecord = VoiceTraceSinkDeliveryRecord>(options: VoiceDrizzleStoreOptions) => VoiceTraceSinkDeliveryStore<TDelivery>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceAssistantMemoryTable',
+						signature:
+							'const voiceAssistantMemoryTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: "voice_assistant_memory";\n    schema: undefined;\n    columns: {\n        assistantId: import("drizzle-orm/pg-core").PgBuildColumn<"voice_assistant_memory", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: "voice_assistant_memory";\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        id: import("drizzle-orm/pg-core").PgBuildColumn<"voice_assistant_memory", import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: "voice_assistant_memory";\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n  '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleAssistantMemoryStore',
+						signature:
+							'const createVoiceDrizzleAssistantMemoryStore: <TRecord extends VoiceAssistantMemoryRecord = VoiceAssistantMemoryRecord>(options: VoiceDrizzleStoreOptions) => VoiceAssistantMemoryStore<TRecord>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceEvalBaselineTable',
+						signature:
+							'const voiceEvalBaselineTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            ha'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleEvalBaselineStore',
+						signature:
+							'const createVoiceDrizzleEvalBaselineStore: (options: VoiceDrizzleStoreOptions) => VoiceEvalBaselineStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceHandoffDeliveriesTable',
+						signature:
+							'const voiceHandoffDeliveriesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n         '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleHandoffDeliveryStore',
+						signature:
+							'const createVoiceDrizzleHandoffDeliveryStore: <TDelivery extends VoiceHandoffDeliveryRecord = VoiceHandoffDeliveryRecord>(options: VoiceDrizzleStoreOptions) => VoiceHandoffDeliveryStore<TDelivery>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceIncidentBundlesTable',
+						signature:
+							'const voiceIncidentBundlesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n           '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleIncidentBundleStore',
+						signature:
+							'const createVoiceDrizzleIncidentBundleStore: <TArtifact extends StoredVoiceIncidentBundleArtifact = StoredVoiceIncidentBundleArtifact>(options: VoiceDrizzleStoreOptions) => VoiceIncidentBundleStore<TArtifact>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceObservabilityExportDeliveryReceiptsTable',
+						signature:
+							'const voiceObservabilityExportDeliveryReceiptsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleObservabilityExportDeliveryReceiptStore',
+						signature:
+							'const createVoiceDrizzleObservabilityExportDeliveryReceiptStore: (options: VoiceDrizzleStoreOptions) => VoiceObservabilityExportDeliveryReceiptStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceRealCallProfileEvidenceTable',
+						signature:
+							'const voiceRealCallProfileEvidenceTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n   '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceRealCallProfileRecoveryJobsTable',
+						signature:
+							'const voiceRealCallProfileRecoveryJobsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{\n    name: string;\n    schema: undefined;\n    columns: {\n        id: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n            name: string;\n            tableName: string;\n            dataType: "string";\n            data: string;\n            driverParam: string;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;\n            hasRuntimeDefault: false;\n            enumValues: undefined;\n            identity: undefined;\n            generated: undefined;\n        }>;\n        payload: import("drizzle-orm/pg-core").PgBuildColumn<string, import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgJsonbBuilder>, {\n            name: string;\n            tableName: string;\n            dataType: "object json";\n            data: unknown;\n            driverParam: unknown;\n            notNull: true;\n            hasDefault: false;\n            isPrimaryKey: false;\n            isAutoincrement: false;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleRealCallProfileEvidenceStore',
+						signature:
+							'const createVoiceDrizzleRealCallProfileEvidenceStore: (options: VoiceDrizzleStoreOptions & {\n    idPrefix?: string;\n    now?: () => Date;\n}) => VoiceRealCallProfileEvidenceStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVoiceDrizzleRealCallProfileRecoveryJobStore',
+						signature:
+							'const createVoiceDrizzleRealCallProfileRecoveryJobStore: (options: VoiceDrizzleStoreOptions & {\n    idPrefix?: string;\n    now?: () => Date;\n}) => VoiceRealCallProfileRecoveryJobStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'voiceDrizzleSchema',
+						signature:
+							'const voiceDrizzleSchema: {\n    voiceAssistantMemory: import("drizzle-orm/pg-core").PgTableWithColumns<{\n        name: "voice_assistant_memory";\n        schema: undefined;\n        columns: {\n            assistantId: import("drizzle-orm/pg-core").PgBuildColumn<"voice_assistant_memory", import("drizzle-orm/pg-core").SetNotNull<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n                name: string;\n                tableName: "voice_assistant_memory";\n                dataType: "string";\n                data: string;\n                driverParam: string;\n                notNull: true;\n                hasDefault: false;\n                isPrimaryKey: false;\n                isAutoincrement: false;\n                hasRuntimeDefault: false;\n                enumValues: undefined;\n                identity: undefined;\n                generated: undefined;\n            }>;\n            id: import("drizzle-orm/pg-core").PgBuildColumn<"voice_assistant_memory", import("drizzle-orm/pg-core").SetIsPrimaryKey<import("drizzle-orm/pg-core").PgTextBuilder<[string, ...string[]]>>, {\n                name: string;\n                tableName: "voice_assistant_memory";\n               '
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/voice/testing',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceTranscriptAccuracy',
+						signature:
+							'type VoiceTranscriptAccuracy = {\n    actualText: string;\n    charDistance: number;\n    charErrorRate: number;\n    expectedText: string;\n    passesThreshold: boolean;\n    threshold: number;\n    wordDistance: number;\n    wordErrorRate: number;\n    alignment?: VoiceWordAlignment;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceWordAlignmentOperation',
+						signature:
+							'type VoiceWordAlignmentOperation = {\n    actual?: string;\n    expected?: string;\n    type: "correct" | "substitution" | "deletion" | "insertion";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceWordAlignment',
+						signature:
+							'type VoiceWordAlignment = {\n    correct: number;\n    deletions: number;\n    hypothesisWordCount: number;\n    insertions: number;\n    operations: VoiceWordAlignmentOperation[];\n    referenceWordCount: number;\n    sentenceError: boolean;\n    substitutions: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'alignTranscriptWords',
+						signature:
+							'const alignTranscriptWords: (actualWords: string[], expectedWords: string[]) => VoiceWordAlignment;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'mergeFinalTranscriptText',
+						signature:
+							'const mergeFinalTranscriptText: (transcripts: Transcript[]) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'scoreTranscriptAccuracy',
+						signature:
+							'const scoreTranscriptAccuracy: (actualText: string, expectedText: string, threshold?: number) => VoiceTranscriptAccuracy;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceAudioCondition',
+						signature:
+							'type VoiceAudioCondition = {\n    id: string;\n    type: "gain";\n    gain: number;\n} | {\n    id: string;\n    type: "clip";\n    ceiling: number;\n} | {\n    id: string;\n    type: "drop-chunks";\n    every: number;\n    chunkDurationMs: number;\n} | {\n    id: string;\n    type: "noise";\n    seed: number;\n    snrDb: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'applyVoiceAudioCondition',
+						signature:
+							'const applyVoiceAudioCondition: (fixture: VoiceTestFixture, condition: VoiceAudioCondition) => VoiceTestFixture;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildVoiceAudioMatrix',
+						signature:
+							'const buildVoiceAudioMatrix: (fixtures: VoiceTestFixture[], conditions: VoiceAudioCondition[]) => VoiceTestFixture[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceExpectedTermAccuracy',
+						signature:
+							'type VoiceExpectedTermAccuracy = {\n    allMatched: boolean;\n    expectedTerms: string[];\n    matchedTerms: string[];\n    missingTerms: string[];\n    recall: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTFixtureEnvironment',
+						signature:
+							'type VoiceSTTFixtureEnvironment = "accent" | "accent-noisy" | "clean" | "code-switch" | "jargon" | "multilingual" | "multi-speaker" | "noisy" | "telephony" | "other";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSpeakerTurnAccuracy',
+						signature:
+							'type VoiceSpeakerTurnAccuracy = {\n    available: boolean;\n    actualTurnCount: number;\n    expectedTurnCount: number;\n    passes: boolean;\n    patternMatchRate: number;\n    postClustered?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkFixtureResult',
+						signature:
+							'type VoiceSTTBenchmarkFixtureResult = {\n    accuracy: VoiceSTTAdapterHarnessResult["accuracy"];\n    closeCount: number;\n    conformance?: VoiceSTTConformanceReport;\n    difficulty?: VoiceTestFixture["difficulty"];\n    elapsedMs: number;\n    endOfTurnCount: number;\n    errorCount: number;\n    expectedTerms: VoiceExpectedTermAccuracy;\n    criticalFields?: VoiceCriticalFieldAccuracy;\n    finalCount: number;\n    finalText: string;\n    fixtureId: string;\n    fragmentationCount: number;\n    group: VoiceSTTFixtureEnvironment;\n    passes: boolean;\n    partialCount: number;\n    speakerTurns?: VoiceSpeakerTurnAccuracy;\n    postSpeechTimeToEndOfTurnMs?: number;\n    postSpeechTimeToFirstFinalMs?: number;\n    tags: string[];\n    timeToEndOfTurnMs?: number;\n    timeToFirstFinalMs?: number;\n    timeToFirstPartialMs?: number;\n    transcriptConfidence?: number;\n    title: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkSummary',
+						signature:
+							'type VoiceSTTBenchmarkSummary = {\n    adapterId: string;\n    averageCharErrorRate: number;\n    averageElapsedMs: number;\n    averageEndOfTurnCount: number;\n    averageFinalCount: number;\n    averageSpeakerTurnMatchRate?: number;\n    averageTermRecall: number;\n    averageCriticalFieldAccuracy: number;\n    requiredCriticalFieldPassRate: number;\n    averagePostSpeechTimeToEndOfTurnMs?: number;\n    averagePostSpeechTimeToFirstFinalMs?: number;\n    averageTimeToEndOfTurnMs?: number;\n    averageTimeToFirstFinalMs?: number;\n    averageTimeToFirstPartialMs?: number;\n    averageWordErrorRate: number;\n    fixtureCount: number;\n    fixturesWithErrors: number;\n    fixturesWithFragmentation: number;\n    passCount: number;\n    passRate: number;\n    totalErrorCount: number;\n    wordAccuracyRate: number;\n    groupSummaries: VoiceSTTBenchmarkFixtureSummary[];\n    confidenceCalibration: VoiceConfidenceCalibrationReport;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkFixtureSummary',
+						signature:
+							'type VoiceSTTBenchmarkFixtureSummary = {\n    group: VoiceSTTFixtureEnvironment;\n    fixtureCount: number;\n    fixturesWithErrors: number;\n    fixturesWithFragments: number;\n    passCount: number;\n    passRate: number;\n    wordAccuracyRate: number;\n    averageTermRecall: number;\n    averageSpeakerTurnMatchRate?: number;\n    averageWordErrorRate: number;\n    averageElapsedMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkReport',
+						signature:
+							'type VoiceSTTBenchmarkReport = {\n    adapterId: string;\n    fixtures: VoiceSTTBenchmarkFixtureResult[];\n    generatedAt: number;\n    summary: VoiceSTTBenchmarkSummary;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkFixtureAggregate',
+						signature:
+							'type VoiceSTTBenchmarkFixtureAggregate = {\n    averageElapsedMs: number;\n    averagePassRate: number;\n    averageWordErrorRate: number;\n    bestWordErrorRate: number;\n    fixtureId: string;\n    group: VoiceSTTFixtureEnvironment;\n    passCount: number;\n    runCount: number;\n    tags: string[];\n    title: string;\n    worstWordErrorRate: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkSeriesSummary',
+						signature:
+							'type VoiceSTTBenchmarkSeriesSummary = {\n    adapterId: string;\n    averageElapsedMs: number;\n    averagePassRate: number;\n    averageWordErrorRate: number;\n    fixtureCount: number;\n    flakyFixtureCount: number;\n    generatedRunCount: number;\n    stableFixtureCount: number;\n    totalPassCount: number;\n    totalRunCount: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkSeriesReport',
+						signature:
+							'type VoiceSTTBenchmarkSeriesReport = {\n    adapterId: string;\n    fixtures: VoiceSTTBenchmarkFixtureAggregate[];\n    generatedAt: number;\n    runCount: number;\n    summary: VoiceSTTBenchmarkSeriesSummary;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkComparisonEntry',
+						signature:
+							'type VoiceSTTBenchmarkComparisonEntry = {\n    adapterId: string;\n    summary: VoiceSTTBenchmarkSummary;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkComparison',
+						signature:
+							'type VoiceSTTBenchmarkComparison = {\n    bestByPassRate?: VoiceSTTBenchmarkComparisonEntry;\n    bestByTermRecall?: VoiceSTTBenchmarkComparisonEntry;\n    bestByWordErrorRate?: VoiceSTTBenchmarkComparisonEntry;\n    entries: VoiceSTTBenchmarkComparisonEntry[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkAcceptanceThresholds',
+						signature:
+							'type VoiceSTTBenchmarkAcceptanceThresholds = {\n    termRecall?: number;\n    wordAccuracyRate?: number;\n    overallPassRate?: number;\n    groupPassRate?: Partial<Record<VoiceSTTFixtureEnvironment, {\n        passRate?: number;\n        wordAccuracyRate?: number;\n    }>>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkAcceptanceResult',
+						signature:
+							'type VoiceSTTBenchmarkAcceptanceResult = {\n    adapterId: string;\n    failures: string[];\n    passed: boolean;\n    score: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTBenchmarkOptions',
+						signature:
+							'type VoiceSTTBenchmarkOptions = VoiceSTTAdapterHarnessOptions & {\n    fixtureOptions?: Record<string, Omit<VoiceSTTAdapterHarnessOptions, "fixtureOptions" | "openOptions">>;\n    openOptions?: Partial<STTAdapterOpenOptions> | ((fixture: VoiceTestFixture) => Partial<STTAdapterOpenOptions> | undefined);\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveFixtureEnvironment',
+						signature:
+							'const resolveFixtureEnvironment: (fixture: Pick<VoiceTestFixture, "language" | "tags">) => VoiceSTTFixtureEnvironment;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'compareSTTBenchmarks',
+						signature:
+							'const compareSTTBenchmarks: (reports: VoiceSTTBenchmarkReport[]) => VoiceSTTBenchmarkComparison;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evaluateSTTBenchmarkAcceptance',
+						signature:
+							'const evaluateSTTBenchmarkAcceptance: (report: VoiceSTTBenchmarkReport, thresholds?: VoiceSTTBenchmarkAcceptanceThresholds) => VoiceSTTBenchmarkAcceptanceResult;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'runSTTAdapterBenchmark',
+						signature:
+							'const runSTTAdapterBenchmark: ({ adapter, adapterId, fixtures, options, }: {\n    adapter: STTAdapter;\n    adapterId: string;\n    fixtures: VoiceTestFixture[];\n    options?: VoiceSTTBenchmarkOptions;\n}) => Promise<VoiceSTTBenchmarkReport>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'runSTTAdapterBenchmarkSeries',
+						signature:
+							'const runSTTAdapterBenchmarkSeries: ({ adapter, adapterId, fixtures, options, runs, }: {\n    adapter: STTAdapter;\n    adapterId: string;\n    fixtures: VoiceTestFixture[];\n    options?: VoiceSTTBenchmarkOptions;\n    runs: number;\n}) => Promise<VoiceSTTBenchmarkSeriesReport>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'summarizeSTTBenchmark',
+						signature:
+							'const summarizeSTTBenchmark: (adapterId: string, fixtures: VoiceSTTBenchmarkFixtureResult[]) => VoiceSTTBenchmarkSummary;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'summarizeSTTBenchmarkSeries',
+						signature:
+							'const summarizeSTTBenchmarkSeries: (input: {\n    adapterId: string;\n    reports: VoiceSTTBenchmarkReport[];\n}) => VoiceSTTBenchmarkSeriesReport;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceConfidenceCalibrationSample',
+						signature:
+							'type VoiceConfidenceCalibrationSample = {\n    confidence: number;\n    correct: boolean;\n    metadata?: Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceConfidenceCalibrationBin',
+						signature:
+							'type VoiceConfidenceCalibrationBin = {\n    accuracy: number;\n    averageConfidence: number;\n    count: number;\n    lowerBound: number;\n    upperBound: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceConfidenceCalibrationReport',
+						signature:
+							'type VoiceConfidenceCalibrationReport = {\n    bins: VoiceConfidenceCalibrationBin[];\n    brierScore: number;\n    expectedCalibrationError: number;\n    sampleCount: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'calibrateVoiceConfidence',
+						signature:
+							'const calibrateVoiceConfidence: (samples: VoiceConfidenceCalibrationSample[], binCount?: number) => VoiceConfidenceCalibrationReport;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTConformanceCheck',
+						signature:
+							'type VoiceSTTConformanceCheck = {\n    detail: string;\n    id: string;\n    passed: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSTTConformanceReport',
+						signature:
+							'type VoiceSTTConformanceReport = {\n    checks: VoiceSTTConformanceCheck[];\n    passed: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evaluateSTTAdapterConformance',
+						signature:
+							'const evaluateSTTAdapterConformance: (result: VoiceSTTAdapterHarnessResult) => VoiceSTTConformanceReport;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceCriticalFieldKind',
+						signature:
+							'type VoiceCriticalFieldKind = "acronym" | "brand" | "currency" | "custom" | "email" | "number" | "organization" | "percentage" | "person-name" | "phone";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceExpectedCriticalField',
+						signature:
+							'type VoiceExpectedCriticalField = {\n    aliases?: string[];\n    id: string;\n    kind: VoiceCriticalFieldKind;\n    metadata?: Record<string, unknown>;\n    required?: boolean;\n    value: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceCriticalFieldResult',
+						signature:
+							'type VoiceCriticalFieldResult = VoiceExpectedCriticalField & {\n    matched: boolean;\n    matchedAlias?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceCriticalFieldAccuracy',
+						signature:
+							'type VoiceCriticalFieldAccuracy = {\n    accuracy: number;\n    fields: VoiceCriticalFieldResult[];\n    matchedCount: number;\n    missingFieldIds: string[];\n    passesRequired: boolean;\n    totalCount: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'scoreVoiceCriticalFields',
+						signature:
+							'const scoreVoiceCriticalFields: (actualText: string, expectedFields?: VoiceExpectedCriticalField[]) => VoiceCriticalFieldAccuracy;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceCorrectionHintProfile',
+						signature:
+							'type VoiceCorrectionHintProfile = "generic" | "benchmark-seeded";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceCorrectionBenchmarkAudit',
+						signature:
+							'type VoiceCorrectionBenchmarkAudit = {\n    raw: VoiceSTTBenchmarkReport;\n    generic: VoiceSTTBenchmarkReport;\n    experimental: VoiceSTTBenchmarkReport;\n    benchmarkSeeded: VoiceSTTBenchmarkReport;\n    holdout: VoiceCorrectionAuditSlice<VoiceSTTBenchmarkReport>;\n    lexicalHoldout: VoiceCorrectionAuditSlice<VoiceSTTBenchmarkReport>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceSessionCorrectionAudit',
+						signature:
+							'type VoiceSessionCorrectionAudit = {\n    raw: VoiceSessionBenchmarkReport;\n    generic: VoiceSessionBenchmarkReport;\n    experimental: VoiceSessionBenchmarkReport;\n    benchmarkSeeded: VoiceSessionBenchmarkReport;\n    holdout: VoiceCorrectionAuditSlice<VoiceSessionBenchmarkReport>;\n    lexicalHoldout: VoiceCorrectionAuditSlice<VoiceSessionBenchmarkReport>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'isCorrectionHoldoutFixtureId',
+						signature:
+							'const isCorrectionHoldoutFixtureId: (fixtureId: string) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildFixturePhraseHints',
+						signature:
+							'const buildFixturePhraseHints: (fixture: Pick<VoiceTestFixture, "expectedTerms" | "expectedText">, profile?: VoiceCorrectionHintProfile) => VoicePhraseHint[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'applyCorrectedBenchmarkReport',
+						signature:
+							'const applyCorrectedBenchmarkReport: (report: VoiceSTTBenchmarkReport, fixtures: VoiceTestFixture[], profile?: VoiceCorrectionHintProfile) => VoiceSTTBenchmarkReport;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'applyExperimentalBenchmarkReport',
+						signature:
+							'const applyExperimentalBenchmarkReport: (report: VoiceSTTBenchmarkReport, fixtures: VoiceTestFixture[]) => VoiceSTTBenchmarkReport;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'applyLexiconCorrectedBenchmarkReport',
+						signature:
+							'const applyLexiconCorrectedBenchmarkReport: (report: VoiceSTTBenchmarkReport, fixtures: VoiceTestFixture[], buildLexicon: (fixture: Pick<VoiceTestFixture, "expectedTerms" | "expectedText" | "language" | "tags">) => VoiceLexiconEntry[]) => VoiceSTTBenchmarkReport;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildCodeSwitchBenchmarkLexicon',
+						signature:
+							'const buildCodeSwitchBenchmarkLexicon: (fixture: Pick<VoiceTestFixture, "expectedTerms" | "expectedText" | "language" | "tags">) => VoiceLexiconEntry[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildCodeSwitchBenchmarkPhraseHints',
+						signature:
+							'const buildCodeSwitchBenchmarkPhraseHints: (fixture: Pick<VoiceTestFixture, "expectedTerms" | "expectedText" | "language" | "tags">) => VoicePhraseHint[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBenchmarkCorrectionHandler',
+						signature:
+							'const createBenchmarkCorrectionHandler: (profile: VoiceCorrectionHintProfile) => VoiceTurnCorrectionHandler;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createCodeSwitchBenchmarkCorrectionHandler',
+						signature:
+							'const createCodeSwitchBenchmarkCorrectionHandler: () => VoiceTurnCorrectionHandler;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'scoreCorrectedExpectedTerms',
+						signature:
+							'const scoreCorrectedExpectedTerms: (actualText: string, expectedTerms: string[] | undefined) => VoiceExpectedTermAccuracy;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildCorrectionBenchmarkAudit',
+						signature:
+							'const buildCorrectionBenchmarkAudit: (rawReport: VoiceSTTBenchmarkReport, fixtures: VoiceTestFixture[]) => VoiceCorrectionBenchmarkAudit;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'buildSessionCorrectionAudit',
+						signature:
+							'const buildSessionCorrectionAudit: (raw: VoiceSessionBenchmarkReport, generic: VoiceSessionBenchmarkReport, experimental: VoiceSessionBenchmarkReport, benchmarkSeeded: VoiceSessionBenchmarkReport, scenarios: Array<Pick<VoiceTestFixture, "expectedTerms" | "expectedText" | "expectedTurnTexts" | "id">>) => VoiceSessionCorrectionAudit;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceDuplexBenchmarkScenario',
+						signature:
+							'type VoiceDuplexBenchmarkScenario = {\n    expectedInterruptCount: number;\n    id: string;\n    initialPartial?: string;\n    interruptDelayMs?: number;\n    level?: number;\n    mode: "audio-send" | "input-level" | "partial";\n    partial?: string;\n    title: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceDuplexBenchmarkScenarioResult',
+						signature:
+							'type VoiceDuplexBenchmarkScenarioResult = {\n    actualInterruptCount: number;\n    elapsedMs: number;\n    expectedInterruptCount: number;\n    fixtureId: string;\n    interruptLatencyMs?: number;\n    mode: VoiceDuplexBenchmarkScenario["mode"];\n    passes: boolean;\n    title: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceDuplexBenchmarkSummary',
+						signature:
+							'type VoiceDuplexBenchmarkSummary = {\n    averageElapsedMs: number;\n    averageInterruptLatencyMs?: number;\n    passCount: number;\n    passRate: number;\n    scenarioCount: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceDuplexBenchmarkReport',
+						signature:
+							'type VoiceDuplexBenchmarkReport = {\n    fixtures: VoiceDuplexBenchmarkScenarioResult[];\n    generatedAt: number;\n    summary: VoiceDuplexBenchmarkSummary;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceDuplexBenchmarkOptions',
+						signature:
+							'type VoiceDuplexBenchmarkOptions = {\n    bargeIn?: VoiceBargeInOptions;\n    defaultInterruptDelayMs?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getDefaultVoiceDuplexBenchmarkScenarios',
+						signature:
+							'const getDefaultVoiceDuplexBenchmarkScenarios: () => {\n    expectedInterruptCount: number;\n    id: string;\n    initialPartial?: string;\n    interruptDelayMs?: number;\n    level?: number;\n    mode: "audio-send" | "input-level" | "partial";\n    partial?: string;\n    title: string;\n}[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'runVoiceDuplexBenchmark',
+						signature:
+							'const runVoiceDuplexBenchmark: (scenarios?: {\n    expectedInterruptCount: number;\n    id: string;\n    initialPartial?: string;\n    interruptDelayMs?: number;\n    level?: number;\n    mode: "audio-send" | "input-level" | "partial";\n    partial?: string;\n    title: string;\n}[], options?: VoiceDuplexBenchmarkOptions) => Promise<VoiceDuplexBenchmarkReport>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'runVoiceDuplexBenchmarkScenario',
+						signature:
+							'const runVoiceDuplexBenchmarkScenario: (scenario: VoiceDuplexBenchmarkScenario, options?: VoiceDuplexBenchmarkOptions) => Promise<VoiceDuplexBenchmarkScenarioResult>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'summarizeVoiceDuplexBenchmark',
+						signature:
+							'const summarizeVoiceDuplexBenchmark: (fixtures: VoiceDuplexBenchmarkScenarioResult[]) => VoiceDuplexBenchmarkSummary;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceTestFixtureManifestEntry',
+						signature:
+							'type VoiceTestFixtureManifestEntry = {\n    id: string;\n    title: string;\n    audioPath: string;\n    expectedText: string;\n    expectedTerms?: string[];\n    expectedCriticalFields?: VoiceExpectedCriticalField[];\n    expectedSpeakerTurns?: VoiceExpectedSpeakerTurn[];\n    expectedTurnTexts?: string[];\n    chunkDurationMs?: number;\n    language?: string;\n    difficulty?: "clean" | "noisy" | "challenging";\n    tags?: string[];\n    tailPaddingMs?: number;\n    format?: Partial<AudioFormat>;\n    provenance?: Omit<import("./provenance").VoiceCorpusFixtureProvenance, "audioSha256" | "fixtureId">;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceTestFixture',
+						signature:
+							'type VoiceTestFixture = Omit<VoiceTestFixtureManifestEntry, "audioPath"> & {\n    audio: Uint8Array;\n    audioPath: string;\n    format: AudioFormat;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceTelephonyFixtureOptions',
+						signature:
+							'type VoiceTelephonyFixtureOptions = {\n    includeAccents?: boolean;\n    targetSampleRateHz?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceMultiSpeakerFixtureOptions',
+						signature:
+							'type VoiceMultiSpeakerFixtureOptions = {\n    silenceMs?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceFixtureLoadOptions',
+						signature:
+							'type VoiceFixtureLoadOptions = {\n    directories?: string[];\n    includeBundled?: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getVoiceFixtureDirectory',
+						signature:
+							'const getVoiceFixtureDirectory: () => Promise<string>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveVoiceFixtureDirectories',
+						signature:
+							'const resolveVoiceFixtureDirectories: (input?: string | string[] | VoiceFixtureLoadOptions) => Promise<string[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createTelephonyVoiceTestFixtures',
+						signature:
+							'const createTelephonyVoiceTestFixtures: (fixtures: VoiceTestFixture[], options?: VoiceTelephonyFixtureOptions) => VoiceTestFixture[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createJargonVoiceTestFixtures',
+						signature:
+							'const createJargonVoiceTestFixtures: (fixtures: VoiceTestFixture[]) => VoiceTestFixture[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMultiSpeakerVoiceTestFixtures',
+						signature:
+							'const createMultiSpeakerVoiceTestFixtures: (fixtures: VoiceTestFixture[], options?: VoiceMultiSpeakerFixtureOptions) => VoiceTestFixture[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'loadVoiceTestFixtures',
+						signature:
+							'const loadVoiceTestFixtures: (fixtureDirectory?: string | string[] | VoiceFixtureLoadOptions) => Promise<VoiceTestFixture[]>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceIOProviderFailureSimulationMode',
+						signature:
+							'type VoiceIOProviderFailureSimulationMode = "failure" | "recovery";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceIOProviderFailureSimulationKind',
+						signature:
+							'type VoiceIOProviderFailureSimulationKind = "stt" | "tts";'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/voice/embed',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceEmbedMountOptions',
+						signature:
+							'type VoiceEmbedMountOptions = {\n    /** WebSocket route the voice runtime is mounted at. Defaults to "/voice". */\n    path?: string;\n    title?: string;\n    theme?: VoiceWidgetTheme;\n    labels?: VoiceWidgetLabels;\n    controllerOptions?: VoiceControllerOptions;\n    /** Auto-start the call as soon as the widget mounts. Defaults to false. */\n    autoStart?: boolean;\n    onError?: (error: string) => void;\n    onStatusChange?: (status: string) => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceEmbedHandle',
+						signature:
+							'type VoiceEmbedHandle = {\n    /** Begin recording / open the call. */\n    start: () => Promise<void>;\n    /** Stop recording (mute). */\n    mute: () => void;\n    /** End the call and tear down. */\n    end: () => Promise<void>;\n    /** Remove the widget from the DOM and release all resources. */\n    unmount: () => void;\n    /** The underlying framework-agnostic controller, for advanced use. */\n    controller: ReturnType<typeof createVoiceController>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'mount',
+						signature:
+							'const mount: (target: string | HTMLElement, options?: VoiceEmbedMountOptions) => VoiceEmbedHandle;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VoiceEmbedGlobal',
+						signature:
+							'type VoiceEmbedGlobal = {\n    mount: typeof mount;\n    version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VOICE_EMBED_VERSION',
+						signature:
+							'const VOICE_EMBED_VERSION = "0.0.22-beta.516";'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/voice/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<VoicePluginConfig, VoiceSessionStore>, "tools" | "contract" | "settings"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<VoiceSessionStore>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<VoiceSessionStore>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        backchannelBargeInGuard: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        greeting: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        normalizeNumbers: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        path: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        preset: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"default">, import("@sinclair/typebox").TLiteral<"chat">, import("@sinclair/typebox").TLiteral<"guided-intake">, import("@sinclair/typebox").TLiteral<"dictation">, import("@sinclair/typebox").TLiteral<"noi'
+					}
+				]
+			}
+		],
 		category: 'Voice & Media',
 		commands: [
 			{
@@ -39880,7 +60159,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/voice',
 		subpackages: [],
-		version: '0.0.22-beta.679'
+		version: '0.0.22-beta.680'
 	},
 	{
 		api: [],
