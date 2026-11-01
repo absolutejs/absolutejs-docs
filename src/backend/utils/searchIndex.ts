@@ -1,42 +1,29 @@
-import { sleep } from 'bun';
-import { createElement } from 'react';
-import { renderToReadableStream } from 'react-dom/server';
-import { documentationMetadataFor } from '../../frontend/data/documentation/documentationMetadata';
-import { searchKeywordsFor } from '../../frontend/data/documentation/searchKeywords';
-import { docsViews, sidebarCategories } from '../../frontend/data/sidebarData';
-import { useTheme } from '../../frontend/hooks/useTheme';
-import { isValidViewId } from '../../types/typeGuards';
-import {
-	isExpandableEntry,
-	type DocsSearchResult,
-	type DocsView
+import { join } from 'node:path';
+import process from 'node:process';
+import { file } from 'bun';
+import type {
+	DocsSearchResult,
+	StoredSearchPage,
+	StoredSearchSection
 } from '../../types/types';
 
-type IndexedSection = {
-	anchor: string | null;
-	heading: string;
-	headingTerms: string;
-	text: string;
-	textLower: string;
-};
+/*
+ * Docs search. The index is built ahead of time (searchIndexBuild.ts, run by
+ * bun run search:generate) and read from its file on the first search, so
+ * the server never renders the whole site to build it.
+ */
 
-type IndexedPage = {
-	breadcrumb: string[];
-	description: string;
-	fields: {
-		breadcrumb: string;
-		description: string;
-		keywords: string;
-		label: string;
-		title: string;
-	};
-	label: string;
+type IndexedSection = StoredSearchSection & { textLower: string };
+type IndexedPage = Omit<StoredSearchPage, 'sections'> & {
 	sections: IndexedSection[];
-	title: string;
-	view: string;
 };
 
-type SectionHeading = { anchor: string | null; heading: string };
+export const SEARCH_INDEX_PATH = join(
+	'src',
+	'backend',
+	'generated',
+	'searchIndex.json'
+);
 
 const MAX_RESULTS = 20;
 const MAX_QUERY_TERMS = 8;
@@ -45,9 +32,6 @@ const SNIPPET_RADIUS = 90;
 const MAX_BODY_HITS = 5;
 const MAX_BODY_SCORE = 12;
 const NOT_FOUND = -1;
-// Pause between pages so a small server keeps answering requests while the
-// index builds.
-const INDEX_PAUSE_MS = 5;
 const OVERVIEW_LABELS = new Set(['guide', 'overview']);
 // How much a query term counts in each place it can appear. A page's title,
 // sidebar label and search keywords outweigh any amount of body text, and a
@@ -74,28 +58,6 @@ const WEIGHTS: Record<
 	title: 12,
 	titlePhrase: 15
 };
-const TITLE_SUFFIX = / \| AbsoluteJS$/;
-const ENTITIES: Record<string, string> = {
-	'&#39;': "'",
-	'&#x27;': "'",
-	'&amp;': '&',
-	'&gt;': '>',
-	'&lt;': '<',
-	'&nbsp;': ' ',
-	'&quot;': '"'
-};
-
-const decodeEntities = (value: string) =>
-	value.replace(
-		/&(?:#39|#x27|amp|gt|lt|nbsp|quot);/g,
-		(entity) => ENTITIES[entity] ?? entity
-	);
-
-const toText = (html: string) =>
-	decodeEntities(html.replace(/<[^>]+>/g, ' '))
-		.replace(/\s+/g, ' ')
-		.trim();
-
 const normalize = (value: string) => value.toLowerCase();
 
 const termsOf = (query: string) =>
@@ -108,140 +70,31 @@ const termsOf = (query: string) =>
 		)
 	].slice(0, MAX_QUERY_TERMS);
 
-// Sidebar position of every page: category, then group, then its label.
-const sidebarPathByView = new Map<string, { label: string; path: string[] }>();
-for (const category of sidebarCategories)
-	for (const entry of category.entries) {
-		if (isExpandableEntry(entry))
-			for (const page of entry.pages)
-				sidebarPathByView.set(page.id, {
-					label: page.label,
-					path: [category.label, entry.label]
-				});
-		else if (entry.id)
-			sidebarPathByView.set(entry.id, {
-				label: entry.label,
-				path: [category.label]
-			});
-	}
-
-const SearchIndexPage = ({ view }: { view: DocsView }) => {
-	const [themeSprings] = useTheme(undefined);
-
-	return createElement(docsViews[view], {
-		currentPageId: view,
-		isMobileOrTablet: true,
-		themeSprings,
-		onNavigate: () => undefined
-	});
-};
-
-// Splits a rendered page into its headings and the text under each one.
-const sectionsOf = (html: string, fallbackHeading: string) => {
-	const withoutChrome = html
-		.replace(/<(script|style|svg|nav)\b[\s\S]*?<\/\1>/g, ' ')
-		.replace(/<button\b[\s\S]*?<\/button>/g, ' ');
-	const headingPattern = /<h([1-3])\b([^>]*)>([\s\S]*?)<\/h\1>/g;
-	const sections: IndexedSection[] = [];
-	let current: SectionHeading = { anchor: null, heading: fallbackHeading };
-	let cursor = 0;
-	const push = (body: string) => {
-		const text = toText(body);
-		if (!text) return;
-		sections.push({
-			...current,
-			headingTerms: normalize(current.heading),
-			text,
-			textLower: normalize(text)
-		});
-	};
-	for (const match of withoutChrome.matchAll(headingPattern)) {
-		push(withoutChrome.slice(cursor, match.index));
-		const [, level, attributes = '', inner = ''] = match;
-		const id = /\bid="([^"]+)"/.exec(attributes)?.[1] ?? null;
-		current = {
-			anchor: level === '1' ? null : id,
-			// Anchor headings render a # link before the heading text.
-			heading: toText(inner).replace(/^#\s*/, '') || fallbackHeading
-		};
-		cursor = (match.index ?? 0) + match[0].length;
-	}
-	push(withoutChrome.slice(cursor));
-
-	return sections;
-};
-
-// renderToString is missing from the production server's react-dom build;
-// the streaming renderer that serves every page is always there.
-const renderPage = async (view: DocsView) => {
-	const stream = await renderToReadableStream(
-		createElement(SearchIndexPage, { view })
-	);
-	await stream.allReady;
-
-	return new Response(stream).text();
-};
-
-const indexPage = async (view: DocsView): Promise<IndexedPage | null> => {
-	const metadata = documentationMetadataFor(view);
-	const title = metadata.title.replace(TITLE_SUFFIX, '');
-	const sidebar = sidebarPathByView.get(view);
-	const label = sidebar?.label ?? title;
-	const breadcrumb = sidebar?.path ?? [];
-	let html: string;
-	try {
-		html = await renderPage(view);
-	} catch (error) {
-		renderFailures.push(
-			`${view}: ${error instanceof Error ? error.message : String(error)}`
-		);
-
-		return null;
-	}
-
-	return {
-		breadcrumb,
-		description: metadata.description,
-		fields: {
-			breadcrumb: normalize(breadcrumb.join(' ')),
-			description: normalize(metadata.description),
-			keywords: normalize(searchKeywordsFor(view).join(' ')),
-			label: normalize(label),
-			title: normalize(title)
-		},
-		label,
-		sections: sectionsOf(html, title),
-		title,
-		view
-	};
-};
-
 let indexPromise: Promise<IndexedPage[]> | undefined;
-const renderFailures: string[] = [];
 
-// Renders one page at a time with a pause between, so building the index
-// never holds up requests.
-const buildIndex = async () => {
-	const pages = await Object.keys(docsViews)
-		.filter(isValidViewId)
-		.reduce<Promise<IndexedPage[]>>(async (previous, view) => {
-			const indexed = await previous;
-			await sleep(INDEX_PAUSE_MS);
-			const page = await indexPage(view);
-			if (page) indexed.push(page);
+const loadIndex = async () => {
+	const stored: StoredSearchPage[] = await file(
+		join(process.cwd(), SEARCH_INDEX_PATH)
+	).json();
 
-			return indexed;
-		}, Promise.resolve([]));
-	if (renderFailures.length > 0)
-		console.warn(
-			`[search] ${renderFailures.length} docs pages could not be indexed; first: ${renderFailures[0]}`
-		);
-
-	return pages;
+	// The file leaves out each section's lowercase text, which is as large
+	// as the text itself; it is rebuilt once here.
+	return stored.map(
+		(page): IndexedPage => ({
+			...page,
+			sections: page.sections.map((section) => ({
+				...section,
+				textLower: normalize(section.text)
+			}))
+		})
+	);
 };
 
 export const getDocsSearchIndex = () => {
-	indexPromise ??= buildIndex();
+	indexPromise ??= loadIndex().catch((error: unknown) => {
+		indexPromise = undefined;
+		throw error;
+	});
 
 	return indexPromise;
 };

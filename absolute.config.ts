@@ -1,6 +1,5 @@
 import { defineConfig } from '@absolutejs/absolute';
 import { blog } from './src/shared/blog';
-import { documentationSitemapRoutes } from './src/frontend/data/sidebarData';
 
 export default defineConfig({
 	assetsDirectory: './src/backend/assets',
@@ -19,6 +18,15 @@ export default defineConfig({
 				}
 			])
 		),
-		routes: () => [...blog.sitemapRoutes(), ...documentationSitemapRoutes]
+		// Imported only when the sitemap is built: a top-level import loaded
+		// every docs page, its data and the highlighter wherever the config was
+		// read, including the production server at each boot (2026-11-01).
+		routes: async () => {
+			const { documentationSitemapRoutes } = await import(
+				'./src/frontend/data/sidebarData'
+			);
+
+			return [...blog.sitemapRoutes(), ...documentationSitemapRoutes];
+		}
 	}
 });
