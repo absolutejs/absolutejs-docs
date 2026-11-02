@@ -1158,7 +1158,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'manifest',
 						signature:
-							'const manifest: import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>;'
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "settings" | "contract" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
 					}
 				]
 			}
@@ -1172,7 +1172,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run build',
+					'bun run format && bun run typecheck && bun run test && bun run build && absolute-changelog check',
 				name: 'check:package'
 			},
 			{
@@ -1241,7 +1241,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/admin',
 		subpackages: [],
-		version: '0.2.0'
+		version: '0.3.0'
 	},
 	{
 		api: [
@@ -5716,6 +5716,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'withProviderRequestTimeout',
+						signature: 'withProviderRequestTimeout'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'StructuredOutputError',
 						signature: 'StructuredOutputError'
 					},
@@ -5742,6 +5748,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'toolOutputText',
 						signature: 'toolOutputText'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'toolOutputModelText',
+						signature: 'toolOutputModelText'
 					},
 					{
 						description: '',
@@ -6180,18 +6192,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'StatTile',
 						signature: 'type StatTile'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'StatTilesSpec',
-						signature: 'type StatTilesSpec'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'TableSpec',
-						signature: 'type TableSpec'
 					}
 				]
 			},
@@ -7888,7 +7888,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/ai/research'
 		],
 		readmeDigest:
-			'cfd2368e8f89d3249208fc02ed1a2d93762123d28d29d6c8ad408c9d1c3996b5',
+			'373f00b3ba64bf8ead14b8a21b7c3175cf1ad904e7508c4bcaff05c357b93664',
 		readmeSamples: [
 			{
 				code: 'const result = await generateAI({\n  provider: anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }),\n  model: "claude-sonnet-4-6",\n  messages: [{ role: "user", content: "What changed today?" }],\n  providerOptions: {\n    anthropic: {\n      serverTools: [\n        {\n          type: "anthropic:web_search",\n          parameters: { maxUses: 3 },\n        },\n      ],\n    },\n  },\n});',
@@ -7990,14 +7990,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'Persist snapshots while consuming the stream. Cancellation or transport failure can prevent done, and no adapter can reconstruct usage the provider never sent. onUsage still reports only complete usage, once per instrumented stream. Keep credit reservations separate from charges and reconcile unknown outcomes in the host application. The package does not invent token counts or decide billing policy.',
 					'Typed forms and background work',
 					'Form fields support valueType (string, number, integer, boolean). For a numeric dropdown use type: "select", options: ["3", "10"], valueType: "integer". All hosts should call prepareFormSubmission(form, values) before invoking the bound tool: it returns typed input or field errors without discarding answers. The host must still validate the complete tool schema and apply authorization. Legacy dropdowns retain string values; migrate numeric fields explicitly.',
-					'BackgroundWorkCard and backgroundWorkNextAction provide framework-neutral progress/CTA semantics. A funding pause offers Add credits; only confirmed funding changes it to Continue research. Completed work offers View results; uncertain work offers Check status, never replay. The host persists the work ID, polls or subscribes to actual progress, and binds actions to authenticated routes.'
+					'BackgroundWorkCard and backgroundWorkNextAction provide framework-neutral progress/CTA semantics. A funding pause offers Add credits; only confirmed funding changes it to Continue research. Completed work offers View results; uncertain work offers Check status, never replay. The host persists the work ID, polls or subscribes to actual progress, and binds actions to authenticated routes.',
+					'streamWithProviderFallback accepts approved model IDs, an individually metered stream(model) callback, and an optional onFallback hook. It never restarts after a chunk or caller cancellation. ProviderError.billingUnavailable identifies provider billing failures; notSent identifies requests blocked locally. Billing suppression is scoped to the configured provider instance, with a five-minute probe interval.',
+					'Recovery across approved providers',
+					'Set contextPolicy.providerFallback on generation helpers and providerFallback on prepareAITextInput / prepareAITextInputStep to cover both token-capacity checks and generation. models accepts an array or a function of the current model; the requested model runs first. Use a provider router containing every approved model. Each alternate validates its own input capacity. Optional onFallback({ from, to, error }) reports the switch.',
+					'Recovery stops after any output chunk, including tool/usage chunks, and never replays cancellation or accounting/application errors. Completed document sections retain validated checkpoints across provider switches. Finite-key OpenAI record schemas are translated to optional named properties without removing value constraints. isProviderError works across package entrypoints; isPermanentAIProviderFailure classifies terminal provider/preflight failures for job runners. Callers own retry budgets, funding, and model approval.'
 				],
 				title: 'Model capability metadata'
 			}
 		],
 		repository: 'https://github.com/absolutejs/ai',
 		subpackages: [],
-		version: '0.6.3'
+		version: '0.6.10'
 	},
 	{
 		api: [],
@@ -9030,7 +9034,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
-							'Resolve an artifact revision into upload inputs accepted by @absolutejs/rag. Storage URIs remain opaque; only the supplied reader is allowed to access bytes.',
+							'Resolve revision bytes. Storage URIs remain opaque to callers.',
 						kind: 'value',
 						name: 'artifactToRAGUploads',
 						signature:
@@ -9215,7 +9219,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/artifacts',
 		subpackages: [],
-		version: '0.3.1'
+		version: '0.3.2'
 	},
 	{
 		api: [
@@ -9373,7 +9377,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'value',
 						name: 'toleratingExistingLogEntries',
 						signature:
-							'const toleratingExistingLogEntries: (runner: CommandRunner) => (command: readonly string[]) => Promise<CommandResult>;'
+							'const toleratingExistingLogEntries: (runner: CommandRunner, options?: {\n    onTolerated?: (command: readonly string[], message: string) => void;\n}) => (command: readonly string[]) => Promise<CommandResult>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'retryingVerification',
+						signature:
+							'const retryingVerification: (runner: CommandRunner, options?: {\n    delaysMs?: readonly number[];\n    sleep?: (ms: number) => Promise<unknown>;\n}) => (command: readonly string[]) => Promise<CommandResult>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'executeSigningPlan',
+						signature:
+							'const executeSigningPlan: (commands: ReadonlyArray<ReadonlyArray<string>>, runner: CommandRunner, options?: {\n    onResign?: (command: readonly string[], message: string) => void;\n    resignAttempts?: number;\n}) => Promise<CommandResult[]>;'
 					},
 					{
 						description: '',
@@ -9446,7 +9464,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/attest/manifest.json'
 		],
 		readmeDigest:
-			'b6159e64f3f12b1e7992d4e3373e6f30b92dff3086ef12a263c99808f1e8345c',
+			'2b8c308cb2dd6d5d9419807edec239bc136c7ae7c689fd429374ca49b2c19233',
 		readmeSamples: [
 			{
 				code: 'import {\n  createImagePublicationCommands,\n  githubWorkflowIdentityFromEnvironment,\n} from "@absolutejs/attest";\n\nconst identity = githubWorkflowIdentityFromEnvironment(process.env);\nconst commands = createImagePublicationCommands({\n  identity,\n  imageReference:\n    "ghcr.io/acme/api@sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",\n  provenancePath: "evidence/provenance.json",\n  sbomPath: "evidence/sbom.spdx.json",\n});',
@@ -9517,7 +9535,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/attest',
 		subpackages: [],
-		version: '0.2.1'
+		version: '0.2.3'
 	},
 	{
 		api: [],
@@ -11378,7 +11396,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'CallbackContext',
 						signature:
-							"type CallbackContext<UserType> = {\n    providerInstance: OAuth2Client<ProviderOption>;\n    /** Configured provider name — a built-in citra key or a customProviders key. */\n    authProvider: string;\n    /** The provider's citra config — pass to instantiateUserSession so identity\n     *  extraction works for custom providers too. */\n    providerConfiguration: ProviderConfig;\n    authClient?: string;\n    authIntent: AuthIntent;\n    tokenResponse: OAuth2TokenResponse;\n    session: SessionRecord<UserType>;\n    unregisteredSession: UnregisteredSessionRecord;\n    userSessionId: UserSessionId;\n    originUrl: string;\n    cookie: CallbackCookie;\n    currentUser?: UserType;\n    /** The callback request; pass it to `instantiateUserSession` to record the device. */\n    request?: Request;\n    status: typeof statusType;\n    redirect: typeof redirectType;\n};"
+							"type CallbackContext<UserType> = {\n    providerInstance: OAuth2Client<ProviderOption>;\n    /** Configured provider name — a built-in citra key or a customProviders key. */\n    authProvider: string;\n    /** The provider's citra config — pass to instantiateUserSession so identity\n     *  extraction works for custom providers too. */\n    providerConfiguration: ProviderConfig;\n    authClient?: string;\n    authIntent: AuthIntent;\n    tokenResponse: OAuth2TokenResponse;\n    session: SessionRecord<UserType>;\n    unregisteredSession: UnregisteredSessionRecord;\n    /** Fresh, cookie-backed ID for login; prior records are removed from the\n     *  context. Linking retains the existing ID. instantiateUserSession rotates\n     *  again: after calling it, use cookie.user_session_id.value, not this snapshot. */\n    userSessionId: UserSessionId;\n    originUrl: string;\n    cookie: CallbackCookie;\n    currentUser?: UserType;\n    /** The callback request; pass it to `instantiateUserSession` to record the device. */\n    request?: Request;\n    status: typeof statusType;\n    redirect: typeof redirectType;\n};"
 					},
 					{
 						description: '',
@@ -12096,7 +12114,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					},
 					{
 						description:
-							'Installs one browser-wide session-expiry guard. It intercepts 401 responses only for explicitly protected same-origin requests and rechecks the auth status route when a backgrounded or bfcached page becomes active again.',
+							'Installs one browser-wide session-expiry guard. It intercepts 401 responses only for explicitly protected same-origin requests, confirms actual session expiry before redirecting, and rechecks the auth status route when a backgrounded or bfcached page becomes active again.',
 						kind: 'value',
 						name: 'installSessionExpiryGuard',
 						signature:
@@ -12260,6 +12278,30 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'runPasskeyRegistration',
 						signature: 'runPasskeyRegistration'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isRecentAuthenticationRequired',
+						signature: 'isRecentAuthenticationRequired'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MAX_IMPERSONATION_REASON_LENGTH',
+						signature: 'MAX_IMPERSONATION_REASON_LENGTH'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MIN_IMPERSONATION_REASON_LENGTH',
+						signature: 'MIN_IMPERSONATION_REASON_LENGTH'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ImpersonationMode',
+						signature: 'type ImpersonationMode'
 					}
 				]
 			},
@@ -14318,7 +14360,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/auth/bun'
 		],
 		readmeDigest:
-			'106d5d5ab8bd19f8325741823db60e3854cec533c3cb9619186f9a35e5fa3eb4',
+			'f0f3a19ff89354e00b5af742ba1ea1719a0a5e3293caeac2851a682faf8dc4a8',
 		readmeSamples: [
 			{
 				code: 'git clone https://github.com/absolutejs/auth.git\n    cd auth',
@@ -14413,6 +14455,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				description:
+					'For login, the OAuth callback rotates user_session_id before invoking onCallbackSuccess: it removes the prior session and pending signup records, sets an HttpOnly, SameSite=Lax cookie (respecting cookieSecure), and supplies the fresh ID as context.userSessionId. Custom handlers can store their new session under that ID. context.currentUser is a snapshot from before rotation; resolve the authenticated provider identity when choosing the login account.',
+				details: [
+					"Prefer instantiateUserSession to construct the session. It rotates again and sets its own cookie options, including optional persistence. After calling it, read context.cookie.user_session_id.value for the final ID; the context's userSessionId is an earlier snapshot. Identity and connector linking retain the existing session ID and must not create a new login session."
+				],
+				title: 'OAuth callback sessions'
+			},
+			{
+				description:
 					"Set bindLinkingToSession: true when using onLinkConnector or onLinkIdentity. Start authorization with an explicit intent=link_connector (or link_identity) and a named client configured with only that capability's scopes. The callback requires the same live session that started consent. Revalidate the user's current application access in the handler. Never interpret a connector callback as login.",
 				details: [
 					'resolveOAuthAuthorization(callbackContext) resolves provider identity and tokens without creating a login session. Check actual returned scopes before saving grants. Compose createEncryptedLinkedProviderGrantStore({store, cipher}) with a raw package grant store and createSecretCipher(serverOnlyKey) or a versioned cipher. Use the encrypted adapter for all token writes and the OAuth credential resolver; use an explicit metadata projection for browser responses. The adapter exposes plaintext only to trusted server callers and binds encrypted tokens to grant, owner, provider subject and token field. It rejects plaintext legacy rows; migrate existing rows deliberately before enabling it. Keep encryption keys outside the DB.',
@@ -14443,13 +14493,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				description:
 					'Use the shared consent, handoff, completion, and recovery screens from @absolutejs/auth/oidc. See OAuth connection screens for hosted MCP installation and device-flow integration.',
-				details: [],
+				details: [
+					'Impersonation policy (0.102)',
+					'startImpersonation owns the session boundary. It requires a live, non-guest, non-impersonated actor session, recent authentication (five minutes by default), a specific reason, an authorization callback, and a durable audit callback. Actor identity is derived from the session using getUserId; callers cannot supply an actor ID. The default mode is ghost (read-only). sandbox and live must be chosen explicitly. The application must enforce the resulting read-only and side-effect suppression flags on its own writes and external integrations.',
+					'Pass authorize(actor, target) to read current permissions and any application MFA requirements. Return true only when access is allowed. This callback is required again by changeImpersonationMode, which also validates the original actor session and recent authentication before enabling actions. Mode changes are audited and rolled back if the audit write fails. endImpersonation requires emit and getUserId, remains available without fresh authentication, and restores the original session only if it is still valid.',
+					"This replaces the old impersonator input and allowNested escape hatch. Supply reason, optional mode, authorize, getUserId, optional getActorEmail, and emit instead. ImpersonationError carries safe status, code, and message fields suitable for an API response. A valid but insufficiently recent session receives reauthentication_required; the client export isRecentAuthenticationRequired(error) identifies that condition. Session expiry is confirmed through the status endpoint before the browser guard redirects, so a verification-required response can reach the application's recovery UI."
+				],
 				title: 'Branded OAuth connection screens'
 			}
 		],
 		repository: 'https://github.com/absolutejs/absolute-auth',
 		subpackages: [],
-		version: '0.101.0'
+		version: '0.102.3'
 	},
 	{
 		api: [],
@@ -14985,17 +15040,576 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.2.2'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/beacon',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'BEACON_ATTRIBUTE',
+						signature: 'BEACON_ATTRIBUTE'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BEACON_SIGNAL',
+						signature: 'BEACON_SIGNAL'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BeaconSignal',
+						signature: 'BeaconSignal'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconLevel',
+						signature:
+							'type BeaconLevel = "fatal" | "error" | "warning" | "info";'
+					},
+					{
+						description:
+							'Response header used to correlate a browser signal with its server request.',
+						kind: 'value',
+						name: 'BEACON_TRACE_HEADER',
+						signature:
+							'const BEACON_TRACE_HEADER = "x-absolute-trace-id";'
+					},
+					{
+						description:
+							'Beacon package version retained with every captured event.',
+						kind: 'value',
+						name: 'BEACON_SDK_VERSION',
+						signature: 'const BEACON_SDK_VERSION = "0.7.0-beta.23";'
+					},
+					{
+						description:
+							"Arbitrary event tags, with Beacon's reserved signal tag type-checked.",
+						kind: 'type',
+						name: 'BeaconTags',
+						signature:
+							'type BeaconTags = Record<string, string> & {\n    signal?: BeaconSignal;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Breadcrumb',
+						signature:
+							'type Breadcrumb = {\n    /** `Date.now()` when recorded. */\n    at: number;\n    type: "console" | "click" | "navigation" | "fetch" | "xhr" | "custom";\n    message: string;\n    data?: Record<string, unknown>;\n};'
+					},
+					{
+						description:
+							"One captured occurrence — structurally the ingest endpoint's BeaconEvent.",
+						kind: 'type',
+						name: 'BeaconEvent',
+						signature:
+							'type BeaconEvent = {\n    /** Stable semantic issue identity for synthetic/integration failures. The\n     * ingest service hashes this key; raw client fingerprints are never trusted. */\n    groupingKey?: string;\n    name: string;\n    message: string;\n    level?: BeaconLevel;\n    stack?: string;\n    at?: number;\n    traceId?: string;\n    spanId?: string;\n    replayId?: string;\n    tags?: BeaconTags;\n    extra?: Record<string, unknown>;\n};'
+					},
+					{
+						description:
+							"The POST body — structurally the ingest endpoint's BeaconEnvelope.",
+						kind: 'type',
+						name: 'BeaconEnvelope',
+						signature:
+							'type BeaconEnvelope = {\n    v: 1;\n    project: string;\n    release?: string;\n    environment?: string;\n    events: BeaconEvent[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CaptureContext',
+						signature:
+							'type CaptureContext = {\n    /** Override stack/message grouping with a stable semantic issue identity. */\n    groupingKey?: string;\n    level?: BeaconLevel;\n    traceId?: string;\n    spanId?: string;\n    tags?: BeaconTags;\n    extra?: Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CaptureMessageContext',
+						signature:
+							'type CaptureMessageContext = Omit<CaptureContext, "level">;'
+					},
+					{
+						description:
+							'Pluggable wire transport — injectable for tests / custom auth / proxies.',
+						kind: 'type',
+						name: 'BeaconTransport',
+						signature:
+							'type BeaconTransport = (request: {\n    url: string;\n    body: string;\n    key?: string;\n    /** True on unload-time flushes — prefer `navigator.sendBeacon`. */\n    useBeacon: boolean;\n}) => void | Promise<void>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconResponseClassification',
+						signature:
+							'type BeaconResponseClassification = {\n    groupingKey: string;\n    level?: BeaconLevel;\n    message: string;\n    tags?: Record<string, string>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconResponseClassifier',
+						signature:
+							'type BeaconResponseClassifier = (response: Response, request: {\n    method: string;\n    url: string;\n}) => void | false | BeaconResponseClassification | Promise<void | false | BeaconResponseClassification>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconInstrumentation',
+						signature:
+							'type BeaconInstrumentation = {\n    /** `window.onerror` / `error` events. Default true. */\n    globalErrors?: boolean;\n    /**\n     * Resource-load errors captured by the global `error` listener. Default true.\n     * A predicate can keep a failure as an error, downgrade it to a grouped\n     * warning, or return false to drop it.\n     */\n    resourceErrors?: boolean | ((failure: BeaconResourceFailure) => "error" | "warning" | false);\n    /** `unhandledrejection` events. Default true. */\n    unhandledRejections?: boolean;\n    /** Breadcrumb `console.error` / `console.warn`. Default true. */\n    console?: boolean;\n    /** Breadcrumb document clicks. Default true. */\n    clicks?: boolean;\n    /** Breadcrumb `fetch` calls. Default true. */\n    fetch?: boolean;\n    /** Breadcrumb `XMLHttpRequest` calls (legacy / third-party libs). Default true. */\n    xhr?: boolean;\n    /** Breadcrumb SPA navigations (`pushState`/`replaceState`/`popstate`). Default true. */\n    history?: boolean;\n    /** Record Network Information API changes as breadcrumbs. Default true. */\n    networkChanges?: boolean;\n    /** Record application-authored Performance API measures as breadcrumbs.\n     * Default false bec'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconResourceFailure',
+						signature:
+							'type BeaconResourceFailure = {\n    crossOrigin: boolean;\n    target: string;\n    type: string;\n    url?: string;\n};'
+					},
+					{
+						description:
+							'"Something went wrong" signal detection — the gap between captured errors and full session streaming. Each enabled signal becomes a warning-level issue (via captureException, so it carries breadcrumbs + the replayId), surfacing silent problems no thrown error or user report would: rage/dead clicks, server failures, policy violations, worker/realtime faults, and console.error. Each detector is feature-gated and independently tunable.',
+						kind: 'type',
+						name: 'BeaconSignals',
+						signature:
+							"type BeaconSignals = {\n    /** Suppress synthetic watchdog findings for WebDriver and explicitly\n     * identified crawler/audit user agents. Explicit exceptions and messages\n     * are unaffected. Default false. */\n    suppressAutomatedBrowsers?: boolean;\n    /** Back/forward navigations the browser could not restore from bfcache. */\n    bfcacheBlocks?: boolean;\n    /** Browser-specific bfcache reason strings that are inherent to an\n     * application's required capabilities and therefore not actionable. */\n    ignoredBfcacheReasons?: string[];\n    /** Marked application roots that settle without meaningful visible content. */\n    blankAppRoots?: boolean;\n    /** Delay before an application root is evaluated. Default 3000ms. */\n    blankAppRootSettleMs?: number;\n    /** Repeated 401/403 responses from one endpoint inside a short window.\n     *  Default true. */\n    authFailureStorms?: boolean;\n    /** Authorization failures from one endpoint that trip a storm. Default 4. */\n    authFailureStormCount?: number;\n    /** Window for the authorization-failure storm counter. Default 30000ms. */\n    authFailureStormWindowMs?: number;\n    /** Browser intervention reports surfaced by Report"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconReleaseProbe',
+						signature:
+							'type BeaconReleaseProbe = {\n    /** Same-origin endpoint returning `{ commit }` or `{ release }`. */\n    endpoint: string;\n    /** Visible-page polling interval. Default 60000ms. */\n    intervalMs?: number;\n    /** Called after the stale-release event has been flushed. */\n    onStale?: (input: {\n        currentRelease: string;\n        newestRelease: string;\n    }) => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconNetworkFailure',
+						signature:
+							'type BeaconNetworkFailure = {\n    /** Request origin only; credentials, path and query are never included. */\n    origin?: string;\n    sameOrigin?: boolean;\n    at: number;\n    durationMs: number;\n    endpoint: string;\n    error: {\n        message: string;\n        name: string;\n        properties?: Record<string, unknown>;\n        stack?: string;\n    };\n    method: string;\n    online: boolean | null;\n    connection?: {\n        downlink?: number;\n        effectiveType?: string;\n        rtt?: number;\n        saveData?: boolean;\n    };\n    transport: "fetch" | "xhr";\n    visibilityState: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconOptions',
+						signature:
+							"type BeaconOptions = {\n    /** Project id (required) — scopes issues server-side. */\n    project: string;\n    /** Ingest endpoint URL. Default `/ingest`. */\n    endpoint?: string;\n    release?: string;\n    /** Compare this page's embedded release with the currently served release.\n     * Once they differ, Beacon emits one stale-release event and suppresses\n     * ambient issue signals from the obsolete page. */\n    releaseProbe?: BeaconReleaseProbe;\n    environment?: string;\n    /** Auth key, sent as `x-beacon-key` (forces `fetch` over `sendBeacon`). */\n    key?: string;\n    /** Auto-flush once this many events are buffered. Default 30. */\n    maxBatch?: number;\n    /** Auto-flush interval (ms). Default 5000. */\n    flushIntervalMs?: number;\n    /** Breadcrumbs retained (ring buffer). Default 30. */\n    maxBreadcrumbs?: number;\n    /** Sample rate 0..1 — fraction of events kept. Default 1. */\n    sampleRate?: number;\n    /** Mutate or drop (return null) each event before it's buffered. */\n    beforeSend?: (event: BeaconEvent) => BeaconEvent | null;\n    /**\n     * Redact credentials, secret-bearing fields, and URL query/hash values after\n     * `beforeSend` and before buffering. Def"
+					},
+					{
+						description:
+							'A finalized Core Web Vital measurement, tagged with the path it was seen on.',
+						kind: 'type',
+						name: 'WebVital',
+						signature:
+							'type WebVital = {\n    /** Unix epoch milliseconds when the finalized metric was observed. */\n    at: number;\n    /** Optional deployment environment copied from the Beacon configuration. */\n    environment?: string;\n    /** The 5 Core Web Vitals, plus TBT measured for 10 seconds from FCP. */\n    name: "LCP" | "INP" | "CLS" | "FCP" | "TTFB" | "TBT";\n    /** Metric value (ms for LCP/INP/FCP/TTFB; unitless for CLS). */\n    value: number;\n    rating: "good" | "needs-improvement" | "poor";\n    /** URL path the vital was measured on (for per-route p75). */\n    path: string;\n    /** Stable per-page-load metric id (dedup). */\n    id: string;\n    navigationType: string;\n    /** Beacon project identifier, used by authenticated relays for tenant fencing. */\n    project: string;\n    /** Per-page Beacon session identifier for cross-signal correlation. */\n    sessionId: string;\n    /** Optional application release copied from the Beacon configuration. */\n    release?: string;\n    /** Optional privacy-masked replay correlation. */\n    replayId?: string;\n    /** Fraction of eligible observations represented by this event. */\n    samplingRate: number;\n    /** Version of this telemetry envelope. */\n'
+					},
+					{
+						description:
+							'Override Web Vital delivery without changing collection semantics.',
+						kind: 'type',
+						name: 'BeaconVitalsTransport',
+						signature:
+							'type BeaconVitalsTransport = (vital: WebVital) => void | Promise<void>;'
+					},
+					{
+						description:
+							'The subset of the web-vitals package surface beacon uses.',
+						kind: 'type',
+						name: 'WebVitalsModule',
+						signature:
+							'type WebVitalsModule = {\n    onLCP: WebVitalReporter;\n    onINP: WebVitalReporter;\n    onCLS: WebVitalReporter;\n    onFCP: WebVitalReporter;\n    onTTFB: WebVitalReporter;\n};'
+					},
+					{
+						description:
+							"Core Web Vitals capture. Uses the web-vitals package as an OPTIONAL, lazy-loaded peer (like rrweb for @absolutejs/replay) — install it (bun add web-vitals) to enable, or inject webVitals for tests. Each metric is reported once, finalized, and sendBeacon'd so it survives unload.",
+						kind: 'type',
+						name: 'BeaconVitalsOptions',
+						signature:
+							'type BeaconVitalsOptions = {\n    /** Where to POST each vital. Default `/ingest/vitals`. */\n    endpoint?: string;\n    /** Inject the web-vitals fns (default: lazy `import("web-vitals")`). */\n    webVitals?: WebVitalsModule;\n    /** Also called for each finalized vital (in addition to the POST). */\n    onVital?: (vital: WebVital) => void;\n    /** Fraction of eligible page loads sampled. Default 1. */\n    samplingRate?: number;\n    /** Telemetry envelope version. Default 1. */\n    schemaVersion?: number;\n    /** SDK/build version retained with the measurement. */\n    sdkVersion?: string;\n    /** Override delivery (default: sendBeacon / fetch keepalive). */\n    transport?: BeaconVitalsTransport;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Beacon',
+						signature:
+							'type Beacon = {\n    captureException: (error: unknown, context?: CaptureContext) => void;\n    captureMessage: (message: string, level?: BeaconLevel, context?: CaptureMessageContext) => void;\n    addBreadcrumb: (crumb: {\n        message: string;\n        type?: Breadcrumb["type"];\n        data?: Record<string, unknown>;\n    }) => void;\n    /** Merge persistent tags applied to every subsequent event. */\n    setTags: (tags: BeaconTags) => void;\n    /** Set (or clear, with null) the user attached to events. */\n    setUser: (user: {\n        id?: string;\n        email?: string;\n    } | null) => void;\n    /** Observe an application-owned browser capability promise without globally\n     * monkey-patching sensitive platform APIs. */\n    observeCapability: <T>(name: string, operation: Promise<T>) => Promise<T>;\n    /** Flush buffered events now. */\n    flush: () => Promise<void>;\n    /** Remove all listeners + do a final flush. */\n    close: () => Promise<void>;\n};'
+					},
+					{
+						description:
+							"Redact an event without mutating the caller's object.",
+						kind: 'value',
+						name: 'redactBeaconEvent',
+						signature:
+							'const redactBeaconEvent: (event: BeaconEvent) => BeaconEvent;'
+					},
+					{
+						description:
+							'Known browser-host/scanner failures that do not originate in page code.',
+						kind: 'value',
+						name: 'isKnownBeaconNoise',
+						signature:
+							'const isKnownBeaconNoise: (event: Pick<BeaconEvent, "message" | "name" | "stack" | "tags">, userAgent?: string) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'isAutomatedBrowser',
+						signature: 'const isAutomatedBrowser: () => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBeacon',
+						signature:
+							'const createBeacon: (options: BeaconOptions) => Beacon;'
+					},
+					{
+						description:
+							'Initialize the global beacon. Returns the instance.',
+						kind: 'value',
+						name: 'initBeacon',
+						signature:
+							'const initBeacon: (options: BeaconOptions) => Beacon;'
+					},
+					{
+						description:
+							'The global beacon, if initBeacon has been called.',
+						kind: 'value',
+						name: 'getBeacon',
+						signature: 'const getBeacon: () => Beacon | undefined;'
+					},
+					{
+						description:
+							'Capture against the global beacon (no-op if uninitialized).',
+						kind: 'value',
+						name: 'captureException',
+						signature:
+							'const captureException: (error: unknown, context?: CaptureContext) => void;'
+					},
+					{
+						description:
+							'Capture a message against the global beacon (no-op if uninitialized).',
+						kind: 'value',
+						name: 'captureMessage',
+						signature:
+							'const captureMessage: (message: string, level?: BeaconLevel, context?: CaptureMessageContext) => void;'
+					},
+					{
+						description:
+							'Add a breadcrumb to the global beacon (no-op if uninitialized).',
+						kind: 'value',
+						name: 'addBreadcrumb',
+						signature:
+							'const addBreadcrumb: (crumb: {\n    message: string;\n    type?: Breadcrumb["type"];\n    data?: Record<string, unknown>;\n}) => void;'
+					},
+					{
+						description:
+							'Observe an application-owned browser capability against the global beacon.',
+						kind: 'value',
+						name: 'observeCapability',
+						signature:
+							'const observeCapability: <T>(name: string, operation: Promise<T>) => Promise<T>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/beacon/contracts',
+				symbols: [
+					{
+						description:
+							"Stable names for Beacon's built-in UX and health signals.",
+						kind: 'value',
+						name: 'BEACON_SIGNAL',
+						signature:
+							'const BEACON_SIGNAL: {\n    readonly AUTH_FAILURE_STORM: "auth_failure_storm";\n    readonly BROWSER_INTERVENTION: "browser_intervention";\n    readonly BROWSER_POLICY_VIOLATION: "browser_policy_violation";\n    readonly BFCACHE_BLOCKED: "bfcache_blocked";\n    readonly CAPABILITY_FAILURE: "capability_failure";\n    readonly BLANK_APP_ROOT: "blank_app_root";\n    readonly CONSOLE_ERROR: "console_error";\n    readonly CONTROL_COLLISION: "control_collision";\n    readonly CSP_VIOLATION: "csp_violation";\n    readonly CLIPBOARD_FAILURE: "clipboard_failure";\n    readonly COLLAPSED_MODAL: "collapsed_modal";\n    readonly DEAD_CLICK: "dead_click";\n    readonly DISRUPTIVE_LAYOUT_SHIFT: "disruptive_layout_shift";\n    readonly DOCUMENT_DISCARDED: "document_discarded";\n    readonly ERROR_CLICK: "error_click";\n    readonly FETCH_FAILED: "fetch_failed";\n    readonly FOCUS_LOST: "focus_lost";\n    readonly FONT_FAILURE: "font_failure";\n    readonly FORM_FRUSTRATION: "form_frustration";\n    readonly FORM_ABANDONMENT: "form_abandonment";\n    readonly FOCUSED_CONTROL_OFFSCREEN: "focused_control_offscreen";\n    readonly HTTP_5XX: "http_5xx";\n    readonly HTTP_RESPONSE_FAILURE: "http_response_failure";\n    read'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'BeaconSignal',
+						signature:
+							'type BeaconSignal = (typeof BEACON_SIGNAL)[keyof typeof BEACON_SIGNAL];'
+					},
+					{
+						description:
+							"Stable DOM attributes understood by Beacon's instrumentation.",
+						kind: 'value',
+						name: 'BEACON_ATTRIBUTE',
+						signature:
+							'const BEACON_ATTRIBUTE: {\n    readonly APP_ROOT: "data-beacon-app-root";\n    readonly CONTROL_GROUP: "data-beacon-control-group";\n    readonly DEAD_CLICK: "data-beacon-dead-click";\n    readonly NAME: "data-beacon-name";\n    readonly EMBED: "data-beacon-embed";\n    readonly LOADING: "data-beacon-loading";\n    readonly LOADING_TIMEOUT: "data-beacon-loading-timeout";\n    readonly FORM: "data-beacon-form";\n    /** `="allow"` exempts an intentional dynamic subtree from layout-shift issues. */\n    readonly LAYOUT_SHIFT: "data-beacon-layout-shift";\n    readonly MEDIA: "data-beacon-media";\n    readonly OVERFLOW: "data-beacon-overflow";\n    readonly SCAN: "data-beacon-scan";\n    readonly THEME: "data-beacon-theme";\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/beacon/early',
+				symbols: [
+					{
+						description:
+							'Lightweight pre-hydration layout-shift recorder.',
+						kind: 'type',
+						name: 'EarlyLayoutShiftRect',
+						signature:
+							'type EarlyLayoutShiftRect = {\n    bottom: number;\n    height: number;\n    left: number;\n    right: number;\n    top: number;\n    width: number;\n    x: number;\n    y: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EarlyLayoutShiftViewport',
+						signature:
+							'type EarlyLayoutShiftViewport = {\n    documentHeight: number;\n    documentWidth: number;\n    innerHeight: number;\n    innerWidth: number;\n    visualHeight?: number;\n    visualOffsetLeft?: number;\n    visualOffsetTop?: number;\n    visualScale?: number;\n    visualWidth?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EarlyLayoutShiftSource',
+						signature:
+							'type EarlyLayoutShiftSource = {\n    currentRect?: EarlyLayoutShiftRect;\n    node?: Node;\n    previousRect?: EarlyLayoutShiftRect;\n    target: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EarlyLayoutShiftEntry',
+						signature:
+							'type EarlyLayoutShiftEntry = {\n    documentReadyState: DocumentReadyState;\n    hadRecentInput: boolean;\n    observedAt: number;\n    sources: EarlyLayoutShiftSource[];\n    startTime: number;\n    value: number;\n    viewport: EarlyLayoutShiftViewport;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EarlyLayoutShiftBuffer',
+						signature:
+							'type EarlyLayoutShiftBuffer = {\n    entries: EarlyLayoutShiftEntry[];\n    interactionTimes: number[];\n    observerStartedAt: number;\n    resizeTimes: number[];\n};'
+					},
+					{
+						description:
+							"Install once from the application's synchronous entry module. SSR-safe.",
+						kind: 'value',
+						name: 'installEarlyLayoutShiftBuffer',
+						signature:
+							'const installEarlyLayoutShiftBuffer: () => void;'
+					},
+					{
+						description:
+							'Consume and remove the pre-hydration recorder, if one was installed.',
+						kind: 'value',
+						name: 'consumeEarlyLayoutShiftBuffer',
+						signature:
+							'const consumeEarlyLayoutShiftBuffer: () => EarlyLayoutShiftBuffer | undefined;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/beacon/policy',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'BEACON_ATTRIBUTE',
+						signature: 'BEACON_ATTRIBUTE'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BEACON_SIGNAL',
+						signature: 'BEACON_SIGNAL'
+					},
+					{
+						description:
+							'One endpoint exemption: a signal raised against a set of endpoints that are known to produce it in normal operation. This is the shape nearly every application-specific rule turns out to have — a stream that stays open for hours, an upload that is megabytes by design, a marketing pixel that fails when a blocker is installed, a request whose client already owns its retry. Naming it once means those rules become four lines of configuration instead of four hand-written predicates.',
+						kind: 'type',
+						name: 'EndpointExemption',
+						signature:
+							'type EndpointExemption = {\n    /** Signals this exemption applies to. */\n    signals: readonly string[];\n    /** Endpoints it covers. A string matches as a substring unless `match` says\n     *  otherwise; a RegExp is tested against the endpoint. */\n    endpoints: readonly (RegExp | string)[];\n    /** Restrict to specific request methods. Omit to cover every method. A\n     *  batched event (method `multiple`) matches whenever its endpoints do. */\n    methods?: readonly string[];\n    /** How string patterns are compared. Default `includes`. */\n    match?: "exact" | "includes" | "prefix";\n};'
+					},
+					{
+						description:
+							'Read the endpoints off an event. Beacon reports a single request on endpoint and a batch on endpoints as a comma-separated list. Every application that writes one of these rules writes this parser first, usually more than once.',
+						kind: 'value',
+						name: 'eventEndpoints',
+						signature:
+							'const eventEndpoints: (tags: BeaconEvent["tags"]) => string[];'
+					},
+					{
+						description:
+							'Whether an event is fully covered by an exemption. Every endpoint has to match, not just one: a batch that mixes the exempt stream with a real request is a real request, and suppressing it would hide the failure behind the stream that happened to travel with it.',
+						kind: 'value',
+						name: 'matchesEndpointExemption',
+						signature:
+							'const matchesEndpointExemption: (event: Pick<BeaconEvent, "tags">, exemption: EndpointExemption) => boolean;'
+					},
+					{
+						description:
+							'A read that failed while the tab was hidden. A backgrounded tab losing a request is browser lifecycle, not breakage — suspension, a dropped connection, a VPN moving. Applications refetch on focus. Visible failures, writes and timeouts all stay actionable.',
+						kind: 'value',
+						name: 'isHiddenReadFailure',
+						signature:
+							'const isHiddenReadFailure: (event: Pick<BeaconEvent, "tags">) => boolean;'
+					},
+					{
+						description:
+							"A 5xx the server already captured. The trace id means a server-side capture exists with the stack, the request and the context. The browser's view of the same failure would open a second issue for one fault, with less in it.",
+						kind: 'value',
+						name: 'isServerCapturedHttpFailure',
+						signature:
+							'const isServerCapturedHttpFailure: (event: Pick<BeaconEvent, "tags" | "traceId">, probeEndpoints?: readonly string[]) => boolean;'
+					},
+					{
+						description:
+							'The page is running an older release than this browser has already seen. Applications that prompt for their own updates — a service worker with an update path, a release probe with an onStale reload — already tell the person what to do. Reporting it as an issue too is a second voice saying the same thing to someone who cannot act on it.',
+						kind: 'value',
+						name: 'isStaleReleaseSignal',
+						signature:
+							'const isStaleReleaseSignal: (event: Pick<BeaconEvent, "tags">) => boolean;'
+					},
+					{
+						description:
+							'A dynamic import for a chunk the deploy replaced. The document was served before the release and asks for a file the release renamed. The update path already recovers it, so what is left is a console error that would churn the board on every deploy, once per open tab.',
+						kind: 'value',
+						name: 'isStaleChunkImport',
+						signature:
+							'const isStaleChunkImport: (event: Pick<BeaconEvent, "message">) => boolean;'
+					},
+					{
+						description:
+							'A browser hides an error thrown by a script from another origin (an extension, an ad or analytics tag, a CDN script without CORS) behind a bare "Script error." with no message, file or stack. Nothing in it can be acted on or even attributed to the application.',
+						kind: 'value',
+						name: 'isOpaqueScriptError',
+						signature:
+							'const isOpaqueScriptError: (event: Pick<BeaconEvent, "message" | "stack">) => boolean;'
+					},
+					{
+						description:
+							"A hydration mismatch caused by a page-recolouring extension. Dark Reader and its kind rewrite inline styles before the framework hydrates, and the framework correctly reports that the markup it found is not the markup it rendered. The edit is the extension's, made in a browser the application will never see, and no change to the application removes it.",
+						kind: 'value',
+						name: 'isThemeExtensionHydrationNoise',
+						signature:
+							'const isThemeExtensionHydrationNoise: (event: Pick<BeaconEvent, "extra" | "message">) => boolean;'
+					},
+					{
+						description:
+							"A browser deprecation report for something the page does not control. A third-party tag's own deprecation is attributed to the document that hosts it. Naming the report identities that are known to come from outside keeps the ones from application code actionable.",
+						kind: 'value',
+						name: 'isExternalBrowserDeprecation',
+						signature:
+							'const isExternalBrowserDeprecation: (event: Pick<BeaconEvent, "tags">, reportIdentities: readonly string[]) => boolean;'
+					},
+					{
+						description:
+							"Google's Attribution Reporting deprecation, emitted by the ads and analytics tags rather than by the page that embeds them.",
+						kind: 'value',
+						name: 'ATTRIBUTION_REPORTING_DEPRECATION',
+						signature:
+							'const ATTRIBUTION_REPORTING_DEPRECATION = "AttributionReporting";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NoisePolicyOptions',
+						signature:
+							'type NoisePolicyOptions = {\n    /**\n     * Endpoints that are known to raise a signal in normal operation: streams\n     * that stay open, uploads that are large by design, pixels that a blocker\n     * refuses, requests whose client owns its own retry.\n     */\n    exemptions?: readonly EndpointExemption[];\n    /**\n     * Health/readiness endpoints. A 5xx from one of these still reports even\n     * when a trace id says the server captured it, because a server that has\n     * stopped answering cannot be relied on to file its own issue.\n     */\n    probeEndpoints?: readonly string[];\n    /** Browser report identities known to originate outside the page. Defaults\n     *  to Attribution Reporting; pass `[]` to keep every deprecation. */\n    externalDeprecations?: readonly string[];\n    /** The application prompts for its own updates. Default true. */\n    ownsReleaseUpdates?: boolean;\n    /** Suppress hidden-tab read failures. Default true. */\n    ignoreHiddenReadFailures?: boolean;\n    /** Suppress 5xx the server already captured. Default true. */\n    ignoreServerCapturedFailures?: boolean;\n    /** Suppress dynamic imports for chunks a deploy replaced. Default true. */\n    ignoreStaleChu'
+					},
+					{
+						description:
+							'Build the beforeSend predicate. Returns true for an event that should be dropped, so a caller reads as beforeSend: (event) => (isNoise(event) ? null : event).',
+						kind: 'value',
+						name: 'createNoisePolicy',
+						signature:
+							'const createNoisePolicy: (options?: NoisePolicyOptions) => (event: BeaconEvent) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ResourceFailurePolicyOptions',
+						signature:
+							"type ResourceFailurePolicyOptions = {\n    /** Hostnames whose scripts are not the application's to fix. A pattern\n     *  matches the hostname itself or any subdomain of it. */\n    thirdPartyHosts?: readonly string[];\n    /** Cross-origin images are optional by default: the elements that show them\n     *  render a placeholder, and the remote host is not the application's to\n     *  fix. Set false to treat a missing remote image as an error. */\n    optionalCrossOriginImages?: boolean;\n    /** Same-origin path prefixes serving optional imagery — an avatar, a logo\n     *  proxy, an uploaded thumbnail — where a placeholder already stands in. */\n    optionalPathPrefixes?: readonly string[];\n};"
+					},
+					{
+						description:
+							"Which failed resources are errors. A third-party analytics script blocked by an extension and a customer's uploaded thumbnail 404ing are not the application being broken — the first is not the application's code to fix, and the second already renders a placeholder. Its own scripts, styles and images still are. Returns Beacon's resourceErrors classifier: a level to report at, or false to ignore.",
+						kind: 'value',
+						name: 'createResourceFailurePolicy',
+						signature:
+							'const createResourceFailurePolicy: (options?: ResourceFailurePolicyOptions) => (failure: BeaconResourceFailure) => "error" | false;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReliabilityPresetOptions',
+						signature:
+							'type ReliabilityPresetOptions = {\n    /**\n     * Behavioural detectors watch a person rather than a page — what they\n     * clicked, where they got stuck — so they belong on the same consent\n     * boundary as session replay. Structural health stays on for everyone.\n     */\n    behavioural?: boolean;\n    /** A `report-to` endpoint already delivers browser policy reports, so the\n     *  parallel observer would file each deprecation twice. Default true. */\n    hasReportingEndpoint?: boolean;\n    /** A Performance console owns ordinary latency, so error triage keeps only\n     *  failures. Default true. */\n    ownsLatencyElsewhere?: boolean;\n    /** The application prompts for its own updates. Default true. */\n    ownsReleaseUpdates?: boolean;\n    /** Documents are restored from server state on boot, so a browser evicting\n     *  a tab to reclaim memory is not a fault. Default true. */\n    restoresFromServerState?: boolean;\n    /** Endpoints whose client owns reconnect and resume. */\n    recoverableSockets?: Array<RegExp | string>;\n    /** bfcache blockers inherent to a capability the application requires. */\n    ignoredBfcacheReasons?: string[];\n};'
+					},
+					{
+						description:
+							'The signal set an application with its own error triage usually wants. Beacon enables every detector by default, which is right for an application that has nothing else. One that also runs a Performance console, a release probe and a Reporting API endpoint has to turn the same four off, for the same reasons, every time — otherwise each of those systems files the issue its neighbour already filed. Everything not named here keeps its default.',
+						kind: 'value',
+						name: 'reliabilitySignalPreset',
+						signature:
+							'const reliabilitySignalPreset: (options?: ReliabilityPresetOptions) => BeaconSignals;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/beacon/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<BeaconOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        endpoint: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        environment: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        filterKnownNoise: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        flushIntervalMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maxBatch: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maxBreadcrumbs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        project: import("@sinclair/typebox").TString;\n        release: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        sampleRate: import("@s'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/beacon/outbox',
+				symbols: [
+					{
+						description:
+							'Durable, bounded delivery for JSON telemetry. Call enqueue only with redacted data. Server must deduplicate by id and acknowledge that id after committing storage. Browser persistence is best effort: unavailable/quota-exhausted storage is reported.',
+						kind: 'type',
+						name: 'OutboxRecord',
+						signature:
+							'type OutboxRecord = {\n    id: string;\n    createdAt: number;\n    body: string;\n    bytes: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'interface',
+						name: 'OutboxStore',
+						signature:
+							'interface OutboxStore {\n    list(): Promise<OutboxRecord[]>;\n    put(record: OutboxRecord): Promise<void>;\n    remove(id: string): Promise<void>;\n}'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'createIndexedDBOutboxStore',
+						signature:
+							'function createIndexedDBOutboxStore(name?: string): OutboxStore;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'createMemoryOutboxStore',
+						signature:
+							'function createMemoryOutboxStore(): OutboxStore;'
+					},
+					{
+						description: '',
+						kind: 'function',
+						name: 'createOutbox',
+						signature:
+							'function createOutbox(options: {\n    store: OutboxStore;\n    send: (record: OutboxRecord, signal: AbortSignal) => Promise<string>;\n    now?: () => number;\n    random?: () => number;\n    maxItems?: number;\n    maxBytes?: number;\n    maxRecordBytes?: number;\n    maxAgeMs?: number;\n    timeoutMs?: number;\n}): {\n    stats: () => {\n        nextAttempt: number;\n        pending: number;\n        bytes: number;\n        dropped: number;\n        expired: number;\n        storageErrors: number;\n        failedAttempts: number;\n        acknowledged: number;\n        persistMs: number;\n    };\n    enqueue(value: unknown, id?: string): Promise<string>;\n    flush(): Promise<void>;\n};'
+					}
+				]
+			}
+		],
 		category: 'Observability',
 		commands: [
 			{
 				command:
-					"rm -rf dist && bun build src/index.ts src/contracts.ts src/early.ts src/policy.ts src/manifest.ts --outdir dist --root ./src --sourcemap --target=browser --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external web-vitals --external 'web-vitals/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+					"rm -rf dist && bun build src/index.ts src/contracts.ts src/early.ts src/policy.ts src/outbox.ts src/manifest.ts --outdir dist --root ./src --sourcemap --target=browser --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' --external web-vitals --external 'web-vitals/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
 				name: 'build'
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && absolute-changelog check',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun run test:package && absolute-changelog check',
 				name: 'check:package'
 			},
 			{
@@ -15005,6 +15619,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				command: 'bun test',
 				name: 'test'
+			},
+			{
+				command: 'bun scripts/verify-outbox-package.ts',
+				name: 'test:package'
 			},
 			{
 				command: 'tsc --noEmit',
@@ -15024,10 +15642,11 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/beacon/early',
 			'@absolutejs/beacon/policy',
 			'@absolutejs/beacon/manifest',
-			'@absolutejs/beacon/manifest.json'
+			'@absolutejs/beacon/manifest.json',
+			'@absolutejs/beacon/outbox'
 		],
 		readmeDigest:
-			'016393146b1c1576aaa67705acb9ef08577e4f9ebaefca69da09faca14d1acb5',
+			'2a5db2f4217270e445fbc161dade21e98b35d4f62b58ab4bd0db1018de2f89a6',
 		readmeSamples: [
 			{
 				code: 'import { initBeacon, captureException } from "@absolutejs/beacon";\n\ninitBeacon({\n  project: "web",\n  endpoint: "https://api.example.com/ingest",\n  release: import.meta.env.VITE_RELEASE,\n  environment: "production",\n  // Optional: detect a tab that stayed open across a deployment. The endpoint\n  // may return either `{ commit: "..." }` or `{ release: "..." }`.\n  releaseProbe: {\n    endpoint: "/version",\n    onStale: () => window.location.reload(),\n  },\n});\n\n// Uncaught errors + unhandled rejections are captured automatically.\n// Manual capture anywhere:\ntry {\n  await checkout();\n} catch (e) {\n  captureException(e, { tags: { component: "billing" } });\n}',
@@ -15128,11 +15747,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 					"This entry point imports nothing from the SDK at runtime: boot-time policy is read by the synchronous page graph, and pulling Beacon's runtime in there makes the bundler merge the whole SDK back into it, defeating lazy startup."
 				],
 				title: 'Noise policy (@absolutejs/beacon/policy)'
+			},
+			{
+				description:
+					'@absolutejs/beacon/outbox exports createOutbox, createIndexedDBOutboxStore, createMemoryOutboxStore, and the OutboxStore/OutboxRecord types. It is a separate browser entry point: existing beacon collectors keep their current API. The host supplies already-redacted payloads and owns scheduling and server storage.',
+				details: [
+					'A successful enqueue means the store accepted the record; it does not mean the server received it. The server must deduplicate IDs and return the same ID only after committing storage. flush() leaves records in place on timeout, failed transport or a mismatched acknowledgement; it coalesces concurrent calls and honors exponential retry backoff. It does not start timers/listeners itself.',
+					'Defaults: 128 records, 4 MB total, 1 MB each, two-day expiry, five-second attempt timeout. Oldest records are pruned under pressure. stats() reports pending records/bytes, drop/expiry/error/acknowledgement counts, cumulative persistence latency and retry time. Counters are per instance. Multiple tabs can resend a record and their bounds are not an atomic global quota. Browser eviction and storage failure remain possible; persistence errors are surfaced to the host. Memory storage is explicit and does not survive reloads. IndexedDB accepts bounded JSON batches, not blobs or a full gameplay replay. The custom store and transport interfaces allow later adapters without changing game code.',
+					"Validation: bun test tests/outbox.test.ts covers restart recovery, unchanged retry IDs, acknowledgement mismatch, overlapping flushes, capacity/age limits, timeouts and quota failure. Exercised by Hello World's real browser offline / reload / retry workflow."
+				],
+				title: 'Durable outbox'
 			}
 		],
 		repository: 'https://github.com/absolutejs/beacon',
 		subpackages: [],
-		version: '0.7.0-beta.15'
+		version: '0.7.0-beta.23'
 	},
 	{
 		api: [],
@@ -16103,7 +16732,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/billing',
 		subpackages: [],
-		version: '0.18.0'
+		version: '0.18.2'
 	},
 	{
 		api: [],
@@ -19421,6 +20050,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'ConsentProvenance',
+						signature: 'ConsentProvenance'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'ConsentState',
 						signature: 'ConsentState'
 					},
@@ -19588,7 +20223,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/consent/server'
 		],
 		readmeDigest:
-			'37f22a0403f86d9858efab717b52727824ab41ff2f2a87afec675ff5843fd503',
+			'8f914a3aa8ad3997403cf44a539e5f84abba1ae046157d1b062cfc140f235f7a',
 		readmeSamples: [
 			{
 				code: "import { createConsentStore, readGpc, readTimeZone, resolveRegion } from '@absolutejs/consent';\n\nconst store = createConsentStore({\n\tcategories: ['analytics', 'marketing'],\n\tgpc: readGpc(),\n\t// Seed from SSR (see below) so the right UI renders on first paint;\n\t// otherwise fall back to the browser time zone.\n\tregion: ssrRegion ?? resolveRegion({ timeZone: readTimeZone() })\n});\n\nstore.subscribe((state) => {\n\tif (state.choices.analytics) startAnalytics();\n\telse stopAnalytics();\n});\n\nstore.getState().needsPrompt; // opt-in region, undecided → show the banner\nstore.getState().needsNotice; // opt-out region, undecided → show a notice\nstore.acceptAll();\nstore.rejectAll();\nstore.decide({ analytics: true });\nstore.dismissNotice(); // hides the notice, records no decision\nstore.applyRemote({ choices: { analytics: false }, decidedAt }); // from the account",
@@ -19645,7 +20280,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/consent',
 		subpackages: [],
-		version: '0.2.1'
+		version: '0.2.2'
 	},
 	{
 		api: [],
@@ -19666,7 +20301,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'dev'
 			},
 			{
-				command: 'absolute prettier --write',
+				command: 'absolute fmt',
 				name: 'format'
 			},
 			{
@@ -19804,10 +20439,515 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/create-absolutejs',
 		subpackages: [],
-		version: '0.20.6'
+		version: '0.20.7'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/crm',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMAccount',
+						signature: 'CRMAccount'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMActivity',
+						signature: 'CRMActivity'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMAddress',
+						signature: 'CRMAddress'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMAdapter',
+						signature: 'CRMAdapter'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMAdapterCapabilities',
+						signature: 'CRMAdapterCapabilities'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMAdapterFactory',
+						signature: 'CRMAdapterFactory'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMAdapterFactoryInput',
+						signature: 'CRMAdapterFactoryInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMContact',
+						signature: 'CRMContact'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMCustomField',
+						signature: 'CRMCustomField'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMDeal',
+						signature: 'CRMDeal'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMEmail',
+						signature: 'CRMEmail'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMEntityType',
+						signature: 'CRMEntityType'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMLead',
+						signature: 'CRMLead'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMListOptions',
+						signature: 'CRMListOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMListResult',
+						signature: 'CRMListResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMNote',
+						signature: 'CRMNote'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMOwner',
+						signature: 'CRMOwner'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMPhone',
+						signature: 'CRMPhone'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMPipeline',
+						signature: 'CRMPipeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMSocialHandle',
+						signature: 'CRMSocialHandle'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMStage',
+						signature: 'CRMStage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMSyncDirection',
+						signature: 'CRMSyncDirection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMTask',
+						signature: 'CRMTask'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMVendor',
+						signature: 'CRMVendor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryCRMLocalEntityStore',
+						signature: 'createInMemoryCRMLocalEntityStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryCRMTokenStore',
+						signature: 'createInMemoryCRMTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresCRMLocalEntityStore',
+						signature: 'createPostgresCRMLocalEntityStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresCRMTokenStore',
+						signature: 'createPostgresCRMTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRedisCRMLocalEntityStore',
+						signature: 'createRedisCRMLocalEntityStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRedisCRMTokenStore',
+						signature: 'createRedisCRMTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSqliteCRMLocalEntityStore',
+						signature: 'createSqliteCRMLocalEntityStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSqliteCRMTokenStore',
+						signature: 'createSqliteCRMTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateInMemoryCRMLocalEntityStoreOptions',
+						signature: 'CreateInMemoryCRMLocalEntityStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateInMemoryCRMTokenStoreOptions',
+						signature: 'CreateInMemoryCRMTokenStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreatePostgresCRMLocalEntityStoreOptions',
+						signature: 'CreatePostgresCRMLocalEntityStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreatePostgresCRMTokenStoreOptions',
+						signature: 'CreatePostgresCRMTokenStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateRedisCRMLocalEntityStoreOptions',
+						signature: 'CreateRedisCRMLocalEntityStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateRedisCRMTokenStoreOptions',
+						signature: 'CreateRedisCRMTokenStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateSqliteCRMLocalEntityStoreOptions',
+						signature: 'CreateSqliteCRMLocalEntityStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateSqliteCRMTokenStoreOptions',
+						signature: 'CreateSqliteCRMTokenStoreOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMLocalEntityOrigin',
+						signature: 'CRMLocalEntityOrigin'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMLocalEntityRecord',
+						signature: 'CRMLocalEntityRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMLocalEntityStore',
+						signature: 'CRMLocalEntityStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMTokenRecord',
+						signature: 'CRMTokenRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMTokenStore',
+						signature: 'CRMTokenStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMVendorTokenContext',
+						signature: 'CRMVendorTokenContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PostgresQueryRunner',
+						signature: 'PostgresQueryRunner'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RedisLikeClient',
+						signature: 'RedisLikeClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SqliteLikeDatabase',
+						signature: 'SqliteLikeDatabase'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SqliteLikeStatement',
+						signature: 'SqliteLikeStatement'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createCRMReconciler',
+						signature: 'createCRMReconciler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createInMemoryCRMSyncQueue',
+						signature: 'createInMemoryCRMSyncQueue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createPostgresCRMSyncQueue',
+						signature: 'createPostgresCRMSyncQueue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createRedisCRMSyncQueue',
+						signature: 'createRedisCRMSyncQueue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createSqliteCRMSyncQueue',
+						signature: 'createSqliteCRMSyncQueue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'lastWriteWinsReconcileResolver',
+						signature: 'lastWriteWinsReconcileResolver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'remoteWinsReconcileResolver',
+						signature: 'remoteWinsReconcileResolver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateCRMReconcilerOptions',
+						signature: 'CreateCRMReconcilerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMChangeEvent',
+						signature: 'CRMChangeEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMReconcileConflictResolution',
+						signature: 'CRMReconcileConflictResolution'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMReconcileConflictResolver',
+						signature: 'CRMReconcileConflictResolver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMReconcileConflictResolverInput',
+						signature: 'CRMReconcileConflictResolverInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMReconcileResult',
+						signature: 'CRMReconcileResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMReconciler',
+						signature: 'CRMReconciler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMReconcilerEvent',
+						signature: 'CRMReconcilerEvent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMSyncEntityPayload',
+						signature: 'CRMSyncEntityPayload'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMSyncJob',
+						signature: 'CRMSyncJob'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMSyncJobKind',
+						signature: 'CRMSyncJobKind'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMSyncJobStatus',
+						signature: 'CRMSyncJobStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMSyncQueue',
+						signature: 'CRMSyncQueue'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateInMemoryCRMSyncQueueOptions',
+						signature: 'CreateInMemoryCRMSyncQueueOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreatePostgresCRMSyncQueueOptions',
+						signature: 'CreatePostgresCRMSyncQueueOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateRedisCRMSyncQueueOptions',
+						signature: 'CreateRedisCRMSyncQueueOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreateSqliteCRMSyncQueueOptions',
+						signature: 'CreateSqliteCRMSyncQueueOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'EnqueueCRMSyncJobInput',
+						signature: 'EnqueueCRMSyncJobInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RedisSortedSetClient',
+						signature: 'RedisSortedSetClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createCRMRuntime',
+						signature: 'createCRMRuntime'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMConflictResolution',
+						signature: 'CRMConflictResolution'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMConflictResolver',
+						signature: 'CRMConflictResolver'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CRMRuntime',
+						signature: 'CRMRuntime'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/crm/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'CRMToolRuntime',
+						signature:
+							'type CRMToolRuntime = {\n    /** Core runtime bound by the host. */\n    crm: CRMRuntime;\n    /** Authorized application user; never supplied by tool input. */\n    userId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<CRMRuntimeOptions, CRMToolRuntime>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<CRMToolRuntime>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<CRMToolRuntime>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        echoSuppressionWindowMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+					}
+				]
+			}
+		],
 		category: 'Commerce & Growth',
 		commands: [
 			{
@@ -19913,7 +21053,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/crm',
 		subpackages: [],
-		version: '0.0.10-alpha.11'
+		version: '0.0.10-alpha.12'
 	},
 	{
 		api: [],
@@ -21297,7 +22437,2501 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.0.1-beta.1'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/deploy',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'ExecOptions',
+						signature: 'ExecOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ExecResult',
+						signature: 'ExecResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LocalTargetOptions',
+						signature: 'LocalTargetOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SshTargetOptions',
+						signature: 'SshTargetOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Target',
+						signature: 'Target'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'UploadOptions',
+						signature: 'UploadOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'localTarget',
+						signature: 'localTarget'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'sshTarget',
+						signature: 'sshTarget'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'BareManagerOptions',
+						signature: 'BareManagerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProcessManager',
+						signature: 'ProcessManager'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ProcessManagerContext',
+						signature: 'ProcessManagerContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'SystemdManagerOptions',
+						signature: 'SystemdManagerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'bareManager',
+						signature: 'bareManager'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'systemdManager',
+						signature: 'systemdManager'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DeployContext',
+						signature: 'DeployContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DeployHooks',
+						signature: 'DeployHooks'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DeployOptions',
+						signature: 'DeployOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DeployResult',
+						signature: 'DeployResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DeployStep',
+						signature: 'DeployStep'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Deployer',
+						signature: 'Deployer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DeployerOptions',
+						signature: 'DeployerOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReleaseAnnotations',
+						signature: 'ReleaseAnnotations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReleaseRecord',
+						signature: 'ReleaseRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'Source',
+						signature: 'Source'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerifySpec',
+						signature: 'VerifySpec'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDeployer',
+						signature: 'createDeployer'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'defaultBunPipeline',
+						signature: 'defaultBunPipeline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CreatedReleaseArtifact',
+						signature: 'CreatedReleaseArtifact'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReleaseArtifactMetadata',
+						signature: 'ReleaseArtifactMetadata'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createReleaseArtifact',
+						signature: 'createReleaseArtifact'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'extractReleaseArtifact',
+						signature: 'extractReleaseArtifact'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'receiveReleaseArtifact',
+						signature: 'receiveReleaseArtifact'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ReleaseArtifactError',
+						signature: 'ReleaseArtifactError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AndroidNativeReleaseMetadata',
+						signature: 'AndroidNativeReleaseMetadata'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ExternalNativeReleaseRecord',
+						signature: 'ExternalNativeReleaseRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'IosNativeReleaseMetadata',
+						signature: 'IosNativeReleaseMetadata'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseArtifactProvenance',
+						signature: 'NativeReleaseArtifactProvenance'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseBlobObject',
+						signature: 'NativeReleaseBlobObject'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseBlobStore',
+						signature: 'NativeReleaseBlobStore'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseCertification',
+						signature: 'NativeReleaseCertification'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseCertificationProvenance',
+						signature: 'NativeReleaseCertificationProvenance'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseCertificationReceipt',
+						signature: 'NativeReleaseCertificationReceipt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseCertificationRequirement',
+						signature: 'NativeReleaseCertificationRequirement'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseCertificationVerification',
+						signature: 'NativeReleaseCertificationVerification'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseChannel',
+						signature: 'NativeReleaseChannel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseMetadata',
+						signature: 'NativeReleaseMetadata'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleasePublication',
+						signature: 'NativeReleasePublication'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseRecord',
+						signature: 'NativeReleaseRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseRegistry',
+						signature: 'NativeReleaseRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseRegistryOptions',
+						signature: 'NativeReleaseRegistryOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'StoredNativeReleaseRecord',
+						signature: 'StoredNativeReleaseRecord'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createNativeReleaseRegistry',
+						signature: 'createNativeReleaseRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'githubActionsArtifactProvenance',
+						signature: 'githubActionsArtifactProvenance'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NATIVE_RELEASE_REGISTRY_FORMAT',
+						signature: 'NATIVE_RELEASE_REGISTRY_FORMAT'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NativeReleaseRegistryError',
+						signature: 'NativeReleaseRegistryError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MobileUpdateChannel',
+						signature: 'MobileUpdateChannel'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MobileUpdateFile',
+						signature: 'MobileUpdateFile'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MobileUpdateManifest',
+						signature: 'MobileUpdateManifest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MobileUpdatePublication',
+						signature: 'MobileUpdatePublication'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MobileUpdatePromotion',
+						signature: 'MobileUpdatePromotion'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MobileUpdateRegistry',
+						signature: 'MobileUpdateRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MobileUpdateRegistryOptions',
+						signature: 'MobileUpdateRegistryOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MobileUpdateRollback',
+						signature: 'MobileUpdateRollback'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMobileUpdateHandler',
+						signature: 'createMobileUpdateHandler'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createMobileUpdateRegistry',
+						signature: 'createMobileUpdateRegistry'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MOBILE_UPDATE_REGISTRY_FORMAT',
+						signature: 'MOBILE_UPDATE_REGISTRY_FORMAT'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MobileUpdateRegistryError',
+						signature: 'MobileUpdateRegistryError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'parseMobileUpdateManifest',
+						signature: 'parseMobileUpdateManifest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayAuth',
+						signature: 'GooglePlayAuth'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayBundle',
+						signature: 'GooglePlayBundle'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayClient',
+						signature: 'GooglePlayClient'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayEdit',
+						signature: 'GooglePlayEdit'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayNativeReleasePublication',
+						signature: 'GooglePlayNativeReleasePublication'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayNativeReleasePublisher',
+						signature: 'GooglePlayNativeReleasePublisher'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayReleaseIntent',
+						signature: 'GooglePlayReleaseIntent'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayReleasePublisherOptions',
+						signature: 'GooglePlayReleasePublisherOptions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayReleaseReceipt',
+						signature: 'GooglePlayReleaseReceipt'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayReleaseStatus',
+						signature: 'GooglePlayReleaseStatus'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayReleaseTarget',
+						signature: 'GooglePlayReleaseTarget'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GooglePlayReviewBehavior',
+						signature: 'GooglePlayReviewBehavior'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/digitalocean',
+				symbols: [
+					{
+						description:
+							'Minimal subset of DO API calls we make. Lets callers BYO a client with retry / observability / etc. (e.g. wrap got, undici, or a tenant-scoped client that injects different tokens per call).',
+						kind: 'type',
+						name: 'DigitalOceanClientLike',
+						signature:
+							'type DigitalOceanClientLike = {\n    request: <T = unknown>(method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE", path: string, body?: unknown) => Promise<T>;\n};'
+					},
+					{
+						description:
+							'A DigitalOcean droplet record, narrowed to what we inspect.',
+						kind: 'type',
+						name: 'DigitalOceanDroplet',
+						signature:
+							'type DigitalOceanDroplet = {\n    id: number;\n    name: string;\n    status: "new" | "active" | "off" | "archive";\n    region?: {\n        slug: string;\n    };\n    size_slug?: string;\n    /** The droplet\'s size as billed: memory in MiB, disk in GB, prices in dollars. */\n    size?: {\n        disk: number;\n        memory: number;\n        price_hourly: number;\n        price_monthly: number;\n        slug: string;\n        vcpus: number;\n    };\n    created_at?: string;\n    networks: {\n        v4: Array<{\n            ip_address: string;\n            type: "public" | "private";\n        }>;\n        v6?: Array<{\n            ip_address: string;\n            type: "public" | "private";\n        }>;\n    };\n    tags?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DigitalOceanTargetOptions',
+						signature:
+							"type DigitalOceanTargetOptions = {\n    /** API token (https://cloud.digitalocean.com/account/api/tokens). Required unless `client` is set. */\n    token?: string;\n    /** Custom client. Overrides token-built default. */\n    client?: DigitalOceanClientLike;\n    /** Droplet name. Also the idempotency key. */\n    name: string;\n    /** Region slug — `'nyc3'`, `'sfo3'`, `'ams3'`, etc. */\n    region: string;\n    /** Size slug — `'s-1vcpu-1gb'`, `'s-2vcpu-4gb'`, etc. */\n    size: string;\n    /** Image slug, snapshot id, or backup id. e.g. `'ubuntu-22-04-x64'`. */\n    image: string | number;\n    /** SSH key fingerprints OR numeric ids. At least one required to ssh in. */\n    sshKeys: ReadonlyArray<string | number>;\n    /** Tags applied at creation. Useful for `listDroplets({ tag })`. */\n    tags?: ReadonlyArray<string>;\n    /** cloud-init user data — a shell script or YAML config. */\n    userData?: string;\n    /** VPC UUID. Defaults to the account's default VPC for the region. */\n    vpcUuid?: string;\n    /** Enable IPv6. Default false. */\n    ipv6?: boolean;\n    /** Enable monitoring agent. Default false. */\n    monitoring?: boolean;\n    /** SSH login user. Default `'root'`. */\n    user?: "
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DigitalOceanTarget',
+						signature:
+							'type DigitalOceanTarget = Target & {\n    readonly dropletId: number;\n    readonly ipv4: string;\n    /** Destroy the droplet via the DO API. */\n    destroy: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'DigitalOceanError',
+						signature:
+							'class DigitalOceanError extends Error {\n    readonly status: number;\n    readonly body: unknown;\n    constructor(message: string, status: number, body: unknown);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDigitalOceanClient',
+						signature:
+							'const createDigitalOceanClient: (token: string, options?: {\n    baseUrl?: string;\n    fetch?: typeof fetch;\n}) => DigitalOceanClientLike;'
+					},
+					{
+						description:
+							'Find a droplet by name. Returns undefined if absent. Throws if more than one droplet shares the name (drifted state). / / A droplet size, narrowed to what size substitution compares.',
+						kind: 'type',
+						name: 'DigitalOceanSize',
+						signature:
+							'type DigitalOceanSize = {\n    slug: string;\n    available: boolean;\n    regions: string[];\n    vcpus: number;\n    memory: number;\n    disk: number;\n    price_monthly: number;\n};'
+					},
+					{
+						description:
+							'Whether DigitalOcean refused a create because the region does not offer the size (after substitution, because it offers nothing comparable).',
+						kind: 'value',
+						name: 'isDigitalOceanSizeUnavailable',
+						signature:
+							'const isDigitalOceanSizeUnavailable: (error: unknown) => boolean;'
+					},
+					{
+						description:
+							'The cheapest size DigitalOcean offers in region with at least the vCPUs, memory and disk of size, or null when there is none. GPU sizes are never substitutes.',
+						kind: 'value',
+						name: 'equivalentDigitalOceanSize',
+						signature:
+							'const equivalentDigitalOceanSize: (sizes: readonly DigitalOceanSize[], size: string, region: string) => DigitalOceanSize | null;'
+					},
+					{
+						description:
+							'POST /droplets. When DigitalOcean stops offering the requested size in the region ("Size is not available in this region", which happens to regular sizes in busy regions without notice), retries once with the cheapest size there that is at least as large, and reports the swap through onSubstitute. Any other failure is thrown as it was.',
+						kind: 'value',
+						name: 'createDigitalOceanDroplet',
+						signature:
+							'const createDigitalOceanDroplet: (client: DigitalOceanClientLike, body: Record<string, unknown> & {\n    region: string;\n    size: string;\n}, onSubstitute?: (from: string, to: string, region: string) => void) => Promise<DigitalOceanDroplet>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'findDigitalOceanDroplet',
+						signature:
+							'const findDigitalOceanDroplet: (client: DigitalOceanClientLike, name: string) => Promise<DigitalOceanDroplet | undefined>;'
+					},
+					{
+						description:
+							'Every row of a DigitalOcean list endpoint, following its pages. A list read as one page stops at 20 rows, and a caller that treats the list as the whole fleet then sees every droplet past the 20th as gone. So a listing is complete or it throws; it is never silently short.',
+						kind: 'value',
+						name: 'listAllDigitalOcean',
+						signature:
+							'const listAllDigitalOcean: <T>(client: DigitalOceanClientLike, path: string, field: string) => Promise<T[]>;'
+					},
+					{
+						description:
+							'List droplets, optionally filtered by tag: every page of them.',
+						kind: 'value',
+						name: 'listDigitalOceanDroplets',
+						signature:
+							'const listDigitalOceanDroplets: (options: {\n    token?: string;\n    client?: DigitalOceanClientLike;\n    tag?: string;\n}) => Promise<DigitalOceanDroplet[]>;'
+					},
+					{
+						description:
+							'Destroy a droplet by id. No-op if already gone.',
+						kind: 'value',
+						name: 'destroyDigitalOceanDroplet',
+						signature:
+							'const destroyDigitalOceanDroplet: (options: {\n    token?: string;\n    client?: DigitalOceanClientLike;\n    id: number;\n}) => Promise<void>;'
+					},
+					{
+						description:
+							'Provision-or-reuse a DO droplet by name, wait for SSH, return a Target. Idempotent: same name → same droplet.',
+						kind: 'value',
+						name: 'digitalOceanTarget',
+						signature:
+							'const digitalOceanTarget: (options: DigitalOceanTargetOptions) => Promise<DigitalOceanTarget>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/digitalocean-infrastructure',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'DigitalOceanFleetRegion',
+						signature:
+							'type DigitalOceanFleetRegion = {\n    image: string | number;\n    ipv6?: boolean;\n    monitoring?: boolean;\n    region: string;\n    size: string;\n    sshKeys: ReadonlyArray<string | number>;\n    userData?: string;\n    vpcUuid?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DigitalOceanInfrastructureProviderOptions',
+						signature:
+							'type DigitalOceanInfrastructureProviderOptions = {\n    agent?: {\n        audience?: string;\n        port?: number;\n        preferPrivateNetwork?: boolean;\n        protocol?: "http" | "https";\n    };\n    client?: DigitalOceanClientLike;\n    /**\n     * Called when a region no longer offers the configured size and the node\n     * was created with the cheapest at-least-as-large size instead. Defaults\n     * to a console warning.\n     */\n    onSizeSubstitute?: (from: string, to: string, region: string) => void;\n    /**\n     * Called when a region refused to create the node because it offers\n     * neither the configured size nor anything comparable, before the next\n     * configured region is tried. A region can stop offering every size\n     * without notice (nyc3, 2026-10-27), so a fleet with more than one region\n     * keeps creating hosts while one refuses.\n     */\n    onRegionRefused?: (region: string, reason: string) => void;\n    regions: readonly DigitalOceanFleetRegion[];\n    tag: string;\n    token?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDigitalOceanInfrastructureProvider',
+						signature:
+							'const createDigitalOceanInfrastructureProvider: (options: DigitalOceanInfrastructureProviderOptions) => InfrastructureProvider;'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'createDigitalOceanBilling',
+						signature: 'createDigitalOceanBilling'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'digitalOceanLineFingerprint',
+						signature: 'digitalOceanLineFingerprint'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/infrastructure',
+				symbols: [
+					{
+						description:
+							'Shared compute-fleet contract implemented by every cloud adapter.',
+						kind: 'type',
+						name: 'InfrastructureNodeState',
+						signature:
+							'type InfrastructureNodeState = "pending" | "ready" | "terminated";'
+					},
+					{
+						description:
+							"A node's size as its provider bills it. Prices are integer micros (millionths of the currency unit), so cost arithmetic stays exact.",
+						kind: 'type',
+						name: 'InfrastructureNodeSize',
+						signature:
+							'type InfrastructureNodeSize = {\n    currency: string;\n    diskGb: number;\n    memoryMb: number;\n    priceHourlyMicros: number;\n    priceMonthlyMicros: number;\n    slug: string;\n    vcpus: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'InfrastructureNode',
+						signature:
+							'type InfrastructureNode = {\n    id: string;\n    label: string;\n    provider: string;\n    region: string;\n    state: InfrastructureNodeState;\n    publicIpv4?: string;\n    privateIpv4?: string;\n    agent?: {\n        audience?: string;\n        url: string;\n    };\n    /** When the provider created the node (ISO 8601). */\n    createdAt?: string;\n    size?: InfrastructureNodeSize;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'InfrastructureProviderCapabilities',
+						signature:
+							'type InfrastructureProviderCapabilities = {\n    cloudInit: boolean;\n    idempotentProvisioning: boolean;\n    privateNetworking: boolean;\n    regionalPlacement: boolean;\n    regions: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProvisionInfrastructureNode',
+						signature:
+							'type ProvisionInfrastructureNode = {\n    idempotencyKey: string;\n    name: string;\n    region?: string;\n    /** Per-host bootstrap configuration, overriding the region default. */\n    userData?: string;\n};'
+					},
+					{
+						description:
+							"One invoice, or the provider's running preview of the open month.",
+						kind: 'type',
+						name: 'InfrastructureInvoice',
+						signature:
+							"type InfrastructureInvoice = {\n    amountMicros: number;\n    currency: string;\n    /** `preview` for the open month, else the provider's invoice id. */\n    id: string;\n    /** The billing month, `YYYY-MM`. */\n    period: string;\n    preview: boolean;\n};"
+					},
+					{
+						description:
+							'One invoice line: what one resource cost over a span.',
+						kind: 'type',
+						name: 'InfrastructureBillLine',
+						signature:
+							'type InfrastructureBillLine = {\n    amountMicros: number;\n    /** The provider\'s own grouping, e.g. "Droplets" or "Spaces". */\n    category: string | null;\n    currency: string;\n    description: string;\n    durationHours: number | null;\n    endTime: string | null;\n    /** Stable within an invoice; identical lines differ by their `:n` suffix. */\n    fingerprint: string;\n    invoiceId: string;\n    period: string;\n    product: string;\n    projectName: string | null;\n    /** The provider\'s resource id (a droplet\'s numeric id on DigitalOcean). */\n    resourceId: string | null;\n    resourceUuid: string | null;\n    startTime: string | null;\n};'
+					},
+					{
+						description:
+							"Read access to the account's bill, where the provider offers one.",
+						kind: 'type',
+						name: 'InfrastructureBilling',
+						signature:
+							"type InfrastructureBilling = {\n    listInvoiceLines: (invoiceId: string) => Promise<InfrastructureBillLine[]>;\n    /** Final invoices, newest first, then the open month's preview. */\n    listInvoices: () => Promise<InfrastructureInvoice[]>;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'InfrastructureProvider',
+						signature:
+							"type InfrastructureProvider = {\n    /** The account's bill, when the provider exposes one. */\n    billing?: InfrastructureBilling;\n    capabilities: InfrastructureProviderCapabilities;\n    getNode: (id: string) => Promise<InfrastructureNode>;\n    listNodes: () => Promise<InfrastructureNode[]>;\n    name: string;\n    provisionNode: (request: ProvisionInfrastructureNode) => Promise<InfrastructureNode>;\n    terminateNode: (id: string, idempotencyKey: string) => Promise<void>;\n};"
+					},
+					{
+						description:
+							'A decimal currency amount ("12.34", -0.5, "0.0012") as integer micros, parsed from its digits so no float rounding enters a bill.',
+						kind: 'value',
+						name: 'amountToMicros',
+						signature:
+							'const amountToMicros: (value: string | number) => number;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/ephemeral-infrastructure',
+				symbols: [
+					{
+						description:
+							'A short-lived compute and storage allocation with independently observable cleanup.',
+						kind: 'type',
+						name: 'EphemeralInfrastructureResources',
+						signature:
+							'type EphemeralInfrastructureResources = {\n    node: InfrastructureNode;\n    volume: {\n        encryptedAtRest: true;\n        id: string;\n        label: string;\n        region: string;\n        sizeGiB: number;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ProvisionEphemeralInfrastructure',
+						signature:
+							'type ProvisionEphemeralInfrastructure = {\n    idempotencyKey: string;\n    image: string | number;\n    name: string;\n    region: string;\n    size: string;\n    sshKeys: ReadonlyArray<string | number>;\n    userData: string;\n    volumeGiB: number;\n    vpcUuid: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EphemeralInfrastructureAbsence',
+						signature:
+							'type EphemeralInfrastructureAbsence = {\n    dropletAbsent: boolean;\n    volumeAbsent: boolean;\n};'
+					},
+					{
+						description:
+							'Provider-owned lifecycle for isolated experiments. It deliberately contains no remote-command primitive: the provisioned image decides what can run.',
+						kind: 'type',
+						name: 'EphemeralInfrastructureProvider',
+						signature:
+							'type EphemeralInfrastructureProvider = {\n    cleanup: (resources: EphemeralInfrastructureResources) => Promise<EphemeralInfrastructureAbsence>;\n    inspectAbsence: (resources: EphemeralInfrastructureResources) => Promise<EphemeralInfrastructureAbsence>;\n    name: string;\n    provision: (request: ProvisionEphemeralInfrastructure) => Promise<EphemeralInfrastructureResources>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint:
+					'@absolutejs/deploy/digitalocean-ephemeral-infrastructure',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'DigitalOceanVolume',
+						signature:
+							'type DigitalOceanVolume = {\n    droplet_ids: number[];\n    id: string;\n    name: string;\n    region: {\n        slug: string;\n    };\n    size_gigabytes: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DigitalOceanEphemeralInfrastructureOptions',
+						signature:
+							'type DigitalOceanEphemeralInfrastructureOptions = {\n    client?: DigitalOceanClientLike;\n    cleanupPollIntervalMs?: number;\n    cleanupTimeoutMs?: number;\n    sleep?: (milliseconds: number) => Promise<void>;\n    tag: string;\n    token?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDigitalOceanEphemeralInfrastructureProvider',
+						signature:
+							'const createDigitalOceanEphemeralInfrastructureProvider: (options: DigitalOceanEphemeralInfrastructureOptions) => EphemeralInfrastructureProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/edge-ingress',
+				symbols: [
+					{
+						description:
+							'Provider-neutral lifecycle for a global ingress in front of regional edge pools.',
+						kind: 'type',
+						name: 'EdgeIngressProtocol',
+						signature:
+							'type EdgeIngressProtocol = "tcp" | "http" | "https";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EdgeIngressBackend',
+						signature:
+							'type EdgeIngressBackend = {\n    /** Provider-native regional pool id (for example a DO regional LB UUID or GCP group self-link). */\n    resourceId: string;\n    region: string;\n    /** Lower values are preferred during regional failover. */\n    priority?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EdgeIngressSpec',
+						signature:
+							'type EdgeIngressSpec = {\n    backends: readonly EdgeIngressBackend[];\n    healthCheck: {\n        path?: string;\n        port: number;\n        protocol: EdgeIngressProtocol;\n    };\n    idempotencyKey: string;\n    listener: {\n        port: number;\n        protocol: EdgeIngressProtocol;\n        targetPort: number;\n        tlsPassthrough?: boolean;\n    };\n    name: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EdgeIngressState',
+						signature:
+							'type EdgeIngressState = "provisioning" | "ready" | "degraded";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EdgeIngress',
+						signature:
+							'type EdgeIngress = {\n    addresses: string[];\n    backends: EdgeIngressBackend[];\n    id: string;\n    name: string;\n    provider: string;\n    state: EdgeIngressState;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EdgeIngressCapabilities',
+						signature:
+							'type EdgeIngressCapabilities = {\n    automaticHealthFailover: boolean;\n    global: boolean;\n    tlsPassthrough: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EdgeIngressProvider',
+						signature:
+							'type EdgeIngressProvider = {\n    capabilities: EdgeIngressCapabilities;\n    getIngress: (name: string) => Promise<EdgeIngress | null>;\n    name: string;\n    reconcileIngress: (spec: EdgeIngressSpec) => Promise<EdgeIngress>;\n    removeIngress: (name: string, idempotencyKey: string) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'EdgeIngressValidationError',
+						signature:
+							'class EdgeIngressValidationError extends Error {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateEdgeIngressSpec',
+						signature:
+							'const validateEdgeIngressSpec: (spec: EdgeIngressSpec) => EdgeIngressSpec;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'normalizedEdgeIngressBackends',
+						signature:
+							'const normalizedEdgeIngressBackends: (backends: readonly EdgeIngressBackend[]) => EdgeIngressBackend[];'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/release-artifact',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'ReleaseArtifactMetadata',
+						signature:
+							'type ReleaseArtifactMetadata = {\n    bytes: number;\n    releaseId: string;\n    sha256: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreatedReleaseArtifact',
+						signature:
+							'type CreatedReleaseArtifact = {\n    dispose: () => Promise<void>;\n    file: Bun.BunFile;\n    metadata: ReleaseArtifactMetadata;\n    path: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'ReleaseArtifactError',
+						signature:
+							'class ReleaseArtifactError extends Error {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createReleaseArtifact',
+						signature:
+							"const createReleaseArtifact: (options: {\n    /** Paths from the source root, e.g. `node_modules` or `apps/web/build`. */\n    exclude?: string[];\n    /**\n     * File names excluded wherever they occur, e.g. `.env` or `.env.*`. Paths\n     * in `exclude` are anchored to the root, and BusyBox tar's `*` does not\n     * cross `/`, so a nested `apps/web/.env` could not be excluded that way.\n     */\n    excludeNames?: string[];\n    releaseId?: string;\n    sourceRoot: string;\n    temporaryRoot?: string;\n}) => Promise<CreatedReleaseArtifact>;"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'receiveReleaseArtifact',
+						signature:
+							'const receiveReleaseArtifact: (options: {\n    destination: string;\n    expectedBytes: number;\n    expectedSha256: string;\n    maxBytes?: number;\n    stream: ReadableStream<Uint8Array>;\n}) => Promise<{\n    bytes: number;\n    sha256: string;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'extractReleaseArtifact',
+						signature:
+							"const extractReleaseArtifact: (options: {\n    archivePath: string;\n    destination: string;\n    /**\n     * Bare names left out at any depth: neither extracted nor held to the\n     * safety check. For archives that may carry disposable state the receiver\n     * never wants, such as a dependency tree's symlinks, written by a producer\n     * that did not leave it out itself.\n     */\n    excludeNames?: string[];\n}) => Promise<{\n    readonly extracted: true;\n}>;"
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/native-release',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'NATIVE_RELEASE_REGISTRY_FORMAT',
+						signature: 'const NATIVE_RELEASE_REGISTRY_FORMAT: 1;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AndroidNativeReleaseMetadata',
+						signature:
+							'type AndroidNativeReleaseMetadata = {\n    appBuild: string;\n    appId: string;\n    artifact: "app-release.aab";\n    bytes: number;\n    engine: "capacitor" | "expo";\n    format: 1;\n    platform: "android";\n    releaseId: string;\n    runtime: string;\n    sha256: string;\n    signed: boolean;\n    type: "aab";\n    versionCode?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IosNativeReleaseMetadata',
+						signature:
+							'type IosNativeReleaseMetadata = {\n    appBuild: string;\n    appId: string;\n    artifact: "App.ipa";\n    buildNumber?: number;\n    bytes: number;\n    engine: "capacitor" | "expo";\n    format: 1;\n    marketingVersion: string;\n    platform: "ios";\n    releaseId: string;\n    runtime: string;\n    sha256: string;\n    signed: boolean;\n    type: "ipa";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseMetadata',
+						signature:
+							'type NativeReleaseMetadata = AndroidNativeReleaseMetadata | IosNativeReleaseMetadata;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseCertificationRequirement',
+						signature:
+							'type NativeReleaseCertificationRequirement = "installed" | "simulator" | "device" | "store";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseCertification',
+						signature:
+							'type NativeReleaseCertification = {\n    certificationId: string;\n    evidence: Array<{\n        artifactExactness?: "archive-equivalent" | "source-equivalent" | "store-delivered";\n        distribution?: "apple-processed" | "registered-device" | "simulator-release";\n        generatedAt: string;\n        networkUnavailable: "not-proven" | "proven";\n        remote: boolean;\n        reportSha256: string;\n        strength: NativeReleaseCertificationRequirement;\n    }>;\n    format: 1;\n    generatedAt: string;\n    release: {\n        appBuild: string;\n        appId: string;\n        artifactBytes: number;\n        artifactSha256: string;\n        buildNumber?: number;\n        engine: "capacitor" | "expo";\n        marketingVersion?: string;\n        platform: "android" | "ios";\n        releaseId: string;\n        runtime: string;\n        signed: true;\n        versionCode?: number;\n    };\n    requirement: NativeReleaseCertificationRequirement;\n    status: "certified";\n    strength: NativeReleaseCertificationRequirement;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseCertificationProvenance',
+						signature:
+							'type NativeReleaseCertificationProvenance = {\n    issuer: string;\n    subject: string;\n    verifiedAt: string;\n    verificationId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseCertificationVerification',
+						signature:
+							'type NativeReleaseCertificationVerification = {\n    bundle: Record<string, unknown>;\n    format: 1;\n    identity: {\n        issuer: string;\n        ref: string;\n        repository: string;\n        sha: string;\n        workflowPath: string;\n    };\n    kind: "sigstore-bundle";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseCertificationReceipt',
+						signature:
+							'type NativeReleaseCertificationReceipt = {\n    certificationId: string;\n    releaseId: string;\n    requirement: NativeReleaseCertificationRequirement;\n    strength: NativeReleaseCertificationRequirement;\n    provenance?: NativeReleaseCertificationProvenance;\n};'
+					},
+					{
+						description:
+							'The GitHub Actions run that built and verified an artifact the registry does not hold. Its build attestation is found by the release digest (GET /repos/{repository}/attestations/sha256:{digest}).',
+						kind: 'type',
+						name: 'NativeReleaseArtifactProvenance',
+						signature:
+							'type NativeReleaseArtifactProvenance = {\n    kind: "github-actions";\n    repository: string;\n    runAttempt: number;\n    runId: number;\n    sha: string;\n    workflowRef: string;\n};'
+					},
+					{
+						description:
+							'A release whose bytes the registry stores and checks on every read.',
+						kind: 'type',
+						name: 'StoredNativeReleaseRecord',
+						signature:
+							'type StoredNativeReleaseRecord = {\n    artifactKey: string;\n    format: typeof NATIVE_RELEASE_REGISTRY_FORMAT;\n    metadata: NativeReleaseMetadata;\n};'
+					},
+					{
+						description:
+							'A release recorded by digest and provenance only: the store it is delivered to (App Store Connect, Google Play) holds the bytes.',
+						kind: 'type',
+						name: 'ExternalNativeReleaseRecord',
+						signature:
+							'type ExternalNativeReleaseRecord = {\n    artifact: {\n        provenance: NativeReleaseArtifactProvenance;\n        retention: "external";\n    };\n    format: typeof NATIVE_RELEASE_REGISTRY_FORMAT;\n    metadata: NativeReleaseMetadata;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseRecord',
+						signature:
+							'type NativeReleaseRecord = StoredNativeReleaseRecord | ExternalNativeReleaseRecord;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseChannel',
+						signature:
+							'type NativeReleaseChannel = {\n    appId: string;\n    channel: string;\n    format: typeof NATIVE_RELEASE_REGISTRY_FORMAT;\n    platform: NativeReleaseMetadata["platform"];\n    promotedAt: string;\n    releaseId: string;\n    sha256: string;\n    certification?: NativeReleaseCertificationReceipt;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseBlobObject',
+						signature:
+							'type NativeReleaseBlobObject = {\n    key: string;\n    lastModified?: number;\n    metadata?: Record<string, string>;\n    size: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseBlobStore',
+						signature:
+							'type NativeReleaseBlobStore = {\n    delete?: (key: string) => Promise<void>;\n    get: (key: string) => Promise<Uint8Array | null>;\n    head: (key: string) => Promise<NativeReleaseBlobObject | null>;\n    list?: (options?: {\n        cursor?: string;\n        limit?: number;\n        prefix?: string;\n    }) => Promise<{\n        cursor?: string;\n        objects: NativeReleaseBlobObject[];\n        truncated: boolean;\n    }>;\n    put: (key: string, body: ReadableStream<Uint8Array> | Uint8Array | string, options?: {\n        cacheControl?: string;\n        contentType?: string;\n        maxBytes?: number;\n        metadata?: Record<string, string>;\n        signal?: AbortSignal;\n    }) => Promise<unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleasePublication',
+						signature:
+							'type NativeReleasePublication = {\n    certification?: NativeReleaseCertificationReceipt;\n    channel?: NativeReleaseChannel;\n    record: NativeReleaseRecord;\n    reused: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseRegistry',
+						signature:
+							'type NativeReleaseRegistry = {\n    promote: (options: {\n        allowUnsigned?: boolean;\n        appId: string;\n        channel: string;\n        platform: NativeReleaseMetadata["platform"];\n        releaseId: string;\n        certificationId?: string;\n        certificationRequirement?: NativeReleaseCertificationRequirement;\n        signal?: AbortSignal;\n    }) => Promise<NativeReleaseChannel>;\n    publish: (options: {\n        allowUnsigned?: boolean;\n        channel?: string;\n        certification?: NativeReleaseCertification;\n        certificationRequirement?: NativeReleaseCertificationRequirement;\n        certificationVerification?: NativeReleaseCertificationVerification;\n        releaseRoot: string;\n        signal?: AbortSignal;\n    }) => Promise<NativeReleasePublication>;\n    read: (options: {\n        appId: string;\n        platform: NativeReleaseMetadata["platform"];\n        releaseId: string;\n    }) => Promise<NativeReleaseRecord | null>;\n    resolve: (options: {\n        appId: string;\n        channel: string;\n        platform: NativeReleaseMetadata["platform"];\n    }) => Promise<{\n        channel: NativeReleaseChannel;\n        record: NativeReleaseRecord;\n    } | null>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'NativeReleaseRegistryOptions',
+						signature:
+							"type NativeReleaseRegistryOptions = {\n    certificationVerifier?: (options: {\n        certification: NativeReleaseCertification;\n        metadata: NativeReleaseMetadata;\n        requirement: NativeReleaseCertificationRequirement;\n        signal?: AbortSignal;\n        verification?: NativeReleaseCertificationVerification;\n    }) => Promise<NativeReleaseCertificationProvenance>;\n    clock?: () => Date;\n    /** Record new releases by digest and provenance without storing their\n     *  bytes. Publication still checks the local artifact's size and digest;\n     *  promotion never needs the bytes, because the destination store keeps\n     *  the exact build. Releases already stored with their bytes still read. */\n    externalArtifacts?: {\n        provenance: () => NativeReleaseArtifactProvenance | Promise<NativeReleaseArtifactProvenance>;\n    };\n    maxArtifactBytes?: number;\n    prefix?: string;\n    requireTrustedCertification?: boolean;\n    store: NativeReleaseBlobStore;\n};"
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'NativeReleaseRegistryError',
+						signature:
+							'class NativeReleaseRegistryError extends Error {\n}'
+					},
+					{
+						description:
+							"Provenance for an artifact built in the current GitHub Actions run, read from the runner's default environment variables.",
+						kind: 'value',
+						name: 'githubActionsArtifactProvenance',
+						signature:
+							'const githubActionsArtifactProvenance: (env?: Record<string, string | undefined>) => NativeReleaseArtifactProvenance;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createNativeReleaseRegistry',
+						signature:
+							'const createNativeReleaseRegistry: (options: NativeReleaseRegistryOptions) => NativeReleaseRegistry;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/mobile-update',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'MOBILE_UPDATE_REGISTRY_FORMAT',
+						signature: 'const MOBILE_UPDATE_REGISTRY_FORMAT: 1;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ExpoUpdateCodeSigningOptions',
+						signature:
+							'type ExpoUpdateCodeSigningOptions = {\n    keys: Readonly<Record<string, {\n        /** Public X.509 root certificate embedded in matching native apps. */\n        certificate: string | Buffer;\n        /** RSA private key available only to the trusted update-serving process. */\n        privateKey: string | Buffer;\n    }>>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateFile',
+						signature:
+							'type MobileUpdateFile = {\n    bytes: number;\n    path: string;\n    sha256: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateManifest',
+						signature:
+							'type MobileUpdateManifest = {\n    appId: string;\n    channel: string;\n    classification: "bug-fix" | "content" | "security";\n    createdAt: string;\n    files: MobileUpdateFile[];\n    format: 1;\n    releaseId: string;\n    runtimeFingerprint: string;\n    signature: {\n        algorithm: "ecdsa-p256-sha256";\n        keyId: string;\n        value: string;\n    };\n    withinSubmittedPurpose: true;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateChannel',
+						signature:
+							'type MobileUpdateChannel = {\n    activationId?: string;\n    activatedAt?: string;\n    appId: string;\n    channel: string;\n    fallbackReleaseId?: string;\n    format: typeof MOBILE_UPDATE_REGISTRY_FORMAT;\n    promotionId?: string;\n    promotedAt: string;\n    releaseId?: string;\n    rollout: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdatePublication',
+						signature:
+							'type MobileUpdatePublication = {\n    appId: string;\n    channel: string;\n    storedBytes?: number;\n    storedFiles?: number;\n    releaseId: string;\n    reused: boolean;\n    reusedBytes?: number;\n    reusedFiles?: number;\n    rollout: number;\n    stage: "published";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdatePromotion',
+						signature:
+							'type MobileUpdatePromotion = {\n    appId: string;\n    channel: string;\n    releaseId: string;\n    rollout: number;\n    stage: "promoted";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateRollback',
+						signature:
+							'type MobileUpdateRollback = {\n    appId: string;\n    channel: string;\n    releaseId?: string;\n    stage: "rolled-back";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateStorageRelease',
+						signature:
+							'type MobileUpdateStorageRelease = {\n    bytes: number;\n    channel: string;\n    createdAt: string;\n    markedAt?: string;\n    objectCount: number;\n    protectedBy: ("active" | "age" | "fallback" | "recent")[];\n    releaseId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateStorageReport',
+						signature:
+							'type MobileUpdateStorageReport = {\n    appId: string;\n    channelCount: number;\n    contentBlobBytes?: number;\n    contentBlobCount?: number;\n    reclaimableBytes: number;\n    reclaimableContentBytes?: number;\n    releaseBytes: number;\n    releaseCount: number;\n    releases: MobileUpdateStorageRelease[];\n    totalBytes: number;\n    totalObjectCount: number;\n    untrackedBytes: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdatePruneResult',
+						signature:
+							'type MobileUpdatePruneResult = MobileUpdateStorageReport & {\n    dryRun: boolean;\n    marked: string[];\n    reclaimedBytes: number;\n    restored: string[];\n    swept: string[];\n    sweptContentBlobs?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateRetentionOptions',
+						signature:
+							'type MobileUpdateRetentionOptions = {\n    appId: string;\n    /** Minimum release age before collection. Defaults to 30 days. */\n    minAgeMs?: number;\n    /** Number of newest releases retained per channel. Defaults to 5. */\n    retainRecent?: number;\n    signal?: AbortSignal;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdatePruneOptions',
+						signature:
+							'type MobileUpdatePruneOptions = MobileUpdateRetentionOptions & {\n    /** Apply marks and sweeps. Omit for a read-only preview. */\n    apply?: boolean;\n    /** Time between marking and deletion. Defaults to 7 days. */\n    gracePeriodMs?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateResolution',
+						signature:
+							'type MobileUpdateResolution = {\n    status: "empty" | "incompatible";\n} | {\n    activationId?: string;\n    activatedAt?: string;\n    manifest: MobileUpdateManifest;\n    manifestKey: string;\n    status: "selected";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateHealthKind',
+						signature:
+							'type MobileUpdateHealthKind = "activated" | "downloaded" | "download-failed" | "quarantined" | "rolled-back";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateHealthTransfer',
+						signature:
+							'type MobileUpdateHealthTransfer = {\n    avoidedBytes: number;\n    downloadedBytes: number;\n    durationMs: number;\n    resumedBytes: number;\n    reusedBytes: number;\n    throughputBytesPerSecond: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateHealthReport',
+						signature:
+							'type MobileUpdateHealthReport = {\n    activated: number;\n    appId: string;\n    channel: string;\n    downloaded: number;\n    downloadFailed: number;\n    failureRate: number;\n    failures: number;\n    paused: boolean;\n    promotionId: string;\n    quarantined: number;\n    releaseId: string;\n    reportedInstallations: number;\n    rolledBack: number;\n    rollout: number;\n    terminalReports: number;\n    transfer: MobileUpdateHealthTransfer;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateRolloutStage',
+						signature:
+							'type MobileUpdateRolloutStage = {\n    /** Maximum failure rate permitted before advancing from this stage. */\n    maximumFailureRate: number;\n    /** Cumulative terminal installation reports required before advancement. */\n    minimumReports: number;\n    /** Minimum time spent at this stage before advancement. */\n    observationMs: number;\n    rollout: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateRolloutOptions',
+						signature:
+							'type MobileUpdateRolloutOptions = {\n    /** Evaluate and advance after terminal health reports. Defaults to false. */\n    automatic?: boolean;\n    /** Strictly increasing rollout stages. A promotion must start at one stage. */\n    stages: readonly MobileUpdateRolloutStage[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateRolloutReport',
+						signature:
+							'type MobileUpdateRolloutReport = MobileUpdateHealthReport & {\n    automatic: boolean;\n    currentStage: number;\n    enteredAt: string;\n    nextStage?: MobileUpdateRolloutStage;\n    pausedBy?: "fleet-health" | "operator";\n    status: "active" | "cancelled" | "complete" | "paused";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateRegistry',
+						signature:
+							'type MobileUpdateRegistry = {\n    advanceUpdateRollout?(input: {\n        appId: string;\n        channel: string;\n        rollout?: number;\n        signal?: AbortSignal;\n    }): Promise<MobileUpdateRolloutReport>;\n    cancelUpdateRollout?(input: {\n        appId: string;\n        channel: string;\n        signal?: AbortSignal;\n    }): Promise<MobileUpdateRolloutReport>;\n    inspectUpdateHealth?(input: {\n        appId: string;\n        channel: string;\n        releaseId?: string;\n    }): Promise<MobileUpdateHealthReport | null>;\n    inspectUpdateRollout?(input: {\n        appId: string;\n        channel: string;\n    }): Promise<MobileUpdateRolloutReport | null>;\n    pauseUpdateRollout?(input: {\n        appId: string;\n        channel: string;\n        signal?: AbortSignal;\n    }): Promise<MobileUpdateRolloutReport>;\n    inspectUpdateStorage(input: MobileUpdateRetentionOptions): Promise<MobileUpdateStorageReport>;\n    pruneUpdates(input: MobileUpdatePruneOptions): Promise<MobileUpdatePruneResult>;\n    publishUpdate(input: {\n        manifest: MobileUpdateManifest;\n        releaseDirectory: string;\n        rollout: number;\n        signal?: AbortSignal;\n    }): Promise<MobileUpdatePublication>;\n'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateHealthOptions',
+						signature:
+							'type MobileUpdateHealthOptions = {\n    /** Pauses only the exact promotion generation after this many terminal reports. */\n    autoPause?: {\n        failureRate?: number;\n        minimumReports?: number;\n    };\n    /** At least 32 unpredictable server-only characters. */\n    secret: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MobileUpdateRegistryOptions',
+						signature:
+							'type MobileUpdateRegistryOptions = {\n    clock?: () => Date;\n    health?: MobileUpdateHealthOptions;\n    prefix?: string;\n    /** Trusted ECDSA P-256 SPKI public keys as canonical base64 DER. */\n    publicKeys: Readonly<Record<string, string>>;\n    rollout?: MobileUpdateRolloutOptions;\n    store: NativeReleaseBlobStore;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'MobileUpdateRegistryError',
+						signature:
+							'class MobileUpdateRegistryError extends Error {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseMobileUpdateManifest',
+						signature:
+							'const parseMobileUpdateManifest: (value: unknown) => MobileUpdateManifest;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMobileUpdateRegistry',
+						signature:
+							'const createMobileUpdateRegistry: (options: MobileUpdateRegistryOptions) => MobileUpdateRegistry;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMobileUpdateHandler',
+						signature:
+							'const createMobileUpdateHandler: (options: {\n    allowedOrigins?: readonly string[];\n    appId: string;\n    channel: string;\n    expoCodeSigning?: ExpoUpdateCodeSigningOptions;\n    registry: MobileUpdateRegistry;\n    route?: string;\n}) => (request: Request) => Promise<Response>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/google-play',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayReleaseStatus',
+						signature:
+							'type GooglePlayReleaseStatus = "completed" | "draft" | "halted" | "inProgress";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayReviewBehavior',
+						signature:
+							'type GooglePlayReviewBehavior = "CANCEL_IN_REVIEW_AND_SUBMIT" | "ERROR_IF_IN_REVIEW";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayReleaseTarget',
+						signature:
+							'type GooglePlayReleaseTarget = {\n    changesNotSentForReview?: boolean;\n    inAppUpdatePriority?: number;\n    name?: string;\n    releaseNotes?: readonly {\n        language: string;\n        text: string;\n    }[];\n    reviewBehavior?: GooglePlayReviewBehavior;\n    status?: GooglePlayReleaseStatus;\n    track: string;\n    userFraction?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayReleaseIntent',
+						signature:
+							'type GooglePlayReleaseIntent = {\n    changesNotSentForReview: boolean;\n    inAppUpdatePriority: number;\n    name?: string;\n    releaseNotes: Array<{\n        language: string;\n        text: string;\n    }>;\n    reviewBehavior: GooglePlayReviewBehavior;\n    status: GooglePlayReleaseStatus;\n    track: string;\n    userFraction?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayReleaseReceipt',
+						signature:
+							'type GooglePlayReleaseReceipt = {\n    editExpiresAt?: string;\n    editId?: string;\n    format: typeof RECEIPT_FORMAT;\n    intent: GooglePlayReleaseIntent;\n    packageName: string;\n    provider: "google-play";\n    releaseId: string;\n    sha256: string;\n    stage: "committed" | "editing" | "uploading" | "commit-pending";\n    updatedAt: string;\n    uploadSession?: string;\n    versionCode?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayBundle',
+						signature:
+							'type GooglePlayBundle = {\n    sha1?: string;\n    sha256?: string;\n    versionCode: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayTrackRelease',
+						signature:
+							'type GooglePlayTrackRelease = {\n    inAppUpdatePriority?: number;\n    name?: string;\n    releaseNotes?: Array<{\n        language: string;\n        text: string;\n    }>;\n    status?: GooglePlayReleaseStatus;\n    userFraction?: number;\n    versionCodes?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayTrack',
+						signature:
+							'type GooglePlayTrack = {\n    releases?: GooglePlayTrackRelease[];\n    track?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayEdit',
+						signature:
+							'type GooglePlayEdit = {\n    expiryTimeSeconds?: string;\n    id: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayClient',
+						signature:
+							'type GooglePlayClient = {\n    commitEdit: (options: {\n        changesNotSentForReview: boolean;\n        editId: string;\n        packageName: string;\n        reviewBehavior: GooglePlayReviewBehavior;\n        signal?: AbortSignal;\n    }) => Promise<void>;\n    deleteEdit: (options: {\n        editId: string;\n        packageName: string;\n        signal?: AbortSignal;\n    }) => Promise<void>;\n    getEdit: (options: {\n        editId: string;\n        packageName: string;\n        signal?: AbortSignal;\n    }) => Promise<GooglePlayEdit | null>;\n    getTrack: (options: {\n        editId: string;\n        packageName: string;\n        signal?: AbortSignal;\n        track: string;\n    }) => Promise<GooglePlayTrack>;\n    insertEdit: (options: {\n        packageName: string;\n        signal?: AbortSignal;\n    }) => Promise<GooglePlayEdit>;\n    listBundles: (options: {\n        editId: string;\n        packageName: string;\n        signal?: AbortSignal;\n    }) => Promise<GooglePlayBundle[]>;\n    startBundleUpload: (options: {\n        bytes: number;\n        editId: string;\n        packageName: string;\n        signal?: AbortSignal;\n    }) => Promise<string>;\n    updateTrack: (options: {\n        editId: string'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayReleasePublisherOptions',
+						signature:
+							'type GooglePlayReleasePublisherOptions = {\n    client?: GooglePlayClient;\n    clock?: () => Date;\n    receiptPrefix?: string;\n    receiptStore: NativeReleaseBlobStore;\n    registry: {\n        publish: (options: {\n            allowUnsigned?: boolean;\n            channel?: string;\n            releaseRoot: string;\n            signal?: AbortSignal;\n            [key: string]: unknown;\n        }) => Promise<NativeReleasePublication>;\n    };\n    target?: GooglePlayReleaseTarget;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayNativeReleasePublication',
+						signature:
+							'type GooglePlayNativeReleasePublication = NativeReleasePublication & {\n    googlePlay?: {\n        receipt: GooglePlayReleaseReceipt;\n        reused: boolean;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayNativeReleasePublisher',
+						signature:
+							'type GooglePlayNativeReleasePublisher = {\n    prepareAndroidRelease: (options: {\n        buildIdentity: string;\n        googlePlay?: GooglePlayReleaseTarget;\n        packageName: string;\n        signal?: AbortSignal;\n    }) => Promise<{\n        versionCode?: number;\n    }>;\n    publish: (options: {\n        allowUnsigned?: boolean;\n        channel?: string;\n        googlePlay?: GooglePlayReleaseTarget;\n        releaseRoot: string;\n        signal?: AbortSignal;\n    }) => Promise<GooglePlayNativeReleasePublication>;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'GooglePlayReleaseError',
+						signature:
+							'class GooglePlayReleaseError extends Error {\n    readonly status?: number;\n    constructor(message: string, status?: number);\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GooglePlayAuth',
+						signature:
+							'type GooglePlayAuth = {\n    getClient: () => Promise<{\n        getRequestHeaders: (url?: string | URL) => Promise<Headers | Record<string, string>>;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGooglePlayClient',
+						signature:
+							'const createGooglePlayClient: (dependencies?: {\n    auth?: GooglePlayAuth;\n    fetch?: typeof fetch;\n}) => GooglePlayClient;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGooglePlayReleasePublisher',
+						signature:
+							'const createGooglePlayReleasePublisher: (options: GooglePlayReleasePublisherOptions) => GooglePlayNativeReleasePublisher;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/app-store-connect',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectAuth',
+						signature:
+							'type AppStoreConnectAuth = {\n    issuerId: string;\n    keyId: string;\n    privateKey: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectReleaseTarget',
+						signature:
+							'type AppStoreConnectReleaseTarget = {\n    groups?: readonly string[];\n    submitForReview?: boolean;\n    whatsNew?: readonly {\n        locale: string;\n        text: string;\n    }[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectReleaseIntent',
+						signature:
+							'type AppStoreConnectReleaseIntent = {\n    groups: string[];\n    submitForReview: boolean;\n    whatsNew: Array<{\n        locale: string;\n        text: string;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectBuild',
+						signature:
+							'type AppStoreConnectBuild = {\n    id: string;\n    processingState: "PROCESSING" | "FAILED" | "INVALID" | "VALID";\n    version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectBuildUpload',
+						signature:
+							'type AppStoreConnectBuildUpload = {\n    id: string;\n    state: "AWAITING_UPLOAD" | "PROCESSING" | "FAILED" | "COMPLETE";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectTestFlightGroup',
+						signature:
+							'type AppStoreConnectTestFlightGroup = {\n    hasAccessToAllBuilds: boolean;\n    id: string;\n    isInternal: boolean;\n    name: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectReleaseReceipt',
+						signature:
+							'type AppStoreConnectReleaseReceipt = {\n    appleAppId: string;\n    buildId?: string;\n    buildNumber: number;\n    buildUploadFileId?: string;\n    buildUploadId?: string;\n    format: typeof RECEIPT_FORMAT;\n    intent: AppStoreConnectReleaseIntent;\n    marketingVersion: string;\n    provider: "app-store-connect";\n    releaseId: string;\n    sha256: string;\n    stage: "preparing" | "uploading" | "processing" | "distributed" | "review-submitted";\n    updatedAt: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectClient',
+						signature:
+							'type AppStoreConnectClient = {\n    addBuildToGroup(options: {\n        buildId: string;\n        groupId: string;\n        signal?: AbortSignal;\n    }): Promise<void>;\n    commitBuildUploadFile(options: {\n        fileId: string;\n        sha256: string;\n        signal?: AbortSignal;\n    }): Promise<void>;\n    createBuildUpload(options: {\n        appId: string;\n        buildNumber: number;\n        marketingVersion: string;\n        signal?: AbortSignal;\n    }): Promise<AppStoreConnectBuildUpload>;\n    createBuildUploadFile(options: {\n        buildUploadId: string;\n        bytes: number;\n        fileName: string;\n        signal?: AbortSignal;\n    }): Promise<string>;\n    findAppId(options: {\n        bundleId: string;\n        signal?: AbortSignal;\n    }): Promise<string>;\n    findBuild(options: {\n        appId: string;\n        buildNumber: number;\n        signal?: AbortSignal;\n    }): Promise<AppStoreConnectBuild | null>;\n    findBuildUploadFile(options: {\n        buildUploadId: string;\n        signal?: AbortSignal;\n    }): Promise<{\n        fileSize: number;\n        id: string;\n    } | null>;\n    findBuildUpload(options: {\n        appId: string;\n        buildNumber: number;\n        market'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectReleasePublisherOptions',
+						signature:
+							'type AppStoreConnectReleasePublisherOptions = {\n    auth?: AppStoreConnectAuth;\n    client?: AppStoreConnectClient;\n    clock?: () => Date;\n    maxWaitMs?: number;\n    pollIntervalMs?: number;\n    receiptPrefix?: string;\n    receiptStore: NativeReleaseBlobStore;\n    registry: NativePublisherBase;\n    target?: AppStoreConnectReleaseTarget;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectNativeReleasePublication',
+						signature:
+							'type AppStoreConnectNativeReleasePublication = NativeReleasePublication & {\n    appStoreConnect?: {\n        receipt: AppStoreConnectReleaseReceipt;\n        reused: boolean;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AppStoreConnectNativeReleasePublisher',
+						signature:
+							'type AppStoreConnectNativeReleasePublisher = Omit<NativePublisherBase, "publish"> & {\n    prepareIosRelease(options: {\n        buildIdentity: string;\n        bundleId: string;\n        marketingVersion: string;\n        signal?: AbortSignal;\n    }): Promise<{\n        buildNumber: number;\n    }>;\n    publish(options: {\n        allowUnsigned?: boolean;\n        appStoreConnect?: AppStoreConnectReleaseTarget;\n        channel?: string;\n        releaseRoot: string;\n        signal?: AbortSignal;\n        [key: string]: unknown;\n    }): Promise<AppStoreConnectNativeReleasePublication>;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'AppStoreConnectReleaseError',
+						signature:
+							'class AppStoreConnectReleaseError extends Error {\n    readonly status?: number;\n    constructor(message: string, status?: number);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAppStoreConnectClient',
+						signature:
+							'const createAppStoreConnectClient: (options: {\n    auth: AppStoreConnectAuth;\n    clock?: () => Date;\n    fetch?: typeof fetch;\n}) => AppStoreConnectClient;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAppStoreConnectReleasePublisher',
+						signature:
+							'const createAppStoreConnectReleasePublisher: (options: AppStoreConnectReleasePublisherOptions) => AppStoreConnectNativeReleasePublisher;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/digitalocean-ingress',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'DigitalOceanIngressProviderOptions',
+						signature:
+							'type DigitalOceanIngressProviderOptions = {\n    client?: DigitalOceanClientLike;\n    networkStack?: "IPV4" | "DUALSTACK";\n    token?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDigitalOceanIngressProvider',
+						signature:
+							'const createDigitalOceanIngressProvider: (options: DigitalOceanIngressProviderOptions) => EdgeIngressProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/gcp',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'GcpComputeRequest',
+						signature:
+							'type GcpComputeRequest = <T>(options: {\n    data?: unknown;\n    method?: string;\n    url: string;\n}) => Promise<{\n    data: T;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GcpIdentityTokenRequest',
+						signature:
+							'type GcpIdentityTokenRequest = (audience: string, url: string, init: NonNullable<Parameters<typeof fetch>[1]>) => Promise<Response>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GcpIdentityAuth',
+						signature:
+							'type GcpIdentityAuth = {\n    getIdTokenClient: (audience: string) => Promise<{\n        getRequestHeaders: (url: string) => Promise<Headers>;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGcpIdentityTokenRequest',
+						signature:
+							'const createGcpIdentityTokenRequest: (dependencies?: {\n    auth?: GcpIdentityAuth;\n    fetch?: typeof fetch;\n}) => GcpIdentityTokenRequest;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GcpInfrastructureProviderOptions',
+						signature:
+							'type GcpInfrastructureProviderOptions = {\n    agentAudience?: string;\n    agentAudienceMetadataKey?: string;\n    agentUrlMetadataKey?: string;\n    authRequest?: GcpComputeRequest;\n    instanceTemplate: string;\n    labelKey?: string;\n    labelValue?: string;\n    projectId: string;\n    zones: readonly string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'GcpInfrastructureError',
+						signature:
+							'class GcpInfrastructureError extends Error {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGcpInfrastructureProvider',
+						signature:
+							'const createGcpInfrastructureProvider: (options: GcpInfrastructureProviderOptions) => InfrastructureProvider;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGcpNodeName',
+						signature:
+							'const createGcpNodeName: (prefix?: string) => string;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/gcp-ingress',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'GcpIngressProviderOptions',
+						signature:
+							'type GcpIngressProviderOptions = {\n    authRequest?: GcpComputeRequest;\n    operationTimeoutMs?: number;\n    portName?: string;\n    projectId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'GcpIngressError',
+						signature: 'class GcpIngressError extends Error {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGcpIngressProvider',
+						signature:
+							'const createGcpIngressProvider: (options: GcpIngressProviderOptions) => EdgeIngressProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/hetzner',
+				symbols: [
+					{
+						description:
+							'Minimal subset of Hetzner Cloud API calls we make. Lets callers BYO a client with retry / observability / etc.',
+						kind: 'type',
+						name: 'HetznerClientLike',
+						signature:
+							"type HetznerClientLike = {\n    request: <T = unknown>(method: 'GET' | 'POST' | 'DELETE', path: string, body?: unknown) => Promise<T>;\n};"
+					},
+					{
+						description:
+							'A Hetzner Cloud server, narrowed to what we inspect.',
+						kind: 'type',
+						name: 'HetznerServer',
+						signature:
+							"type HetznerServer = {\n    id: number;\n    name: string;\n    status: 'initializing' | 'starting' | 'running' | 'stopping' | 'off' | 'deleting' | 'migrating' | 'rebuilding' | 'unknown';\n    public_net: {\n        ipv4: {\n            id: number;\n            ip: string;\n            blocked: boolean;\n            dns_ptr?: string;\n        } | null;\n        ipv6: {\n            id: number;\n            ip: string;\n            blocked: boolean;\n        } | null;\n    };\n    server_type?: {\n        name: string;\n    };\n    datacenter?: {\n        location: {\n            name: string;\n        };\n    };\n    labels?: Record<string, string>;\n    private_net?: Array<{\n        ip: string;\n        network: number;\n    }>;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HetznerTargetOptions',
+						signature:
+							"type HetznerTargetOptions = {\n    /** API token (https://docs.hetzner.cloud/#authentication). Required unless `client` is set. */\n    token?: string;\n    /** Custom client. Overrides token-built default. */\n    client?: HetznerClientLike;\n    /** Server name. Hetzner-unique per project; also our idempotency key. */\n    name: string;\n    /** Location slug — `'nbg1'`, `'fsn1'`, `'hel1'`, `'ash'`, `'hil'`. */\n    location: string;\n    /** Server type slug — `'cx22'`, `'cpx11'`, `'ccx13'`, etc. */\n    serverType: string;\n    /** Image slug or numeric id, e.g. `'ubuntu-22.04'`. */\n    image: string | number;\n    /** SSH key fingerprints, numeric ids, or names. At least one required. */\n    sshKeys: ReadonlyArray<string | number>;\n    /** Labels (Hetzner's key-value tags). */\n    labels?: Record<string, string>;\n    /** cloud-init user data — a shell script or YAML config. */\n    userData?: string;\n    /** Attach to a Cloud Network (by id). */\n    networkId?: number;\n    /** Disable IPv4 public addressing. Default: enabled. */\n    disablePublicIpv4?: boolean;\n    /** Disable IPv6 public addressing. Default: enabled. */\n    disablePublicIpv6?: boolean;\n    /** SSH login user. Default `'ro"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HetznerTarget',
+						signature:
+							'type HetznerTarget = Target & {\n    readonly serverId: number;\n    readonly ipv4: string;\n    /** Destroy the server via the Hetzner API. */\n    destroy: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'HetznerError',
+						signature:
+							'class HetznerError extends Error {\n    readonly status: number;\n    readonly body: unknown;\n    constructor(message: string, status: number, body: unknown);\n}'
+					},
+					{
+						description:
+							'fetch-backed default client. Talks JSON to api.hetzner.cloud/v1. Throws HetznerError on non-2xx with the response body attached so the caller can switch on err.status.',
+						kind: 'value',
+						name: 'createHetznerClient',
+						signature:
+							'const createHetznerClient: (token: string, options?: {\n    baseUrl?: string;\n    fetch?: typeof fetch;\n}) => HetznerClientLike;'
+					},
+					{
+						description:
+							"Find a server by name. Returns undefined if absent. Hetzner enforces unique server names per project, so duplicates aren't possible — but if the API ever returns >1 we still surface that loudly.",
+						kind: 'value',
+						name: 'findHetznerServer',
+						signature:
+							'const findHetznerServer: (client: HetznerClientLike, name: string) => Promise<HetznerServer | undefined>;'
+					},
+					{
+						description:
+							'List servers, optionally filtered by label selector.',
+						kind: 'value',
+						name: 'listHetznerServers',
+						signature:
+							"const listHetznerServers: (options: {\n    token?: string;\n    client?: HetznerClientLike;\n    /** Label selector, e.g. `'env=prod'` or `'env in (prod,staging)'`. */\n    labelSelector?: string;\n}) => Promise<HetznerServer[]>;"
+					},
+					{
+						description:
+							'Destroy a server by id. 404 treated as idempotent success.',
+						kind: 'value',
+						name: 'destroyHetznerServer',
+						signature:
+							'const destroyHetznerServer: (options: {\n    token?: string;\n    client?: HetznerClientLike;\n    id: number;\n}) => Promise<void>;'
+					},
+					{
+						description:
+							'Provision-or-reuse a Hetzner Cloud server by name, wait for SSH, return a Target. Idempotent: same name → same server.',
+						kind: 'value',
+						name: 'hetznerTarget',
+						signature:
+							'const hetznerTarget: (options: HetznerTargetOptions) => Promise<HetznerTarget>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/hetzner-infrastructure',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'HetznerFleetRegion',
+						signature:
+							'type HetznerFleetRegion = {\n    image: string | number;\n    networkId?: number;\n    region: string;\n    serverType: string;\n    sshKeys: ReadonlyArray<string | number>;\n    userData?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HetznerInfrastructureProviderOptions',
+						signature:
+							'type HetznerInfrastructureProviderOptions = {\n    agent?: InfrastructureAgentOptions;\n    client?: HetznerClientLike;\n    labelKey?: string;\n    labelValue?: string;\n    regions: readonly HetznerFleetRegion[];\n    token?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createHetznerInfrastructureProvider',
+						signature:
+							'const createHetznerInfrastructureProvider: (options: HetznerInfrastructureProviderOptions) => InfrastructureProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/dns',
+				symbols: [
+					{
+						description:
+							'DNS provider contract for @absolutejs/deploy. Provider-specific adapters (Cloudflare, Route 53, etc.) implement DnsProvider; the deploy pipeline composes them with a cloud Target to point a hostname at a freshly-provisioned IP. Operations are zone-scoped: a DnsProvider instance is bound to one zone at construction time. Multi-zone hosts construct one provider per zone. / / Record types we care about for deploy workflows.',
+						kind: 'type',
+						name: 'DnsRecordType',
+						signature:
+							"type DnsRecordType = 'A' | 'AAAA' | 'CNAME' | 'TXT' | 'MX';"
+					},
+					{
+						description:
+							'A DNS record as it exists in the provider.',
+						kind: 'type',
+						name: 'DnsRecord',
+						signature:
+							"type DnsRecord = {\n    /** Provider-assigned id (Cloudflare uuid, Route 53 set name, etc.). */\n    id: string;\n    /** Fully-qualified record name (`api.example.com.`). */\n    name: string;\n    type: DnsRecordType;\n    /** Record value — IP for A/AAAA, hostname for CNAME, text for TXT, etc. */\n    content: string;\n    ttl?: number;\n    /**\n     * Cloudflare's orange-cloud proxy flag. Other providers ignore this\n     * field. Default behavior is provider-specific: Cloudflare defaults\n     * to `true` (proxied) for new records when omitted.\n     */\n    proxied?: boolean;\n    comment?: string;\n};"
+					},
+					{
+						description: 'Desired state for an upsert.',
+						kind: 'type',
+						name: 'DnsRecordSpec',
+						signature:
+							"type DnsRecordSpec = {\n    /** Record name. May be `'@'` for the zone apex or relative ('api'). */\n    name: string;\n    type: DnsRecordType;\n    content: string;\n    ttl?: number;\n    proxied?: boolean;\n    comment?: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DnsRecordFilter',
+						signature:
+							'type DnsRecordFilter = {\n    name?: string;\n    type?: DnsRecordType;\n};'
+					},
+					{
+						description:
+							'Zone-scoped DNS operations. Implementations: cloudflareProvider, future route53Provider, etc.',
+						kind: 'type',
+						name: 'DnsProvider',
+						signature:
+							'type DnsProvider = {\n    /** Human-readable description for logs (`\'cloudflare zone "example.com"\'`). */\n    readonly description: string;\n    /** List records, optionally filtered by name + type. */\n    list: (filter?: DnsRecordFilter) => Promise<DnsRecord[]>;\n    /**\n     * Find one record by exact (name, type). Returns undefined if absent.\n     * Throws if multiple records share that key (drifted state — multiple\n     * A records pointing at different IPs, etc.).\n     */\n    find: (key: {\n        name: string;\n        type: DnsRecordType;\n    }) => Promise<DnsRecord | undefined>;\n    create: (spec: DnsRecordSpec) => Promise<DnsRecord>;\n    update: (id: string, spec: DnsRecordSpec) => Promise<DnsRecord>;\n    delete: (id: string) => Promise<void>;\n    /**\n     * Create or update so the (name, type) record matches `spec`. The\n     * canonical "point this DNS at this IP" entry point — idempotent.\n     */\n    upsert: (spec: DnsRecordSpec) => Promise<DnsRecord>;\n};'
+					},
+					{
+						description:
+							"Compose a DNS provider with a cloud Target's IPv4. Idempotently ensures an A record (name → target.ipv4) exists. Returns the resulting DNS record. Usage: const target = await digitalOceanTarget({ ... }); const dns = cloudflareProvider({ token, zoneId }); await ensureDnsForTarget(dns, { name: 'api.example.com', target, ttl: 60, proxied: false, });",
+						kind: 'value',
+						name: 'ensureDnsForTarget',
+						signature:
+							"const ensureDnsForTarget: (provider: DnsProvider, options: {\n    /** Record name (FQDN, relative, or `'@'` for zone apex). */\n    name: string;\n    /** Cloud Target with an `ipv4` field. */\n    target: {\n        ipv4: string;\n    };\n    /** Default 300s. */\n    ttl?: number;\n    /** Cloudflare orange-cloud. Other providers ignore. */\n    proxied?: boolean;\n    /** Optional record comment for audit trails. */\n    comment?: string;\n}) => Promise<DnsRecord>;"
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/cloudflare',
+				symbols: [
+					{
+						description:
+							'Minimal subset of Cloudflare API calls. Lets callers BYO a client with retry / observability / etc.',
+						kind: 'type',
+						name: 'CloudflareClientLike',
+						signature:
+							"type CloudflareClientLike = {\n    request: <T = unknown>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', path: string, body?: unknown) => Promise<T>;\n};"
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'CloudflareError',
+						signature:
+							'class CloudflareError extends Error {\n    readonly status: number;\n    readonly body: unknown;\n    constructor(message: string, status: number, body: unknown);\n}'
+					},
+					{
+						description:
+							'fetch-backed default client. Throws CloudflareError on non-2xx OR on a 2xx with success: false (Cloudflare returns 200 + an errors array for some validation failures, hence the second check).',
+						kind: 'value',
+						name: 'createCloudflareClient',
+						signature:
+							'const createCloudflareClient: (token: string, options?: {\n    baseUrl?: string;\n    fetch?: typeof fetch;\n}) => CloudflareClientLike;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CloudflareProviderOptions',
+						signature:
+							'type CloudflareProviderOptions = {\n    /** API token with `Zone:DNS:Edit` permission. Required unless `client` is set. */\n    token?: string;\n    /** Custom client. Overrides token-built default. */\n    client?: CloudflareClientLike;\n    /** Cloudflare Zone ID this provider operates on. */\n    zoneId: string;\n    /** Optional zone name for log copy. Default uses `zoneId` truncated. */\n    zoneName?: string;\n};'
+					},
+					{
+						description:
+							'Build a {@link DnsProvider} bound to one Cloudflare zone.',
+						kind: 'value',
+						name: 'cloudflareProvider',
+						signature:
+							'const cloudflareProvider: (options: CloudflareProviderOptions) => DnsProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/tls',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'LETSENCRYPT_PRODUCTION',
+						signature:
+							'const LETSENCRYPT_PRODUCTION = "https://acme-v02.api.letsencrypt.org/directory";'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'LETSENCRYPT_STAGING',
+						signature:
+							'const LETSENCRYPT_STAGING = "https://acme-staging-v02.api.letsencrypt.org/directory";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AcmeAccount',
+						signature:
+							'type AcmeAccount = {\n    key: CryptoKeyPair;\n    /** Account URL — set after first registration; persisted for renewals. */\n    kid?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AcmeAccountJson',
+						signature:
+							'type AcmeAccountJson = {\n    publicJwk: JsonWebKey;\n    privateJwk: JsonWebKey;\n    kid?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'generateAccountKey',
+						signature:
+							'const generateAccountKey: () => Promise<AcmeAccount>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'exportAccount',
+						signature:
+							'const exportAccount: (account: AcmeAccount) => Promise<AcmeAccountJson>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'importAccount',
+						signature:
+							'const importAccount: (json: AcmeAccountJson) => Promise<AcmeAccount>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IssueCertificateOptions',
+						signature:
+							"type IssueCertificateOptions = {\n    /** Domain(s) to include. First is the CN; all are SANs. */\n    domains: string[];\n    /** DNS provider used for DNS-01 challenges (must own the zone). */\n    dnsProvider: DnsProvider;\n    /**\n     * Map the public ACME challenge name to the record name written through\n     * `dnsProvider`. Use this for CNAME-delegated DNS-01, where customers point\n     * `_acme-challenge.app.example.com` at a platform-owned validation zone.\n     * The propagation checker still receives the public challenge name because\n     * that is what the certificate authority resolves.\n     */\n    mapDnsChallengeRecord?: (context: {\n        domain: string;\n        recordName: string;\n    }) => string;\n    /** Contact email for the ACME account. */\n    email: string;\n    /** ACME directory URL. Default Let's Encrypt production. */\n    directoryUrl?: string;\n    /** Reuse an existing account. Pass `exportAccount`'s output via `importAccount`. */\n    account?: AcmeAccount;\n    /** Override fetch (tests). Default global fetch. */\n    fetch?: typeof fetch;\n    /** Poll interval. Default 3 s. */\n    pollIntervalMs?: number;\n    /**\n     * Max wait before notifying ACME that the "
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'IssuedCertificate',
+						signature:
+							'type IssuedCertificate = {\n    certificatePem: string;\n    privateKeyPem: string;\n    account: AcmeAccount;\n    domains: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'AcmeError',
+						signature:
+							'class AcmeError extends Error {\n    readonly status: number;\n    readonly body: unknown;\n    constructor(message: string, status: number, body: unknown);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'issueCertificate',
+						signature:
+							'const issueCertificate: (options: IssueCertificateOptions) => Promise<IssuedCertificate>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'InstallCertificateOptions',
+						signature:
+							"type InstallCertificateOptions = {\n    /** Remote path for the cert chain. Default `/etc/ssl/<firstDomain>/fullchain.pem`. */\n    certPath?: string;\n    /** Remote path for the private key. Default `/etc/ssl/<firstDomain>/privkey.pem`. */\n    keyPath?: string;\n    /** Mode (chmod) for the cert + key. Default `600`. */\n    mode?: string;\n    /** Owner (chown) for the cert + key. Default unchanged. */\n    owner?: string;\n    /** Optional reload command run after install (e.g. `'systemctl reload nginx'`). */\n    reload?: string;\n    /** Override the writeTo helper (tests). */\n    writeFile?: (target: Target, path: string, contents: string) => Promise<void>;\n};"
+					},
+					{
+						description:
+							'@internal — exposed for unit testing of cryptographic primitives. Not part of the public API; consumers should NOT depend on this.',
+						kind: 'value',
+						name: '__testing',
+						signature:
+							'const __testing: {\n    base64UrlDecode: (value: string) => Uint8Array;\n    base64UrlEncode: (bytes: Uint8Array | ArrayBuffer) => string;\n    base64UrlEncodeString: (value: string) => string;\n    buildCsr: (domains: string[], keypair: CryptoKeyPair) => Promise<Uint8Array>;\n    derBitString: (payload: Uint8Array) => Uint8Array;\n    derInt: (value: number | Uint8Array) => Uint8Array;\n    derOid: (oid: string) => Uint8Array;\n    derSeq: (children: Uint8Array[]) => Uint8Array;\n    derSet: (children: Uint8Array[]) => Uint8Array;\n    ecdsaRawToDer: (rawSig: Uint8Array) => Uint8Array;\n    exportEcPrivateKeyPem: (keypair: CryptoKeyPair) => Promise<string>;\n    exportPublicJwk: (publicKey: CryptoKey) => Promise<JsonWebKey>;\n    generateCertKeyPair: () => Promise<CryptoKeyPair>;\n    jwkThumbprint: (publicJwk: JsonWebKey) => Promise<string>;\n    signJws: (privateKey: CryptoKey, header: JwsHeader, payload: object | string) => Promise<JwsBody>;\n};'
+					},
+					{
+						description:
+							'Upload cert + private key to the target. Composable with the deploy pipeline as a verify-step or post-deploy hook.',
+						kind: 'value',
+						name: 'installCertificateOnTarget',
+						signature:
+							'const installCertificateOnTarget: (target: Target, cert: IssuedCertificate, options?: InstallCertificateOptions) => Promise<{\n    certPath: string;\n    keyPath: string;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CertificateInspection',
+						signature:
+							'type CertificateInspection = {\n    /** CN + every SAN, deduplicated. */\n    subjects: string[];\n    /** Issuance time, ms since epoch. */\n    validFrom: number;\n    /** Expiration time, ms since epoch. */\n    validTo: number;\n    /** Whole days remaining before `validTo`. Negative if expired. */\n    daysRemaining: number;\n    /** True when the cert is past `validTo`. */\n    expired: boolean;\n    /** Issuer DN string (for "Let\'s Encrypt vs staging vs other CA" checks). */\n    issuer: string;\n};'
+					},
+					{
+						description:
+							'Parse a PEM certificate into operator-shaped metadata. Used by {@link renewCertificate} to decide whether to re-issue; also fine for status pages and observability.',
+						kind: 'value',
+						name: 'inspectCertificate',
+						signature:
+							'const inspectCertificate: (pem: string, options?: {\n    now?: () => number;\n}) => CertificateInspection;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RenewCertificateOptions',
+						signature:
+							"type RenewCertificateOptions = IssueCertificateOptions & {\n    /**\n     * Current cert PEM. When provided, the cert's `validTo` decides\n     * whether to re-issue; when absent, renewal always issues.\n     */\n    currentCertificatePem?: string;\n    /**\n     * Re-issue when fewer than this many days remain. Default 30,\n     * matching certbot's standard schedule (Let's Encrypt issues 90-day\n     * certs; renewing at 30 days leaves a 60-day error budget).\n     */\n    renewWhenDaysRemaining?: number;\n    /** Force re-issue regardless of remaining days. Default false. */\n    force?: boolean;\n    /** Override `Date.now()` for testing. */\n    now?: () => number;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RenewalResult',
+						signature:
+							"type RenewalResult = {\n    renewed: true;\n    certificate: IssuedCertificate;\n    reason: 'forced' | 'no-current-cert' | 'expiring-soon';\n} | {\n    renewed: false;\n    reason: 'still-fresh';\n    inspection: CertificateInspection;\n};"
+					},
+					{
+						description:
+							'Conditional cert renewal. Parses the supplied cert (if any), decides whether to re-issue based on remaining days, and either returns the existing cert info ("still fresh") or issues a new one via {@link issueCertificate}. Wire to a scheduled function (cron / @absolutejs/sync schedule / GitHub Action) running at least once a week. Idempotent: a fresh cert returns renewed: false cheaply (one PEM parse, zero network IO).',
+						kind: 'value',
+						name: 'renewCertificate',
+						signature:
+							'const renewCertificate: (options: RenewCertificateOptions) => Promise<RenewalResult>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/env',
+				symbols: [
+					{
+						description:
+							'Minimal interface this module needs to read secret values. The SecretBroker from @absolutejs/secrets satisfies it structurally; any other implementation (a Map, an AWS Secrets Manager client wrapper, etc.) works as long as it exposes resolve(name).',
+						kind: 'type',
+						name: 'SecretSource',
+						signature:
+							'type SecretSource = {\n    resolve: (name: string) => Promise<{\n        value: string;\n        fingerprint?: string;\n    } | null>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'serializeEnvFile',
+						signature:
+							'const serializeEnvFile: (values: Record<string, string>) => string;'
+					},
+					{
+						description:
+							"Parse a remote env file's contents. Ignores blank lines and # comments. Lines that don't match KEY=VALUE throw — the deploy primitive owns the file, so unknown content is loud, not silent.",
+						kind: 'value',
+						name: 'parseEnvFile',
+						signature:
+							'const parseEnvFile: (text: string) => Record<string, string>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EnvDeployment',
+						signature:
+							"type EnvDeployment = {\n    /** The cloud Target whose remote filesystem we write to. */\n    target: Target;\n    /** Remote path for the env file (e.g. `/etc/myapp.env`). */\n    remotePath: string;\n    /**\n     * Names of secrets this deployment consumes from the SecretSource.\n     * Each name is resolved before the file is written.\n     */\n    secretNames?: ReadonlyArray<string>;\n    /**\n     * Non-secret env vars to merge in (NODE_ENV, PORT, LOG_LEVEL).\n     * If an `extras` key collides with a `secretNames` entry, throws —\n     * silent overrides are worse than a loud rejection.\n     */\n    extras?: Record<string, string>;\n    /** chmod for the file. Default `'600'`. */\n    mode?: string;\n    /** chown for the file. Default unchanged. */\n    owner?: string;\n    /**\n     * Command to run after the file changes. Skipped when the diff is\n     * empty — bouncing a service for an identical file is the wrong\n     * default.\n     */\n    reload?: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EnvSyncResult',
+						signature:
+							"type EnvSyncResult = {\n    /** Keys present in the new spec but not the existing file. */\n    added: string[];\n    /** Keys whose values changed (fingerprints, NOT plaintext, for safety). */\n    changed: string[];\n    /** Keys removed from the spec (still in the existing file). */\n    removed: string[];\n    /** Keys whose values matched — file wasn't rewritten for these. */\n    unchanged: string[];\n    /** True iff `deployment.reload` was invoked. */\n    reloaded: boolean;\n    /** True iff the file content changed (atomic-write happened). */\n    wrote: boolean;\n    /** Remote path that was synced. */\n    remotePath: string;\n};"
+					},
+					{
+						description:
+							'Push an env file to a single target. Atomic: write to a .new tempfile, chmod / chown, then mv into place. Diffs the merged values against the existing file content and skips the write+reload when nothing changed.',
+						kind: 'value',
+						name: 'syncEnvToTarget',
+						signature:
+							'const syncEnvToTarget: (deployment: EnvDeployment, values: Record<string, string>) => Promise<EnvSyncResult>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeploymentSyncResult',
+						signature:
+							'type DeploymentSyncResult = {\n    deployment: EnvDeployment;\n    result?: EnvSyncResult;\n    error?: Error;\n};'
+					},
+					{
+						description:
+							"Fan-out push: for each deployment, resolve its secretNames via the source, merge with extras, and push to the target. Resolves are fresh every call — so calling this again after broker.rotate(name) propagates the new value to every deployment that uses it. Best-effort across the fan-out: a per-target failure is captured in the result, but doesn't stop the rest. Operator inspects the returned array, fixes the broken target, re-runs.",
+						kind: 'value',
+						name: 'syncSecretsToDeployments',
+						signature:
+							'const syncSecretsToDeployments: (source: SecretSource, deployments: ReadonlyArray<EnvDeployment>) => Promise<DeploymentSyncResult[]>;'
+					},
+					{
+						description:
+							'Returns just the deployments that use a given secret name. Useful for "rotate one secret and propagate ONLY to the consumers" — syncSecretsToDeployments(source, deploymentsUsing(name, deployments)).',
+						kind: 'value',
+						name: 'deploymentsUsing',
+						signature:
+							'const deploymentsUsing: (name: string, deployments: ReadonlyArray<EnvDeployment>) => EnvDeployment[];'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/linode',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'LinodeClientLike',
+						signature:
+							"type LinodeClientLike = {\n    request: <T = unknown>(method: 'GET' | 'POST' | 'DELETE', path: string, body?: unknown) => Promise<T>;\n};"
+					},
+					{
+						description:
+							'A Linode instance, narrowed to what we inspect.',
+						kind: 'type',
+						name: 'LinodeInstance',
+						signature:
+							"type LinodeInstance = {\n    id: number;\n    label: string;\n    status: 'running' | 'offline' | 'booting' | 'rebooting' | 'shutting_down' | 'provisioning' | 'deleting' | 'migrating' | 'rebuilding' | 'cloning' | 'restoring' | 'stopped';\n    /** Linode returns IPv4 as a flat string array; public IPs first. */\n    ipv4: string[];\n    region?: string;\n    type?: string;\n    tags?: string[];\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'LinodeTargetOptions',
+						signature:
+							"type LinodeTargetOptions = {\n    /** Linode Personal Access Token. Required unless `client` is set. */\n    token?: string;\n    /** Custom client. Overrides token-built default. */\n    client?: LinodeClientLike;\n    /** Instance label. Idempotency key. */\n    name: string;\n    /** Region slug — `'us-east'`, `'us-west'`, `'ap-south'`, etc. */\n    region: string;\n    /** Type slug — `'g6-nanode-1'`, `'g6-standard-1'`, etc. */\n    type: string;\n    /** Image slug — e.g. `'linode/ubuntu22.04'`. */\n    image: string;\n    /**\n     * SSH public keys (raw `ssh-rsa AAAA…` / `ssh-ed25519 AAAA…` strings)\n     * authorized for root login. At least one required for a usable target.\n     */\n    sshKeys: ReadonlyArray<string>;\n    /** Tags applied to the instance. */\n    tags?: ReadonlyArray<string>;\n    /** Cloud-init / StackScript user data, base64-encoded by us. */\n    userData?: string;\n    /**\n     * Root password. Linode requires a password at creation. Defaults to\n     * a random 32-char string — you should rely on `sshKeys` and never\n     * type this. Override only if you have a specific reason.\n     */\n    rootPass?: string;\n    /** Enable private IP. Default false. */\n    privateIp?: boo"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'LinodeTarget',
+						signature:
+							'type LinodeTarget = Target & {\n    readonly instanceId: number;\n    readonly ipv4: string;\n    destroy: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'LinodeError',
+						signature:
+							'class LinodeError extends Error {\n    readonly status: number;\n    readonly body: unknown;\n    constructor(message: string, status: number, body: unknown);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createLinodeClient',
+						signature:
+							'const createLinodeClient: (token: string, options?: {\n    baseUrl?: string;\n    fetch?: typeof fetch;\n}) => LinodeClientLike;'
+					},
+					{
+						description:
+							'Find an instance by label. Throws on ambiguous duplicates.',
+						kind: 'value',
+						name: 'findLinodeInstance',
+						signature:
+							'const findLinodeInstance: (client: LinodeClientLike, name: string) => Promise<LinodeInstance | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'listLinodeInstances',
+						signature:
+							'const listLinodeInstances: (options: {\n    token?: string;\n    client?: LinodeClientLike;\n    tag?: string;\n}) => Promise<LinodeInstance[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'destroyLinodeInstance',
+						signature:
+							'const destroyLinodeInstance: (options: {\n    token?: string;\n    client?: LinodeClientLike;\n    id: number;\n}) => Promise<void>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'linodeTarget',
+						signature:
+							'const linodeTarget: (options: LinodeTargetOptions) => Promise<LinodeTarget>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/linode-infrastructure',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'LinodeFleetRegion',
+						signature:
+							'type LinodeFleetRegion = {\n    image: string;\n    region: string;\n    sshKeys: ReadonlyArray<string>;\n    type: string;\n    userData?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'LinodeInfrastructureProviderOptions',
+						signature:
+							'type LinodeInfrastructureProviderOptions = {\n    agent?: InfrastructureAgentOptions;\n    client?: LinodeClientLike;\n    regions: readonly LinodeFleetRegion[];\n    tag?: string;\n    token?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createLinodeInfrastructureProvider',
+						signature:
+							'const createLinodeInfrastructureProvider: (options: LinodeInfrastructureProviderOptions) => InfrastructureProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/vultr',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'VultrClientLike',
+						signature:
+							"type VultrClientLike = {\n    request: <T = unknown>(method: 'GET' | 'POST' | 'DELETE' | 'PATCH', path: string, body?: unknown) => Promise<T>;\n};"
+					},
+					{
+						description:
+							'A Vultr instance, narrowed to what we inspect.',
+						kind: 'type',
+						name: 'VultrInstance',
+						signature:
+							"type VultrInstance = {\n    id: string;\n    label: string;\n    status: 'active' | 'pending' | 'suspended' | 'resizing';\n    power_status?: 'running' | 'stopped' | 'starting';\n    server_status?: string;\n    main_ip: string;\n    internal_ip?: string;\n    region?: string;\n    plan?: string;\n    tags?: string[];\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VultrTargetOptions',
+						signature:
+							"type VultrTargetOptions = {\n    /** Vultr API key. Required unless `client` is set. */\n    token?: string;\n    client?: VultrClientLike;\n    /** Instance label. Idempotency key. */\n    name: string;\n    /** Region slug — `'ewr'`, `'lax'`, `'sgp'`, etc. */\n    region: string;\n    /** Plan slug — `'vc2-1c-1gb'`, `'vc2-2c-4gb'`, etc. */\n    plan: string;\n    /** OS id. Numeric — e.g. `1743` for Ubuntu 22.04. */\n    osId: number;\n    /**\n     * SSH key UUIDs already registered in your Vultr account\n     * (https://my.vultr.com/settings/#ssh-keys). Vultr does NOT accept\n     * raw key strings — you upload them once, then reference the UUIDs.\n     */\n    sshKeys: ReadonlyArray<string>;\n    /** Tags applied to the instance. */\n    tags?: ReadonlyArray<string>;\n    /** Cloud-init user data (will be base64-encoded by us). */\n    userData?: string;\n    /** Enable IPv6. Default false. */\n    enableIpv6?: boolean;\n    /** Enable backups. Default false. */\n    backups?: boolean;\n    /** Enable DDoS protection. Default false. */\n    ddosProtection?: boolean;\n    /** Hostname (Vultr distinguishes label from hostname). Default = name. */\n    hostname?: string;\n    user?: string;\n    identity?: str"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VultrTarget',
+						signature:
+							'type VultrTarget = Target & {\n    readonly instanceId: string;\n    readonly ipv4: string;\n    destroy: () => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'VultrError',
+						signature:
+							'class VultrError extends Error {\n    readonly status: number;\n    readonly body: unknown;\n    constructor(message: string, status: number, body: unknown);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVultrClient',
+						signature:
+							'const createVultrClient: (token: string, options?: {\n    baseUrl?: string;\n    fetch?: typeof fetch;\n}) => VultrClientLike;'
+					},
+					{
+						description:
+							'Find an instance by label. Throws on ambiguous duplicates.',
+						kind: 'value',
+						name: 'findVultrInstance',
+						signature:
+							'const findVultrInstance: (client: VultrClientLike, name: string) => Promise<VultrInstance | undefined>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'listVultrInstances',
+						signature:
+							'const listVultrInstances: (options: {\n    token?: string;\n    client?: VultrClientLike;\n    tag?: string;\n}) => Promise<VultrInstance[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'destroyVultrInstance',
+						signature:
+							'const destroyVultrInstance: (options: {\n    token?: string;\n    client?: VultrClientLike;\n    id: string;\n}) => Promise<void>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'vultrTarget',
+						signature:
+							'const vultrTarget: (options: VultrTargetOptions) => Promise<VultrTarget>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/vultr-infrastructure',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'VultrFleetRegion',
+						signature:
+							'type VultrFleetRegion = {\n    osId: number;\n    plan: string;\n    region: string;\n    sshKeys: ReadonlyArray<string>;\n    userData?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VultrInfrastructureProviderOptions',
+						signature:
+							'type VultrInfrastructureProviderOptions = {\n    agent?: InfrastructureAgentOptions;\n    client?: VultrClientLike;\n    regions: readonly VultrFleetRegion[];\n    tag?: string;\n    token?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createVultrInfrastructureProvider',
+						signature:
+							'const createVultrInfrastructureProvider: (options: VultrInfrastructureProviderOptions) => InfrastructureProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/digitalocean-dns',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'DigitalOceanDnsProviderOptions',
+						signature:
+							"type DigitalOceanDnsProviderOptions = {\n    token?: string;\n    client?: DigitalOceanClientLike;\n    /** The DO domain — e.g. `'example.com'`. */\n    domain: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'digitalOceanDnsProvider',
+						signature:
+							'const digitalOceanDnsProvider: (options: DigitalOceanDnsProviderOptions) => DnsProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/hetzner-dns',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'HetznerDnsClientLike',
+						signature:
+							"type HetznerDnsClientLike = {\n    request: <T = unknown>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', path: string, body?: unknown) => Promise<T>;\n};"
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'HetznerDnsError',
+						signature:
+							'class HetznerDnsError extends Error {\n    readonly status: number;\n    readonly body: unknown;\n    constructor(message: string, status: number, body: unknown);\n}'
+					},
+					{
+						description:
+							"fetch-backed default client. Uses Hetzner DNS's Auth-API-Token header — NOT the Bearer-style auth used by Hetzner Cloud compute.",
+						kind: 'value',
+						name: 'createHetznerDnsClient',
+						signature:
+							'const createHetznerDnsClient: (token: string, options?: {\n    baseUrl?: string;\n    fetch?: typeof fetch;\n}) => HetznerDnsClientLike;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HetznerDnsProviderOptions',
+						signature:
+							'type HetznerDnsProviderOptions = {\n    token?: string;\n    client?: HetznerDnsClientLike;\n    /** Hetzner DNS zone id (UUID-shaped). */\n    zoneId: string;\n    /** Optional zone name for log + record-name conversion. */\n    zoneName?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'hetznerDnsProvider',
+						signature:
+							'const hetznerDnsProvider: (options: HetznerDnsProviderOptions) => DnsProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/route53',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'Route53ResourceRecord',
+						signature:
+							'type Route53ResourceRecord = {\n    Value: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Route53ResourceRecordSet',
+						signature:
+							'type Route53ResourceRecordSet = {\n    Name: string;\n    Type: string;\n    TTL?: number;\n    ResourceRecords?: Route53ResourceRecord[];\n    AliasTarget?: {\n        HostedZoneId: string;\n        DNSName: string;\n        EvaluateTargetHealth: boolean;\n    };\n    SetIdentifier?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Route53Change',
+						signature:
+							"type Route53Change = {\n    Action: 'CREATE' | 'DELETE' | 'UPSERT';\n    ResourceRecordSet: Route53ResourceRecordSet;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Route53ListInput',
+						signature:
+							'type Route53ListInput = {\n    HostedZoneId: string;\n    StartRecordName?: string;\n    StartRecordType?: string;\n    MaxItems?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Route53ListOutput',
+						signature:
+							'type Route53ListOutput = {\n    ResourceRecordSets: Route53ResourceRecordSet[];\n    IsTruncated?: boolean;\n    NextRecordName?: string;\n    NextRecordType?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Route53ChangeInput',
+						signature:
+							'type Route53ChangeInput = {\n    HostedZoneId: string;\n    ChangeBatch: {\n        Changes: Route53Change[];\n        Comment?: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Route53ChangeOutput',
+						signature:
+							'type Route53ChangeOutput = {\n    ChangeInfo: {\n        Id: string;\n        Status: string;\n    };\n};'
+					},
+					{
+						description:
+							"Minimal subset of the Route 53 client we need. Wire your @aws-sdk/client-route-53 Route53Client with a shim: ts import { Route53Client, ListResourceRecordSetsCommand, ChangeResourceRecordSetsCommand, } from '@aws-sdk/client-route-53'; const aws = new Route53Client({ region: 'us-east-1' }); const client: Route53ClientLike = { listResourceRecordSets: (input) => aws.send(new ListResourceRecordSetsCommand(input)) as any, changeResourceRecordSets: (input) => aws.send(new ChangeResourceRecordSetsComma",
+						kind: 'type',
+						name: 'Route53ClientLike',
+						signature:
+							'type Route53ClientLike = {\n    listResourceRecordSets: (input: Route53ListInput) => Promise<Route53ListOutput>;\n    changeResourceRecordSets: (input: Route53ChangeInput) => Promise<Route53ChangeOutput>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Route53ProviderOptions',
+						signature:
+							"type Route53ProviderOptions = {\n    client: Route53ClientLike;\n    /** Hosted zone id, e.g. `'Z2FDTNDATAQYW2'`. */\n    hostedZoneId: string;\n    /** Zone name for log + name conversion, e.g. `'example.com'`. */\n    zoneName: string;\n    /** Default TTL when `spec.ttl` is omitted. Default 300. */\n    defaultTtl?: number;\n};"
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'route53DnsProvider',
+						signature:
+							'const route53DnsProvider: (options: Route53ProviderOptions) => DnsProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/preview',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'PreviewRecord',
+						signature:
+							'type PreviewRecord = {\n    previewId: string;\n    hostname: string;\n    url: string;\n    port: number;\n    dnsRecordId?: string;\n    releaseId: string;\n    commitSha?: string;\n    createdAt: number;\n    annotations?: ReleaseAnnotations;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PreviewStore',
+						signature:
+							'type PreviewStore = {\n    list: () => Promise<PreviewRecord[]>;\n    get: (previewId: string) => Promise<PreviewRecord | null>;\n    put: (record: PreviewRecord) => Promise<void>;\n    remove: (previewId: string) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PreviewDeployerContext',
+						signature:
+							'type PreviewDeployerContext = {\n    previewId: string;\n    port: number;\n    hostname: string;\n    url: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PreviewFleetOptions',
+						signature:
+							"type PreviewFleetOptions = {\n    /**\n     * Apex used to build preview hostnames: `<previewId>.<baseDomain>`.\n     * `previewId` is slugified before use (alphanumeric + `-`).\n     */\n    baseDomain: string;\n    /**\n     * Optional URL scheme. Defaults to `'https'`. Set `'http'` for\n     * local-loop previews behind a localhost proxy.\n     */\n    scheme?: 'http' | 'https';\n    /**\n     * DNS provider — `cloudflareProvider`, `route53Provider`, etc.\n     * Optional: when absent, `fleet.create` skips DNS work and the\n     * caller is responsible for routing requests at the hostname.\n     */\n    dns?: DnsProvider;\n    /**\n     * Public IPv4 the A record should point at. Required when `dns`\n     * is set. The fleet calls `dns.upsert({ name, type: 'A',\n     * content: ipv4 })`.\n     */\n    ipv4?: string;\n    /**\n     * TTL applied to created A records. Default 60s — previews come\n     * and go and we want low cache lifetime.\n     */\n    dnsTtl?: number;\n    /**\n     * Proxied flag (Cloudflare orange-cloud). Default `false` — most\n     * previews want a real IP, not a Cloudflare proxy.\n     */\n    dnsProxied?: boolean;\n    /**\n     * Port range that the fleet allocates from. Default `[3100"
+					},
+					{
+						description:
+							'Single-file JSON registry. Reads + writes atomically (temp-file + rename). Adequate for a deploy bot on one host — swap in a Postgres-backed store for distributed deploy bots.',
+						kind: 'value',
+						name: 'createFilePreviewStore',
+						signature:
+							'const createFilePreviewStore: (root: string) => PreviewStore;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createMemoryPreviewStore',
+						signature:
+							'const createMemoryPreviewStore: () => PreviewStore;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreatePreviewInput',
+						signature:
+							"type CreatePreviewInput = {\n    previewId: string;\n    commitSha?: string;\n    annotations?: ReleaseAnnotations;\n    /**\n     * Override hostname. Default = `<slug(previewId)>.<baseDomain>`.\n     * Use this for previews with a vanity name that shouldn't echo\n     * the PR id directly.\n     */\n    hostname?: string;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreatePreviewResult',
+						signature:
+							'type CreatePreviewResult = {\n    record: PreviewRecord;\n    deploy: DeployResult;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PreviewFleet',
+						signature:
+							'type PreviewFleet = {\n    /**\n     * Spin up a preview. Idempotent on `previewId` — if a record\n     * already exists, the fleet re-uses its port + DNS and runs a\n     * fresh `deployer.deploy()` (so PRs that push new commits roll\n     * forward).\n     */\n    create: (input: CreatePreviewInput) => Promise<CreatePreviewResult>;\n    /** Tear down a single preview (stop → DNS remove → registry remove → afterTeardown). */\n    teardown: (previewId: string) => Promise<void>;\n    /** List active previews. */\n    list: () => Promise<PreviewRecord[]>;\n    /** Get one preview by id. */\n    get: (previewId: string) => Promise<PreviewRecord | null>;\n    /**\n     * Tear down all previews older than `olderThanMs`. Returns the\n     * list of preview ids torn down. Failures on individual previews\n     * are swallowed and reported on `errors`.\n     */\n    gc: (options: {\n        olderThanMs: number;\n    }) => Promise<{\n        removed: string[];\n        errors: {\n            previewId: string;\n            error: Error;\n        }[];\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createPreviewFleet',
+						signature:
+							'const createPreviewFleet: (options: PreviewFleetOptions) => PreviewFleet;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/deploy/managed-preview',
+				symbols: [
+					{
+						description:
+							'Durable, transport-neutral preview lifecycle. Unlike createPreviewFleet, this surface does not assume that the caller can construct a Deployer for the destination. It is intended for control planes that stream an immutable artifact to a remote fleet agent and own routing in a separate edge service.',
+						kind: 'type',
+						name: 'ManagedPreviewStatus',
+						signature:
+							'type ManagedPreviewStatus = "provisioning" | "running" | "failed" | "deleting";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedPreviewRecord',
+						signature:
+							'type ManagedPreviewRecord<Context = Record<string, unknown>, Output = unknown> = {\n    previewId: string;\n    runtimeId: string;\n    status: ManagedPreviewStatus;\n    context: Context;\n    createdAt: number;\n    updatedAt: number;\n    expiresAt?: number;\n    releaseId?: string;\n    url?: string;\n    output?: Output;\n    error?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedPreviewStore',
+						signature:
+							'type ManagedPreviewStore<Context = Record<string, unknown>, Output = unknown> = {\n    list: () => Promise<ManagedPreviewRecord<Context, Output>[]>;\n    get: (previewId: string) => Promise<ManagedPreviewRecord<Context, Output> | null>;\n    put: (record: ManagedPreviewRecord<Context, Output>) => Promise<void>;\n    remove: (previewId: string) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedPreviewPublication',
+						signature:
+							'type ManagedPreviewPublication<Output = unknown> = {\n    releaseId: string;\n    url: string;\n    output?: Output;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreateManagedPreviewInput',
+						signature:
+							'type CreateManagedPreviewInput<Context> = {\n    previewId: string;\n    context: Context;\n    runtimeId?: string;\n    expiresAt?: number;\n    releaseId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedPreviewFleetOptions',
+						signature:
+							'type ManagedPreviewFleetOptions<Context, Output> = {\n    store: ManagedPreviewStore<Context, Output>;\n    publish: (record: ManagedPreviewRecord<Context, Output>) => Promise<ManagedPreviewPublication<Output>>;\n    destroy: (record: ManagedPreviewRecord<Context, Output>) => Promise<void>;\n    createRuntimeId?: () => string;\n    clock?: () => number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedPreviewFleet',
+						signature:
+							'type ManagedPreviewFleet<Context, Output> = {\n    create: (input: CreateManagedPreviewInput<Context>) => Promise<ManagedPreviewRecord<Context, Output>>;\n    resume: (previewId: string) => Promise<ManagedPreviewRecord<Context, Output>>;\n    teardown: (previewId: string) => Promise<void>;\n    list: () => Promise<ManagedPreviewRecord<Context, Output>[]>;\n    get: (previewId: string) => Promise<ManagedPreviewRecord<Context, Output> | null>;\n    gc: () => Promise<{\n        removed: string[];\n        errors: {\n            previewId: string;\n            error: Error;\n        }[];\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createManagedPreviewFleet',
+						signature:
+							'const createManagedPreviewFleet: <Context, Output = unknown>(options: ManagedPreviewFleetOptions<Context, Output>) => ManagedPreviewFleet<Context, Output>;'
+					}
+				]
+			}
+		],
 		category: 'Platform & Infra',
 		commands: [
 			{
@@ -21572,7 +25206,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/deploy',
 		subpackages: [],
-		version: '0.29.0'
+		version: '0.33.1'
 	},
 	{
 		api: [],
@@ -21585,7 +25219,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			},
 			{
 				command:
-					'bun run typecheck && bun test && bun run build && bun run verify:dist',
+					'bun run --cwd packages/devices build && bun run typecheck && bun test && bun run build && bun run verify:dist',
 				name: 'check'
 			},
 			{
@@ -21650,7 +25284,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Development'
 			}
 		],
-		repository: null,
+		repository: 'https://github.com/absolutejs/devices',
 		subpackages: [
 			{
 				api: [],
@@ -21778,7 +25412,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'packages/devices-capacitor',
-				version: '0.8.0'
+				version: '0.8.1'
 			},
 			{
 				api: [],
@@ -22674,18 +26308,102 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<BrowserDiagnosticsOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>>;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>>;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        maxBytes: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maxConsoleEntries: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        maxNetworkEntries: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n        propagateDiagnosticId: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TBoolean>;\n        project: import("@sinclair/typebox").TString;\n    }>;\n});'
 					}
 				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/run',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticRunStatus',
+						signature:
+							'type DiagnosticRunStatus = "running" | "completed" | "failed" | "invalid" | "interrupted";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticRunSnapshot',
+						signature:
+							'type DiagnosticRunSnapshot = Readonly<{\n    status: DiagnosticRunStatus;\n    startedAt: number;\n    finishedAt?: number;\n    sourceUnchanged?: boolean;\n    error?: string;\n    assertionStatus?: "completed";\n    processExitCode?: number;\n    processSignal?: string;\n    processExitedAt?: number;\n}>;'
+					},
+					{
+						description:
+							'A host-neutral lifecycle for bounded diagnostic jobs. Completion of assertions is distinct from process termination. No listeners, I/O or global state are installed: the host persists snapshots and supplies its actual exit evidence. An unobserved process kill or power loss cannot be inferred as a clean exit.',
+						kind: 'function',
+						name: 'createDiagnosticRunLifecycle',
+						signature:
+							'function createDiagnosticRunLifecycle(now?: () => number): {\n    snapshot: () => Readonly<{\n        status: DiagnosticRunStatus;\n        startedAt: number;\n        finishedAt?: number;\n        sourceUnchanged?: boolean;\n        error?: string;\n        assertionStatus?: "completed";\n        processExitCode?: number;\n        processSignal?: string;\n        processExitedAt?: number;\n    }>;\n    finish(outcome: "completed" | "failed", evidence: {\n        sourceUnchanged: boolean;\n        error?: string;\n    }): Readonly<{\n        status: DiagnosticRunStatus;\n        startedAt: number;\n        finishedAt?: number;\n        sourceUnchanged?: boolean;\n        error?: string;\n        assertionStatus?: "completed";\n        processExitCode?: number;\n        processSignal?: string;\n        processExitedAt?: number;\n    }>;\n    exited(code: number, signal?: string): Readonly<{\n        status: DiagnosticRunStatus;\n        startedAt: number;\n        finishedAt?: number;\n        sourceUnchanged?: boolean;\n        error?: string;\n        assertionStatus?: "completed";\n        processExitCode?: number;\n        processSignal?: string;\n        processExitedAt?: number;\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DiagnosticResourceSnapshot',
+						signature:
+							'type DiagnosticResourceSnapshot = Readonly<{\n    startedAtMs: number;\n    elapsedMs: number;\n    observations: number;\n    residentSamples: number;\n    peakResidentBytes?: number;\n    exhausted: boolean;\n    reason?: "elapsed-budget" | "resident-budget";\n}>;'
+					},
+					{
+						description:
+							'Sampled, host-neutral resource policy. The host supplies resident bytes and owns scheduling, termination and persistence. Missing samples do not prove memory safety; short peaks between observations cannot be detected here. Use a monotonic clock in milliseconds, never a wall-clock timestamp.',
+						kind: 'function',
+						name: 'createDiagnosticResourceBudget',
+						signature:
+							'function createDiagnosticResourceBudget(options: {\n    maxElapsedMs: number;\n    maxResidentBytes?: number;\n    now?: () => number;\n}): {\n    snapshot: () => Readonly<{\n        startedAtMs: number;\n        elapsedMs: number;\n        observations: number;\n        residentSamples: number;\n        peakResidentBytes?: number;\n        exhausted: boolean;\n        reason?: "elapsed-budget" | "resident-budget";\n    }>;\n    observe(sample?: {\n        residentBytes?: number;\n    }): DiagnosticResourceSnapshot;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/diagnostics/worker',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'WorkerDiagnosticFrame',
+						signature:
+							'type WorkerDiagnosticFrame = Readonly<{\n    channel: typeof CHANNEL;\n    jobId: string;\n    sequence: number;\n    event: string;\n    json: string;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WorkerDiagnosticRecord',
+						signature:
+							'type WorkerDiagnosticRecord = Readonly<{\n    jobId: string;\n    sequence: number;\n    event: string;\n    fields: Record<string, unknown>;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WorkerDiagnosticLimits',
+						signature:
+							'type WorkerDiagnosticLimits = {\n    /** Attempt budget, including invalid/dropped messages; default 32, maximum 256. */\n    maxMessages?: number;\n    /** UTF-8 JSON bytes per message; default 16384, maximum 65536. */\n    maxMessageBytes?: number;\n    /** UTF-8 JSON bytes per channel; default 262144, maximum 1048576. */\n    maxTotalBytes?: number;\n};'
+					},
+					{
+						description:
+							'No worker, listener, network connection, storage, or retry queue is created. Caller supplies trusted, already bounded fields and its own send callback. Limits bound wire payload and attempts, not arbitrary producer object traversal. Callbacks must be synchronous. Callback/serialization failures cannot escape into the measured computation. Correlation identifiers/event names must contain no sensitive user data.',
+						kind: 'function',
+						name: 'createWorkerDiagnosticReporter',
+						signature:
+							'function createWorkerDiagnosticReporter(options: WorkerDiagnosticLimits & {\n    jobId: string;\n    send: (frame: WorkerDiagnosticFrame) => void;\n    /** Reserve one attempt and this many UTF-8 bytes for emitTerminal().\n     * Default zero preserves the existing ordinary-message limits. The caller\n     * must explicitly send a compact terminal record; worker termination can\n     * still prevent delivery. Must not exceed either byte limit. */\n    terminalReserveBytes?: number;\n}): {\n    emit(event: string, fields: Record<string, unknown>): boolean;\n    /** One-shot final record. Closes the reporter even on validation/send\n     * failure; retries could duplicate a frame posted before a callback threw. */\n    emitTerminal(event: string, fields: Record<string, unknown>): boolean;\n    close(): void;\n    snapshot(): {\n        attempts: number;\n        sent: number;\n        dropped: number;\n        errors: number;\n        sentBytes: number;\n        closed: boolean;\n        terminalAttempted: boolean;\n        terminalSent: boolean;\n        terminalReserveBytes: number;\n        ordinaryExhausted: boolean;\n        exhausted: boolean;\n    };\n};'
+					},
+					{
+						description:
+							"Bind to one active job. Unrelated task messages are ignored. Call close on cancellation/completion. The callback receives owned, redacted parsed fields; it is responsible for existing diagnostic persistence/delivery policy. This is not an authentication boundary or a guarantee that a worker's claims are true.",
+						kind: 'function',
+						name: 'createWorkerDiagnosticReceiver',
+						signature:
+							'function createWorkerDiagnosticReceiver(options: WorkerDiagnosticLimits & {\n    jobId: string;\n    onRecord: (record: WorkerDiagnosticRecord) => void;\n}): {\n    receive(value: unknown): "unrelated" | "accepted" | "rejected" | "closed";\n    close(): void;\n    snapshot(): {\n        attempts: number;\n        accepted: number;\n        rejected: number;\n        errors: number;\n        receivedBytes: number;\n        lastSequence: number;\n        missingSequences: number;\n        closed: boolean;\n        exhausted: boolean;\n    };\n};'
+					}
+				]
 			}
 		],
 		category: 'Observability',
 		commands: [
 			{
 				command:
-					"rm -rf dist && bun build src/index.ts src/browser.ts src/har.ts src/redact.ts src/support.ts src/trace.ts src/ui.ts src/viewer.ts --outdir dist --root ./src --splitting --sourcemap --target=browser && bun build src/playwright.ts src/elysia.ts src/blob.ts src/manifest.ts --outdir dist --root ./src --splitting --sourcemap --target=bun --external playwright --external elysia --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
+					"rm -rf dist && bun build src/index.ts src/run.ts src/worker.ts src/browser.ts src/har.ts src/redact.ts src/support.ts src/trace.ts src/ui.ts src/viewer.ts --outdir dist --root ./src --splitting --sourcemap --target=browser && bun build src/playwright.ts src/elysia.ts src/blob.ts src/manifest.ts --outdir dist --root ./src --splitting --sourcemap --target=bun --external playwright --external elysia --external @absolutejs/manifest --external '@absolutejs/manifest/*' --external @sinclair/typebox --external '@sinclair/typebox/*' && tsc --project tsconfig.build.json && absolute-manifest emit",
 				name: 'build'
 			},
 			{
 				command:
-					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && absolute-changelog check',
+					'bun run format && bun run typecheck && bun run test && bun run verify-package && bun run build && bun scripts/check-run-package.ts && bun scripts/check-worker-package.ts && absolute-changelog check',
 				name: 'check:package'
 			},
 			{
@@ -22721,10 +26439,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/diagnostics/viewer',
 			'@absolutejs/diagnostics/elysia',
 			'@absolutejs/diagnostics/manifest',
-			'@absolutejs/diagnostics/manifest.json'
+			'@absolutejs/diagnostics/manifest.json',
+			'@absolutejs/diagnostics/run',
+			'@absolutejs/diagnostics/worker'
 		],
 		readmeDigest:
-			'241da08ee960cc0c7641860b1fc3fd890885c116d5216e6b92faca8ae26e773a',
+			'26fa5a7736113fc2fae02d373d74631dd36ff76e0701f21414cf8e5afd07fbcf',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/diagnostics',
@@ -22861,11 +26581,37 @@ export const ecosystemProjects: EcosystemProject[] = [
 					"Therefore an in-page export is useful but partial. Use Playwright/CDP for a complete desktop-browser HAR. Capturing native iPhone Safari with Web Inspector still requires Apple's supported Mac-connected workflow; this package cannot bypass platform security boundaries."
 				],
 				title: 'Browser limitations'
+			},
+			{
+				description:
+					'@absolutejs/diagnostics/run exposes createDiagnosticRunLifecycle, a host-neutral state machine for renderer captures, benchmark jobs and other bounded diagnostic runs. It installs no process listeners, filesystem writes or browser hooks. Persist its immutable snapshots through your existing diagnostic storage.',
+				details: [
+					"Successful assertions alone do not establish a clean process exit: processExitCode remains absent until observed. A later nonzero exit or explicit signal changes success to interrupted and retains assertionStatus: 'completed'. Exiting before finish, even with code zero, is incomplete. Changed source invalidates success; original failures and invalidations cannot be overwritten by later success. Repeated termination reports preserve the first observation. Error text is limited to 2,000 characters; hosts must redact it before passing it here. Power loss and unobserved SIGKILL cannot run exit handlers, so retain a heartbeat or running record separately."
+				],
+				title: 'Diagnostic job completion and process exit'
+			},
+			{
+				description:
+					'Import createWorkerDiagnosticReporter and createWorkerDiagnosticReceiver from @absolutejs/diagnostics/worker. These helpers do not create workers or listeners. They exchange a distinct diagnostic envelope alongside your existing worker task protocol. Bind both ends to the same non-sensitive job identifier.',
+				details: [
+					'Defaults are 32 attempted messages, 16 KiB of UTF-8 JSON per message and 256 KiB of JSON per job. Limits count JSON payload, not envelope/structured-clone overhead. Both ends enforce limits independently. Invalid/dropped attempts consume the message budget. Ordinary task replies and other job identifiers are ignored. Duplicate/out-of-order sequences are rejected and gaps are counted. JSON length and UTF-8 byte budgets are checked before receiver parsing. Producer fields are redacted before sending; received fields are redacted again before the callback.',
+					"The producer must supply trusted bounded objects: wire limits do not bound the cost of traversing an arbitrarily large input object. Callbacks must be synchronous. Thrown callbacks/serialization failures are counted and do not escape into the measured computation. Sender sentBytes conservatively includes attempted sends whose callbacks threw (a callback could post and then throw). Receiver accepted means a valid frame was received; inspect errors for callback failures. No queue, retry, network upload, listener, persistence or authorization is implicit. Attach existing host logging/delivery and permission policy; this is not an authentication boundary or proof of a worker's assertions. Use non-sensitive IDs and event names.",
+					"A checkpoint received by the host can outlive worker failure; a worker termination can discard queued messages, so no final report is guaranteed. Browser/process or power loss still requires the host's durable storage policy. See the normative HTML worker lifecycle.",
+					'Reserved terminal worker checkpoints',
+					'High-volume progress must not consume all capacity needed to explain a failure. Opt in when constructing the existing reporter:',
+					'The reserve uses the existing channel byte and attempt limits; it does not raise them. One attempt and the requested UTF-8 bytes remain unavailable to ordinary records. A terminal payload must still fit the per-message and remaining total limits. Keep it within the requested reservation to guarantee capacity against ordinary saturation. The method closes before calling transport code, even if validation or transmission fails; retrying could duplicate a frame that was posted before its callback threw. Snapshot fields report terminal attempt/send status and ordinary-budget exhaustion. Receivers and wire frames are unchanged.',
+					'No terminal message is sent automatically. Abrupt termination, a failed callback or oversized/unserializable fields can still prevent delivery. Previously received host checkpoints remain the fallback. Without a reservation, ordinary message budgets retain their existing behavior.',
+					'Sampled resource budgets',
+					'@absolutejs/diagnostics/run also exports createDiagnosticResourceBudget. Use it to share deadline and observed resident-memory policy across CLI jobs, workers and other diagnostic hosts. It installs no timer, reads no process information and never kills a process. The caller chooses when to sample, obtains memory evidence from its platform, persists the returned snapshot and owns cancellation.',
+					'The default clock is performance.now(); an injected now must be monotonic milliseconds. The deadline is exhausted at elapsedMs >= maxElapsedMs; memory exceeds its budget only above the inclusive maximum. The first observed reason is retained even if memory subsequently drops. When both limits first fail together, the deadline takes precedence. Options are captured at creation and returned snapshots are immutable.',
+					'Omit residentBytes when unavailable. Missing memory samples remain explicitly unknown (residentSamples: 0, absent peakResidentBytes); they are not treated as zero. A JS heap sample is not process resident memory. Sampled monitoring cannot catch peaks between observations and does not replace operating-system limits. Invalid observations or a backward/nonfinite clock throw without changing the last accepted snapshot. This policy does not infer clean process exit or source identity; use the existing run lifecycle for those separate facts.'
+				],
+				title: 'Bounded worker diagnostic checkpoints'
 			}
 		],
 		repository: 'https://github.com/absolutejs/diagnostics',
 		subpackages: [],
-		version: '0.3.0'
+		version: '0.6.0'
 	},
 	{
 		api: [],
@@ -22961,7 +26707,533 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.2.1'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/dispatch',
+				symbols: [
+					{
+						description:
+							"Optional reference to @absolutejs/audit. We don't import the type directly — that would force consumers to install audit even when unused. We accept anything structurally compatible with the minimal append shape.",
+						kind: 'type',
+						name: 'AuditLike',
+						signature:
+							'type AuditLike = {\n    append: (event: {\n        kind: string;\n        actor?: string;\n        target?: string;\n        metadata?: Record<string, unknown>;\n    }) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailMessage',
+						signature:
+							'type EmailMessage = {\n    to: string | ReadonlyArray<string>;\n    from?: string;\n    /** Stable provider idempotency key for retry-safe delivery. */\n    idempotencyKey?: string;\n    subject: string;\n    text?: string;\n    html?: string;\n    replyTo?: string;\n    cc?: string | ReadonlyArray<string>;\n    bcc?: string | ReadonlyArray<string>;\n    headers?: Record<string, string>;\n    /**\n     * Optional tenant identifier. When set, propagates to the OTel span\n     * as `abs.tenant` and to the audit event as `actor`. The recipient\n     * (`to`) is the `target` regardless.\n     */\n    tenant?: string;\n    /** Adapter-specific extras (tracking ids, tags, custom headers). */\n    metadata?: Record<string, unknown>;\n};'
+					},
+					{
+						description:
+							'Adapter packages extend this registry through module augmentation. This keeps core exhaustive for its built-in transports without forcing a core release whenever a provider introduces another channel.',
+						kind: 'interface',
+						name: 'MessagingTransportRegistry',
+						signature:
+							'interface MessagingTransportRegistry {\n    mms: {\n        family: "carrier";\n    };\n    rcs: {\n        family: "rich";\n    };\n    sms: {\n        family: "carrier";\n    };\n    whatsapp: {\n        family: "ott";\n    };\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingTransport',
+						signature:
+							'type MessagingTransport = Extract<keyof MessagingTransportRegistry, string>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingEndpoint',
+						signature:
+							'type MessagingEndpoint = {\n    address: string;\n    transport: MessagingTransport;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingAction',
+						signature:
+							'type MessagingAction = {\n    kind: "dial";\n    label: string;\n    phoneNumber: string;\n} | {\n    kind: "location";\n    label: string;\n    latitude: number;\n    longitude: number;\n} | {\n    kind: "reply";\n    label: string;\n    payload: string;\n} | {\n    kind: "url";\n    label: string;\n    url: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingContent',
+						signature:
+							'type MessagingContent = {\n    kind: "text";\n    text: string;\n} | {\n    kind: "media";\n    mediaUrls: ReadonlyArray<string>;\n    subject?: string;\n    text?: string;\n} | {\n    kind: "template";\n    id: string;\n    variables?: Readonly<Record<string, string>>;\n} | {\n    actions?: ReadonlyArray<MessagingAction>;\n    extensions?: Readonly<Record<string, unknown>>;\n    kind: "rich";\n    mediaUrl?: string;\n    text: string;\n    title?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingFallbackRoute',
+						signature:
+							'type MessagingFallbackRoute = {\n    content?: MessagingContent;\n    from?: MessagingEndpoint;\n    transport: MessagingTransport;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingMessage',
+						signature:
+							'type MessagingMessage = {\n    /** Typed primary recipient and requested transport. */\n    to: MessagingEndpoint;\n    /** Typed primary sender. Providers may select one from a configured pool when omitted. */\n    from?: MessagingEndpoint;\n    /** Exactly one portable content representation. */\n    content: MessagingContent;\n    /** Ordered provider fallback routes. Consent is evaluated for every route automatically. */\n    fallbacks?: ReadonlyArray<MessagingFallbackRoute>;\n    /** ISO-8601 delivery time for providers that support native scheduling. */\n    sendAt?: string;\n    /** Stable adapter idempotency key for retry-safe delivery. */\n    idempotencyKey?: string;\n    /** Provider retention controls for message content and addressing data. */\n    privacy?: {\n        addressRetention?: "obfuscate" | "retain";\n        contentRetention?: "discard" | "retain";\n    };\n    /** Consent identity evaluated for the primary and every fallback route. */\n    consent?: {\n        /** Stable messaging program identity across provider accounts and sender pools. */\n        programId: string;\n        /** Consent purpose, such as `incident-alerts` or `login-verification`. */\n        purpose: string;\n'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushAction',
+						signature:
+							'type PushAction = {\n    id: string;\n    label: string;\n    /** Optional app route or HTTPS URL opened by this action. */\n    deepLink?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushMessage',
+						signature:
+							"type PushMessage = {\n    /**\n     * Device token (FCM/APNs) OR topic name. Adapter decides the\n     * interpretation; see each adapter's docs.\n     */\n    to: string;\n    title?: string;\n    body: string;\n    /** Stable key used by lifecycle fanout and providers that support collapse/deduplication. */\n    idempotencyKey?: string;\n    actions?: ReadonlyArray<PushAction>;\n    badge?: number;\n    deepLink?: string;\n    sound?: string;\n    /** Free-form data payload sent alongside the notification. */\n    data?: Record<string, unknown>;\n    /**\n     * Privacy-safe identifier for logs and audit events, such as a durable\n     * subscription id. Raw device tokens are never used as push audit targets.\n     */\n    safeTarget?: string;\n    tenant?: string;\n    metadata?: Record<string, unknown>;\n};"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DispatchChannel',
+						signature:
+							'type DispatchChannel = "email" | "messaging" | "push";'
+					},
+					{
+						description:
+							"Returned by every send on every adapter. id is the provider's tracking identifier (Resend message id, Twilio SID, FCM message id) when the provider returns one; provider is the adapter's name.",
+						kind: 'type',
+						name: 'DispatchResult',
+						signature:
+							'type DispatchResult = {\n    id?: string;\n    provider: string;\n    at: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingDeliveryStatus',
+						signature:
+							'type MessagingDeliveryStatus = "accepted" | "canceled" | "delivered" | "expired" | "failed" | "queued" | "read" | "scheduled" | "sending" | "sent" | "undeliverable" | "unknown";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingFailure',
+						signature:
+							'type MessagingFailure = {\n    code?: string;\n    detail?: string;\n    title?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingEconomics',
+						signature:
+							'type MessagingEconomics = {\n    currency: string;\n    price: string;\n    segments?: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingDeliveryAttempt',
+						signature:
+							'type MessagingDeliveryAttempt = {\n    actualTransport?: MessagingTransport;\n    errors?: ReadonlyArray<MessagingFailure>;\n    providerMessageId?: string;\n    providerStatus?: string;\n    route: "primary" | {\n        fallbackIndex: number;\n    };\n    status: MessagingDeliveryStatus;\n    transport: MessagingTransport;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingDispatchResult',
+						signature:
+							'type MessagingDispatchResult = DispatchResult & {\n    delivery: {\n        actualTransport?: MessagingTransport;\n        attempts: ReadonlyArray<MessagingDeliveryAttempt>;\n        requestedTransport: MessagingTransport;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingEventBase',
+						signature:
+							'type MessagingEventBase = {\n    actualTransport?: MessagingTransport;\n    eventId: string;\n    from?: MessagingEndpoint;\n    messageId: string;\n    occurredAt: number;\n    provider: string;\n    providerAccountId?: string;\n    requestedTransport?: MessagingTransport;\n    tenant?: string;\n    to?: MessagingEndpoint;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingDeliveryEvent',
+						signature:
+							'type MessagingDeliveryEvent = MessagingEventBase & {\n    attempt?: MessagingDeliveryAttempt;\n    economics?: MessagingEconomics;\n    errors: ReadonlyArray<MessagingFailure>;\n    kind: "delivery";\n    networkCode?: string;\n    providerStatus: string;\n    status: MessagingDeliveryStatus;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingInboundEvent',
+						signature:
+							'type MessagingInboundEvent = MessagingEventBase & {\n    content: MessagingContent;\n    interaction?: {\n        label?: string;\n        payload: string;\n    };\n    kind: "inbound";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingConsentEvent',
+						signature:
+							'type MessagingConsentEvent = MessagingEventBase & {\n    action: "grant" | "help" | "revoke";\n    keyword?: string;\n    kind: "consent";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingEvent',
+						signature:
+							'type MessagingEvent = MessagingConsentEvent | MessagingDeliveryEvent | MessagingInboundEvent;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingEventHandler',
+						signature:
+							'type MessagingEventHandler = (event: MessagingEvent) => Promise<void> | void;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingCapabilityCheck',
+						signature:
+							'type MessagingCapabilityCheck = {\n    detail: string;\n    id: string;\n    status: "fail" | "pass" | "pending";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingCapabilityReport',
+						signature:
+							'type MessagingCapabilityReport = {\n    checks: ReadonlyArray<MessagingCapabilityCheck>;\n    ready: boolean;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingScheduledMessageReport',
+						signature:
+							'type MessagingScheduledMessageReport = {\n    messageId: string;\n    providerStatus: string;\n    state: "canceled" | "failed" | "pending" | "sent";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingSchedulingCapability',
+						signature:
+							'type MessagingSchedulingCapability = {\n    cancel: (messageId: string) => Promise<MessagingScheduledMessageReport>;\n    inspect: (messageId: string) => Promise<MessagingScheduledMessageReport>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingReadinessCapability',
+						signature:
+							'type MessagingReadinessCapability = {\n    inspect: () => Promise<MessagingCapabilityReport>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingRegistrationCapability',
+						signature:
+							'type MessagingRegistrationCapability<Input = unknown> = {\n    inspect: (input: Input) => Promise<MessagingCapabilityReport>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EmailAdapter',
+						signature:
+							'type EmailAdapter = {\n    send: (message: EmailMessage) => Promise<DispatchResult>;\n    readonly name: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MessagingAdapter',
+						signature:
+							'type MessagingAdapter = {\n    capabilities?: {\n        readiness?: MessagingReadinessCapability;\n        scheduling?: MessagingSchedulingCapability;\n    };\n    send: (message: MessagingMessage) => Promise<MessagingDispatchResult>;\n    readonly name: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushAdapter',
+						signature:
+							'type PushAdapter = {\n    send: (message: PushMessage) => Promise<DispatchResult>;\n    readonly name: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DispatchPolicyContext',
+						signature:
+							'type DispatchPolicyContext = {\n    adapter: string;\n    channel: DispatchChannel;\n    message: EmailMessage | MessagingMessage | PushMessage;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DispatchPolicyDecision',
+						signature:
+							'type DispatchPolicyDecision = {\n    allowed: true;\n} | {\n    allowed: false;\n    code: string;\n    reason: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DispatchPolicy',
+						signature:
+							'type DispatchPolicy = {\n    readonly name: string;\n    evaluate: (context: DispatchPolicyContext) => DispatchPolicyDecision | Promise<DispatchPolicyDecision>;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'DispatchPolicyDeniedError',
+						signature:
+							'class DispatchPolicyDeniedError extends Error {\n    readonly code: string;\n    readonly policy: string;\n    constructor(input: {\n        code: string;\n        policy: string;\n        reason: string;\n    });\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DispatcherOptions',
+						signature:
+							"type DispatcherOptions = {\n    email?: EmailAdapter;\n    messaging?: MessagingAdapter;\n    push?: PushAdapter;\n    /** Ordered authorization policies evaluated before any provider call. */\n    policies?: ReadonlyArray<DispatchPolicy>;\n    /**\n     * Default `from` per channel. Consumers can override per message.\n     * Adapters MAY enforce their own defaults if these aren't set\n     * (Resend requires `from`; SES requires a verified sender; etc).\n     */\n    defaultFrom?: {\n        email?: string;\n        messaging?: MessagingEndpoint;\n    };\n    /**\n     * Per-send error hook. Defaults to `console.warn`. Fires AFTER the\n     * audit emission and BEFORE re-throwing.\n     */\n    onError?: (error: unknown, channel: DispatchChannel, message: EmailMessage | MessagingMessage | PushMessage) => void;\n    /**\n     * Optional `@opentelemetry/api`-compatible `TracerProvider`. When\n     * set, every send is wrapped in a `dispatch.<channel>.send` span.\n     */\n    tracerProvider?: TracerProvider;\n    /**\n     * Optional `@absolutejs/audit` instance. When set, every send\n     * emits a `dispatch.<channel>.<outcome>` event with the recipient\n     * as `target`. Consumers without `@absolutejs/aud"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DispatcherChannelMetrics',
+						signature:
+							'type DispatcherChannelMetrics = {\n    sent: number;\n    failed: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DispatcherMetrics',
+						signature:
+							'type DispatcherMetrics = {\n    sent: number;\n    failed: number;\n    byChannel: Record<DispatchChannel, DispatcherChannelMetrics>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'Dispatcher',
+						signature:
+							'type Dispatcher = {\n    email: (message: EmailMessage) => Promise<DispatchResult>;\n    messaging: (message: MessagingMessage) => Promise<MessagingDispatchResult>;\n    push: (message: PushMessage) => Promise<DispatchResult>;\n    metrics: () => DispatcherMetrics;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'DispatchUnsupportedError',
+						signature:
+							'class DispatchUnsupportedError extends Error {\n    readonly channel: DispatchChannel;\n    constructor(channel: DispatchChannel);\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createDispatcher',
+						signature:
+							'const createDispatcher: (options: DispatcherOptions) => Dispatcher;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MemoryEmailAdapterOptions',
+						signature:
+							"type MemoryEmailAdapterOptions = {\n    max?: number;\n    /** Override the result's `id`. Default: a UUID. */\n    idGenerator?: (message: EmailMessage) => string;\n};"
+					},
+					{
+						description:
+							'In-process tail of sent emails. Useful in tests and dev — assert what was sent without round-tripping a real provider. inspect() returns the captured messages oldest-first. Drops the oldest FIFO when max is reached (default 1000).',
+						kind: 'type',
+						name: 'MemoryEmailAdapter',
+						signature:
+							'type MemoryEmailAdapter = EmailAdapter & {\n    inspect: () => ReadonlyArray<EmailMessage & {\n        id: string;\n        at: number;\n    }>;\n    clear: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'memoryEmailAdapter',
+						signature:
+							'const memoryEmailAdapter: (options?: MemoryEmailAdapterOptions) => MemoryEmailAdapter;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MemoryMessagingAdapter',
+						signature:
+							'type MemoryMessagingAdapter = MessagingAdapter & {\n    inspect: () => ReadonlyArray<MessagingMessage & {\n        id: string;\n        at: number;\n    }>;\n    clear: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'memoryMessagingAdapter',
+						signature:
+							'const memoryMessagingAdapter: (options?: {\n    max?: number;\n}) => MemoryMessagingAdapter;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'MemoryPushAdapter',
+						signature:
+							'type MemoryPushAdapter = PushAdapter & {\n    inspect: () => ReadonlyArray<PushMessage & {\n        id: string;\n        at: number;\n    }>;\n    clear: () => void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'memoryPushAdapter',
+						signature:
+							'const memoryPushAdapter: (options?: {\n    max?: number;\n}) => MemoryPushAdapter;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ConsoleAdapterOptions',
+						signature:
+							'type ConsoleAdapterOptions = {\n    stream?: "log" | "error";\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'consoleEmailAdapter',
+						signature:
+							'const consoleEmailAdapter: (options?: ConsoleAdapterOptions) => EmailAdapter;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'consoleMessagingAdapter',
+						signature:
+							'const consoleMessagingAdapter: (options?: ConsoleAdapterOptions) => MessagingAdapter;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'consolePushAdapter',
+						signature:
+							'const consolePushAdapter: (options?: ConsoleAdapterOptions) => PushAdapter;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushPlatform',
+						signature:
+							'type PushPlatform = "apns" | "fcm" | "webpush";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'WebPushSubscriptionCredential',
+						signature:
+							'type WebPushSubscriptionCredential = {\n    endpoint: string;\n    keys: {\n        auth: string;\n        p256dh: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushSubscription',
+						signature:
+							'type PushSubscription = PushSubscriptionBase & PushProviderCredential;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RegisterPushSubscriptionInput',
+						signature:
+							'type RegisterPushSubscriptionInput = RegisterPushSubscriptionBase & PushProviderCredential;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RegisterPushInstallationInput',
+						signature:
+							'type RegisterPushInstallationInput = Omit<RegisterPushSubscriptionBase, "deviceId" | "id"> & PushProviderCredential & {\n    /** Opaque server-issued installation identity, absent on first registration. */\n    installationId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RemovePushInstallationInput',
+						signature:
+							'type RemovePushInstallationInput = {\n    installationId: string;\n    tenant: string;\n    userId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'PushInstallationOwnershipError',
+						signature:
+							'class PushInstallationOwnershipError extends Error {\n    constructor(message?: string);\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushSubscriptionQuery',
+						signature:
+							'type PushSubscriptionQuery = {\n    deviceId?: string;\n    ids?: ReadonlyArray<string>;\n    platform?: PushPlatform;\n    tenant: string;\n    topic?: string;\n    userId?: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushSubscriptionStore',
+						signature:
+							'type PushSubscriptionStore = {\n    disable: (input: {\n        id: string;\n        reason: string;\n        tenant: string;\n    }) => Promise<void>;\n    list: (query: PushSubscriptionQuery) => Promise<ReadonlyArray<PushSubscription>>;\n    remove: (input: {\n        id: string;\n        tenant: string;\n    }) => Promise<void>;\n    upsert: (subscription: PushSubscription) => Promise<PushSubscription>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushFanoutClaim',
+						signature:
+							'type PushFanoutClaim = {\n    disposition: "claimed";\n    token: string;\n} | {\n    disposition: "completed" | "in-flight" | "indeterminate";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushFanoutClaimStore',
+						signature:
+							'type PushFanoutClaimStore = {\n    claim: (key: string) => Promise<PushFanoutClaim>;\n    complete: (key: string, token: string) => Promise<void>;\n    fail: (key: string, token: string, reason?: string) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushTarget',
+						signature:
+							'type PushTarget = {\n    deviceId: string;\n    tenant: string;\n    userId?: string;\n} | {\n    subscriptionIds: ReadonlyArray<string>;\n    tenant: string;\n} | {\n    tenant: string;\n    topic: string;\n} | {\n    tenant: string;\n    userId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushFanoutOutcome',
+						signature:
+							'type PushFanoutOutcome = {\n    attempts: number;\n    provider?: string;\n    providerMessageId?: string;\n    status: "delivered" | "failed" | "indeterminate" | "retired" | "skipped";\n    subscriptionId: string;\n    error?: unknown;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PushFanoutResult',
+						signature:
+							'type PushFanoutResult = {\n    delivered: number;\n    failed: number;\n    indeterminate: number;\n    outcomes: ReadonlyArray<PushFanoutOutcome>;\n    retired: number;\n    skipped: number;\n    targeted: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CreatePushLifecycleOptions',
+						signature:
+							'type CreatePushLifecycleOptions = {\n    adapterFor: (subscription: PushSubscription) => Promise<PushAdapter> | PushAdapter;\n    claimStore?: PushFanoutClaimStore;\n    clock?: () => number;\n    concurrency?: number;\n    idGenerator?: () => string;\n    isInvalidTokenError?: (error: unknown, platform: PushPlatform) => boolean;\n    isRetryableError?: (error: unknown) => boolean;\n    maxAttempts?: number;\n    retryDelay?: (attempt: number) => Promise<void>;\n    store: PushSubscriptionStore;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createPushLifecycle',
+						signature:
+							'const createPushLifecycle: (options: CreatePushLifecycleOptions) => {\n    register: (input: RegisterPushSubscriptionInput) => Promise<PushSubscription>;\n    registerInstallation: (input: RegisterPushInstallationInput) => Promise<{\n        installationId: string;\n        subscription: PushSubscription;\n    }>;\n    remove: (input: {\n        id: string;\n        tenant: string;\n    }) => Promise<void>;\n    removeInstallation: (input: RemovePushInstallationInput) => Promise<void>;\n    send: (target: PushTarget, message: Omit<PushMessage, "safeTarget" | "tenant" | "to">) => Promise<PushFanoutResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'memoryPushSubscriptionStore',
+						signature:
+							'const memoryPushSubscriptionStore: () => PushSubscriptionStore & {\n    inspect: () => ReadonlyArray<PushSubscription>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'memoryPushFanoutClaimStore',
+						signature:
+							'const memoryPushFanoutClaimStore: () => PushFanoutClaimStore;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/dispatch/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<DispatcherOptions, Dispatcher>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<Dispatcher>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<Dispatcher>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        defaultFrom: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TObject<{\n            email: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n            messaging: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TObject<{\n                address: import("@sinclair/typebox").TString;\n                transport: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"sms">, import("@sinclair/typebox").TLiteral<"mms">, import("@sinclair/typebox").TLiteral<"rcs">, import("@sinclair/typebox").TLiteral<"whatsapp">]>;\n            }>>;\n        }>>;\n    }>;\n});'
+					}
+				]
+			}
+		],
 		category: 'Messaging',
 		commands: [
 			{
@@ -23109,7 +27381,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/dispatch',
 		subpackages: [],
-		version: '0.9.0'
+		version: '0.9.1'
 	},
 	{
 		api: [],
@@ -23293,7 +27565,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'aws-end-user-messaging',
-				version: '0.1.0'
+				version: '0.1.1'
 			},
 			{
 				api: [],
@@ -23410,7 +27682,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'infobip',
-				version: '0.1.0'
+				version: '0.1.1'
 			},
 			{
 				api: [],
@@ -23510,7 +27782,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'postmark',
-				version: '0.1.0'
+				version: '0.1.1'
 			},
 			{
 				api: [],
@@ -23678,7 +27950,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'resend',
-				version: '0.7.0'
+				version: '0.7.1'
 			},
 			{
 				api: [],
@@ -23788,7 +28060,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'sinch',
-				version: '0.3.0'
+				version: '0.3.1'
 			},
 			{
 				api: [],
@@ -23888,7 +28160,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'telnyx',
-				version: '0.3.0'
+				version: '0.3.1'
 			},
 			{
 				api: [],
@@ -24019,7 +28291,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'twilio',
-				version: '0.7.0'
+				version: '0.7.1'
 			},
 			{
 				api: [],
@@ -24124,7 +28396,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'vonage',
-				version: '0.2.0'
+				version: '0.2.1'
 			}
 		],
 		version: null
@@ -25518,7 +29790,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/eden',
 		subpackages: [],
-		version: '0.3.0'
+		version: '0.3.1'
 	},
 	{
 		api: [
@@ -26558,114 +30830,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/engagement-adapters',
 		subpackages: [
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/engagement',
-						symbols: [
-							{
-								description:
-									'Thrown by an adapter when the provider reports a rate limit (e.g. HTTP 429), so a consumer can DEFER (retry when the window resets) instead of mistaking it for "no results found". Other failures still resolve to null/[] — only an explicit rate limit throws, because only it is meaningfully retryable-later.',
-								kind: 'class',
-								name: 'RateLimitError',
-								signature:
-									'class RateLimitError extends Error {\n    readonly provider: string;\n    constructor(provider: string);\n}'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'NormalizedPerson',
-								signature:
-									'type NormalizedPerson = {\n    /** Every known address (work + personal), best-first and de-duplicated. The\n     *  primary is `emails[0]`; empty when the provider returned none. One list, so\n     *  there\'s a single source of truth (no separate "primary" field to drift). */\n    emails: string[];\n    name: string | null;\n    firstName: string | null;\n    lastName: string | null;\n    title: string | null;\n    company: string | null;\n    companyDomain: string | null;\n    linkedinUrl: string | null;\n    twitterUrl: string | null;\n    facebookUrl: string | null;\n    githubUrl: string | null;\n    photoUrl: string | null;\n    location: string | null;\n    raw?: unknown;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'NormalizedCompany',
-								signature:
-									'type NormalizedCompany = {\n    name: string | null;\n    domain: string | null;\n    industry: string | null;\n    employeeCount: number | null;\n    foundedYear: number | null;\n    linkedinUrl: string | null;\n    description: string | null;\n    raw?: unknown;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'EngagementChannel',
-								signature:
-									'type EngagementChannel = "call" | "email" | "linkedin" | "meeting" | "other";'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'EngagementDirection',
-								signature:
-									'type EngagementDirection = "inbound" | "outbound";'
-							},
-							{
-								description:
-									'One outreach touchpoint, normalized. kind is the provider\'s own event name (e.g. "email_sent", "email_opened", "email_replied", "linkedin_message") kept verbatim so no fidelity is lost; channel + direction are the normalized axes a consumer can rely on.',
-								kind: 'type',
-								name: 'EngagementActivity',
-								signature:
-									'type EngagementActivity = {\n    id: string;\n    channel: EngagementChannel;\n    direction: EngagementDirection;\n    kind: string;\n    occurredAt: string;\n    subject: string | null;\n    preview: string | null;\n    contactEmail: string | null;\n    contactName: string | null;\n    raw?: unknown;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'EnrichPersonQuery',
-								signature:
-									'type EnrichPersonQuery = {\n    email?: string;\n    name?: string;\n    company?: string;\n    domain?: string;\n    linkedinUrl?: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'EnrichCompanyQuery',
-								signature:
-									'type EnrichCompanyQuery = {\n    domain?: string;\n    name?: string;\n};'
-							},
-							{
-								description:
-									'Find the people at a company who match a set of role/title hints — "who are the partnerships leads at X". A provider resolves this from its own DB (reliable + instant, vs scraping the web). titles are matched loosely against each person\'s title; limit caps how many people to return.',
-								kind: 'type',
-								name: 'PersonSearchQuery',
-								signature:
-									'type PersonSearchQuery = {\n    company?: string;\n    domain?: string;\n    titles?: string[];\n    limit?: number;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'ActivityQuery',
-								signature:
-									'type ActivityQuery = {\n    contactEmail?: string;\n    /** ISO-8601 lower bound — only activities at or after this instant. */\n    since?: string;\n    limit?: number;\n};'
-							},
-							{
-								description:
-									'The result of a people search, carrying the resolved people PLUS the paid-call counts the search actually incurred — so a metered caller bills the work that happened, not just the rows that survived. revealsAttempted is every per-person reveal fired (a provider charges per reveal even when one resolves to nothing); searchRequests is the underlying search call(s). people is the non-null resolved subset — always <= revealsAttempted.',
-								kind: 'type',
-								name: 'PersonSearchResult',
-								signature:
-									'type PersonSearchResult = {\n    people: NormalizedPerson[];\n    revealsAttempted: number;\n    searchRequests: number;\n};'
-							},
-							{
-								description:
-									"A sales-engagement provider. Every capability is optional so an adapter can implement only what its provider (and the caller's plan) supports — a consumer checks for the method before calling it.",
-								kind: 'type',
-								name: 'EngagementSource',
-								signature:
-									'type EngagementSource = {\n    /** Stable provider id, e.g. "apollo". */\n    readonly id: string;\n    enrichPerson?: (query: EnrichPersonQuery) => Promise<NormalizedPerson | null>;\n    enrichCompany?: (query: EnrichCompanyQuery) => Promise<NormalizedCompany | null>;\n    /** Find the decision-makers at a company by role — returns fully-resolved\n     *  people (name, LinkedIn, email when the plan allows) plus the paid-call counts\n     *  the search incurred, so a metered caller bills the work accurately. */\n    searchPeople?: (query: PersonSearchQuery) => Promise<PersonSearchResult>;\n    listActivities?: (query: ActivityQuery) => Promise<EngagementActivity[]>;\n};'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/engagement/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, EngagementSource>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<EngagementSource>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<EngagementSource>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -26700,7 +30865,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/engagement/manifest.json'
 				],
 				readmeDigest:
-					'fd17af3b6aad8cfce5941b0b56a05231eb5c277308e29094ddbea382c5fc492b',
+					'180c5ac01ac329f946656ecb1a536215fd3aacfaa87c34f3d261f292e1e84048',
 				readmeSamples: [
 					{
 						code: 'import type { EngagementSource } from "@absolutejs/engagement";\n\nexport const enrichLead = async (engagement: EngagementSource, email: string) =>\n  engagement.enrichPerson?.({ email });',
@@ -26727,42 +30892,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'core',
-				version: '0.0.8'
+				version: '0.0.10'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/engagement-apollo',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'ApolloOptions',
-								signature:
-									'type ApolloOptions = {\n    apiKey: string;\n    /** Override for testing or a proxy. Defaults to https://api.apollo.io. */\n    baseUrl?: string;\n    /** Inject a fetch (tests, instrumentation). Defaults to global fetch. */\n    fetchImpl?: typeof fetch;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'apolloSource',
-								signature:
-									'const apolloSource: (options: ApolloOptions) => EngagementSource;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/engagement-apollo/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<ApolloOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -26797,7 +30930,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					'@absolutejs/engagement-apollo/manifest.json'
 				],
 				readmeDigest:
-					'a1aae6744415ce294ecc171aba6213857201402430fc831cf6df5984a541766d',
+					'6ac14e4373c0d626e553d6e83c42f5793ef1c182cff96bcaf69534a0079965cc',
 				readmeSamples: [
 					{
 						code: 'import { apolloSource } from "@absolutejs/engagement-apollo";\n\nconst apollo = apolloSource({ apiKey: process.env.APOLLO_KEY! });\n\n// Enrichment\nconst person = await apollo.enrichPerson?.({ email: "jane@acme.com" });\nconst company = await apollo.enrichCompany?.({ domain: "acme.com" });\n\n// Outreach activity (what\'s been sent / opened / replied) for a contact\nconst activity = await apollo.listActivities?.({\n  contactEmail: "jane@acme.com",\n});',
@@ -26819,13 +30952,14 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'enrichPerson — POST /v1/people/match — Consumes an enrichment credit per match.',
 							'enrichCompany — GET /v1/organizations/enrich — Domain required.',
 							'listActivities — POST /v1/emailer_messages/search — Plan-gated — engagement API access varies by Apollo plan. Returns [] if unsupported; verify field mapping against a live account before relying on it.',
-							'All calls fail soft: a non-2xx response or an unexpected shape returns null / [] rather than throwing, so a consumer can treat the source as best-effort.'
+							'Company enrichment preserves provider identity and annual revenue with observation time and provider-estimate attribution. Apollo documents organization.annual_revenue as an estimate in USD; the adapter preserves that denomination. It does not infer currency from the company location.',
+							'Company enrichment returns null for no match (404), throws RateLimitError for 429, and throws EngagementProviderError for authentication, permission, server, or malformed-response failures. Errors exclude raw response bodies and credentials. Person/activity endpoints retain their existing behavior.'
 						],
 						title: 'Capabilities'
 					}
 				],
 				sourcePath: 'apollo',
-				version: '0.0.8'
+				version: '0.0.16'
 			}
 		],
 		version: null
@@ -27792,7 +31926,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/errors',
 		subpackages: [],
-		version: '0.10.0'
+		version: '0.10.3'
 	},
 	{
 		api: [],
@@ -30722,6 +34856,18 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'CheckpointYieldError',
+						signature: 'CheckpointYieldError'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'isCheckpointYieldError',
+						signature: 'isCheckpointYieldError'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'createMemoryEffectStore',
 						signature: 'createMemoryEffectStore'
 					},
@@ -31192,18 +35338,6 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'EffectAdapterHealthSignal',
 						signature: 'type EffectAdapterHealthSignal'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'EffectAdapterHealthStatus',
-						signature: 'type EffectAdapterHealthStatus'
-					},
-					{
-						description: '',
-						kind: 'export',
-						name: 'EffectAdapterHealthStore',
-						signature: 'type EffectAdapterHealthStore'
 					}
 				]
 			},
@@ -31314,10 +35448,963 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/execution',
 		subpackages: [],
-		version: '0.14.10'
+		version: '0.14.12'
 	},
 	{
 		api: [],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command: 'tsc -p tsconfig.json',
+				name: 'build'
+			},
+			{
+				command: 'bun run build && bun test ./tests',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test ./tests',
+				name: 'test'
+			}
+		],
+		description:
+			'Bounded geometry projection, oriented material components, point membership and plane-clipped volume and surface moments for web 3D tooling.',
+		directory: 'geometry',
+		kind: 'package',
+		name: 'Geometry',
+		packageName: '@absolutejs/geometry',
+		private: false,
+		publicExports: [
+			'@absolutejs/geometry',
+			'@absolutejs/geometry/manifold'
+		],
+		readmeDigest:
+			'12c8d94b9103d16a87c8c6d08c584f8ae01a0fd4237a11987a0dbe6cd892e25a',
+		readmeSamples: [
+			{
+				code: "import { projectAlphaCoverage } from '@absolutejs/geometry';\n\nconst measurement = projectAlphaCoverage({\n  positions: new Float64Array([0, 0, 0, 1, 0, 0, 0, 0, 1]),\n  uv: new Float32Array([0, 0, 1, 0, 0, 1]),\n  indices: new Uint16Array([0, 1, 2]),\n  alpha: new Uint8Array([255]),\n  textureWidth: 1,\n  textureHeight: 1,\n  cutoff: 0.4,\n  resolution: 256,\n});\nconsole.log(measurement.footprintArea, measurement.gapFraction);",
+				description: '# @absolutejs/geometry',
+				heading: '@absolutejs/geometry quick start',
+				language: 'typescript'
+			},
+			{
+				code: "import { tetrahedronPlaneMoments } from '@absolutejs/geometry';\nconst cut = tetrahedronPlaneMoments(\n  [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]],\n  [0.5, 0, 0], [1, 1, 1]\n);\n// cut.signedVolume = 1/48; cut.centroid = [0.125, 0.125, 0.125]",
+				description:
+					'tetrahedronPlaneMoments(vertices, planePoint, planeNormal) integrates the part of a four-vertex oriented tetrahedron on the side dot(position - planePoint, planeNormal) <= 0. The normal need not be unit length. It returns signed clipped/full volumes, their ratio, a centroid (null for an empty cut), a reference point and signed first moments relative to that reference. Input arrays are borrowed synchronously and never changed. No engine or native allocation is required; work is bounded by four faces and six crossed edges.',
+				heading: 'Plane-clipped tetrahedron moments',
+				language: 'typescript'
+			},
+			{
+				code: 'const session = createManifoldCutSession(wasm, sourceMeshes);\ntry {\n  const initial = session.snapshot();\n  const result = session.cut(cutterMesh);\n  // result.retained / result.removed are owned mesh copies.\n  // origins identify initial input or accepted cutter index, original face, backside.\n  // result.sequence counts accepted material-removing cuts; air strikes do not count.\n} finally {\n  session.dispose();\n}',
+				description:
+					'createManifoldCutSession(wasm, inputs, maximumCuts?) is available from the optional @absolutejs/geometry/manifold entry. Inputs and cutters are closed oriented meshes in one caller-chosen common frame. The session unions the inputs once and retains the native solid across cuts, avoiding a Float32 import of generated thin triangles between operations. It does not infer a tool frame or snap nearly shared planes.',
+				heading: 'Native cut sessions',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Worker-side measurement of alpha-masked triangle geometry. The first API measures orthographic coverage without Three.js, a renderer, or a GPU. This is useful for asset inspection, canopy gap measurement, and tools in a 3D website builder.',
+				details: [],
+				title: 'Overview'
+			},
+			{
+				description:
+					"Positions are xyz in the caller's projection frame, projected onto xz. Supply transformed positions for the actual pose, preferably in local double precision. An origin already rounded away in Float32 cannot be recovered. Indexed vertices define a convex reference hull; its area includes transparent card extents and gaps between disconnected leaves. This is a declared reference footprint, not a botanical crown boundary. Units are caller-defined; areas use squared units.",
+				details: [
+					'UVs must already include any texture transform. Alpha is row-major, one byte per texel, with v=0 at the first row: apply any image flip before calling. Bilinear sampling uses the base texture level, wrapS/wrapT default to clamp, and alpha at or above cutoff is covered. Repeat and mirrored repeat are supported. Faces are two-sided; overlapping faces form a union. No color-space conversion applies to alpha. Material opacity, vertex alpha, multiple materials and blend materials must be resolved by the caller; this API does not silently approximate them.'
+				],
+				title: 'Coordinate and texture contract'
+			},
+			{
+				description:
+					'cells is a resolution-squared mask: 0 outside the reference hull, 1 open, 2 covered. Rows run from minZ to maxZ; columns from minX to maxX. bounds is [minX, minZ, maxX, maxZ]. footprintArea is the analytic hull area; sampledFootprintArea and sampledCoveredArea expose center-sampling error. coveredArea normalizes the sampled coverage fraction to the analytic hull. gapFraction is the open fraction of sampled hull cells.',
+				details: [
+					'Center sampling can miss thin geometry and small holes. Compare resolutions for your asset; convergence is evidence, not a rigorous error bound. The game asset audit in docs covers all eight canonical trees plus deformed and fallen examples. This does not measure light transmission, rainfall interception, storage capacity, wind deformation, mip-filtered screen coverage, or hydrologic history.'
+				],
+				title: 'Results and accuracy'
+			},
+			{
+				description:
+					"Run this synchronous function in a worker or an offline asset pipeline, never a render loop. It does not mutate input buffers. Transfer owned copies when worker ownership must change; do not detach a renderer's borrowed geometry buffers.",
+				details: [
+					'Limits: 300,000 vertices, 200,000 triangles, 4,194,304 texture texels, resolution 8–1024, finite UV magnitudes at most 1,000,000. Triangle-local bounding rectangles are charged against maxPixelTests (default 50 million, maximum 100 million) before rasterization. The counter is conservative even when union early-outs skip already covered cells. Hull construction sorts indexed vertices; scanline setup walks convex hull edges. These limits bound work and allocation, not wall time. Worker owners should additionally enforce deadlines and cancellation. Malformed, unresolved, degenerate and over-budget inputs throw.'
+				],
+				title: 'Cost and ownership'
+			},
+			{
+				description:
+					'BVM selects Bun 1.4.4+absolute.1 from .bun-version. Run bun install --frozen-lockfile and bun run check:package. bun scripts/audit-game-canopies.ts additionally requires the Hello World checkout and its development asset tooling; see docs/canopy-audit/README.md.',
+				details: [
+					'Licensed under BSL-1.1; see LICENSE for the additional use grant and change date.'
+				],
+				title: 'Development'
+			},
+			{
+				description:
+					'alphaFromRgba(rgba, width, height) copies one alpha byte per RGBA8 texel into an owned Uint8Array. It accepts Uint8Array or Uint8ClampedArray and validates the exact byte length and the same 4,194,304-texel budget before allocation.',
+				details: [
+					'alphaFromImageBitmap(bitmap) reads an already decoded bitmap using a temporary OffscreenCanvas 2D context with willReadFrequently: true. Call it in a worker; it performs synchronous CPU readback wherever it is called. The temporary canvas is released afterward. It does not create a WebGL context, close the input bitmap, or detach any borrowed renderer resource. The caller owns bitmap cleanup. Unsupported runtimes, closed/invalid bitmaps and oversized images fail explicitly. There is no hidden main-thread fallback.',
+					'ImageBitmap supports structured cloning as well as transfer. The browser-worker qualification checks exact alpha values and that closing a cloned worker image leaves its source usable. Transfer only owned copies if using a transfer list. See the HTML ImageBitmap ownership contract and OffscreenCanvas. These helpers prepare raster inputs; they do not assign hydrologic meaning to alpha.'
+				],
+				title: 'Worker-side alpha preparation (0.1.1)'
+			},
+			{
+				description:
+					"closedComponents(positions, indices) splits index-connected closed oriented boundary shells. Coincident coordinates never weld distinct authored vertices. solidPointMembership(positions, indices) prepares a solid-angle classifier that returns inside, outside, or boundary; oriented cavity walls cancel their outer shell's winding inside a void.",
+				details: [
+					'solidComponents(positions, indices, faceOwners, maxTriangleTests?) returns { components, shells, cavities, pointQueries, triangleTests }. Each component contains positions, indices and original sourceTriangles. It preserves separate positive components of the same source, and assigns each inward cavity to the smallest enclosing positive shell of its explicitly declared source. It never infers source identity, takes absolute cavity mass, or uses a convex hull.',
+					"Precondition: each owner's input must be a valid, nonintersecting oriented solid boundary, such as a validated Boolean kernel result. Shells must not touch. Topology checks and all-cavity-vertex containment checks are not a complete triangle-intersection validator; do not use this API to repair arbitrary soups. An outward material island inside an inward cavity remains a separate component. Deterministic order is positive-shell order, followed by each component's cavity shells; provenance follows that same face order (not globally sorted).",
+					'Inputs are Float64 positions, Uint32 indices, and Int16/Uint16 per-face owners. Limits: 100,000 vertices, 200,000 triangles, 128 shells. Prepared point classifiers support up to 20,000 triangles; containment charges every tested outer triangle per cavity vertex, with 2 million tests by default (maximum 8 million). No GPU, Three.js, WASM, or runtime dependencies. All coordinates must share one local frame; point boundary tolerance is 1e-7 coordinate units, winding tolerance 1e-5. Near-degenerate faces, unresolved orientation, missing cavity parents, detected touching/crossing shells and exhausted budgets throw rather than guess.',
+					"Sources: Manifold's oriented boundary representation and Jacobson et al.'s generalized winding numbers."
+				],
+				title: 'Oriented solid boundaries (0.2.0)'
+			},
+			{
+				description:
+					'auditSolidOverlaps(meshes, kernel, maximumQueries = 256) checks solid intersection volumes before physics publication. Supply {create(mesh), intersect(a,b)} using your Boolean backend. Handles implement volume() and delete(); each operation must return a new owned handle. A factory that throws must release any allocation it made before throwing. The audit releases all successfully returned handles on both success and failure, and passes private position/index copies to the kernel. No Boolean engine is bundled or required at runtime.',
+				details: [
+					'The result includes per-mesh oriented volumes, pair indices/intersection volumes, fraction of the smaller solid, query count, bounds skips and maximum input volume round-trip error. Touching/disjoint bounds need no native intersection. Candidate pairs are rebased before construction. Native volume error above 1e-5 or impossible intersection volume rejects; tiny nonzero intersections are reported, not rounded away. The host chooses its material-resolution threshold explicitly.',
+					'Use valid oriented material boundaries, including cavity walls. The API does not repair overlapping shells within one input mesh, assign source ownership, union models, predict extraction clearance or validate dynamic contact penetration. Bounds are not proof of overlap. Limits: 64 meshes, 100,000 total vertices, 200,000 total triangles, and at most 1,024 requested pair queries. A host worker must impose its own lifetime bound on its injected native kernel.'
+				],
+				title: 'Initial material overlap audit (0.3.0)'
+			},
+			{
+				description:
+					'partitionSolidMaterials(meshes, kernel, maximumOperations = 126) implements ordered solid ownership. Cell i is input i minus the union of earlier inputs. The caller explicitly chooses the order; this library does not invent a material priority. Inputs must be valid oriented solid boundaries, including cavity walls.',
+				details: [
+					'Supply {create(mesh), subtract(a,b), union(a,b), mesh(solid)}. Native handles implement volume() and delete(); every construction/operation returns a fresh handle, and failures inside the adapter must clean up allocations not returned. mesh returns Float64 positions and Uint32 indices in the supplied local frame. Return a valid closed boundary, or two empty arrays for an empty solid. The package copies all borrowed arrays and releases native handles on success/failure. At most three native handles are retained at once, including the output of the current operation; previous union/intermediate geometry is promptly released.',
+					'Results include:',
+					'cells: one entry per input, with stable source index, mesh and volume.',
+					'A fully covered source remains an explicitly empty cell.',
+					'exterior: the separate whole-union boundary and volume.',
+					'inputVolumes, authoredVolume, materialVolume, volumeDifference,',
+					'maximumVolumeError and operations. The signed volume difference is not clamped; insignificant negative roundoff can remain.',
+					'Cell walls include internal material interfaces. Do not render every cell wall as exposed material or infer that two touching cells are detached. Exterior face provenance, adjacency, strength, density, fracture surfaces and extraction/physics acceptance remain host concerns. In particular this does not turn an existing positive-overlap attachment graph into a surface-interface graph.',
+					'Limits: 1–64 inputs, 100,000 input vertices/200,000 input triangles, up to 126 Boolean operations, and 200,000 exported vertices/400,000 exported triangles across all cells plus exterior. Native input/output volume and total conservation errors above 1e-5 reject. These are acceptance budgets, not certified geometric error bounds or a proof against a faulty Boolean backend. Topology checks do not detect all geometric self-intersections. Use a cancellable worker: a synchronous backend call cannot be interrupted by an operation counter.',
+					"The implementation uses the set identity C_i = S_i ∖ (S_0 ∪ … ∪ S_(i−1)); its tests use Manifold only as a development dependency. Manifold's documentation describes the native Boolean/volume contract. No Boolean engine is bundled."
+				],
+				title: 'Exclusive material partition (0.4.0)'
+			},
+			{
+				description:
+					"Partition kernels receive create(mesh, sourceIndex). Their mesh(solid) can return origins: {sources: Uint16Array, faces: Uint32Array, reversed: Uint8Array}, one entry per output triangle. These identify a source mesh/triangle and whether subtraction exposed its backside. This is boundary ancestry, distinct from a cell's volume owner. The result copies and verifies this metadata; absent ancestry is explicitly null.",
+				details: [
+					'auditSurfaceOrigins(mesh, origins, sourceMeshes, maximumPlaneDistance = 1e-6) checks every output vertex against its nominated source triangle and verifies winding. Invalid IDs, lengths, orientation, unrelated triangles and exhausted budgets throw. The plane-distance acceptance range is 1e-7 through 1e-5 in the input coordinate units; this is not a certified Boolean error bound. triangleWeights exports the same dominant-plane barycentric interpolation for material attributes, including thin triangles; it rejects off-surface points.',
+					'mergeIndexedMesh(mesh, center, tolerance) reconstructs indexed geometry using an explicit merge map. It never welds nearby vertices by guessed distance. It accepts three Float32 position properties, Uint32 indices and merge arrays, checks finite coordinates/indices/merge displacement, and restores the supplied origin in double precision. This reconstructs topology; use the separate closed boundary/component validators where appropriate.',
+					'For Manifold 3.5.1, the optional @absolutejs/geometry/manifold entry exports createManifoldPartitionKernel(wasm, sourceCount = 64). Pass your initialized module. The optional peer is not imported at runtime and the core entry point does not require Manifold.',
+					"The adapter supplies create/subtract/union/intersect/export, native status checks, original mesh IDs, face IDs and backside flags. It creates fresh IDs for overlap operands when no explicit source index is given. Export now preserves native double-precision positions through getManifoldMesh64(solid), also exported from the optional Manifold entry. A temporary property channel stores exact integer indices into a bounded sidecar captured by Manifold's property callback; the final Float32 property index recovers the original double position. No simplification, proximity welding or tolerance change is used. The temporary native copy is freed.",
+					"getManifoldMesh64 returns owned arrays with interleaved Float64 vertProperties, numProp, triangle indices, explicit merge maps, original IDs, face IDs, run boundaries and per-run reversed flags. Extra property values keep native getMesh export semantics (including transformed normals); only position precision is upgraded. The input solid remains owned and unchanged by the caller. The result is an export record, not an input accepted directly by Manifold's Float32 Mesh API.",
+					'Limits:200,000 triangles,100,000 exported property vertices,16 extra channels, and at most600,000 position callbacks. mergeIndexedMesh accepts Float32 or Float64 position-only buffers and still uses explicit merge ancestry. Core imports remain independent of Manifold.',
+					'createManifoldMesh64(wasm, mesh) imports a position-only mesh with numProp: 3, Float64 vertProperties, Uint32 triVerts, and optional native mesh metadata (such as face IDs and original source runs). The partition adapter uses this helper. It constructs the required Float32 native Mesh, then restores the exact original coordinates via native warp before Boolean operations. It rejects nonfinite coordinates, distinct doubles with the same rounded Float32 position, unknown native vertices, and changes to vertex/triangle counts during import or restoration. Input bounds are 100,000 vertices and 200,000 triangles. Intermediate native handles are released; callers own the returned solid.',
+					'This does not recover coordinates already lost before this call, repair topology, certify self-intersection freedom, or guarantee every thin mesh can pass the native Float32 constructor. Rejections are explicit. Keep precision-sensitive operations native until final export when possible; repeated serialization/rebasing can still introduce slivers at coincident cut faces.',
+					'The ancestry contract does not assign grain across a newly cut face spanning multiple materials, validate a collider, or prove a physical attachment.'
+				],
+				title: 'Boundary ancestry and optional Manifold adapter (0.5.0)'
+			},
+			{
+				description:
+					'principalInertiaFrame(tensor) accepts nine finite numbers containing a symmetric row-major inertia tensor, in any consistent mass/length units. It returns sorted positive principal moments and an {x,y,z,w} unit-quaternion frame mapping principal coordinates into the original coordinates. The bounded double-precision Jacobi solver checks symmetry, physical moment inequalities and reconstruction; it rejects invalid input rather than repairing it. Isotropic/repeated moments may have non-unique physical axes; the returned frame is deterministic for identical input, not a temporally continuous orientation for animations.',
+				details: [
+					"Use the full tensor, including off-diagonal terms. This helper does not integrate mesh mass or validate collisions. When passing explicit mass properties to Rapier, set collision-shape density to zero to avoid adding their mass a second time; unit conversion remains the caller's responsibility. No physics engine is imported.",
+					'Unoriented fibre mixtures',
+					'axialOrientationTensor([{axis: [1, 0, 0], weight: 1}, ...]) returns the second orientation moment as a transferable row-major Float64Array. Directions are normalized and weights are nonnegative. An axis and its negation contribute identically, avoiding cancellation when blending wood, hair or textile fibre axes. All-zero weights, zero axes and invalid input fail explicitly; at most 4096 samples are accepted. Input arrays are never changed. Finite vector and weight scales near the limits of double precision are normalized before accumulation.',
+					'The output is symmetric, positive semidefinite and has trace one. It intentionally does not choose a unique direction for isotropic or conflicting orientations. A second moment discards higher-order distribution information; it is neither a full fibre distribution nor a biological growth, fracture or constitutive model. Use a separate calibrated material model for strength and breaking forces.',
+					'Thin-face membership uses scaled normals and dominant-plane projection. Nonzero faces are not rejected by an absolute area cutoff; exactly collinear boundary faces retain their edges. The existing 1e-7 boundary tolerance and winding checks remain unchanged. This does not make Boolean geometry exact below native feature limits, and does not alter source topology or repair degenerate whole solids.',
+					'Plane-clipped tetrahedron moments',
+					'tetrahedronPlaneMoments(vertices, planePoint, planeNormal) integrates the part of a four-vertex oriented tetrahedron on the side dot(position - planePoint, planeNormal) <= 0. The normal need not be unit length. It returns signed clipped/full volumes, their ratio, a centroid (null for an empty cut), a reference point and signed first moments relative to that reference. Input arrays are borrowed synchronously and never changed. No engine or native allocation is required; work is bounded by four faces and six crossed edges.',
+					"Orientation matters: reversing two vertices reverses signed volume and moments. For a valid closed-solid tetrahedral decomposition, sum signed contributions; do not take each contribution's absolute value. To combine first moments with a common reference r, add firstMoment + signedVolume (reference - r). The helper does not construct or validate that decomposition. Tiny represented wet corners are retained using a shared cut-vertex integration origin, with no absolute volume cutoff. Degenerate or unrepresentable results throw; this is floating-point geometry, not exact predicates. A ratio can exceed one by accepted floating-point roundoff up to 1e-12; no silent clamping repairs the output.",
+					'This measures geometry, not buoyancy or fluid response. A sealed air compartment and an open flooded cavity do not exclude the same water volume; the caller must supply the appropriate physical region. Water-surface curvature, density, force, torque, pressure dynamics and clock ownership are separate responsibilities.',
+					'Prepared plane moments (0.11)',
+					'For repeated cuts of an unchanged body-local tetrahedron, use prepareTetrahedronPlaneMoments(vertices) and call the returned function with (planePoint, planeNormal). Preparation owns a copy of the four vertices and caches plane-independent normalization and full moments. Each query returns the same signed-volume, centroid and relative-first-moment contract as tetrahedronPlaneMoments. Returned arrays can be changed without modifying later queries. Rebuild the prepared query when source geometry changes.',
+					'For moving rigid bodies, transform the plane into body-local coordinates and transform the resulting centroid back. The package does not supply rigid-body forces, water clocks, sealing/flooding rules or a displacement-mesh validity certificate. Signed tetrahedral contributions must retain their orientation.'
+				],
+				title: 'Principal inertia frame'
+			},
+			{
+				description:
+					'regularizeZeroExtentShells(positions, indices) removes only complete disconnected closed shells whose coordinate range is exactly zero on at least one axis. Such shells have no 3D interior. There is no epsilon, near-flat test or volume cutoff; even subnormal nonzero thickness is retained. Non-axis-aligned flat geometry is also retained. This is a narrow certificate for coincident tool-plane artifacts, not general mesh repair or a complete regularized Boolean implementation.',
+				details: [
+					'Results contain owned positions, indices, a retained sourceTriangles map, retainedShells, and removed certificates with axis, coordinate and original face indices. Topology must be closed before processing. Run it in the frame that makes the intended plane exact, before rotating or translating output for display.'
+				],
+				title: 'Exact zero-extent shell regularization'
+			},
+			{
+				description:
+					'createManifoldCutSession(wasm, inputs, maximumCuts?) is available from the optional @absolutejs/geometry/manifold entry. Inputs and cutters are closed oriented meshes in one caller-chosen common frame. The session unions the inputs once and retains the native solid across cuts, avoiding a Float32 import of generated thin triangles between operations. It does not infer a tool frame or snap nearly shared planes.',
+				details: [
+					'Each exported snapshot verifies face ancestry against owned source copies and reports exact zero-extent sheets separately. Failed edits leave the previous native state intact and release pending handles. Physical volume conservation must agree within 1e-8 relative to the pre-cut material. This is geometry acceptance, not collision, grain, canopy, motion or material-strength certification. Callers must keep the worker bounded and explicitly dispose sessions; rendering copies must not be treated as a lossless serialization of native session state.',
+					'Limits: 1–63 initial sources, at most 32 accepted cuts, at most 64 total source IDs, 100,000 source vertices and 200,000 source triangles across all inputs/cutters,',
+					'coordinate — ≤ 1000, and bounded native exports. Default cut budget is the smaller',
+					'of 32 and the remaining source-ID capacity. Snapshot statistics expose native counts, volume/tolerance, exported triangles and removed sheet triangles for host diagnostics. No GPU or engine initialization is performed by this adapter.',
+					'Double import now assigns a unique original face ID per triangle when IDs are omitted. Without this, the native Float32 constructor can merge rounded coplanar faces before restoration; immediate import volume can still match while a later cut changes. Explicit face IDs retain caller semantics.',
+					'Disjoint or merely touching cutter bounds skip native splitting (broadPhaseSkipped). This remains allowed after the accepted-cut quota is full. Empty snapshots report nativeTolerance: null; skipped empty results report nativeEvaluated: false. No near-contact tolerance is introduced by this broad phase.'
+				],
+				title: 'Native cut sessions'
+			},
+			{
+				description:
+					'auditManifoldCoverage(wasm, target, candidates) from the Manifold entry, or session.auditCoverage(candidates), compares candidate cells with actual material components while retaining native target geometry. Results include owned target and component meshes, independent missing/excess volumes, measured cell intersections, cross-body overlap and bounded operation counts. Temporary native objects are always released; standalone callers retain ownership of target.',
+				details: [
+					"Overlapping cells are unioned for coverage, so summed collider volume is not mistaken for physical mass. Cavity walls and nested islands remain separate material components. The API reports geometry evidence; it does not certify convexity, contacts or a game's acceptance policy. Bounds and qualification notes are in docs/native-coverage-2026-10-31/README.md."
+				],
+				title: 'Read-only native coverage'
+			},
+			{
+				description:
+					'prepareTrianglePositiveQuadraticMoments([a, b, c]) owns a finite, nondegenerate triangle and returns a query accepting three scalar values at its vertices. It integrates their affine interpolant s over the portion where s > 0: area, integral = ∫s² dA, cubicIntegral = ∫s³ dA, and relativeFirstMoment = ∫(x-reference)s² dA. meanOffset is the quadratic-weighted point relative to the owned reference, or null for zero pressure. The result also includes full area and the oriented unit surface normal. Returned arrays are owned; mutating them does not affect future queries.',
+				details: [
+					'The query clips in triangle barycentric coordinates and integrates polynomial moments analytically. It does not subdivide into samples, call WASM, infer a drag coefficient, determine exposure to flow, or advance a body. Keeping moments in a relative frame avoids forming a weighted absolute position at large coordinates. Non-finite inputs, degenerate triangles and unrepresentable output powers throw. This is double-precision arithmetic, not an exact-arithmetic geometry kernel.',
+					"An optional second query argument supplies three affine domain values. Integration then includes only points where both pressure scalar and domain scalar are positive. For a horizontal waterline, supply each vertex's depth below the surface as the domain value. This clips wet area exactly before computing the pressure moments; a fully dry domain yields zero moments. Domain boundaries carry no area, and a field that is identically zero is excluded. This remains a flat boundary calculation, not a wave or fluid solver.",
+					'Closed-solid surface queries validate the plane once, then use an internal normalized-plane path for each triangle. Public triangle queries retain their input validation and owned results. Surface flux is accumulated with scalar coordinates to avoid temporary vectors; clipping rules, component ownership, precision guards and summation order are unchanged.'
+				],
+				title: 'Positive quadratic triangle moments'
+			},
+			{
+				description:
+					'prepareTrianglePositiveLinearMoments([a, b, c]) owns the same validated triangle geometry and affine-domain clipping as the quadratic query. Its returned function accepts three finite field values and an optional three-value positive domain. It integrates the positive linear field: integral = integral(s dA) and relativeFirstMoment = integral((x-reference) s dA). meanOffset is the weighted point relative to reference, or null for a zero result. area, fullArea and oriented surfaceNormal are also returned. Every returned array is owned. There is no cubicIntegral on the linear result.',
+				details: [
+					'For hydrostatic pressure, field values may be vertex depths below a waterline, with an explicitly supplied domain describing the exposed region. The math does not decide contact sealing, permeability or fluid connectivity. A caller can assemble force from -normal integral and torque from the first moment, with its own physical coefficient and reference-frame conversion.',
+					'An all-zero domain is empty. Exactly opposed field/domain values are also empty: this is an exact identity at all three vertices, not an epsilon or volume cutoff. Nearby thin positive domains remain integrated. Nonfinite/unrepresentable results reject explicitly. Fully retained domains share the direct polynomial fast path; crossing domains retain analytic clipping without point sampling.',
+					'Bounded surface domains (queued 0.17.0 extension)',
+					"partitionTriangleAffineDomains(triangle, domains, options) partitions a triangle into convex polygons. Each domain is an intersection of affine fields supplied as three values at the input vertices; nonnegative values are inside. Returned reference, relativePositions, barycentric and domains arrays are owned by the result. Positions stay relative to the input triangle origin, avoiding collapse when a small partition sits at a large absolute coordinate. Retain the origin through downstream transforms; adding it prematurely can lose that precision. Domain indices describe each polygon's relative interior; zero-area boundary fragments are not separate cells. An identically zero field includes the full polygon. partitionTriangleBoxDomains supplies the six fields for each axis-aligned box.",
+					'Use the barycentric coordinates for attribute interpolation and fan-triangulate each convex polygon. Defaults limit output to 1,024 cells and 8,192 vertices; explicit limits are checked during partitioning. Invalid input, unrepresentable intersections, area-conservation failure or exhausted budgets throw, without returning partial results. These are bounded double-precision operations, not exact-arithmetic Boolean solid repair. Domain membership is not a proof of solid ownership: applications must establish their own material/volume assumptions.',
+					'For example, the triangle [[0,0,0],[1,0,0],[0,1,0]] and one domain [[[-0.5,0.5,0.5]]] separate the region x+y >= 0.5; its area is 0.375. A positive rescaling of the affine field describes the same domain.',
+					'Repeated source-face interpolation',
+					'prepareTriangleWeights(a, b, c, maximumPlaneDistance?) owns a prepared source triangle and returns a point-query function. Use it when multiple cut vertices share the same source face. It preserves dominant-plane projection, outside-face rejection and the existing projection-distance limits; each result is an owned three-element array. triangleWeights remains the one-shot form. Nonrepresentable geometry or query arithmetic rejects instead of returning nonfinite weights.'
+				],
+				title: 'Positive linear triangle moments'
+			},
+			{
+				description:
+					'prepareUpwardSurface({ positions, indices, cellSize: 4 }) builds an owned XZ spatial index for upward-wound mesh faces. Positions are Float32Array or Float64Array xyz triples; indices are Uint16Array or Uint32Array triangle triples. Coordinates and heights must use the same frame and units. The game can reuse it for terrain support; builders can inspect walkable surfaces or place objects.',
+				details: [
+					"The nearest upward surface is returned, not necessarily the highest surface. Downward ceilings and exactly vertical/degenerate projections are excluded. Equal-distance ties retain input triangle order. No height is extrapolated across missing coverage. maxDistance is inclusive; callers needing a strict threshold can apply it to the result. Optional fifth query argument edgeTolerance (default 1e-8, maximum 1e-4) controls dimensionless barycentric edge tolerance inside indexed cells; it does not expand the index's geometric footprint.",
+					'Preparation retains no input buffers: they may be changed or transferred after preparation. .stats reports triangle/upward-face/cell/reference counts and coefficient bytes (not total JS/Map overhead). Each query reports actual indexed triangle visits. Inputs are capped at 262,144 vertices and 131,072 triangles; maxReferences defaults to 262,144 and cannot exceed 1,048,576. Grid reference expansion is checked before inserting a face, so an enormous face with tiny cells fails rather than silently causing unbounded work. Invalid inputs, unsafe grid coordinates and nonfinite arithmetic throw RangeError. Empty meshes are allowed.',
+					'This module imports no renderer, React or physics engine. A support hit is not a solid-membership result, a contact manifold or proof that a body is balanced. Multiple chunks must be queried in their own coordinate frames; missing neighboring geometry remains unknown. Use repeated sample queries to build application-specific support policies rather than treating a single center hit as whole-object support.'
+				],
+				title: 'Repeated upward surface queries'
+			}
+		],
+		repository: 'https://github.com/absolutejs/geometry',
+		subpackages: [],
+		version: '0.18.0'
+	},
+	{
+		api: [
+			{
+				entryPoint: '@absolutejs/git',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'GitRepositorySchema',
+						signature:
+							'const GitRepositorySchema: import("@sinclair/typebox").TObject<{\n    cloneUrl: import("@sinclair/typebox").TString;\n    defaultBranch: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n    fullName: import("@sinclair/typebox").TString;\n    provider: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"github">, import("@sinclair/typebox").TLiteral<"gitlab">, import("@sinclair/typebox").TLiteral<"bitbucket">, import("@sinclair/typebox").TLiteral<"generic">]>;\n    webUrl: import("@sinclair/typebox").TString;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'GitRevisionSchema',
+						signature:
+							'const GitRevisionSchema: import("@sinclair/typebox").TObject<{\n    commitSha: import("@sinclair/typebox").TString;\n    ref: import("@sinclair/typebox").TString;\n    repository: import("@sinclair/typebox").TObject<{\n        cloneUrl: import("@sinclair/typebox").TString;\n        defaultBranch: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        fullName: import("@sinclair/typebox").TString;\n        provider: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"github">, import("@sinclair/typebox").TLiteral<"gitlab">, import("@sinclair/typebox").TLiteral<"bitbucket">, import("@sinclair/typebox").TLiteral<"generic">]>;\n        webUrl: import("@sinclair/typebox").TString;\n    }>;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'GitPushEventSchema',
+						signature:
+							'const GitPushEventSchema: import("@sinclair/typebox").TObject<{\n    after: import("@sinclair/typebox").TString;\n    before: import("@sinclair/typebox").TString;\n    deleted: import("@sinclair/typebox").TBoolean;\n    deliveryId: import("@sinclair/typebox").TString;\n    forced: import("@sinclair/typebox").TBoolean;\n    pusher: import("@sinclair/typebox").TObject<{\n        email: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n        name: import("@sinclair/typebox").TString;\n    }>;\n    receivedAt: import("@sinclair/typebox").TString;\n    revision: import("@sinclair/typebox").TObject<{\n        commitSha: import("@sinclair/typebox").TString;\n        ref: import("@sinclair/typebox").TString;\n        repository: import("@sinclair/typebox").TObject<{\n            cloneUrl: import("@sinclair/typebox").TString;\n            defaultBranch: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n            fullName: import("@sinclair/typebox").TString;\n            provider: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"github">, import("@sinclair/typebox").TLiteral<"gitlab">, import("@sinclair/typebox").TLiteral<"bit'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'GitPullRequestEventSchema',
+						signature:
+							'const GitPullRequestEventSchema: import("@sinclair/typebox").TObject<{\n    action: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"opened">, import("@sinclair/typebox").TLiteral<"reopened">, import("@sinclair/typebox").TLiteral<"synchronize">, import("@sinclair/typebox").TLiteral<"closed">]>;\n    author: import("@sinclair/typebox").TObject<{\n        login: import("@sinclair/typebox").TString;\n    }>;\n    base: import("@sinclair/typebox").TObject<{\n        commitSha: import("@sinclair/typebox").TString;\n        ref: import("@sinclair/typebox").TString;\n        repository: import("@sinclair/typebox").TObject<{\n            cloneUrl: import("@sinclair/typebox").TString;\n            defaultBranch: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n            fullName: import("@sinclair/typebox").TString;\n            provider: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"github">, import("@sinclair/typebox").TLiteral<"gitlab">, import("@sinclair/typebox").TLiteral<"bitbucket">, import("@sinclair/typebox").TLiteral<"generic">]>;\n            webUrl: import("@sinclair/typebox").TString;\n        }>;\n    }>;\n    '
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'GitProvenanceSchema',
+						signature:
+							'const GitProvenanceSchema: import("@sinclair/typebox").TObject<{\n    commitSha: import("@sinclair/typebox").TString;\n    deliveryId: import("@sinclair/typebox").TString;\n    provider: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"github">, import("@sinclair/typebox").TLiteral<"gitlab">, import("@sinclair/typebox").TLiteral<"bitbucket">, import("@sinclair/typebox").TLiteral<"generic">]>;\n    receivedAt: import("@sinclair/typebox").TString;\n    ref: import("@sinclair/typebox").TString;\n    repository: import("@sinclair/typebox").TString;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitRepository',
+						signature:
+							'type GitRepository = Static<typeof GitRepositorySchema>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitRevision',
+						signature:
+							'type GitRevision = Static<typeof GitRevisionSchema>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitPushEvent',
+						signature:
+							'type GitPushEvent = Static<typeof GitPushEventSchema>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitPullRequestEvent',
+						signature:
+							'type GitPullRequestEvent = Static<typeof GitPullRequestEventSchema>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitProvenance',
+						signature:
+							'type GitProvenance = Static<typeof GitProvenanceSchema>;'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'GitIngestionError',
+						signature: 'class GitIngestionError extends Error {\n}'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'GitAuthorizationError',
+						signature:
+							'class GitAuthorizationError extends GitIngestionError {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseGitRepository',
+						signature:
+							'const parseGitRepository: (value: unknown) => GitRepository;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseGitRevision',
+						signature:
+							'const parseGitRevision: (value: unknown) => GitRevision;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseGitPushEvent',
+						signature:
+							'const parseGitPushEvent: (value: unknown) => GitPushEvent;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseGitPullRequestEvent',
+						signature:
+							'const parseGitPullRequestEvent: (value: unknown) => GitPullRequestEvent;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitAuthorizationPolicy',
+						signature:
+							'type GitAuthorizationPolicy = {\n    allowedRefs?: readonly string[];\n    repository: Pick<GitRepository, "fullName" | "provider">;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'assertGitRevisionAuthorized',
+						signature:
+							'const assertGitRevisionAuthorized: (policy: GitAuthorizationPolicy, revision: GitRevision) => {\n    commitSha: string;\n    ref: string;\n    repository: {\n        defaultBranch?: string | undefined;\n        cloneUrl: string;\n        fullName: string;\n        provider: "github" | "gitlab" | "bitbucket" | "generic";\n        webUrl: string;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'gitIngestionIdempotencyKey',
+						signature:
+							'const gitIngestionIdempotencyKey: (provider: GitRepository["provider"], deliveryId: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'gitProvenanceFor',
+						signature:
+							'const gitProvenanceFor: (event: GitPushEvent) => GitProvenance;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/azure-devops',
+				symbols: [
+					{
+						description: '',
+						kind: 'class',
+						name: 'AzureDevOpsApiError',
+						signature:
+							'class AzureDevOpsApiError extends GitIngestionError {\n    readonly status: number;\n    constructor(message: string, status: number);\n}'
+					},
+					{
+						description:
+							'An Azure DevOps repository, shaped like the others this package returns. id is a GUID string. fullName is organization/project/repository, which is what makes one addressable at all — the same repository name can exist in every project of every organization.',
+						kind: 'type',
+						name: 'AzureDevOpsRepository',
+						signature:
+							'type AzureDevOpsRepository = {\n    cloneUrl: string;\n    defaultBranch: string | null;\n    fullName: string;\n    id: string;\n    organization: string;\n    private: boolean;\n    project: string;\n    webUrl: string;\n};'
+					},
+					{
+						description:
+							'The signed-in user, whose id the organization listing is keyed by.',
+						kind: 'value',
+						name: 'getAzureDevOpsProfile',
+						signature:
+							'const getAzureDevOpsProfile: (options: {\n    accessToken: string;\n    fetch?: Fetch;\n}) => Promise<{\n    displayName: string | null;\n    emailAddress: string | null;\n    id: string;\n}>;'
+					},
+					{
+						description:
+							'The organizations the user belongs to. Served from the identity origin, not dev.azure.com, and keyed by the profile id rather than by "me".',
+						kind: 'value',
+						name: 'listAzureDevOpsOrganizations',
+						signature:
+							'const listAzureDevOpsOrganizations: (options: {\n    accessToken: string;\n    fetch?: Fetch;\n    memberId: string;\n}) => Promise<{\n    id: string;\n    name: string;\n}[]>;'
+					},
+					{
+						description:
+							'Every repository in one organization, across all of its projects.',
+						kind: 'value',
+						name: 'listAzureDevOpsRepositoriesForOrganization',
+						signature:
+							'const listAzureDevOpsRepositoriesForOrganization: (options: {\n    accessToken: string;\n    fetch?: Fetch;\n    organization: string;\n}) => Promise<AzureDevOpsRepository[]>;'
+					},
+					{
+						description:
+							"Every repository the token's owner can reach: organizations first, then each organization's repositories.",
+						kind: 'value',
+						name: 'listAzureDevOpsRepositoriesForUser',
+						signature:
+							'const listAzureDevOpsRepositoriesForUser: (options: {\n    accessToken: string;\n    fetch?: Fetch;\n}) => Promise<AzureDevOpsRepository[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getAzureDevOpsRepository',
+						signature:
+							'const getAzureDevOpsRepository: (options: {\n    accessToken: string;\n    fetch?: Fetch;\n    /** `organization/project/repository`. */\n    fullName: string;\n}) => Promise<AzureDevOpsRepository>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/azure-devops-user',
+				symbols: [
+					{
+						description:
+							"An Azure DevOps repository reached through a customer's own linked account. account is the organization, so a picker can group by it the way it groups the other hosts by owner. The project is not the account: several projects share one organization, and it is already in fullName.",
+						kind: 'type',
+						name: 'AzureDevOpsUserRepository',
+						signature:
+							'type AzureDevOpsUserRepository = AzureDevOpsRepository & {\n    account: {\n        id: string;\n        login: string;\n    };\n    /** Which linked account this was reached through. Not the organization\n     *  above: a customer may have authorized two Entra accounts, and only the\n     *  one that can see a repository can clone it. */\n    linkedAccountId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'AzureDevOpsUserCredentialUnavailableError',
+						signature:
+							'class AzureDevOpsUserCredentialUnavailableError extends GitIngestionError {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createAzureDevOpsUserClient',
+						signature:
+							'const createAzureDevOpsUserClient: (options: {\n    connectorProvider?: string;\n    credentials: LinkedProviderCredentialResolver;\n    fetch?: Fetch;\n    minTokenValidityMs?: number;\n}) => {\n    getAccessToken: (ownerRef: string, externalAccountId?: string) => Promise<string>;\n    getRepository: (ownerRef: string, input: {\n        /** Which linked account to ask. Omitted, every one is asked and the\n         *  first that admits to the repository answers. */\n        externalAccountId?: string;\n        fullName: string;\n    }) => Promise<AzureDevOpsUserRepository>;\n    listRepositories: (ownerRef: string) => Promise<import("./linked-identities").LinkedListing<AzureDevOpsUserRepository>>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/bitbucket',
+				symbols: [
+					{
+						description: '',
+						kind: 'class',
+						name: 'BitbucketApiError',
+						signature:
+							'class BitbucketApiError extends GitIngestionError {\n    readonly status: number;\n    constructor(message: string, status: number);\n}'
+					},
+					{
+						description:
+							'A Bitbucket repository, shaped like the GitHub and GitLab ones this package returns so a consumer can list from any of them without branching on which host it came from. id is a string here, and only here: Bitbucket identifies a repository by a braced UUID rather than a number. defaultBranch is null for a repository with no commits yet, which is a real thing to show rather than an error to throw.',
+						kind: 'type',
+						name: 'BitbucketRepository',
+						signature:
+							'type BitbucketRepository = {\n    cloneUrl: string;\n    defaultBranch: string | null;\n    fullName: string;\n    id: string;\n    private: boolean;\n    webUrl: string;\n    workspace: {\n        slug: string;\n        uuid: string;\n    };\n};'
+					},
+					{
+						description:
+							'The workspaces the token\'s owner belongs to. /2.0/user/workspaces, and not one of the three neighbours you will find recommended: /2.0/workspaces, /2.0/user/permissions/workspaces and /2.0/user/permissions/repositories were all removed with the cross-workspace APIs, and answer 404 "There is no API hosted at this URL" — which reads as a typo rather than a removal. Much of the migration advice written during the deprecation window names the permissions one. Needs the account scope, which repositor',
+						kind: 'value',
+						name: 'listBitbucketWorkspacesForUser',
+						signature:
+							'const listBitbucketWorkspacesForUser: (options: {\n    accessToken: string;\n    baseUrl?: string;\n    fetch?: Fetch;\n}) => Promise<Array<{\n    administrator: boolean;\n    slug: string;\n    uuid: string;\n}>>;'
+					},
+					{
+						description:
+							'The account the token belongs to. Bitbucket identifies an account by an immutable uuid; the username can be changed by its owner, so it is what a person recognises rather than what a stored connection is keyed by. The address is not on this response and needs /2.0/user/emails, a separate scope, so it is deliberately absent. Needs the account scope.',
+						kind: 'value',
+						name: 'getBitbucketUser',
+						signature:
+							'const getBitbucketUser: (options: {\n    accessToken: string;\n    baseUrl?: string;\n    fetch?: Fetch;\n}) => Promise<{\n    displayName: string | null;\n    username: string;\n    uuid: string;\n}>;'
+					},
+					{
+						description:
+							"Every repository the token's owner can reach, across all their workspaces. Two calls deep because Bitbucket removed the flat cross-workspace listing (CHANGE-2770): /2.0/repositories now answers 410 whatever you ask it for, and repositories are only reachable one workspace at a time. The N+1 is the API's shape, not a missed optimisation.",
+						kind: 'value',
+						name: 'listBitbucketRepositoriesForUser',
+						signature:
+							'const listBitbucketRepositoriesForUser: (options: {\n    accessToken: string;\n    baseUrl?: string;\n    fetch?: Fetch;\n}) => Promise<BitbucketRepository[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getBitbucketRepository',
+						signature:
+							'const getBitbucketRepository: (options: {\n    accessToken: string;\n    baseUrl?: string;\n    fetch?: Fetch;\n    /** `workspace/repo_slug`. Bitbucket accepts braced UUIDs in either\n     *  position too, which is what makes this safe to keep after a rename. */\n    fullName: string;\n}) => Promise<BitbucketRepository>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/bitbucket-user',
+				symbols: [
+					{
+						description:
+							"A Bitbucket repository reached through a customer's own linked account. workspace is repeated as account so this and the GitHub and GitLab clients hand back the same shape: a consumer grouping a picker by account should not have to know which host it is talking to. The id is a string because Bitbucket numbers nothing — it is UUIDs all the way down.",
+						kind: 'type',
+						name: 'BitbucketUserRepository',
+						signature:
+							'type BitbucketUserRepository = BitbucketRepository & {\n    account: {\n        id: string;\n        login: string;\n    };\n    /** Which linked account this was reached through. Not the workspace above:\n     *  a customer may have authorized two Bitbucket accounts, and only the one\n     *  that can see a repository can clone it. */\n    linkedAccountId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'BitbucketUserCredentialUnavailableError',
+						signature:
+							'class BitbucketUserCredentialUnavailableError extends GitIngestionError {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBitbucketUserClient',
+						signature:
+							'const createBitbucketUserClient: (options: {\n    /** Where the API lives. Bitbucket Data Center serves the same shape at\n     *  another origin, which is why this is a parameter rather than a\n     *  constant. */\n    baseUrl?: string;\n    credentials: LinkedProviderCredentialResolver;\n    fetch?: Fetch;\n    minTokenValidityMs?: number;\n}) => {\n    getAccessToken: (ownerRef: string, externalAccountId?: string) => Promise<string>;\n    getRepository: (ownerRef: string, input: {\n        /** Which linked account to ask. Omitted, every one is asked and the\n         *  first that admits to the repository answers. */\n        externalAccountId?: string;\n        fullName: string;\n    }) => Promise<BitbucketUserRepository>;\n    listRepositories: (ownerRef: string) => Promise<import("./linked-identities").LinkedListing<BitbucketUserRepository>>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/checkout',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitCheckout',
+						signature:
+							'type GitCheckout = {\n    bytes: number;\n    dispose: () => Promise<void>;\n    files: number;\n    revision: GitRevision;\n    sourceRoot: string;\n};'
+					},
+					{
+						description:
+							'How a host wants to be told who is asking. Almost everyone takes HTTP Basic with the token as the password and their own username beside it. Azure DevOps documents a bearer header for an Entra token instead — Basic with a JWT as the password is widely reported to work there, but it is undocumented, and this is not the place to rely on that.',
+						kind: 'type',
+						name: 'GitCheckoutCredential',
+						signature:
+							'type GitCheckoutCredential = {\n    scheme?: "basic";\n    token: string;\n    username?: string;\n} | {\n    scheme: "bearer";\n    token: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGitCheckout',
+						signature:
+							'const createGitCheckout: (options: {\n    credential?: GitCheckoutCredential;\n    maxBytes?: number;\n    maxFiles?: number;\n    revision: GitRevision;\n    run?: Run;\n    signal?: AbortSignal;\n    temporaryRoot?: string;\n}) => Promise<GitCheckout>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/gitea',
+				symbols: [
+					{
+						description: '',
+						kind: 'class',
+						name: 'GiteaApiError',
+						signature:
+							'class GiteaApiError extends GitIngestionError {\n    readonly status: number;\n    constructor(message: string, status: number);\n}'
+					},
+					{
+						description:
+							'A Gitea repository, shaped like the others this package returns. defaultBranch is null for a repository with no commits yet, which Gitea also flags as empty.',
+						kind: 'type',
+						name: 'GiteaRepository',
+						signature:
+							'type GiteaRepository = {\n    cloneUrl: string;\n    defaultBranch: string | null;\n    fullName: string;\n    id: number;\n    owner: {\n        id: number;\n        login: string;\n    };\n    private: boolean;\n    webUrl: string;\n};'
+					},
+					{
+						description:
+							"The account the token belongs to. Needed for more than display: Gitea authenticates a clone over HTTPS with the account's own login beside the token, so a clone cannot be built from the token alone.",
+						kind: 'value',
+						name: 'getGiteaUser',
+						signature:
+							'const getGiteaUser: (options: {\n    accessToken: string;\n    baseUrl: string;\n    fetch?: Fetch;\n}) => Promise<{\n    email: string | null;\n    fullName: string | null;\n    id: number;\n    login: string;\n}>;'
+					},
+					{
+						description:
+							"Every repository the token's owner can reach, their organisations' included. Unlike Bitbucket this is one call per page and needs no enumeration of owners first.",
+						kind: 'value',
+						name: 'listGiteaRepositoriesForUser',
+						signature:
+							'const listGiteaRepositoriesForUser: (options: {\n    accessToken: string;\n    baseUrl: string;\n    fetch?: Fetch;\n}) => Promise<GiteaRepository[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getGiteaRepository',
+						signature:
+							'const getGiteaRepository: (options: {\n    accessToken: string;\n    baseUrl: string;\n    fetch?: Fetch;\n    /** `owner/repo`. */\n    fullName: string;\n}) => Promise<GiteaRepository>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/gitea-user',
+				symbols: [
+					{
+						description:
+							"A Gitea repository reached through a customer's own linked account. owner is repeated as account so this and the other clients hand back the same shape: a consumer grouping a picker by account should not have to know which host it is talking to.",
+						kind: 'type',
+						name: 'GiteaUserRepository',
+						signature:
+							'type GiteaUserRepository = GiteaRepository & {\n    account: {\n        id: number;\n        login: string;\n    };\n    /** Which linked account this was reached through. Not the owner above: a\n     *  customer may have authorized two accounts on the same instance, and only\n     *  the one that can see a repository can clone it. */\n    linkedAccountId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'GiteaUserCredentialUnavailableError',
+						signature:
+							'class GiteaUserCredentialUnavailableError extends GitIngestionError {\n}'
+					},
+					{
+						description:
+							"Gitea, Forgejo and Codeberg through one client. baseUrl is required rather than defaulted: every deployment of these lives somewhere else, and a default origin would only ever be wrong. connectorProvider is a parameter too, because one deployment may have several of these connected at once — a company's own Gitea and Codeberg, say — and each needs its own credential in the vault.",
+						kind: 'value',
+						name: 'createGiteaUserClient',
+						signature:
+							'const createGiteaUserClient: (options: {\n    baseUrl: string;\n    /** How this instance\'s credential is filed. Defaults to `gitea`, which is\n     *  right when there is only one. */\n    connectorProvider?: string;\n    credentials: LinkedProviderCredentialResolver;\n    fetch?: Fetch;\n    minTokenValidityMs?: number;\n}) => {\n    getAccessToken: (ownerRef: string, externalAccountId?: string) => Promise<string>;\n    getCloneCredential: (ownerRef: string, externalAccountId?: string) => Promise<{\n        token: string;\n        username: string;\n    }>;\n    getRepository: (ownerRef: string, input: {\n        /** Which linked account to ask. Omitted, every one is asked and the\n         *  first that admits to the repository answers. */\n        externalAccountId?: string;\n        fullName: string;\n    }) => Promise<GiteaUserRepository>;\n    listRepositories: (ownerRef: string) => Promise<import("./linked-identities").LinkedListing<GiteaUserRepository>>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/github',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyGitHubWebhookEnvelope',
+						signature:
+							'const verifyGitHubWebhookEnvelope: (options: GitHubWebhookOptions, eventName: string) => {\n    deliveryId: string;\n    payload: Record<string, unknown>;\n    receivedAt: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyGitHubPushWebhook',
+						signature:
+							'const verifyGitHubPushWebhook: (options: GitHubWebhookOptions) => GitPushEvent;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/github-app',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitHubAppInstallation',
+						signature:
+							'type GitHubAppInstallation = {\n    account: {\n        id: number;\n        login: string;\n    };\n    id: number;\n    /**\n     * Where this installation is configured on GitHub -- the page that adds\n     * repositories to it or widens it to all of them.\n     *\n     * Taken from the API rather than assembled, because the path differs by\n     * account type: a personal installation lives under `/settings`, an\n     * organisation\'s under `/organizations/<login>/settings`, and a caller\n     * that guesses gets one of the two wrong.\n     *\n     * Null when the response omits it. It is a link and nothing more, so an\n     * installation that arrives without one is still an installation whose\n     * repositories can be listed and deployed -- refusing the whole listing\n     * over a missing link would cost the customer every repository on every\n     * account to save them one dead anchor.\n     */\n    installationUrl: string | null;\n    repositorySelection: "all" | "selected";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitHubAppRepository',
+						signature:
+							'type GitHubAppRepository = {\n    cloneUrl: string;\n    defaultBranch: string;\n    fullName: string;\n    id: number;\n    private: boolean;\n    webUrl: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitHubAppInstallationToken',
+						signature:
+							'type GitHubAppInstallationToken = {\n    expiresAt: string;\n    token: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'GitHubApiError',
+						signature:
+							'class GitHubApiError extends GitIngestionError {\n    readonly status: number;\n    constructor(message: string, status: number);\n}'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitHubCheckRunConclusion',
+						signature:
+							'type GitHubCheckRunConclusion = "action_required" | "cancelled" | "failure" | "neutral" | "skipped" | "stale" | "success" | "timed_out";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitHubCheckRunStatus',
+						signature:
+							'type GitHubCheckRunStatus = "completed" | "in_progress" | "queued";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitHubCheckRunOutput',
+						signature:
+							'type GitHubCheckRunOutput = {\n    summary: string;\n    text?: string;\n    title: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitHubCheckRun',
+						signature:
+							'type GitHubCheckRun = {\n    conclusion: GitHubCheckRunConclusion | null;\n    htmlUrl: string;\n    id: number;\n    status: GitHubCheckRunStatus;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGitHubCheckRun',
+						signature:
+							'const createGitHubCheckRun: (options: {\n    conclusion?: GitHubCheckRunConclusion;\n    detailsUrl?: string;\n    externalId?: string;\n    fetch?: Fetch;\n    headSha: string;\n    installationToken: string;\n    name: string;\n    output?: GitHubCheckRunOutput;\n    repositoryFullName: string;\n    status: GitHubCheckRunStatus;\n}) => Promise<GitHubCheckRun>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'updateGitHubCheckRun',
+						signature:
+							'const updateGitHubCheckRun: (options: {\n    checkRunId: number;\n    conclusion?: GitHubCheckRunConclusion;\n    detailsUrl?: string;\n    externalId?: string;\n    fetch?: Fetch;\n    installationToken: string;\n    name: string;\n    output?: GitHubCheckRunOutput;\n    repositoryFullName: string;\n    status: GitHubCheckRunStatus;\n}) => Promise<GitHubCheckRun>;'
+					},
+					{
+						description:
+							'One check run on a commit, as a deploy gate reads it.',
+						kind: 'type',
+						name: 'GitHubCommitCheckRun',
+						signature:
+							'type GitHubCommitCheckRun = {\n    /** The GitHub App that owns the run (GitHub Actions, a CI service, ...). */\n    appId: number | null;\n    conclusion: GitHubCheckRunConclusion | null;\n    htmlUrl: string | null;\n    name: string;\n    status: GitHubCheckRunStatus;\n};'
+					},
+					{
+						description:
+							'Every check run on a commit, its latest attempt each, across all pages. Needs an installation token with checks read access.',
+						kind: 'value',
+						name: 'listGitHubCommitCheckRuns',
+						signature:
+							'const listGitHubCommitCheckRuns: (options: {\n    fetch?: Fetch;\n    headSha: string;\n    installationToken: string;\n    repositoryFullName: string;\n}) => Promise<GitHubCommitCheckRun[]>;'
+					},
+					{
+						description:
+							"What a commit's checks say about deploying it: - none: no check run yet (CI may not have started), so keep waiting. - pending: at least one run has not finished. - passed: every run finished as success, neutral or skipped. - failed: every run finished and at least one did not pass. ignoreAppIds leaves out runs a deployer posts itself, which would otherwise wait on the very deploy they report. A failure is only final once nothing is still running, since a re-run may still turn it green.",
+						kind: 'type',
+						name: 'GitHubChecksVerdict',
+						signature:
+							'type GitHubChecksVerdict = {\n    state: "none";\n} | {\n    state: "pending";\n    waitingOn: string[];\n} | {\n    state: "passed";\n    passed: string[];\n} | {\n    failed: string[];\n    state: "failed";\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'gitHubChecksVerdict',
+						signature:
+							'const gitHubChecksVerdict: (runs: readonly GitHubCommitCheckRun[], options?: {\n    ignoreAppIds?: readonly number[];\n}) => GitHubChecksVerdict;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGitHubAppJwt',
+						signature:
+							'const createGitHubAppJwt: (options: {\n    appId: string | number;\n    now?: () => Date;\n    privateKey: string;\n}) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getGitHubAppInstallation',
+						signature:
+							'const getGitHubAppInstallation: (options: {\n    appJwt: string;\n    fetch?: Fetch;\n    installationId: number;\n}) => Promise<GitHubAppInstallation>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGitHubAppInstallationToken',
+						signature:
+							'const createGitHubAppInstallationToken: (options: {\n    appJwt: string;\n    fetch?: Fetch;\n    installationId: number;\n    repositoryIds?: readonly number[];\n}) => Promise<GitHubAppInstallationToken>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'listGitHubAppRepositories',
+						signature:
+							'const listGitHubAppRepositories: (options: {\n    fetch?: Fetch;\n    installationToken: string;\n}) => Promise<GitHubAppRepository[]>;'
+					},
+					{
+						description:
+							'The account a user access token belongs to. Which installations a token can see follows from which account authorized it, so a deployment that stores one token per account has to know which account that is. GitHub answers this for a GitHub App user token as well as for an OAuth one.',
+						kind: 'value',
+						name: 'getGitHubUser',
+						signature:
+							'const getGitHubUser: (options: {\n    fetch?: Fetch;\n    userAccessToken: string;\n}) => Promise<{\n    email: string | null;\n    id: number;\n    login: string;\n    name: string | null;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'listGitHubAppInstallationsForUser',
+						signature:
+							'const listGitHubAppInstallationsForUser: (options: {\n    fetch?: Fetch;\n    userAccessToken: string;\n}) => Promise<GitHubAppInstallation[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'listGitHubAppRepositoriesForUser',
+						signature:
+							'const listGitHubAppRepositoriesForUser: (options: {\n    fetch?: Fetch;\n    installationId: number;\n    userAccessToken: string;\n}) => Promise<GitHubAppRepository[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyGitHubAppPushWebhook',
+						signature:
+							'const verifyGitHubAppPushWebhook: (options: {\n    body: string | Uint8Array;\n    headers: HeaderSource;\n    now?: () => Date;\n    secret: string;\n}) => {\n    event: GitPushEvent;\n    installationId: number;\n    repositoryId: number;\n};'
+					},
+					{
+						description:
+							"A check suite finished on a commit: the moment a deploy gated on the commit's checks can look again. Only completed is accepted; GitHub sends it to every App with checks access on the repository, whoever ran the suite.",
+						kind: 'value',
+						name: 'verifyGitHubAppCheckSuiteWebhook',
+						signature:
+							'const verifyGitHubAppCheckSuiteWebhook: (options: {\n    body: string | Uint8Array;\n    headers: HeaderSource;\n    now?: () => Date;\n    secret: string;\n}) => {\n    deliveryId: string;\n    headSha: string;\n    installationId: number;\n    receivedAt: string;\n    repositoryFullName: string;\n    repositoryId: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyGitHubAppPullRequestWebhook',
+						signature:
+							'const verifyGitHubAppPullRequestWebhook: (options: {\n    body: string | Uint8Array;\n    headers: HeaderSource;\n    now?: () => Date;\n    secret: string;\n}) => {\n    event: GitPullRequestEvent;\n    installationId: number;\n    repositoryId: number;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/github-app-user',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'GitHubAppUserRepository',
+						signature:
+							'type GitHubAppUserRepository = GitHubAppRepository & {\n    account: {\n        id: number;\n        login: string;\n    };\n    installationId: number;\n    /** Which linked account this was reached through. Not the installation\n     *  account above: an installation on an organisation is reachable through\n     *  whichever member authorized, and only that account can list it again. */\n    linkedAccountId: string;\n    /**\n     * What the installation this repository came through was granted: every\n     * repository on the account, or only the ones somebody chose.\n     *\n     * Carried onto each repository because listing flattens the installations\n     * away, and a caller that wants to say "anything you add later will appear"\n     * has nowhere else to learn it from without repeating the installation\n     * call.\n     */\n    repositorySelection: "all" | "selected";\n    /** Where the installation this came through is configured on GitHub, or\n     *  null when the response carried no link. */\n    installationUrl: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'GitHubUserCredentialUnavailableError',
+						signature:
+							'class GitHubUserCredentialUnavailableError extends GitIngestionError {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGitHubAppUserClient',
+						signature:
+							'const createGitHubAppUserClient: (options: {\n    credentials: LinkedProviderCredentialResolver;\n    fetch?: Fetch;\n    minTokenValidityMs?: number;\n}) => {\n    getRepository: (ownerRef: string, input: {\n        installationId: number;\n        repositoryId: number;\n    }) => Promise<{\n        account: {\n            id: number;\n            login: string;\n        };\n        installationId: number;\n        installationUrl: string | null;\n        repositorySelection: "all" | "selected";\n        cloneUrl: string;\n        defaultBranch: string;\n        fullName: string;\n        id: number;\n        private: boolean;\n        webUrl: string;\n    }>;\n    listRepositories: (ownerRef: string) => Promise<LinkedListing<GitHubAppUserRepository>>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/gitlab',
+				symbols: [
+					{
+						description: '',
+						kind: 'class',
+						name: 'GitLabApiError',
+						signature:
+							'class GitLabApiError extends GitIngestionError {\n    readonly status: number;\n    constructor(message: string, status: number);\n}'
+					},
+					{
+						description:
+							'A GitLab project, shaped like the GitHub repository the rest of this package returns, so a consumer can list from either without branching on which host it came from. defaultBranch is nullable because GitLab reports null for a project with no commits yet, and a repository that exists but has nothing in it is a real thing to be shown rather than an error to be thrown.',
+						kind: 'type',
+						name: 'GitLabRepository',
+						signature:
+							'type GitLabRepository = {\n    cloneUrl: string;\n    defaultBranch: string | null;\n    fullName: string;\n    id: number;\n    namespace: {\n        fullPath: string;\n        id: number;\n    };\n    private: boolean;\n    webUrl: string;\n};'
+					},
+					{
+						description:
+							"The account the token belongs to. Same instance, same endpoint whether the token came from gitlab.com or an operator's own GitLab, so a deployment holding several tokens can tell which account each one speaks for.",
+						kind: 'value',
+						name: 'getGitLabUser',
+						signature:
+							'const getGitLabUser: (options: {\n    accessToken: string;\n    baseUrl?: string;\n    fetch?: Fetch;\n}) => Promise<{\n    email: string | null;\n    id: number;\n    name: string | null;\n    username: string;\n}>;'
+					},
+					{
+						description:
+							"Every project the token's owner is a member of, across all their groups.",
+						kind: 'value',
+						name: 'listGitLabProjectsForUser',
+						signature:
+							'const listGitLabProjectsForUser: (options: {\n    accessToken: string;\n    baseUrl?: string;\n    fetch?: Fetch;\n}) => Promise<GitLabRepository[]>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'getGitLabProject',
+						signature:
+							"const getGitLabProject: (options: {\n    accessToken: string;\n    baseUrl?: string;\n    fetch?: Fetch;\n    /** The numeric id, or the project's full path. GitLab accepts a\n     *  URL-encoded `group/subgroup/project` wherever it accepts an id, which is\n     *  what lets a pasted address be resolved without first knowing the id. */\n    projectId: number | string;\n}) => Promise<GitLabRepository>;"
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/gitlab-user',
+				symbols: [
+					{
+						description:
+							"A GitLab project reached through a customer's own linked account. namespace is repeated as account so this and the GitHub App client hand back the same shape: a consumer grouping a picker by account should not have to know which host it is talking to.",
+						kind: 'type',
+						name: 'GitLabUserRepository',
+						signature:
+							'type GitLabUserRepository = GitLabRepository & {\n    account: {\n        id: number;\n        login: string;\n    };\n    /** Which linked account this was reached through. Not the namespace above:\n     *  a customer may have authorized two GitLab accounts, and only the one\n     *  that can see a repository can clone it. */\n    linkedAccountId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'GitLabUserCredentialUnavailableError',
+						signature:
+							'class GitLabUserCredentialUnavailableError extends GitIngestionError {\n}'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createGitLabUserClient',
+						signature:
+							'const createGitLabUserClient: (options: {\n    /** Where the instance lives. Defaults to gitlab.com; a self-managed server\n     *  is the same API at a different origin, which is most of why this is a\n     *  parameter rather than a constant. */\n    baseUrl?: string;\n    credentials: LinkedProviderCredentialResolver;\n    fetch?: Fetch;\n    minTokenValidityMs?: number;\n}) => {\n    getAccessToken: (ownerRef: string, externalAccountId?: string) => Promise<string>;\n    getRepository: (ownerRef: string, input: {\n        /** Which linked account to ask. Omitted, every one is asked and the\n         *  first that admits to the project answers. */\n        externalAccountId?: string;\n        projectId: number | string;\n    }) => Promise<GitLabUserRepository>;\n    listRepositories: (ownerRef: string) => Promise<import("./linked-identities").LinkedListing<GitLabUserRepository>>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/git/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<GitManifestSettings, unknown>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<unknown>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<unknown>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        allowedRefs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>>;\n        provider: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"github">, import("@sinclair/typebox").TLiteral<"gitlab">, import("@sinclair/typebox").TLiteral<"bitbucket">, import("@sinclair/typebox").TLiteral<"generic">]>>;\n        repository: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n    }>;\n});'
+					}
+				]
+			}
+		],
 		category: 'Data & Sync',
 		commands: [
 			{
@@ -31410,7 +36497,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/git',
 		subpackages: [],
-		version: '0.18.0'
+		version: '0.19.0'
 	},
 	{
 		api: [
@@ -31864,14 +36951,15 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'HealthPluginOptions',
 						signature:
-							'type HealthPluginOptions = {\n    checker: HealthChecker;\n    /** Liveness endpoint path. Default `/healthz`. */\n    livenessPath?: string;\n    /** Readiness endpoint path. Default `/readyz`. */\n    readinessPath?: string;\n    /** Inject a fake Elysia (tests). */\n    makeElysia?: () => ElysiaLike;\n};'
+							'type HealthPluginOptions<LivenessPath extends string = string, ReadinessPath extends string = string> = {\n    checker: HealthChecker;\n    /** Liveness endpoint path. Default `/healthz`. */\n    livenessPath?: LivenessPath;\n    /** Readiness endpoint path. Default `/readyz`. */\n    readinessPath?: ReadinessPath;\n};'
 					},
 					{
-						description: '',
+						description:
+							'A real, typed Elysia plugin; importing the checker alone does not load Elysia.',
 						kind: 'value',
 						name: 'healthPlugin',
 						signature:
-							'const healthPlugin: (options: HealthPluginOptions) => Promise<ElysiaLike>;'
+							'const healthPlugin: <const LivenessPath extends string = "/healthz", const ReadinessPath extends string = "/readyz">(options: HealthPluginOptions<LivenessPath, ReadinessPath>) => Promise<import("elysia/types").AddRoute<"", "local", import("elysia").DefaultSingleton, {\n    typebox: {};\n    error: [];\n}, import("elysia").DefaultMetadata, {} & (string extends LivenessPath | "/healthz" ? {} : {\n    healthz: {\n        get: {\n            body: unknown;\n            params: import("elysia/types").IsNever<keyof import("elysia/types").IntersectIfObject<{} | import("elysia/types").ResolvePath<import("elysia/types").JoinPath<"", LivenessPath>>, unknown>> extends true ? {} | import("elysia/types").ResolvePath<LivenessPath> : import("elysia/types").IntersectIfObject<{} | import("elysia/types").ResolvePath<import("elysia/types").JoinPath<"", LivenessPath>>, unknown>;\n            query: unknown;\n            headers: unknown;\n            response: import("elysia/types").UnionResponseStatus<import("elysia/types").UnionResponseStatus<{ [K_1 in keyof ({} extends {} & ((undefined extends import("elysia/types").IntersectIfObject<{} | import("elysia/types").ResolvePath<import("elysia/types").JoinPath<"",'
 					}
 				]
 			},
@@ -31896,7 +36984,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'build'
 			},
 			{
-				command: 'bun run typecheck && bun run build && bun run test',
+				command:
+					'bun run typecheck && bun run build && bun run test && absolute-changelog check',
 				name: 'check:package'
 			},
 			{
@@ -32007,7 +37096,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/health',
 		subpackages: [],
-		version: '0.4.0'
+		version: '0.5.0'
 	},
 	{
 		api: [
@@ -33902,6 +38991,66 @@ export const ecosystemProjects: EcosystemProject[] = [
 	},
 	{
 		api: [],
+		category: 'Platform & Infra',
+		commands: [
+			{
+				command:
+					'bun build src/index.ts --target=browser --outdir dist && tsc --emitDeclarationOnly',
+				name: 'build'
+			},
+			{
+				command: 'bun run typecheck && bun run test && bun run build',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test',
+				name: 'test'
+			},
+			{
+				command: 'tsc --noEmit',
+				name: 'typecheck'
+			}
+		],
+		description:
+			'Explicit maintenance and developer holds with safe public responses and audited transitions.',
+		directory: 'maintenance',
+		kind: 'package',
+		name: 'Maintenance',
+		packageName: '@absolutejs/maintenance',
+		private: false,
+		publicExports: ['@absolutejs/maintenance'],
+		readmeDigest:
+			'38271eb5bb8bbbac2e95bf3d8229d525edb3d40f4bc4857b3c4685ba84d8b6c5',
+		readmeSamples: [
+			{
+				code: "import { availabilityResponse } from '@absolutejs/maintenance';\nconst blocked = availabilityResponse(request, persistedState, {\n  serviceName: 'Your service',\n  contactUrl: 'https://example.com/support',\n});\nif (blocked) return blocked;\nreturn application.fetch(request);",
+				description: '# @absolutejs/maintenance',
+				heading: '@absolutejs/maintenance quick start',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Explicit service availability for planned maintenance and developer-authorized holds. Framework-independent Web Request/Response functions plus self-contained light/dark HTML for a reverse proxy, so visitors still see a useful page when the app is stopped.',
+				details: [
+					'open: normal routing.',
+					'maintenance: HTTP 503 with Retry-After and an optional estimated return time. An estimate never reopens traffic automatically.',
+					'developer_hold: HTTP 503 with a neutral contact-the-developer message. Only an explicitly authorized transition can activate or lift it. No billing, contract interpretation, telemetry, or error rule activates a hold.',
+					'transitionAvailability requires host authorization and an audit callback. It validates revisions and returns an immutable next state only after both succeed. The host must serialize and persist with compare-and-swap; this function alone is not a database transaction or authentication system. Do not expose it as an unauthenticated endpoint. Private reasons and actor IDs never enter public responses.',
+					"Validate persisted input using parseAvailabilityState; invalid state throws instead of opening traffic. Hosts should retain the last valid state and alert an operator on storage failure. There are no header, query, admin-path or health-path bypasses. Keep operational probes on a separate authenticated or loopback listener and explicitly preserve provider webhook delivery according to the application's retry contract.",
+					'renderAvailabilityPage(state, publicConfig) creates standalone HTML with no external fonts, scripts or image dependency. At a reverse proxy, return 503, no-store, and Retry-After for maintenance; simply serving this file with 200 is incorrect. Never use the public page as the queue-draining mechanism: first block new work, fence claims, let active jobs finish, verify health, then explicitly reopen traffic. Keep rollback and an operator-controlled recovery path available.',
+					'This package does not terminate jobs, release credit holds, send messages, or decide whether a contract was breached. Deployments must not automatically lift a developer hold.'
+				],
+				title: 'Overview'
+			}
+		],
+		repository: 'https://github.com/absolutejs/maintenance',
+		subpackages: [],
+		version: '0.1.0'
+	},
+	{
+		api: [],
 		category: 'AI',
 		commands: [
 			{
@@ -34207,7 +39356,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'build'
 			},
 			{
-				command: 'bun run typecheck && bun run test && bun run build',
+				command:
+					'bun run typecheck && bun run test && bun run build && absolute-changelog check',
 				name: 'check:package'
 			},
 			{
@@ -34263,7 +39413,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/marketplace',
 		subpackages: [],
-		version: '0.1.7'
+		version: '0.1.8'
 	},
 	{
 		api: [
@@ -35057,6 +40207,22 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'export',
 						name: 'ActionJob',
 						signature: 'type ActionJob'
+					},
+					{
+						description:
+							'Keep complete presentation state out of model context. The compact model data must include outcomes, blockers and authorized retrieval references. This is projection, not truncation; callers decide which facts the model needs.',
+						kind: 'value',
+						name: 'createMcpAppResult',
+						signature:
+							'const createMcpAppResult: (input: {\n    model: Record<string, unknown>;\n    view: Record<string, unknown>;\n    text?: string;\n    isError?: boolean;\n    meta?: Record<string, unknown>;\n}) => McpToolResult;'
+					},
+					{
+						description:
+							'Read the full host-only view, accepting older results during rolling upgrades.',
+						kind: 'value',
+						name: 'readMcpAppView',
+						signature:
+							'const readMcpAppView: (result: unknown) => Record<string, unknown> | undefined;'
 					}
 				]
 			},
@@ -35111,7 +40277,22 @@ export const ecosystemProjects: EcosystemProject[] = [
 				symbols: [
 					{
 						description:
-							'Local device-flow client. Token files are private to the OS user and never returned by begin/poll/status. An exclusive directory lock serializes refresh rotation across AI sessions; interrupted locks fail closed, never replay a possibly consumed refresh token. No request/response bodies are logged.',
+							'What went wrong, for a caller deciding whether to retry or sign in again.',
+						kind: 'type',
+						name: 'LocalMcpAuthErrorCode',
+						signature:
+							'type LocalMcpAuthErrorCode = "AUTH_BUSY" | "AUTH_REFRESH_UNCERTAIN" | "AUTH_REQUIRED" | "AUTH_STORAGE" | "AUTH_UNAVAILABLE";'
+					},
+					{
+						description: '',
+						kind: 'class',
+						name: 'LocalMcpAuthError',
+						signature:
+							'class LocalMcpAuthError extends Error {\n    readonly code: LocalMcpAuthErrorCode;\n    constructor(code: LocalMcpAuthErrorCode, message: string);\n}'
+					},
+					{
+						description:
+							'Local device-flow client. Token files are private to the OS user and never returned by begin/poll/status. An exclusive directory lock serializes refresh rotation and device polling across AI sessions, and the pending device sign-in is stored so any session can finish it. A refresh moves the token file to a journal before network I/O: a refresh that provably never left the machine restores it, any other ambiguous outcome fails closed and never replays a possibly consumed refresh token. No request',
 						kind: 'function',
 						name: 'createLocalMcpAuthorization',
 						signature:
@@ -35174,7 +40355,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/mcp/local-auth'
 		],
 		readmeDigest:
-			'f298c1bc0422486a127bfd2587d087e3ee3ea3a01a2914948a31e543d0eea5a8',
+			'52dbbe6648010e5eeea2c30d22449faff5dc0b706d24281f76cfb7f3fae06620',
 		readmeSamples: [
 			{
 				code: 'import { Elysia } from "elysia";\nimport { mcpServer, verifyBearer } from "@absolutejs/mcp";\nimport { verifyJwt } from "@absolutejs/auth"; // or any JWT verifier\n\ntype Caller = { userId: string };\n\nconst server = new Elysia().use(\n  mcpServer<Caller>({\n    path: "/mcp",\n    issuer: "https://your.app",\n    serverInfo: { name: "your-app", title: "Your App", version: "1.0.0" },\n    instructions: "What the model should know about this server.",\n    scopesSupported: ["openid", "mcp"],\n    serveRootMetadata: true,\n\n    // You decide who is allowed in. verifyBearer does the standard OAuth\n    // access-token checks; add your own (billing, role, MFA) on top.\n    authorize: async (request) => {\n      const token = await verifyBearer({\n        audience: "https://your.app/mcp",\n        request,\n        issuer: "https://your.app",\n        requiredScope: "mcp",\n        verify: (jwt) => verifyJwt(jwt, publicJwk),\n      });\n      if ("error" in token) return { ok: false, reason: token.error };\n      return { ok: true, caller: { userId: token.subject } };\n    },\n\n    // Called once per request; build the tools for this caller.\n    tools: ({ caller }) => buildToolsFor(caller.userId),\n  }),\n);',
@@ -35331,7 +40512,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/mcp',
 		subpackages: [],
-		version: '0.30.0'
+		version: '0.31.2'
 	},
 	{
 		api: [
@@ -37696,12 +42877,686 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.3.1'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/partnership',
+				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'AIMessage',
+						signature: 'AIMessage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GenerateObject',
+						signature: 'GenerateObject'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'GenerateObjectRequest',
+						signature: 'GenerateObjectRequest'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PartnershipContext',
+						signature: 'PartnershipContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResearchContext',
+						signature: 'ResearchContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ResearchFn',
+						signature: 'ResearchFn'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'scoreTrustFit',
+						signature: 'scoreTrustFit'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrustFitDimensions',
+						signature: 'type TrustFitDimensions'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrustFitInput',
+						signature: 'type TrustFitInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrustFitMember',
+						signature: 'type TrustFitMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrustFitPartner',
+						signature: 'type TrustFitPartner'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrustFitReasons',
+						signature: 'type TrustFitReasons'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'TrustFitResult',
+						signature: 'type TrustFitResult'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'classifyRelationship',
+						signature: 'classifyRelationship'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_RELATIONSHIP_TYPES',
+						signature: 'DEFAULT_RELATIONSHIP_TYPES'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ClassifyCompany',
+						signature: 'type ClassifyCompany'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ClassifyInput',
+						signature: 'type ClassifyInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ClassifyMember',
+						signature: 'type ClassifyMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RelationshipClassification',
+						signature: 'type RelationshipClassification'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RelationshipType',
+						signature: 'type RelationshipType'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'frameConnection',
+						signature: 'frameConnection'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionFraming',
+						signature: 'type ConnectionFraming'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionInput',
+						signature: 'type ConnectionInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionMember',
+						signature: 'type ConnectionMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ConnectionPerson',
+						signature: 'type ConnectionPerson'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'verifyPartner',
+						signature: 'verifyPartner'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationContext',
+						signature: 'type VerificationContext'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerificationDossier',
+						signature: 'type VerificationDossier'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerifyInput',
+						signature: 'type VerifyInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerifyMember',
+						signature: 'type VerifyMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerifyPartner',
+						signature: 'type VerifyPartner'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'VerifyPartnership',
+						signature: 'type VerifyPartnership'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateMeetingPrep',
+						signature: 'generateMeetingPrep'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MeetingPrepBrief',
+						signature: 'type MeetingPrepBrief'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MeetingPrepInput',
+						signature: 'type MeetingPrepInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MeetingPrepMember',
+						signature: 'type MeetingPrepMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MeetingPrepPartner',
+						signature: 'type MeetingPrepPartner'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MeetingPrepPartnership',
+						signature: 'type MeetingPrepPartnership'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'analyzeCompetitor',
+						signature: 'analyzeCompetitor'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CompetitorAnalysis',
+						signature: 'type CompetitorAnalysis'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CompetitorCompany',
+						signature: 'type CompetitorCompany'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CompetitorInput',
+						signature: 'type CompetitorInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'CompetitorMember',
+						signature: 'type CompetitorMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'draftOutreach',
+						signature: 'draftOutreach'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OutreachBounds',
+						signature: 'type OutreachBounds'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OutreachDraft',
+						signature: 'type OutreachDraft'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OutreachInput',
+						signature: 'type OutreachInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OutreachMatchFacts',
+						signature: 'type OutreachMatchFacts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OutreachMode',
+						signature: 'type OutreachMode'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'OutreachProfileFacts',
+						signature: 'type OutreachProfileFacts'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateNudges',
+						signature: 'generateNudges'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NudgeMember',
+						signature: 'type NudgeMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NudgePerson',
+						signature: 'type NudgePerson'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'NudgeSuggestion',
+						signature: 'type NudgeSuggestion'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DEFAULT_RENEWAL_VERDICTS',
+						signature: 'DEFAULT_RENEWAL_VERDICTS'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateAmplificationPlan',
+						signature: 'generateAmplificationPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateDealStructure',
+						signature: 'generateDealStructure'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateExitPlan',
+						signature: 'generateExitPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateLaunchPlan',
+						signature: 'generateLaunchPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateMaturationPlan',
+						signature: 'generateMaturationPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'generateRenewalPlan',
+						signature: 'generateRenewalPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AmplificationPlan',
+						signature: 'type AmplificationPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AmplificationPlanInput',
+						signature: 'type AmplificationPlanInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DealStructureInput',
+						signature: 'type DealStructureInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DealStructurePlan',
+						signature: 'type DealStructurePlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ExitPlan',
+						signature: 'type ExitPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'ExitPlanInput',
+						signature: 'type ExitPlanInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LaunchPlan',
+						signature: 'type LaunchPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'LaunchPlanInput',
+						signature: 'type LaunchPlanInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MaturationPlan',
+						signature: 'type MaturationPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'MaturationPlanInput',
+						signature: 'type MaturationPlanInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PlannerEconomics',
+						signature: 'type PlannerEconomics'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PlannerMember',
+						signature: 'type PlannerMember'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'PlannerPartner',
+						signature: 'type PlannerPartner'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RenewalPlan',
+						signature: 'type RenewalPlan'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RenewalPlanInput',
+						signature: 'type RenewalPlanInput'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RenewalVerdict',
+						signature: 'type RenewalVerdict'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'redlineDeal',
+						signature: 'redlineDeal'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'DealRedline',
+						signature: 'type DealRedline'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RedlineInput',
+						signature: 'type RedlineInput'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/partnership/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<ResearchContext, ResearchContext>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<ResearchContext>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<ResearchContext>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        model: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n    }>;\n});'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/partnership/revenue',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'RevenueEvidenceSchema',
+						signature:
+							'const RevenueEvidenceSchema: z.ZodObject<{\n    basis: z.ZodEnum<{\n        documented: "documented";\n        client_reported: "client_reported";\n        provider_estimate: "provider_estimate";\n    }>;\n    sourceUrl: z.ZodOptional<z.ZodURL>;\n    sourceTitle: z.ZodString;\n    quote: z.ZodString;\n    observedAt: z.ZodISODateTime;\n    period: z.ZodOptional<z.ZodString>;\n    confidence: z.ZodEnum<{\n        high: "high";\n        medium: "medium";\n        low: "low";\n    }>;\n}, z.core.$strip>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'RevenueAmountSchema',
+						signature:
+							'const RevenueAmountSchema: z.ZodObject<{\n    amount: z.ZodNumber;\n    currency: z.ZodString;\n    period: z.ZodEnum<{\n        month: "month";\n        year: "year";\n    }>;\n    unit: z.ZodEnum<{\n        company: "company";\n        seat: "seat";\n        customer: "customer";\n    }>;\n    pricingModel: z.ZodOptional<z.ZodEnum<{\n        recurring: "recurring";\n        annual_customer_value: "annual_customer_value";\n    }>>;\n    evidence: z.ZodObject<{\n        basis: z.ZodEnum<{\n            documented: "documented";\n            client_reported: "client_reported";\n            provider_estimate: "provider_estimate";\n        }>;\n        sourceUrl: z.ZodOptional<z.ZodURL>;\n        sourceTitle: z.ZodString;\n        quote: z.ZodString;\n        observedAt: z.ZodISODateTime;\n        period: z.ZodOptional<z.ZodString>;\n        confidence: z.ZodEnum<{\n            high: "high";\n            medium: "medium";\n            low: "low";\n        }>;\n    }, z.core.$strip>;\n}, z.core.$strip>;'
+					},
+					{
+						description:
+							'Structured provider data retained even when pricing cannot support a calculation.',
+						kind: 'value',
+						name: 'CompanyRevenueObservationSchema',
+						signature:
+							'const CompanyRevenueObservationSchema: z.ZodObject<{\n    provider: z.ZodString;\n    providerRecordId: z.ZodNullable<z.ZodString>;\n    domain: z.ZodString;\n    amount: z.ZodNullable<z.ZodNumber>;\n    display: z.ZodNullable<z.ZodString>;\n    currency: z.ZodNullable<z.ZodString>;\n    observedAt: z.ZodISODateTime;\n    basis: z.ZodLiteral<"provider_estimate">;\n}, z.core.$strip>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CompanyRevenueObservation',
+						signature:
+							'type CompanyRevenueObservation = z.infer<typeof CompanyRevenueObservationSchema>;'
+					},
+					{
+						description:
+							'Source-attributed company context; never an implicit calculation input.',
+						kind: 'value',
+						name: 'CompanyProfileObservationSchema',
+						signature:
+							'const CompanyProfileObservationSchema: z.ZodObject<{\n    provider: z.ZodString;\n    providerRecordId: z.ZodNullable<z.ZodString>;\n    domain: z.ZodString;\n    sourceUrl: z.ZodOptional<z.ZodURL>;\n    observedAt: z.ZodISODateTime;\n    facts: z.ZodArray<z.ZodObject<{\n        label: z.ZodString;\n        value: z.ZodString;\n    }, z.core.$strip>>;\n}, z.core.$strip>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CompanyProfileObservation',
+						signature:
+							'type CompanyProfileObservation = z.infer<typeof CompanyProfileObservationSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'PartnerRevenuePipelineInputSchema',
+						signature:
+							'const PartnerRevenuePipelineInputSchema: z.ZodObject<{\n    researchCoverage: z.ZodOptional<z.ZodObject<{\n        status: z.ZodEnum<{\n            not_started: "not_started";\n            checked_sources: "checked_sources";\n            incomplete: "incomplete";\n            failed: "failed";\n        }>;\n        sources: z.ZodArray<z.ZodObject<{\n            url: z.ZodURL;\n            title: z.ZodString;\n        }, z.core.$strip>>;\n        limitations: z.ZodArray<z.ZodString>;\n    }, z.core.$strip>>;\n    observations: z.ZodOptional<z.ZodArray<z.ZodObject<{\n        kind: z.ZodEnum<{\n            revenue: "revenue";\n            pricing: "pricing";\n            financial_context: "financial_context";\n        }>;\n        scope: z.ZodEnum<{\n            partner_site: "partner_site";\n            client_site: "client_site";\n            external_source: "external_source";\n        }>;\n        quote: z.ZodString;\n        sourceUrl: z.ZodURL;\n        sourceTitle: z.ZodString;\n        observedAt: z.ZodISODateTime;\n    }, z.core.$strip>>>;\n    companyRevenue: z.ZodOptional<z.ZodObject<{\n        provider: z.ZodString;\n        providerRecordId: z.ZodNullable<z.ZodString>;\n        domain: z.ZodString;\n    '
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RevenueEvidence',
+						signature:
+							'type RevenueEvidence = z.infer<typeof RevenueEvidenceSchema>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RevenueAmount',
+						signature:
+							'type RevenueAmount = z.infer<typeof RevenueAmountSchema>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PartnerRevenuePipelineInput',
+						signature:
+							'type PartnerRevenuePipelineInput = z.infer<typeof PartnerRevenuePipelineInputSchema>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'PartnerRevenuePipeline',
+						signature:
+							'type PartnerRevenuePipeline = {\n    researchCoverage?: RevenueResearchCoverage;\n    observations?: FinancialObservation[];\n    companyRevenue?: CompanyRevenueObservation;\n    companyProfile?: CompanyProfileObservation;\n    status: "available" | "unavailable";\n    customerEquivalents: number | null;\n    potentialPartnerRevenue: number | null;\n    currency: string | null;\n    annualPartnerRevenue: number | null;\n    annualPartnerPricing: number | null;\n    annualClientPricing: number | null;\n    confidence: "high" | "medium" | "low" | null;\n    limitations: string[];\n    assumptions: string[];\n    inputs: PartnerRevenuePipelineInput;\n};'
+					},
+					{
+						description:
+							'A deterministic, theoretical 100%-conversion opportunity, never a forecast.',
+						kind: 'value',
+						name: 'calculatePartnerRevenuePipeline',
+						signature:
+							'const calculatePartnerRevenuePipeline: (original: PartnerRevenuePipelineInput) => PartnerRevenuePipeline;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RevenuePipelineResearchInput',
+						signature:
+							'type RevenuePipelineResearchInput = {\n    partnerName: string;\n    partnerWebsite?: string;\n    clientName?: string;\n    clientWebsite?: string;\n    clientPricing?: RevenueAmount | null;\n};'
+					},
+					{
+						description:
+							'Inject Brave-backed research through the normal metered ResearchContext.',
+						kind: 'value',
+						name: 'researchPartnerRevenuePipeline',
+						signature:
+							'const researchPartnerRevenuePipeline: (input: RevenuePipelineResearchInput, ctx: ResearchContext) => Promise<PartnerRevenuePipeline>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'PartnerRevenuePipelineSchema',
+						signature:
+							'const PartnerRevenuePipelineSchema: z.ZodObject<{\n    researchCoverage: z.ZodOptional<z.ZodObject<{\n        status: z.ZodEnum<{\n            not_started: "not_started";\n            checked_sources: "checked_sources";\n            incomplete: "incomplete";\n            failed: "failed";\n        }>;\n        sources: z.ZodArray<z.ZodObject<{\n            url: z.ZodURL;\n            title: z.ZodString;\n        }, z.core.$strip>>;\n        limitations: z.ZodArray<z.ZodString>;\n    }, z.core.$strip>>;\n    observations: z.ZodOptional<z.ZodArray<z.ZodObject<{\n        kind: z.ZodEnum<{\n            revenue: "revenue";\n            pricing: "pricing";\n            financial_context: "financial_context";\n        }>;\n        scope: z.ZodEnum<{\n            partner_site: "partner_site";\n            client_site: "client_site";\n            external_source: "external_source";\n        }>;\n        quote: z.ZodString;\n        sourceUrl: z.ZodURL;\n        sourceTitle: z.ZodString;\n        observedAt: z.ZodISODateTime;\n    }, z.core.$strip>>>;\n    companyRevenue: z.ZodOptional<z.ZodObject<{\n        provider: z.ZodString;\n        providerRecordId: z.ZodNullable<z.ZodString>;\n        domain: z.ZodString;\n        a'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'revenueAmountSchema',
+						signature:
+							'const revenueAmountSchema: z.ZodObject<{\n    amount: z.ZodNumber;\n    currency: z.ZodString;\n    period: z.ZodEnum<{\n        month: "month";\n        year: "year";\n    }>;\n    unit: z.ZodEnum<{\n        company: "company";\n        seat: "seat";\n        customer: "customer";\n    }>;\n    pricingModel: z.ZodOptional<z.ZodEnum<{\n        recurring: "recurring";\n        annual_customer_value: "annual_customer_value";\n    }>>;\n    evidence: z.ZodObject<{\n        basis: z.ZodEnum<{\n            documented: "documented";\n            client_reported: "client_reported";\n            provider_estimate: "provider_estimate";\n        }>;\n        sourceUrl: z.ZodOptional<z.ZodURL>;\n        sourceTitle: z.ZodString;\n        quote: z.ZodString;\n        observedAt: z.ZodISODateTime;\n        period: z.ZodOptional<z.ZodString>;\n        confidence: z.ZodEnum<{\n            high: "high";\n            medium: "medium";\n            low: "low";\n        }>;\n    }, z.core.$strip>;\n}, z.core.$strip>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'partnerRevenuePipelineSchema',
+						signature:
+							'const partnerRevenuePipelineSchema: z.ZodObject<{\n    researchCoverage: z.ZodOptional<z.ZodObject<{\n        status: z.ZodEnum<{\n            not_started: "not_started";\n            checked_sources: "checked_sources";\n            incomplete: "incomplete";\n            failed: "failed";\n        }>;\n        sources: z.ZodArray<z.ZodObject<{\n            url: z.ZodURL;\n            title: z.ZodString;\n        }, z.core.$strip>>;\n        limitations: z.ZodArray<z.ZodString>;\n    }, z.core.$strip>>;\n    observations: z.ZodOptional<z.ZodArray<z.ZodObject<{\n        kind: z.ZodEnum<{\n            revenue: "revenue";\n            pricing: "pricing";\n            financial_context: "financial_context";\n        }>;\n        scope: z.ZodEnum<{\n            partner_site: "partner_site";\n            client_site: "client_site";\n            external_source: "external_source";\n        }>;\n        quote: z.ZodString;\n        sourceUrl: z.ZodURL;\n        sourceTitle: z.ZodString;\n        observedAt: z.ZodISODateTime;\n    }, z.core.$strip>>>;\n    companyRevenue: z.ZodOptional<z.ZodObject<{\n        provider: z.ZodString;\n        providerRecordId: z.ZodNullable<z.ZodString>;\n        domain: z.ZodString;\n        a'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'collectFinancialObservations',
+						signature: 'collectFinancialObservations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FinancialObservationSchema',
+						signature: 'FinancialObservationSchema'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'uniqueFinancialObservations',
+						signature: 'uniqueFinancialObservations'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'FinancialObservation',
+						signature: 'type FinancialObservation'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RevenueResearchCoverageSchema',
+						signature: 'RevenueResearchCoverageSchema'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'revenueResearchCoverage',
+						signature: 'revenueResearchCoverage'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'partnerRevenueResearchQueries',
+						signature: 'partnerRevenueResearchQueries'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'RevenueResearchCoverage',
+						signature: 'type RevenueResearchCoverage'
+					}
+				]
+			}
+		],
 		category: 'Commerce & Growth',
 		commands: [
 			{
 				command:
-					'rm -rf dist && bun build src/index.ts src/manifest.ts --outdir dist --root ./src --target=bun --external zod && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
+					'rm -rf dist && bun build src/index.ts src/manifest.ts src/revenuePipeline.ts --outdir dist --root ./src --target=bun --external zod && tsc --emitDeclarationOnly --project tsconfig.json && absolute-manifest emit',
 				name: 'build'
 			},
 			{
@@ -37727,10 +43582,11 @@ export const ecosystemProjects: EcosystemProject[] = [
 		publicExports: [
 			'@absolutejs/partnership',
 			'@absolutejs/partnership/manifest',
-			'@absolutejs/partnership/manifest.json'
+			'@absolutejs/partnership/manifest.json',
+			'@absolutejs/partnership/revenue'
 		],
 		readmeDigest:
-			'18fc5387883c5999956099bdecbdc49bd53f117c378450bd332d68cdf0ea44f1',
+			'75c1ebe640ccf9dc46214b5085b48c144b839624b87951243162b61c25281e6a',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/partnership',
@@ -37791,14 +43647,25 @@ export const ecosystemProjects: EcosystemProject[] = [
 				description:
 					'ResearchFn accepts structured research alongside legacy string | null. Verification, competitor analysis and meeting preparation retain researchStatus, sources, findings and limitations. researchedAt is empty when source-bound research was unavailable; generatedAt is always generation time. Existing string research remains explicitly unverified.',
 				details: [
-					"Structured research invokes a separate researchEvidenceReview generation through the host's generateObject, which must be budgeted and metered like the initial synthesis. fieldEvidence binds reviewed output paths to exact source excerpts, supplied input, proposed assessments or unresolved facts. Unsupported factual text becomes unresolved, and corporate affiliations are removed unless every textual field is source-supported. analysisStatus describes that review; numeric scores remain interpretations, not verified facts. A model's entailment judgment still requires human review for consequential decisions."
+					"Structured research invokes a separate researchEvidenceReview generation through the host's generateObject, which must be budgeted and metered like the initial synthesis. fieldEvidence binds reviewed output paths to exact source excerpts, supplied input, proposed assessments or unresolved facts. Unsupported factual text becomes unresolved, and corporate affiliations are removed unless every textual field is source-supported. analysisStatus describes that review; numeric scores remain interpretations, not verified facts. A model's entailment judgment still requires human review for consequential decisions.",
+					'Partner Revenue Pipeline',
+					"calculatePartnerRevenuePipeline (also in the browser-safe @absolutejs/partnership/revenue entry) computes company revenue divided by annual recurring pricing as customer equivalents, then multiplies by the client's annual pricing as a theoretical annual revenue opportunity. This assumes 100% conversion and is not a customer count or revenue forecast. Results retain evidence, assumptions, limitations, and low scenario confidence.",
+					'Supply partnerAnnualRevenue, partnerPricing, and clientPricing as RevenueAmount objects (or null). Each amount includes amount, ISO currency, period (month or year), billing unit (company, customer, or seat), and evidence (basis, sourceTitle, exact quote, ISO observedAt, confidence, and source URL for documented claims). Pricing units and currencies must align. Seat prices cannot be used as customer prices. Usage-based businesses require a sourced or client-reported yearly customer value with pricingModel: "annual_customer_value"; do not multiply a per-call price by twelve.',
+					"researchPartnerRevenuePipeline(input, researchContext) uses the host's injected, metered research and structured-generation calls. Wire Brave-backed research through the existing ResearchContext.research contract. Only structured, retained source quotes with matching numeric amounts can populate research inputs. Unknown revenue, incomparable business scope, missing prices and unsupported evidence remain unavailable. Research cannot guarantee a public revenue disclosure exists. No foreign-exchange conversion is implicit.",
+					"When clientPricing is missing, supply clientName and optionally clientWebsite to research the client's public recurring pricing alongside partner revenue and pricing (three query intents). Explicit client pricing always wins and skips the extra query. Usage-based prices remain unknown unless there is an explicit source-supported annual customer value.",
+					'Source-backed asset construction (0.3)',
+					'draftPartnershipAsset and editPartnershipAsset return evidenceDocument with the title and Markdown. Persist it with the immutable input sources. Source blocks select whole records by content-addressed ID. The server renders their exact text and provenance. Announcement statement blocks instead contain model-authored prose linked to those original records; citation integrity is not proof that the prose is true. validateAssetEvidenceDocument(sources, markdown, evidenceDocument) rejects changed sources, citations, plans or output. Call it before publication/export. Existing prose is editing context, never new evidence.',
+					'Source quotations are reported information, not verified truth. Intake summaries can themselves contain AI errors. Hosts must distinguish primary records from summaries and retain their source snapshots. Sources are escaped as inert text; their content cannot choose its own provenance classification.',
+					'Proposal and question blocks remain model-authored, visibly labeled, and must pass a host-side review rejecting any factual assertion or presupposition. Construction alone cannot establish semantic truth or appropriate proposals. calculateAssetScenario computes a labeled scenario from complete numeric source fields, matching annual periods/currencies, and explicit assumptions; it rejects invented amounts and never represents potential revenue as guaranteed.',
+					'Evidence eligibility',
+					"A stored AI analysis is not primary evidence. Match sources are context-only by default. Hosts may set evidenceSelection to exact JSON-pointer fields and optional decoded-text start/end spans. Use it to select original user turns, supplied documents, or independently retained evidence; never grant eligibility to generated reasoning simply because it is stored. An empty selection produces no factual records. Selection metadata is included in the construction digest, and validation rejects old documents that used excluded records. Offsets still address the original immutable decoded source value. This establishes provenance, not the truth of a source or completeness of a model's selection."
 				],
 				title: 'Research evidence (0.1)'
 			}
 		],
 		repository: 'https://github.com/absolutejs/partnership',
 		subpackages: [],
-		version: '0.1.0'
+		version: '0.10.1'
 	},
 	{
 		api: [
@@ -38099,7 +43966,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'StartResourceTimingOptions',
 						signature:
-							"type StartResourceTimingOptions = {\n    /** Where samples are POSTed. */\n    endpoint: string;\n    environment?: string;\n    release?: string;\n    /** Paths whose loads are not measured. The collector's own endpoint belongs\n     *  here, along with any other telemetry: left in, they are reliably the\n     *  busiest assets on the page and tell you nothing. */\n    ignorePaths?: readonly string[];\n    /** Samples buffered before a flush is forced. Default 60. */\n    maxBatch?: number;\n    /** Quiet period before a buffered batch is sent. Default 4s. */\n    flushMs?: number;\n};"
+							"type StartResourceTimingOptions = {\n    /** Optional acknowledged/durable transport. The host owns retry and correlation. */\n    transport?: (batch: {\n        environment?: string;\n        release?: string;\n        resources: ResourceSample[];\n    }) => void | Promise<void>;\n    onTransportError?: (error: unknown) => void;\n    /** Where samples are POSTed. */\n    endpoint: string;\n    environment?: string;\n    release?: string;\n    /** Paths whose loads are not measured. The collector's own endpoint belongs\n     *  here, along with any other telemetry: left in, they are reliably the\n     *  busiest assets on the page and tell you nothing. */\n    ignorePaths?: readonly string[];\n    /** Samples buffered before a flush is forced. Default 60. */\n    maxBatch?: number;\n    /** Quiet period before a buffered batch is sent. Default 4s. */\n    flushMs?: number;\n};"
 					},
 					{
 						description:
@@ -38210,7 +44077,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/performance/drizzle'
 		],
 		readmeDigest:
-			'5ef2de7051ec58428c62d27ef71452e12b6d2a6d41942daf60f4697fc37f6cb3',
+			'7e052a755aac7a29810e45cce4a8fb2e0748b90b81bcebc56d8714fbc5e5444f',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/performance',
@@ -38292,11 +44159,19 @@ export const ecosystemProjects: EcosystemProject[] = [
 					"Read from Postgres' own statistics: no query wrapping, nothing on the hot path, zero cost until the page is opened. Slow queries are ordered by mean time, but mean × calls is reported too — that column is what exposes an N+1, where a 2ms query called forty thousand times is the actual problem and no single call looks slow.",
 				details: [],
 				title: 'Database health'
+			},
+			{
+				description:
+					'startResourceTiming in @absolutejs/performance/client now accepts transport and onTransportError. Existing callers retain the sendBeacon path. The custom transport receives { environment, release, resources } and may return a promise. Use it to feed an application-owned acknowledged outbox such as @absolutejs/beacon/outbox, adding session/release correlation at the host boundary. Rejected promises and synchronous throws reach onTransportError; this resource collector itself does not retry. Persist inside the transport before resolving if durability is required. Do not assume sendBeacon acceptance is a server receipt.',
+				details: [
+					"Large resource bursts now drain over subsequent bounded batches instead of stranding the remainder until another observer notification. Explicit flushes cancel their previous scheduled timer. Resource query-string stripping and telemetry-path exclusions are preserved. tests/client.test.ts verifies burst draining, custom transport failure reporting, URL sanitization and exclusion. This is an unpublished local extension exercised by Hello World's playtest queue."
+				],
+				title: 'Custom resource transport'
 			}
 		],
 		repository: 'https://github.com/absolutejs/performance',
 		subpackages: [],
-		version: '0.1.1-beta.0'
+		version: '0.1.1-beta.1'
 	},
 	{
 		api: [],
@@ -38850,7 +44725,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/product-analytics',
 		subpackages: [],
-		version: '0.6.2'
+		version: '0.6.3'
 	},
 	{
 		api: [
@@ -39006,6 +44881,30 @@ export const ecosystemProjects: EcosystemProject[] = [
 			{
 				entryPoint: '@absolutejs/pwa/client',
 				symbols: [
+					{
+						description: '',
+						kind: 'export',
+						name: 'reportAssetLoadFailure',
+						signature: 'reportAssetLoadFailure'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'onAssetLoadFailure',
+						signature: 'onAssetLoadFailure'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'clearAssetLoadFailure',
+						signature: 'clearAssetLoadFailure'
+					},
+					{
+						description: '',
+						kind: 'export',
+						name: 'AssetLoadFailure',
+						signature: 'type AssetLoadFailure'
+					},
 					{
 						description: '',
 						kind: 'type',
@@ -39254,7 +45153,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'ApplyUpdateOptions',
 						signature:
-							'type ApplyUpdateOptions = {\n    /** Maximum wait for a waiting service worker to take control before a hard\n     *  reload. Default 5000ms. */\n    activationTimeoutMs?: number;\n};'
+							'type ApplyUpdateOptions = {\n    /** Same-origin failed navigation destination. Used only after an explicit user action. */\n    targetUrl?: string;\n    /** Maximum wait for a waiting service worker to take control before a hard\n     *  reload. Default 5000ms. */\n    activationTimeoutMs?: number;\n};'
 					},
 					{
 						description:
@@ -39391,7 +45290,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/pwa/manifest.json'
 		],
 		readmeDigest:
-			'1d927140a785df7e1a9f91119123cc5933a73315109f9f908679f63d31251e51',
+			'548bf62b1ad96dcde44f1bd4fb205ec5f5d93ebb7ad2c80006b31f4bece86d9f',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/pwa',
@@ -39463,7 +45362,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/pwa',
 		subpackages: [],
-		version: '0.16.3'
+		version: '0.17.0'
 	},
 	{
 		api: [
@@ -39930,7 +45829,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/queue/manifest.json'
 		],
 		readmeDigest:
-			'd5cab492ab803177b51fb33cd1f5b6fbd5591570303d7c6eaf8375d744013d59',
+			'33471978e7950e64af8da6e20c74f3a3af6ee557e2e0dbe0e3dbbcc2142544a9',
 		readmeSamples: [
 			{
 				code: 'bun add @absolutejs/queue elysia',
@@ -40004,7 +45903,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/queue',
 		subpackages: [],
-		version: '0.10.0'
+		version: '0.10.1'
 	},
 	{
 		api: [],
@@ -40071,7 +45970,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Develop'
 			}
 		],
-		repository: null,
+		repository: 'https://github.com/absolutejs/queue-adapters',
 		subpackages: [
 			{
 				api: [],
@@ -40199,7 +46098,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'postgres',
-				version: '0.1.8'
+				version: '0.1.9'
 			},
 			{
 				api: [],
@@ -42961,6 +48860,12 @@ export const ecosystemProjects: EcosystemProject[] = [
 					{
 						description: '',
 						kind: 'export',
+						name: 'isWebReadError',
+						signature: 'isWebReadError'
+					},
+					{
+						description: '',
+						kind: 'export',
 						name: 'WebFetchResult',
 						signature: 'WebFetchResult'
 					},
@@ -42982,7 +48887,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'WebReadResult',
 						signature:
-							'type WebReadResult = {\n    status: "ok" | "partial" | "error";\n    url: string;\n    finalUrl: string;\n    title: string | null;\n    text: string;\n    method: "http" | "browser";\n    truncated: boolean;\n    attempts: WebReadAttempt[];\n    error?: {\n        code: string;\n        message: string;\n    };\n    fetchedAt: string;\n    redirects: WebRedirect[];\n    evidence: WebEvidence;\n    limitations: string[];\n};'
+							'type WebReadResult = {\n    status: "ok" | "partial" | "error";\n    url: string;\n    finalUrl: string;\n    title: string | null;\n    text: string;\n    /** Complete extracted source, independent of the model-facing preview budget. */\n    fullText?: string;\n    originalChars?: number;\n    method: "http" | "browser";\n    truncated: boolean;\n    attempts: WebReadAttempt[];\n    error?: {\n        code: string;\n        message: string;\n    };\n    fetchedAt: string;\n    redirects: WebRedirect[];\n    evidence: WebEvidence;\n    limitations: string[];\n};'
 					},
 					{
 						description: '',
@@ -43128,21 +49033,21 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'ResearchResult',
 						signature:
-							'type ResearchResult<T = unknown> = {\n    id: string;\n    status: "reviewed" | "partial" | "empty" | "unavailable";\n    /** Only populated when every primitive field passed evidence review. */\n    data: T | null;\n    fields: ResearchField[];\n    sources: SearchSource[];\n    searches: SearchResult[];\n    limitations: string[];\n    generatedAt: string;\n    operations: {\n        kind: ResearchOperation;\n        status: "fulfilled" | "unknown";\n        usage?: AIUsage;\n        durationMs: number;\n    }[];\n};'
+							'type ResearchResult<T = unknown> = {\n    /** Complete fetched text retained separately from model-facing excerpts. */\n    documents?: Array<{\n        sourceId: string;\n        url: string;\n        text: string;\n        originalChars: number;\n    }>;\n    sourceFailures?: Array<{\n        url: string;\n        code: string;\n        message: string;\n    }>;\n    coverage?: {\n        requested: number;\n        supported: number;\n        complete: boolean;\n    };\n    id: string;\n    status: "reviewed" | "partial" | "empty" | "unavailable";\n    /** Only populated when every primitive field passed evidence review. */\n    data: T | null;\n    fields: ResearchField[];\n    sources: SearchSource[];\n    searches: SearchResult[];\n    limitations: string[];\n    generatedAt: string;\n    operations: {\n        kind: ResearchOperation;\n        status: "fulfilled" | "unknown";\n        usage?: AIUsage;\n        durationMs: number;\n    }[];\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'ResearchTask',
 						signature:
-							'type ResearchTask<S extends ResearchSchema = ResearchSchema> = {\n    schema: S;\n    instructions?: string;\n};'
+							'type ResearchTask<S extends ResearchSchema = ResearchSchema> = {\n    schema: S;\n    /** Count only items whose required fields passed evidence review. JSON pointer to an array. */\n    collection?: {\n        path: string;\n        minimum: number;\n        requiredFields: string[];\n    };\n    instructions?: string;\n};'
 					},
 					{
 						description: '',
 						kind: 'type',
 						name: 'ResearchInput',
 						signature:
-							'type ResearchInput = {\n    queries?: string[];\n    requiredPhrases?: string[];\n    query: string;\n    task?: string;\n    freshness?: string;\n    signal?: AbortSignal;\n    onProgress?: (event: ResearchProgress) => void;\n};'
+							'type ResearchInput = {\n    /** Tasks may contain instructions/JSON; quotes are not literal search filters. */\n    queryMode?: "search" | "task";\n    queries?: string[];\n    requiredPhrases?: string[];\n    query: string;\n    task?: string;\n    freshness?: string;\n    signal?: AbortSignal;\n    onProgress?: (event: ResearchProgress) => void;\n};'
 					},
 					{
 						description: '',
@@ -43156,7 +49061,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 						kind: 'type',
 						name: 'ResearchConfig',
 						signature:
-							'type ResearchConfig = {\n    /** Optional host accounting adapter; defaults to the standard AI generator. */\n    generateObject?: typeof import("@absolutejs/ai").generateObjectAI;\n    budget?: import("./budget").ResearchBudgetConfig;\n    search: SearchProvider;\n    provider: AIProviderConfig;\n    model: string;\n    /** Optional separate reviewer. Host reservations must price this model too. */\n    reviewer?: {\n        provider: AIProviderConfig;\n        model: string;\n    };\n    tasks?: Record<string, ResearchTask>;\n    limits?: Partial<ResearchLimits>;\n    /** Explicit shared-public or tenant scope. Omit to disable search caching. */\n    cache?: {\n        scope: string;\n        store?: SearchCacheStore;\n        ttlMs?: number;\n        capacity?: number;\n    };\n    reader?: (options: ReadWebpageOptions) => Promise<WebReadResult>;\n    render?: ReadWebpageOptions["render"];\n    /** Called before each operation. May atomically reserve tenant budget or deny. */\n    admit?: (operation: {\n        runId: string;\n        kind: ResearchOperation;\n        signal: AbortSignal;\n    }) => Promise<false | {\n        settle: (outcome: {\n            status: "fulfilled" | "unknown";\n            usage'
+							'type ResearchConfig = {\n    /** Extra schema-validation attempts per extract/review, each separately admitted. Default 1; 0 disables repair. Provider/network failures are never retried. */\n    validationRepairs?: number;\n    /** Server-side diagnostics only. Errors are never serialized into public research results. */\n    onError?: (event: {\n        runId: string;\n        phase: ResearchOperation;\n        error: unknown;\n    }) => void;\n    /** Optional host accounting adapter; defaults to the standard AI generator. */\n    generateObject?: typeof import("@absolutejs/ai").generateObjectAI;\n    budget?: import("./budget").ResearchBudgetConfig;\n    search: SearchProvider;\n    provider: AIProviderConfig;\n    model: string;\n    /** Optional separate reviewer. Host reservations must price this model too. */\n    reviewer?: {\n        provider: AIProviderConfig;\n        model: string;\n    };\n    tasks?: Record<string, ResearchTask>;\n    limits?: Partial<ResearchLimits>;\n    /** Explicit shared-public or tenant scope. Omit to disable search caching. */\n    cache?: {\n        scope: string;\n        store?: SearchCacheStore;\n        ttlMs?: number;\n        capacity?: number;\n    };\n    reader?:'
 					},
 					{
 						description: '',
@@ -43710,9 +49615,9 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Web research workflows'
 			}
 		],
-		repository: null,
+		repository: 'https://github.com/absolutejs/rag',
 		subpackages: [],
-		version: '0.22.5'
+		version: '0.22.15'
 	},
 	{
 		api: [],
@@ -43993,6 +49898,313 @@ export const ecosystemProjects: EcosystemProject[] = [
 			}
 		],
 		version: null
+	},
+	{
+		api: [],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command: 'bash absolutejs/scripts/build-native.sh',
+				name: 'build'
+			},
+			{
+				command: 'bun absolutejs/scripts/build-api.ts',
+				name: 'build:api'
+			},
+			{
+				command: 'bun test absolutejs/tests',
+				name: 'test'
+			}
+		],
+		description:
+			'Rapier 3D with matched free-body rotation, corrected contact witnesses and solver diagnostics',
+		directory: 'rapier3d',
+		kind: 'package',
+		name: 'Rapier3d',
+		packageName: '@absolutejs/rapier3d',
+		private: false,
+		publicExports: [
+			'@absolutejs/rapier3d',
+			'@absolutejs/rapier3d/build-info'
+		],
+		readmeDigest:
+			'da63bb197d1b3242b74ed133240ca5821983daf0d3352d5396502493008688f3',
+		readmeSamples: [
+			{
+				code: "import RAPIER from '@absolutejs/rapier3d';\nawait RAPIER.init();\nworld.solverContactPair(firstCollider, secondCollider, (manifold, flipped) => {\n  for (let i = 0; i < manifold.numSolverContacts(); i++) {\n    const point = manifold.solverContactPoint(i);\n    const cachedDistance = manifold.solverContactDist(i);\n    const separation = manifold.solverContactSeparation(i);\n    const anchor1 = manifold.solverContactPoint1(i);\n    const anchor2 = manifold.solverContactPoint2(i);\n    // Copy values here. The callback view expires when the callback returns.\n  }\n});",
+				description: '# AbsoluteJS Rapier 3D',
+				heading: 'AbsoluteJS Rapier 3D quick start',
+				language: 'typescript'
+			},
+			{
+				code: 'const contact = firstCollider.contactColliderAtCurrentBodyPoses(secondCollider, 0);',
+				description:
+					'Working example for Current-body shape contact queries (0.5.0).',
+				heading: 'Current-body shape contact queries (0.5.0)',
+				language: 'typescript'
+			},
+			{
+				code: "import {buildInfo} from '@absolutejs/rapier3d/build-info';\nreport.physicsBuild = buildInfo;",
+				description:
+					'Version 0.7 adds package metadata without changing the qualified 0.6 native kernel. Package version and kernel release are deliberately separate fields. This release does not include the experimental gyroscopic increment correction; game contact regressions keep that native change under investigation.',
+				heading: 'Lightweight build identity (0.7)',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					"A focused distribution of Rapier 0.21.0 / engine 0.36.0 with solver-contact diagnostics, current-body geometry queries, accurate prescribed kinematics, and corrected contact-witness and force-free rotation calculations. The engine's original geometric manifolds and its clustered solver manifolds are distinct. The upstream JavaScript contact query only exposes the former, which can have no solver-contact entries even when the solver is resolving contact. This package exposes the latter separately.",
+				details: [
+					"The callback receives a restricted solver view: normal, count, point, distance, friction, restitution, and tangent velocity. It does not promise original subshape identifiers or geometric surface normals. The flipped convention matches contactPair. Do not step, free, or mutate the world inside either callback. Nested read-only solver queries are supported; callback exceptions release query wrappers before propagating. Solver distances are the engine's cached contact update distances, not a continuous or post-step exact penetration guarantee.",
+					'contactPair exposes geometric manifolds; solverContactPair exposes solver manifolds. Version 0.6 improves velocity-driven kinematics. Version 0.8 corrects previous-simplex witness preservation and reduces force-free rotation roundoff, as described below. Contact and CCD policy defaults remain unchanged. Runtime motion still needs independent geometric and energy checks.',
+					'Version 0.8.1 refreshes articulated link velocities after final solver impulses and uses the integrated link geometry for center-of-mass velocity offsets. This fixes stale linvel()/angvel() state and inconsistent velocities on rotating fixed assemblies. It does not change the restitution iteration budget or provide a general energy-conservation guarantee for off-center articulated impacts.',
+					'The ESM package includes WASM initialization and requires no separate asset URL. Concurrent init() calls share initialization. The package targets 3D f32 web/Node/Bun; it does not claim a 2D, f64, CommonJS or SIMD distribution.'
+				],
+				title: 'Overview'
+			},
+			{
+				description:
+					'Source base: dimforge/rapier commit b716d375efc0201003f0cd9ef7168eee0b62c177. Upstream Apache-2.0 licensing is retained. The distribution adds binding queries, package build/test tooling, and CCD profiler timer wiring. Version 0.6 also evaluates velocity-driven kinematic poses directly from each solver-pass origin. Version 0.8 additionally pins the corrected Parry collision source and applies the gyroscopic momentum increment without reconstructing the entire angular velocity through the inertia frame.',
+				details: [
+					"Use Bun 1.4.4+absolute.1, Rust 1.94.0 with wasm32-unknown-unknown, and Python 3.12. Run bun install --frozen-lockfile, then bash absolutejs/scripts/build-native.sh. Cargo's exact lockfile is versioned, compilation defaults to one job (override with CARGO_BUILD_JOBS), and the wasm-bindgen 0.2.129 CLI archive is checksum verified before extraction. Caches and generated build output are reproducible; modified source and selected test receipts are committed. dist/provenance.json records the resulting WASM hash.",
+					'API packaging verifies the post-bindgen native bytes against absolutejs/native-kernel.json before writing the distribution. A shared Cargo cache containing a research kernel therefore fails closed. Rebuild stable native source after research builds. Do not update the qualification hash merely to make a build pass: a changed kernel requires physical qualification and a recorded release decision. API-only releases retain the qualified native hash. See absolutejs/research/native-build-guard/ for positive and negative controls.',
+					'The build copies this canonical documentation to the root README used by npm, so published package documentation stays synchronized.',
+					'Run bun test absolutejs/tests after building. Tests compare queried and unqueried worlds under the same kernel, exercise actual clustered contacts, nested queries, exception cleanup, captured contact regressions and analytic rotation controls. The independent upstream-motion probe records intentional trajectory differences; exact old floating-point rounding is not a physical acceptance criterion. Browser-worker validation is separate from native GPU performance testing; no GPU is required by the engine.',
+					'This is a maintained AbsoluteJS distribution, not an official Dimforge release.'
+				],
+				title: 'Build and provenance'
+			},
+			{
+				description:
+					'solverContactPoint1/2 return the native solver anchors transformed by current body poses. solverContactSeparation projects their difference onto the stored world solver normal. Negative means overlapping anchors; invalid indices return null. Anchor values include contact skin and hook offsets, so they are not necessarily points on the visible material surface. The normal is from the contact update; this is not a new narrow-phase query or a continuous material penetration bound. The old cached solverContactDist remains explicitly separate.',
+				details: [
+					'world.integrationParameters.contactClustering exposes the existing engine switch. It defaults to true, exactly as upstream. Set it only between steps; disabling it may increase solver workload and is not a general penetration fix. Snapshot restore preserves the setting. The game is not instructed to turn it off by this release.',
+					'The independent every-step cube/cavity audit demonstrates the distinction: about 0.459mm current penetration is visible in live anchors when the cached distance is zero. Disabling clustering retains about 0.469mm peak penetration in that case. Neither extra telemetry nor changing clustering is presented as a physics cure.',
+					"minCcdDt exposes the engine's minimum CCD substep duration in seconds. Its upstream default stays 1/60/100, even when the outer timestep is changed. The setter rejects negative, non-finite and f32-overflowing values. Smaller values can introduce instability; changing it is an explicit experiment, not an automatic quality preset. Both controls are retained through native snapshot serialization."
+				],
+				title: 'Live anchors and explicit clustering control (0.2)'
+			},
+			{
+				description:
+					"Snapshot restoration now preserves null for an unowned collider's parent(). Previously an absent native handle could be coerced to body zero during JavaScript wrapper reconstruction. Real body-zero and fixed-body attachments remain intact. This changes wrapper metadata only; native ownership, WASM and solver behavior are unchanged. Repeated snapshot restoration and browser workers are regression tested.",
+				details: [],
+				title: 'Restored collider ownership (0.2.1)'
+			},
+			{
+				description:
+					'Enable world.profilerEnabled = true, step the world, then read world.ccdSubsteps(). It reports the native count of CCD passes in the last completed profiled step, rather than the configured maximum. Zero means CCD did not act, not that the world failed to advance. It returns null when unavailable: before a profiled step, while profiling is disabled, or after toggling profiling until a new step completes. Setting an already enabled profiler to true is idempotent. Restored worlds start with profiling disabled and no sample. Event-enabled stepping is covered too. This is opt-in telemetry; no physics policy or defaults change. The counter does not expose individual substep durations or times of impact.',
+				details: [
+					'CCD timing now accumulates activation/impact-planning and motion-clamping work across all passes in a step. The TOI timer also accumulates instead of resetting for every clamp pass. Both are recorded only with profiling enabled. The timing fix leaves contact equations and trajectories unchanged; package tests compare profiled/unprofiled poses and official upstream trajectories.'
+				],
+				title: 'Actual CCD substeps (0.3)'
+			},
+			{
+				description:
+					'The following existing native settings are now exposed through world.integrationParameters. Defaults and solver algorithms are unchanged.',
+				details: [
+					'Property — Default — Meaning',
+					'contactRecycling — true — Reuse contact manifolds while relative poses stay within the native reuse bounds.',
+					'normalizedContactRecycleDistance — 0.05 — Relative-pose drift bound, multiplied by lengthUnit; zero prevents recycling.',
+					'warmstartCoefficient — 1 — Fraction of cached impulses reused by the solver, from zero to one.',
+					'Change settings between simulation steps. The boolean setter rejects coercible non-booleans; numeric setters reject non-finite/out-of-range input, including f32 overflow for the distance. Native snapshots preserve all three settings.',
+					'These controls support explicit diagnosis and application-specific qualification. Disabling recycling increases contact-generation work and can change contact features; disabling warm starting changes convergence. Neither is a general fix for penetration. Evaluate the entire requested simulation horizon and geometric intersections, alongside live/cached contact diagnostics. A process that exits successfully after an early physical guard is not a completed physical test.'
+				],
+				title: 'Contact policy controls (0.4)'
+			},
+			{
+				description:
+					"This additive query composes each collider's local pose with its current parent body pose. It observes direct body edits before the next world step without propagating poses, stepping the simulation, or altering cached solver contacts. Parentless colliders use their own world pose. The optional third argument reuses a ShapeContact result. Prediction must be finite and nonnegative, in world units.",
+				details: [
+					'Use this for bounded explicit diagnostics, not every render/physics tick. It allocates shape queries and returns a world-space native shape contact, not a solver manifold, continuous sweep or authored-material overlap bound. Collision filters, hooks and contact skin are not applied. Native unsupported shape pairs can return null as well as separated pairs; null is not a general disjointness proof. Existing contactCollider retains its stored-collider-pose semantics.',
+					'The distinction matters for rotating contacts: projecting current anchors onto a stored normal can report no penetration while a fresh shape query finds overlap. Both observations are useful, but answer different questions. Release 0.5.0 keeps the 0.4.0 native kernel byte-for-byte unchanged; it does not include the private relative-motion, EPA or clamp-graph solver experiments.'
+				],
+				title: 'Current-body shape contact queries (0.5.0)'
+			},
+			{
+				description:
+					'Velocity-driven kinematic bodies now evaluate their prescribed center-of-mass translation and rotation from the start of each solver pass. This removes angular phase error from repeatedly linearizing the prescribed rotation and limits substep-dependent accumulation drift. Existing linear/angular speed caps still apply. Dynamic bodies, position-driven endpoints, multibody integration and soft-frame proxies retain their prior integration paths.',
+				details: [
+					'No API changes are required. This changes motion involving velocity-driven kinematic bodies, including the contact response of bodies they touch. Floating point rounding remains; this is not a general contact or continuous-collision accuracy guarantee. Native qualification records, independent analytic path controls, negative tests against 0.5.0, and bounded CPU observations are retained in absolutejs/research/kinematic-precision/. The private tagged contact research is excluded from this release.',
+					'Direct rotation evaluation adds CPU work for velocity-driven kinematic bodies. Profile kinematic-heavy scenes; increasing solver subdivisions is not a free accuracy improvement. The recorded CPU probes are not browser FPS guarantees.',
+					'Native builds use pinned Rust and wasm-bindgen versions and remap checkout/cache paths to stable virtual prefixes before checking the qualified WASM checksum. Custom compiler flags are preserved, but their output must still match the qualified kernel. A checksum mismatch stops API packaging; it does not silently adopt a different native solver.'
+				],
+				title: 'Prescribed velocity-driven paths (0.6)'
+			},
+			{
+				description:
+					'Version 0.7 adds package metadata without changing the qualified 0.6 native kernel. Package version and kernel release are deliberately separate fields. This release does not include the experimental gyroscopic increment correction; game contact regressions keep that native change under investigation.',
+				details: [
+					'The frozen metadata includes package version, qualified kernel release, native WASM SHA-256/byte count, upstream/binding versions and whether the kernel changes the pinned upstream solver. The same values are available as RAPIER.buildInfo and the root named buildInfo export. Package and kernel releases can differ when an API-only upgrade reuses a qualified kernel. The lightweight subpath contains metadata only and works before init(). It reports the packaged kernel; supplying custom bytes to init(input) does not change that identity and must be recorded separately.'
+				],
+				title: 'Lightweight build identity (0.7)'
+			},
+			{
+				description:
+					"Version 0.8 introduced the absolutejs/parry collision correction at revision dbd99a8dfce020da3698056471262435d56d3f69, based on upstream 0.31.1. Tetrahedron-to-face reduction now preserves support points needed by GJK's previous-simplex calculation. Previously, an overwritten point could be combined with its old barycentric weight, inventing a deep contact. A captured floor/hull case reported -14.719921 cm despite separation; the corrected native replay reports a small positive separation. Snapshot decoding and query read-only behavior remain byte-exact. No contact tolerance, CCD default or game rejection threshold is changed by this correction.",
+				details: [
+					'The rotation correction applies only the computed gyroscopic momentum increment. Principal-axis and isotropic force-free bodies therefore avoid artificial spin-up from repeatedly reconstructing the entire velocity through inertia and its inverse. Genuine asymmetric precession remains active and is checked against a converged double-precision Euler/RK4 reference.',
+					'In the recorded 336-case, 0.1-second free-spin matrix, worst relative energy error falls from about 0.004033 to 0.000562. One tilted long-box control has about 1.305 ppm more energy error. These measurements cover specific shapes, rates and iteration budgets; they are not a universal energy-error bound, a performance claim, or a substitute for coupled-contact acceptance. f32 conditioning and time integration errors remain.',
+					'buildInfo.collisionLibraryVersion and buildInfo.collisionSource identify the exact locked collision library alongside the native WASM hash. They are lightweight serialized strings and require no WASM initialization. Packaging rejects ambiguous multiple Parry source entries. Release qualification evidence and retained experiment results are recorded in absolutejs/research/simplex-gyro/.'
+				],
+				title: 'Contact witnesses and force-free rotation (0.8)'
+			},
+			{
+				description:
+					'world.multibodyJoints.generalizedDamping(jointHandle) returns an owned Float32Array for the entire articulation containing that joint, including its floating root. A removed joint returns undefined. These coefficients are raw native coefficients, separate from rigid-body damping: native free angular generalized coordinates default to 0.1 even when RigidBody.setAngularDamping(0) is used. They are not dimensionless decay rates: angular coefficients act against inertia in native world units. The same numeric coefficient need not produce the same decay after changing the world length scale.',
+				details: [
+					'setGeneralizedDamping(jointHandle, values) returns true on success. It rejects wrong lengths, negative/nonfinite values, native float overflow and removed handles without mutation. Coordinate order is the native generalized order; read the vector again after adding, removing or changing joints. The setter does not wake sleeping bodies; wake the affected bodies explicitly. Neither method changes the native default policy for newly created coordinates.',
+					'For an explicitly undamped diagnostic, read the vector, replace it with a zero vector of the same length, and verify the readback. This is a diagnostic control, not a recommendation to remove damping from every game mechanism.'
+				],
+				title: 'Articulation damping controls'
+			},
+			{
+				description:
+					'Coupled contacts can disturb each other: a single late restitution sweep can leave order-dependent velocities when two bodies strike one light articulation. Version 0.10 repeats the existing normal/restitution solve to a projected velocity residual, with a bounded iteration budget. In these adaptive phases, a local double-precision normal-impulse accumulator retains corrections that would otherwise round away. Native velocities, response matrices, warmstart storage, persistent snapshots, and the JavaScript API retain their existing formats. This is not a double-precision engine or an energy clamp.',
+				details: [
+					'Adaptive compression applies only to one-group, single-worker, generic-only frictionless contacts, with no soft/FEM bodies or independent joint rows. The configured PGS count remains a minimum; the cap is the larger of that count and 256. Adaptive restitution applies only to one-group, single-worker, generic-only contacts and is capped at 256 sweeps. Both stop at a projected velocity residual of 1e-6 lengthUnit. Ordinary and mixed/parallel contact paths retain their previous iteration policy. Reaching the cap is not a guarantee of convergence for arbitrary mass ratios or scenes.',
+					'The added regression cases cover opposing impacts, creation-order reversal, restitution 0/0.5/1, unequal masses, timestep and substep changes. Existing integration, contact preparation, damping defaults and geometry are unchanged; known general articulation integration limitations remain.',
+					'Accuracy has a CPU cost. A bounded CPU-only paired benchmark of 1/8/32 disconnected heavy-light-heavy impacts measured candidate median step times of 0.62/2.48/7.87 ms, versus 0.41/0.84/1.72 ms for 0.9.0, whose velocity error in that fixture was about 6.94 m/s. The candidate error was below 0.000002 m/s. These are host-specific step measurements excluding rendering and snapshot restoration, not a frame-rate guarantee. Production scenes still need physics budgets and profiling. Detailed qualification and limitations are in absolutejs/research/contact-convergence/.'
+				],
+				title: 'Coupled articulation impacts (0.10)'
+			},
+			{
+				description:
+					'Enable world.profilerEnabled, complete a step, then call world.contactConvergence() for an owned ContactConvergenceStats object. The result is null before a completed profiled step, while profiling is disabled, after toggling profiling until another step completes, and after snapshot restoration. Reading or mutating this returned object cannot change the world. No profiling data is serialized into physical world snapshots.',
+				details: [
+					'Fields are compressionSolves, compressionIterations, compressionLimitHits, maxCompressionResidual, and restitutionSolves, restitutionIterations, restitutionLimitHits, maxRestitutionResidual. Counts accumulate across eligible solve phases within the full step, including CCD passes and solver substeps. They count phases/groups, not physical islands or individual contacts. Zero solves means no eligible adaptive path was executed; it does not certify that all contacts converged. Ordinary and mixed/parallel paths are outside these adaptive observations.',
+					'Residual fields are the maximum terminal projected normal-velocity error among measured phases, in native world length units per second. A limit hit means the phase exhausted its configured budget while still above the existing 1e-6 lengthUnit threshold. The API reports that fact; it does not change tolerances, budgets, impulses or physical policy. The configured compression minimum may exceed 256 and is still honored.',
+					'The added diagnostics exactly preserve physical result records across 548 paired collision/free-motion cases versus 0.10.0. Profiler-on/off snapshot parity and CCD aggregation are also tested. In the 20/1/20 kg fixture, the counters reveal 164 compression passes and 256 restitution sweeps, with a terminal restitution residual near 2.15e-6 m/s. A tiny physical error can therefore coexist with an exhausted iteration budget. Treat that as useful evidence, not as zero or automatic failure of the simulation.',
+					'Unprofiled paired median costs at 1/8/32 islands were 0.65/2.49/7.09 ms versus 0.66/2.45/7.28 ms for 0.10.0 in the qualification run. These host-specific small samples do not establish a speedup or frame-rate guarantee. Query allocation occurs only when the caller requests observations.'
+				],
+				title: 'Adaptive contact observations (0.11)'
+			},
+			{
+				description:
+					'createPhysicsStepProfiler(world, options) borrows an initialized world. Call profiler.step(eventQueue?, hooks?) wherever you would explicitly call world.step(), then profiler.snapshot() to obtain an owned report. It creates no render loop, listeners, transport, or ownership of the world/event queue. This is suitable for workers and offline jobs as well as application-managed stepping.',
+				details: [
+					'Every managed call records wall time spent inside World.step. Selected calls also capture native phase timings, CCD substeps, convergence counters and world units/settings. Native timings are nested: do not add solver, assembly, resolution and CCD durations together. Native samples are observations of those selected calls, not estimates of unsampled solver work. The summary wall-time sum excludes profiler setup, native capture and report construction; it is not whole-job time or an FPS measurement.',
+					'The default cadence and capacity are both 32. Sampling stops when capacity is reached; samplesOmittedForBudget counts later eligible calls. Use sampleStartStep to inspect a later window. Capacity is bounded to 256; zero keeps wall-time accounting without enabling native profiling. A failed selected call consumes a slot. There is no unbounded event queue or per-body duplication.',
+					'Each selected call restores the previous native profiler setting, including when stepping throws. Unselected calls leave it alone. If profiling was already on, the caller retains fresh native observations; otherwise turning it back off invalidates native live queries, but the owned captured sample remains readable. Original step exceptions (including non-Error values) propagate unchanged. Clock and native-capture failures are counted instead of stopping a successful physical step; missing/invalid observations are null, never invented zero times. A custom now must return monotonic milliseconds and have no side effects. Reports remain usable after freeing the borrowed world. Always attach the actual build identity when storing or sending a report through your existing diagnostics system. Sampling has a cost: use explicit application policy and measure it.',
+					'The sampler was introduced in 0.12.0 without changing the 0.11.0 native kernel. Sampling itself does not change solver thresholds, contact policies or physical state serialization. Later native revisions remain identified by buildInfo.'
+				],
+				title: 'Bounded managed-step profiling'
+			},
+			{
+				description:
+					'The collision dependency now pins absolutejs/parry revision c566aabd77be8ac7a427c2b704860c47e34657b9. Mass-property aggregation uses a scale-normalized, bounded Jacobi decomposition with double-precision workspace. It corrects principal frames for small tensors and repeated or nearly repeated moments. Public f32 types, mass, COM and nonnegative principal-moment policy are unchanged; compound mass properties and resulting motion can change when the previous decomposition was inaccurate. No JavaScript API is added.',
+				details: [
+					'The focused native suite covers 2,688 tensor/aggregation cases in f32 and f64. The package tests also reconstruct two- and three-collider physical tensors across scale, orientation and insertion order. The small-object baseline could exceed 50% relative tensor error; this is a reproduced fixture, not an estimate of error across all objects. Angular integration and articulated COM-transport limitations are separate and remain under investigation.',
+					'This calculation runs when mass properties are recomputed. It is not a render optimization: recompute after geometry/mass changes, not unnecessarily every frame. Qualification records, measured cost and limits are retained under absolutejs/research/inertia-reconstruction/.'
+				],
+				title: 'Compound inertia reconstruction (0.13)'
+			},
+			{
+				description:
+					'An isolated, awake dynamic body with gyroscopic forces enabled now uses a bounded implicit midpoint angular update with its matching Cayley attitude. This substantially reduces free-flight angular energy and world-momentum drift. The path requires physical stored inertia, unlocked angular axes, zero external torque and angular damping, and ordinary rotation limits. Contact-connected, jointed, articulated, soft/FEM and fast-rotation bodies retain their existing solver path. This does not correct coupled angular/contact integration or the remaining articulated COM-transport defect.',
+				details: [
+					'A rejected update does not partially mutate state. Nonphysical stored moments, rotation limits and failed/invalid solves are observed explicitly; the existing correction/cap ordering applies for the rest of that island solve. The next solve re-evaluates eligibility. No energy or momentum clamp is introduced.',
+					"With world.profilerEnabled = true, world.freeRotationStats() returns owned counts (acceptedSteps, nonphysicalInertiaRejections, rotationLimitRejections, invalidOrFailedSolves), maximum Newton updates, and maximum accepted residual in radians/second. It returns null before a completed profiled step, after restoration, while profiling is disabled or after toggling it. Counts include solver substeps and CCD passes; zero acceptance does not establish conservation. The bounded createPhysicsStepProfiler includes these observations as each sample's native.freeRotation, with the same sample and ownership limits.",
+					'The 96-case native matrix reduces worst relative angular-energy drift from 3.2% to 0.00026%; 542 excluded/rejected control states match the previous release exactly. On a synthetic 32-body CPU/WASM workload the median paired additional cost is approximately 0.7 microseconds per body/substep (2.9x batch ratio). These are fixture measurements, not game-wide guarantees or hardware FPS. Admission, numerical/storage limits, actual-engine tests, failed assumptions and cost records are preserved in absolutejs/research/rigid-midpoint-engine.',
+					'Floating-root center-of-mass coordinates (0.14.1)',
+					"Articulation root linear velocity is measured at its center of mass. For an object whose authored origin differs from its mass center, time integration must rotate the local COM offset while advancing that physical center. The root origin update includes R_old localCom - R_new localCom; otherwise moving an object's modeling origin changes its physical trajectory. Fixed roots and zero-offset roots retain their existing arithmetic. This correction does not replace the articulation's angular integrator or eliminate remaining aggregate momentum/energy drift. Coordinate-covariance, movable-joint and snapshot replay regressions are recorded in absolutejs/research/rigid-assembly."
+				],
+				title: 'Matched isolated-body rotation and observations (0.14)'
+			},
+			{
+				description:
+					'The solver additionally admits isolated floating assemblies made only of fixed links, with gyroscopic forces enabled, no damping/armature/friction, no locks or fast rotation, and no external loads except uniform gravity shared by every link. Contacts, external joints, movable links, differing gravity scales and unsupported states retain their existing path. Aggregate inertia is assembled in authored local frames, then a matched angular update advances the assembly about its total center of mass. Linear gravity uses the existing semi-implicit kick-then-drift convention. This is not a contact or fracture model.',
+				details: [
+					'world.freeAssemblyStats() reports owned attempt counts after a completed profiled step, with the same freshness rules as freeRotationStats(). The bounded profiler records a deep-owned native.freeAssembly object. Counters distinguish accepted steps, nonphysical-inertia rejections, rotation-limit rejections, and invalid/failed solves. Unsupported assemblies and invalid aggregate construction are excluded before an attempt; these exclusions do not increment rejection counts. Zero counts do not prove conservation. Counts include solver substeps and CCD passes. Qualification includes 198 package tests, 843 game tests, GPU-disabled browser checks, 80 byte-exact snapshot replays and matching independent distribution builds. The synthetic 16-assembly falling benchmark measured about 0.95 additional microseconds per assembly/substep (median paired batch ratio 1.12); this is not a hardware FPS result. Contact coupling, partial-subtree fracture and extreme thin-moment storage remain separate work. See absolutejs/research/aggregate-free-transport/README.md for evidence and limits.'
+				],
+				title: 'Isolated fixed-assembly integration and observations (0.15)'
+			},
+			{
+				description:
+					"Removing a link from a moving fixed assembly can leave multiple assemblies. Newly released roots inherit their body's world COM and angular velocity; the surviving original root retains its coordinates, damping, armature, friction and surviving couplings. Newly free root coordinates use their normal defaults. Explicit fixed-to-dynamic activation also preserves prescribed body velocity. Initial articulation construction semantics are unchanged.",
+				details: [
+					'An ordinary free fragment now retains the matched free-rotation path when an unrelated articulation shares its solver batch. Multibody links are excluded from ordinary-body initialization, and existing external-constraint, damping, torque, lock and speed exclusions still apply. This corrects a batch-dependent motion error without applying free-body integration to constrained bodies.',
+					"takeSnapshot() now writes the ABSJS3DS envelope, version 1, including ordered pending connectivity edits and dirty impulse-joint state. Saving immediately after a cut therefore retains changes not yet consumed by a simulation step. Native Rust callers can capture/restore the opaque PendingIslandEvents companion with the corresponding serialized world sets. Capture neither flushes edits nor reconstructs the world's connectivity. Snapshot payloads still depend on the native engine layout: retain buildInfo with diagnostic captures; the envelope is not a promise of cross-engine save compatibility. Prior compatible raw captures remain readable for investigation, but edits omitted by their original writer cannot be recovered. All new saves use the versioned format.",
+					'Qualification and retained failed assumptions are in absolutejs/research/assembly-split/. Tests measure the remaining material after body removal; they do not invent a fracture-energy budget or model cutting forces, plastic deformation or coupled-contact accuracy. Those remain separate physical models and qualification work.'
+				],
+				title: 'Partial assembly splits and pending snapshots (0.16)'
+			},
+			{
+				description:
+					'Snapshots now serialize unordered pending wake/join membership in handle order. The default backend also consumes queued wake requests in handle order, retaining impulse-before-multibody priority. Previously, restoring a snapshot could reorder sleeping bodies when they woke, changing active-set records on subsequent steps. Only queued edits are sorted; there is no scan of every world body. The enhanced- determinism feature retains its existing insertion-ordered behavior. Ordered connectivity events and the version-1 snapshot payload layout are unchanged; this is not a general cross-engine snapshot-compatibility promise.',
+				details: [
+					'Qualification includes 223 package tests, 843 game tests, exact sleeping-wake replays, native feature/worker checks, GPU-disabled browser replay and identical independent builds. Unaffected transport and impact states match published 0.16.0. Sorting has a measured cost: at 256 released bodies, median first-wake step time was 0.82 ms versus 0.98 ms, with about 26 microseconds added per pending snapshot capture. These are bounded CPU fixtures, not hardware FPS claims. See absolutejs/research/snapshot-order/ for original failures and full evidence.'
+				],
+				title: 'Stable queued wake replay (0.16.1)'
+			},
+			{
+				description:
+					'Moving convex pairs now refresh separated predictive contacts instead of reusing stale closest features across the contact-recycling drift window. Captured tree fragments could previously penetrate while the cached anchors still reported separation. Exactly unchanged relative geometry and world rotations retain reuse, as do the existing empty-pair and touching-contact paths. This adds no public setting, solver-iteration increase or snapshot-layout change.',
+				details: [
+					'The new rule applies only when both shapes are convex. Composite triangle, heightfield and compound contact recycling retains its prior behavior. A broader candidate regressed real generated-terrain support and was rejected; its captures and controls remain in the research record. Mixed touching/predictive sets and general composite-contact accuracy remain separate qualification work.',
+					'Qualification includes 227 package tests, 844 game tests, exact captured replay, one/two-worker native checks, allocation-enabled no-std, GPU-disabled browser checks and 18 full tree-drop cases. Four generated/excavated terrain cases retain all measured physical fields and 491 poses exactly versus 0.16.1. The originally bad flat-floor tree cases improve from roughly 7–12 mm cached penetration to below 0.6 mm; other cases can change within their original limits. These cached measurements are not continuous authored-material penetration guarantees.',
+					'Bounded paired CPU ratios versus 0.16.1 were about 0.99/0.99/1.05 for stationary predictions, resting stacks and falling boxes. The stack trajectory changes but passes its original stability limits. These fixtures do not measure hardware FPS or establish a general speedup. See absolutejs/research/predictive-recycle/ for source, failed candidates, controls and qualification receipts.',
+					'Independent builds match all 49 distribution files and the packaged native payload byte-for-byte. Raw executable/data sections match; only unshipped wasm-bindgen custom metadata differs. Snapshot layout and public APIs are unchanged.'
+				],
+				title: 'Predictive convex contacts (0.16.2)'
+			},
+			{
+				description:
+					'Contact-patch reduction now applies the same contact-skin, soft-body and velocity-prediction eligibility rule as final solver admission. Previously, reduction filtered outer points by current distance alone. An approaching tilted box could consequently receive support along just one edge even though points on the opposite edge qualified for the solver. The regression now retains four support points spanning both sides, across three scales and both insertion orders. Stationary and receding outer points remain excluded by the existing rule.',
+				details: [
+					'This is a two-file solver correction. It changes no public API, snapshot layout, material coefficient, solver budget or admission tolerance. Published Parry c566aabd is unchanged; the separate GJK-normal, persistent triangle-frame and conservative-CCD experiments are excluded. This release does not solve the remaining generated-heightfield or rotational direct-sweep limitations.',
+					'Qualification includes 236 package tests, 844 game tests, exact snapshot replay, GPU-disabled browser tests, native one/two-worker controls and allocation-enabled no-std. The 24 paired terrain controls add no rejection, but the existing raw variant-0/1920 rejection remains. Four actual generated/excavated work requests and 18 flat-floor tree cases pass their original limits. Twenty of 24 paired terrain rows retain their measured physical fields exactly; others change. These checks do not establish continuous authored-material separation.',
+					'Bounded paired CPU ratios versus 0.16.2 were approximately 1.03, 1.05 and 0.95 for stationary predictions, resting stacks and falling boxes, with identical final physical fields. The affected tilted-patch ratio was 0.95. These shared-host observations are not hardware FPS or a universal speedup claim. See absolutejs/research/predictive-support/ for complete evidence and limitations.',
+					'Independent builds match all 49 distribution files and the packaged native payload byte-for-byte. Raw executable/data sections match; only unshipped wasm-bindgen metadata differs.'
+				],
+				title: 'Approaching contact support (0.16.3)'
+			},
+			{
+				description:
+					'Orientation-changing 3D direct sweeps now use separating-plane motion bounds to detect the captured case where a rotating bar crosses a surface between two clear endpoint poses. Translation-only sweeps retain the existing path. The distance-query budget remains 25, with explicit failure if safe progress cannot be established. Composite traversal is a separate limitation; this is not a universal continuous-separation guarantee.',
+				details: [
+					'Stalled convex queries preserve the direction associated with the support bound used for classification. This fixes a captured tree/triangle query that reported about 202 mm penetration while independent plane projection bounded required separation to about 0.013 mm. Both corrections are qualified together: the rotational change alone exposed this cached-direction error in the full oak excavation test. The combined engine passes it and all 844 game tests.',
+					'Package API, snapshot layout, contact tolerances and solver budgets are unchanged. The raw variant-5/960 terrain clearance rejection remains identically present; physical outcomes elsewhere may change. Bounded CPU control scenes retain identical physical results and comparable timings. The targeted tilted-contact fixture costs about 51% more after extended warmup, about 0.037 ms extra per restored step in that fixture. This is a measured correctness tradeoff, not a browser FPS or general performance guarantee.',
+					'Qualification includes 432 direct-sweep cases, captured old/new contact regressions, 237 package tests, GPU-disabled browser checks, native one/two-worker controls, no-std, 24 tree/rate comparisons, four generated/excavated requests, 18 flat-tree cases and an independent build matching all shipped files. Evidence: absolutejs/research/rotational-contact/.',
+					'Numerical contact softness',
+					'world.integrationParameters.contactSoftness and staticContactSoftness read or atomically replace { naturalFrequency, dampingRatio }. The first controls dynamic contacts (native default 30 Hz / 10); the second controls contacts with a fixed body (native default 60 Hz / 10). Change them between steps. Reads return owned copies; values must be representable finite native coefficients, with positive frequency and nonnegative damping. Both values are validated before either changes. Snapshots preserve both settings. Bounded step profiles record each distinct settings pair once in a bounded contactSettings table; samples carry native.contactSettingsIndex. Reports deeply own that table, including after the world is freed. This avoids repeating configuration in every sample and keeps telemetry within existing event budgets.',
+					"These are numerical regularization parameters, not measured material elasticity. Higher frequency can reduce transient penetration but may produce jitter or prevent sleeping. Qualify motion, contact, sleeping and cost across actual scenarios before changing a product's policy. Defaults are unchanged.",
+					'0.18.0 contact correction and adoption limits',
+					'The collision library rejects an exactly duplicated CSO point before it can form a degenerate tetrahedron and lose a valid terrain contact. Both friction builders select static/dynamic coefficients directly, avoiding dependence on an unused coefficient through floating-point cancellation.',
+					"Native defaults remain unchanged. In the game's actual tree matrix, the collision correction fixes one missed-contact case but makes another case exceed the game's clearance limit at default softness (-21.007 mm). The game therefore qualifies an explicit 600 Hz / 10 static-contact policy alongside this engine: all 24 tree/rate cases and 18 cut-tree cases pass and sleep. This is a bounded product policy, not a universal stiffness recommendation. The default-policy failure is retained in the investigation records.",
+					'Qualification: 242 package tests, 847 game tests, four generated/excavated terrain requests, GPU-disabled browser controls, native serial/two-worker checks, no-std, and independent builds matching all shipped files. Three ordinary CPU controls are within roughly 1% of 0.17.0 in this run. See absolutejs/research/contact-softness-controls/ for measured fixture costs, source hashes, intermediate failures and scope limitations.',
+					'Queued 0.19.0: explicit quadratic resistance',
+					'solveQuadraticDragImpulse analytically integrates one quadratic relative-flow resistance channel with positive supplied effective inverse mass. It returns the signed impulse, implicit relative speed, dissipated energy and separate body / reservoir work. It is pure and does not infer shape, exposure or coefficients. Use consistent units and the complete effective mass response; verify native application precision. See absolutejs/research/quadratic-drag-2026-10-31/README.md for the derivation, scope and evidence. Native engine qualification stays 0.18.0.'
+				],
+				title: 'Rotational intervals and cached contact directions (0.17.0)'
+			},
+			{
+				description:
+					"The opt-in world.solverSchedule() query returns owned observations from the last completed profiled step. Like ccdSubsteps(), it returns null before such a step, when profiling is disabled or toggled, and after snapshot restoration. createPhysicsStepProfiler retains distinct owned records in solverSchedules, referenced by each sample's native.solverScheduleIndex (omitted means entry 0). The table is always present and cannot exceed the retained sample count; repeated observations do not repeat the full record.",
+				details: [
+					"groupVisits counts prepared nonempty rigid-body solve groups across CCD passes. rigidBodyVisits sums their rigid-body slots, while rigidBodySubsteps weights those slots by each group's prepared substep count. These are visits, not unique body identities. minSubsteps/maxSubsteps report the group range; minSubstepDt/maxSubstepDt are durations in seconds. All four range fields are null when no nonempty rigid group was prepared. Soft-particle-only work and internal PGS sweeps are outside these counts.",
+					"This reads the actual group layout, including additional iterations propagated through constraint-connected bodies. It does not change that layout, force sampling, native timestep or contact policy. It is not a per-body mapping, elapsed CPU timing, proof of force/energy accuracy, or forecast of the next step. In particular, a previous group's substep count must not silently select gameplay fluid-force timing when contact connectivity or CCD can change.",
+					'The native observer is qualified by independent native builds and exact full-state comparisons across 18 fixtures / 9,240 steps against 0.19.0. Sampled local CPU costs and limits are recorded in absolutejs/research/solver-schedule/. The previous private artifacts remain archived; release availability is separate from source qualification.',
+					'Bounded diagnostic profile transport',
+					'encodePhysicsStepProfile(profile) converts a readable report into an owned, versioned numeric packet. decodePhysicsStepProfile(value) validates an unknown packet and reconstructs owned readable observations. For example:',
+					"The codec preserves every defined observation without rounding, including null measurements, failed samples, signed zero and explicit versus omitted default schedule references. It excludes arbitrary application metadata and user strings. The format tag is absolutejs-physics-step-profile/1; one fixed '-0' cell tag preserves signed zero through JSON. Arrays are bounded to 256 entries, tuple lengths and enums are fixed, and indices/scalars are validated. Malformed packets throw TypeError. This is transport validation, not a claim of native provenance or physical correctness. Apply normal metadata redaction outside the codec.",
+					'Readable PhysicsStepProfile remains the simulation-facing API. In 0.20 its always-present solverSchedules table and optional sample index are part of that schema; older readable profiles without this table are not silently upgraded. Keep the format tag with stored packets and decode before displaying their fields.'
+				],
+				title: 'Prepared solver schedules (0.20.0)'
+			},
+			{
+				description:
+					"collider.convexMeshData() returns an owned {vertices: Float32Array, indices: Uint32Array} pair from one native hull reconstruction. Use it when both buffers are needed; separate vertices() and indices() calls each reconstruct the hull. The query observes the current shape, so replacing a collider's shape requires no cache invalidation. Mutating returned arrays does not change the collider.",
+				details: [
+					"Nonconvex shapes return undefined. Rounded convex shapes return the inner polyhedron, excluding the round radius. The mesh is a reconstructed boundary of the stored Float32 points, not a copy of internal contact faces. Reconstruction uses double precision and exact-sign dimension checks for thin point clouds; returned positions remain original Float32 coordinates. It does not upgrade the physics engine's storage or solver to double precision. Boundary measurements and native mass measurements remain distinct; applications must continue to validate both.",
+					'buildInfo.convexExportPrecision identifies this reconstruction as float64. The f32 and f64 collision-library dependencies use the same recorded source pin. Captured export, browser-worker, simulation-parity and CPU timing evidence lives in absolutejs/research/convex-export/. Release availability is separate from source qualification; publication may be deferred. The unchanged physical engine retains its existing settling limits.'
+				],
+				title: 'Convex boundary export (0.21)'
+			}
+		],
+		repository: 'https://github.com/absolutejs/rapier3d',
+		subpackages: [],
+		version: '0.21.0'
 	},
 	{
 		api: [
@@ -44737,6 +50949,115 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/reliability',
 		subpackages: [],
 		version: '0.1.0'
+	},
+	{
+		api: [],
+		category: 'Frontend & UX',
+		commands: [
+			{
+				command: 'tsc -p tsconfig.json',
+				name: 'build'
+			},
+			{
+				command: 'bun run build && bun run test',
+				name: 'check:package'
+			},
+			{
+				command: 'bun test ./tests',
+				name: 'test'
+			},
+			{
+				command: 'bun scripts/verify-browser.cjs',
+				name: 'test:browser'
+			},
+			{
+				command: 'bun scripts/verify-spring.cjs',
+				name: 'test:spring:browser'
+			}
+		],
+		description:
+			'Render-destination coverage policies and callback-preserving material ownership for Three.js applications.',
+		directory: 'rendering',
+		kind: 'package',
+		name: 'Rendering',
+		packageName: '@absolutejs/rendering',
+		private: false,
+		publicExports: [
+			'@absolutejs/rendering',
+			'@absolutejs/rendering/spring'
+		],
+		readmeDigest:
+			'22f85859f1e69d4f91b50b9453aba430990c677f28b909dfcc5dbb9874f3349f',
+		readmeSamples: [
+			{
+				code: "import { bindAlphaToCoverageDestination } from '@absolutejs/rendering';\nmaterial.alphaToCoverage = true;\nconst unbind = bindAlphaToCoverageDestination(material);\n// On every draw, the policy selects coverage from the active render destination.\n// Call unbind() when removing the policy while retaining the material.",
+				description:
+					'A multisampled canvas does not make a reflection texture multisampled. An alpha-to-coverage shader used unchanged in a single-sample target can draw partially covered foliage as solid pixels.',
+				heading: 'Coverage follows the destination',
+				language: 'typescript'
+			},
+			{
+				code: "import { cloneRenderMaterial } from '@absolutejs/rendering';\nconst owned = cloneRenderMaterial(source);\n// Textures remain borrowed. Dispose the clone, not the source's textures.",
+				description:
+					'Working example for Clone customized materials safely.',
+				heading: 'Clone customized materials safely',
+				language: 'typescript'
+			}
+		],
+		readmeTopics: [
+			{
+				description:
+					'Small Three.js material-lifecycle utilities for AbsoluteJS applications and 3D authoring tools. These complement R3F and drei; they do not provide a scene graph, camera controls, effects composer or renderer replacement.',
+				details: [],
+				title: 'Overview'
+			},
+			{
+				description:
+					'A multisampled canvas does not make a reflection texture multisampled. An alpha-to-coverage shader used unchanged in a single-sample target can draw partially covered foliage as solid pixels.',
+				details: [
+					'The policy runs after the previous material callback and before Three selects the program. It updates the material only when the effective coverage mode changes. Three can cache the corresponding program variants. It does not inject shaders, allocate textures, traverse the scene, monkey-patch a renderer, or call synchronous GPU queries per draw.',
+					'Shader customizations must retain their non-ALPHA_TO_COVERAGE fallback. The policy uses declared render-target sample counts, bounded by renderer support; callers must create targets with supported attachment formats. Canvas antialias attributes are cached per renderer, but a lost context is not cached as a permanent capability result. Disabled preferences remain disabled on all destinations. Shadow passes that call renderBufferDirect require their own depth-material policy; this callback targets normal material draws.',
+					'Rebinding updates the existing preference without stacking callbacks. The returned disposer is idempotent and restores the original flag and callback only while it still owns the callback slot; it will not overwrite a later owner.'
+				],
+				title: 'Coverage follows the destination'
+			},
+			{
+				description:
+					"This retains onBeforeCompile, customProgramCacheKey and onBeforeRender. A registered destination policy is cloned independently, including when the source was last drawn into a non-MSAA target. Changing the clone's preference cannot affect the source. This does not clone arbitrary object callbacks, custom depth materials or scene state.",
+				details: [],
+				title: 'Clone customized materials safely'
+			},
+			{
+				description:
+					'Qualified against Three r186. No React dependency and no animation loop. Runtime cost is a small callback and destination check per affected draw; switching sampling modes can select another cached shader program. Hardware frame-rate improvements are not claimed. Game-specific foliage algorithms, lighting, world generation and simulation remain outside this package.',
+				details: [
+					'Use bun run check:package to build declarations and run the ownership/policy tests. Browser evidence is retained under docs/.'
+				],
+				title: 'Compatibility and scope'
+			},
+			{
+				description:
+					'renderTargetScope(renderer, run) restores the render target, cube face, mip, viewport, scissor and scissor-test state even if synchronous work throws. The callback must finish renderer mutations synchronously; do not hold a scope over an await.',
+				details: [
+					"readTargetPixelsScoped(renderer, target, width, height, buffer, textureIndex?) submits a byte/float read from a neutral target and restores the caller through Three's target setter. This avoids restoring a resolve framebuffer in place of its multisample draw attachment, or treating a cube framebuffer array as a single framebuffer.",
+					'readFloatTargetScoped(...) submits asynchronous float readback in the same neutral state, restores the caller immediately, and returns the exact supplied Float32Array on completion. It never restores stale renderer state after await. Allocate supported targets and correctly sized buffers before calling these helpers. The helpers do not choose formats, sample counts or capture resolution.'
+				],
+				title: 'Scoped captures and readback'
+			},
+			{
+				description:
+					'The optional @absolutejs/rendering/spring entry provides animated.mesh, animated.group, useSpring, easings, and createFiberSpringHost for other explicit Fiber primitives:',
+				details: [
+					"It keeps React Spring's normal scheduler. Three prop updates invalidate the owning Fiber root through applyProps; DOM-only animation does not render a scene and can finish without a mounted Canvas. No useFrame, manual animation clock, global scheduler replacement, or unconditional render loop is installed.",
+					"Do not also runtime-import @react-spring/three: that entry installs a global Fiber-driven scheduler even when its consuming component is never mounted. This adapter does not override or repair another module's global scheduler changes. Type-only imports from that package are safe. Test your actual application's eager import graph as well as isolated components.",
+					"Use createFiberSpringHost(['instancedMesh', 'meshStandardMaterial']) to opt into additional hosts without registering every Three constructor. React, Fiber and React Spring peers are optional for the core material utilities, but required when using this subpath. @react-spring/three supplies host types only; it is not runtime-imported by this entry. The tested versions are React 19.3, Fiber 9.8.2, Three 0.186.1 and React Spring 10.1.2."
+				],
+				title: 'React Spring with demand-rendered Fiber scenes'
+			}
+		],
+		repository: 'https://github.com/absolutejs/rendering',
+		subpackages: [],
+		version: '0.3.0'
 	},
 	{
 		api: [],
@@ -45813,11 +52134,26 @@ export const ecosystemProjects: EcosystemProject[] = [
 							'type BunGatewayResolution = RouteRequest | null;'
 					},
 					{
+						description:
+							'How an upstream failed a request: it could not be reached at all, or it sent no response headers within upstreamHeadersTimeoutMs.',
+						kind: 'type',
+						name: 'UpstreamFailureKind',
+						signature:
+							"type UpstreamFailureKind = 'timeout' | 'unreachable';"
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'UpstreamFailure',
+						signature:
+							'type UpstreamFailure = {\n    error: unknown;\n    kind: UpstreamFailureKind;\n    request: Request;\n    shard: Shard;\n};'
+					},
+					{
 						description: '',
 						kind: 'type',
 						name: 'BunGatewayOptions',
 						signature:
-							"type BunGatewayOptions = {\n    router: Pick<Router, 'acquire' | 'route'>;\n    resolve: (request: Request) => BunGatewayResolution | Promise<BunGatewayResolution>;\n    /** Optional final target rewrite after the router chooses a shard. */\n    target?: (shard: Shard, request: Request) => string | URL;\n    /** Preserve a trusted ingress proxy's X-Forwarded-For chain. Default false. */\n    trustForwardedFor?: boolean;\n    /** Public scheme when TLS terminates before this gateway. Never read from client headers. */\n    publicProtocol?: 'http' | 'https';\n    /** Send the client's Host to the upstream instead of the shard's address,\n     *  as reverse proxies normally do. Apps behind the gateway then build URLs\n     *  (callbacks, redirects, emailed links) from their public name rather than\n     *  an internal host:port. X-Forwarded-Host is set either way. Default false. */\n    preserveHost?: boolean;\n    upstreamOpenTimeoutMs?: number;\n    onError?: (error: unknown, request: Request) => void;\n};"
+							"type BunGatewayOptions = {\n    router: Pick<Router, 'acquire' | 'route'>;\n    resolve: (request: Request) => BunGatewayResolution | Promise<BunGatewayResolution>;\n    /** Optional final target rewrite after the router chooses a shard. */\n    target?: (shard: Shard, request: Request) => string | URL;\n    /** Preserve a trusted ingress proxy's X-Forwarded-For chain. Default false. */\n    trustForwardedFor?: boolean;\n    /** Public scheme when TLS terminates before this gateway. Never read from client headers. */\n    publicProtocol?: 'http' | 'https';\n    /** Send the client's Host to the upstream instead of the shard's address,\n     *  as reverse proxies normally do. Apps behind the gateway then build URLs\n     *  (callbacks, redirects, emailed links) from their public name rather than\n     *  an internal host:port. X-Forwarded-Host is set either way. Default false. */\n    preserveHost?: boolean;\n    upstreamOpenTimeoutMs?: number;\n    /**\n     * Abort an upstream that sends no response headers within this long. It\n     * counts as a failed upstream (`onUpstreamFailure`, kind `'timeout'`) and\n     * answers 504, but the request is never retried, so slow work never runs\n     * twice. "
 					},
 					{
 						description: '',
@@ -45870,7 +52206,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		private: false,
 		publicExports: ['@absolutejs/router', '@absolutejs/router/bun'],
 		readmeDigest:
-			'bb8f7ec64e3eea9a8d76301a520e3082b6a9983fd2ed8675be989398a1400e56',
+			'f39f3b0b0e43478d2d2aefc30e0846192ee583a9314ee49822adc719d90cb787',
 		readmeSamples: [
 			{
 				code: "import { createBunGateway } from '@absolutejs/router/bun';\n\nconst gateway = createBunGateway({\n\trouter,\n\tresolve: (request) => {\n\t\tconst hit = domainMap.resolve(request.headers.get('host') ?? '');\n\n\t\treturn hit\n\t\t\t? { route: new URL(request.url).pathname, tenantId: hit.tenantId }\n\t\t\t: null;\n\t}\n});\n\nBun.serve({ port: 3001, ...gateway });",
@@ -45987,7 +52323,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/router',
 		subpackages: [],
-		version: '0.7.0'
+		version: '0.8.0'
 	},
 	{
 		api: [
@@ -46542,7 +52878,193 @@ export const ecosystemProjects: EcosystemProject[] = [
 		version: '0.0.1'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/search',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchStatus',
+						signature:
+							'type SearchStatus = "ok" | "empty" | "partial" | "unavailable" | "rate_limited" | "quota_exceeded" | "cancelled" | "error";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchSource',
+						signature:
+							'type SearchSource = {\n    id: string;\n    url: string;\n    title: string;\n    excerpts: string[];\n    retrievedAt: string;\n    /** Date reported by the page/provider; never an event date inferred from a crawl. */\n    publishedAt?: string;\n    contentFetchedAt?: string;\n    metadata?: Record<string, unknown>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchRequest',
+						signature:
+							'type SearchRequest = {\n    filters?: SearchFilters;\n    query: string;\n    mode?: "web" | "context";\n    signal?: AbortSignal;\n    count?: number;\n    maxTokens?: number;\n    maxUrls?: number;\n    maxTokensPerUrl?: number;\n    freshness?: string;\n    country?: string;\n    language?: string;\n    threshold?: "strict" | "balanced" | "lenient" | "disabled";\n    goggles?: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchAttempt',
+						signature:
+							'type SearchAttempt = {\n    id: string;\n    provider: string;\n    endpoint: string;\n    startedAt: string;\n    durationMs: number;\n    status: SearchStatus;\n    httpStatus?: number;\n    /** Provider diagnostic code, retained independently of HTTP status. */\n    errorCode?: string;\n    /** Bounded provider explanation with the configured credential removed. */\n    errorMessage?: string;\n    retryAfterMs?: number;\n    /** A successful HTTP response is billable even if parsing fails. */\n    billing: "fulfilled" | "rejected" | "unknown" | "not_sent";\n    costUsd: number | null;\n    providerRequestId?: string;\n    quota?: {\n        limit: string | null;\n        remaining: string | null;\n        reset: string | null;\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchResult',
+						signature:
+							'type SearchResult = {\n    provider: string;\n    version: string;\n    query: string;\n    status: SearchStatus;\n    sources: SearchSource[];\n    attempts: SearchAttempt[];\n    limitations: string[];\n    cache?: {\n        hit: boolean;\n        originalAttemptIds: string[];\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchProvider',
+						signature:
+							'type SearchProvider = {\n    capabilities?: SearchCapabilities;\n    name: string;\n    version: string;\n    search: (request: SearchRequest) => Promise<SearchResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'searchCompleted',
+						signature:
+							'const searchCompleted: (result: SearchResult) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'searchUsable',
+						signature:
+							'const searchUsable: (result: SearchResult) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'unavailableSearch',
+						signature:
+							'const unavailableSearch: (provider: string, query: string, reason: string) => SearchResult;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evidenceText',
+						signature:
+							'const evidenceText: (sources: SearchSource[]) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'sourceSupportsQuote',
+						signature:
+							'const sourceSupportsQuote: (source: SearchSource, quote: string) => boolean;'
+					},
+					{
+						description:
+							'No truncation: split oversized questions into bounded chunks and retain every word.',
+						kind: 'value',
+						name: 'boundedQueries',
+						signature:
+							'const boundedQueries: (text: string, maxChars?: number, maxWords?: number) => string[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchCacheEntry',
+						signature:
+							'type SearchCacheEntry = {\n    expiresAt: number;\n    result: SearchResult;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchCacheStore',
+						signature:
+							'type SearchCacheStore = {\n    get: (key: string) => Promise<SearchCacheEntry | undefined>;\n    set: (key: string, entry: SearchCacheEntry) => Promise<void>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'searchCacheKey',
+						signature:
+							'const searchCacheKey: (provider: SearchProvider, request: SearchRequest, scope: string) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'withSearchCache',
+						signature:
+							'const withSearchCache: (provider: SearchProvider, options: {\n    scope: string;\n    ttlMs?: number;\n    emptyTtlMs?: number;\n    capacity?: number;\n    now?: () => number;\n    store?: SearchCacheStore;\n}) => SearchProvider;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchCapabilities',
+						signature:
+							'type SearchCapabilities = {\n    modes: readonly ("web" | "context")[];\n    filters: readonly ("freshness" | "country" | "language" | "includeDomains" | "excludeDomains" | "publishedAfter" | "publishedBefore" | "category")[];\n    content: readonly ("excerpts" | "text")[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SearchFilters',
+						signature:
+							'type SearchFilters = {\n    includeDomains?: string[];\n    excludeDomains?: string[];\n    publishedAfter?: string;\n    publishedBefore?: string;\n    category?: string;\n};'
+					},
+					{
+						description:
+							'Reject unsupported constraints before provider work; never silently broaden a query.',
+						kind: 'value',
+						name: 'assertSearchCapabilities',
+						signature:
+							'const assertSearchCapabilities: (provider: Pick<SearchProvider, "capabilities">, request: SearchRequest) => void;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'withSearchCapabilities',
+						signature:
+							'const withSearchCapabilities: (provider: SearchProvider) => SearchProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/search/brave',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'BraveOptions',
+						signature:
+							'type BraveOptions = {\n    apiKey: string;\n    fetch?: typeof fetch;\n    now?: () => number;\n    timeoutMs?: number;\n    apiVersion?: string;\n    /** Awaited before returning, including rejected and malformed responses. Does not expose credentials. */\n    observe?: (attempt: SearchAttempt) => Promise<void> | void;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'braveSearchCapabilities',
+						signature:
+							'const braveSearchCapabilities: SearchCapabilities;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createBraveSearch',
+						signature:
+							'const createBraveSearch: (options: BraveOptions) => SearchProvider;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/search/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<BraveOptions, SearchProvider>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<SearchProvider>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<SearchProvider>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{\n        timeoutMs: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TInteger>;\n    }>;\n});'
+					}
+				]
+			}
+		],
 		category: 'AI',
 		commands: [
 			{
@@ -46607,7 +53129,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/search',
 		subpackages: [],
-		version: '0.2.1'
+		version: '0.2.3'
 	},
 	{
 		api: [],
@@ -50037,7 +56559,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/stock-images',
 		subpackages: [],
-		version: '0.1.1'
+		version: '0.1.2'
 	},
 	{
 		api: [],
@@ -50072,31 +56594,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/stock-images-providers',
 		subpackages: [
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/stock-images-pexels',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'createPexelsProvider',
-								signature:
-									'const createPexelsProvider: (options: ProviderOptions) => StockImageProvider;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/stock-images-pexels/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature: 'const manifest: any;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -50150,42 +56648,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'pexels',
-				version: '0.1.0'
+				version: '0.1.1'
 			},
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/stock-images-unsplash',
-						symbols: [
-							{
-								description: '',
-								kind: 'interface',
-								name: 'UnsplashOptions',
-								signature:
-									'interface UnsplashOptions extends ProviderOptions {\n    appName: string;\n}'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createUnsplashProvider',
-								signature:
-									'const createUnsplashProvider: (options: UnsplashOptions) => StockImageProvider;'
-							}
-						]
-					},
-					{
-						entryPoint:
-							'@absolutejs/stock-images-unsplash/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature: 'const manifest: any;'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -50239,7 +56705,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'unsplash',
-				version: '0.1.0'
+				version: '0.1.1'
 			}
 		],
 		version: null
@@ -53279,7 +59745,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/sync',
 		subpackages: [],
-		version: '3.0.0'
+		version: '3.0.2'
 	},
 	{
 		api: [],
@@ -53348,7 +59814,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 				title: 'Why a monorepo'
 			}
 		],
-		repository: null,
+		repository: 'https://github.com/absolutejs/sync-adapters',
 		subpackages: [
 			{
 				api: [],
@@ -53750,7 +60216,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'capacitor',
-				version: '0.9.4'
+				version: '0.9.5'
 			},
 			{
 				api: [],
@@ -62229,6 +68695,10 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'build'
 			},
 			{
+				command: 'absolute-changelog check',
+				name: 'check:package'
+			},
+			{
 				command: 'bun test',
 				name: 'test'
 			},
@@ -62301,10 +68771,1030 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/vue-composables',
 		subpackages: [],
-		version: '0.4.0'
+		version: '0.4.1'
 	},
 	{
-		api: [],
+		api: [
+			{
+				entryPoint: '@absolutejs/vulnerabilities',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'VULNERABILITY_CONTRACT_VERSION',
+						signature: 'const VULNERABILITY_CONTRACT_VERSION: 1;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AssetKindSchema',
+						signature:
+							'const AssetKindSchema: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"container">, import("@sinclair/typebox").TLiteral<"host">, import("@sinclair/typebox").TLiteral<"package">, import("@sinclair/typebox").TLiteral<"repository">, import("@sinclair/typebox").TLiteral<"deployment">]>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AssetKind',
+						signature:
+							'type AssetKind = Static<typeof AssetKindSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AssetEnvironmentSchema',
+						signature:
+							'const AssetEnvironmentSchema: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"production">, import("@sinclair/typebox").TLiteral<"staging">, import("@sinclair/typebox").TLiteral<"development">, import("@sinclair/typebox").TLiteral<"test">, import("@sinclair/typebox").TLiteral<"unknown">]>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AssetEnvironment',
+						signature:
+							'type AssetEnvironment = Static<typeof AssetEnvironmentSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AssetCriticalitySchema',
+						signature:
+							'const AssetCriticalitySchema: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"critical">, import("@sinclair/typebox").TLiteral<"high">, import("@sinclair/typebox").TLiteral<"medium">, import("@sinclair/typebox").TLiteral<"low">, import("@sinclair/typebox").TLiteral<"unknown">]>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AssetCriticality',
+						signature:
+							'type AssetCriticality = Static<typeof AssetCriticalitySchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VulnerabilityAssetSchema',
+						signature:
+							'const VulnerabilityAssetSchema: import("@sinclair/typebox").TObject<{\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    criticality: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"critical">, import("@sinclair/typebox").TLiteral<"high">, import("@sinclair/typebox").TLiteral<"medium">, import("@sinclair/typebox").TLiteral<"low">, import("@sinclair/typebox").TLiteral<"unknown">]>;\n    environment: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"production">, import("@sinclair/typebox").TLiteral<"staging">, import("@sinclair/typebox").TLiteral<"development">, import("@sinclair/typebox").TLiteral<"test">, import("@sinclair/typebox").TLiteral<"unknown">]>;\n    id: import("@sinclair/typebox").TString;\n    kind: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"container">, import("@sinclair/typebox").TLiteral<"host">, import("@sinclair/typebox").TLiteral<"package">, import("@sinclair/typebox").TLiteral<"repository">, import("@sinclair/typebox").TLiteral<"deployment">]>;\n    labels: import("@sinclair/typebox").TRecord<import("@sinclair/typebox").TString, import("@sinclair/typebox").TString>;\n    name: im'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAsset',
+						signature:
+							'type VulnerabilityAsset = Static<typeof VulnerabilityAssetSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'ComponentIdentitySchema',
+						signature:
+							'const ComponentIdentitySchema: import("@sinclair/typebox").TObject<{\n    ecosystem: import("@sinclair/typebox").TString;\n    name: import("@sinclair/typebox").TString;\n    namespace: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    purl: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    version: import("@sinclair/typebox").TString;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ComponentIdentity',
+						signature:
+							'type ComponentIdentity = Static<typeof ComponentIdentitySchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VulnerabilityComponentSchema',
+						signature:
+							'const VulnerabilityComponentSchema: import("@sinclair/typebox").TObject<{\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    id: import("@sinclair/typebox").TString;\n    identity: import("@sinclair/typebox").TObject<{\n        ecosystem: import("@sinclair/typebox").TString;\n        name: import("@sinclair/typebox").TString;\n        namespace: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n        purl: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n        version: import("@sinclair/typebox").TString;\n    }>;\n    licenses: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;\n    locations: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;\n    properties: import("@sinclair/typebox").TRecord<import("@sinclair/typebox").TString, import("@sinclair/typebox").TString>;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityComponent',
+						signature:
+							'type VulnerabilityComponent = Static<typeof VulnerabilityComponentSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AdvisorySourceSchema',
+						signature:
+							'const AdvisorySourceSchema: import("@sinclair/typebox").TObject<{\n    fetchedAt: import("@sinclair/typebox").TString;\n    name: import("@sinclair/typebox").TString;\n    revision: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    url: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AdvisorySource',
+						signature:
+							'type AdvisorySource = Static<typeof AdvisorySourceSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'AdvisorySeveritySchema',
+						signature:
+							'const AdvisorySeveritySchema: import("@sinclair/typebox").TObject<{\n    score: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TNumber]>;\n    system: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"cvss-v2">, import("@sinclair/typebox").TLiteral<"cvss-v3">, import("@sinclair/typebox").TLiteral<"cvss-v4">, import("@sinclair/typebox").TLiteral<"vendor">, import("@sinclair/typebox").TLiteral<"unknown">]>;\n    value: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"critical">, import("@sinclair/typebox").TLiteral<"high">, import("@sinclair/typebox").TLiteral<"medium">, import("@sinclair/typebox").TLiteral<"low">, import("@sinclair/typebox").TLiteral<"negligible">, import("@sinclair/typebox").TLiteral<"unknown">]>;\n    vector: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AdvisorySeverity',
+						signature:
+							'type AdvisorySeverity = Static<typeof AdvisorySeveritySchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VulnerabilityAdvisorySchema',
+						signature:
+							'const VulnerabilityAdvisorySchema: import("@sinclair/typebox").TObject<{\n    affected: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n        package: import("@sinclair/typebox").TObject<{\n            ecosystem: import("@sinclair/typebox").TString;\n            name: import("@sinclair/typebox").TString;\n            purl: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n        }>;\n        ranges: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n            events: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n                fixed: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n                introduced: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n                lastAffected: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n                limit: import("@sinclair/typebox").TOptional<import("@sinclair/typebox").TString>;\n            }>>;\n            repository: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAdvisory',
+						signature:
+							'type VulnerabilityAdvisory = Static<typeof VulnerabilityAdvisorySchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'EvidenceReferenceSchema',
+						signature:
+							'const EvidenceReferenceSchema: import("@sinclair/typebox").TObject<{\n    collectedAt: import("@sinclair/typebox").TString;\n    digest: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    kind: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"advisory">, import("@sinclair/typebox").TLiteral<"inventory">, import("@sinclair/typebox").TLiteral<"scan">, import("@sinclair/typebox").TLiteral<"vendor-status">, import("@sinclair/typebox").TLiteral<"vex">, import("@sinclair/typebox").TLiteral<"verification">]>;\n    source: import("@sinclair/typebox").TString;\n    uri: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceReference',
+						signature:
+							'type EvidenceReference = Static<typeof EvidenceReferenceSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VulnerabilityObservationSchema',
+						signature:
+							'const VulnerabilityObservationSchema: import("@sinclair/typebox").TObject<{\n    advisoryIds: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;\n    assetId: import("@sinclair/typebox").TString;\n    componentId: import("@sinclair/typebox").TString;\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    evidence: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n        collectedAt: import("@sinclair/typebox").TString;\n        digest: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n        kind: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"advisory">, import("@sinclair/typebox").TLiteral<"inventory">, import("@sinclair/typebox").TLiteral<"scan">, import("@sinclair/typebox").TLiteral<"vendor-status">, import("@sinclair/typebox").TLiteral<"vex">, import("@sinclair/typebox").TLiteral<"verification">]>;\n        source: import("@sinclair/typebox").TString;\n        uri: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    }>>;\n    id: import("@sinclair/typebox").TString;\n    observedAt: impor'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityObservation',
+						signature:
+							'type VulnerabilityObservation = Static<typeof VulnerabilityObservationSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'FindingStatusSchema',
+						signature:
+							'const FindingStatusSchema: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"new">, import("@sinclair/typebox").TLiteral<"triaged">, import("@sinclair/typebox").TLiteral<"under_investigation">, import("@sinclair/typebox").TLiteral<"confirmed">, import("@sinclair/typebox").TLiteral<"remediation_planned">, import("@sinclair/typebox").TLiteral<"remediating">, import("@sinclair/typebox").TLiteral<"mitigated">, import("@sinclair/typebox").TLiteral<"fixed">, import("@sinclair/typebox").TLiteral<"accepted_risk">, import("@sinclair/typebox").TLiteral<"false_positive">, import("@sinclair/typebox").TLiteral<"reopened">]>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FindingStatus',
+						signature:
+							'type FindingStatus = Static<typeof FindingStatusSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'ManagedVulnerabilityFindingSchema',
+						signature:
+							'const ManagedVulnerabilityFindingSchema: import("@sinclair/typebox").TObject<{\n    assetId: import("@sinclair/typebox").TString;\n    componentId: import("@sinclair/typebox").TString;\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    firstSeenAt: import("@sinclair/typebox").TString;\n    id: import("@sinclair/typebox").TString;\n    lastSeenAt: import("@sinclair/typebox").TString;\n    observationIds: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TString>;\n    severity: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"critical">, import("@sinclair/typebox").TLiteral<"high">, import("@sinclair/typebox").TLiteral<"medium">, import("@sinclair/typebox").TLiteral<"low">, import("@sinclair/typebox").TLiteral<"negligible">, import("@sinclair/typebox").TLiteral<"unknown">]>;\n    status: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"new">, import("@sinclair/typebox").TLiteral<"triaged">, import("@sinclair/typebox").TLiteral<"under_investigation">, import("@sinclair/typebox").TLiteral<"confirmed">, import("@sinclair/typebox").TLiteral<"remediation_planned">, import("@sinclair/typebox").TLiteral<"remediating">, import('
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'ManagedVulnerabilityFinding',
+						signature:
+							'type ManagedVulnerabilityFinding = Static<typeof ManagedVulnerabilityFindingSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VexStatusSchema',
+						signature:
+							'const VexStatusSchema: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"affected">, import("@sinclair/typebox").TLiteral<"not_affected">, import("@sinclair/typebox").TLiteral<"fixed">, import("@sinclair/typebox").TLiteral<"under_investigation">]>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VexStatus',
+						signature:
+							'type VexStatus = Static<typeof VexStatusSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VexJustificationSchema',
+						signature:
+							'const VexJustificationSchema: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"component_not_present">, import("@sinclair/typebox").TLiteral<"vulnerable_code_not_present">, import("@sinclair/typebox").TLiteral<"vulnerable_code_not_executed">, import("@sinclair/typebox").TLiteral<"vulnerable_configuration_disabled">, import("@sinclair/typebox").TLiteral<"vendor_backport_applied">, import("@sinclair/typebox").TLiteral<"compensating_control">, import("@sinclair/typebox").TLiteral<"scanner_identification_incorrect">, import("@sinclair/typebox").TLiteral<"other">]>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VexJustification',
+						signature:
+							'type VexJustification = Static<typeof VexJustificationSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VexDecisionSchema',
+						signature:
+							'const VexDecisionSchema: import("@sinclair/typebox").TObject<{\n    author: import("@sinclair/typebox").TString;\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    createdAt: import("@sinclair/typebox").TString;\n    evidence: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n        collectedAt: import("@sinclair/typebox").TString;\n        digest: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n        kind: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"advisory">, import("@sinclair/typebox").TLiteral<"inventory">, import("@sinclair/typebox").TLiteral<"scan">, import("@sinclair/typebox").TLiteral<"vendor-status">, import("@sinclair/typebox").TLiteral<"vex">, import("@sinclair/typebox").TLiteral<"verification">]>;\n        source: import("@sinclair/typebox").TString;\n        uri: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    }>>;\n    expiresAt: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    id: import("@sinclair/typebox").TString;\n  '
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VexDecision',
+						signature:
+							'type VexDecision = Static<typeof VexDecisionSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VexFindingApplicationSchema',
+						signature:
+							'const VexFindingApplicationSchema: import("@sinclair/typebox").TObject<{\n    appliedAt: import("@sinclair/typebox").TString;\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    decisionId: import("@sinclair/typebox").TString;\n    endedAt: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    findingId: import("@sinclair/typebox").TString;\n    previousStatus: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"new">, import("@sinclair/typebox").TLiteral<"triaged">, import("@sinclair/typebox").TLiteral<"under_investigation">, import("@sinclair/typebox").TLiteral<"confirmed">, import("@sinclair/typebox").TLiteral<"remediation_planned">, import("@sinclair/typebox").TLiteral<"remediating">, import("@sinclair/typebox").TLiteral<"mitigated">, import("@sinclair/typebox").TLiteral<"fixed">, import("@sinclair/typebox").TLiteral<"accepted_risk">, import("@sinclair/typebox").TLiteral<"false_positive">, import("@sinclair/typebox").TLiteral<"reopened">]>;\n    resultingStatus: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"new">, import("@sinclair/typebox").TLiteral<"triaged">, impo'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VexFindingApplication',
+						signature:
+							'type VexFindingApplication = Static<typeof VexFindingApplicationSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'RiskPrioritySchema',
+						signature:
+							'const RiskPrioritySchema: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"emergency">, import("@sinclair/typebox").TLiteral<"critical">, import("@sinclair/typebox").TLiteral<"high">, import("@sinclair/typebox").TLiteral<"medium">, import("@sinclair/typebox").TLiteral<"low">, import("@sinclair/typebox").TLiteral<"informational">]>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RiskPriority',
+						signature:
+							'type RiskPriority = Static<typeof RiskPrioritySchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'VulnerabilityRiskAssessmentSchema',
+						signature:
+							'const VulnerabilityRiskAssessmentSchema: import("@sinclair/typebox").TObject<{\n    assessedAt: import("@sinclair/typebox").TString;\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    epssPercentile: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TNumber]>;\n    epssProbability: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TNumber]>;\n    findingId: import("@sinclair/typebox").TString;\n    fixAvailable: import("@sinclair/typebox").TBoolean;\n    internetExposed: import("@sinclair/typebox").TBoolean;\n    kev: import("@sinclair/typebox").TBoolean;\n    policyVersion: import("@sinclair/typebox").TString;\n    priority: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"emergency">, import("@sinclair/typebox").TLiteral<"critical">, import("@sinclair/typebox").TLiteral<"high">, import("@sinclair/typebox").TLiteral<"medium">, import("@sinclair/typebox").TLiteral<"low">, import("@sinclair/typebox").TLiteral<"informational">]>;\n    reachability: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"reachable">, import("@sinclair/typebox").TL'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityRiskAssessment',
+						signature:
+							'type VulnerabilityRiskAssessment = Static<typeof VulnerabilityRiskAssessmentSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'RemediationActionSchema',
+						signature:
+							'const RemediationActionSchema: import("@sinclair/typebox").TObject<{\n    assetId: import("@sinclair/typebox").TString;\n    componentId: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    fromVersion: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    id: import("@sinclair/typebox").TString;\n    kind: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"package_upgrade">, import("@sinclair/typebox").TLiteral<"configuration_change">, import("@sinclair/typebox").TLiteral<"workaround">, import("@sinclair/typebox").TLiteral<"remove_component">, import("@sinclair/typebox").TLiteral<"rebuild">, import("@sinclair/typebox").TLiteral<"reboot">]>;\n    requiresRestart: import("@sinclair/typebox").TBoolean;\n    toVersion: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RemediationAction',
+						signature:
+							'type RemediationAction = Static<typeof RemediationActionSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'RemediationPlanSchema',
+						signature:
+							'const RemediationPlanSchema: import("@sinclair/typebox").TObject<{\n    actions: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n        assetId: import("@sinclair/typebox").TString;\n        componentId: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n        fromVersion: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n        id: import("@sinclair/typebox").TString;\n        kind: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"package_upgrade">, import("@sinclair/typebox").TLiteral<"configuration_change">, import("@sinclair/typebox").TLiteral<"workaround">, import("@sinclair/typebox").TLiteral<"remove_component">, import("@sinclair/typebox").TLiteral<"rebuild">, import("@sinclair/typebox").TLiteral<"reboot">]>;\n        requiresRestart: import("@sinclair/typebox").TBoolean;\n        toVersion: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    }>>;\n    approvedAt: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclai'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RemediationPlan',
+						signature:
+							'type RemediationPlan = Static<typeof RemediationPlanSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'RemediationExecutionSchema',
+						signature:
+							'const RemediationExecutionSchema: import("@sinclair/typebox").TObject<{\n    completedAt: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    evidence: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n        collectedAt: import("@sinclair/typebox").TString;\n        digest: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n        kind: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"advisory">, import("@sinclair/typebox").TLiteral<"inventory">, import("@sinclair/typebox").TLiteral<"scan">, import("@sinclair/typebox").TLiteral<"vendor-status">, import("@sinclair/typebox").TLiteral<"vex">, import("@sinclair/typebox").TLiteral<"verification">]>;\n        source: import("@sinclair/typebox").TString;\n        uri: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n    }>>;\n    id: import("@sinclair/typebox").TString;\n    message: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RemediationExecution',
+						signature:
+							'type RemediationExecution = Static<typeof RemediationExecutionSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'RemediationDeploymentSchema',
+						signature:
+							'const RemediationDeploymentSchema: import("@sinclair/typebox").TObject<{\n    activatedAt: import("@sinclair/typebox").TString;\n    assetId: import("@sinclair/typebox").TString;\n    releaseId: import("@sinclair/typebox").TString;\n}>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RemediationDeployment',
+						signature:
+							'type RemediationDeployment = Static<typeof RemediationDeploymentSchema>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'RemediationVerificationSchema',
+						signature:
+							'const RemediationVerificationSchema: import("@sinclair/typebox").TObject<{\n    contract: import("@sinclair/typebox").TLiteral<1>;\n    deployments: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n        activatedAt: import("@sinclair/typebox").TString;\n        assetId: import("@sinclair/typebox").TString;\n        releaseId: import("@sinclair/typebox").TString;\n    }>>;\n    evidence: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{\n        collectedAt: import("@sinclair/typebox").TString;\n        digest: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n        kind: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TLiteral<"advisory">, import("@sinclair/typebox").TLiteral<"inventory">, import("@sinclair/typebox").TLiteral<"scan">, import("@sinclair/typebox").TLiteral<"vendor-status">, import("@sinclair/typebox").TLiteral<"vex">, import("@sinclair/typebox").TLiteral<"verification">]>;\n        source: import("@sinclair/typebox").TString;\n        uri: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TNull, import("@sinclair/typebox").TString]>;\n   '
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'RemediationVerification',
+						signature:
+							'type RemediationVerification = Static<typeof RemediationVerificationSchema>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeploymentAdmissionPolicy',
+						signature:
+							'type DeploymentAdmissionPolicy = {\n    blockCritical: boolean;\n    blockKnownExploited: boolean;\n    version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'DEFAULT_DEPLOYMENT_ADMISSION_POLICY',
+						signature:
+							'const DEFAULT_DEPLOYMENT_ADMISSION_POLICY: DeploymentAdmissionPolicy;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DeploymentAdmissionEvaluation',
+						signature:
+							'type DeploymentAdmissionEvaluation = {\n    evaluatedAt: string;\n    exceptions: Array<{\n        decisionId: string;\n        findingId: string;\n    }>;\n    policyVersion: string;\n    status: "failed" | "passed";\n    violations: Array<{\n        findingId: string;\n        reasons: Array<"critical" | "known_exploited">;\n        vulnerabilityIds: string[];\n    }>;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evaluateDeploymentAdmission',
+						signature:
+							'const evaluateDeploymentAdmission: (input: {\n    decisions?: readonly VexDecision[];\n    evaluatedAt: string;\n    findings: readonly ManagedVulnerabilityFinding[];\n    knownExploitedCves?: ReadonlySet<string>;\n    policy?: DeploymentAdmissionPolicy;\n    productId: string;\n}) => DeploymentAdmissionEvaluation;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAlertKind',
+						signature:
+							'type VulnerabilityAlertKind = "evidence_checkpoint_stale" | "evidence_witness_backup_stale" | "evidence_witness_certificate_expiring" | "evidence_witness_key_rotation_due" | "evidence_witness_quorum_failed" | "evidence_witness_unhealthy" | "emergency_finding" | "intelligence_failed" | "intelligence_stale" | "remediation_deadline" | "remediation_execution_overdue" | "remediation_plan_overdue" | "verification_overdue" | "vex_expiring" | "worker_failed" | "worker_stale";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAlertSeverity',
+						signature:
+							'type VulnerabilityAlertSeverity = "emergency" | "critical" | "warning";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAlertAudience',
+						signature:
+							'type VulnerabilityAlertAudience = "admin" | "owner";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAlertDeliveryKind',
+						signature:
+							'type VulnerabilityAlertDeliveryKind = "escalated" | "opened" | "resolved";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAlert',
+						signature:
+							'type VulnerabilityAlert = {\n    assetId: string | null;\n    body: string;\n    dueAt: string | null;\n    findingId: string | null;\n    fingerprint: string;\n    id: string;\n    kind: VulnerabilityAlertKind;\n    observedAt: string;\n    planId: string | null;\n    severity: VulnerabilityAlertSeverity;\n    sourceId: string | null;\n    tenantId: string;\n    title: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityIntelligenceHealth',
+						signature:
+							'type VulnerabilityIntelligenceHealth = {\n    error: string | null;\n    id: string;\n    kind: "feed" | "worker";\n    lastObservedAt: string;\n    lastSucceededAt: string | null;\n    status: "failed" | "healthy" | "unknown";\n    tenantId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityEvidenceOperationalCondition',
+						signature:
+							'type VulnerabilityEvidenceOperationalCondition = {\n    body: string;\n    dueAt: string | null;\n    kind: "evidence_checkpoint_stale" | "evidence_witness_backup_stale" | "evidence_witness_certificate_expiring" | "evidence_witness_key_rotation_due" | "evidence_witness_quorum_failed" | "evidence_witness_unhealthy";\n    observedAt: string;\n    severity: VulnerabilityAlertSeverity;\n    sourceId: string;\n    tenantId: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAlertPolicy',
+						signature:
+							'type VulnerabilityAlertPolicy = {\n    deadlineWarningMs: number;\n    executionStartSlaMs: number;\n    intelligenceStaleAfterMs: number;\n    remediationPlanSlaMs: number;\n    verificationSlaMs: number;\n    vexExpirationWarningMs: number;\n    workerStaleAfterMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAlertRoutingPolicy',
+						signature:
+							'type VulnerabilityAlertRoutingPolicy = Record<VulnerabilityAlertSeverity, Record<VulnerabilityAlertDeliveryKind, readonly VulnerabilityAlertAudience[]>>;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAlertConfiguration',
+						signature:
+							'type VulnerabilityAlertConfiguration = {\n    contract: 1;\n    escalationAfterMs: Record<VulnerabilityAlertSeverity, number>;\n    evaluation: VulnerabilityAlertPolicy;\n    routing: VulnerabilityAlertRoutingPolicy;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'DEFAULT_VULNERABILITY_ALERT_POLICY',
+						signature:
+							'const DEFAULT_VULNERABILITY_ALERT_POLICY: {\n    readonly deadlineWarningMs: number;\n    readonly executionStartSlaMs: number;\n    readonly intelligenceStaleAfterMs: number;\n    readonly remediationPlanSlaMs: number;\n    readonly verificationSlaMs: number;\n    readonly vexExpirationWarningMs: number;\n    readonly workerStaleAfterMs: number;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'DEFAULT_VULNERABILITY_ALERT_CONFIGURATION',
+						signature:
+							'const DEFAULT_VULNERABILITY_ALERT_CONFIGURATION: {\n    readonly contract: 1;\n    readonly escalationAfterMs: {\n        readonly critical: 3600000;\n        readonly emergency: number;\n        readonly warning: number;\n    };\n    readonly evaluation: {\n        readonly deadlineWarningMs: number;\n        readonly executionStartSlaMs: number;\n        readonly intelligenceStaleAfterMs: number;\n        readonly remediationPlanSlaMs: number;\n        readonly verificationSlaMs: number;\n        readonly vexExpirationWarningMs: number;\n        readonly workerStaleAfterMs: number;\n    };\n    readonly routing: {\n        readonly critical: {\n            readonly escalated: readonly ["admin"];\n            readonly opened: readonly ["owner"];\n            readonly resolved: readonly ["owner"];\n        };\n        readonly emergency: {\n            readonly escalated: readonly ["admin"];\n            readonly opened: readonly ["owner"];\n            readonly resolved: readonly ["owner"];\n        };\n        readonly warning: {\n            readonly escalated: readonly ["admin"];\n            readonly opened: readonly ["owner"];\n            readonly resolved: readonly ["owner"];\n        };\n    };\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityAlertEvaluationInput',
+						signature:
+							'type VulnerabilityAlertEvaluationInput = {\n    decisions?: readonly VexDecision[];\n    evidenceConditions?: readonly VulnerabilityEvidenceOperationalCondition[];\n    executions?: readonly RemediationExecution[];\n    findings: readonly ManagedVulnerabilityFinding[];\n    health?: readonly VulnerabilityIntelligenceHealth[];\n    now: string;\n    plans?: readonly RemediationPlan[];\n    policy?: VulnerabilityAlertPolicy;\n    riskAssessments?: readonly VulnerabilityRiskAssessment[];\n    vexApplications?: readonly VexFindingApplication[];\n    verifications?: readonly RemediationVerification[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'validateVulnerabilityAlertConfiguration',
+						signature:
+							'const validateVulnerabilityAlertConfiguration: (configuration: VulnerabilityAlertConfiguration) => VulnerabilityAlertConfiguration;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'resolveVulnerabilityAlertAudiences',
+						signature:
+							'const resolveVulnerabilityAlertAudiences: (input: {\n    configuration?: VulnerabilityAlertConfiguration;\n    hasOwner: boolean;\n    kind: VulnerabilityAlertDeliveryKind;\n    severity: VulnerabilityAlertSeverity;\n}) => VulnerabilityAlertAudience[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evaluateVulnerabilityAlerts',
+						signature:
+							'const evaluateVulnerabilityAlerts: (input: VulnerabilityAlertEvaluationInput) => VulnerabilityAlert[];'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AdvisoryComponentEvaluation',
+						signature:
+							'type AdvisoryComponentEvaluation = {\n    advisoryId: string;\n    componentId: string;\n    reason: string;\n    status: MatchStatus;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityCorrelationResult',
+						signature:
+							'type VulnerabilityCorrelationResult = {\n    evaluations: AdvisoryComponentEvaluation[];\n    findings: ManagedVulnerabilityFinding[];\n    observations: VulnerabilityObservation[];\n    resolved: ManagedVulnerabilityFinding[];\n    upserts: ManagedVulnerabilityFinding[];\n    verificationPending: ManagedVulnerabilityFinding[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evaluateAdvisoryComponent',
+						signature:
+							'const evaluateAdvisoryComponent: (input: {\n    advisory: VulnerabilityAdvisory;\n    component: VulnerabilityComponent;\n}) => AdvisoryComponentEvaluation;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'correlateVulnerabilityInventory',
+						signature:
+							'const correlateVulnerabilityInventory: (input: {\n    advisories: readonly VulnerabilityAdvisory[];\n    asset: VulnerabilityAsset;\n    components: readonly VulnerabilityComponent[];\n    existingFindings?: readonly ManagedVulnerabilityFinding[];\n    inventoryEvidence?: EvidenceReference;\n    observedAt: string;\n}) => VulnerabilityCorrelationResult;'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FeedDescriptor',
+						signature:
+							'type FeedDescriptor = {\n    id: string;\n    name: string;\n    url: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FeedCursor',
+						signature:
+							'type FeedCursor = {\n    etag: string | null;\n    lastModified: string | null;\n    token: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FeedRecord',
+						signature:
+							'type FeedRecord<T> = {\n    id: string;\n    modifiedAt: string;\n    value: T;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FeedSnapshot',
+						signature:
+							'type FeedSnapshot<T> = {\n    cursor: FeedCursor;\n    feed: FeedDescriptor;\n    fetchedAt: string;\n    records: FeedRecord<T>[];\n    revision: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FeedFetchRequest',
+						signature:
+							'type FeedFetchRequest = {\n    cursor: FeedCursor | null;\n    signal?: AbortSignal;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FeedFetchResult',
+						signature:
+							'type FeedFetchResult<T> = {\n    status: "not_modified";\n} | {\n    cursor: FeedCursor;\n    deletedIds?: string[];\n    fetchedAt: string;\n    records: FeedRecord<T>[];\n    replaceAll: boolean;\n    revision: string | null;\n    status: "updated";\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'FeedAdapter',
+						signature:
+							'type FeedAdapter<T> = {\n    descriptor: FeedDescriptor;\n    fetch: (request: FeedFetchRequest) => Promise<FeedFetchResult<T>>;\n};'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/vulnerabilities/host',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'HostCommandResult',
+						signature:
+							'type HostCommandResult = {\n    exitCode: number;\n    stderr: string;\n    stdout: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HostCommandTarget',
+						signature:
+							'type HostCommandTarget = {\n    readonly description?: string;\n    exec: (command: string) => Promise<HostCommandResult>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'HostPackage',
+						signature:
+							'type HostPackage = {\n    architecture: string | null;\n    name: string;\n    version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'DebianHostInventory',
+						signature:
+							'type DebianHostInventory = {\n    collectedAt: string;\n    kernel: string;\n    operatingSystem: Record<string, string>;\n    packages: HostPackage[];\n    rebootRequired: boolean;\n    target: string | null;\n    vendorSecurityStatus: unknown | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseOsRelease',
+						signature:
+							'const parseOsRelease: (input: string) => Record<string, string>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseDpkgQuery',
+						signature:
+							'const parseDpkgQuery: (input: string) => HostPackage[];'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'collectDebianHostInventory',
+						signature:
+							'const collectDebianHostInventory: (target: HostCommandTarget, options?: {\n    collectedAt?: string;\n}) => Promise<DebianHostInventory>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/vulnerabilities/sbom',
+				symbols: [
+					{
+						description: '',
+						kind: 'type',
+						name: 'CycloneDxComponent',
+						signature:
+							'type CycloneDxComponent = {\n    "bom-ref": string;\n    group?: string;\n    name: string;\n    purl: string;\n    type: "application" | "library";\n    version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'CycloneDxSbom',
+						signature:
+							'type CycloneDxSbom = {\n    bomFormat: "CycloneDX";\n    components: CycloneDxComponent[];\n    metadata: {\n        component: CycloneDxComponent;\n        timestamp: string;\n        tools: {\n            components: Array<{\n                name: string;\n                type: "application";\n                version: string;\n            }>;\n        };\n    };\n    serialNumber: `urn:uuid:${string}`;\n    specVersion: "1.6";\n    version: 1;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseCycloneDxSbom',
+						signature:
+							'const parseCycloneDxSbom: (value: unknown) => CycloneDxSbom;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'generateCycloneDxSbom',
+						signature:
+							'const generateCycloneDxSbom: (input: {\n    generatedAt?: string;\n    releaseId: string;\n    root: string;\n}) => Promise<CycloneDxSbom>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'cycloneDxSbomToInventory',
+						signature:
+							'const cycloneDxSbomToInventory: (input: {\n    asset: Omit<VulnerabilityAsset, "contract">;\n    sbom: CycloneDxSbom;\n}) => {\n    asset: VulnerabilityAsset;\n    components: VulnerabilityComponent[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SignedSbomAttestation',
+						signature:
+							'type SignedSbomAttestation = {\n    algorithm: "HS256";\n    digest: `sha256:${string}`;\n    issuedAt: string;\n    keyId: string;\n    projectId: string;\n    releaseId: string;\n    sbom: CycloneDxSbom;\n    signature: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'signSbomAttestation',
+						signature:
+							'const signSbomAttestation: (input: {\n    issuedAt?: string;\n    keyId: string;\n    projectId: string;\n    releaseId: string;\n    sbom: CycloneDxSbom;\n    secret: string;\n}) => SignedSbomAttestation;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifySbomAttestation',
+						signature:
+							'const verifySbomAttestation: (attestation: SignedSbomAttestation, secret: string) => boolean;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/vulnerabilities/intelligence-snapshot',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'ADMISSION_INTELLIGENCE_CONTRACT',
+						signature:
+							'const ADMISSION_INTELLIGENCE_CONTRACT: "absolutejs.vulnerability-admission-intelligence/v1";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AdmissionIntelligencePackage',
+						signature:
+							'type AdmissionIntelligencePackage = {\n    ecosystem: string;\n    name: string;\n    version: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AdmissionIntelligencePayload',
+						signature:
+							'type AdmissionIntelligencePayload<TKev = unknown> = {\n    contract: typeof ADMISSION_INTELLIGENCE_CONTRACT;\n    coverage: string[];\n    kev: FeedSnapshot<TKev>;\n    osv: FeedSnapshot<VulnerabilityAdvisory>;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SignedAdmissionIntelligenceSnapshot',
+						signature:
+							'type SignedAdmissionIntelligenceSnapshot<TKev = unknown> = {\n    algorithm: "HS256";\n    digest: `sha256:${string}`;\n    expiresAt: string;\n    issuedAt: string;\n    keyId: string;\n    payload: AdmissionIntelligencePayload<TKev>;\n    signature: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'AdmissionIntelligenceVerification',
+						signature:
+							'type AdmissionIntelligenceVerification<TKev = unknown> = {\n    status: "expired" | "invalid";\n} | {\n    payload: AdmissionIntelligencePayload<TKev>;\n    status: "verified";\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'admissionIntelligenceCoverageKey',
+						signature:
+							'const admissionIntelligenceCoverageKey: (input: AdmissionIntelligencePackage) => string;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'normalizeAdmissionIntelligencePayload',
+						signature:
+							'const normalizeAdmissionIntelligencePayload: <TKev>(input: {\n    coverage: readonly string[];\n    kev: FeedSnapshot<TKev>;\n    osv: FeedSnapshot<VulnerabilityAdvisory>;\n}) => AdmissionIntelligencePayload<TKev>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'signAdmissionIntelligenceSnapshot',
+						signature:
+							'const signAdmissionIntelligenceSnapshot: <TKev>(input: {\n    coverage: readonly string[];\n    issuedAt?: string;\n    kev: FeedSnapshot<TKev>;\n    keyId: string;\n    maxAgeMs: number;\n    osv: FeedSnapshot<VulnerabilityAdvisory>;\n    secret: string;\n}) => SignedAdmissionIntelligenceSnapshot<TKev>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyAdmissionIntelligenceSnapshot',
+						signature:
+							'const verifyAdmissionIntelligenceSnapshot: <TKev>(input: {\n    attestation: SignedAdmissionIntelligenceSnapshot<TKev>;\n    now?: string;\n    secret: string;\n}) => AdmissionIntelligenceVerification<TKev>;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/vulnerabilities/evidence-bundle',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'VULNERABILITY_EVIDENCE_BUNDLE_CONTRACT',
+						signature:
+							'const VULNERABILITY_EVIDENCE_BUNDLE_CONTRACT: "absolutejs.vulnerability-evidence-bundle/v1";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceVerificationKey',
+						signature:
+							'type EvidenceVerificationKey = {\n    algorithm: "ed25519";\n    createdAt: string;\n    fingerprint: string;\n    keyId: string;\n    publicKey: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceSigningIdentity',
+						signature:
+							'type EvidenceSigningIdentity = EvidenceVerificationKey & {\n    privateKey: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceSigningKeyTransition',
+						signature:
+							'type EvidenceSigningKeyTransition = {\n    algorithm: "ed25519";\n    nextKey: EvidenceVerificationKey;\n    previousKey: EvidenceVerificationKey;\n    rotatedAt: string;\n    signature: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityEvidenceBundlePayload',
+						signature:
+							'type VulnerabilityEvidenceBundlePayload<TKev = unknown> = {\n    admission: DeploymentAdmissionEvaluation;\n    generatedAt: string;\n    intelligence: SignedAdmissionIntelligenceSnapshot<TKev>;\n    project: {\n        id: string;\n        name: string;\n    };\n    releaseId: string;\n    sbom: SignedSbomAttestation;\n    vex: VexDecision[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SignedVulnerabilityEvidenceBundle',
+						signature:
+							'type SignedVulnerabilityEvidenceBundle<TKev = unknown> = {\n    contract: typeof VULNERABILITY_EVIDENCE_BUNDLE_CONTRACT;\n    key: EvidenceVerificationKey;\n    payload: VulnerabilityEvidenceBundlePayload<TKev>;\n    signature: {\n        algorithm: "ed25519";\n        keyId: string;\n        signedAt: string;\n        value: string;\n    };\n    transitions: EvidenceSigningKeyTransition[];\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityEvidenceBundleVerification',
+						signature:
+							'type VulnerabilityEvidenceBundleVerification = {\n    chainValid: boolean;\n    signatureValid: boolean;\n    trust: "trusted" | "untrusted";\n    trustedKeyId: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'evidenceVerificationKeyFrom',
+						signature:
+							'const evidenceVerificationKeyFrom: (identity: EvidenceSigningIdentity) => EvidenceVerificationKey;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseEvidenceVerificationKey',
+						signature:
+							'const parseEvidenceVerificationKey: (value: EvidenceVerificationKey) => EvidenceVerificationKey;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'parseEvidenceSigningIdentity',
+						signature:
+							'const parseEvidenceSigningIdentity: (value: EvidenceSigningIdentity) => EvidenceSigningIdentity;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createEvidenceSigningIdentity',
+						signature:
+							'const createEvidenceSigningIdentity: (input?: {\n    createdAt?: string;\n    keyId?: string;\n}) => EvidenceSigningIdentity;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createEvidenceSigningKeyTransition',
+						signature:
+							'const createEvidenceSigningKeyTransition: (input: {\n    nextKey: EvidenceVerificationKey;\n    previousIdentity: EvidenceSigningIdentity;\n    rotatedAt?: string;\n}) => EvidenceSigningKeyTransition;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyEvidenceSigningKeyTransition',
+						signature:
+							'const verifyEvidenceSigningKeyTransition: (value: EvidenceSigningKeyTransition) => boolean;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'signVulnerabilityEvidenceBundle',
+						signature:
+							'const signVulnerabilityEvidenceBundle: <TKev>(input: {\n    identity: EvidenceSigningIdentity;\n    payload: VulnerabilityEvidenceBundlePayload<TKev>;\n    signedAt?: string;\n    transitions?: readonly EvidenceSigningKeyTransition[];\n}) => SignedVulnerabilityEvidenceBundle<TKev>;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyVulnerabilityEvidenceBundle',
+						signature:
+							'const verifyVulnerabilityEvidenceBundle: <TKev>(input: {\n    bundle: SignedVulnerabilityEvidenceBundle<TKev>;\n    trustedKeys?: readonly EvidenceVerificationKey[];\n}) => VulnerabilityEvidenceBundleVerification;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/vulnerabilities/evidence-transparency',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'EVIDENCE_KEY_TRANSPARENCY_CONTRACT',
+						signature:
+							'const EVIDENCE_KEY_TRANSPARENCY_CONTRACT: "absolutejs.vulnerability-evidence-key-transparency/v1";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceKeyRevocation',
+						signature:
+							'type EvidenceKeyRevocation = {\n    key: EvidenceVerificationKey;\n    reason: string;\n    revokedAt: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceKeyTransparencyEvent',
+						signature:
+							'type EvidenceKeyTransparencyEvent = {\n    key: EvidenceVerificationKey;\n    kind: "key_created";\n} | {\n    kind: "key_rotated";\n    transition: EvidenceSigningKeyTransition;\n} | ({\n    kind: "key_revoked";\n} & EvidenceKeyRevocation);'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceKeyTransparencyEntry',
+						signature:
+							'type EvidenceKeyTransparencyEntry = {\n    contract: typeof EVIDENCE_KEY_TRANSPARENCY_CONTRACT;\n    digest: `sha256:${string}`;\n    event: EvidenceKeyTransparencyEvent;\n    previousDigest: `sha256:${string}` | null;\n    sequence: number;\n    signature: {\n        algorithm: "ed25519";\n        keyId: string;\n        signedAt: string;\n        value: string;\n    };\n    signedBy: EvidenceVerificationKey;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceKeyTransparencyLog',
+						signature:
+							'type EvidenceKeyTransparencyLog = {\n    contract: typeof EVIDENCE_KEY_TRANSPARENCY_CONTRACT;\n    entries: EvidenceKeyTransparencyEntry[];\n    head: `sha256:${string}`;\n    version: 1;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceKeyTransparencyVerification',
+						signature:
+							'type EvidenceKeyTransparencyVerification = {\n    activeKeyId: string | null;\n    chainValid: boolean;\n    head: `sha256:${string}` | null;\n    headMatches: boolean;\n    keys: EvidenceVerificationKey[];\n    revocations: EvidenceKeyRevocation[];\n    signaturesValid: boolean;\n    trust: "trusted" | "untrusted";\n    trustedKeyId: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'VulnerabilityEvidenceTransparencyVerification',
+						signature:
+							'type VulnerabilityEvidenceTransparencyVerification = VulnerabilityEvidenceBundleVerification & {\n    keyInTransparencyLog: boolean;\n    revoked: boolean;\n    transparency: EvidenceKeyTransparencyVerification;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyEvidenceKeyTransparencyLog',
+						signature:
+							'const verifyEvidenceKeyTransparencyLog: (input: {\n    log: EvidenceKeyTransparencyLog;\n    pinnedHead?: string;\n    trustedKeys?: readonly EvidenceVerificationKey[];\n}) => EvidenceKeyTransparencyVerification;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createEvidenceKeyTransparencyLog',
+						signature:
+							'const createEvidenceKeyTransparencyLog: (input: {\n    identity: EvidenceSigningIdentity;\n    signedAt?: string;\n}) => EvidenceKeyTransparencyLog;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'appendEvidenceKeyRotation',
+						signature:
+							'const appendEvidenceKeyRotation: (input: {\n    identity: EvidenceSigningIdentity;\n    log: EvidenceKeyTransparencyLog;\n    transition: EvidenceSigningKeyTransition;\n}) => EvidenceKeyTransparencyLog;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'appendEvidenceKeyRevocation',
+						signature:
+							'const appendEvidenceKeyRevocation: (input: {\n    identity: EvidenceSigningIdentity;\n    key: EvidenceVerificationKey;\n    log: EvidenceKeyTransparencyLog;\n    reason: string;\n    revokedAt?: string;\n}) => EvidenceKeyTransparencyLog;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyVulnerabilityEvidenceWithTransparency',
+						signature:
+							'const verifyVulnerabilityEvidenceWithTransparency: <TKev>(input: {\n    bundle: SignedVulnerabilityEvidenceBundle<TKev>;\n    log: EvidenceKeyTransparencyLog;\n    pinnedHead?: string;\n    trustedKeys?: readonly EvidenceVerificationKey[];\n}) => VulnerabilityEvidenceTransparencyVerification;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/vulnerabilities/evidence-witness',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'EVIDENCE_WITNESS_CHECKPOINT_CONTRACT',
+						signature:
+							'const EVIDENCE_WITNESS_CHECKPOINT_CONTRACT: "absolutejs.vulnerability-evidence-witness-checkpoint/v1";'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceWitnessCheckpoint',
+						signature:
+							'type EvidenceWitnessCheckpoint = {\n    contract: typeof EVIDENCE_WITNESS_CHECKPOINT_CONTRACT;\n    logHead: `sha256:${string}`;\n    logSize: number;\n    observedAt: string;\n    origin: string;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'SignedEvidenceWitnessCheckpoint',
+						signature:
+							'type SignedEvidenceWitnessCheckpoint = EvidenceWitnessCheckpoint & {\n    signature: {\n        algorithm: "ed25519";\n        keyId: string;\n        value: string;\n    };\n    witness: EvidenceVerificationKey;\n};'
+					},
+					{
+						description: '',
+						kind: 'type',
+						name: 'EvidenceWitnessQuorumVerification',
+						signature:
+							'type EvidenceWitnessQuorumVerification = {\n    invalidCheckpoints: SignedEvidenceWitnessCheckpoint[];\n    quorumMet: boolean;\n    required: number;\n    trustedCheckpoints: SignedEvidenceWitnessCheckpoint[];\n    trustedWitnessFingerprints: string[];\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createEvidenceWitnessCheckpointForHead',
+						signature:
+							'const createEvidenceWitnessCheckpointForHead: (input: {\n    identity: EvidenceSigningIdentity;\n    logHead: `sha256:${string}`;\n    logSize: number;\n    observedAt?: string;\n    origin: string;\n}) => SignedEvidenceWitnessCheckpoint;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'createEvidenceWitnessCheckpoint',
+						signature:
+							'const createEvidenceWitnessCheckpoint: (input: {\n    identity: EvidenceSigningIdentity;\n    log: EvidenceKeyTransparencyLog;\n    observedAt?: string;\n    origin: string;\n}) => SignedEvidenceWitnessCheckpoint;'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyEvidenceWitnessCheckpoint',
+						signature:
+							'const verifyEvidenceWitnessCheckpoint: (input: {\n    checkpoint: SignedEvidenceWitnessCheckpoint;\n    log?: EvidenceKeyTransparencyLog;\n    trustedWitnesses?: readonly EvidenceVerificationKey[];\n}) => {\n    logMatches: boolean;\n    signatureValid: boolean;\n    trust: "trusted" | "untrusted";\n    witnessKeyId: string | null;\n};'
+					},
+					{
+						description: '',
+						kind: 'value',
+						name: 'verifyEvidenceWitnessQuorum',
+						signature:
+							'const verifyEvidenceWitnessQuorum: (input: {\n    checkpoints: readonly SignedEvidenceWitnessCheckpoint[];\n    log: EvidenceKeyTransparencyLog;\n    minimum: number;\n    trustedWitnesses: readonly EvidenceVerificationKey[];\n}) => EvidenceWitnessQuorumVerification;'
+					}
+				]
+			},
+			{
+				entryPoint: '@absolutejs/vulnerabilities/manifest',
+				symbols: [
+					{
+						description: '',
+						kind: 'value',
+						name: 'manifest',
+						signature:
+							'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<Record<string, never>, never>, "contract" | "tools" | "settings"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
+					}
+				]
+			}
+		],
 		category: 'Platform & Infra',
 		commands: [
 			{
@@ -62349,29 +69839,29 @@ export const ecosystemProjects: EcosystemProject[] = [
 			'@absolutejs/vulnerabilities/manifest.json'
 		],
 		readmeDigest:
-			'9c00c2b43acf5ead57a129a0e66ec8acedd19b95ba5d6fa3e68d838e33a0fe8c',
+			'bc8eda114d792aa3c2cacc4ece8627728276c4e3a40b2c1d8617b39f779f1253',
 		readmeSamples: [
 			{
-				code: "import {\n\tassertVulnerabilityPolicy,\n\tcreateVulnerabilityEvidence,\n\tsummarizeGrypeReport\n} from '@absolutejs/vulnerabilities';\n\nconst counts = summarizeGrypeReport(await Bun.file('grype.json').json());\nassertVulnerabilityPolicy(counts, {\n\tmaximums: { critical: 0, high: 0 }\n});\n\nconst evidence = createVulnerabilityEvidence({\n\tasset: { id: imageDigest, kind: 'container' },\n\tscan: {\n\t\t...counts,\n\t\tdatabaseBuiltAt: grypeDatabaseBuiltAt,\n\t\tscannedAt: new Date().toISOString(),\n\t\tscanner: 'grype'\n\t}\n});",
+				code: 'import {\n  assertVulnerabilityPolicy,\n  createVulnerabilityEvidence,\n  summarizeGrypeReport,\n} from "@absolutejs/vulnerabilities";\n\nconst counts = summarizeGrypeReport(await Bun.file("grype.json").json());\nassertVulnerabilityPolicy(counts, {\n  maximums: { critical: 0, high: 0 },\n});\n\nconst evidence = createVulnerabilityEvidence({\n  asset: { id: imageDigest, kind: "container" },\n  scan: {\n    ...counts,\n    databaseBuiltAt: grypeDatabaseBuiltAt,\n    scannedAt: new Date().toISOString(),\n    scanner: "grype",\n  },\n});',
 				description: '# @absolutejs/vulnerabilities',
 				heading: '@absolutejs/vulnerabilities quick start',
 				language: 'typescript'
 			},
 			{
-				code: "import { collectDebianHostInventory } from '@absolutejs/vulnerabilities/host';\n\nconst inventory = await collectDebianHostInventory(deployTarget);",
+				code: 'import { collectDebianHostInventory } from "@absolutejs/vulnerabilities/host";\n\nconst inventory = await collectDebianHostInventory(deployTarget);',
 				description: '# @absolutejs/vulnerabilities',
 				heading: '@absolutejs/vulnerabilities quick start 2',
 				language: 'typescript'
 			},
 			{
-				code: "import {\n\tcomparePackageVersions,\n\tevaluateVersionConstraints\n} from '@absolutejs/vulnerabilities';\n\ncomparePackageVersions({\n\tecosystem: 'ubuntu',\n\tleft: '1.24.0-2ubuntu7.4',\n\tright: '1.24.0-2ubuntu7.5'\n});\n\nevaluateVersionConstraints({\n\tecosystem: 'ubuntu',\n\tinstalledVersion: '1.24.0-2ubuntu7.4',\n\tconstraints: [\n\t\t{ operator: 'gte', version: '1.24.0' },\n\t\t{ operator: 'lt', version: '1.24.0-2ubuntu7.5' }\n\t]\n});",
+				code: 'import {\n  comparePackageVersions,\n  evaluateVersionConstraints,\n} from "@absolutejs/vulnerabilities";\n\ncomparePackageVersions({\n  ecosystem: "ubuntu",\n  left: "1.24.0-2ubuntu7.4",\n  right: "1.24.0-2ubuntu7.5",\n});\n\nevaluateVersionConstraints({\n  ecosystem: "ubuntu",\n  installedVersion: "1.24.0-2ubuntu7.4",\n  constraints: [\n    { operator: "gte", version: "1.24.0" },\n    { operator: "lt", version: "1.24.0-2ubuntu7.5" },\n  ],\n});',
 				description:
 					'Version comparison is ecosystem-aware and explainable. Debian/Ubuntu revisions, epochs, and backport suffixes are preserved rather than reduced to upstream versions. SemVer, Go module, Python PEP 440, and NuGet versions use their native ordering rules.',
 				heading: 'Version intelligence',
 				language: 'typescript'
 			},
 			{
-				code: "import { createMemoryFeedStore, syncFeed } from '@absolutejs/vulnerabilities';\n\nconst result = await syncFeed({\n\tadapter,\n\tmaxStaleMs: 24 * 60 * 60 * 1_000,\n\tstore: createMemoryFeedStore()\n});\n\nif (result.status === 'stale') {\n\t// Cached intelligence remains available, with the provider error attached.\n}",
+				code: 'import { createMemoryFeedStore, syncFeed } from "@absolutejs/vulnerabilities";\n\nconst result = await syncFeed({\n  adapter,\n  maxStaleMs: 24 * 60 * 60 * 1_000,\n  store: createMemoryFeedStore(),\n});\n\nif (result.status === "stale") {\n  // Cached intelligence remains available, with the provider error attached.\n}',
 				description:
 					'Feed adapters share cursor, snapshot, cache, and failure-isolation contracts. Applications can persist snapshots in their own storage while keeping provider fetching separate from policy and remediation logic.',
 				heading: 'Advisory feeds',
@@ -62420,7 +69910,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/vulnerabilities',
 		subpackages: [],
-		version: '0.15.1'
+		version: '0.15.2'
 	},
 	{
 		api: [],
@@ -64034,7 +71524,8 @@ export const ecosystemProjects: EcosystemProject[] = [
 				name: 'build'
 			},
 			{
-				command: 'bun run typecheck && bun run test && bun run build',
+				command:
+					'bun run typecheck && bun run test && bun run build && absolute-changelog check',
 				name: 'check:package'
 			},
 			{
@@ -64093,7 +71584,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		],
 		repository: 'https://github.com/absolutejs/wallet',
 		subpackages: [],
-		version: '0.9.3'
+		version: '0.10.0'
 	},
 	{
 		api: [],
@@ -64150,74 +71641,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 		repository: 'https://github.com/absolutejs/wallet-adapters',
 		subpackages: [
 			{
-				api: [
-					{
-						entryPoint: '@absolutejs/wallet-stripe',
-						symbols: [
-							{
-								description: '',
-								kind: 'type',
-								name: 'StripeWalletMetadata',
-								signature:
-									'type StripeWalletMetadata = {\n    userSub: string;\n    ownerId: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'StripeWalletAction',
-								signature:
-									'type StripeWalletAction = {\n    kind: "fund";\n    eventId: string;\n    ownerId: string;\n    userSub: string;\n    amountCents: number;\n    idempotencyKey: string;\n    paymentRef: string;\n} | {\n    kind: "refund";\n    eventId: string;\n    ownerId: string;\n    userSub: string;\n    amountCents: number;\n    idempotencyKey: string;\n    paymentRef: string;\n    freeze: false;\n} | {\n    kind: "dispute";\n    eventId: string;\n    ownerId: string;\n    userSub: string;\n    amountCents: number;\n    idempotencyKey: string;\n    paymentRef: string;\n    freeze: true;\n} | {\n    kind: "dispute-reversal";\n    eventId: string;\n    ownerId: string;\n    userSub: string;\n    amountCents: number;\n    idempotencyKey: string;\n    paymentRef: string;\n    freeze: true;\n} | {\n    kind: "ignored";\n    eventId: string;\n    reason: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'FundingCheckoutInput',
-								signature:
-									'type FundingCheckoutInput = {\n    amountCents: number;\n    ownerId: string;\n    userSub: string;\n    customerId?: string;\n    successUrl: string;\n    cancelUrl: string;\n    productName?: string;\n    description?: string;\n    statement?: string;\n    currency?: string;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'AdapterOptions',
-								signature:
-									'type AdapterOptions = {\n    stripe: StripeClient;\n    webhookSecret: string;\n    policy?: WalletPolicy;\n};'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'createStripeWalletAdapter',
-								signature:
-									'const createStripeWalletAdapter: ({ stripe, webhookSecret, policy }: AdapterOptions) => {\n    createFundingCheckout(input: FundingCheckoutInput): Promise<{\n        id: string;\n        url: string | null;\n    }>;\n    verifyWebhook: (payload: string, signature: string) => Promise<Stripe.Event>;\n    verifyAndNormalizeWebhook: (payload: string, signature: string) => Promise<StripeWalletAction>;\n    normalizeEvent: (event: Stripe.Event) => Promise<StripeWalletAction>;\n};'
-							},
-							{
-								description: '',
-								kind: 'type',
-								name: 'StripeWalletAdapter',
-								signature:
-									'type StripeWalletAdapter = ReturnType<typeof createStripeWalletAdapter>;'
-							},
-							{
-								description: '',
-								kind: 'value',
-								name: 'toWalletFundingEvent',
-								signature:
-									'const toWalletFundingEvent: (action: StripeWalletAction, accounts: {\n    accountId: string;\n    clearingAccountId: string;\n}) => WalletFundingEvent | null;'
-							}
-						]
-					},
-					{
-						entryPoint: '@absolutejs/wallet-stripe/manifest',
-						symbols: [
-							{
-								description: '',
-								kind: 'value',
-								name: 'manifest',
-								signature:
-									'const manifest: Omit<import("@absolutejs/manifest").PackageManifest<AdapterOptions, never>, "contract" | "settings" | "tools"> & (({\n    contract: 1;\n    tools?: Record<string, import("@absolutejs/manifest").LegacyManifestTool<never>> | undefined;\n} | {\n    contract: 2;\n    tools?: Record<string, import("@absolutejs/manifest").AuthorizedManifestTool<never>> | undefined;\n}) & {\n    settings: import("@sinclair/typebox").TObject<{}>;\n});'
-							}
-						]
-					}
-				],
+				api: [],
 				commands: [
 					{
 						command:
@@ -64265,7 +71689,7 @@ export const ecosystemProjects: EcosystemProject[] = [
 					}
 				],
 				sourcePath: 'stripe',
-				version: '0.4.4'
+				version: '0.4.5'
 			}
 		],
 		version: null
