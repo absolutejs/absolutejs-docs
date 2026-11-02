@@ -18,8 +18,10 @@
 		"check:docs": "bun scripts/checkDocumentationCoverage.ts",
 		"check:examples": "bun scripts/checkRunnableExamples.ts",
 		"check:languages": "bun scripts/checkCodeLanguages.ts",
-		"check:quality": "bun run lint && bun run check:docs && bun run check:languages && bun run check:examples && tsc --noEmit",
+		"check:quality": "bun run lint && bun run check:docs && bun run check:languages && bun run check:examples && bun run check:search && tsc --noEmit",
+		"check:search": "bun scripts/generateSearchIndex.ts --check",
 		"config": "absolute config",
+		"search:generate": "bun scripts/generateSearchIndex.ts",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"format": "absolute prettier --write",
 		"dev": "absolute dev",
@@ -30,7 +32,7 @@
 		"db:push": "drizzle-kit push"
 	},
 	"dependencies": {
-		"@absolutejs/absolute": "0.20.0-beta.144",
+		"@absolutejs/absolute": "0.20.0-beta.161",
 		"@absolutejs/auth": "0.101.0",
 		"@absolutejs/blog": "0.2.0",
 		"@elysia/eden": "2.0.0-rc.0",

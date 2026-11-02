@@ -1,0 +1,52 @@
+name: CI
+
+# The docs site (absolutejs.com) runs on the AbsoluteJS platform, which
+# deploys main itself through its GitHub App. This workflow only checks a
+# change. It replaced the droplet deploy, whose droplet was retired on
+# 2026-10-23.
+#
+# The package catalog's freshness against npm (bun run check:docs) is not
+# gated here: it changes whenever any package publishes, not when this repo
+# changes. Refresh it with bun run catalog:generate.
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+    workflow_dispatch: {}
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    check:
+        runs-on: ubuntu-24.04
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@v5
+
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version-file: .bun-version
+
+            - name: Install dependencies
+              run: bun install --frozen-lockfile
+
+            - name: Typecheck
+              run: bunx tsc --noEmit
+
+            - name: Lint
+              run: bun run lint
+
+            - name: Code sample languages resolve in the shiki bundle
+              run: bun run check:languages
+
+            - name: Runnable examples
+              run: bun run check:examples
+
+            - name: Search index matches the pages
+              run: bun run check:search

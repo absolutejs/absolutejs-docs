@@ -52,6 +52,32 @@ export const sidebarEntryKey = (category: string, entry: SidebarEntry) =>
 
 export type DocsView = Extract<keyof typeof docsViews, string>;
 
+/* One section of a docs page in the search index: its heading and the text
+ * under it, as the index file stores them. */
+export type StoredSearchSection = {
+	anchor: string | null;
+	heading: string;
+	headingTerms: string;
+	text: string;
+};
+
+/* One docs page in the search index file (scripts/generateSearchIndex.ts). */
+export type StoredSearchPage = {
+	breadcrumb: string[];
+	description: string;
+	fields: {
+		breadcrumb: string;
+		description: string;
+		keywords: string;
+		label: string;
+		title: string;
+	};
+	label: string;
+	sections: StoredSearchSection[];
+	title: string;
+	view: string;
+};
+
 export type DocsSearchResult = {
 	anchor: string | null;
 	breadcrumb: string[];
