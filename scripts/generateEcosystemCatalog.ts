@@ -206,6 +206,7 @@ const categoryByDirectory: Record<string, string> = {
 	'eslint-plugin': 'Dev Tools',
 	examples: 'Dev Tools',
 	execution: 'AI',
+	geometry: 'Frontend & UX',
 	git: 'Data & Sync',
 	handoff: 'AI',
 	hcss: 'Commerce & Growth',
@@ -218,6 +219,7 @@ const categoryByDirectory: Record<string, string> = {
 	'key-transparency-providers': 'Messaging',
 	'linked-providers': 'Auth & Identity',
 	logs: 'Observability',
+	maintenance: 'Platform & Infra',
 	manifest: 'AI',
 	marketplace: 'Commerce & Growth',
 	mcp: 'AI',
@@ -241,8 +243,10 @@ const categoryByDirectory: Record<string, string> = {
 	quickbooks: 'Commerce & Growth',
 	rag: 'AI',
 	'rag-adapters': 'AI',
+	rapier3d: 'Frontend & UX',
 	'rate-limit': 'Platform & Infra',
 	reliability: 'Platform & Infra',
+	rendering: 'Frontend & UX',
 	renown: 'Dev Tools',
 	'renown-vscode-extension': 'Dev Tools',
 	replay: 'Observability',
@@ -928,20 +932,25 @@ const nameFor = (directory: string, packageName: string | null) => {
 	return titleCase(directory);
 };
 
-const refreshedProjects = readdirSync(workspaceDirectory)
+/* The projects to read: the workspace's directories, and any supplied by
+ * --source or --npm. Reading only the workspace dropped every selected
+ * project that was supplied but not checked out beside the docs, and the
+ * catalog lost them silently (a refresh from a fresh clone removed 40 of
+ * its 143 projects, 2026-11-02). */
+const projectPath = (directory: string) =>
+	sourceOverrides.get(directory) ?? join(workspaceDirectory, directory);
+const refreshedProjects = [
+	...new Set([...readdirSync(workspaceDirectory), ...sourceOverrides.keys()])
+]
 	.filter(
 		(directory) =>
 			selectedDirectories.size === 0 || selectedDirectories.has(directory)
 	)
 	.filter((directory) => !directory.startsWith('.') && directory !== 'PAAS')
-	.filter((directory) =>
-		statSync(join(workspaceDirectory, directory)).isDirectory()
-	)
+	.filter((directory) => statSync(projectPath(directory)).isDirectory())
 	.sort((left, right) => left.localeCompare(right))
 	.map((directory) => {
-		const projectDirectory =
-			sourceOverrides.get(directory) ??
-			join(workspaceDirectory, directory);
+		const projectDirectory = projectPath(directory);
 		const packageData = readPackage(join(projectDirectory, 'package.json'));
 		const nestedPackages = findNestedPackages(projectDirectory)
 			.map((manifestPath) => ({
@@ -1011,6 +1020,15 @@ const refreshedProjects = readdirSync(workspaceDirectory)
 			)
 		};
 	});
+
+const unrefreshed = [...selectedDirectories].filter(
+	(directory) =>
+		!refreshedProjects.some((project) => project.directory === directory)
+);
+if (unrefreshed.length > 0)
+	throw new Error(
+		`Selected projects were not refreshed, so they would be dropped: ${unrefreshed.join(', ')}`
+	);
 
 const projects = [
 	...existingProjects.filter(
