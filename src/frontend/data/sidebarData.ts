@@ -43,6 +43,7 @@ import { DataFetchingView } from '../components/documentation/data/DataFetchingV
 import { ServerStateView } from '../components/documentation/data/ServerStateView';
 import { DockerView } from '../components/documentation/deployment/DockerView';
 import { HostingView } from '../components/documentation/deployment/HostingView';
+import { IsolateAppsView } from '../components/documentation/deployment/IsolateAppsView';
 import { ProductionBuildView } from '../components/documentation/deployment/ProductionBuildView';
 import { StaticGenerationView } from '../components/documentation/deployment/StaticGenerationView';
 import { InstallationView } from '../components/documentation/getting-started/InstallationView';
@@ -387,6 +388,7 @@ const primaryDocsViews = definePortalViews({
 	installation: InstallationView,
 	islands: IslandsView,
 	'islands-cli': IslandsCliView,
+	'isolate-apps': IsolateAppsView,
 	'isolated-jsc': IsolatedJscProofPackView,
 	'isolated-jsc-bun': IsolatedJscBunPositioningView,
 	'isolated-jsc-hibernation': IsolatedJscHibernationView,
@@ -776,6 +778,7 @@ const baseSidebarCategories: SidebarCategory[] = [
 				pages: [
 					{ id: 'production-build', label: 'Production Build' },
 					{ id: 'hosting', label: 'Hosting' },
+					{ id: 'isolate-apps', label: 'Isolate Apps' },
 					{ id: 'docker', label: 'Docker' }
 				]
 			},
