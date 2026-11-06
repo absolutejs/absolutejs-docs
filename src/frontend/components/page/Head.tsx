@@ -22,6 +22,9 @@ type MetaTag = {
 type OpenGraphMetadata = {
 	description?: string;
 	image?: string;
+	imageAlt?: string;
+	imageHeight?: number;
+	imageWidth?: number;
 	locale?: string;
 	siteName?: string;
 	title?: string;
@@ -33,9 +36,17 @@ type TwitterMetadata = {
 	card?: string;
 	description?: string;
 	image?: string;
+	imageAlt?: string;
 	site?: string;
 	title?: string;
 };
+
+const defaultShareImage =
+	'https://absolutejs.com/assets/png/absolutejs-social-v1.png';
+const defaultShareImageWidth = 1200;
+const defaultShareImageHeight = 630;
+const defaultShareImageAlt =
+	'AbsoluteJS — Type-safe, full-stack. Database to API to interface.';
 
 export const Head = ({
 	canonical,
@@ -50,10 +61,19 @@ export const Head = ({
 	twitter
 }: HeadProps) => {
 	const canonicalHref = canonicalUrl ?? canonical;
-	const image =
-		openGraph?.image ??
-		twitter?.image ??
-		'https://absolutejs.com/assets/png/absolutejs-logo.png';
+	const image = openGraph?.image ?? twitter?.image ?? defaultShareImage;
+	const imageAlt =
+		openGraph?.imageAlt ??
+		(image === defaultShareImage ? defaultShareImageAlt : undefined);
+	const imageWidth =
+		openGraph?.imageWidth ??
+		(image === defaultShareImage ? defaultShareImageWidth : undefined);
+	const imageHeight =
+		openGraph?.imageHeight ??
+		(image === defaultShareImage ? defaultShareImageHeight : undefined);
+	const twitterImage = twitter?.image ?? image;
+	const twitterImageAlt =
+		twitter?.imageAlt ?? (twitterImage === image ? imageAlt : undefined);
 
 	return (
 		<head>
@@ -73,6 +93,18 @@ export const Head = ({
 			/>
 			<meta content={openGraph?.locale ?? 'en_US'} property="og:locale" />
 			<meta content={image} property="og:image" />
+			{imageAlt ? (
+				<meta content={imageAlt} property="og:image:alt" />
+			) : null}
+			{imageWidth ? (
+				<meta content={String(imageWidth)} property="og:image:width" />
+			) : null}
+			{imageHeight ? (
+				<meta
+					content={String(imageHeight)}
+					property="og:image:height"
+				/>
+			) : null}
 			<meta
 				content={twitter?.card ?? 'summary_large_image'}
 				name="twitter:card"
@@ -82,7 +114,10 @@ export const Head = ({
 				content={twitter?.description ?? description}
 				name="twitter:description"
 			/>
-			<meta content={twitter?.image ?? image} name="twitter:image" />
+			<meta content={twitterImage} name="twitter:image" />
+			{twitterImageAlt ? (
+				<meta content={twitterImageAlt} name="twitter:image:alt" />
+			) : null}
 			{twitter?.site ? (
 				<meta content={twitter.site} name="twitter:site" />
 			) : null}

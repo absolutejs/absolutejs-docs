@@ -1,0 +1,107 @@
+<!doctype html>
+<!-- Source for absolutejs-social-v1.png. Render at 1200 x 630, device scale 1,
+     wait for the logo to load, then capture the viewport with Chromium.
+     Keep the output filename versioned to avoid stale social-preview caches. -->
+<html lang="en">
+	<meta charset="utf-8" />
+	<title>AbsoluteJS social card</title>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+		body {
+			margin: 0;
+			width: 1200px;
+			height: 630px;
+			overflow: hidden;
+			background: #091423;
+			color: #f6f9ff;
+			font-family: Arial, sans-serif;
+		}
+		.card {
+			position: relative;
+			width: 1200px;
+			height: 630px;
+			padding: 64px 72px;
+			background:
+				radial-gradient(
+					ellipse at 96% 10%,
+					#164e76 0%,
+					transparent 58%
+				),
+				linear-gradient(135deg, #101e30, #070f1c);
+		}
+		.brand {
+			font-size: 34px;
+			font-weight: 700;
+			letter-spacing: -1px;
+		}
+		.brand span {
+			color: #71d5ff;
+		}
+		h1 {
+			margin: 60px 0 24px;
+			font-size: 76px;
+			line-height: 1.05;
+			letter-spacing: -3px;
+			font-weight: 700;
+		}
+		h1 span {
+			color: #71d5ff;
+		}
+		.description {
+			margin: 0;
+			font-size: 24px;
+			color: #c0cede;
+		}
+		.logo {
+			position: absolute;
+			right: 100px;
+			top: 91px;
+			width: 236px;
+			height: 365px;
+			object-fit: contain;
+		}
+		.footer {
+			position: absolute;
+			bottom: 60px;
+			left: 72px;
+			right: 72px;
+			border-top: 1px solid #30435b;
+			padding-top: 25px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			color: #a6bed3;
+			font-size: 20px;
+		}
+		.flow {
+			display: flex;
+			align-items: center;
+			gap: 22px;
+		}
+		.arrow {
+			color: #61c9f5;
+		}
+		.domain {
+			color: #f6f9ff;
+		}
+	</style>
+	<div class="card">
+		<div class="brand">Absolute<span>JS</span></div>
+		<h1>Type-safe.<br /><span>Full-stack.</span></h1>
+		<p class="description">One connected TypeScript ecosystem.</p>
+		<img
+			class="logo"
+			src="../../src/backend/assets/png/absolutejs-logo.png"
+			alt="AbsoluteJS logo"
+		/>
+		<div class="footer">
+			<div class="flow">
+				<span>Database</span><span class="arrow">→</span><span>API</span
+				><span class="arrow">→</span><span>Interface</span>
+			</div>
+			<span class="domain">absolutejs.com</span>
+		</div>
+	</div>
+</html>
