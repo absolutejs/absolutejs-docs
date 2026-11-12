@@ -60,3 +60,13 @@ package-lock.json
 
 .playwright-mcp/
 src/backend/.absolutejs-hmr-*
+
+# design and media skill working files
+.taste-skill/
+.hyperframes/
+.hf-tmp/
+# Impeccable's shared config and design files are meant to be committed; its runtime folders ignore themselves
+.impeccable/config.local.json
+
+# private drafts (blog posts, plans)
+.drafts/

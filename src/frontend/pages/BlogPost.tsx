@@ -6,10 +6,9 @@ import { useRef } from 'react';
 import { User } from '../../../db/schema';
 import { AnimatedCSSProperties } from '../../types/springTypes';
 import { blog } from '../../shared/blog';
-import { CitraArticleContent } from '../components/blog/CitraArticleContent';
+import { getArticleEntry } from '../components/blog/postRegistry';
 import { Navbar } from '../components/navbar/Navbar';
 import { ThemeMode, useTheme } from '../hooks/useTheme';
-import { citraArticleStyles } from '../styles/citraArticleStyles';
 
 const PERCENT = 100;
 
@@ -36,6 +35,11 @@ export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
 	if (post === undefined) {
 		throw new Error(`Unknown blog post "${slug}"`);
 	}
+	const article = getArticleEntry(slug);
+	if (article === undefined) {
+		throw new Error(`Blog post "${slug}" has no article content`);
+	}
+	const { bodyClassName, Content, footer, styles } = article;
 
 	const [themeSprings, setTheme] = useTheme(theme);
 	const articleRef = useRef<HTMLElement>(null);
@@ -76,10 +80,7 @@ export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
 				icon="/assets/favicon.ico"
 				meta={metadata.meta}
 			/>
-			<animated.body
-				className="citra-blog-document"
-				style={articleThemeStyle}
-			>
+			<animated.body className={bodyClassName} style={articleThemeStyle}>
 				<script
 					dangerouslySetInnerHTML={{
 						__html: JSON.stringify({
@@ -89,7 +90,7 @@ export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
 					}}
 					type="application/ld+json"
 				/>
-				<style>{citraArticleStyles}</style>
+				<style>{styles}</style>
 				<div className="blog-sticky-header">
 					<Navbar
 						setTheme={setTheme}
@@ -104,14 +105,11 @@ export const BlogPost = ({ slug, theme, user }: BlogPostProps) => {
 					</div>
 				</div>
 				<main ref={articleRef}>
-					<CitraArticleContent
-						post={post}
-						readingTime={readingTime}
-					/>
+					<Content post={post} readingTime={readingTime} />
 				</main>
 				<footer className="site-footer">
-					<span>Citra · OAuth2 for TypeScript</span>
-					<span>78 provider configurations, one request engine.</span>
+					<span>{footer.title}</span>
+					<span>{footer.detail}</span>
 				</footer>
 			</animated.body>
 		</html>
