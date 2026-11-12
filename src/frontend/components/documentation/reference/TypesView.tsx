@@ -97,7 +97,8 @@ export const TypesView = ({
 						Build Config
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Configuration options for the build() function:
+						Configuration options for <code>defineConfig</code> in{' '}
+						<code>absolute.config.ts</code>:
 					</p>
 					<PrismPlus
 						codeString={buildOptionsType}

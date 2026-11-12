@@ -164,7 +164,7 @@ export const citraArticleStyles = `
 				margin: 0;
 				padding: 10px 14px;
 				background: var(--accent);
-				color: #ffffff;
+				color: var(--paper);
 				font-weight: 800;
 			}
 

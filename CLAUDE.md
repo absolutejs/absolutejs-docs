@@ -45,7 +45,7 @@ This is the documentation site for AbsoluteJS, built with Bun, Elysia, and React
 ## Docs search and the package catalog
 
 - **Search** (`src/backend/utils/searchIndex.ts`, `GET /api/v1/search`) renders every docs view server-side to index its headings and text. It must use `renderToReadableStream`: `renderToString` is undefined in the production bundle. Production builds the index a minute after boot so it never competes with the deploy's smoke checks. Verify search changes with `bun run start`, not only `bun run dev`.
-- **Package catalog** (`ecosystem.generated.ts`) is generated, never hand-edited. `bun run check:docs` fails the deploy when a published package is missing or documented at an older version than npm. Fix it with `bun run catalog:generate --only=<directory> --npm` (single packages; reads the published tarball) or `--source=<directory>=<checkout of the released branch>` (monorepos). Never generate from a local checkout with unreleased work.
+- **Package catalog** (`ecosystem.generated.ts`) is generated, never hand-edited. `bun run check:docs` reports a published package that is missing or documented at an older version than npm. CI does not run it, because the catalog goes stale whenever any package publishes, not when this repo changes; run it before refreshing the catalog. Fix what it reports with `bun run catalog:generate --only=<directory> --npm` (single packages; reads the published tarball) or `--source=<directory>=<checkout of the released branch>` (monorepos). Never generate from a local checkout with unreleased work.
 
 ## Rules
 

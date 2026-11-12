@@ -19,7 +19,6 @@ type BuildConfig = {
 };
 
 type BuildOptions = {
-  preserveIntermediateFiles?: boolean;
   throwOnError?: boolean;
   injectHMR?: boolean;
   hmr?: {
@@ -31,7 +30,7 @@ type BuildOptions = {
 import { defineConfig } from '@absolutejs/absolute';
 
 export default defineConfig({
-  reactDirectory: 'src/frontend/pages',
+  reactDirectory: 'src/frontend',
   assetsDirectory: 'src/assets',
   tailwind: {
     input: './src/styles/globals.css',

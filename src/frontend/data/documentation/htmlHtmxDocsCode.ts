@@ -12,12 +12,16 @@ export const htmlAssetDetection = `\
 
 // All paths are updated to point to the bundled, hashed files`;
 export const htmlBuild = `\
-const manifest = await build({
-  htmlDirectory: 'src/frontend'
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  htmlDirectory: 'src/html'
+  // Pages live in src/html/pages
 });
 
-// The manifest maps page names to their built HTML files
-// { "home": "/build/pages/home.html", "about": "/build/pages/about.html" }`;
+// Manifest keys come from page file names:
+// src/html/pages/Home.html → asset(manifest, 'Home')`;
 export const htmlBuiltExample = `\
 <!-- After build, paths are automatically updated -->
 <!DOCTYPE html>
@@ -72,8 +76,12 @@ new Elysia()
     \`;
   })`;
 export const htmxBuild = `\
-const manifest = await build({
-  htmxDirectory: 'src/htmx/pages'
+// absolute.config.ts
+import { defineConfig } from '@absolutejs/absolute';
+
+export default defineConfig({
+  htmxDirectory: 'src/htmx'
+  // Pages live in src/htmx/pages
 });`;
 export const htmxExample = `\
 <!-- src/htmx/pages/app.html -->

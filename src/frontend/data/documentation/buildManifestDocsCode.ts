@@ -16,7 +16,7 @@ import { defineConfig } from '@absolutejs/absolute';
 export default defineConfig({
   reactDirectory: './src/frontend',
   options: {
-    preserveIntermediateFiles: true  // Keep intermediate build artifacts
+    throwOnError: true  // Throw on a build error instead of exiting
   }
 });`;
 export const cliCommands = `\
@@ -56,7 +56,6 @@ export default defineConfig({
     output: './build/styles.css'
   },
   options: {                        // Additional build options
-    preserveIntermediateFiles: false,
     throwOnError: false
   }
 });`;

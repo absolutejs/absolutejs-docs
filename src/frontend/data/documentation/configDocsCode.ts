@@ -25,8 +25,7 @@ export default defineConfig({
 
   // Build options
   options: {
-    preserveIntermediateFiles: false, // Keep compiled/ folder
-    throwOnError: false               // Throw vs exit(1)
+    throwOnError: false // Throw vs exit(1)
   }
 });`;
 export const assetsDirectory = `\
