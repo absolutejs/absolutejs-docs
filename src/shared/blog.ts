@@ -19,8 +19,27 @@ export const whyCitraPost = definePost({
 	title: 'Why Citra: A Complete OAuth Library Built to Last'
 });
 
+export const eugeneGraves = defineAuthor({
+	id: 'eugene-graves',
+	kind: 'person',
+	name: 'Eugene Graves III',
+	role: 'Core developer · Building with AbsoluteJS since 2025',
+	url: 'https://github.com/eugenegraves'
+});
+
+export const choosePerRoutePost = definePost({
+	author: eugeneGraves,
+	description:
+		"A core developer's account of building production apps on AbsoluteJS: the conventions, the dev loop, the sharp edges, and what it lets you do that you couldn't before.",
+	publishedAt: '2026-11-12',
+	slug: 'choose-per-route',
+	sourceUrl: 'https://github.com/absolutejs/absolutejs',
+	tags: ['AbsoluteJS', 'Developer Experience', 'Bun', 'Elysia', 'TypeScript'],
+	title: 'Choose Per Route: What Building With AbsoluteJS Is Actually Like'
+});
+
 export const blog = createBlog({
-	posts: [whyCitraPost],
+	posts: [choosePerRoutePost, whyCitraPost],
 	site: {
 		baseUrl: 'https://absolutejs.com',
 		description:
