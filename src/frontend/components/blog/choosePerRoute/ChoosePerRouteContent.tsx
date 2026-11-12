@@ -689,14 +689,15 @@ export const ChoosePerRouteContent = ({
 							hard, which is what you want there.
 						</p>
 						<p>
-							The one rough edge I still hit: after a fast burst
-							of edits across many files, the dev server has
-							occasionally served me a stale module. Restarting
-							fixes it. If you&apos;re debugging something that
-							makes no sense, check that the served file has your
-							change. A few things that used to need a restart,
-							like global stylesheet changes, no longer do.
-							That&apos;s the pace this project moves at.
+							On an earlier beta, a fast burst of edits across
+							many files occasionally left the dev server serving a stale
+							module until I restarted it. I couldn&apos;t
+							reproduce that on beta.168. I rewrote seven files at
+							once 65 times, some bursts only 40 ms apart, and
+							every served module and the open page stayed
+							current. Global stylesheet changes used to need a
+							restart too, and they no longer do. That&apos;s the
+							pace this project moves at.
 						</p>
 					</div>
 				</section>
