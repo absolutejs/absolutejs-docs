@@ -183,9 +183,9 @@ export const ReactOverviewView = ({
 						page components.
 					</p>
 					<p style={paragraphSpacedStyle}>
-						By default, these generated files are deleted after
-						bundling. To inspect them, enable{' '}
-						<code>preserveIntermediateFiles</code>:
+						The build deletes these generated files after bundling.
+						To read one, open it from the dev server while{' '}
+						<code>absolute dev</code> is running:
 					</p>
 					<PrismPlus
 						codeString={reactPreserveFiles}

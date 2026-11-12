@@ -80,8 +80,10 @@ export const HTMLOverviewView = ({
 						Build Configuration
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Add HTML to your build by specifying the directory
-						containing your HTML files:
+						Add HTML to your build by setting{' '}
+						<code>htmlDirectory</code> in{' '}
+						<code>absolute.config.ts</code>. Pages live in its{' '}
+						<code>pages/</code> folder:
 					</p>
 					<PrismPlus
 						codeString={htmlBuild}

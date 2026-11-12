@@ -76,8 +76,10 @@ export const HTMXOverviewView = ({
 						Build Configuration
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Add HTMX to your build by specifying the directory
-						containing your HTMX pages:
+						Add HTMX to your build by setting{' '}
+						<code>htmxDirectory</code> in{' '}
+						<code>absolute.config.ts</code>. Pages live in its{' '}
+						<code>pages/</code> folder:
 					</p>
 					<PrismPlus
 						codeString={htmxBuild}

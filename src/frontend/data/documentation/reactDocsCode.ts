@@ -92,16 +92,11 @@ export const Home = ({ user, posts }: HomeProps) => (
   </html>
 );`;
 export const reactPreserveFiles = `\
-// To inspect generated index files, enable preserveIntermediateFiles
-// absolute.config.ts
-import { defineConfig } from '@absolutejs/absolute';
-
-export default defineConfig({
-  reactDirectory: 'src/frontend',
-  options: {
-    preserveIntermediateFiles: true  // Index files won't be deleted
-  }
-});`;
+// While absolute dev is running, each page's generated hydration
+// entry is served from build/_src_indexes/. For a page at
+// src/frontend/pages/Home.tsx, open:
+//
+//   http://localhost:3000/@src/build/_src_indexes/Home.tsx`;
 export const reactStreaming = `\
 // AbsoluteJS uses React's streaming SSR for optimal performance
 // Content is sent to the browser progressively
