@@ -155,8 +155,8 @@ export const AngularComponentsView = ({
 					<p style={paragraphSpacedStyle}>
 						These primitives are only enabled when the route uses{' '}
 						<code>handleAngularPageRequest</code> with{' '}
-						<code>{`{ collectStreamingSlots: true }`}</code> in the
-						options argument.
+						<code>collectStreamingSlots: true</code> in its input
+						object.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						AbsoluteJS lowers <code>@defer</code> into the shared

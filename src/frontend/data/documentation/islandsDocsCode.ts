@@ -305,7 +305,7 @@ export const IslandsPage = () => (
   </main>
 );`;
 export const svelteIslandsHost = `<script lang="ts">
-  import { Island } from '@absolutejs/absolute/svelte';
+  import Island from '@absolutejs/absolute/svelte/Island.svelte';
 </script>
 
 <main>

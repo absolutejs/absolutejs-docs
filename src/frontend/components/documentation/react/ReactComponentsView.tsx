@@ -238,8 +238,8 @@ export const ReactComponentsView = ({
 					<p style={paragraphSpacedStyle}>
 						These primitives are only activated when the route uses{' '}
 						<code>handleReactPageRequest</code> with{' '}
-						<code>{`{ collectStreamingSlots: true }`}</code> in the
-						options argument.
+						<code>collectStreamingSlots: true</code> in its input
+						object.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						<code>SuspenseSlot</code> is the framework-native

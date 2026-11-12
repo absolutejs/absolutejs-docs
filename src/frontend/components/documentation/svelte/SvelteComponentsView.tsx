@@ -185,8 +185,8 @@ export const SvelteComponentsView = ({
 					<p style={paragraphSpacedStyle}>
 						These primitives are only enabled when the route uses{' '}
 						<code>handleSveltePageRequest</code> with{' '}
-						<code>{`{ collectStreamingSlots: true }`}</code> in the
-						options argument.
+						<code>collectStreamingSlots: true</code> in its input
+						object.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						This keeps authoring in normal Svelte markup while still

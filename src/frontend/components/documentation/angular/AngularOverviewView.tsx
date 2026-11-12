@@ -508,8 +508,8 @@ export const AngularOverviewView = ({
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Framework handlers are non-streaming by default. Add{' '}
-						<code>{`{ collectStreamingSlots: true }`}</code> as the
-						final argument to enable streaming for
+						<code>collectStreamingSlots: true</code> to the
+						handler&apos;s input object to enable streaming for
 						<code>abs-stream-slot</code> and <code>@defer</code>{' '}
 						scenarios.
 					</p>
@@ -532,9 +532,10 @@ export const AngularOverviewView = ({
 					</AnchorHeading>
 					<p style={paragraphLargeStyle}>
 						Angular pages in AbsoluteJS are plain standalone
-						components. A page module&apos;s{' '}
-						<code>default export</code> is the page root; nothing
-						else is required. There is no{' '}
+						components. A page module just exports its component
+						class, as in{' '}
+						<code>export class DashboardComponent</code>; no default
+						export is needed. There is no{' '}
 						<code>defineAngularPage</code> wrapper, no exported{' '}
 						<code>providers</code> array, and no per-prop{' '}
 						<code>InjectionToken</code> ceremony.

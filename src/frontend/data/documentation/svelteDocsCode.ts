@@ -3,26 +3,27 @@ export const svelteBuild = `\
 import { defineConfig } from '@absolutejs/absolute';
 
 export default defineConfig({
-  svelteDirectory: 'src/svelte/pages'
-  // Svelte components are compiled during build
+  svelteDirectory: 'src/svelte'
+  // Pages live in src/svelte/pages and are compiled during build
 });`;
 export const svelteCompilation = `\
 // Your raw Svelte file:
 src/svelte/pages/Dashboard.svelte
 
-// Gets compiled into two files:
-build/DashboardPage.js    // Compiled page component for SSR
-build/DashboardIndex.js   // Compiled index file for client hydration`;
+// Gets compiled into two entries in the build manifest:
+Dashboard        // Compiled page component for SSR (pagePath)
+DashboardIndex   // Client entry that hydrates the page (indexPath)`;
 export const svelteComponent = `\
 <!-- src/svelte/pages/Dashboard.svelte -->
 <script lang="ts">
+  import type { Stats, User } from '../../types/databaseTypes';
+
   type DashboardProps = {
     user: User;
     stats: Stats;
   };
 
-  export let user: DashboardProps['user'];
-  export let stats: DashboardProps['stats'];
+  let { user, stats }: DashboardProps = $props();
 </script>
 
 <svelte:head>
@@ -55,6 +56,7 @@ export const svelteHandler = `\
 // backend/server.ts
 import { asset } from '@absolutejs/absolute';
 import { handleSveltePageRequest } from '@absolutejs/absolute/svelte';
+import type Dashboard from '../svelte/pages/Dashboard.svelte';
 
 new Elysia()
   .get('/dashboard', async ({ cookie }) => {
@@ -62,7 +64,7 @@ new Elysia()
     const stats = await getStats(user.id);
 
     // Both the page and index use asset() to get the compiled paths
-    return handleSveltePageRequest({
+    return handleSveltePageRequest<typeof Dashboard>({
       indexPath: asset(manifest, 'DashboardIndex'),
       pagePath: asset(manifest, 'Dashboard'),
       props: { user, stats }
@@ -70,22 +72,18 @@ new Elysia()
   })`;
 export const svelteTypeSafetyServer = `\
 // backend/server.ts
-import { User, Stats } from '../types/databaseTypes';
-
-type DashboardProps = {
-  user: User;
-  stats: Stats;
-};
+import type Dashboard from '../svelte/pages/Dashboard.svelte';
 
 new Elysia()
   .get('/dashboard', async ({ cookie }) => {
     const user = await getUser(cookie);
     const stats = await getStats(user.id);
 
-    // TypeScript error if props don't match DashboardProps!
-    return handleSveltePageRequest({
+    // absolute typecheck reports a missing prop (TS2741), a wrong type
+    // (TS2322) or an unknown prop (TS2353) against Dashboard's $props()
+    return handleSveltePageRequest<typeof Dashboard>({
       indexPath: asset(manifest, 'DashboardIndex'),
-      pagePath: asset(manifest, 'DashboardPage'),
+      pagePath: asset(manifest, 'Dashboard'),
       props: { user, stats }
     });
   })`;

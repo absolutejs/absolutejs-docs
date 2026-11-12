@@ -143,9 +143,9 @@ export const VueOverviewView = ({
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Framework handlers are non-streaming by default. Add{' '}
-						<code>{`{ collectStreamingSlots: true }`}</code> as the
-						final argument to opt into out-of-order slot streaming
-						for framework primitives.
+						<code>collectStreamingSlots: true</code> to the
+						handler&apos;s input object to opt into out-of-order
+						slot streaming for framework primitives.
 					</p>
 					<PrismPlus
 						codeString={vueHandler}
