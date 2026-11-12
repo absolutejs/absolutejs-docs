@@ -6,6 +6,9 @@ import { FrameworkReel } from './FrameworkReel';
 import { ManifestPlayground } from './ManifestPlayground';
 import { ReplacedSentence } from './ReplacedSentence';
 import { SaveStoryboard } from './SaveStoryboard';
+import { SectionRail } from './SectionRail';
+import { articleSections } from './sections';
+import { SideNote } from './SideNote';
 import { TypecheckScale } from './TypecheckScale';
 
 const COPY_FEEDBACK_DURATION_MS = 1600;
@@ -18,21 +21,6 @@ const formatPostDate = (value: string) =>
 		timeZone: 'UTC',
 		year: 'numeric'
 	}).format(new Date(value));
-
-type TocSection = { id: string; title: string };
-
-const sections: TocSection[] = [
-	{ id: 'seams', title: 'The seams' },
-	{ id: 'routes', title: 'A page is a route' },
-	{ id: 'per-route', title: 'Frontend per route' },
-	{ id: 'types', title: 'Types, no codegen' },
-	{ id: 'dev-loop', title: 'The dev loop' },
-	{ id: 'checks', title: 'Fast checks' },
-	{ id: 'production', title: 'To production' },
-	{ id: 'real-app', title: 'One real app' },
-	{ id: 'day-one', title: 'Before day one' },
-	{ id: 'questions', title: 'Questions' }
-];
 
 const serverCode = `import { Elysia } from 'elysia';
 import { asset, handleHTMXPageRequest, networking, prepare } from '@absolutejs/absolute';
@@ -238,7 +226,7 @@ export const ChoosePerRouteContent = ({
 				<nav aria-label="In this article" className="article-toc">
 					<p>In this article</p>
 					<ol>
-						{sections.map((section) => (
+						{articleSections.map((section) => (
 							<li key={section.id}>
 								<a href={`#${section.id}`}>{section.title}</a>
 							</li>
@@ -247,6 +235,7 @@ export const ChoosePerRouteContent = ({
 				</nav>
 			</section>
 
+			<SectionRail />
 			<article className="cpr-article">
 				<section className="cpr-section" id="seams">
 					<h2>The seams are where the time goes</h2>
@@ -300,6 +289,19 @@ export const ChoosePerRouteContent = ({
 							<code>routes/</code> folder. There isn&apos;t one.
 							There&apos;s no file-system router.
 						</p>
+						<SideNote
+							docs={[
+								{
+									href: '/documentation/routing-and-handlers',
+									label: 'Routing & Handlers'
+								}
+							]}
+							label="Tested"
+						>
+							This exact server ran on beta.168 on Nov 12, 2026,
+							in <code>absolute dev</code> and in production, with
+							all three routes rendering.
+						</SideNote>
 						<p>
 							A page in AbsoluteJS is an Elysia route that returns
 							streamed HTML. That&apos;s the whole model.
@@ -340,6 +342,20 @@ export const ChoosePerRouteContent = ({
 					</div>
 					<ManifestPlayground />
 					<div className="cpr-col">
+						<SideNote
+							docs={[
+								{
+									href: '/documentation/build-and-manifest',
+									label: 'Build & Manifest'
+								}
+							]}
+							label="What you'll see"
+						>
+							In dev a missing key logs{' '}
+							<code>[asset] key "X" not found in manifest</code>{' '}
+							and carries on. In production the route fails with{' '}
+							<code>Asset "X" not found in manifest.</code>
+						</SideNote>
 						<p>
 							Two things about the manifest are worth knowing
 							early. In dev, a missing key returns an empty string
@@ -349,6 +365,20 @@ export const ChoosePerRouteContent = ({
 							in a key should fail the build, not ship a page with
 							no JavaScript.
 						</p>
+						<SideNote
+							docs={[
+								{
+									href: '/documentation/type-safety',
+									label: 'Type Safety'
+								}
+							]}
+							label="Tested"
+						>
+							A missing Svelte prop fails with TS2741, a wrong
+							type with TS2322 and an unknown prop with TS2353.
+							Install <code>svelte2tsx</code> as a dev dependency
+							for the Svelte check.
+						</SideNote>
 						<p>
 							Props are typed against the page. If{' '}
 							<code>Home</code> takes{' '}
@@ -438,6 +468,19 @@ export const ChoosePerRouteContent = ({
 							file="html/pages/Landing.html"
 							language="html"
 						/>
+						<SideNote
+							docs={[
+								{
+									href: '/documentation/islands',
+									label: 'Islands'
+								}
+							]}
+							label="Tested"
+						>
+							In Chromium on beta.168, the <code>load</code> and{' '}
+							<code>idle</code> islands responded to clicks, and{' '}
+							<code>hydrate="none"</code> stayed static.
+						</SideNote>
 						<p>
 							Pointing the config at the registry,{' '}
 							<code>{'islands: { registry }'}</code>, is all the
@@ -525,6 +568,18 @@ export const ChoosePerRouteContent = ({
 								that suddenly fail to line up.
 							</li>
 						</ul>
+						<SideNote
+							docs={[
+								{
+									href: '/documentation/doctor',
+									label: 'Doctor'
+								}
+							]}
+							label="Worth knowing"
+						>
+							<code>absolute doctor --json</code> prints the same
+							diagnosis for CI or an agent to read.
+						</SideNote>
 						<p>
 							That last one used to cost me an afternoon each
 							time. Now <code>absolute doctor --fix</code> finds
@@ -556,6 +611,17 @@ export const ChoosePerRouteContent = ({
 							trust or loses it, so here&apos;s exactly what
 							happens when you save.
 						</p>
+						<SideNote
+							docs={[
+								{ href: '/documentation/dev', label: 'Dev' }
+							]}
+							label="Worth knowing"
+						>
+							Requests for the same page share one build, and
+							hovering a link warms the page before you click.{' '}
+							<code>ABSOLUTE_DEV_PROFILE=1</code> prints a boot
+							timeline.
+						</SideNote>
 						<p>
 							<code>absolute dev</code> doesn&apos;t bundle your
 							app on every edit. It runs an unbundled module
@@ -579,6 +645,10 @@ export const ChoosePerRouteContent = ({
 							test, a stylesheet edit applied in about 20 ms with
 							no reload.
 						</p>
+						<SideNote label="Measured">
+							On beta.168 the changed response was served about
+							0.16 s after saving. The 29 ms is the update itself.
+						</SideNote>
 						<p>
 							The one I&apos;d call the standout is backend HMR.
 							When you edit server code, the running server
@@ -654,6 +724,19 @@ export const ChoosePerRouteContent = ({
 					</div>
 					<TypecheckScale />
 					<div className="cpr-col">
+						<SideNote
+							docs={[
+								{
+									href: '/documentation/typecheck',
+									label: 'Typecheck'
+								}
+							]}
+							label="Machine"
+						>
+							Apple M4 with 10 cores and 16 GB of memory, Bun
+							1.4.4 and TypeScript 5.9.3. Both checkers reported
+							identical results.
+						</SideNote>
 						<p>
 							That&apos;s 1,200 source files checked in about 0.6
 							seconds using 0.44 GB of memory, where{' '}
@@ -684,6 +767,28 @@ export const ChoosePerRouteContent = ({
 				<section className="cpr-section" id="production">
 					<h2>From laptop to production without rewriting the app</h2>
 					<div className="cpr-col">
+						<SideNote
+							docs={[
+								{
+									href: '/documentation/static-generation',
+									label: 'Static Generation'
+								},
+								{
+									href: '/documentation/sitemap',
+									label: 'Sitemap'
+								},
+								{
+									href: '/documentation/image-optimization',
+									label: 'Image Optimization'
+								},
+								{
+									href: '/documentation/compile',
+									label: 'Compile'
+								},
+								{ href: '/documentation/pwa', label: 'PWA' }
+							]}
+							label="In the docs"
+						/>
 						<p>
 							The parts of a project that usually need their own
 							tool are built in, and they work from the same
@@ -799,6 +904,18 @@ export const ChoosePerRouteContent = ({
 								gap the hand-rolled version had.
 							</li>
 						</ul>
+						<SideNote
+							docs={[
+								{
+									href: '/documentation/packages',
+									label: 'Package catalog'
+								}
+							]}
+							label="The packages"
+						>
+							Queue, sync, errors and dispatch are all first-party{' '}
+							<code>@absolutejs</code> packages.
+						</SideNote>
 						<p>
 							None of that changed the app&apos;s architecture.
 							It&apos;s still one Elysia server, now with fewer

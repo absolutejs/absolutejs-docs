@@ -962,6 +962,129 @@ summary:focus-visible {
 	transform: scale(0.97);
 }
 
+/* margin notes: inline by default, in the right margin on wide screens */
+.cpr-note {
+	display: grid;
+	gap: 6px;
+	margin: 0 0 22px;
+	padding: 2px 0 2px 14px;
+	border-left: 2px solid var(--accent);
+	color: var(--muted);
+	font-size: 0.86rem;
+	line-height: 1.5;
+}
+
+.cpr-col .cpr-note p {
+	margin: 0;
+	font-size: 0.86rem;
+	line-height: 1.5;
+}
+
+.cpr-note-label {
+	color: var(--ink);
+	font-size: 0.78rem;
+	font-weight: 650;
+}
+
+.cpr-article .cpr-note code {
+	padding: 0;
+	background: none;
+	color: var(--ink);
+	font-size: 0.92em;
+}
+
+.cpr-col .cpr-note-links {
+	display: grid;
+	gap: 4px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.cpr-col .cpr-note-links li {
+	font-size: 0.86rem;
+	line-height: 1.4;
+}
+
+.cpr-col .cpr-note-links a {
+	color: var(--accent);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.cpr-col .cpr-note-links a:hover {
+	text-decoration: underline;
+}
+
+/* section list: only on wide screens, only inside the article */
+.cpr-rail {
+	display: none;
+}
+
+.cpr-figure,
+.cpr-story {
+	clear: both;
+}
+
+@media (min-width: 1280px) {
+	.cpr-note {
+		float: right;
+		clear: right;
+		width: 220px;
+		margin: 6px -260px 16px 0;
+	}
+
+	.cpr-rail {
+		position: fixed;
+		z-index: 5;
+		top: 140px;
+		left: max(24px, calc(50% - 340px - 64px - 190px));
+		display: block;
+		width: 190px;
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 200ms ease,
+			visibility 200ms;
+	}
+
+	.cpr-rail[data-visible='true'] {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.cpr-rail ol {
+		display: grid;
+		gap: 2px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.cpr-rail a {
+		display: block;
+		padding: 5px 0 5px 14px;
+		border-left: 2px solid var(--line);
+		color: var(--muted);
+		font-size: 0.82rem;
+		line-height: 1.35;
+		text-decoration: none;
+		transition:
+			color 160ms ease,
+			border-color 160ms ease;
+	}
+
+	.cpr-rail a:hover {
+		color: var(--ink);
+	}
+
+	.cpr-rail a[aria-current='location'] {
+		border-left-color: var(--accent);
+		color: var(--ink);
+		font-weight: 650;
+	}
+}
+
 /* entrance */
 @media (prefers-reduced-motion: no-preference) {
 	.cpr-hero-inner > * {
@@ -1091,7 +1214,9 @@ summary:focus-visible {
 	.cpr-reel-bar i,
 	.cpr-story-stage,
 	.cpr-story-steps li,
-	.cpr-replaced span {
+	.cpr-replaced span,
+	.cpr-rail,
+	.cpr-rail a {
 		transition: none;
 	}
 }
