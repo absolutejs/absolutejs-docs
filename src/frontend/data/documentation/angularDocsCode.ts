@@ -287,32 +287,26 @@ import { Component } from '@angular/core';
 })
 export class AboutComponent {}`;
 export const angularTypeSafety = `\
-// Types flow from your server to Angular components via props
-// The page handler enforces type safety at the boundary
-import { defineAngularPage } from '@absolutejs/absolute/angular';
-import { Component, inject, InjectionToken } from '@angular/core';
+// src/angular/pages/settings.ts
+// Declare the page's context next to the component. The server's
+// handleAngularPageRequest<Context> call is checked against this same type.
+import { usePageContext } from '@absolutejs/absolute/angular';
+import { Component } from '@angular/core';
 
-// 1. Define your props type
-type SettingsProps = {
+export type Context = {
   user: User;
   preferences: UserPreferences;
 };
-
-// 2. Angular component receives typed props via matching InjectionTokens
-export const USER = new InjectionToken<SettingsProps['user']>('USER');
-export const PREFERENCES = new InjectionToken<SettingsProps['preferences']>(
-  'PREFERENCES'
-);
 
 @Component({
   selector: 'app-settings',
   standalone: true,
   template: \`
     <div>
-      <h1>Settings for {{ user.name }}</h1>
+      <h1>Settings for {{ ctx.user.name }}</h1>
       <label>
         Theme:
-        <select [value]="preferences.theme">
+        <select [value]="ctx.preferences.theme">
           <option value="light">Light</option>
           <option value="dark">Dark</option>
         </select>
@@ -320,26 +314,23 @@ export const PREFERENCES = new InjectionToken<SettingsProps['preferences']>(
     </div>
   \`
 })
-export class Settings {
-  readonly user = inject(USER);
-  readonly preferences = inject(PREFERENCES);
+export class SettingsComponent {
+  readonly ctx = usePageContext<Context>();
 }
 
-export const page = defineAngularPage<SettingsProps>({
-  component: Settings
-});
+// src/backend/server.ts
+import type * as SettingsPage from '../angular/pages/settings';
 
-// 3. Server passes type-safe props
 .get('/settings', async ({ cookie }) => {
   const user = await getUser(cookie);
   const preferences = await getPreferences(user.id);
 
-  // TypeScript error if props don't match SettingsProps!
-  return handleAngularPageRequest<typeof SettingsPage>({
+  // TypeScript error if requestContext doesn't match SettingsPage.Context
+  return handleAngularPageRequest<SettingsPage.Context>({
     pagePath: asset(manifest, 'Settings'),
     indexPath: asset(manifest, 'SettingsIndex'),
     headTag: generateHeadElement({ title: 'Settings' }),
-    props: { user, preferences }
+    requestContext: { user, preferences }
   });
 })`;
 export const angularUsePageContext = `\

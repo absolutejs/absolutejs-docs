@@ -293,8 +293,8 @@ export const OutOfOrderStreamingView = ({
 					<p style={paragraphSpacedStyle}>
 						Framework page handlers default to regular SSR. Enable
 						them here only when you need out-of-order streaming by
-						passing <code>{`{ collectStreamingSlots: true }`}</code>{' '}
-						as the page-handler options argument.
+						adding <code>collectStreamingSlots: true</code> to the
+						page handler&apos;s input object.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						This page is the transport overview. The

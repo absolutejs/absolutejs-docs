@@ -221,8 +221,11 @@ export const TypeSafetyView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={{ ...paragraphSpacedStyle, marginTop: '1.5rem' }}>
-						Use those types in your server handlers to ensure props
-						match your components:
+						Import the page's type and pass it to the handler.{' '}
+						<code>absolute typecheck</code> generates types for each
+						Svelte component, so props that don&apos;t match the
+						component&apos;s <code>$props()</code> fail at compile
+						time:
 					</p>
 					<PrismPlus
 						codeString={svelteTypeSafetyServer}
@@ -306,11 +309,12 @@ export const TypeSafetyView = ({
 						Angular
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Angular components receive typed props via{' '}
-						<code>@Input()</code> decorators. The page handler acts
-						as a typed provider, injecting props into the component
-						at render time. TypeScript catches mismatched props at
-						compile time.
+						Angular pages declare a <code>Context</code> type next
+						to the component. <code>handleAngularPageRequest</code>{' '}
+						checks the <code>requestContext</code> you pass against
+						it, and the component reads it with{' '}
+						<code>usePageContext&lt;Context&gt;()</code>. A missing
+						or mistyped field fails at compile time.
 					</p>
 					<PrismPlus
 						codeString={angularTypeSafety}
