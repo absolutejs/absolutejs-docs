@@ -689,15 +689,13 @@ export const ChoosePerRouteContent = ({
 							hard, which is what you want there.
 						</p>
 						<p>
-							On an earlier beta, a fast burst of edits across
-							many files occasionally left the dev server serving a stale
-							module until I restarted it. I couldn&apos;t
-							reproduce that on beta.168. I rewrote seven files at
-							once 65 times, some bursts only 40 ms apart, and
-							every served module and the open page stayed
-							current. Global stylesheet changes used to need a
-							restart too, and they no longer do. That&apos;s the
-							pace this project moves at.
+							Put together, the loop gets out of the way. You
+							save, and the page or the server changes while
+							whatever you were in the middle of stays put: the
+							form you half filled in, the socket you had open,
+							the job the queue was working through. After a while
+							you stop thinking about the dev server at all, which
+							is the best thing a dev server can do.
 						</p>
 					</div>
 				</section>
