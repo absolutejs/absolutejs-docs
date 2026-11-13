@@ -38,8 +38,19 @@ export const choosePerRoutePost = definePost({
 	title: 'Choose Per Route: What Building With AbsoluteJS Is Actually Like'
 });
 
+export const vueCheckPost = definePost({
+	author: alexKahn,
+	description:
+		"vue-check type-checks Vue projects with Bun's native checker and reports exactly what vue-tsc reports. How it works, and how it's proven: a four-way differential on real projects, planted errors and Vue's own conformance suite.",
+	publishedAt: '2026-11-13',
+	slug: 'vue-check',
+	sourceUrl: 'https://github.com/absolutejs/vue-check',
+	tags: ['vue-check', 'Vue', 'Bun', 'TypeScript'],
+	title: "vue-check: vue-tsc's Errors, From Bun's Native Type Checker"
+});
+
 export const blog = createBlog({
-	posts: [choosePerRoutePost, whyCitraPost],
+	posts: [vueCheckPost, choosePerRoutePost, whyCitraPost],
 	site: {
 		baseUrl: 'https://absolutejs.com',
 		description:
