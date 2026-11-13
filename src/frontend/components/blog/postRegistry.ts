@@ -4,6 +4,7 @@ import { choosePerRouteStyles } from '../../styles/choosePerRouteStyles';
 import { citraArticleStyles } from '../../styles/citraArticleStyles';
 import { ChoosePerRouteContent } from './choosePerRoute/ChoosePerRouteContent';
 import { CitraArticleContent } from './CitraArticleContent';
+import { VueCheckContent } from './vueCheck/VueCheckContent';
 
 export type ArticleContentProps = {
 	post: BlogPost;
@@ -24,6 +25,15 @@ const articleEntries: Record<string, ArticleEntry> = {
 		footer: {
 			detail: 'One server. Any frontend, per route.',
 			title: 'AbsoluteJS · Choose Per Route'
+		},
+		styles: choosePerRouteStyles
+	},
+	'vue-check': {
+		bodyClassName: 'cpr-blog-document',
+		Content: VueCheckContent,
+		footer: {
+			detail: 'Vue codegen, Bun’s native checker, vue-tsc’s errors.',
+			title: 'vue-check · Type-check Vue on Bun'
 		},
 		styles: choosePerRouteStyles
 	},
