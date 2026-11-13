@@ -254,6 +254,23 @@ const ThreeSteps = () => (
 				two codegen patterns normalized to valid TypeScript of exactly
 				the same length.
 			</p>
+			<p>
+				One of them changes a result. Vue’s codegen turns the{' '}
+				<code>//</code> in a URL prop into the start of a comment, so in{' '}
+				<code>{`<Child href="https://example.com" :count="'text'" />`}</code>{' '}
+				<code>vue-tsc</code> 3.3.14 never checks <code>count</code>.
+				vue-check restores the URL, so it reports the error, as{' '}
+				<code>vue-tsc</code> does when <code>count</code> comes first.
+				Both patterns are reported upstream (
+				<a href="https://github.com/vuejs/language-tools/issues/6360">
+					vuejs/language-tools#6360
+				</a>
+				,{' '}
+				<a href="https://github.com/vuejs/language-tools/issues/6361">
+					#6361
+				</a>
+				).
+			</p>
 		</div>
 	</section>
 );
