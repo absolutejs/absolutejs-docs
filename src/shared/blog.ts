@@ -23,14 +23,14 @@ export const eugeneGraves = defineAuthor({
 	id: 'eugene-graves',
 	kind: 'person',
 	name: 'Eugene Graves III',
-	role: 'Core developer · Building with AbsoluteJS since 2025',
+	role: 'Co-creator · Building with AbsoluteJS since 2025',
 	url: 'https://github.com/eugenegraves'
 });
 
 export const choosePerRoutePost = definePost({
 	author: eugeneGraves,
 	description:
-		"A core developer's account of building production apps on AbsoluteJS: the conventions, the dev loop, the sharp edges, and what it lets you do that you couldn't before.",
+		"A co-creator's account of building production apps on AbsoluteJS: the conventions, the dev loop, the sharp edges, and what it lets you do that you couldn't before.",
 	publishedAt: '2026-11-12',
 	slug: 'choose-per-route',
 	sourceUrl: 'https://github.com/absolutejs/absolutejs',
@@ -38,8 +38,28 @@ export const choosePerRoutePost = definePost({
 	title: 'Choose Per Route: What Building With AbsoluteJS Is Actually Like'
 });
 
+export const keepYourFrameworkPost = definePost({
+	author: eugeneGraves,
+	description:
+		"React, Svelte, Vue, Angular, HTML and HTMX each pick up something inside AbsoluteJS that their own meta-framework doesn't give them. A chapter per framework, with the code.",
+	publishedAt: '2026-11-14',
+	slug: 'keep-your-framework',
+	sourceUrl: 'https://github.com/absolutejs/absolutejs',
+	tags: [
+		'AbsoluteJS',
+		'React',
+		'Svelte',
+		'Vue',
+		'Angular',
+		'HTMX',
+		'Bun',
+		'Elysia'
+	],
+	title: 'Keep Your Framework, Lose the Package Deal'
+});
+
 export const blog = createBlog({
-	posts: [choosePerRoutePost, whyCitraPost],
+	posts: [keepYourFrameworkPost, choosePerRoutePost, whyCitraPost],
 	site: {
 		baseUrl: 'https://absolutejs.com',
 		description:

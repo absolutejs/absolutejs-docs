@@ -142,6 +142,86 @@ metadataByView.set('native-testing', {
 	title: 'Testing Native Apps on Emulators, Simulators and iPhones | AbsoluteJS'
 });
 
+const coreFeatureMetadata: [string, string, string][] = [
+	[
+		'angular-change-detection',
+		'Angular pages render zoneless on Bun by default. Opt in to zone.js per project for libraries that need it, and stream @defer blocks from the server.',
+		'Angular Change Detection: Zoneless and zone.js'
+	],
+	[
+		'cross-framework-navigation',
+		'Turn links between React and Svelte pages into soft navigations with enableNavigation(), keeping island stores and skipping full page loads.',
+		'Cross-Framework Navigation'
+	],
+	[
+		'file-routes',
+		'Opt in to file routes for React and Svelte pages, with a typed load function beside each route and explicit Elysia routes taking precedence.',
+		'File Routes with Typed Load Functions'
+	],
+	[
+		'fonts',
+		'Self-host web fonts from absolute.config.ts: hashed font files, generated CSS, preload links and fallback metrics, with no third-party requests.',
+		'Fonts: Self-Hosted Web Fonts'
+	],
+	[
+		'form-actions',
+		'Define a form action once with an Elysia schema and use it from React, HTML and HTMX, with validation errors and values kept with JavaScript on or off.',
+		'Form Actions'
+	],
+	[
+		'html-includes',
+		'Build HTML pages from layouts and partials with abs-include and abs-slot, resolved at build time, with dev updates to every open page.',
+		'HTML Includes and Layouts'
+	],
+	[
+		'i18n',
+		'Add locales with defineI18n and i18nPlugin: locale-prefixed routes, typed messages, lang and dir attributes, hreflang links and per-locale sitemaps.',
+		'Internationalization (i18n)'
+	],
+	[
+		'partial-prerendering',
+		'Serve a cached static shell instantly and stream only the dynamic slots per request, for React and Svelte pages listed in static.routes.',
+		'Partial Prerendering'
+	],
+	[
+		'react-server-components',
+		'Opt in to React Server Components per page: async pages that read data directly, client components that hydrate, and streaming from an Elysia route.',
+		'React Server Components'
+	],
+	[
+		'security-headers',
+		'Add a strict nonce-based Content Security Policy and security headers with secureHeaders(), with the nonce on everything AbsoluteJS writes into a page.',
+		'Security Headers and Content Security Policy'
+	],
+	[
+		'static-page-conventions',
+		'Render error.html and not-found.html for HTML and HTMX pages, with a generic message in production and full details in dev and the server log.',
+		'Error and Not-Found Pages'
+	],
+	[
+		'svelte-await-streaming',
+		'Use plain Svelte {#await} blocks that render on the server and hydrate, or opt in to streaming the resolved branch with one comment.',
+		'Svelte Await and Streaming'
+	],
+	[
+		'svelte-router',
+		'Route Svelte apps on server and client with guards that send real redirects, lazy routes, beforeNavigate and scroll restoration.',
+		'Svelte Router: Guards, Lazy Routes and Scroll'
+	],
+	[
+		'vue-server-data',
+		'Load Vue page data on the server with useServerData and reuse it on hydration with no second fetch, or ship pages with no script at all.',
+		'Vue Server Data'
+	],
+	[
+		'web-vitals',
+		'Collect Core Web Vitals from real visitors with the vitals config and handle each report on your own server with onVital.',
+		'Web Vitals'
+	]
+];
+for (const [view, description, title] of coreFeatureMetadata)
+	metadataByView.set(view, { description, title: `${title} | AbsoluteJS` });
+
 metadataByView.set('packages', {
 	description:
 		'Explore every AbsoluteJS package, adapter, module, extension, example, and development tool.',

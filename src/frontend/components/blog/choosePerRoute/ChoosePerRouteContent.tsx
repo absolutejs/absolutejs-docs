@@ -1,14 +1,14 @@
 /* eslint-disable absolute/max-jsxnesting -- long-form editorial markup keeps its semantic document hierarchy */
 import { useState, type ReactNode } from 'react';
 import type { ArticleContentProps } from '../postRegistry';
-import { CodeSample } from './CodeSample';
+import { CodeSample } from '../shared/CodeSample';
 import { FrameworkReel } from './FrameworkReel';
 import { ManifestPlayground } from './ManifestPlayground';
 import { ReplacedSentence } from './ReplacedSentence';
 import { SaveStoryboard } from './SaveStoryboard';
-import { SectionRail } from './SectionRail';
+import { SectionRail } from '../shared/SectionRail';
 import { articleSections } from './sections';
-import { SideNote } from './SideNote';
+import { SideNote } from '../shared/SideNote';
 import { TypecheckScale } from './TypecheckScale';
 
 const COPY_FEEDBACK_DURATION_MS = 1600;
@@ -68,9 +68,11 @@ const islandHtml = `<absolute-island
 
 const apiCode = `export const api = new Elysia({ name: 'api', prefix: '/api' })
 	.get('/projects', () => db.projects.list())
-	.post('/projects', ({ body }) => db.projects.create(body), {
-		body: t.Object({ name: t.String({ minLength: 1 }) })
-	});
+	.post(
+		'/projects',
+		{ body: t.Object({ name: t.String({ minLength: 1 }) }) },
+		({ body }) => db.projects.create(body)
+	);
 
 export type Api = typeof api;`;
 
@@ -85,8 +87,8 @@ type DayOneRow = { edge: string; todo: ReactNode };
 
 const dayOneRows: DayOneRow[] = [
 	{
-		edge: "There's no file-system router",
-		todo: 'Routes are explicit Elysia handlers. The server file is your map.'
+		edge: 'Routes are explicit by default',
+		todo: 'Routes are Elysia handlers, so the server file is your map. File routes are opt-in.'
 	},
 	{
 		edge: 'Manifest keys are PascalCase',
@@ -171,7 +173,7 @@ export const ChoosePerRouteContent = ({
 
 	return (
 		<>
-			<section aria-labelledby="page-title" className="cpr-hero">
+			<section aria-labelledby="page-title" className="post-hero">
 				<div className="article-meta">
 					<div className="author-lockup">
 						<div>
@@ -202,7 +204,7 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</div>
 
-				<div className="cpr-hero-inner">
+				<div className="post-hero-inner">
 					<p
 						aria-label="One server, any frontend."
 						className="cpr-sentence"
@@ -215,7 +217,7 @@ export const ChoosePerRouteContent = ({
 						Choose Per Route: What Building With AbsoluteJS Is
 						Actually Like
 					</h1>
-					<p className="cpr-hero-summary">
+					<p className="post-hero-summary">
 						I&apos;ve been shipping production apps on AbsoluteJS
 						since 2025, and I work on the framework itself. This is
 						what the day-to-day is really like, what to expect, and
@@ -235,11 +237,14 @@ export const ChoosePerRouteContent = ({
 				</nav>
 			</section>
 
-			<SectionRail />
-			<article className="cpr-article">
-				<section className="cpr-section" id="seams">
+			<SectionRail
+				sections={articleSections}
+				wideFigures=".post-figure, .cpr-story"
+			/>
+			<article className="post-article">
+				<section className="post-section" id="seams">
 					<h2>The seams are where the time goes</h2>
-					<div className="cpr-col">
+					<div className="post-col">
 						<p>
 							Every web stack I&apos;ve worked in has the same
 							shape. There&apos;s a frontend framework, a server,
@@ -280,14 +285,15 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</section>
 
-				<section className="cpr-section" id="routes">
+				<section className="post-section" id="routes">
 					<h2>A page is just a route</h2>
-					<div className="cpr-col">
+					<div className="post-col">
 						<p>
 							The first thing people coming from Next or SvelteKit
 							look for is the <code>app/</code> or{' '}
-							<code>routes/</code> folder. There isn&apos;t one.
-							There&apos;s no file-system router.
+							<code>routes/</code> folder. By default there
+							isn&apos;t one: routes are explicit, and file routes
+							are an opt-in for React and Svelte pages.
 						</p>
 						<SideNote
 							docs={[
@@ -341,7 +347,7 @@ export const ChoosePerRouteContent = ({
 						</p>
 					</div>
 					<ManifestPlayground />
-					<div className="cpr-col">
+					<div className="post-col">
 						<SideNote
 							docs={[
 								{
@@ -382,7 +388,7 @@ export const ChoosePerRouteContent = ({
 						<p>
 							Props are typed against the page. If{' '}
 							<code>Home</code> takes{' '}
-							<code className="cpr-nowrap">
+							<code className="post-nowrap">
 								{'{ cssPath: string; user: User }'}
 							</code>{' '}
 							and you forget <code>user</code>, the route
@@ -400,9 +406,9 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</section>
 
-				<section className="cpr-section" id="per-route">
+				<section className="post-section" id="per-route">
 					<h2>Pick the frontend per route, then change your mind</h2>
-					<div className="cpr-col">
+					<div className="post-col">
 						<p>
 							This is the part that changed how I plan projects.
 						</p>
@@ -514,9 +520,9 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</section>
 
-				<section className="cpr-section" id="types">
+				<section className="post-section" id="types">
 					<h2>Types cross the wire with no codegen</h2>
-					<div className="cpr-col">
+					<div className="post-col">
 						<p>
 							Your API is an Elysia app. You export its type, and
 							the browser calls it through Eden Treaty:
@@ -603,9 +609,9 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</section>
 
-				<section className="cpr-section" id="dev-loop">
+				<section className="post-section" id="dev-loop">
 					<h2>Save the file and keep your place</h2>
-					<div className="cpr-col">
+					<div className="post-col">
 						<p>
 							The dev loop is where a framework either earns your
 							trust or loses it, so here&apos;s exactly what
@@ -638,7 +644,7 @@ export const ChoosePerRouteContent = ({
 						</p>
 					</div>
 					<SaveStoryboard />
-					<div className="cpr-col">
+					<div className="post-col">
 						<p>
 							CSS hot-reloads too, both the global stylesheets you
 							configure and the CSS a component imports. In my
@@ -700,9 +706,9 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</section>
 
-				<section className="cpr-section" id="checks">
+				<section className="post-section" id="checks">
 					<h2>Checks fast enough that you actually run them</h2>
-					<div className="cpr-col">
+					<div className="post-col">
 						<p>
 							<code>absolute typecheck</code> is one command for
 							the whole app. It runs the TypeScript checker, then
@@ -722,7 +728,7 @@ export const ChoosePerRouteContent = ({
 						</p>
 					</div>
 					<TypecheckScale />
-					<div className="cpr-col">
+					<div className="post-col">
 						<SideNote
 							docs={[
 								{
@@ -763,9 +769,9 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</section>
 
-				<section className="cpr-section" id="production">
+				<section className="post-section" id="production">
 					<h2>From laptop to production without rewriting the app</h2>
-					<div className="cpr-col">
+					<div className="post-col">
 						<SideNote
 							docs={[
 								{
@@ -866,9 +872,9 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</section>
 
-				<section className="cpr-section" id="real-app">
+				<section className="post-section" id="real-app">
 					<h2>What one real app stopped needing</h2>
-					<div className="cpr-col">
+					<div className="post-col">
 						<p>
 							The production SaaS I work on started on a familiar
 							stack, and we moved it to AbsoluteJS before its
@@ -935,10 +941,10 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</section>
 
-				<section className="cpr-section" id="day-one">
+				<section className="post-section" id="day-one">
 					<h2>Know these before day one</h2>
-					<div className="cpr-col">
-						<div className="cpr-table-wrap">
+					<div className="post-col">
+						<div className="post-table-wrap">
 							<table>
 								<thead>
 									<tr>
@@ -959,17 +965,18 @@ export const ChoosePerRouteContent = ({
 					</div>
 				</section>
 
-				<section className="cpr-section" id="questions">
+				<section className="post-section" id="questions">
 					<h2>Questions people ask</h2>
-					<div className="cpr-col cpr-questions">
+					<div className="post-col post-questions">
 						<details>
 							<summary>Is there file-based routing?</summary>
 							<p>
-								No. Routes are explicit Elysia handlers, and
-								I&apos;ve come to prefer it. A{' '}
-								<code>pageRouterPlugin</code> exists in the
-								source as a placeholder, but it isn&apos;t
-								implemented.
+								As an opt-in. Routes are explicit Elysia
+								handlers by default, and I&apos;ve come to
+								prefer it. Turn on <code>fileRoutes</code> and
+								React and Svelte pages under{' '}
+								<code>routes/</code> become routes, with a typed{' '}
+								<code>load</code> beside each one.
 							</p>
 						</details>
 						<details>
@@ -1040,16 +1047,16 @@ export const ChoosePerRouteContent = ({
 				</section>
 			</article>
 
-			<section aria-labelledby="close-title" className="cpr-close">
-				<div className="cpr-close-inner">
+			<section aria-labelledby="close-title" className="post-close">
+				<div className="post-close-inner">
 					<h2 id="close-title">Pick a route. Pick a frontend.</h2>
-					<div className="cpr-close-row">
+					<div className="post-close-row">
 						<p>
 							Start with one page in the framework you know. Then
 							add a second route in one you don&apos;t, and see
 							how little changes.
 						</p>
-						<div className="cpr-command">
+						<div className="post-command">
 							<code>{CREATE_COMMAND}</code>
 							<button onClick={copyCreateCommand} type="button">
 								{copied ? 'Copied' : 'Copy'}

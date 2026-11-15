@@ -7,8 +7,8 @@ type CodeSampleProps = {
 };
 
 export const CodeSample = ({ code, file, language }: CodeSampleProps) => (
-	<div className="cpr-code">
-		<div className="cpr-code-bar">
+	<div className="post-code">
+		<div className="post-code-bar">
 			<span>{file}</span>
 			<span>{language}</span>
 		</div>

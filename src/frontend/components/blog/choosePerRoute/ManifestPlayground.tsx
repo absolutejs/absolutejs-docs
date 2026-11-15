@@ -202,7 +202,7 @@ type FrameworkPickerProps = {
 
 const FrameworkPicker = ({ onSelect, selected }: FrameworkPickerProps) => (
 	<fieldset className="cpr-fw-row">
-		<legend className="cpr-visually-hidden">Framework</legend>
+		<legend className="post-visually-hidden">Framework</legend>
 		{frameworks.map((option) => (
 			<button
 				aria-pressed={option.key === selected}
@@ -232,8 +232,8 @@ const ManifestKeys = ({ rows }: { rows: ManifestRow[] }) => (
 type RoutePanelProps = { framework: FrameworkKey; name: string };
 
 const RoutePanel = ({ framework, name }: RoutePanelProps) => (
-	<div className="cpr-code">
-		<div className="cpr-code-bar">
+	<div className="post-code">
+		<div className="post-code-bar">
 			<span>
 				{framework}/pages/{name}.{fileExtensions[framework]}
 			</span>
@@ -253,7 +253,7 @@ export const ManifestPlayground = () => {
 	const name = toPascalCase(rawName);
 
 	return (
-		<figure className="cpr-figure">
+		<figure className="post-figure">
 			<div className="cpr-play">
 				<div className="cpr-play-input">
 					<label htmlFor="cpr-page-name">Page name</label>
@@ -277,7 +277,7 @@ export const ManifestPlayground = () => {
 				</div>
 				<RoutePanel framework={framework} name={name} />
 			</div>
-			<figcaption className="cpr-figcaption">
+			<figcaption className="post-figcaption">
 				Type a page name and pick a framework to see the manifest keys
 				the build creates and the route that serves the page.
 			</figcaption>

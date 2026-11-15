@@ -29,6 +29,7 @@ import { PrismPlus } from '../../utils/PrismPlus';
 import { BuildPipelineDiagram } from '../../diagrams/BuildPipelineDiagram';
 import { MobileTableOfContents } from '../../utils/MobileTableOfContents';
 import { TableOfContents, TocItem } from '../../utils/TableOfContents';
+import { TypedManifestKeysSection } from './TypedManifestKeysSection';
 
 const tocItems: TocItem[] = [
 	{ href: '#config-file', label: 'Configuration File' },
@@ -36,6 +37,7 @@ const tocItems: TocItem[] = [
 	{ href: '#configuration', label: 'Configuration Examples' },
 	{ href: '#manifest', label: 'The Manifest' },
 	{ href: '#asset-lookup', label: 'Asset Lookup' },
+	{ href: '#typed-manifest-keys', label: 'Typed Manifest Keys' },
 	{ href: '#tailwind', label: 'Tailwind CSS' },
 	{ href: '#build-options', label: 'Build Options' },
 	{ href: '#cli', label: 'CLI Commands' }
@@ -222,6 +224,8 @@ export const BuildManifestView = ({
 						themeSprings={themeSprings}
 					/>
 				</section>
+
+				<TypedManifestKeysSection themeSprings={themeSprings} />
 
 				<section style={sectionStyle}>
 					<AnchorHeading

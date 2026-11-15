@@ -251,6 +251,21 @@ import { ReactIslandsView } from '../components/documentation/react/ReactIslands
 import { SvelteIslandsView } from '../components/documentation/svelte/SvelteIslandsView';
 import { VueIslandsView } from '../components/documentation/vue/VueIslandsView';
 import { AngularAIView } from '../components/documentation/angular/AngularAIView';
+import { SecurityHeadersView } from '../components/documentation/core/SecurityHeadersView';
+import { StaticPageConventionsView } from '../components/documentation/core/StaticPageConventionsView';
+import { FontsView } from '../components/documentation/core/FontsView';
+import { WebVitalsView } from '../components/documentation/core/WebVitalsView';
+import { FormActionsView } from '../components/documentation/core/FormActionsView';
+import { FileRoutesView } from '../components/documentation/core/FileRoutesView';
+import { CrossFrameworkNavigationView } from '../components/documentation/core/CrossFrameworkNavigationView';
+import { PartialPrerenderingView } from '../components/documentation/core/PartialPrerenderingView';
+import { I18nView } from '../components/documentation/core/I18nView';
+import { ReactServerComponentsView } from '../components/documentation/react/ReactServerComponentsView';
+import { SvelteRouterView } from '../components/documentation/svelte/SvelteRouterView';
+import { SvelteAwaitStreamingView } from '../components/documentation/svelte/SvelteAwaitStreamingView';
+import { VueServerDataView } from '../components/documentation/vue/VueServerDataView';
+import { AngularChangeDetectionView } from '../components/documentation/angular/AngularChangeDetectionView';
+import { HTMLIncludesView } from '../components/documentation/html/HTMLIncludesView';
 import { createOutcomePlaybookView } from '../components/documentation/playbooks/OutcomePlaybookView';
 
 const definePortalViews = <T>(views: T) => views;
@@ -264,6 +279,7 @@ const primaryDocsViews = definePortalViews({
 	'ai-tools': AIToolsView,
 	analyze: AnalyzeView,
 	'angular-ai': AngularAIView,
+	'angular-change-detection': AngularChangeDetectionView,
 	'angular-components': AngularComponentsView,
 	'angular-islands': AngularIslandsView,
 	'angular-overview': AngularOverviewView,
@@ -315,6 +331,7 @@ const primaryDocsViews = definePortalViews({
 	'create-absolutejs': CreateAbsoluteJSView,
 	crm: CrmPackageView,
 	'cron-jobs': CronJobsView,
+	'cross-framework-navigation': CrossFrameworkNavigationView,
 	'data-fetching': DataFetchingView,
 	db: DbView,
 	'demo-browser': DemoBrowserView,
@@ -370,6 +387,9 @@ const primaryDocsViews = definePortalViews({
 	'eslint-sort-exports': EslintRuleView,
 	'eslint-sort-keys-fixable': EslintRuleView,
 	'eslint-spring-naming-convention': EslintRuleView,
+	'file-routes': FileRoutesView,
+	fonts: FontsView,
+	'form-actions': FormActionsView,
 	frameworks: FrameworksView,
 	generate: GenerateView,
 	'head-meta-tags': HeadMetaTagsView,
@@ -377,11 +397,13 @@ const primaryDocsViews = definePortalViews({
 	hosting: HostingView,
 	'html-ai': HTMLAIView,
 	'html-image-optimization': HTMLImageOptView,
+	'html-includes': HTMLIncludesView,
 	'html-islands': HTMLIslandsView,
 	'html-overview': HTMLOverviewView,
 	'htmx-ai': HTMXAIView,
 	'htmx-islands': HTMXIslandsView,
 	'htmx-overview': HTMXOverviewView,
+	i18n: I18nView,
 	'image-optimization': ImageOptimizationView,
 	info: InfoView,
 	inspect: InspectView,
@@ -432,6 +454,7 @@ const primaryDocsViews = definePortalViews({
 	'package-exports': PackageExportsView,
 	packages: PackagesCatalogView,
 	'page-handlers': PageHandlersView,
+	'partial-prerendering': PartialPrerenderingView,
 	partnership: PartnershipPackageView,
 	'platform-overview': PlatformOverviewView,
 	'playbook-commerce-growth': createOutcomePlaybookView(
@@ -471,6 +494,7 @@ const primaryDocsViews = definePortalViews({
 	'react-hooks': ReactHooksView,
 	'react-islands': ReactIslandsView,
 	'react-overview': ReactOverviewView,
+	'react-server-components': ReactServerComponentsView,
 	'react-spa': ReactSpaView,
 	renown: RenownPackageView,
 	'replay-overview': ReplayPackageView,
@@ -482,16 +506,20 @@ const primaryDocsViews = definePortalViews({
 	'scoped-state': ScopedStateView,
 	search: SearchPackageView,
 	secrets: SecretsOverviewView,
+	'security-headers': SecurityHeadersView,
 	'server-state': ServerStateView,
 	sitemap: SitemapView,
 	'ssr-model': SSRModelView,
 	start: StartView,
 	'static-generation': StaticGenerationView,
+	'static-page-conventions': StaticPageConventionsView,
 	'substrate-audit': PlatformOverviewView,
 	'svelte-ai': SvelteAIView,
+	'svelte-await-streaming': SvelteAwaitStreamingView,
 	'svelte-components': SvelteComponentsView,
 	'svelte-islands': SvelteIslandsView,
 	'svelte-overview': SvelteOverviewView,
+	'svelte-router': SvelteRouterView,
 	'svelte-spa': SvelteSpaView,
 	'sync-actions': SyncActionsJobsView,
 	'sync-adapters': SyncAdaptersView,
@@ -540,7 +568,9 @@ const primaryDocsViews = definePortalViews({
 	'vue-composables': VueComposablesPackageView,
 	'vue-islands': VueIslandsView,
 	'vue-overview': VueOverviewView,
+	'vue-server-data': VueServerDataView,
 	'vue-spa': VueSpaView,
+	'web-vitals': WebVitalsView,
 	...packageReferenceViews
 });
 
@@ -636,7 +666,25 @@ const baseSidebarCategories: SidebarCategory[] = [
 					{
 						id: 'out-of-order-streaming',
 						label: 'Out-of-Order Streaming'
-					}
+					},
+					{ id: 'form-actions', label: 'Form Actions' },
+					{ id: 'file-routes', label: 'File Routes' },
+					{
+						id: 'cross-framework-navigation',
+						label: 'Page Navigation'
+					},
+					{
+						id: 'partial-prerendering',
+						label: 'Partial Prerendering'
+					},
+					{
+						id: 'static-page-conventions',
+						label: 'Error & Not-Found Pages'
+					},
+					{ id: 'security-headers', label: 'Security Headers' },
+					{ id: 'fonts', label: 'Fonts' },
+					{ id: 'web-vitals', label: 'Web Vitals' },
+					{ id: 'i18n', label: 'Internationalization' }
 				]
 			},
 			{
@@ -674,6 +722,10 @@ const baseSidebarCategories: SidebarCategory[] = [
 					{ id: 'react-overview', label: 'Overview' },
 					{ id: 'react-components', label: 'Components' },
 					{ id: 'react-hooks', label: 'Hooks' },
+					{
+						id: 'react-server-components',
+						label: 'Server Components'
+					},
 					{ id: 'react-spa', label: 'SPA' },
 					{ id: 'react-islands', label: 'Islands' },
 					{ id: 'react-ai', label: 'AI' }
@@ -684,6 +736,11 @@ const baseSidebarCategories: SidebarCategory[] = [
 				pages: [
 					{ id: 'svelte-overview', label: 'Overview' },
 					{ id: 'svelte-components', label: 'Components' },
+					{ id: 'svelte-router', label: 'Router' },
+					{
+						id: 'svelte-await-streaming',
+						label: 'Await & Streaming'
+					},
 					{ id: 'svelte-spa', label: 'SPA' },
 					{ id: 'svelte-islands', label: 'Islands' },
 					{ id: 'svelte-ai', label: 'AI' }
@@ -694,6 +751,7 @@ const baseSidebarCategories: SidebarCategory[] = [
 				pages: [
 					{ id: 'vue-overview', label: 'Overview' },
 					{ id: 'vue-components', label: 'Components' },
+					{ id: 'vue-server-data', label: 'Server Data' },
 					{ id: 'vue-spa', label: 'SPA' },
 					{ id: 'vue-islands', label: 'Islands' },
 					{ id: 'vue-ai', label: 'AI' }
@@ -704,6 +762,10 @@ const baseSidebarCategories: SidebarCategory[] = [
 				pages: [
 					{ id: 'angular-overview', label: 'Overview' },
 					{ id: 'angular-components', label: 'Components' },
+					{
+						id: 'angular-change-detection',
+						label: 'Change Detection'
+					},
 					{ id: 'angular-spa', label: 'SPA' },
 					{ id: 'angular-islands', label: 'Islands' },
 					{ id: 'angular-ai', label: 'AI' }
@@ -713,6 +775,7 @@ const baseSidebarCategories: SidebarCategory[] = [
 				label: 'HTML',
 				pages: [
 					{ id: 'html-overview', label: 'Overview' },
+					{ id: 'html-includes', label: 'Includes & Layouts' },
 					{
 						id: 'html-image-optimization',
 						label: 'Image Optimization'

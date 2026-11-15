@@ -21,7 +21,7 @@ const valueStyle = (seconds: number): CSSProperties => ({
 });
 
 export const TypecheckScale = () => (
-	<figure className="cpr-figure">
+	<figure className="post-figure">
 		<div className="cpr-scale">
 			<div className="cpr-bar-row">
 				<span className="cpr-bar-name">
@@ -60,7 +60,7 @@ export const TypecheckScale = () => (
 				))}
 			</div>
 		</div>
-		<figcaption className="cpr-figcaption">
+		<figcaption className="post-figcaption">
 			1,200 source files on the AbsoluteJS repository, measured on an
 			Apple M4. tsc took 7 to 10 seconds and about 1 GB across runs; the
 			grey bar shows the middle of that range.

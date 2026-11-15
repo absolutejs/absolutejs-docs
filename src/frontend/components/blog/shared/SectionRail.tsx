@@ -1,16 +1,25 @@
 import { useEffect, useState } from 'react';
-import { articleSections } from './sections';
+
+export type ArticleSection = { id: string; title: string };
+
+type SectionRailProps = {
+	sections: ArticleSection[];
+	// Full-width figures pass through the rail's area; the rail steps aside
+	// while one matching this selector is there.
+	wideFigures: string;
+};
 
 // A section counts as current while it crosses this band near the top of
 // the viewport. Outside every section (the opening, the close) the rail hides.
 const CURRENT_BAND = '-30% 0px -65% 0px';
-// The rail is fixed at 140px from the top and about 320px tall. Full-width
-// figures pass through that area, so the rail steps aside while one does.
+// The rail is fixed at 140px from the top and about 320px tall.
 const RAIL_TOP_PX = 130;
 const RAIL_BOTTOM_PX = 470;
-const WIDE_FIGURES = '.cpr-figure, .cpr-story';
 
-const observeCurrentSection = (onChange: (id: string | null) => void) => {
+const observeCurrentSection = (
+	sections: ArticleSection[],
+	onChange: (id: string | null) => void
+) => {
 	const intersecting = new Set<string>();
 	const observer = new IntersectionObserver(
 		(entries) => {
@@ -18,14 +27,14 @@ const observeCurrentSection = (onChange: (id: string | null) => void) => {
 				if (entry.isIntersecting) intersecting.add(entry.target.id);
 				else intersecting.delete(entry.target.id);
 			}
-			const current = articleSections.find((section) =>
+			const current = sections.find((section) =>
 				intersecting.has(section.id)
 			);
 			onChange(current?.id ?? null);
 		},
 		{ rootMargin: CURRENT_BAND }
 	);
-	for (const section of articleSections) {
+	for (const section of sections) {
 		const element = document.getElementById(section.id);
 		if (element !== null) observer.observe(element);
 	}
@@ -33,7 +42,10 @@ const observeCurrentSection = (onChange: (id: string | null) => void) => {
 	return observer;
 };
 
-const observeWideFigures = (onChange: (overlapping: boolean) => void) => {
+const observeWideFigures = (
+	selector: string,
+	onChange: (overlapping: boolean) => void
+) => {
 	const overlapping = new Set<Element>();
 	const bottomInset = Math.max(0, window.innerHeight - RAIL_BOTTOM_PX);
 	const observer = new IntersectionObserver(
@@ -46,35 +58,38 @@ const observeWideFigures = (onChange: (overlapping: boolean) => void) => {
 		},
 		{ rootMargin: `-${RAIL_TOP_PX}px 0px -${bottomInset}px 0px` }
 	);
-	for (const element of document.querySelectorAll(WIDE_FIGURES)) {
+	for (const element of document.querySelectorAll(selector)) {
 		observer.observe(element);
 	}
 
 	return observer;
 };
 
-export const SectionRail = () => {
+export const SectionRail = ({ sections, wideFigures }: SectionRailProps) => {
 	const [activeId, setActiveId] = useState<string | null>(null);
 	const [figureInTheWay, setFigureInTheWay] = useState(false);
 
 	useEffect(() => {
-		const sections = observeCurrentSection(setActiveId);
-		const figures = observeWideFigures(setFigureInTheWay);
+		const sectionObserver = observeCurrentSection(sections, setActiveId);
+		const figureObserver = observeWideFigures(
+			wideFigures,
+			setFigureInTheWay
+		);
 
 		return () => {
-			sections.disconnect();
-			figures.disconnect();
+			sectionObserver.disconnect();
+			figureObserver.disconnect();
 		};
-	}, []);
+	}, [sections, wideFigures]);
 
 	return (
 		<nav
 			aria-label="Sections"
-			className="cpr-rail"
+			className="post-rail"
 			data-visible={activeId !== null && !figureInTheWay}
 		>
 			<ol>
-				{articleSections.map((section) => (
+				{sections.map((section) => (
 					<li key={section.id}>
 						<a
 							aria-current={

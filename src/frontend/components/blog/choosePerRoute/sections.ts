@@ -1,4 +1,4 @@
-export type ArticleSection = { id: string; title: string };
+import type { ArticleSection } from '../shared/SectionRail';
 
 export const articleSections: ArticleSection[] = [
 	{ id: 'seams', title: 'The seams' },
