@@ -24,6 +24,13 @@ type ProjectResult = {
 };
 
 type VueCheckResults = {
+	codegen: {
+		files: number;
+		javascriptMs: number;
+		name: string;
+		native: number;
+		nativeMs: number;
+	}[];
 	conformance: {
 		bunMatchesTsc7: number;
 		cases: number;
@@ -43,6 +50,120 @@ type VueCheckResults = {
 };
 
 export const vueCheckResults: VueCheckResults = {
+	codegen: [
+		{
+			files: 623,
+			javascriptMs: 7285,
+			name: '1panel',
+			native: 623,
+			nativeMs: 1616
+		},
+		{
+			files: 592,
+			javascriptMs: 5110,
+			name: 'misskey',
+			native: 592,
+			nativeMs: 1066
+		},
+		{
+			files: 219,
+			javascriptMs: 3332,
+			name: 'dozzle',
+			native: 219,
+			nativeMs: 703
+		},
+		{
+			files: 376,
+			javascriptMs: 3130,
+			name: 'vue-vben-admin',
+			native: 376,
+			nativeMs: 936
+		},
+		{
+			files: 255,
+			javascriptMs: 3129,
+			name: 'vue-pure-admin',
+			native: 255,
+			nativeMs: 854
+		},
+		{
+			files: 249,
+			javascriptMs: 3054,
+			name: 'vikunja',
+			native: 248,
+			nativeMs: 875
+		},
+		{
+			files: 214,
+			javascriptMs: 2929,
+			name: 'vueuse',
+			native: 214,
+			nativeMs: 730
+		},
+		{
+			files: 470,
+			javascriptMs: 2853,
+			name: 'reka-ui',
+			native: 470,
+			nativeMs: 755
+		},
+		{
+			files: 121,
+			javascriptMs: 2122,
+			name: 'slidev',
+			native: 120,
+			nativeMs: 694
+		},
+		{
+			files: 90,
+			javascriptMs: 1778,
+			name: 'soybean-admin',
+			native: 90,
+			nativeMs: 578
+		},
+		{
+			files: 31,
+			javascriptMs: 1655,
+			name: 'vue-devtools',
+			native: 31,
+			nativeMs: 610
+		},
+		{
+			files: 26,
+			javascriptMs: 1646,
+			name: 'gitea',
+			native: 26,
+			nativeMs: 530
+		},
+		{
+			files: 66,
+			javascriptMs: 1575,
+			name: 'vitepress-client',
+			native: 66,
+			nativeMs: 539
+		},
+		{
+			files: 34,
+			javascriptMs: 1359,
+			name: 'vue-element-plus-admin',
+			native: 34,
+			nativeMs: 520
+		},
+		{
+			files: 31,
+			javascriptMs: 1306,
+			name: 'halo-console-components',
+			native: 31,
+			nativeMs: 495
+		},
+		{
+			files: 4,
+			javascriptMs: 962,
+			name: 'vitepress-docs',
+			native: 4,
+			nativeMs: 471
+		}
+	],
 	conformance: {
 		bunMatchesTsc7: 252,
 		cases: 252,
@@ -51,7 +172,7 @@ export const vueCheckResults: VueCheckResults = {
 	},
 	environment: {
 		bun: '1.4.4+absolute.2',
-		containerMemoryLimit: '10 GB',
+		containerMemoryLimit: '6 GB',
 		cpu: 'Intel(R) Core(TM) Ultra 7 155U',
 		node: 'v26.3.0',
 		totalMemoryGB: 12,
@@ -65,31 +186,151 @@ export const vueCheckResults: VueCheckResults = {
 	projects: [
 		{
 			bunMatchesTsc7: true,
+			errors: 2298,
+			identical: true,
+			name: 'directus',
+			phases: {
+				checkMB: 638,
+				checkS: 1.29,
+				codegenMB: 667,
+				codegenS: 3.64,
+				mapMB: 588,
+				mapS: 1.48,
+				vueFiles: 597
+			},
+			runs: 5,
+			single: {
+				mb: 706,
+				s: 9.34
+			},
+			typeScript7Changes: 234,
+			vueCheck: {
+				mb: 724,
+				s: 6.49
+			},
+			vueTsc: {
+				mb: 2436,
+				s: 30.94,
+				version: '3.1.8'
+			}
+		},
+		{
+			bunMatchesTsc7: true,
+			errors: 267,
+			identical: true,
+			name: '1panel',
+			phases: {
+				checkMB: 494,
+				checkS: 0.89,
+				codegenMB: 585,
+				codegenS: 1.38,
+				mapMB: 827,
+				mapS: 1.36,
+				vueFiles: 623
+			},
+			runs: 5,
+			single: {
+				mb: 836,
+				s: 5.86
+			},
+			typeScript7Changes: 10,
+			vueCheck: {
+				mb: 827,
+				s: 3.87
+			},
+			vueTsc: {
+				mb: 2747,
+				s: 29.21,
+				version: '3.3.9'
+			}
+		},
+		{
+			bunMatchesTsc7: true,
+			errors: 687,
+			identical: true,
+			name: 'misskey',
+			phases: {
+				checkMB: 460,
+				checkS: 0.7,
+				codegenMB: 326,
+				codegenS: 0.86,
+				mapMB: 444,
+				mapS: 1.09,
+				vueFiles: 592
+			},
+			runs: 5,
+			single: {
+				mb: 490,
+				s: 4.34
+			},
+			typeScript7Changes: 4,
+			vueCheck: {
+				mb: 558,
+				s: 2.79
+			},
+			vueTsc: {
+				mb: 2198,
+				s: 26.47,
+				version: '3.3.11'
+			}
+		},
+		{
+			bunMatchesTsc7: true,
+			errors: 0,
+			identical: true,
+			name: 'vikunja',
+			phases: {
+				checkMB: 360,
+				checkS: 0.72,
+				codegenMB: 226,
+				codegenS: 0.87,
+				mapMB: 169,
+				mapS: 0.35,
+				vueFiles: 249
+			},
+			runs: 5,
+			single: {
+				mb: 355,
+				s: 3.08
+			},
+			typeScript7Changes: 0,
+			vueCheck: {
+				mb: 417,
+				s: 2
+			},
+			vueTsc: {
+				mb: 1423,
+				s: 21.11,
+				version: '3.3.11'
+			}
+		},
+		{
+			bunMatchesTsc7: true,
 			errors: 0,
 			identical: true,
 			name: 'vue-vben-admin',
 			phases: {
-				checkMB: 391,
-				checkS: 0.98,
-				codegenMB: 390,
-				codegenS: 2.58,
-				mapMB: 299,
-				mapS: 0.92,
+				checkMB: 390,
+				checkS: 1.1,
+				codegenMB: 225,
+				codegenS: 0.87,
+				mapMB: 166,
+				mapS: 0.32,
 				vueFiles: 376
 			},
 			runs: 5,
 			single: {
-				mb: 421,
-				s: 5.92
+				mb: 423,
+				s: 3.27
 			},
 			typeScript7Changes: 0,
 			vueCheck: {
-				mb: 447,
-				s: 4.54
+				mb: 446,
+				s: 2.34
 			},
 			vueTsc: {
-				mb: 1445,
-				s: 23.17,
+				mb: 1457,
+				s: 20.14,
 				version: '3.3.11'
 			}
 		},
@@ -99,27 +340,27 @@ export const vueCheckResults: VueCheckResults = {
 			identical: true,
 			name: 'vue-pure-admin',
 			phases: {
-				checkMB: 353,
-				checkS: 0.98,
-				codegenMB: 369,
-				codegenS: 2.82,
-				mapMB: 192,
-				mapS: 0.45,
+				checkMB: 356,
+				checkS: 1.09,
+				codegenMB: 208,
+				codegenS: 0.75,
+				mapMB: 130,
+				mapS: 0.24,
 				vueFiles: 255
 			},
 			runs: 5,
 			single: {
-				mb: 409,
-				s: 5.12
+				mb: 371,
+				s: 2.68
 			},
 			typeScript7Changes: 6,
 			vueCheck: {
-				mb: 410,
-				s: 4.33
+				mb: 411,
+				s: 2.14
 			},
 			vueTsc: {
-				mb: 1466,
-				s: 19.15,
+				mb: 1467,
+				s: 19.42,
 				version: '3.3.13'
 			}
 		},
@@ -129,27 +370,27 @@ export const vueCheckResults: VueCheckResults = {
 			identical: true,
 			name: 'element-plus',
 			phases: {
-				checkMB: 297,
-				checkS: 0.92,
-				codegenMB: 339,
-				codegenS: 2.26,
-				mapMB: 420,
-				mapS: 2.17,
+				checkMB: 303,
+				checkS: 1.09,
+				codegenMB: 333,
+				codegenS: 2.22,
+				mapMB: 138,
+				mapS: 0.33,
 				vueFiles: 165
 			},
 			runs: 5,
 			single: {
-				mb: 420,
-				s: 6.65
+				mb: 365,
+				s: 4.48
 			},
 			typeScript7Changes: 3,
 			vueCheck: {
-				mb: 420,
-				s: 5.43
+				mb: 367,
+				s: 3.76
 			},
 			vueTsc: {
-				mb: 1220,
-				s: 18.9,
+				mb: 1221,
+				s: 16.96,
 				version: '3.1.5'
 			}
 		},
@@ -159,27 +400,27 @@ export const vueCheckResults: VueCheckResults = {
 			identical: true,
 			name: 'gitea',
 			phases: {
-				checkMB: 275,
-				checkS: 0.39,
-				codegenMB: 238,
-				codegenS: 1.21,
-				mapMB: 140,
-				mapS: 0.33,
+				checkMB: 270,
+				checkS: 0.41,
+				codegenMB: 149,
+				codegenS: 0.58,
+				mapMB: 58,
+				mapS: 0.04,
 				vueFiles: 26
 			},
 			runs: 5,
 			single: {
-				mb: 271,
-				s: 2.5
+				mb: 273,
+				s: 1.33
 			},
 			typeScript7Changes: 0,
 			vueCheck: {
-				mb: 314,
-				s: 1.97
+				mb: 309,
+				s: 1.07
 			},
 			vueTsc: {
-				mb: 1015,
-				s: 10.49,
+				mb: 1007,
+				s: 11.24,
 				version: '3.3.14'
 			}
 		},
@@ -189,27 +430,27 @@ export const vueCheckResults: VueCheckResults = {
 			identical: true,
 			name: 'naive-ui-admin',
 			phases: {
-				checkMB: 257,
-				checkS: 0.32,
-				codegenMB: 269,
-				codegenS: 1.52,
-				mapMB: 188,
-				mapS: 0.55,
+				checkMB: 259,
+				checkS: 0.37,
+				codegenMB: 244,
+				codegenS: 1.61,
+				mapMB: 78,
+				mapS: 0.09,
 				vueFiles: 68
 			},
 			runs: 5,
 			single: {
-				mb: 301,
-				s: 2.88
+				mb: 287,
+				s: 2.55
 			},
 			typeScript7Changes: 0,
 			vueCheck: {
-				mb: 303,
-				s: 2.43
+				mb: 302,
+				s: 2.09
 			},
 			vueTsc: {
-				mb: 914,
-				s: 8.61,
+				mb: 908,
+				s: 10.12,
 				version: '3.3.13'
 			}
 		},
@@ -217,30 +458,30 @@ export const vueCheckResults: VueCheckResults = {
 			bunMatchesTsc7: true,
 			errors: 0,
 			identical: true,
-			name: 'vue-element-plus-admin',
+			name: 'dozzle',
 			phases: {
-				checkMB: 175,
-				checkS: 0.16,
-				codegenMB: 201,
-				codegenS: 0.9,
-				mapMB: 121,
-				mapS: 0.31,
-				vueFiles: 34
+				checkMB: 286,
+				checkS: 0.43,
+				codegenMB: 191,
+				codegenS: 0.72,
+				mapMB: 181,
+				mapS: 0.42,
+				vueFiles: 219
 			},
 			runs: 5,
 			single: {
-				mb: 238,
-				s: 1.72
+				mb: 295,
+				s: 2.44
 			},
 			typeScript7Changes: 0,
 			vueCheck: {
-				mb: 235,
-				s: 1.38
+				mb: 344,
+				s: 1.62
 			},
 			vueTsc: {
-				mb: 537,
-				s: 5.49,
-				version: '3.3.9'
+				mb: 1394,
+				s: 7.03,
+				version: '3.3.14'
 			}
 		},
 		{
@@ -249,28 +490,58 @@ export const vueCheckResults: VueCheckResults = {
 			identical: true,
 			name: 'slidev',
 			phases: {
-				checkMB: 206,
+				checkMB: 203,
 				checkS: 0.15,
-				codegenMB: 252,
-				codegenS: 1.55,
-				mapMB: 40,
+				codegenMB: 158,
+				codegenS: 0.72,
+				mapMB: 45,
 				mapS: 0,
 				vueFiles: 121
 			},
 			runs: 5,
 			single: {
-				mb: 285,
-				s: 2.04
+				mb: 209,
+				s: 1.07
 			},
 			typeScript7Changes: 0,
 			vueCheck: {
-				mb: 285,
-				s: 1.71
+				mb: 243,
+				s: 0.88
 			},
 			vueTsc: {
 				mb: 741,
-				s: 4.43,
+				s: 5.69,
 				version: '3.3.14'
+			}
+		},
+		{
+			bunMatchesTsc7: true,
+			errors: 0,
+			identical: true,
+			name: 'vue-element-plus-admin',
+			phases: {
+				checkMB: 176,
+				checkS: 0.15,
+				codegenMB: 133,
+				codegenS: 0.51,
+				mapMB: 53,
+				mapS: 0.02,
+				vueFiles: 34
+			},
+			runs: 5,
+			single: {
+				mb: 171,
+				s: 0.9
+			},
+			typeScript7Changes: 0,
+			vueCheck: {
+				mb: 216,
+				s: 0.7
+			},
+			vueTsc: {
+				mb: 539,
+				s: 4.66,
+				version: '3.3.9'
 			}
 		},
 		{
@@ -279,27 +550,117 @@ export const vueCheckResults: VueCheckResults = {
 			identical: true,
 			name: 'vitepress-client',
 			phases: {
-				checkMB: 109,
-				checkS: 0.12,
-				codegenMB: 234,
-				codegenS: 1.47,
-				mapMB: 121,
-				mapS: 0.39,
+				checkMB: 111,
+				checkS: 0.09,
+				codegenMB: 141,
+				codegenS: 0.5,
+				mapMB: 103,
+				mapS: 0.26,
 				vueFiles: 66
 			},
 			runs: 5,
 			single: {
-				mb: 264,
-				s: 1.78
+				mb: 176,
+				s: 1.02
 			},
 			typeScript7Changes: 0,
 			vueCheck: {
-				mb: 268,
-				s: 2.05
+				mb: 175,
+				s: 0.87
 			},
 			vueTsc: {
-				mb: 366,
-				s: 3.93,
+				mb: 367,
+				s: 4.2,
+				version: '3.3.14'
+			}
+		},
+		{
+			bunMatchesTsc7: true,
+			errors: 0,
+			identical: true,
+			name: 'reka-ui',
+			phases: {
+				checkMB: 226,
+				checkS: 0.3,
+				codegenMB: 176,
+				codegenS: 0.58,
+				mapMB: 121,
+				mapS: 0.19,
+				vueFiles: 470
+			},
+			runs: 5,
+			single: {
+				mb: 231,
+				s: 1.83
+			},
+			typeScript7Changes: 2,
+			vueCheck: {
+				mb: 273,
+				s: 1.1
+			},
+			vueTsc: {
+				mb: 634,
+				s: 3.81,
+				version: '3.3.11'
+			}
+		},
+		{
+			bunMatchesTsc7: true,
+			errors: 1,
+			identical: true,
+			name: 'vueuse',
+			phases: {
+				checkMB: 268,
+				checkS: 0.22,
+				codegenMB: 164,
+				codegenS: 0.61,
+				mapMB: 47,
+				mapS: 0,
+				vueFiles: 214
+			},
+			runs: 5,
+			single: {
+				mb: 232,
+				s: 1.27
+			},
+			typeScript7Changes: 0,
+			vueCheck: {
+				mb: 309,
+				s: 0.84
+			},
+			vueTsc: {
+				mb: 708,
+				s: 3.73,
+				version: '3.3.14'
+			}
+		},
+		{
+			bunMatchesTsc7: true,
+			errors: 95,
+			identical: true,
+			name: 'vue-devtools',
+			phases: {
+				checkMB: 124,
+				checkS: 0.08,
+				codegenMB: 146,
+				codegenS: 0.42,
+				mapMB: 133,
+				mapS: 0.27,
+				vueFiles: 31
+			},
+			runs: 5,
+			single: {
+				mb: 178,
+				s: 0.93
+			},
+			typeScript7Changes: 4,
+			vueCheck: {
+				mb: 180,
+				s: 0.79
+			},
+			vueTsc: {
+				mb: 402,
+				s: 3.08,
 				version: '3.3.14'
 			}
 		},
@@ -310,26 +671,26 @@ export const vueCheckResults: VueCheckResults = {
 			name: 'halo-console-components',
 			phases: {
 				checkMB: 100,
-				checkS: 0.09,
-				codegenMB: 193,
-				codegenS: 0.97,
-				mapMB: 98,
-				mapS: 0.23,
+				checkS: 0.08,
+				codegenMB: 185,
+				codegenS: 0.52,
+				mapMB: 39,
+				mapS: 0.01,
 				vueFiles: 31
 			},
 			runs: 5,
 			single: {
-				mb: 230,
-				s: 1.61
+				mb: 178,
+				s: 0.65
 			},
 			typeScript7Changes: 0,
 			vueCheck: {
-				mb: 227,
-				s: 1.39
+				mb: 219,
+				s: 0.62
 			},
 			vueTsc: {
-				mb: 301,
-				s: 2.58,
+				mb: 300,
+				s: 2.8,
 				version: '3.3.9'
 			}
 		},
@@ -339,27 +700,27 @@ export const vueCheckResults: VueCheckResults = {
 			identical: true,
 			name: 'vitepress-docs',
 			phases: {
-				checkMB: 106,
+				checkMB: 108,
 				checkS: 0.06,
-				codegenMB: 151,
-				codegenS: 0.49,
-				mapMB: 87,
-				mapS: 0.15,
+				codegenMB: 131,
+				codegenS: 0.43,
+				mapMB: 82,
+				mapS: 0.17,
 				vueFiles: 4
 			},
 			runs: 5,
 			single: {
-				mb: 182,
-				s: 0.76
+				mb: 164,
+				s: 0.71
 			},
 			typeScript7Changes: 0,
 			vueCheck: {
-				mb: 185,
-				s: 0.73
+				mb: 165,
+				s: 0.68
 			},
 			vueTsc: {
 				mb: 302,
-				s: 1.66,
+				s: 2.13,
 				version: '3.3.14'
 			}
 		},
@@ -369,27 +730,27 @@ export const vueCheckResults: VueCheckResults = {
 			identical: true,
 			name: 'soybean-admin',
 			phases: {
-				checkMB: 169,
-				checkS: 0.13,
-				codegenMB: 236,
-				codegenS: 1.57,
-				mapMB: 39,
+				checkMB: 168,
+				checkS: 0.1,
+				codegenMB: 161,
+				codegenS: 0.5,
+				mapMB: 45,
 				mapS: 0,
 				vueFiles: 90
 			},
 			runs: 5,
 			single: {
-				mb: 271,
-				s: 1.76
+				mb: 189,
+				s: 0.81
 			},
 			typeScript7Changes: 0,
 			vueCheck: {
-				mb: 270,
-				s: 1.71
+				mb: 207,
+				s: 0.61
 			},
 			vueTsc: {
-				mb: 577,
-				s: 1.56,
+				mb: 584,
+				s: 1.33,
 				version: '3.3.12'
 			}
 		}

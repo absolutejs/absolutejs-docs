@@ -4,26 +4,27 @@ import { vueCheckResults } from './results';
 const times = (before: number, after: number) =>
 	`${(before / after).toFixed(1)}×`;
 const yes = (value: boolean) => (value ? '✓' : '✗');
-const { projects } = vueCheckResults;
+const { codegen, projects } = vueCheckResults;
+const MS_PER_SECOND = 1000;
+const seconds = (milliseconds: number) =>
+	`${(milliseconds / MS_PER_SECOND).toFixed(2)} s`;
 
-export const PerformanceTable = () => (
+export const CodegenTable = () => (
 	<DataTable
 		columns={[
 			'Project',
 			'Vue files',
-			'vue-tsc',
-			'vue-check',
-			'Faster',
-			'Less memory'
+			'JavaScript codegen',
+			'Native codegen',
+			'Faster'
 		]}
-		rows={projects.map((project) => ({
+		rows={codegen.map((project) => ({
 			cells: [
 				project.name,
-				project.phases.vueFiles,
-				`${project.vueTsc.s} s · ${project.vueTsc.mb} MB`,
-				`${project.vueCheck.s} s · ${project.vueCheck.mb} MB`,
-				times(project.vueTsc.s, project.vueCheck.s),
-				times(project.vueTsc.mb, project.vueCheck.mb)
+				project.files,
+				seconds(project.javascriptMs),
+				seconds(project.nativeMs),
+				times(project.javascriptMs, project.nativeMs)
 			],
 			key: project.name
 		}))}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { articleSections } from './sections';
+import { type ArticleSection, articleSections } from './sections';
 
 // A section counts as current while it crosses this band near the top of
 // the viewport. Outside every section (the opening, the close) the rail hides.
@@ -10,7 +10,10 @@ const RAIL_TOP_PX = 130;
 const RAIL_BOTTOM_PX = 470;
 const WIDE_FIGURES = '.cpr-figure, .cpr-story';
 
-const observeCurrentSection = (onChange: (id: string | null) => void) => {
+const observeCurrentSection = (
+	sections: ArticleSection[],
+	onChange: (id: string | null) => void
+) => {
 	const intersecting = new Set<string>();
 	const observer = new IntersectionObserver(
 		(entries) => {
@@ -18,14 +21,14 @@ const observeCurrentSection = (onChange: (id: string | null) => void) => {
 				if (entry.isIntersecting) intersecting.add(entry.target.id);
 				else intersecting.delete(entry.target.id);
 			}
-			const current = articleSections.find((section) =>
+			const current = sections.find((section) =>
 				intersecting.has(section.id)
 			);
 			onChange(current?.id ?? null);
 		},
 		{ rootMargin: CURRENT_BAND }
 	);
-	for (const section of articleSections) {
+	for (const section of sections) {
 		const element = document.getElementById(section.id);
 		if (element !== null) observer.observe(element);
 	}
@@ -53,19 +56,23 @@ const observeWideFigures = (onChange: (overlapping: boolean) => void) => {
 	return observer;
 };
 
-export const SectionRail = () => {
+type SectionRailProps = { sections?: ArticleSection[] };
+
+export const SectionRail = ({
+	sections = articleSections
+}: SectionRailProps) => {
 	const [activeId, setActiveId] = useState<string | null>(null);
 	const [figureInTheWay, setFigureInTheWay] = useState(false);
 
 	useEffect(() => {
-		const sections = observeCurrentSection(setActiveId);
+		const current = observeCurrentSection(sections, setActiveId);
 		const figures = observeWideFigures(setFigureInTheWay);
 
 		return () => {
-			sections.disconnect();
+			current.disconnect();
 			figures.disconnect();
 		};
-	}, []);
+	}, [sections]);
 
 	return (
 		<nav
@@ -74,7 +81,7 @@ export const SectionRail = () => {
 			data-visible={activeId !== null && !figureInTheWay}
 		>
 			<ol>
-				{articleSections.map((section) => (
+				{sections.map((section) => (
 					<li key={section.id}>
 						<a
 							aria-current={

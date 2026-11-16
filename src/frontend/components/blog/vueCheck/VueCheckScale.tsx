@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import { vueCheckResults } from './results';
 
 const PERCENT = 100;
@@ -39,15 +38,35 @@ const barsOf = (project: NonNullable<typeof largest>) => [
 	}
 ];
 
+type BarTrackProps = { bar: Bar; percent: number };
+
+// A short bar has its value beside it; the long one carries it inside, so
+// the value never runs past the end of the track.
+const BarTrack = ({ bar, percent }: BarTrackProps) => (
+	<div className="cpr-bar-track">
+		<div
+			className={`cpr-bar ${bar.fast ? 'is-fast' : 'is-slow'}`}
+			style={{ width: `${percent}%` }}
+		>
+			{bar.fast ? null : bar.text}
+		</div>
+		{bar.fast ? (
+			<span
+				className="cpr-bar-value"
+				style={{ left: `calc(${percent}% + ${VALUE_GAP_PX}px)` }}
+			>
+				{bar.text}
+			</span>
+		) : null}
+	</div>
+);
+
 export const VueCheckScale = () => {
 	if (largest === undefined) return null;
 	const bars: Bar[] = barsOf(largest);
 	const scale =
 		Math.ceil(largest.vueTsc.s / TICK_STEP_SECONDS) * TICK_STEP_SECONDS;
 	const widthOf = (seconds: number) => (seconds / scale) * PERCENT;
-	const valueStyle = (seconds: number): CSSProperties => ({
-		left: `calc(${widthOf(seconds)}% + ${VALUE_GAP_PX}px)`
-	});
 	const ticks = Array.from(
 		{ length: scale / TICK_STEP_SECONDS + 1 },
 		(_, index) => index * TICK_STEP_SECONDS
@@ -65,18 +84,7 @@ export const VueCheckScale = () => {
 							{bar.label}
 							<small>{bar.detail}</small>
 						</span>
-						<div className="cpr-bar-track">
-							<div
-								className={`cpr-bar ${bar.fast ? 'is-fast' : 'is-slow'}`}
-								style={{ width: `${widthOf(bar.seconds)}%` }}
-							/>
-							<span
-								className="cpr-bar-value"
-								style={valueStyle(bar.seconds)}
-							>
-								{bar.text}
-							</span>
-						</div>
+						<BarTrack bar={bar} percent={widthOf(bar.seconds)} />
 					</div>
 				))}
 				<div aria-hidden="true" className="cpr-axis">

@@ -2,6 +2,7 @@ import type { BlogPost, ReadingTime } from '@absolutejs/blog';
 import type { ReactNode } from 'react';
 import { choosePerRouteStyles } from '../../styles/choosePerRouteStyles';
 import { citraArticleStyles } from '../../styles/citraArticleStyles';
+import { vueCheckStyles } from '../../styles/vueCheckStyles';
 import { ChoosePerRouteContent } from './choosePerRoute/ChoosePerRouteContent';
 import { CitraArticleContent } from './CitraArticleContent';
 import { VueCheckContent } from './vueCheck/VueCheckContent';
@@ -35,7 +36,7 @@ const articleEntries: Record<string, ArticleEntry> = {
 			detail: 'Vue codegen, Bun’s native checker, vue-tsc’s errors.',
 			title: 'vue-check · Type-check Vue on Bun'
 		},
-		styles: choosePerRouteStyles
+		styles: `${choosePerRouteStyles}${vueCheckStyles}`
 	},
 	'why-citra': {
 		bodyClassName: 'citra-blog-document',
