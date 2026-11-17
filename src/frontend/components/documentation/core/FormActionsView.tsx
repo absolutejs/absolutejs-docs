@@ -2,6 +2,8 @@ import { animated } from '@react-spring/web';
 import { DocsViewProps } from '../../../../types/springTypes';
 import { DocsNavigation } from '../DocsNavigation';
 import {
+	formActionsClient,
+	formActionsContext,
 	formActionsDefine,
 	formActionsEden,
 	formActionsEnhanceScript,
@@ -9,6 +11,7 @@ import {
 	formActionsHtmxAction,
 	formActionsHtmxPage,
 	formActionsOptions,
+	formActionsPlainElysia,
 	formActionsReactPage,
 	formActionsRedirect,
 	formActionsServer,
@@ -40,7 +43,10 @@ const responseRows: DocsTableCell[][] = [
 		{ code: 'useFormAction', suffix: ' or enhanceForms' },
 		'JSON result with status 200, valid or not'
 	],
-	['Eden, fetch, or any JSON client', 'JSON result, 422 on error'],
+	[
+		'Eden, fetch, or any JSON client',
+		"The handler's data with 200, or the field errors with 422"
+	],
 	[
 		{ code: 'HX-Request: true' },
 		'The htmx fragment with status 200, or HX-Redirect when there is no fragment'
@@ -50,10 +56,9 @@ const responseRows: DocsTableCell[][] = [
 ];
 
 const optionRows: DocsTableCell[][] = [
-	[{ code: 'body' }, 'An Elysia t.Object. Its keys are the field names.'],
 	[
-		{ code: 'handler' },
-		'Gets body, fail, request, set and the Elysia context. Returns data, fail(...), or a Response.'
+		{ code: 'body' },
+		'An Elysia t.Object. Its keys are the field names. Pass it as form on its own when you need no other option.'
 	],
 	[
 		{ code: 'redirect' },
@@ -62,10 +67,6 @@ const optionRows: DocsTableCell[][] = [
 	[
 		{ code: 'htmx' },
 		'Returns the HTML fragment for HTMX requests, or undefined.'
-	],
-	[
-		{ code: 'beforeHandle' },
-		'Runs after validation. Return a response to stop.'
 	],
 	[
 		{ code: 'csrf' },
@@ -81,6 +82,7 @@ const optionRows: DocsTableCell[][] = [
 const tocItems: TocItem[] = [
 	{ href: '#overview', label: 'Overview' },
 	{ href: '#define-action', label: 'Define an Action' },
+	{ href: '#app-context', label: 'App Context' },
 	{ href: '#react', label: 'React' },
 	{ href: '#without-javascript', label: 'Without JavaScript' },
 	{ href: '#redirects', label: 'Redirects' },
@@ -119,10 +121,10 @@ export const FormActionsView = ({
 						Form Actions
 					</h1>
 					<p style={paragraphLargeStyle}>
-						A form action is one POST handler that serves a plain
-						HTML form, a form enhanced with JavaScript, an HTMX
-						form, and a typed Eden call. Forms keep working when
-						JavaScript is off.
+						A form action is one POST route that serves a plain HTML
+						form, a form enhanced with JavaScript, an HTMX form, and
+						a typed Eden call. Forms keep working when JavaScript is
+						off.
 					</p>
 				</animated.div>
 
@@ -136,11 +138,11 @@ export const FormActionsView = ({
 						Overview
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						You define an action with <code>defineAction</code> and
-						mount it like any Elysia plugin. The body schema
-						validates the form, and each invalid field gets its own
-						message. The same action answers each caller in the way
-						that caller expects.
+						A form action is an ordinary Elysia route with a{' '}
+						<code>form</code> schema in place of <code>body</code>.
+						The schema validates the form, and each invalid field
+						gets its own message. The same route answers each caller
+						in the way that caller expects.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Form actions work on React, HTML and HTMX pages. React
@@ -161,11 +163,16 @@ export const FormActionsView = ({
 						Define an Action
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>defineAction(path, options)</code> takes the route
-						path and an options object. <code>body</code> is an
-						Elysia <code>t.Object</code>. Add an <code>error</code>{' '}
-						string to a property to replace the validator&apos;s
-						message for that field.
+						Declare the route with{' '}
+						<code>
+							.post(path, {'{'} form {'}'}, handler)
+						</code>
+						. <code>form</code> is an Elysia <code>t.Object</code>.
+						Add an <code>error</code> string to a property to
+						replace the validator&apos;s message for that field. The{' '}
+						<code>absolutejs</code> plugin from{' '}
+						<code>prepare()</code> brings the <code>form</code>{' '}
+						option, so there is nothing else to mount.
 					</p>
 					<PrismPlus
 						codeString={formActionsDefine}
@@ -174,12 +181,12 @@ export const FormActionsView = ({
 						themeSprings={themeSprings}
 					/>
 					<p style={paragraphSpacedStyle}>
-						The handler runs only when the body is valid. Return
-						data for success. Return{' '}
-						<code>fail(errors, message?)</code> for errors you find
-						yourself, such as a taken email. The keys of{' '}
-						<code>errors</code> are typed to the schema&apos;s
-						fields.
+						The handler runs only when the body is valid.{' '}
+						<code>body</code> is typed from the schema. Return data
+						for success. Return <code>fail(errors, message?)</code>{' '}
+						for errors you find yourself, such as a taken email. The
+						keys of <code>errors</code> are typed to the
+						schema&apos;s fields.
 					</p>
 					<p style={paragraphSpacedStyle}>
 						Browser forms send strings. Before validation, an
@@ -188,15 +195,37 @@ export const FormActionsView = ({
 						string becomes a number, and an empty file input is
 						dropped.
 					</p>
+				</section>
+
+				<section style={sectionStyle}>
+					<AnchorHeading
+						id="app-context"
+						level="h2"
+						style={gradientHeadingStyle(themeSprings)}
+						themeSprings={themeSprings}
+					>
+						App Context
+					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Mount the action with <code>.use()</code>. A page route
-						reads the result of the last post without JavaScript
-						with <code>getActionState(action)</code> and passes it
-						to the page as a prop. It returns <code>undefined</code>{' '}
-						when there is none.
+						A form action sits in the app&apos;s chain like any
+						other route, so the app&apos;s <code>derive</code>,{' '}
+						<code>resolve</code>, guards, groups and prefixes apply
+						to it. Values they add reach the handler with their
+						types.
 					</p>
 					<PrismPlus
-						codeString={formActionsServer}
+						codeString={formActionsContext}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						An Elysia app that doesn&apos;t use{' '}
+						<code>prepare()</code> adds the option once with{' '}
+						<code>formActions()</code>:
+					</p>
+					<PrismPlus
+						codeString={formActionsPlainElysia}
 						language="typescript"
 						showLineNumbers={true}
 						themeSprings={themeSprings}
@@ -213,11 +242,41 @@ export const FormActionsView = ({
 						React
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>useFormAction</code> comes from{' '}
-						<code>@absolutejs/absolute/react/hooks</code>. Pass the
-						action&apos;s type with <code>import type</code>, so no
-						server code reaches the browser bundle. The path is
-						type-checked against the action.
+						Create the typed client once with{' '}
+						<code>
+							createFormActionClient&lt;typeof server&gt;()
+						</code>{' '}
+						from <code>@absolutejs/absolute/react/hooks</code>.
+						Import the server&apos;s type with{' '}
+						<code>import type</code>, so no server code reaches the
+						browser bundle. Paths are checked against the app&apos;s{' '}
+						<code>form</code> routes, and the state, data and field
+						errors are typed from the route.
+					</p>
+					<PrismPlus
+						codeString={formActionsClient}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						The page route reads the result of the last post without
+						JavaScript with{' '}
+						<code>actions.getActionState(path)</code> and passes it
+						to the page as a prop. It returns <code>undefined</code>{' '}
+						when there is none. Give the route a return type, as
+						here, because the client&apos;s type depends on the app
+						this route belongs to.
+					</p>
+					<PrismPlus
+						codeString={formActionsServer}
+						language="typescript"
+						showLineNumbers={true}
+						themeSprings={themeSprings}
+					/>
+					<p style={paragraphSpacedStyle}>
+						The page calls <code>actions.useFormAction(path)</code>{' '}
+						from the same module:
 					</p>
 					<PrismPlus
 						codeString={formActionsReactPage}
@@ -282,10 +341,10 @@ export const FormActionsView = ({
 						Redirects
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Set <code>redirect</code> to send the browser somewhere
-						else after success. Without JavaScript, the{' '}
-						<code>303</code> goes there. With JavaScript, the
-						helpers navigate there.
+						Put the schema under <code>body</code> and set{' '}
+						<code>redirect</code> to send the browser somewhere else
+						after success. Without JavaScript, the <code>303</code>{' '}
+						goes there. With JavaScript, the helpers navigate there.
 					</p>
 					<PrismPlus
 						codeString={formActionsRedirect}
@@ -354,10 +413,11 @@ export const FormActionsView = ({
 						HTMX Pages
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						Give the action an <code>htmx</code> renderer. It
+						Give the route an <code>htmx</code> renderer. It
 						receives the result and returns the HTML fragment that
 						HTMX swaps in. The answer is a <code>200</code>, so HTMX
-						swaps errors too.
+						swaps errors too. Annotate the parameter with{' '}
+						<code>ActionResult&lt;Data&gt;</code> to type the data.
 					</p>
 					<PrismPlus
 						codeString={formActionsHtmxAction}
@@ -397,10 +457,11 @@ export const FormActionsView = ({
 						Eden and JSON
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						An action is a normal Elysia route with a body schema,
-						so Eden sees it. A missing or mistyped field is a type
-						error. JSON clients get the result as JSON, with{' '}
-						<code>422</code> when it is an error.
+						A form action is a normal Elysia route, so Eden sees it.
+						A missing or mistyped field is a type error. A JSON
+						client gets the handler&apos;s data with{' '}
+						<code>200</code>, and the field errors with{' '}
+						<code>422</code>, both typed.
 					</p>
 					<PrismPlus
 						codeString={formActionsEden}
@@ -425,7 +486,7 @@ export const FormActionsView = ({
 						Responses
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						One action, one handler. The caller decides the shape of
+						One route, one handler. The caller decides the shape of
 						the answer.
 					</p>
 					<DocsTable
@@ -451,6 +512,18 @@ export const FormActionsView = ({
 					>
 						Options
 					</AnchorHeading>
+					<p style={paragraphSpacedStyle}>
+						Options go next to the schema:{' '}
+						<code>
+							form: {'{'} body, redirect, htmx, csrf, maxBodySize,
+							preserveValues {'}'}
+						</code>
+						. Route options such as <code>beforeHandle</code> stay
+						on the route, where they run after validation and before
+						the handler. A form route declares its{' '}
+						<code>422</code>, so declare any other status its hooks
+						return in <code>response</code>, and Eden types it too.
+					</p>
 					<PrismPlus
 						codeString={formActionsOptions}
 						language="typescript"
@@ -474,11 +547,13 @@ export const FormActionsView = ({
 						Result Types
 					</AnchorHeading>
 					<p style={paragraphSpacedStyle}>
-						<code>ActionStateOf&lt;typeof action&gt;</code> is the
-						state a form can be in. Use it to type the prop that
-						carries <code>getActionState</code>. The success data
-						comes from what the handler returns, and the error keys
-						come from the body schema.
+						<code>
+							FormActionStateOf&lt;typeof server, path&gt;
+						</code>{' '}
+						is the state a form at that path can be in. The success
+						data comes from what the handler returns, and the error
+						keys come from the schema. <code>FormActionDataOf</code>{' '}
+						and <code>FormActionFieldsOf</code> give the two halves.
 					</p>
 					<PrismPlus
 						codeString={formActionsStateTypes}

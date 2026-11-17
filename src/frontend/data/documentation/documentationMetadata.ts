@@ -165,7 +165,7 @@ const coreFeatureMetadata: [string, string, string][] = [
 	],
 	[
 		'form-actions',
-		'Define a form action once with an Elysia schema and use it from React, HTML and HTMX, with validation errors and values kept with JavaScript on or off.',
+		'Turn any Elysia POST route into a form action with a form schema, and use it from React, HTML and HTMX, with typed errors and values kept with JavaScript on or off.',
 		'Form Actions'
 	],
 	[

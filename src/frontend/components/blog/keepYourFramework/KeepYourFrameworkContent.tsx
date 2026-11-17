@@ -16,6 +16,7 @@ import {
 	islandStore,
 	openingRoute,
 	reactAction,
+	reactClient,
 	reactForm,
 	reactRoute,
 	reactServerComponent,
@@ -193,13 +194,13 @@ export const KeepYourFrameworkContent = ({
 					whether or not JavaScript loads:
 				</p>
 				<CodeSample
-					code={reactAction}
-					file="actions.ts"
+					code={`${reactAction}\n${reactRoute}`}
+					file="src/backend/server.ts"
 					language="ts"
 				/>
 				<CodeSample
-					code={reactRoute}
-					file="src/backend/server.ts"
+					code={reactClient}
+					file="src/frontend/actions.ts"
 					language="ts"
 				/>
 				<CodeSample code={reactForm} file="Signup.tsx" language="tsx" />
@@ -211,10 +212,13 @@ export const KeepYourFrameworkContent = ({
 					serve. The client bundle had zero matches.
 				</SideNote>
 				<p>
-					The body schema is an ordinary Elysia schema, so the same
-					rules validate the form, type <code>signup.errors</code>,
-					and type the Eden client when your client&apos;s type
-					includes the action. With JavaScript on, the form submits
+					The action is an ordinary route in the app&apos;s chain, so{' '}
+					<code>user</code> arrives typed from the app&apos;s own
+					auth. Its <code>form</code> schema is an ordinary Elysia
+					schema, so the same rules validate the form, type{' '}
+					<code>signup.errors</code> and type the Eden client. The
+					page reaches the action by its path, checked against the
+					server&apos;s routes. With JavaScript on, the form submits
 					without a page load. With it off, the browser posts, the
 					server redirects back, and the page renders the same errors
 					and keeps what you typed.
@@ -651,13 +655,17 @@ export const KeepYourFrameworkContent = ({
 					language="ts"
 				/>
 				<p>
-					Form actions work here too. The same{' '}
-					<code>defineAction</code> from the React chapter takes an{' '}
-					<code>htmx</code> renderer, so <code>hx-post</code> gets a
-					fragment back, and a browser without JavaScript gets a
-					normal post and redirect:
+					Form actions work here too. The same <code>form</code>{' '}
+					option from the React chapter takes an <code>htmx</code>{' '}
+					renderer, so <code>hx-post</code> gets a fragment back, and
+					a browser without JavaScript gets a normal post and
+					redirect:
 				</p>
-				<CodeSample code={htmxAction} file="actions.ts" language="ts" />
+				<CodeSample
+					code={htmxAction}
+					file="src/backend/server.ts"
+					language="ts"
+				/>
 				<SideNote docs={docsFor('htmx')} label="Docs" />
 				<p>
 					htmx itself is version 2.0.11, pinned and served from your

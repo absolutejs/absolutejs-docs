@@ -1,5 +1,6 @@
 // Every sample below ran in a fresh create-absolutejs app on
-// @absolutejs/absolute 0.20.0-beta.178 to beta.181 before publishing.
+// @absolutejs/absolute 0.20.0-beta.178 to beta.181 before publishing; the
+// form-action samples ran on beta.191 and beta.192.
 
 export const angularDefer = `@defer (on timer(300ms)) {
   <section class="activity">{{ stats.updates }} updates since your last visit</section>
@@ -34,14 +35,19 @@ export const htmlPage = `<abs-include src="../layouts/base.html">
   <h1>About us</h1>
   <absolute-island framework="react" component="ContactForm" hydrate="visible"></absolute-island>
 </abs-include>`;
-export const htmxAction = `export const signup = defineAction('/actions/signup', {
-  body: t.Object({ name: t.String({ error: 'Name too short', minLength: 2 }) }),
-  handler: ({ body }) => ({ hello: body.name }),
-  htmx: (result) =>
-    result.status === 'success'
-      ? \`<p>Hello \${result.data?.hello}</p>\`
-      : \`<p>\${result.errors.name}</p>\`
-});`;
+export const htmxAction = `.post(
+  '/actions/greet',
+  {
+    form: {
+      body: t.Object({ name: t.String({ error: 'Name too short', minLength: 2 }) }),
+      htmx: (result: ActionResult<{ hello: string }>) =>
+        result.status === 'success'
+          ? \`<p>Hello \${result.data?.hello}</p>\`
+          : \`<p>\${result.errors.name}</p>\`
+    }
+  },
+  ({ body }) => ({ hello: body.name })
+)`;
 export const htmxRoute = `.post(
   '/htmx/greet',
   { body: t.Object({ name: t.String({ minLength: 2 }) }) },
@@ -64,18 +70,29 @@ export const openingRoute = `new Elysia()
       props: { stats }
     })
   );`;
-export const reactAction = `export const createUser = defineAction('/actions/signup', {
-  body: t.Object({
-    email: t.String({ error: 'Enter a valid email', format: 'email' }),
-    name: t.String({ error: 'Name must be at least 2 characters', minLength: 2 })
-  }),
-  handler: ({ body, fail }) =>
+export const reactAction = `.use(auth) // derives user
+.post(
+  '/actions/signup',
+  {
+    form: t.Object({
+      email: t.String({ error: 'Enter a valid email', format: 'email' }),
+      name: t.String({
+        error: 'Name must be at least 2 characters',
+        minLength: 2
+      })
+    })
+  },
+  ({ body, fail, user }) =>
     body.name === 'taken'
       ? fail({ name: 'That name is taken' })
-      : { greeting: \`Welcome, \${body.name}\` }
-});`;
-export const reactForm = `const signup = useFormAction<typeof createUser>('/actions/signup', {
-  initialState: signupState ?? undefined
+      : { greeting: \`Welcome, \${body.name}\`, invitedBy: user?.name }
+)`;
+export const reactClient = `import { createFormActionClient } from '@absolutejs/absolute/react/hooks';
+import type { server } from '../backend/server';
+
+export const actions = createFormActionClient<typeof server>();`;
+export const reactForm = `const signup = actions.useFormAction('/actions/signup', {
+  initialState: signupState
 });
 
 <form {...signup.formProps}>
@@ -83,12 +100,11 @@ export const reactForm = `const signup = useFormAction<typeof createUser>('/acti
   {signup.errors.name && <p>{signup.errors.name}</p>}
   …
 </form>`;
-export const reactRoute = `.use(createUser)
-.get('/signup', () =>
+export const reactRoute = `.get('/signup', (): Promise<Response> =>
   handleReactPageRequest({
     Page: Signup,
     index: asset(manifest, 'SignupIndex'),
-    props: { signupState: getActionState(createUser) ?? null }
+    props: { signupState: actions.getActionState('/actions/signup') ?? null }
   })
 )`;
 export const reactServerComponent = `.get('/report', () =>
