@@ -10,7 +10,6 @@ import { defineConfig } from 'eslint/config';
 import absolutePlugin from 'eslint-plugin-absolute';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import promisePlugin from 'eslint-plugin-promise';
-import reactCompilerPlugin from 'eslint-plugin-react-compiler';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import securityPlugin from 'eslint-plugin-security';
 import globals from 'globals';
@@ -224,14 +223,29 @@ export default defineConfig([
 		files: ['src/**/*.{jsx,tsx}'],
 		plugins: {
 			'jsx-a11y': jsxA11yPlugin,
-			'react-compiler': reactCompilerPlugin,
 			'react-hooks': reactHooksPlugin
 		},
 		rules: {
 			'jsx-a11y/prefer-tag-over-role': 'error',
-			'react-compiler/react-compiler': 'error',
+			// The React Compiler's checks, now part of eslint-plugin-react-hooks
+			// (they replace the standalone eslint-plugin-react-compiler rule),
+			// at the levels of its recommended-latest config.
+			...Object.fromEntries(
+				Object.entries(
+					reactHooksPlugin.configs['recommended-latest'].rules
+				).filter(
+					([name]) =>
+						name !== 'react-hooks/exhaustive-deps' &&
+						name !== 'react-hooks/rules-of-hooks'
+				)
+			),
 			'react-hooks/exhaustive-deps': 'warn',
-			'react-hooks/rules-of-hooks': 'error'
+			// Checks the old plugin did not run, with existing findings in the
+			// site (setState in an effect, an impure call during render):
+			// visible as warnings until those components are reworked.
+			'react-hooks/purity': 'warn',
+			'react-hooks/rules-of-hooks': 'error',
+			'react-hooks/set-state-in-effect': 'warn'
 		}
 	},
 	{
