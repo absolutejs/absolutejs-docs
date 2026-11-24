@@ -1,6 +1,6 @@
 import { Elysia, t } from 'elysia';
 import { User } from '../../../db/schema';
-import { asset, getEnv } from '@absolutejs/absolute';
+import { asset } from '@absolutejs/absolute';
 import { handleReactPageRequest } from '@absolutejs/absolute/react';
 import {
 	getStatus,
@@ -30,11 +30,9 @@ import {
 	packageProjectViewId,
 	packageSubpackageViewId
 } from '../../frontend/data/documentation/packages/packageRoutes';
+import { adminSubs } from '../utils/isAdmin';
 
-const whitelistedAdmins =
-	getEnv('ADMIN_SUBS')
-		?.split(',')
-		.map((adminSub) => adminSub.trim()) ?? [];
+const whitelistedAdmins = adminSubs();
 
 // First visit only (no breakpoint cookie yet): guess the device class from
 // the user agent so SSR doesn't hand desktop visitors the mobile layout.

@@ -1,7 +1,12 @@
 import { env } from 'node:process';
 
-export const isAdmin = (authSub: string | undefined) => {
-	const adminSubs = env.ADMIN_SUBS?.split(',') ?? [];
+/* The admins' auth subjects. Optional: a copy without ADMIN_SUBS (a Studio
+ * workspace, a fresh checkout) has no admins rather than failing to start. */
+export const adminSubs = () =>
+	(env.ADMIN_SUBS ?? '')
+		.split(',')
+		.map((adminSub) => adminSub.trim())
+		.filter((adminSub) => adminSub.length > 0);
 
-	return authSub !== undefined && adminSubs.includes(authSub);
-};
+export const isAdmin = (authSub: string | undefined) =>
+	authSub !== undefined && adminSubs().includes(authSub);
