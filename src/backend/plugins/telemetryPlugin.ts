@@ -26,15 +26,12 @@ import {
 	upsertUserLabel
 } from '../handlers/telemetryHandlers';
 import { isRateLimited } from '../utils/rateLimit';
-import { getEnv } from '@absolutejs/absolute';
 import { protectRoutePlugin } from '@absolutejs/auth';
 import { isObject } from '../../types/typeGuards';
+import { adminSubs } from '../utils/isAdmin';
 
 const MAX_BODY_BYTES = 10240;
-const whitelistedAdmins =
-	getEnv('ADMIN_SUBS')
-		?.split(',')
-		.map((adminSub) => adminSub.trim()) ?? [];
+const whitelistedAdmins = adminSubs();
 
 export const telemetryPlugin = (db: DatabaseType) =>
 	new Elysia({ prefix: '/api' })
